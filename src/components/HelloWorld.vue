@@ -6,12 +6,16 @@ defineProps({});
 
 var filterBegDate = ref("1970-01-01");
 var filterEndDate = ref(new Date(Date.now()).toISOString().slice(0, 10));
-var filterFinish = ref(2);
+var filterFinish = ref(-1);
 var filterSearch = ref("");
+
+const dataPath =
+    "data.csv?random=" + Math.floor(Math.random() * 1000000).toString();
 
 var dataSource = [];
 var dataDisplay = ref([]);
-d3.csv("/data.csv", function (d) {
+
+d3.csv(dataPath, function (d) {
     dataSource.push(d);
     refresh();
 });
@@ -59,10 +63,8 @@ function statusToString(i) {
     } else if (i == 1) {
         return "已完成";
     } else if (i == 2) {
-        return "已抽出";
-    } else if (i == 3) {
         return "勉强过";
-    } else if (i == 4) {
+    } else if (i == 3) {
         return "进行中";
     } else {
         return "undefined";
@@ -75,10 +77,8 @@ function statusToColor(i) {
     } else if (i == 1) {
         return "#196F3D";
     } else if (i == 2) {
-        return "#9AFF02";
-    } else if (i == 3) {
         return "#9D9D9D";
-    } else if (i == 4) {
+    } else if (i == 3) {
         return "#4DFFFF";
     } else {
         return "#000000";
@@ -98,11 +98,10 @@ function drawPieChart(dataIn) {
     const s1 = dataIn.filter((v) => v.done == 1).length;
     const s2 = dataIn.filter((v) => v.done == 2).length;
     const s3 = dataIn.filter((v) => v.done == 3).length;
-    const s4 = dataIn.filter((v) => v.done == 4).length;
 
     const pieFn = d3.pie();
     const arcFn = d3.arc().innerRadius(0).outerRadius(0.9);
-    const arc = pieFn([s0, s1, s2, s3, s4]);
+    const arc = pieFn([s0, s1, s2, s3]);
 
     d3.select("#pieChart").selectAll("*").remove();
 
@@ -138,7 +137,6 @@ function drawBarChart(dataIn) {
             s1: d[1].filter((v) => v.done == 1).length,
             s2: d[1].filter((v) => v.done == 2).length,
             s3: d[1].filter((v) => v.done == 3).length,
-            s4: d[1].filter((v) => v.done == 4).length,
         };
     });
 
@@ -156,8 +154,7 @@ function drawBarChart(dataIn) {
     let physicalW = (logicalW / logicalH) * physicalH;
 
     let hScale =
-        Math.max(...series.map((d) => d.s0 + d.s1 + d.s2 + d.s3 + d.s4)) /
-        diagramH;
+        Math.max(...series.map((d) => d.s0 + d.s1 + d.s2 + d.s3)) / diagramH;
 
     d3.select("#barChart").selectAll("*").remove();
 
@@ -206,19 +203,6 @@ function drawBarChart(dataIn) {
         .attr("height", (d) => d.s3 / hScale)
         .attr("fill", statusToColor(3));
 
-    svg.selectAll("s4")
-        .data(series)
-        .enter()
-        .append("rect")
-        .attr("x", (_, i) => i * sep)
-        .attr(
-            "y",
-            (d) => diagramH - (d.s0 + d.s1 + d.s2 + d.s3 + d.s4) / hScale
-        )
-        .attr("width", sep - pad)
-        .attr("height", (d) => d.s4 / hScale)
-        .attr("fill", statusToColor(4));
-
     const xAxis = d3
         .scaleBand()
         .domain(series.map((d) => d.date))
@@ -261,9 +245,8 @@ function drawBarChart(dataIn) {
                 <option value="-1"></option>
                 <option value="0">未开始</option>
                 <option value="1">已完成</option>
-                <option value="2">已抽出</option>
-                <option value="3">勉强过</option>
-                <option value="4">进行中</option>
+                <option value="2">勉强过</option>
+                <option value="3">进行中</option>
             </select>
         </div>
         <div>
