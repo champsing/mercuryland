@@ -293,6 +293,7 @@ hr.rounded {
 }
 
 .pie {
+    max-height: 50vh;
     width: 100%;
     padding: 0 0 0 0;
     margin: 0 0 0 0;
