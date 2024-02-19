@@ -95,29 +95,23 @@ function drawPieChart(dataIn) {
         .enter()
         .append("g")
         .append("path")
-        .attr("fill", function (_, i) {
-            return numToColor(i);
-        })
+        .attr("fill", (_, i) => numToColor(i))
         .attr("d", arcFn);
 
     svg.selectAll("label")
-        .data(arc)
+        .data(arc.filter((d) => d.data != 0))
         .enter()
         .append("g")
-        .attr("transform", function (d) {
-            return "translate(" + arcFn.centroid(d) + ")";
-        })
+        .attr("transform", (d) => "translate(" + arcFn.centroid(d) + ")")
         .append("text")
-        .text(function (d) {
-            return d.data.toString();
-        })
+        .text((d) => d.data.toString())
         .style("text-anchor", "middle")
         .style("font-size", 0.1);
 
     console.log(arc);
 }
 
-const count = ref(0);
+function drawBarChart() {}
 </script>
 
 <template>
@@ -195,20 +189,7 @@ const count = ref(0);
         </div>
     </div>
 
-    <p>
-        Check out
-        <a href="https://vuejs.org/guide/quick-start.html#local" target="_blank"
-            >create-vue</a
-        >, the official Vue + Vite starter
-    </p>
-    <p>
-        Install
-        <a href="https://github.com/vuejs/language-tools" target="_blank"
-            >Volar</a
-        >
-        in your IDE for a better DX
-    </p>
-    <p class="read-the-docs">Click on the Vite and Vue logos to learn more</p>
+    <div class="time"></div>
 </template>
 
 <style scoped>
@@ -242,6 +223,14 @@ hr.rounded {
     width: 100%;
     padding: 0 0 0 0;
     margin: 0 0 0 0;
+}
+
+.time {
+    height: 20vh;
+    width: 100%;
+    padding: 0 0 0 0;
+    margin: 0 0 0 0;
+    overflow-x: scroll;
 }
 
 table {
