@@ -59,6 +59,14 @@ function numToYN(i) {
     }
 }
 
+function numToColor(i) {
+    if (i == 0) {
+        return "#922B21";
+    } else {
+        return "#196F3D";
+    }
+}
+
 function truncateStr(s) {
     if (s.length > 12) {
         return s.substring(0, 10) + "...";
@@ -108,8 +116,10 @@ const count = ref(0);
         </div>
     </div>
 
+    <hr class="rounded" />
+
     <div class="main">
-        <div class="table">
+        <div class="detail">
             <table>
                 <thead>
                     <tr>
@@ -119,7 +129,12 @@ const count = ref(0);
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="item in dataDisplay">
+                    <tr
+                        v-for="item in dataDisplay"
+                        :style="{
+                            'background-color': numToColor(item.done),
+                        }"
+                    >
                         <td>
                             {{ item.date }}
                         </td>
@@ -157,6 +172,25 @@ const count = ref(0);
     align-content: space-evenly;
     grid-template-columns: auto auto auto auto;
     gap: 10px;
+}
+
+hr.rounded {
+    border-top: 4px solid #bbb;
+    border-radius: 2px;
+}
+
+.main {
+    width: 100%;
+}
+
+.detail {
+    max-height: 60vh;
+    width: 70%;
+    overflow-y: scroll;
+}
+
+table {
+    width: 100%;
 }
 
 .read-the-docs {
