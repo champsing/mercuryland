@@ -32,6 +32,7 @@ function refresh() {
         .sort((lhs, rhs) => lhs.date.localeCompare(rhs.date));
 
     drawPieChart(dataDisplay.value);
+    drawBarChart(dataDisplay.value);
 }
 
 function updateBegDate(newDate) {
@@ -107,11 +108,76 @@ function drawPieChart(dataIn) {
         .text((d) => d.data.toString())
         .style("text-anchor", "middle")
         .style("font-size", 0.1);
-
-    console.log(arc);
 }
 
-function drawBarChart() {}
+function drawBarChart(dataIn) {
+    var series = Array.from(
+        Map.groupBy(dataIn, (d) => d.date),
+        ([key, value]) => [key, value]
+    ).map(function (d) {
+        return {
+            date: d[0],
+            positive: d[1].filter((v) => v.done == 1).length,
+            negative: d[1].filter((v) => v.done == 0).length,
+        };
+    });
+
+    let sep = 40;
+    let pad = 10;
+
+    // height = 27vh or 220 (10 for axis)
+    // width = 50*n/220*27vh or 50*n
+
+    let physicalH = 27;
+    let logicalH = 200;
+    let diagramH = logicalH - 50;
+
+    let logicalW = sep * series.length;
+    let physicalW = (logicalW / logicalH) * physicalH;
+
+    let hScale =
+        Math.max(...series.map((d) => d.positive + d.negative)) / diagramH;
+
+    d3.select("#barChart").selectAll("*").remove();
+
+    const svg = d3
+        .select("#barChart")
+        .attr("width", physicalW + "vh")
+        .attr("viewBox", "0 0 " + logicalW + " " + logicalH);
+
+    svg.selectAll("negative")
+        .data(series)
+        .enter()
+        .append("rect")
+        .attr("x", (_, i) => i * sep)
+        .attr("y", (d) => diagramH - d.negative / hScale)
+        .attr("width", sep - pad)
+        .attr("height", (d) => d.negative / hScale)
+        .attr("fill", numToColor(0));
+
+    svg.selectAll("positive")
+        .data(series)
+        .enter()
+        .append("rect")
+        .attr("x", (_, i) => i * sep)
+        .attr("y", (d) => diagramH - (d.negative + d.positive) / hScale)
+        .attr("width", sep - pad)
+        .attr("height", (d) => d.positive / hScale)
+        .attr("fill", numToColor(1));
+
+    const xAxis = d3
+        .scaleBand()
+        .domain(series.map((d) => d.date))
+        .range([0, logicalW])
+        .padding(0.1);
+
+    svg.append("g")
+        .attr("transform", "translate(0," + diagramH + ")")
+        .call(d3.axisBottom(xAxis))
+        .selectAll("text")
+        .style("text-anchor", "end")
+        .attr("transform", "rotate(-45)");
+}
 </script>
 
 <template>
@@ -185,11 +251,18 @@ function drawBarChart() {}
             </table>
         </div>
         <div class="pie">
-            <svg id="pieChart" viewBox="-1 -1 2 2"></svg>
+            <svg
+                id="pieChart"
+                width="100%"
+                height="100%"
+                viewBox="-1 -1 2 2"
+            ></svg>
         </div>
     </div>
 
-    <div class="time"></div>
+    <div class="time">
+        <svg id="barChart" height="90%"></svg>
+    </div>
 </template>
 
 <style scoped>
@@ -212,7 +285,7 @@ hr.rounded {
 }
 
 .detail {
-    max-height: 60vh;
+    max-height: 50vh;
     width: 100%;
     padding: 0 0 0 0;
     margin: 0 0 0 0;
@@ -226,7 +299,7 @@ hr.rounded {
 }
 
 .time {
-    height: 20vh;
+    height: 30vh;
     width: 100%;
     padding: 0 0 0 0;
     margin: 0 0 0 0;
@@ -235,6 +308,10 @@ hr.rounded {
 
 table {
     width: 100%;
+}
+
+.axis {
+    font: 1px;
 }
 
 .read-the-docs {
