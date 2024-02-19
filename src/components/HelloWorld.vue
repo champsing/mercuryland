@@ -2,9 +2,7 @@
 import { ref } from "vue";
 import * as d3 from "d3";
 
-defineProps({
-    msg: String,
-});
+defineProps({});
 
 var filterBegDate = ref("1970-01-01");
 var filterEndDate = ref(new Date(Date.now()).toISOString().slice(0, 10));
@@ -24,7 +22,7 @@ function refresh() {
             (v) =>
                 v.date >= filterBegDate.value && v.date <= filterEndDate.value
         )
-        .filter((v) => filterFinish.value == 2 || filterFinish.value == v.done)
+        .filter((v) => filterFinish.value == -1 || filterFinish.value == v.done)
         .filter(
             (v) =>
                 filterSearch.value == "" || v.name.includes(filterSearch.value)
@@ -55,19 +53,35 @@ function updateSearch(text) {
     refresh();
 }
 
-function numToYN(i) {
+function statusToString(i) {
     if (i == 0) {
-        return "N";
+        return "未开始";
+    } else if (i == 1) {
+        return "已完成";
+    } else if (i == 2) {
+        return "已抽出";
+    } else if (i == 3) {
+        return "勉强过";
+    } else if (i == 4) {
+        return "进行中";
     } else {
-        return "Y";
+        return "undefined";
     }
 }
 
-function numToColor(i) {
+function statusToColor(i) {
     if (i == 0) {
         return "#922B21";
-    } else {
+    } else if (i == 1) {
         return "#196F3D";
+    } else if (i == 2) {
+        return "#9AFF02";
+    } else if (i == 3) {
+        return "#9D9D9D";
+    } else if (i == 4) {
+        return "#4DFFFF";
+    } else {
+        return "#000000";
     }
 }
 
@@ -96,7 +110,7 @@ function drawPieChart(dataIn) {
         .enter()
         .append("g")
         .append("path")
-        .attr("fill", (_, i) => numToColor(i))
+        .attr("fill", (_, i) => statusToColor(i))
         .attr("d", arcFn);
 
     svg.selectAll("label")
@@ -153,7 +167,7 @@ function drawBarChart(dataIn) {
         .attr("y", (d) => diagramH - d.negative / hScale)
         .attr("width", sep - pad)
         .attr("height", (d) => d.negative / hScale)
-        .attr("fill", numToColor(0));
+        .attr("fill", statusToColor(0));
 
     svg.selectAll("positive")
         .data(series)
@@ -163,7 +177,7 @@ function drawBarChart(dataIn) {
         .attr("y", (d) => diagramH - (d.negative + d.positive) / hScale)
         .attr("width", sep - pad)
         .attr("height", (d) => d.positive / hScale)
-        .attr("fill", numToColor(1));
+        .attr("fill", statusToColor(1));
 
     const xAxis = d3
         .scaleBand()
@@ -204,9 +218,12 @@ function drawBarChart(dataIn) {
                 :value="filterFinish.valueOf()"
                 @input="updateFinish($event.target.value)"
             >
-                <option value="2"></option>
+                <option value="-1"></option>
+                <option value="0">未开始</option>
                 <option value="1">已完成</option>
-                <option value="0">未完成</option>
+                <option value="2">已抽出</option>
+                <option value="3">勉强过</option>
+                <option value="4">进行中</option>
             </select>
         </div>
         <div>
@@ -234,7 +251,7 @@ function drawBarChart(dataIn) {
                     <tr
                         v-for="item in dataDisplay"
                         :style="{
-                            'background-color': numToColor(item.done),
+                            'background-color': statusToColor(item.done),
                         }"
                     >
                         <td>
@@ -244,7 +261,7 @@ function drawBarChart(dataIn) {
                             {{ truncateStr(item.name) }}
                         </td>
                         <td>
-                            {{ numToYN(item.done) }}
+                            {{ statusToString(item.done) }}
                         </td>
                     </tr>
                 </tbody>
