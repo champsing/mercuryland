@@ -78,31 +78,43 @@ function truncateStr(s) {
     }
 }
 
-function drawPieChart(d) {
-    const positive = d.filter((v) => v.done == 1).length;
-    const negative = d.filter((v) => v.done == 0).length;
-    console.log([negative, positive]);
+function drawPieChart(dataIn) {
+    const positive = dataIn.filter((v) => v.done == 1).length;
+    const negative = dataIn.filter((v) => v.done == 0).length;
 
-    const pie = d3.pie();
-    const arc = pie([negative, positive]);
+    const pieFn = d3.pie();
+    const arcFn = d3.arc().innerRadius(0).outerRadius(0.9);
+    const arc = pieFn([negative, positive]);
 
-    const svg = d3
-        .select("#pieChart")
-        .append("g")
-        .attr("transform", "translate(0.5,0.5)");
+    d3.select("#pieChart").selectAll("*").remove();
 
-    var arcs = svg
-        .selectAll("arc")
+    const svg = d3.select("#pieChart");
+
+    svg.selectAll("arc")
         .data(arc)
         .enter()
         .append("g")
-        .attr("class", "arc");
-
-    arcs.append("path")
-        .attr("fill", function (d, i) {
+        .append("path")
+        .attr("fill", function (_, i) {
             return numToColor(i);
         })
-        .attr("d", d3.arc().innerRadius(0).outerRadius(0.4));
+        .attr("d", arcFn);
+
+    svg.selectAll("label")
+        .data(arc)
+        .enter()
+        .append("g")
+        .attr("transform", function (d) {
+            return "translate(" + arcFn.centroid(d) + ")";
+        })
+        .append("text")
+        .text(function (d) {
+            return d.data.toString();
+        })
+        .style("text-anchor", "middle")
+        .style("font-size", 0.1);
+
+    console.log(arc);
 }
 
 const count = ref(0);
@@ -179,7 +191,7 @@ const count = ref(0);
             </table>
         </div>
         <div class="pie">
-            <svg id="pieChart" viewBox="0 0 1 1"></svg>
+            <svg id="pieChart" viewBox="-1 -1 2 2"></svg>
         </div>
     </div>
 
