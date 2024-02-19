@@ -94,12 +94,15 @@ function truncateStr(s) {
 }
 
 function drawPieChart(dataIn) {
-    const positive = dataIn.filter((v) => v.done == 1).length;
-    const negative = dataIn.filter((v) => v.done == 0).length;
+    const s0 = dataIn.filter((v) => v.done == 0).length;
+    const s1 = dataIn.filter((v) => v.done == 1).length;
+    const s2 = dataIn.filter((v) => v.done == 2).length;
+    const s3 = dataIn.filter((v) => v.done == 3).length;
+    const s4 = dataIn.filter((v) => v.done == 4).length;
 
     const pieFn = d3.pie();
     const arcFn = d3.arc().innerRadius(0).outerRadius(0.9);
-    const arc = pieFn([negative, positive]);
+    const arc = pieFn([s0, s1, s2, s3, s4]);
 
     d3.select("#pieChart").selectAll("*").remove();
 
@@ -131,8 +134,11 @@ function drawBarChart(dataIn) {
     ).map(function (d) {
         return {
             date: d[0],
-            positive: d[1].filter((v) => v.done == 1).length,
-            negative: d[1].filter((v) => v.done == 0).length,
+            s0: d[1].filter((v) => v.done == 0).length,
+            s1: d[1].filter((v) => v.done == 1).length,
+            s2: d[1].filter((v) => v.done == 2).length,
+            s3: d[1].filter((v) => v.done == 3).length,
+            s4: d[1].filter((v) => v.done == 4).length,
         };
     });
 
@@ -150,7 +156,8 @@ function drawBarChart(dataIn) {
     let physicalW = (logicalW / logicalH) * physicalH;
 
     let hScale =
-        Math.max(...series.map((d) => d.positive + d.negative)) / diagramH;
+        Math.max(...series.map((d) => d.s0 + d.s1 + d.s2 + d.s3 + d.s4)) /
+        diagramH;
 
     d3.select("#barChart").selectAll("*").remove();
 
@@ -159,25 +166,58 @@ function drawBarChart(dataIn) {
         .attr("width", physicalW + "vh")
         .attr("viewBox", "0 0 " + logicalW + " " + logicalH);
 
-    svg.selectAll("negative")
+    svg.selectAll("s0")
         .data(series)
         .enter()
         .append("rect")
         .attr("x", (_, i) => i * sep)
-        .attr("y", (d) => diagramH - d.negative / hScale)
+        .attr("y", (d) => diagramH - d.s0 / hScale)
         .attr("width", sep - pad)
-        .attr("height", (d) => d.negative / hScale)
+        .attr("height", (d) => d.s0 / hScale)
         .attr("fill", statusToColor(0));
 
-    svg.selectAll("positive")
+    svg.selectAll("s1")
         .data(series)
         .enter()
         .append("rect")
         .attr("x", (_, i) => i * sep)
-        .attr("y", (d) => diagramH - (d.negative + d.positive) / hScale)
+        .attr("y", (d) => diagramH - (d.s0 + d.s1) / hScale)
         .attr("width", sep - pad)
-        .attr("height", (d) => d.positive / hScale)
+        .attr("height", (d) => d.s1 / hScale)
         .attr("fill", statusToColor(1));
+
+    svg.selectAll("s2")
+        .data(series)
+        .enter()
+        .append("rect")
+        .attr("x", (_, i) => i * sep)
+        .attr("y", (d) => diagramH - (d.s0 + d.s1 + d.s2) / hScale)
+        .attr("width", sep - pad)
+        .attr("height", (d) => d.s2 / hScale)
+        .attr("fill", statusToColor(2));
+
+    svg.selectAll("s3")
+        .data(series)
+        .enter()
+        .append("rect")
+        .attr("x", (_, i) => i * sep)
+        .attr("y", (d) => diagramH - (d.s0 + d.s1 + d.s2 + d.s3) / hScale)
+        .attr("width", sep - pad)
+        .attr("height", (d) => d.s3 / hScale)
+        .attr("fill", statusToColor(3));
+
+    svg.selectAll("s4")
+        .data(series)
+        .enter()
+        .append("rect")
+        .attr("x", (_, i) => i * sep)
+        .attr(
+            "y",
+            (d) => diagramH - (d.s0 + d.s1 + d.s2 + d.s3 + d.s4) / hScale
+        )
+        .attr("width", sep - pad)
+        .attr("height", (d) => d.s4 / hScale)
+        .attr("fill", statusToColor(4));
 
     const xAxis = d3
         .scaleBand()
