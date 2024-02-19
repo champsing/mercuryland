@@ -1,22 +1,138 @@
 <script setup>
 import { ref } from "vue";
+import * as d3 from "d3";
 
 defineProps({
     msg: String,
 });
 
+var filterBegDate = ref("1970-01-01");
+var filterEndDate = ref(new Date(Date.now()).toISOString().slice(0, 10));
+var filterFinish = ref(2);
+var filterSearch = ref("");
+
+var dataSource = [];
+var dataDisplay = ref([]);
+d3.csv("public/data.csv", function (d) {
+    dataSource.push(d);
+    refresh();
+});
+
+function refresh() {
+    dataDisplay.value = dataSource
+        .filter(
+            (v) =>
+                v.date >= filterBegDate.value && v.date <= filterEndDate.value
+        )
+        .filter((v) => filterFinish.value == 2 || filterFinish.value == v.done)
+        .filter(
+            (v) =>
+                filterSearch.value == "" || v.name.includes(filterSearch.value)
+        );
+}
+
+function updateBegDate(newDate) {
+    filterBegDate.value = newDate.toISOString().slice(0, 10);
+    refresh();
+}
+
+function updateEndDate(newDate) {
+    filterEndDate.value = newDate.toISOString().slice(0, 10);
+    refresh();
+}
+
+function updateFinish(newFinish) {
+    filterFinish.value = parseInt(newFinish);
+    refresh();
+}
+
+function updateSearch(text) {
+    filterSearch.value = text;
+    refresh();
+}
+
+function numToYN(i) {
+    if (i == 0) {
+        return "N";
+    } else {
+        return "Y";
+    }
+}
+
+function truncateStr(s) {
+    if (s.length > 12) {
+        return s.substring(0, 10) + "...";
+    } else {
+        return s;
+    }
+}
+
 const count = ref(0);
 </script>
 
 <template>
-    <h1>{{ msg }}</h1>
+    <div class="filter">
+        <div>
+            <label>起始日期:</label>
+            <input
+                type="date"
+                :value="filterBegDate.valueOf()"
+                @input="updateBegDate($event.target.valueAsDate)"
+            />
+        </div>
+        <div>
+            <label>结束日期:</label>
+            <input
+                type="date"
+                :value="filterEndDate.valueOf()"
+                @input="updateEndDate($event.target.valueAsDate)"
+            />
+        </div>
+        <div>
+            <label>完成状态:</label>
+            <select
+                :value="filterFinish.valueOf()"
+                @input="updateFinish($event.target.value)"
+            >
+                <option value="2"></option>
+                <option value="1">已完成</option>
+                <option value="0">未完成</option>
+            </select>
+        </div>
+        <div>
+            <label>搜索:</label>
+            <input
+                :value="filterSearch.valueOf()"
+                @input="updateSearch($event.target.value)"
+            />
+        </div>
+    </div>
 
-    <div class="card">
-        <button type="button" @click="count++">count is {{ count }}</button>
-        <p>
-            Edit
-            <code>components/HelloWorld.vue</code> to test HMR
-        </p>
+    <div class="main">
+        <div class="table">
+            <table>
+                <thead>
+                    <tr>
+                        <td>日期</td>
+                        <td>惩罚内容</td>
+                        <td>完成状况</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="item in dataDisplay">
+                        <td>
+                            {{ item.date }}
+                        </td>
+                        <td>
+                            {{ truncateStr(item.name) }}
+                        </td>
+                        <td>
+                            {{ numToYN(item.done) }}
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
 
     <p>
@@ -36,6 +152,13 @@ const count = ref(0);
 </template>
 
 <style scoped>
+.filter {
+    display: grid;
+    align-content: space-evenly;
+    grid-template-columns: auto auto auto auto;
+    gap: 10px;
+}
+
 .read-the-docs {
     color: #888;
 }
