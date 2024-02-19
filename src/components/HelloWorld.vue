@@ -13,7 +13,7 @@ var filterSearch = ref("");
 
 var dataSource = [];
 var dataDisplay = ref([]);
-d3.csv("public/data.csv", function (d) {
+d3.csv("/data.csv", function (d) {
     dataSource.push(d);
     refresh();
 });
@@ -72,8 +72,8 @@ function numToColor(i) {
 }
 
 function truncateStr(s) {
-    if (s.length > 12) {
-        return s.substring(0, 10) + "...";
+    if (s.length > 32) {
+        return s.substring(0, 30) + "...";
     } else {
         return s;
     }
@@ -279,9 +279,9 @@ hr.rounded {
 }
 
 .main {
-    width: 100vw;
+    width: 90vw;
     display: grid;
-    grid-template-columns: 70% 30%;
+    grid-template-columns: 80% 20%;
 }
 
 .detail {
