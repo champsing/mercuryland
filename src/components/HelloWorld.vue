@@ -28,7 +28,8 @@ function refresh() {
         .filter(
             (v) =>
                 filterSearch.value == "" || v.name.includes(filterSearch.value)
-        );
+        )
+        .sort((lhs, rhs) => lhs.date.localeCompare(rhs.date));
 }
 
 function updateBegDate(newDate) {
