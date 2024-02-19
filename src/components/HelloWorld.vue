@@ -30,6 +30,8 @@ function refresh() {
                 filterSearch.value == "" || v.name.includes(filterSearch.value)
         )
         .sort((lhs, rhs) => lhs.date.localeCompare(rhs.date));
+
+    drawPieChart(dataDisplay.value);
 }
 
 function updateBegDate(newDate) {
@@ -74,6 +76,33 @@ function truncateStr(s) {
     } else {
         return s;
     }
+}
+
+function drawPieChart(d) {
+    const positive = d.filter((v) => v.done == 1).length;
+    const negative = d.filter((v) => v.done == 0).length;
+    console.log([negative, positive]);
+
+    const pie = d3.pie();
+    const arc = pie([negative, positive]);
+
+    const svg = d3
+        .select("#pieChart")
+        .append("g")
+        .attr("transform", "translate(0.5,0.5)");
+
+    var arcs = svg
+        .selectAll("arc")
+        .data(arc)
+        .enter()
+        .append("g")
+        .attr("class", "arc");
+
+    arcs.append("path")
+        .attr("fill", function (d, i) {
+            return numToColor(i);
+        })
+        .attr("d", d3.arc().innerRadius(0).outerRadius(0.4));
 }
 
 const count = ref(0);
@@ -149,6 +178,9 @@ const count = ref(0);
                 </tbody>
             </table>
         </div>
+        <div class="pie">
+            <svg id="pieChart" viewBox="0 0 1 1"></svg>
+        </div>
     </div>
 
     <p>
@@ -181,13 +213,23 @@ hr.rounded {
 }
 
 .main {
-    width: 100%;
+    width: 100vw;
+    display: grid;
+    grid-template-columns: 70% 30%;
 }
 
 .detail {
     max-height: 60vh;
-    width: 70%;
+    width: 100%;
+    padding: 0 0 0 0;
+    margin: 0 0 0 0;
     overflow-y: scroll;
+}
+
+.pie {
+    width: 100%;
+    padding: 0 0 0 0;
+    margin: 0 0 0 0;
 }
 
 table {
