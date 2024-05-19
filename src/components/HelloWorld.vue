@@ -1,13 +1,7 @@
 <script setup>
 import { ref } from "vue";
 import * as d3 from "d3";
-import { 
-    NCollapse,
-    NCollapseItem,
-    NList,
-    NListItem,
-    NThing,
-} from "naive-ui";
+import { NCollapse, NCollapseItem, NList, NListItem, NThing, NTable } from "naive-ui";
 // import { Doughnut, Line } from "vue-chartjs";
 import {
     Chart as ChartJS,
@@ -32,7 +26,7 @@ ChartJS.register(
     CategoryScale,
     LinearScale,
     LogarithmicScale,
-    TimeScale,
+    TimeScale
 );
 
 defineProps({});
@@ -256,10 +250,10 @@ function drawBarChart(dataIn) {
         <div>
             <label>起始日期:</label>
             <input
-                type = "date"
+                type="date"
                 :value="filterBegDate.valueOf()"
                 @input="updateBegDate($event.target.valueAsDate)"
-            />   
+            />
         </div>
         <div>
             <label>结束日期:</label>
@@ -337,66 +331,58 @@ function drawBarChart(dataIn) {
         <svg id="barChart" height="90%"></svg>
     </div>
     <n-space>
-    <br>
+        <br />
     </n-space>
-    
-    <hr class="rounded" />
-    
-    <n-collapse arrow-placement="right">
-      <n-collapse-item title="懲罰語法" name="punish_syntax">
-        <div>
-        <n-list bordered>    
-            <n-list-item>
-                <n-thing>
-                    🆙增加<br>
-                    🔁重抽<br>
-                    2️⃣備案<br>
-                    📝原主人修改n次<br>
-                    ➕其他後來增加的條件<br>
-                </n-thing>
-            </n-list-item>
-        </n-list>    
-        </div>
-      </n-collapse-item>
-      <n-collapse-item title="詳細資料" name="more_information">
-        <div>nice</div>
-      </n-collapse-item>
-      <n-collapse-item title="完成狀態" name="punish_status">
-        <div>very good</div>
-      </n-collapse-item>
 
-    <template>
-        <n-collapse arrow-placement="right">
+    <hr class="rounded" />
+
+    <n-collapse arrow-placement="right">
         <n-collapse-item title="懲罰語法" name="punish_syntax">
             <div>
-            <n-list bordered>    
-                <n-list-item>
-                    <n-thing>
-                        🆙增加<br>
-                        🔁重抽<br>
-                        2️⃣備案<br>
-                        📝原主人修改n次<br>
-                        ➕其他後來增加的條件<br>
-                    </n-thing>
-                </n-list-item>
-            </n-list>    
+                <n-list bordered>
+                    <n-list-item>
+                        <n-thing>
+                            🆙增加<br />
+                            🔁重抽<br />
+                            2️⃣備案<br />
+                            📝原主人修改n次<br />
+                            ➕其他後來增加的條件<br />
+                        </n-thing>
+                    </n-list-item>
+                </n-list>
             </div>
-      </n-collapse-item>
-      <n-collapse-item title="詳細資料" name="more_information">
-        <div>nice</div>
-      </n-collapse-item>
-      <n-collapse-item title="完成狀態" name="punish_status">
-        <div>very good</div>
-      </n-collapse-item>
+        </n-collapse-item>
+        <n-collapse-item title="詳細資料" name="more_information">
+            <div>nice</div>
+        </n-collapse-item>
+        <n-collapse-item title="完成狀態" name="punish_status">
+            <div>very good</div>
+        </n-collapse-item>
     </n-collapse>
-    </template>
 
-</n-collapse>
-
-    <component is="script">
-        
-    </component>
-
+    <n-collapse arrow-placement="right">
+        <n-collapse-item title="懲罰語法" name="punish_syntax">
+            <div>
+                <n-list bordered>
+                    <n-list-item>
+                        <n-thing>
+                            🆙增加<br />
+                            🔁重抽<br />
+                            2️⃣備案<br />
+                            📝原主人修改n次<br />
+                            ➕其他後來增加的條件<br />
+                        </n-thing>
+                    </n-list-item>
+                </n-list>
+            </div>
+        </n-collapse-item>
+        <n-collapse-item title="詳細資料" name="more_information">
+            <div>nice</div>
+        </n-collapse-item>
+        <n-collapse-item title="完成狀態" name="punish_status">
+            <div>very good</div>
+        </n-collapse-item>
+    </n-collapse>
 </template>
 
 <style scoped>
