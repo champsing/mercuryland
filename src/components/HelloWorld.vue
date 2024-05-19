@@ -1,7 +1,7 @@
 <script setup>
 import { ref } from "vue";
 import * as d3 from "d3";
-import { NCollapse, NCollapseItem, NList, NListItem, NThing, NTable, NSpace } from "naive-ui";
+import { NCode, NCollapse, NCollapseItem, NList, NListItem, NThing, NTable, NSpace } from "naive-ui";
 // import { Doughnut, Line } from "vue-chartjs";
 import {
     Chart as ChartJS,
@@ -346,28 +346,42 @@ function drawBarChart(dataIn) {
     </n-space>
 
     <n-collapse arrow-placement="right" style="
+    --n-title-font-size: 24px;
     --n-title-text-color: rgb(11,118,225); 
     ">
         <n-collapse-item title="懲罰語法" name="punish_syntax">
-            <div>
+            <div style="overflow: auto">
                 <n-list bordered>
                     <n-list-item>
-                        <n-thing>
-                            🆙增加<br />
-                            🔁重抽<br />
-                            2️⃣備案<br />
-                            📝原主人修改n次<br />
-                            ➕其他後來增加的條件<br />
+                        <n-thing style="text-align: left;">
+                            <日期>: Unix Timestamp<br />
+                            <編號>: int <懲罰主文>: string 〔詳細資料〕: additionalMetaDeta（執行狀態）: statusMetaData
                         </n-thing>
                     </n-list-item>
                 </n-list>
             </div>
         </n-collapse-item>
         <n-collapse-item title="詳細資料" name="more_information">
-            <div>nice</div>
+            <div>
+                <n-list bordered>
+                    <n-list-item>
+                        <n-thing>
+                            🆙增加、🔁重抽、2️⃣備案、📝原主人修改n次、其他後來增加的條件
+                        </n-thing>
+                    </n-list-item>
+                </n-list>
+            </div>
         </n-collapse-item>
         <n-collapse-item title="完成狀態" name="punish_status">
-            <div>very good</div>
+            <div>
+                <n-list bordered>
+                    <n-list-item>
+                        <n-thing>
+                            ✅完成、✅已抽、🏁原主人或投票給過、⏲️ ⚔️目前已完成進度
+                        </n-thing>
+                    </n-list-item>
+                </n-list>
+            </div>
         </n-collapse-item>
     </n-collapse>
     
