@@ -300,17 +300,26 @@ function drawBarChart(dataIn) {
                 <tbody>
                     <tr
                         v-for="item in dataDisplay"
+                    >
+                        <td
                         :style="{
                             'background-color': statusToColor(item.done),
                         }"
-                    >
-                        <td>
+                        >
                             {{ item.date }}
                         </td>
-                        <td>
+                        <td
+                        :style="{
+                            'background-color': statusToColor(item.done),
+                        }"
+                        >
                             {{ truncateStr(item.name) }}
                         </td>
-                        <td>
+                        <td
+                        :style="{
+                            'background-color': statusToColor(item.done),
+                        }"
+                        >
                             {{ statusToString(item.done) }}
                         </td>
                     </tr>
@@ -336,7 +345,9 @@ function drawBarChart(dataIn) {
         <br />
     </n-space>
 
-    <n-collapse arrow-placement="right">
+    <n-collapse arrow-placement="right" style="
+    --n-title-text-color: rgb(11,118,225); 
+    ">
         <n-collapse-item title="懲罰語法" name="punish_syntax">
             <div>
                 <n-list bordered>
