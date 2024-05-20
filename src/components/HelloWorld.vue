@@ -1,7 +1,7 @@
 <script setup>
 import { defineComponent, ref } from "vue";
 import * as d3 from "d3";
-import { NCode, NCollapse, NCollapseItem, NDatePicker, NInput, NList, NListItem, NThing, NTable, NSpace } from "naive-ui";
+import { NCode, NCollapse, NCollapseItem, NDatePicker, NSelect, NInput, NList, NListItem, NThing, NTable, NSpace } from "naive-ui";
 // import { Doughnut, Line } from "vue-chartjs";
 import {
     Chart as ChartJS,
@@ -35,7 +35,7 @@ defineProps({});
 //   setup() {
 //     return {
 //       value: ref([""]),
-//       options: [
+//       statuses: [
 //         {
 //           label: "未開始",
 //           value: "0",
@@ -125,6 +125,7 @@ function statusToString(i) {
     }
 }
 
+//  表格填滿顏色
 function statusToColor(i) {
     if (i == 0) {
         return "#922B21";
@@ -138,6 +139,17 @@ function statusToColor(i) {
         return "#000000";
     }
 }
+
+// 表格文字顏色
+// i = 0 和 1 時返回白色，其他黑色
+function statusToColorText(i) {
+    if (i == 0 || i == 1) {
+        return "#FFFFFF";
+    } else {
+        return "#000000";
+    }
+}
+
 
 function truncateStr(s) {
     if (s.length > 32) {
@@ -299,7 +311,7 @@ function drawBarChart(dataIn) {
         <div>
             <label style="font-size: 18px;">完成状态:</label>
             <n-space vertical>
-                <n-select v-model:value="value" multiple :options="options" />
+                <n-select :options="statuses" :consistent-menu-width="false" />
             </n-space>    
             <select
                 :value="filterFinish.valueOf()"
@@ -318,10 +330,10 @@ function drawBarChart(dataIn) {
                 <n-input round placeholder="輸入懲罰內容來搜尋" 
                 :value="filterSearch.valueOf()"
                 @input="updateSearch($event.target.value)" />
-                <!-- <input
+                <input
                     :value="filterSearch.valueOf()"
                     @input="updateSearch($event.target.value)"
-                /> -->
+                />
             </n-space>
         </div>
     </div>
@@ -330,7 +342,7 @@ function drawBarChart(dataIn) {
 
     <div class="main">
         <div class="detail">
-            <n-table :bordered="true" size="large" style="text-align: center;">
+            <n-table :bordered="true" size="small" style="text-align: center;">
                 <thead>
                     <tr>
                         <td style="font-size: 18px;">日期</td>
@@ -342,23 +354,35 @@ function drawBarChart(dataIn) {
                     <tr
                         v-for="item in dataDisplay"
                     >
-                        <td
+                        <td 
                         :style="{
                             'background-color': statusToColor(item.done),
+                            'color': statusToColorText(item.done)
                         }"
                         >
                             {{ item.date }}
                         </td>
-                        <td style="font-size: 18px;"
+                        <td
                         :style="{
                             'background-color': statusToColor(item.done),
+                            'color': statusToColorText(item.done)
                         }"
                         >
+                        {{ truncateStr(item.name) }}
+                        <!-- 顯示右側拉匣，標題為項目名稱，內容為項目敘述 -->
+                        <!-- <n-button @click="activate('right')">
                             {{ truncateStr(item.name) }}
+                        </n-button>
+                        <n-drawer v-model:show="active" :width="502" :placement="placement">
+                            <n-drawer-content title={{ truncateStr(item.name) }}>
+                                {{ truncateStr(item.description) }}
+                            </n-drawer-content>
+                        </n-drawer> -->
                         </td>
                         <td
                         :style="{
                             'background-color': statusToColor(item.done),
+                            'color': statusToColorText(item.done)
                         }"
                         >
                             {{ statusToString(item.done) }}
