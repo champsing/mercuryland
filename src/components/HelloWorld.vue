@@ -1,7 +1,7 @@
 <script setup>
-import { ref } from "vue";
+import { defineComponent, ref } from "vue";
 import * as d3 from "d3";
-import { NCode, NCollapse, NCollapseItem, NList, NListItem, NThing, NTable, NSpace } from "naive-ui";
+import { NCode, NCollapse, NCollapseItem, NDatePicker, NInput, NList, NListItem, NThing, NTable, NSpace } from "naive-ui";
 // import { Doughnut, Line } from "vue-chartjs";
 import {
     Chart as ChartJS,
@@ -31,6 +31,32 @@ ChartJS.register(
 
 defineProps({});
 
+// export default defineComponent({
+//   setup() {
+//     return {
+//       value: ref([""]),
+//       options: [
+//         {
+//           label: "未開始",
+//           value: "0",
+//         }, 
+//         {
+//           label: "已完成",
+//           value: "1",
+//         }, 
+//         {
+//           label: "勉強過",
+//           value: "2",
+//         }, 
+//         {
+//           label: "進行中",
+//           value: "3",
+//         },
+//       ]
+//     };
+//   }
+// });
+
 var filterBegDate = ref("1970-01-01");
 var filterEndDate = ref(new Date(Date.now()).toISOString().slice(0, 10));
 var filterFinish = ref(-1);
@@ -41,6 +67,7 @@ const dataPath =
 
 var dataSource = [];
 var dataDisplay = ref([]);
+
 
 d3.csv(dataPath, function (d) {
     dataSource.push(d);
@@ -242,21 +269,27 @@ function drawBarChart(dataIn) {
         .selectAll("text")
         .style("text-anchor", "end")
         .attr("transform", "rotate(-45)");
+
 }
 </script>
 
 <template>
     <div class="filter">
         <div>
-            <label>起始日期:</label>
+            <label style="font-size: 18px;">起始日期:</label>
+            <n-date-picker type="date" 
+            v-model:value="timestamp"
+            @input="updateBegDate($event.target.valueAsDate)"/>
             <input
                 type="date"
                 :value="filterBegDate.valueOf()"
                 @input="updateBegDate($event.target.valueAsDate)"
+                 
             />
         </div>
         <div>
-            <label>结束日期:</label>
+            <label style="font-size: 18px;">结束日期:</label>
+            <n-date-picker v-model:value="timestamp" type="date" />
             <input
                 type="date"
                 :value="filterEndDate.valueOf()"
@@ -264,7 +297,10 @@ function drawBarChart(dataIn) {
             />
         </div>
         <div>
-            <label>完成状态:</label>
+            <label style="font-size: 18px;">完成状态:</label>
+            <n-space vertical>
+                <n-select v-model:value="value" multiple :options="options" />
+            </n-space>    
             <select
                 :value="filterFinish.valueOf()"
                 @input="updateFinish($event.target.value)"
@@ -277,11 +313,16 @@ function drawBarChart(dataIn) {
             </select>
         </div>
         <div>
-            <label>搜索:</label>
-            <input
+            <label style="font-size: 18px;">搜索:</label>
+            <n-space vertical>
+                <n-input round placeholder="輸入懲罰內容來搜尋" 
                 :value="filterSearch.valueOf()"
-                @input="updateSearch($event.target.value)"
-            />
+                @input="updateSearch($event.target.value)" />
+                <!-- <input
+                    :value="filterSearch.valueOf()"
+                    @input="updateSearch($event.target.value)"
+                /> -->
+            </n-space>
         </div>
     </div>
 
@@ -292,9 +333,9 @@ function drawBarChart(dataIn) {
             <n-table :bordered="true" size="large" style="text-align: center;">
                 <thead>
                     <tr>
-                        <td>日期</td>
-                        <td>惩罚内容</td>
-                        <td>完成状况</td>
+                        <td style="font-size: 18px;">日期</td>
+                        <td style="font-size: 18px;">惩罚内容</td>
+                        <td style="font-size: 18px;">完成状况</td>
                     </tr>
                 </thead>
                 <tbody>
@@ -308,7 +349,7 @@ function drawBarChart(dataIn) {
                         >
                             {{ item.date }}
                         </td>
-                        <td
+                        <td style="font-size: 18px;"
                         :style="{
                             'background-color': statusToColor(item.done),
                         }"
@@ -353,9 +394,9 @@ function drawBarChart(dataIn) {
             <div style="overflow: auto">
                 <n-list bordered>
                     <n-list-item>
-                        <n-thing style="text-align: left;">
+                        <n-thing style="text-align: left; font-size: 18px">
                             <日期>: Unix Timestamp<br />
-                            <編號>: int <懲罰主文>: string 〔詳細資料〕: additionalMetaDeta（執行狀態）: statusMetaData
+                            <編號>: int <懲罰主文>: string 〔詳細資料〕: additionalMetaData（執行狀態）: statusMetaData
                         </n-thing>
                     </n-list-item>
                 </n-list>
@@ -365,8 +406,8 @@ function drawBarChart(dataIn) {
             <div>
                 <n-list bordered>
                     <n-list-item>
-                        <n-thing>
-                            🆙增加、🔁重抽、2️⃣備案、📝原主人修改n次、其他後來增加的條件
+                        <n-thing style="font-size: 18px;">
+                            🆙增加、🔁重抽、2️⃣備案、📝原主人修改n次、➕其他後來增加的條件
                         </n-thing>
                     </n-list-item>
                 </n-list>
@@ -376,7 +417,7 @@ function drawBarChart(dataIn) {
             <div>
                 <n-list bordered>
                     <n-list-item>
-                        <n-thing>
+                        <n-thing style="font-size: 18px;">
                             ✅完成、✅已抽、🏁原主人或投票給過、⏲️ ⚔️目前已完成進度
                         </n-thing>
                     </n-list-item>
