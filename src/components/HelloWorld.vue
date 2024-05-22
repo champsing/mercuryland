@@ -55,8 +55,8 @@ ChartJS.register(
 //   }
 // });
 
-var filterBegTs = defineModel({ default: 0, set(value) { refresh(value); return value; }})
-var filterEndDate = ref(new Date(Date.now()).toISOString().slice(0, 10));
+var filterBegTs = defineModel("filterBegTs", { default: 0, set(value) { refresh(value, filterEndTs.value); return value; }})
+var filterEndTs = defineModel("filterEndTs", { default: Date.now(), set(value) { refresh(filterBegTs.value, value); return value; }})
 var filterFinish = ref(-1);
 var filterSearch = ref("");
 
@@ -69,14 +69,14 @@ var dataDisplay = ref([]);
 
 d3.csv(dataPath, function (d) {
     dataSource.push(d);
-    refresh(filterBegTs.value);
+    refresh(filterBegTs.value, filterEndTs.value);
 });
 
-function refresh(begTs) {
+function refresh(begTs, endTs) {
     dataDisplay.value = dataSource
         .filter(
             (v) =>
-                v.date >= new Date(begTs).toISOString().slice(0, 10) && v.date <= filterEndDate.value
+                v.date >= new Date(begTs).toISOString().slice(0, 10) && v.date <= new Date(endTs).toISOString().slice(0, 10)
         )
         .filter((v) => filterFinish.value == -1 || filterFinish.value == v.done)
         .filter(
@@ -87,11 +87,6 @@ function refresh(begTs) {
 
     drawPieChart(dataDisplay.value);
     drawBarChart(dataDisplay.value);
-}
-
-function updateEndDate(newDate) {
-    filterEndDate.value = newDate.toISOString().slice(0, 10);
-    refresh();
 }
 
 function updateFinish(newFinish) {
@@ -286,12 +281,7 @@ function drawBarChart(dataIn) {
         </div>
         <div>
             <label style="font-size: 18px;">结束日期:</label>
-            <n-date-picker v-model:value="timestamp" type="date" />
-            <input
-                type="date"
-                :value="filterEndDate.valueOf()"
-                @input="updateEndDate($event.target.valueAsDate)"
-            />
+            <n-date-picker type="date" v-model:value="filterEndTs"/>
         </div>
         <div>
             <label style="font-size: 18px;">完成状态:</label>
