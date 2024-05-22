@@ -29,8 +29,6 @@ ChartJS.register(
     TimeScale
 );
 
-defineProps({});
-
 // export default defineComponent({
 //   setup() {
 //     return {
@@ -57,7 +55,7 @@ defineProps({});
 //   }
 // });
 
-var filterBegDate = ref("1970-01-01");
+var filterBegTs = defineModel({ default: 0, set(value) { refresh(value); return value; }})
 var filterEndDate = ref(new Date(Date.now()).toISOString().slice(0, 10));
 var filterFinish = ref(-1);
 var filterSearch = ref("");
@@ -71,14 +69,14 @@ var dataDisplay = ref([]);
 
 d3.csv(dataPath, function (d) {
     dataSource.push(d);
-    refresh();
+    refresh(filterBegTs.value);
 });
 
-function refresh() {
+function refresh(begTs) {
     dataDisplay.value = dataSource
         .filter(
             (v) =>
-                v.date >= filterBegDate.value && v.date <= filterEndDate.value
+                v.date >= new Date(begTs).toISOString().slice(0, 10) && v.date <= filterEndDate.value
         )
         .filter((v) => filterFinish.value == -1 || filterFinish.value == v.done)
         .filter(
@@ -89,11 +87,6 @@ function refresh() {
 
     drawPieChart(dataDisplay.value);
     drawBarChart(dataDisplay.value);
-}
-
-function updateBegDate(newDate) {
-    filterBegDate.value = newDate.toISOString().slice(0, 10);
-    refresh();
 }
 
 function updateEndDate(newDate) {
@@ -289,15 +282,7 @@ function drawBarChart(dataIn) {
     <div class="filter">
         <div>
             <label style="font-size: 18px;">起始日期:</label>
-            <n-date-picker type="date" 
-            v-model:value="timestamp"
-            @input="updateBegDate($event.target.valueAsDate)"/>
-            <input
-                type="date"
-                :value="filterBegDate.valueOf()"
-                @input="updateBegDate($event.target.valueAsDate)"
-                 
-            />
+            <n-date-picker type="date" v-model:value="filterBegTs"/>
         </div>
         <div>
             <label style="font-size: 18px;">结束日期:</label>
