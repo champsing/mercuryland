@@ -29,11 +29,11 @@ ChartJS.register(
     TimeScale
 );
 
-// export default defineComponent({
-//   setup() {
+//  export default defineComponent({
+//    setup() {
 //     return {
 //       value: ref([""]),
-//       statuses: [
+//       options: [
 //         {
 //           label: "未開始",
 //           value: "0",
@@ -55,10 +55,10 @@ ChartJS.register(
 //   }
 // });
 
-var filterBegTs = defineModel("filterBegTs", { default: 0, set(value) { refresh(value, filterEndTs.value); return value; }})
-var filterEndTs = defineModel("filterEndTs", { default: Date.now(), set(value) { refresh(filterBegTs.value, value); return value; }})
-var filterFinish = ref(-1);
-var filterSearch = ref("");
+var filterBegTs = defineModel("filterBegTs", { default: 0, set(value) { refresh(value, filterEndTs.value, filterFinish.value, filterSearch.value); return value; }})
+var filterEndTs = defineModel("filterEndTs", { default: Date.now(), set(value) { refresh(filterBegTs.value, value, filterFinish.value, filterSearch.value); return value; }})
+var filterFinish = defineModel("filterFinish", { default: -1, set(value) { refresh(filterBegTs.value, filterEndTs.value, value, filterSearch.value); return value; }})
+var filterSearch = defineModel("filterSearch", { default: "", set(value) { refresh(filterBegTs.value, filterEndTs.value, filterFinish.value, value); return value; }})
 
 const dataPath =
     "data.csv?random=" + Math.floor(Math.random() * 1000000).toString();
@@ -69,34 +69,24 @@ var dataDisplay = ref([]);
 
 d3.csv(dataPath, function (d) {
     dataSource.push(d);
-    refresh(filterBegTs.value, filterEndTs.value);
+    refresh(filterBegTs.value, filterEndTs.value, filterFinish.value);
 });
 
-function refresh(begTs, endTs) {
+function refresh(begTs, endTs, finish, search) {
     dataDisplay.value = dataSource
         .filter(
             (v) =>
                 v.date >= new Date(begTs).toISOString().slice(0, 10) && v.date <= new Date(endTs).toISOString().slice(0, 10)
         )
-        .filter((v) => filterFinish.value == -1 || filterFinish.value == v.done)
+        .filter((v) => finish == -1 || finish == v.done)
         .filter(
             (v) =>
-                filterSearch.value == "" || v.name.includes(filterSearch.value)
+                search == "" || v.name.includes(search)
         )
         .sort((lhs, rhs) => lhs.date.localeCompare(rhs.date));
 
     drawPieChart(dataDisplay.value);
     drawBarChart(dataDisplay.value);
-}
-
-function updateFinish(newFinish) {
-    filterFinish.value = parseInt(newFinish);
-    refresh();
-}
-
-function updateSearch(text) {
-    filterSearch.value = text;
-    refresh();
 }
 
 function statusToString(i) {
@@ -286,8 +276,8 @@ function drawBarChart(dataIn) {
         <div>
             <label style="font-size: 18px;">完成状态:</label>
             <n-space vertical>
-                <n-select :options="statuses" :consistent-menu-width="false" />
-            </n-space>    
+                <n-select v-model:value="filterFinish" :consistent-menu-width="false" />
+            </n-space>
             <select
                 :value="filterFinish.valueOf()"
                 @input="updateFinish($event.target.value)"
@@ -303,12 +293,7 @@ function drawBarChart(dataIn) {
             <label style="font-size: 18px;">搜索:</label>
             <n-space vertical>
                 <n-input round placeholder="輸入懲罰內容來搜尋" 
-                :value="filterSearch.valueOf()"
-                @input="updateSearch($event.target.value)" />
-                <input
-                    :value="filterSearch.valueOf()"
-                    @input="updateSearch($event.target.value)"
-                />
+                v-model:value="filterSearch" type="text" />
             </n-space>
         </div>
     </div>
