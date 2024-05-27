@@ -1,7 +1,7 @@
-<script setup>
-import { defineComponent, ref } from "vue";
+<script setup lang="ts">
+import { ref } from "vue";
 import * as d3 from "d3";
-import { NCode, NCollapse, NCollapseItem, NDatePicker, NSelect, NInput, NList, NListItem, NThing, NTable, NSpace } from "naive-ui";
+import { NCollapse, NCollapseItem, NDatePicker, NSelect, NInput, NList, NListItem, NThing, NTable, NSpace } from "naive-ui";
 // import { Doughnut, Line } from "vue-chartjs";
 import {
     Chart as ChartJS,
