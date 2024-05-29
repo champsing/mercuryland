@@ -33,7 +33,7 @@ ChartJS.register(
 //    setup() {
 //     return {
 //       value: ref([""]),
-//       options: [
+//       options [
 //         {
 //           label: "未開始",
 //           value: "0",
@@ -59,6 +59,30 @@ var filterBegTs = defineModel("filterBegTs", { default: 0, set(value) { refresh(
 var filterEndTs = defineModel("filterEndTs", { default: Date.now(), set(value) { refresh(filterBegTs.value, value, filterFinish.value, filterSearch.value); return value; }})
 var filterFinish = defineModel("filterFinish", { default: -1, set(value) { refresh(filterBegTs.value, filterEndTs.value, value, filterSearch.value); return value; }})
 var filterSearch = defineModel("filterSearch", { default: "", set(value) { refresh(filterBegTs.value, filterEndTs.value, filterFinish.value, value); return value; }})
+var finishOptions = [
+    {
+        label: "",
+        value: -1,
+    },
+    {
+        label: "未開始",
+        value: 0,
+    }, 
+    {
+        label: "已完成",
+        value: 1,
+    }, 
+    {
+        label: "勉強過",
+        value: 2,
+    }, 
+    {
+        label: "進行中",
+        value: 3,
+    },
+]
+
+
 
 const dataPath =
     "data.csv?random=" + Math.floor(Math.random() * 1000000).toString();
@@ -69,7 +93,7 @@ var dataDisplay = ref([]);
 
 d3.csv(dataPath, function (d) {
     dataSource.push(d);
-    refresh(filterBegTs.value, filterEndTs.value, filterFinish.value);
+    refresh(filterBegTs.value, filterEndTs.value, filterFinish.value, filterSearch.value);
 });
 
 function refresh(begTs, endTs, finish, search) {
@@ -80,8 +104,7 @@ function refresh(begTs, endTs, finish, search) {
         )
         .filter((v) => finish == -1 || finish == v.done)
         .filter(
-            (v) =>
-                search == "" || v.name.includes(search)
+            (v) =>                search == "" || v.name.toLowerCase().includes(search.toLowerCase())
         )
         .sort((lhs, rhs) => lhs.date.localeCompare(rhs.date));
 
@@ -276,19 +299,9 @@ function drawBarChart(dataIn) {
         <div>
             <label style="font-size: 18px;">完成状态:</label>
             <n-space vertical>
-                <n-select v-model:value="filterFinish" :consistent-menu-width="false" />
+                <n-select v-model:value="filterFinish" :options="finishOptions" :consistent-menu-width="false" />
             </n-space>
-            <select
-                :value="filterFinish.valueOf()"
-                @input="updateFinish($event.target.value)"
-            >
-                <option value="-1"></option>
-                <option value="0">未开始</option>
-                <option value="1">已完成</option>
-                <option value="2">勉强过</option>
-                <option value="3">进行中</option>
-            </select>
-        </div>
+            </div>
         <div>
             <label style="font-size: 18px;">搜索:</label>
             <n-space vertical>
