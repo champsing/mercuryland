@@ -29,36 +29,10 @@ ChartJS.register(
     TimeScale
 );
 
-//  export default defineComponent({
-//    setup() {
-//     return {
-//       value: ref([""]),
-//       options [
-//         {
-//           label: "未開始",
-//           value: "0",
-//         }, 
-//         {
-//           label: "已完成",
-//           value: "1",
-//         }, 
-//         {
-//           label: "勉強過",
-//           value: "2",
-//         }, 
-//         {
-//           label: "進行中",
-//           value: "3",
-//         },
-//       ]
-//     };
-//   }
-// });
-
-var filterBegTs = defineModel("filterBegTs", { default: 0, set(value) { refresh(value, filterEndTs.value, filterFinish.value, filterSearch.value); return value; }})
-var filterEndTs = defineModel("filterEndTs", { default: Date.now(), set(value) { refresh(filterBegTs.value, value, filterFinish.value, filterSearch.value); return value; }})
-var filterFinish = defineModel("filterFinish", { default: -1, set(value) { refresh(filterBegTs.value, filterEndTs.value, value, filterSearch.value); return value; }})
-var filterSearch = defineModel("filterSearch", { default: "", set(value) { refresh(filterBegTs.value, filterEndTs.value, filterFinish.value, value); return value; }})
+var filterBegTs = defineModel("filterBegTs", { default: 0, set(value) { refresh(value, filterEndTs.value, filterFinish.value, filterSearch.value); return value; } })
+var filterEndTs = defineModel("filterEndTs", { default: Date.now(), set(value) { refresh(filterBegTs.value, value, filterFinish.value, filterSearch.value); return value; } })
+var filterFinish = defineModel("filterFinish", { default: -1, set(value) { refresh(filterBegTs.value, filterEndTs.value, value, filterSearch.value); return value; } })
+var filterSearch = defineModel("filterSearch", { default: "", set(value) { refresh(filterBegTs.value, filterEndTs.value, filterFinish.value, value); return value; } })
 var finishOptions = [
     {
         label: "",
@@ -67,15 +41,15 @@ var finishOptions = [
     {
         label: "未開始",
         value: 0,
-    }, 
+    },
     {
         label: "已完成",
         value: 1,
-    }, 
+    },
     {
         label: "勉強過",
         value: 2,
-    }, 
+    },
     {
         label: "進行中",
         value: 3,
@@ -94,7 +68,7 @@ var dataDisplay = ref([]);
 d3.csv(dataPath, function (d) {
     dataSource.push(d);
     refresh(filterBegTs.value, filterEndTs.value, filterFinish.value, filterSearch.value);
-});
+} as any);
 
 function refresh(begTs, endTs, finish, search) {
     dataDisplay.value = dataSource
@@ -104,7 +78,7 @@ function refresh(begTs, endTs, finish, search) {
         )
         .filter((v) => finish == -1 || finish == v.done)
         .filter(
-            (v) =>                search == "" || v.name.toLowerCase().includes(search.toLowerCase())
+            (v) => search == "" || v.name.toLowerCase().includes(search.toLowerCase())
         )
         .sort((lhs, rhs) => lhs.date.localeCompare(rhs.date));
 
@@ -180,13 +154,13 @@ function drawPieChart(dataIn) {
         .append("g")
         .append("path")
         .attr("fill", (_, i) => statusToColor(i))
-        .attr("d", arcFn);
+        .attr("d", arcFn as any);
 
     svg.selectAll("label")
         .data(arc.filter((d) => d.data != 0))
         .enter()
         .append("g")
-        .attr("transform", (d) => "translate(" + arcFn.centroid(d) + ")")
+        .attr("transform", (d) => "translate(" + arcFn.centroid(d as any) + ")")
         .append("text")
         .text((d) => d.data.toString())
         .style("text-anchor", "middle")
@@ -195,6 +169,7 @@ function drawPieChart(dataIn) {
 
 function drawBarChart(dataIn) {
     var series = Array.from(
+        // @ts-ignore 
         Map.groupBy(dataIn, (d) => d.date),
         ([key, value]) => [key, value]
     ).map(function (d) {
@@ -290,23 +265,22 @@ function drawBarChart(dataIn) {
     <div class="filter">
         <div>
             <label style="font-size: 18px;">起始日期:</label>
-            <n-date-picker type="date" v-model:value="filterBegTs"/>
+            <n-date-picker type="date" v-model:value="filterBegTs" />
         </div>
         <div>
             <label style="font-size: 18px;">结束日期:</label>
-            <n-date-picker type="date" v-model:value="filterEndTs"/>
+            <n-date-picker type="date" v-model:value="filterEndTs" />
         </div>
         <div>
             <label style="font-size: 18px;">完成状态:</label>
             <n-space vertical>
                 <n-select v-model:value="filterFinish" :options="finishOptions" :consistent-menu-width="false" />
             </n-space>
-            </div>
+        </div>
         <div>
             <label style="font-size: 18px;">搜索:</label>
             <n-space vertical>
-                <n-input round placeholder="輸入懲罰內容來搜尋" 
-                v-model:value="filterSearch" type="text" />
+                <n-input round placeholder="輸入懲罰內容來搜尋" v-model:value="filterSearch" type="text" />
             </n-space>
         </div>
     </div>
@@ -324,26 +298,20 @@ function drawBarChart(dataIn) {
                     </tr>
                 </thead>
                 <tbody>
-                    <tr
-                        v-for="item in dataDisplay"
-                    >
-                        <td 
-                        :style="{
+                    <tr v-for="item in dataDisplay">
+                        <td :style="{
                             'background-color': statusToColor(item.done),
                             'color': statusToColorText(item.done)
-                        }"
-                        >
+                        }">
                             {{ item.date }}
                         </td>
-                        <td
-                        :style="{
+                        <td :style="{
                             'background-color': statusToColor(item.done),
                             'color': statusToColorText(item.done)
-                        }"
-                        >
-                        {{ truncateStr(item.name) }}
-                        <!-- 顯示右側拉匣，標題為項目名稱，內容為項目敘述 -->
-                        <!-- <n-button @click="activate('right')">
+                        }">
+                            {{ truncateStr(item.name) }}
+                            <!-- 顯示右側拉匣，標題為項目名稱，內容為項目敘述 -->
+                            <!-- <n-button @click="activate('right')">
                             {{ truncateStr(item.name) }}
                         </n-button>
                         <n-drawer v-model:show="active" :width="502" :placement="placement">
@@ -352,12 +320,10 @@ function drawBarChart(dataIn) {
                             </n-drawer-content>
                         </n-drawer> -->
                         </td>
-                        <td
-                        :style="{
+                        <td :style="{
                             'background-color': statusToColor(item.done),
                             'color': statusToColorText(item.done)
-                        }"
-                        >
+                        }">
                             {{ statusToString(item.done) }}
                         </td>
                     </tr>
@@ -365,12 +331,7 @@ function drawBarChart(dataIn) {
             </n-table>
         </div>
         <div class="pie">
-            <svg
-                id="pieChart"
-                width="100%"
-                height="100%"
-                viewBox="-1 -1 2 2"
-            ></svg>
+            <svg id="pieChart" width="100%" height="100%" viewBox="-1 -1 2 2"></svg>
         </div>
     </div>
 
@@ -378,7 +339,7 @@ function drawBarChart(dataIn) {
         <svg id="barChart" height="90%"></svg>
     </div>
     <hr class="rounded" />
-    
+
     <n-space>
         <br />
     </n-space>
@@ -393,7 +354,7 @@ function drawBarChart(dataIn) {
                     <n-list-item>
                         <n-thing style="text-align: left; font-size: 18px">
                             <日期>: Unix Timestamp<br />
-                            <編號>: int <懲罰主文>: string 〔詳細資料〕: additionalMetaData（執行狀態）: statusMetaData
+                                <編號>: int <懲罰主文>: string 〔詳細資料〕: additionalMetaData（執行狀態）: statusMetaData
                         </n-thing>
                     </n-list-item>
                 </n-list>
@@ -422,7 +383,7 @@ function drawBarChart(dataIn) {
             </div>
         </n-collapse-item>
     </n-collapse>
-    
+
 </template>
 
 <style scoped>
