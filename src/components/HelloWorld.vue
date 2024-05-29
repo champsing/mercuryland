@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import * as d3 from "d3";
-import { NCollapse, NCollapseItem, NDatePicker, NSelect, NInput, NList, NListItem, NThing, NTable, NSpace } from "naive-ui";
+import { NButton, NCollapse, NCollapseItem, NDatePicker, NDrawer, NDrawerContent, DrawerPlacement, NSelect, NInput, NList, NListItem, NThing, NTable, NSpace } from "naive-ui";
 // import { Doughnut, Line } from "vue-chartjs";
 import {
     Chart as ChartJS,
@@ -29,7 +29,7 @@ ChartJS.register(
     TimeScale
 );
 
-var filterBegTs = defineModel("filterBegTs", { default: 0, set(value) { refresh(value, filterEndTs.value, filterFinish.value, filterSearch.value); return value; } })
+var filterBegTs = defineModel("filterBegTs", { default: 1672502400000, set(value) { refresh(value, filterEndTs.value, filterFinish.value, filterSearch.value); return value; } })
 var filterEndTs = defineModel("filterEndTs", { default: Date.now(), set(value) { refresh(filterBegTs.value, value, filterFinish.value, filterSearch.value); return value; } })
 var filterFinish = defineModel("filterFinish", { default: -1, set(value) { refresh(filterBegTs.value, filterEndTs.value, value, filterSearch.value); return value; } })
 var filterSearch = defineModel("filterSearch", { default: "", set(value) { refresh(filterBegTs.value, filterEndTs.value, filterFinish.value, value); return value; } })
@@ -167,6 +167,21 @@ function drawPieChart(dataIn) {
         .style("font-size", 0.1);
 }
 
+const active = ref(false)
+const placement = ref<DrawerPlacement>('right')
+const content = ref({
+    id: "",
+    date: "",
+    name: "",
+    done: "",
+    description: ""
+})
+const activate = (item) => {
+    active.value = true
+    content.value = item
+}
+
+
 function drawBarChart(dataIn) {
     var series = Array.from(
         // @ts-ignore 
@@ -257,7 +272,6 @@ function drawBarChart(dataIn) {
         .selectAll("text")
         .style("text-anchor", "end")
         .attr("transform", "rotate(-45)");
-
 }
 </script>
 
@@ -297,6 +311,7 @@ function drawBarChart(dataIn) {
                         <td style="font-size: 18px;">完成状况</td>
                     </tr>
                 </thead>
+
                 <tbody>
                     <tr v-for="item in dataDisplay">
                         <td :style="{
@@ -311,15 +326,12 @@ function drawBarChart(dataIn) {
                         }">
                             {{ truncateStr(item.name) }}
                             <!-- 顯示右側拉匣，標題為項目名稱，內容為項目敘述 -->
-                            <!-- <n-button @click="activate('right')">
-                            {{ truncateStr(item.name) }}
-                        </n-button>
-                        <n-drawer v-model:show="active" :width="502" :placement="placement">
-                            <n-drawer-content title={{ truncateStr(item.name) }}>
-                                {{ truncateStr(item.description) }}
-                            </n-drawer-content>
-                        </n-drawer> -->
+                            <n-button @click="activate(item)" class="stylefornbutton">
+                                {{ truncateStr(item.name) }}
+                            </n-button>
+
                         </td>
+
                         <td :style="{
                             'background-color': statusToColor(item.done),
                             'color': statusToColorText(item.done)
@@ -329,6 +341,11 @@ function drawBarChart(dataIn) {
                     </tr>
                 </tbody>
             </n-table>
+            <n-drawer v-model:show="active" :width="502" :placement="placement">
+                <n-drawer-content :title="truncateStr(content.name)">
+                    {{ truncateStr(content.description) }}
+                </n-drawer-content>
+            </n-drawer>
         </div>
         <div class="pie">
             <svg id="pieChart" width="100%" height="100%" viewBox="-1 -1 2 2"></svg>
@@ -438,5 +455,17 @@ table {
 
 .read-the-docs {
     color: #888;
+}
+
+.n-button .n-button__content {
+    --n-border: 0;
+    --n-border-hover: 0;
+    --n-border-pressed: 0;
+    --n-border-focus: 0;
+    --n-border-disabled: 0;
+    --n-text-color: #FFFFFF;
+    --n-text-color-hover: #BEBEBE;
+    --n-text-color-pressed: #272727;
+    --n-text-color-focus: #BEBEBE;
 }
 </style>
