@@ -56,18 +56,6 @@ button:focus-visible {
     text-align: center;
 }
 
-.n-button .n-button__content {
-    --n-border: 0;
-    --n-border-hover: 0;
-    --n-border-pressed: 0;
-    --n-border-focus: 0;
-    --n-border-disabled: 0;
-    --n-text-color: #FFFFFF;
-    --n-text-color-hover: #BEBEBE;
-    --n-text-color-pressed: #272727;
-    --n-text-color-focus: #BEBEBE;
-}
-
 
 @media (prefers-color-scheme: light) {
     :root {

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import * as d3 from "d3";
-import { NButton, NCollapse, NCollapseItem, NDatePicker, NDrawer, NDrawerContent, DrawerPlacement, NSelect, NInput, NList, NListItem, NThing, NTable, NSpace } from "naive-ui";
+import { NButton, NCollapse, NCollapseItem, NDatePicker, NDrawer, NDrawerContent, NSelect, NInput, NList, NListItem, NThing, NTable, NSpace } from "naive-ui";
 // import { Doughnut, Line } from "vue-chartjs";
 import {
     Chart as ChartJS,
@@ -259,22 +259,28 @@ function drawBarChart(dataIn) {
         .attr("transform", "rotate(-45)");
 }
 
-const DRAWER_PLACEMENT = ref<DrawerPlacement>('right')
 const activateDrawer = (item) => {
     isDrawerActive.value = true
-    drawerContent.value = item
+    csvContent.value = item
 }
 const open_youtube_vod = (link) => {
     window.open(link)
 }
+/*
+const open_youtube_vod = (link, link2) => {
+    window.open(link)
+    window.open(link2)
+}
+*/
 const isDrawerActive = ref(false)
-const drawerContent = ref({
+const csvContent = ref({
     id: "",
     date: "",
-    youtube_vod: "",
+    youtube_vod: "",//["",""]
     name: "",
     done: "",
-    description: ""
+    description: "",
+    //youtube_vod_2: ""
 })
 
 </script>
@@ -345,8 +351,8 @@ const drawerContent = ref({
                 </tbody>
             </n-table>
             <n-drawer v-model:show="isDrawerActive" :width="502" :placement="'right'">
-                <n-drawer-content :title="truncateStr(drawerContent.name)">
-                    {{ truncateStr(drawerContent.description) }}
+                <n-drawer-content :title="truncateStr(csvContent.name)">
+                    {{ truncateStr(csvContent.description) }}
                 </n-drawer-content>
             </n-drawer>
         </div>
@@ -458,17 +464,5 @@ table {
 
 .read-the-docs {
     color: #888;
-}
-
-.buttonName {
-    --n-border: 0;
-    --n-border-hover: 0;
-    --n-border-pressed: 0;
-    --n-border-focus: 0;
-    --n-border-disabled: 0;
-    --n-text-color: #FFFFFF;
-    --n-text-color-hover: #BEBEBE;
-    --n-text-color-pressed: #272727;
-    --n-text-color-focus: #BEBEBE;
 }
 </style>
