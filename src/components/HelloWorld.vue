@@ -167,21 +167,6 @@ function drawPieChart(dataIn) {
         .style("font-size", 0.1);
 }
 
-const active = ref(false)
-const placement = ref<DrawerPlacement>('right')
-const content = ref({
-    id: "",
-    date: "",
-    name: "",
-    done: "",
-    description: ""
-})
-const activate = (item) => {
-    active.value = true
-    content.value = item
-}
-
-
 function drawBarChart(dataIn) {
     var series = Array.from(
         // @ts-ignore 
@@ -273,6 +258,21 @@ function drawBarChart(dataIn) {
         .style("text-anchor", "end")
         .attr("transform", "rotate(-45)");
 }
+
+const DRAWER_PLACEMENT = ref<DrawerPlacement>('right')
+const activateDrawer = (item) => {
+    isDrawerActive.value = true
+    drawerContent.value = item
+}
+const isDrawerActive = ref(false)
+const drawerContent = ref({
+    id: "",
+    date: "",
+    name: "",
+    done: "",
+    description: ""
+})
+
 </script>
 
 <template>
@@ -324,12 +324,9 @@ function drawBarChart(dataIn) {
                             'background-color': statusToColor(item.done),
                             'color': statusToColorText(item.done)
                         }">
-                            {{ truncateStr(item.name) }}
-                            <!-- 顯示右側拉匣，標題為項目名稱，內容為項目敘述 -->
-                            <n-button @click="activate(item)" class="stylefornbutton">
+                            <n-button @click="activateDrawer(item)" :text="true" :focusable="false" :text-color="'#FFFFFF'">
                                 {{ truncateStr(item.name) }}
                             </n-button>
-
                         </td>
 
                         <td :style="{
@@ -341,9 +338,9 @@ function drawBarChart(dataIn) {
                     </tr>
                 </tbody>
             </n-table>
-            <n-drawer v-model:show="active" :width="502" :placement="placement">
-                <n-drawer-content :title="truncateStr(content.name)">
-                    {{ truncateStr(content.description) }}
+            <n-drawer v-model:show="isDrawerActive" :width="502" :placement="'right'">
+                <n-drawer-content :title="truncateStr(drawerContent.name)">
+                    {{ truncateStr(drawerContent.description) }}
                 </n-drawer-content>
             </n-drawer>
         </div>
@@ -457,7 +454,7 @@ table {
     color: #888;
 }
 
-.n-button .n-button__content {
+.buttonName {
     --n-border: 0;
     --n-border-hover: 0;
     --n-border-pressed: 0;
