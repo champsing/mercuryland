@@ -264,10 +264,14 @@ const activateDrawer = (item) => {
     isDrawerActive.value = true
     drawerContent.value = item
 }
+const open_youtube_vod = (link) => {
+    window.open(link)
+}
 const isDrawerActive = ref(false)
 const drawerContent = ref({
     id: "",
     date: "",
+    youtube_vod: "",
     name: "",
     done: "",
     description: ""
@@ -318,7 +322,9 @@ const drawerContent = ref({
                             'background-color': statusToColor(item.done),
                             'color': statusToColorText(item.done)
                         }">
-                            {{ item.date }}
+                            <n-button @click="open_youtube_vod(item.youtube_vod)" :text="true" :focusable="false" :text-color="'#FFFFFF'">
+                                {{ item.date }}
+                            </n-button>
                         </td>
                         <td :style="{
                             'background-color': statusToColor(item.done),
