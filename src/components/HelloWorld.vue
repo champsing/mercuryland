@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import * as d3 from "d3";
-import { NButton, NCollapse, NCollapseItem, NDatePicker, NDrawer, NDrawerContent, NSelect, NInput, NList, NListItem, NThing, NTable, NSpace } from "naive-ui";
-// import { Doughnut, Line } from "vue-chartjs";
+import { NButton, NCollapse, NCollapseItem, NDatePicker, NDrawer, NDrawerContent, NGrid, NGi, NSelect, NInput, NList, NListItem, NThing, NTable, NSpace } from "naive-ui";
+import { Doughnut, Line } from "vue-chartjs";
 import {
     Chart as ChartJS,
     Title,
@@ -15,9 +15,12 @@ import {
     LinearScale,
     LogarithmicScale,
     TimeScale,
+    ChartOptions,
+    ArcElement
 } from "chart.js";
 import penaltyData from "../assets/penalty.json";
 import vodLinkData from "../assets/vod.json";
+import penaltyStatus from "../assets/penalty_status.json";
 ChartJS.register(
     Title,
     Tooltip,
@@ -28,7 +31,8 @@ ChartJS.register(
     CategoryScale,
     LinearScale,
     LogarithmicScale,
-    TimeScale
+    TimeScale,
+    ArcElement
 );
 
 var filterBegTs = defineModel("filterBegTs", { default: 1672502400000, set(value) { refresh(value, filterEndTs.value, filterFinish.value, filterSearch.value); return value; } })
@@ -58,23 +62,11 @@ var finishOptions = [
     },
 ]
 
-
-
-const dataPath =
-    "data.csv?random=" + Math.floor(Math.random() * 1000000).toString();
-
-var dataSource = [];
 var dataDisplay = ref([]);
 
 
-d3.csv(dataPath, function (d) {
-    dataSource.push(d);
-    refresh(filterBegTs.value, filterEndTs.value, filterFinish.value, filterSearch.value);
-} as any);
-
-
 function refresh(begTs, endTs, finish, search) {
-    dataDisplay.value = dataSource
+    dataDisplay.value = penaltyData
         .filter(
             (v) =>
                 v.date >= new Date(begTs).toISOString().slice(0, 10) && v.date <= new Date(endTs).toISOString().slice(0, 10)
@@ -88,6 +80,8 @@ function refresh(begTs, endTs, finish, search) {
     drawPieChart(dataDisplay.value);
     drawBarChart(dataDisplay.value);
 }
+
+refresh(filterBegTs.value, filterEndTs.value, filterFinish.value, filterSearch.value)
 
 function statusToString(i) {
     if (i == 0) {
@@ -136,6 +130,29 @@ function truncateStr(s) {
         return s;
     }
 }
+
+let pieChartConfig = {
+    maintainAspectRatio: false,
+    plugins: {
+        legend: {
+            display: false
+        },
+    },
+    layout: {
+        padding: 20
+    }
+} as ChartOptions<"doughnut">;
+
+const pieChartData = {
+    labels: penaltyStatus.map(x => x.name),
+    datasets: [{
+        label: null,
+        data: [100, 200, 300, 400],
+        backgroundColor: penaltyStatus.map(x => x.color),
+        borderWidth: 0,
+        hoverOffset: 50
+    }]
+};
 
 function drawPieChart(dataIn) {
     const s0 = dataIn.filter((v) => v.done == 0).length;
@@ -313,9 +330,8 @@ const csvContent = ref({
     </div>
 
     <hr class="rounded" />
-
-    <div class="main">
-        <div class="detail">
+    <n-grid x-gap="12" :cols="3" class="main">
+        <n-gi class="detail" :span="2">
             <n-table :bordered="true" size="small" style="text-align: center;">
                 <thead>
                     <tr>
@@ -331,13 +347,14 @@ const csvContent = ref({
                             'background-color': statusToColor(item.done),
                             'color': statusToColorText(item.done)
                         }">
-                                {{ item.date }}
+                            {{ item.date }}
                         </td>
                         <td :style="{
                             'background-color': statusToColor(item.done),
                             'color': statusToColorText(item.done)
                         }">
-                            <n-button @click="activateDrawer(item)" :text="true" :focusable="false" :text-color="'#FFFFFF'">
+                            <n-button @click="activateDrawer(item)" :text="true" :focusable="false"
+                                :text-color="'#FFFFFF'">
                                 {{ truncateStr(item.name) }}
                             </n-button>
                         </td>
@@ -351,19 +368,24 @@ const csvContent = ref({
                     </tr>
                 </tbody>
             </n-table>
-            <n-drawer v-model:show="isDrawerActive" :width="502" :placement="'right'">
-                <n-drawer-content :title="truncateStr(csvContent.name)">
-                    {{ csvContent.description }}
-                    <n-button @click="open_youtube_vod(csvContent.youtube_vod)">
-                        直播連結
-                    </n-button>
-                </n-drawer-content>
-            </n-drawer>
-        </div>
-        <div class="pie">
-            <svg id="pieChart" width="100%" height="100%" viewBox="-1 -1 2 2"></svg>
-        </div>
-    </div>
+
+        </n-gi>
+        <n-gi>
+            <Doughnut ref="pieChart" :options="pieChartConfig" :data="pieChartData" :style="{
+                height: '90%',
+                width: '90%',
+            }" />
+        </n-gi>
+    </n-grid>
+
+    <n-drawer v-model:show="isDrawerActive" :width="502" :placement="'right'">
+        <n-drawer-content :title="truncateStr(csvContent.name)">
+            {{ csvContent.description }}
+            <n-button @click="open_youtube_vod(csvContent.youtube_vod)">
+                直播連結
+            </n-button>
+        </n-drawer-content>
+    </n-drawer>
 
     <div class="time">
         <svg id="barChart" height="90%"></svg>
@@ -383,8 +405,8 @@ const csvContent = ref({
                 <n-list bordered>
                     <n-list-item>
                         <n-thing style="text-align: left; font-size: 18px">
-                            <日期>: Unix Timestamp<br />
-                                <編號>: int <懲罰主文>: string 〔詳細資料〕: additionalMetaData（執行狀態）: statusMetaData
+                            &lt;日期&gt;: Unix Timestamp<br />
+                            &lt;編號&gt;: int &lt;懲罰主文&gt;: string 〔詳細資料〕: additionalMetaData（執行狀態）: statusMetaData
                         </n-thing>
                     </n-list-item>
                 </n-list>
@@ -431,8 +453,6 @@ hr.rounded {
 
 .main {
     width: 90vw;
-    display: grid;
-    grid-template-columns: 80% 20%;
 }
 
 .detail {
