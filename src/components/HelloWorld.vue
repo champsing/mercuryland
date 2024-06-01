@@ -64,6 +64,30 @@ var finishOptions = [
 
 var dataDisplay = ref([]);
 
+let pieChartConfig = {
+    maintainAspectRatio: false,
+    plugins: {
+        legend: {
+            display: false
+        },
+    },
+    layout: {
+        padding: 20
+    }
+} as ChartOptions<"doughnut">;
+
+const pieChartData = ref({
+    labels: penaltyStatus.map(x => x.name),
+    datasets: [{
+        label: null,
+        data: penaltyStatus.map(x => penaltyData.filter(y => x.id == y.done).length),
+        backgroundColor: penaltyStatus.map(x => x.color),
+        borderWidth: 0,
+        hoverOffset: 50
+    }]
+});
+
+
 
 function refresh(begTs, endTs, finish, search) {
     dataDisplay.value = penaltyData
@@ -76,8 +100,16 @@ function refresh(begTs, endTs, finish, search) {
             (v) => search == "" || v.name.toLowerCase().includes(search.toLowerCase())
         )
         .sort((lhs, rhs) => lhs.date.localeCompare(rhs.date));
-
-    drawPieChart(dataDisplay.value);
+    pieChartData.value = {
+        labels: penaltyStatus.map(x => x.name),
+        datasets: [{
+            label: null,
+            data: penaltyStatus.map(x => dataDisplay.value.filter(y => x.id == y.done).length),
+            backgroundColor: penaltyStatus.map(x => x.color),
+            borderWidth: 0,
+            hoverOffset: 50
+        }]
+    }
     drawBarChart(dataDisplay.value);
 }
 
@@ -131,28 +163,6 @@ function truncateStr(s) {
     }
 }
 
-let pieChartConfig = {
-    maintainAspectRatio: false,
-    plugins: {
-        legend: {
-            display: false
-        },
-    },
-    layout: {
-        padding: 20
-    }
-} as ChartOptions<"doughnut">;
-
-const pieChartData = {
-    labels: penaltyStatus.map(x => x.name),
-    datasets: [{
-        label: null,
-        data: penaltyStatus.map(x => penaltyData.filter(y => x.id == y.done).length),
-        backgroundColor: penaltyStatus.map(x => x.color),
-        borderWidth: 0,
-        hoverOffset: 50
-    }]
-};
 
 
 
@@ -373,10 +383,7 @@ const csvContent = ref({
 
         </n-gi>
         <n-gi>
-            <Doughnut ref="pieChart" :options="pieChartConfig" :data="pieChartData" :style="{
-                height: '90%',
-                width: '90%',
-            }" />
+            <Doughnut ref="pieChart" :options="pieChartConfig" :data="pieChartData" class="pie" />
         </n-gi>
     </n-grid>
 
@@ -458,7 +465,7 @@ hr.rounded {
 }
 
 .detail {
-    max-height: 50vh;
+    height: 45vh;
     width: 100%;
     padding: 0 0 0 0;
     margin: 0 0 0 0;
@@ -466,7 +473,7 @@ hr.rounded {
 }
 
 .pie {
-    max-height: 50vh;
+    height: 45vh;
     width: 100%;
     padding: 0 0 0 0;
     margin: 0 0 0 0;
