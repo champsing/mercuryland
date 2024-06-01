@@ -16,6 +16,8 @@ import {
     LogarithmicScale,
     TimeScale,
 } from "chart.js";
+import penaltyData from "../assets/penalty.json";
+import vodLinkData from "../assets/vod.json";
 ChartJS.register(
     Title,
     Tooltip,
@@ -69,6 +71,7 @@ d3.csv(dataPath, function (d) {
     dataSource.push(d);
     refresh(filterBegTs.value, filterEndTs.value, filterFinish.value, filterSearch.value);
 } as any);
+
 
 function refresh(begTs, endTs, finish, search) {
     dataDisplay.value = dataSource
@@ -328,9 +331,7 @@ const csvContent = ref({
                             'background-color': statusToColor(item.done),
                             'color': statusToColorText(item.done)
                         }">
-                            <n-button @click="open_youtube_vod(item.youtube_vod)" :text="true" :focusable="false" :text-color="'#FFFFFF'">
                                 {{ item.date }}
-                            </n-button>
                         </td>
                         <td :style="{
                             'background-color': statusToColor(item.done),
@@ -352,7 +353,10 @@ const csvContent = ref({
             </n-table>
             <n-drawer v-model:show="isDrawerActive" :width="502" :placement="'right'">
                 <n-drawer-content :title="truncateStr(csvContent.name)">
-                    {{ truncateStr(csvContent.description) }}
+                    {{ csvContent.description }}
+                    <n-button @click="open_youtube_vod(csvContent.youtube_vod)">
+                        直播連結
+                    </n-button>
                 </n-drawer-content>
             </n-drawer>
         </div>
