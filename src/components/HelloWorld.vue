@@ -2,7 +2,7 @@
 import { ref } from "vue";
 import * as d3 from "d3";
 import { NButton, NCollapse, NCollapseItem, NDatePicker, NDrawer, NDrawerContent, NGrid, NGi, NSelect, NInput, NList, NListItem, NThing, NTable, NSpace } from "naive-ui";
-import { Doughnut, Line } from "vue-chartjs";
+import { Doughnut } from "vue-chartjs";
 import {
     Chart as ChartJS,
     Title,
@@ -19,7 +19,7 @@ import {
     ArcElement
 } from "chart.js";
 import penaltyData from "../assets/penalty.json";
-import vodLinkData from "../assets/vod.json";
+//import vodLinkData from "../assets/vod.json";
 import penaltyStatus from "../assets/penalty_status.json";
 ChartJS.register(
     Title,
@@ -163,41 +163,6 @@ function truncateStr(s) {
     }
 }
 
-
-
-
-function drawPieChart(dataIn) {
-    const s0 = dataIn.filter((v) => v.done == 0).length;
-    const s1 = dataIn.filter((v) => v.done == 1).length;
-    const s2 = dataIn.filter((v) => v.done == 2).length;
-    const s3 = dataIn.filter((v) => v.done == 3).length;
-
-    const pieFn = d3.pie();
-    const arcFn = d3.arc().innerRadius(0).outerRadius(0.9);
-    const arc = pieFn([s0, s1, s2, s3]);
-
-    d3.select("#pieChart").selectAll("*").remove();
-
-    const svg = d3.select("#pieChart");
-
-    svg.selectAll("arc")
-        .data(arc)
-        .enter()
-        .append("g")
-        .append("path")
-        .attr("fill", (_, i) => statusToColor(i))
-        .attr("d", arcFn as any);
-
-    svg.selectAll("label")
-        .data(arc.filter((d) => d.data != 0))
-        .enter()
-        .append("g")
-        .attr("transform", (d) => "translate(" + arcFn.centroid(d as any) + ")")
-        .append("text")
-        .text((d) => d.data.toString())
-        .style("text-anchor", "middle")
-        .style("font-size", 0.1);
-}
 
 function drawBarChart(dataIn) {
     var series = Array.from(
