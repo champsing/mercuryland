@@ -147,12 +147,14 @@ const pieChartData = {
     labels: penaltyStatus.map(x => x.name),
     datasets: [{
         label: null,
-        data: [100, 200, 300, 400],
+        data: penaltyStatus.map(x => penaltyData.filter(y => x.id == y.done).length),
         backgroundColor: penaltyStatus.map(x => x.color),
         borderWidth: 0,
         hoverOffset: 50
     }]
 };
+
+
 
 function drawPieChart(dataIn) {
     const s0 = dataIn.filter((v) => v.done == 0).length;
