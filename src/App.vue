@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import { NConfigProvider, darkTheme } from "naive-ui";
 
-import Vod from "./components/Vod.vue";
+import HelloWorld from "./components/HelloWorld.vue";
 </script>
 
 <template>
     <n-config-provider :theme="darkTheme">
-        <Vod />
+        <HelloWorld />
     </n-config-provider>
 </template>
 
