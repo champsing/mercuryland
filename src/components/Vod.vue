@@ -11,25 +11,6 @@ import {
 } from "naive-ui";
 import vodLinkData from "../assets/vod.json";
 
-let filteredData = defineModel("filteredData", {
-    default: vodLinkData,
-});
-
-function filterVodData(
-    begTs: number,
-    endTs: number,
-    tag: string
-): typeof vodLinkData {
-    return vodLinkData
-        .filter(
-            (v) =>
-                v.date >= new Date(begTs).toISOString().slice(0, 10) &&
-                v.date <= new Date(endTs).toISOString().slice(0, 10)
-        )
-        .filter((v) => tag == "" || v.tags.includes(tag))
-        .sort((lhs, rhs) => lhs.date.localeCompare(rhs.date));
-}
-
 let filterBegTs = defineModel("filterBegTs", {
     default: 1577836800000,
     set(value) {
@@ -64,11 +45,34 @@ let filterTag = defineModel("filterTag", {
     },
 });
 
-function tagOptions(): Array<{label: string, value: any}> {
-    return [...new Set(vodLinkData.flatMap(x => x.tags))]
+let filteredData = defineModel("filteredData", {
+    default: filterVodData(0, Date.now(), ""),
+});
+</script>
+
+<script lang="ts">
+function filterVodData(
+    begTs: number,
+    endTs: number,
+    tag: string
+): typeof vodLinkData {
+    return vodLinkData
+        .filter(
+            (v) =>
+                v.date >= new Date(begTs).toISOString().slice(0, 10) &&
+                v.date <= new Date(endTs).toISOString().slice(0, 10)
+        )
+        .filter((v) => tag == "" || v.tags.includes(tag))
+        .sort((lhs, rhs) => rhs.date.localeCompare(lhs.date));
+}
+
+function tagOptions(): Array<{ label: string; value: any }> {
+    return [...new Set(vodLinkData.flatMap((x) => x.tags))]
         .concat([""])
         .sort()
-        .map(x => { return {label: x, value: x} })
+        .map((x) => {
+            return { label: x, value: x };
+        });
 }
 
 function truncate(str: string, len: number) {
@@ -95,9 +99,13 @@ function openLink(link: string) {
             <n-date-picker type="date" v-model:value="filterEndTs" />
         </n-gi>
         <n-gi>
-            <label style="font-size: 18px;">TAG:</label>
+            <label style="font-size: 18px">TAG:</label>
             <n-space vertical>
-                <n-select v-model:value="filterTag" :options="tagOptions()" :consistent-menu-width="false" />
+                <n-select
+                    v-model:value="filterTag"
+                    :options="tagOptions()"
+                    :consistent-menu-width="false"
+                />
             </n-space>
         </n-gi>
     </n-grid>
@@ -162,7 +170,7 @@ function openLink(link: string) {
 }
 
 .detail {
-    height: 100%;
+    height: 70vh;
     width: 100%;
     padding: 0 0 0 0;
     margin: 0 0 0 0;
