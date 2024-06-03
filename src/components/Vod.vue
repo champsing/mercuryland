@@ -154,7 +154,7 @@ function openLink(link: string) {
                             </template>
                         </td>
                         <td>
-                            {{ item.hours }}
+                            {{ item.duration }}
                         </td>
                     </tr>
                 </tbody>
