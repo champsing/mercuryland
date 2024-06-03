@@ -30,7 +30,7 @@ import {
     ChartData,
 } from "chart.js";
 import { Doughnut } from "vue-chartjs";
-
+import { truncateText, openLink } from "../composables/utils.ts";
 import penaltyData from "../assets/penalty.json";
 //import vodLinkData from "../assets/vod.json";
 import penaltyStatus from "../assets/penalty_status.json";
@@ -122,20 +122,9 @@ let doughnutChartOptions = {
     },
 } as ChartOptions<"doughnut">;
 
-function truncateStr(s) {
-    if (s.length > 32) {
-        return s.substring(0, 30) + "...";
-    } else {
-        return s;
-    }
-}
-
 const activateDrawer = (item) => {
     isDrawerActive.value = true;
     csvContent.value = item;
-};
-const open_youtube_vod = (link) => {
-    window.open(link);
 };
 
 const isDrawerActive = ref(false);
@@ -270,7 +259,7 @@ function queryStatusMetadata(status: string): (typeof penaltyStatus)[0] {
                                     queryStatusMetadata(item.status).textColor
                                 "
                             >
-                                {{ truncateStr(item.name) }}
+                                {{ truncateText(item.name, 30) }}
                             </n-button>
                         </td>
 
@@ -300,9 +289,9 @@ function queryStatusMetadata(status: string): (typeof penaltyStatus)[0] {
     </n-grid>
 
     <n-drawer v-model:show="isDrawerActive" :width="502" :placement="'right'">
-        <n-drawer-content :title="truncateStr(csvContent.name)">
+        <n-drawer-content :title="csvContent.name">
             {{ csvContent.description }}
-            <n-button @click="open_youtube_vod(csvContent.youtube_vod)">
+            <n-button @click="openLink(csvContent.youtube_vod)">
                 直播連結
             </n-button>
         </n-drawer-content>
