@@ -44,7 +44,7 @@
         "date": "2021-05-02",
         "link": "https://www.youtube.com/watch?v=Vy-dUa8CX5g",
         "title": "【惡靈】 (,,・ω・,,)",
-        "tags": ["MC游乐园生存", "MC亡国之战地图"],
+        "tags": ["MC游乐园生存", "MC制作地图"],
         "duration": "02:32:17"
     },
     {
@@ -52,7 +52,7 @@
         "date": "2021-05-09",
         "link": "https://www.youtube.com/watch?v=9vaXDcm-k88",
         "title": "【惡靈】一起頹廢",
-        "tags": ["MC游乐园生存", "MC亡国之战地图"],
+        "tags": ["MC游乐园生存", "MC制作地图"],
         "duration": "02:34:01"
     },
     {
@@ -460,78 +460,48 @@
         "date": "2023-03-05",
         "link": "https://youtube.com/live/n60no_132Fw",
         "title": "【惡靈】在晚上開台會發生什麼事呢",
-        "tags": [
-            "MC游乐园生存",
-            "MC地下城",
-            "MC盖地图",
-            "MC空岛生存"
-        ],
-        "duration": ""
+        "tags": ["MC跑酷", "MC解密地图"],
+        "duration": "02:03:36"
     },
     {
         "id": 58,
         "date": "2023-03-12",
         "link": "https://youtube.com/live/hM1-zsgG0dM",
         "title": "【惡靈】直播耍廢廢時間",
-        "tags": [
-            "MC游乐园生存",
-            "MC地下城",
-            "MC盖地图",
-            "MC空岛生存"
-        ],
-        "duration": ""
+        "tags": ["MC跑酷", "MC解密地图"],
+        "duration": "03:08:21"
     },
     {
         "id": 59,
         "date": "2023-03-19",
         "link": "https://youtube.com/live/_LdCpuW3Pyk",
         "title": "【惡靈】直播播咯",
-        "tags": [
-            "MC游乐园生存",
-            "MC地下城",
-            "MC盖地图",
-            "MC空岛生存"
-        ],
-        "duration": ""
+        "tags": ["MC跑酷", "MC速通"],
+        "duration": "04:03:29"
     },
     {
         "id": 60,
         "date": "2023-03-26",
         "link": "https://youtube.com/live/nPudgIJ22Xo",
         "title": "【惡靈】網路別80我啊",
-        "tags": [
-            "MC游乐园生存",
-            "MC地下城",
-            "MC盖地图",
-            "MC空岛生存"
-        ],
-        "duration": ""
+        "tags": ["MC跑酷"],
+        "duration": "01:38:19"
     },
     {
         "id": 61,
         "date": "2023-04-02",
         "link": "https://youtube.com/live/IlJOqQuIWtQ",
         "title": "【惡靈】遲到五分鐘已經是慣例了",
-        "tags": [
-            "MC游乐园生存",
-            "MC地下城",
-            "MC盖地图",
-            "MC空岛生存"
-        ],
-        "duration": ""
+        "tags": ["Hypixel", "Poppy Playtime"],
+        "duration": "02:29:12"
     },
     {
         "id": 62,
         "date": "2023-04-09",
         "link": "https://youtube.com/live/-wB2gydPOV4",
         "title": "【惡靈】每週快樂直播時間",
-        "tags": [
-            "MC游乐园生存",
-            "MC地下城",
-            "MC盖地图",
-            "MC空岛生存"
-        ],
-        "duration": ""
+        "tags": ["MC速通"],
+        "duration": "02:36:18"
     },
     {
         "id": 63,
