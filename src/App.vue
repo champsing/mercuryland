@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { NTabs, NTabPane, NConfigProvider, darkTheme } from "naive-ui";
 import Vod from "./components/Vod.vue";
-import Penalty from "./components/HelloWorld.vue"
+import Penalty from "./components/Penalty.vue"
 </script>
 
 <template>
