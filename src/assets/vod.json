@@ -572,39 +572,24 @@
         "date": "2023-06-11",
         "link": "https://youtube.com/live/9ENyADbuTjs",
         "title": "【惡靈】直播啵啵啵",
-        "tags": [
-            "MC游乐园生存",
-            "MC地下城",
-            "MC盖地图",
-            "MC空岛生存"
-        ],
-        "duration": ""
+        "tags": ["Garten of Banban 2", "Hypixel"],
+        "duration": "02:27:49"
     },
     {
         "id": 73,
         "date": "2023-06-18",
         "link": "https://youtube.com/live/Qsj0oHA3Da0",
         "title": "【惡靈】直播播耍廢廢",
-        "tags": [
-            "MC游乐园生存",
-            "MC地下城",
-            "MC盖地图",
-            "MC空岛生存"
-        ],
-        "duration": ""
+        "tags": ["MC边界生存"],
+        "duration": "02:03:41"
     },
     {
         "id": 74,
         "date": "2023-06-25",
         "link": "https://youtube.com/live/fuuOcny-yiY",
         "title": "【惡靈】大家有吃月餅嗎？",
-        "tags": [
-            "MC游乐园生存",
-            "MC地下城",
-            "MC盖地图",
-            "MC空岛生存"
-        ],
-        "duration": ""
+        "tags": ["MC猎杀"],
+        "duration": "02:23:55"
     },
     {
         "id": 75,
