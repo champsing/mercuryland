@@ -404,91 +404,56 @@
         "date": "2023-01-08",
         "link": "https://youtube.com/live/MJ7xYSKukC4",
         "title": "【惡靈】新年新絕望",
-        "tags": [
-            "MC原味生存",
-            "MC地下城",
-            "MC盖地图",
-            "MC空岛生存"
-        ],
-        "duration": ""
+        "tags": ["MC游乐园生存", "MC跑酷"],
+        "duration": "03:05:36"
     },
     {
         "id": 51,
         "date": "2023-01-29",
         "link": "https://youtube.com/live/GXeBeivObm8",
         "title": "【惡靈】大家收到了多少紅包呢",
-        "tags": [
-            "MC游乐园生存",
-            "MC地下城",
-            "MC盖地图",
-            "MC空岛生存"
-        ],
-        "duration": ""
+        "tags": ["MC跑酷"],
+        "duration": "01:52:02"
     },
     {
         "id": 52,
         "date": "2023-01-29",
         "link": "https://youtube.com/live/6E8njTHjYpI",
         "title": "【惡靈】直播到停電，我應該是史上第一位",
-        "tags": [
-            "MC游乐园生存",
-            "MC地下城",
-            "MC盖地图",
-            "MC空岛生存"
-        ],
-        "duration": ""
+        "tags": [],
+        "duration": "00:21:43"
     },
     {
         "id": 53,
         "date": "2023-02-05",
         "link": "https://youtube.com/live/CfR4Aus6_Z8",
         "title": "【惡靈】希望今天不要再直播到停電了",
-        "tags": [
-            "MC游乐园生存",
-            "MC地下城",
-            "MC盖地图",
-            "MC空岛生存"
-        ],
-        "duration": ""
+        "tags": ["MC跑酷"],
+        "duration": "03:00:41"
     },
     {
         "id": 54,
         "date": "2023-02-19",
         "link": "https://youtube.com/live/gX59yDQZNPs",
         "title": "【惡靈】大家有沒有想念我啊",
-        "tags": [
-            "MC游乐园生存",
-            "MC地下城",
-            "MC盖地图",
-            "MC空岛生存"
-        ],
-        "duration": ""
+        "tags": ["MC跑酷", "ALTF4"],
+        "duration": "03:04:22"
     },
     {
         "id": 55,
         "date": "2023-02-26",
         "link": "https://youtube.com/live/c1zqQ3YP2oY",
         "title": "【惡靈】直播廢廢時間",
-        "tags": [
-            "MC游乐园生存",
-            "MC地下城",
-            "MC盖地图",
-            "MC空岛生存"
-        ],
-        "duration": ""
+        "tags": ["MC跑酷"],
+        "duration": "02:02:05"
     },
     {
         "id": 56,
         "date": "2023-03-05",
         "link": "https://youtube.com/live/qL-H0G983uM",
         "title": "【惡靈】廉價加班台",
-        "tags": [
-            "MC游乐园生存",
-            "MC地下城",
-            "MC盖地图",
-            "MC空岛生存"
-        ],
-        "duration": ""
+        "tags": ["MC跑酷"],
+        "duration": "01:47:39"
     },
     {
         "id": 57,
