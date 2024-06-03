@@ -8,7 +8,7 @@ for i in range(50, 201):
         "id": i,
         "date": "2023",
         "link": "",
-        "title": "",
+        "title": "【惡靈】",
         "tags": ["MC原味生存", "MC地下城", "MC盖地图", "MC空岛生存"],
         "duration": ""
     },

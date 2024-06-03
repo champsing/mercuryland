@@ -125,11 +125,11 @@ let doughnutChartOptions = {
 
 const activateDrawer = (item) => {
     isDrawerActive.value = true;
-    csvContent.value = item;
+    penaltyContent.value = item;
 };
 
 const isDrawerActive = ref(false);
-const csvContent = ref({
+const penaltyContent = ref({
     id: "",
     date: "",
     youtube_vod: "", //["",""]
@@ -287,9 +287,9 @@ function queryStatusMetadata(status: string): (typeof penaltyStatus)[0] {
     </n-grid>
 
     <n-drawer v-model:show="isDrawerActive" :width="502" :placement="'right'">
-        <n-drawer-content :title="csvContent.name">
-            {{ csvContent.description }}
-            <n-button @click="openLink(csvContent.youtube_vod)">
+        <n-drawer-content :title="penaltyContent.name">
+            {{ penaltyContent.description }}
+            <n-button @click="openLink(penaltyContent.youtube_vod)">
                 直播連結
             </n-button>
         </n-drawer-content>
