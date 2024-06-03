@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { ref } from "vue";
 import {
     NButton,
     NDatePicker,
@@ -9,6 +10,7 @@ import {
     NSpace,
     NDivider,
 } from "naive-ui";
+import { truncateText, openLink } from "../composables/utils.ts";
 import vodLinkData from "../assets/vod.json";
 
 let filterBegTs = defineModel("filterBegTs", {
@@ -44,7 +46,14 @@ let filterTag = defineModel("filterTag", {
         return value;
     },
 });
-
+let tagOptions = ref(
+    [...new Set(vodLinkData.flatMap((x) => x.tags))]
+        .concat([""])
+        .sort()
+        .map((x) => {
+            return { label: x, value: x };
+        })
+);
 let filteredData = defineModel("filteredData", {
     default: filterVodData(0, Date.now(), ""),
 });
@@ -65,27 +74,6 @@ function filterVodData(
         .filter((v) => tag == "" || v.tags.includes(tag))
         .sort((lhs, rhs) => rhs.date.localeCompare(lhs.date));
 }
-
-function tagOptions(): Array<{ label: string; value: any }> {
-    return [...new Set(vodLinkData.flatMap((x) => x.tags))]
-        .concat([""])
-        .sort()
-        .map((x) => {
-            return { label: x, value: x };
-        });
-}
-
-function truncate(str: string, len: number) {
-    if (str.length > len) {
-        return str.substring(0, len - 2) + "...";
-    } else {
-        return str;
-    }
-}
-
-function openLink(link: string) {
-    window.open(link);
-}
 </script>
 
 <template>
@@ -103,7 +91,7 @@ function openLink(link: string) {
             <n-space vertical>
                 <n-select
                     v-model:value="filterTag"
-                    :options="tagOptions()"
+                    :options="tagOptions"
                     :consistent-menu-width="false"
                 />
             </n-space>
@@ -134,7 +122,7 @@ function openLink(link: string) {
                                 :text="true"
                                 :focusable="false"
                             >
-                                {{ truncate(item.title, 30) }}
+                                {{ truncateText(item.title, 30) }}
                             </n-button>
                         </td>
                         <td>

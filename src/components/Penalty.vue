@@ -1,7 +1,23 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import * as d3 from "d3";
-import { NButton, NCollapse, NCollapseItem, NDatePicker, NDrawer, NDrawerContent, NGrid, NGi, NSelect, NInput, NList, NListItem, NThing, NTable, NSpace } from "naive-ui";
+import {
+    NButton,
+    NCollapse,
+    NCollapseItem,
+    NDatePicker,
+    NDrawer,
+    NDrawerContent,
+    NGrid,
+    NGi,
+    NSelect,
+    NInput,
+    NList,
+    NListItem,
+    NThing,
+    NTable,
+    NSpace,
+} from "naive-ui";
 import { Doughnut } from "vue-chartjs";
 import {
     Chart as ChartJS,
@@ -16,7 +32,7 @@ import {
     LogarithmicScale,
     TimeScale,
     ChartOptions,
-    ArcElement
+    ArcElement,
 } from "chart.js";
 import penaltyData from "../assets/penalty.json";
 //import vodLinkData from "../assets/vod.json";
@@ -35,10 +51,54 @@ ChartJS.register(
     ArcElement
 );
 
-var filterBegTs = defineModel("filterBegTs", { default: 1672502400000, set(value) { refresh(value, filterEndTs.value, filterFinish.value, filterSearch.value); return value; } })
-var filterEndTs = defineModel("filterEndTs", { default: Date.now(), set(value) { refresh(filterBegTs.value, value, filterFinish.value, filterSearch.value); return value; } })
-var filterFinish = defineModel("filterFinish", { default: -1, set(value) { refresh(filterBegTs.value, filterEndTs.value, value, filterSearch.value); return value; } })
-var filterSearch = defineModel("filterSearch", { default: "", set(value) { refresh(filterBegTs.value, filterEndTs.value, filterFinish.value, value); return value; } })
+var filterBegTs = defineModel("filterBegTs", {
+    default: 1672502400000,
+    set(value) {
+        refresh(
+            value,
+            filterEndTs.value,
+            filterFinish.value,
+            filterSearch.value
+        );
+        return value;
+    },
+});
+var filterEndTs = defineModel("filterEndTs", {
+    default: Date.now(),
+    set(value) {
+        refresh(
+            filterBegTs.value,
+            value,
+            filterFinish.value,
+            filterSearch.value
+        );
+        return value;
+    },
+});
+var filterFinish = defineModel("filterFinish", {
+    default: -1,
+    set(value) {
+        refresh(
+            filterBegTs.value,
+            filterEndTs.value,
+            value,
+            filterSearch.value
+        );
+        return value;
+    },
+});
+var filterSearch = defineModel("filterSearch", {
+    default: "",
+    set(value) {
+        refresh(
+            filterBegTs.value,
+            filterEndTs.value,
+            filterFinish.value,
+            value
+        );
+        return value;
+    },
+});
 var finishOptions = [
     {
         label: "",
@@ -60,7 +120,7 @@ var finishOptions = [
         label: "進行中",
         value: 3,
     },
-]
+];
 
 var dataDisplay = ref([]);
 
@@ -68,52 +128,67 @@ let pieChartConfig = {
     maintainAspectRatio: false,
     plugins: {
         legend: {
-            display: false
+            display: false,
         },
     },
     layout: {
-        padding: 20
-    }
+        padding: 20,
+    },
 } as ChartOptions<"doughnut">;
 
 const pieChartData = ref({
-    labels: penaltyStatus.map(x => x.name),
-    datasets: [{
-        label: null,
-        data: penaltyStatus.map(x => penaltyData.filter(y => x.id == y.done).length),
-        backgroundColor: penaltyStatus.map(x => x.color),
-        borderWidth: 0,
-        hoverOffset: 50
-    }]
+    labels: penaltyStatus.map((x) => x.name),
+    datasets: [
+        {
+            label: null,
+            data: penaltyStatus.map(
+                (x) => penaltyData.filter((y) => x.id == y.done).length
+            ),
+            backgroundColor: penaltyStatus.map((x) => x.color),
+            borderWidth: 0,
+            hoverOffset: 50,
+        },
+    ],
 });
-
-
 
 function refresh(begTs, endTs, finish, search) {
     dataDisplay.value = penaltyData
         .filter(
             (v) =>
-                v.date >= new Date(begTs).toISOString().slice(0, 10) && v.date <= new Date(endTs).toISOString().slice(0, 10)
+                v.date >= new Date(begTs).toISOString().slice(0, 10) &&
+                v.date <= new Date(endTs).toISOString().slice(0, 10)
         )
         .filter((v) => finish == -1 || finish == v.done)
         .filter(
-            (v) => search == "" || v.name.toLowerCase().includes(search.toLowerCase())
+            (v) =>
+                search == "" ||
+                v.name.toLowerCase().includes(search.toLowerCase())
         )
         .sort((lhs, rhs) => lhs.date.localeCompare(rhs.date));
     pieChartData.value = {
-        labels: penaltyStatus.map(x => x.name),
-        datasets: [{
-            label: null,
-            data: penaltyStatus.map(x => dataDisplay.value.filter(y => x.id == y.done).length),
-            backgroundColor: penaltyStatus.map(x => x.color),
-            borderWidth: 0,
-            hoverOffset: 50
-        }]
-    }
+        labels: penaltyStatus.map((x) => x.name),
+        datasets: [
+            {
+                label: null,
+                data: penaltyStatus.map(
+                    (x) =>
+                        dataDisplay.value.filter((y) => x.id == y.done).length
+                ),
+                backgroundColor: penaltyStatus.map((x) => x.color),
+                borderWidth: 0,
+                hoverOffset: 50,
+            },
+        ],
+    };
     drawBarChart(dataDisplay.value);
 }
 
-refresh(filterBegTs.value, filterEndTs.value, filterFinish.value, filterSearch.value)
+refresh(
+    filterBegTs.value,
+    filterEndTs.value,
+    filterFinish.value,
+    filterSearch.value
+);
 
 function statusToString(i) {
     if (i == 0) {
@@ -154,7 +229,6 @@ function statusToColorText(i) {
     }
 }
 
-
 function truncateStr(s) {
     if (s.length > 32) {
         return s.substring(0, 30) + "...";
@@ -163,10 +237,9 @@ function truncateStr(s) {
     }
 }
 
-
 function drawBarChart(dataIn) {
     var series = Array.from(
-        // @ts-ignore 
+        // @ts-ignore
         Map.groupBy(dataIn, (d) => d.date),
         ([key, value]) => [key, value]
     ).map(function (d) {
@@ -257,51 +330,59 @@ function drawBarChart(dataIn) {
 }
 
 const activateDrawer = (item) => {
-    isDrawerActive.value = true
-    csvContent.value = item
-}
+    isDrawerActive.value = true;
+    csvContent.value = item;
+};
 const open_youtube_vod = (link) => {
-    window.open(link)
-}
+    window.open(link);
+};
 /*
 const open_youtube_vod = (link, link2) => {
     window.open(link)
     window.open(link2)
 }
 */
-const isDrawerActive = ref(false)
+const isDrawerActive = ref(false);
 const csvContent = ref({
     id: "",
     date: "",
-    youtube_vod: "",//["",""]
+    youtube_vod: "", //["",""]
     name: "",
     done: "",
     description: "",
     //youtube_vod_2: ""
-})
-
+});
 </script>
 
 <template>
     <div class="filter">
         <div>
-            <label style="font-size: 18px;">起始日期:</label>
+            <label style="font-size: 18px">起始日期:</label>
             <n-date-picker type="date" v-model:value="filterBegTs" />
         </div>
         <div>
-            <label style="font-size: 18px;">结束日期:</label>
+            <label style="font-size: 18px">结束日期:</label>
             <n-date-picker type="date" v-model:value="filterEndTs" />
         </div>
         <div>
-            <label style="font-size: 18px;">完成状态:</label>
+            <label style="font-size: 18px">完成状态:</label>
             <n-space vertical>
-                <n-select v-model:value="filterFinish" :options="finishOptions" :consistent-menu-width="false" />
+                <n-select
+                    v-model:value="filterFinish"
+                    :options="finishOptions"
+                    :consistent-menu-width="false"
+                />
             </n-space>
         </div>
         <div>
-            <label style="font-size: 18px;">搜索:</label>
+            <label style="font-size: 18px">搜索:</label>
             <n-space vertical>
-                <n-input round placeholder="輸入懲罰內容來搜尋" v-model:value="filterSearch" type="text" />
+                <n-input
+                    round
+                    placeholder="輸入懲罰內容來搜尋"
+                    v-model:value="filterSearch"
+                    type="text"
+                />
             </n-space>
         </div>
     </div>
@@ -309,46 +390,60 @@ const csvContent = ref({
     <hr class="rounded" />
     <n-grid x-gap="12" :cols="3" class="main">
         <n-gi class="detail" :span="2">
-            <n-table :bordered="true" size="small" style="text-align: center;">
+            <n-table :bordered="true" size="small" style="text-align: center">
                 <thead>
                     <tr>
-                        <td style="font-size: 18px;">日期</td>
-                        <td style="font-size: 18px;">惩罚内容</td>
-                        <td style="font-size: 18px;">完成状况</td>
+                        <td style="font-size: 18px">日期</td>
+                        <td style="font-size: 18px">惩罚内容</td>
+                        <td style="font-size: 18px">完成状况</td>
                     </tr>
                 </thead>
 
                 <tbody>
                     <tr v-for="item in dataDisplay">
-                        <td :style="{
-                            'background-color': statusToColor(item.done),
-                            'color': statusToColorText(item.done)
-                        }">
+                        <td
+                            :style="{
+                                'background-color': statusToColor(item.done),
+                                color: statusToColorText(item.done),
+                            }"
+                        >
                             {{ item.date }}
                         </td>
-                        <td :style="{
-                            'background-color': statusToColor(item.done),
-                            'color': statusToColorText(item.done)
-                        }">
-                            <n-button @click="activateDrawer(item)" :text="true" :focusable="false"
-                                :text-color="'#FFFFFF'">
+                        <td
+                            :style="{
+                                'background-color': statusToColor(item.done),
+                                color: statusToColorText(item.done),
+                            }"
+                        >
+                            <n-button
+                                @click="activateDrawer(item)"
+                                :text="true"
+                                :focusable="false"
+                                :text-color="'#FFFFFF'"
+                            >
                                 {{ truncateStr(item.name) }}
                             </n-button>
                         </td>
 
-                        <td :style="{
-                            'background-color': statusToColor(item.done),
-                            'color': statusToColorText(item.done)
-                        }">
+                        <td
+                            :style="{
+                                'background-color': statusToColor(item.done),
+                                color: statusToColorText(item.done),
+                            }"
+                        >
                             {{ statusToString(item.done) }}
                         </td>
                     </tr>
                 </tbody>
             </n-table>
-
         </n-gi>
         <n-gi>
-            <Doughnut ref="pieChart" :options="pieChartConfig" :data="pieChartData" class="pie" />
+            <Doughnut
+                ref="pieChart"
+                :options="pieChartConfig"
+                :data="pieChartData"
+                class="pie"
+            />
         </n-gi>
     </n-grid>
 
@@ -370,17 +465,22 @@ const csvContent = ref({
         <br />
     </n-space>
 
-    <n-collapse arrow-placement="right" style="
-    --n-title-font-size: 24px;
-    --n-title-text-color: rgb(11,118,225); 
-    ">
+    <n-collapse
+        arrow-placement="right"
+        style="
+            --n-title-font-size: 24px;
+            --n-title-text-color: rgb(11, 118, 225);
+        "
+    >
         <n-collapse-item title="懲罰語法" name="punish_syntax">
             <div style="overflow: auto">
                 <n-list bordered>
                     <n-list-item>
                         <n-thing style="text-align: left; font-size: 18px">
                             &lt;日期&gt;: Unix Timestamp<br />
-                            &lt;編號&gt;: int &lt;懲罰主文&gt;: string 〔詳細資料〕: additionalMetaData（執行狀態）: statusMetaData
+                            &lt;編號&gt;: int &lt;懲罰主文&gt;: string
+                            〔詳細資料〕: additionalMetaData（執行狀態）:
+                            statusMetaData
                         </n-thing>
                     </n-list-item>
                 </n-list>
@@ -390,7 +490,7 @@ const csvContent = ref({
             <div>
                 <n-list bordered>
                     <n-list-item>
-                        <n-thing style="font-size: 18px;">
+                        <n-thing style="font-size: 18px">
                             🆙增加、🔁重抽、2️⃣備案、📝原主人修改n次、➕其他後來增加的條件
                         </n-thing>
                     </n-list-item>
@@ -401,15 +501,15 @@ const csvContent = ref({
             <div>
                 <n-list bordered>
                     <n-list-item>
-                        <n-thing style="font-size: 18px;">
-                            ✅完成、✅已抽、🏁原主人或投票給過、⏲️ ⚔️目前已完成進度
+                        <n-thing style="font-size: 18px">
+                            ✅完成、✅已抽、🏁原主人或投票給過、⏲️
+                            ⚔️目前已完成進度
                         </n-thing>
                     </n-list-item>
                 </n-list>
             </div>
         </n-collapse-item>
     </n-collapse>
-
 </template>
 
 <style scoped>
