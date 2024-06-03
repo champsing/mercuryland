@@ -6,6 +6,7 @@ import {
     NCollapseItem,
     NDatePicker,
     NDrawer,
+    NDivider,
     NDrawerContent,
     NGrid,
     NGi,
@@ -185,39 +186,36 @@ function queryStatusMetadata(status: string): (typeof penaltyStatus)[0] {
 </script>
 
 <template>
-    <div class="filter">
-        <div>
+    <n-grid x-gap="12" :cols="4" class="main">
+        <n-gi>
             <label style="font-size: 18px">起始日期:</label>
             <n-date-picker type="date" v-model:value="filterBegTs" />
-        </div>
-        <div>
+        </n-gi>
+        <n-gi>
             <label style="font-size: 18px">结束日期:</label>
             <n-date-picker type="date" v-model:value="filterEndTs" />
-        </div>
-        <div>
+        </n-gi>
+        <n-gi>
             <label style="font-size: 18px">完成状态:</label>
-            <n-space vertical>
-                <n-select
-                    v-model:value="filterStatus"
-                    :options="finishOptions"
-                    :consistent-menu-width="false"
-                />
-            </n-space>
-        </div>
-        <div>
+            <n-select
+                v-model:value="filterStatus"
+                :options="finishOptions"
+                :consistent-menu-width="false"
+            />
+        </n-gi>
+        <n-gi>
             <label style="font-size: 18px">搜索:</label>
-            <n-space vertical>
-                <n-input
-                    round
-                    placeholder="輸入懲罰內容來搜尋"
-                    v-model:value="filterSearch"
-                    type="text"
-                />
-            </n-space>
-        </div>
-    </div>
+            <n-input
+                round
+                placeholder="輸入懲罰內容來搜尋"
+                v-model:value="filterSearch"
+                type="text"
+            />
+        </n-gi>
+    </n-grid>
 
-    <hr class="rounded" />
+    <n-divider />
+
     <n-grid x-gap="12" :cols="3" class="main">
         <n-gi class="detail" :span="2">
             <n-table :bordered="true" size="small" style="text-align: center">
@@ -354,18 +352,6 @@ function queryStatusMetadata(status: string): (typeof penaltyStatus)[0] {
 </template>
 
 <style scoped>
-.filter {
-    display: grid;
-    align-content: space-evenly;
-    grid-template-columns: auto auto auto auto;
-    gap: 10px;
-}
-
-hr.rounded {
-    border-top: 4px solid #bbb;
-    border-radius: 2px;
-}
-
 .main {
     width: 90vw;
 }
