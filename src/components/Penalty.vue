@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { ref } from "vue";
-import * as d3 from "d3";
 import {
     NButton,
     NCollapse,
@@ -18,113 +17,100 @@ import {
     NTable,
     NSpace,
 } from "naive-ui";
-import { Doughnut } from "vue-chartjs";
 import {
     Chart as ChartJS,
     Title,
     Tooltip,
-    Legend,
     BarElement,
-    LineElement,
-    PointElement,
+    ArcElement,
     CategoryScale,
     LinearScale,
-    LogarithmicScale,
     TimeScale,
     ChartOptions,
-    ArcElement,
+    ChartData,
 } from "chart.js";
+import { Doughnut } from "vue-chartjs";
+
 import penaltyData from "../assets/penalty.json";
 //import vodLinkData from "../assets/vod.json";
 import penaltyStatus from "../assets/penalty_status.json";
+
 ChartJS.register(
     Title,
     Tooltip,
-    Legend,
     BarElement,
-    LineElement,
-    PointElement,
+    ArcElement,
     CategoryScale,
     LinearScale,
-    LogarithmicScale,
-    TimeScale,
-    ArcElement
+    TimeScale
 );
 
-var filterBegTs = defineModel("filterBegTs", {
+let filterBegTs = defineModel("filterBegTs", {
     default: 1672502400000,
     set(value) {
-        refresh(
+        filteredData.value = filterPenaltyData(
             value,
             filterEndTs.value,
-            filterFinish.value,
+            filterStatus.value,
             filterSearch.value
         );
         return value;
     },
 });
-var filterEndTs = defineModel("filterEndTs", {
+let filterEndTs = defineModel("filterEndTs", {
     default: Date.now(),
     set(value) {
-        refresh(
+        filteredData.value = filterPenaltyData(
             filterBegTs.value,
             value,
-            filterFinish.value,
+            filterStatus.value,
             filterSearch.value
         );
         return value;
     },
 });
-var filterFinish = defineModel("filterFinish", {
-    default: -1,
-    set(value) {
-        refresh(
-            filterBegTs.value,
-            filterEndTs.value,
-            value,
-            filterSearch.value
-        );
-        return value;
-    },
-});
-var filterSearch = defineModel("filterSearch", {
+let filterStatus = defineModel("filterFinish", {
     default: "",
     set(value) {
-        refresh(
+        filteredData.value = filterPenaltyData(
             filterBegTs.value,
             filterEndTs.value,
-            filterFinish.value,
+            value,
+            filterSearch.value
+        );
+        return value;
+    },
+});
+let filterSearch = defineModel("filterSearch", {
+    default: "",
+    set(value) {
+        filteredData.value = filterPenaltyData(
+            filterBegTs.value,
+            filterEndTs.value,
+            filterStatus.value,
             value
         );
         return value;
     },
 });
-var finishOptions = [
-    {
-        label: "",
-        value: -1,
-    },
-    {
-        label: "未開始",
-        value: 0,
-    },
-    {
-        label: "已完成",
-        value: 1,
-    },
-    {
-        label: "勉強過",
-        value: 2,
-    },
-    {
-        label: "進行中",
-        value: 3,
-    },
-];
+let finishOptions = penaltyStatus
+    .map((x) => x.name)
+    .concat([""])
+    .sort()
+    .map((x) => {
+        return { label: x, value: x };
+    });
 
-var dataDisplay = ref([]);
+let filteredData = defineModel("filteredData", {
+    default: filterPenaltyData(0, Date.now(), "", ""),
+    set(value) {
+        doughnutChartData.value = generateDoughnutChartData(value);
+        return value;
+    },
+});
 
-let pieChartConfig = {
+let doughnutChartData = ref(generateDoughnutChartData(filteredData.value));
+let doughnutChartOptions = {
     maintainAspectRatio: false,
     plugins: {
         legend: {
@@ -136,197 +122,12 @@ let pieChartConfig = {
     },
 } as ChartOptions<"doughnut">;
 
-const pieChartData = ref({
-    labels: penaltyStatus.map((x) => x.name),
-    datasets: [
-        {
-            label: null,
-            data: penaltyStatus.map(
-                (x) => penaltyData.filter((y) => x.id == y.done).length
-            ),
-            backgroundColor: penaltyStatus.map((x) => x.color),
-            borderWidth: 0,
-            hoverOffset: 50,
-        },
-    ],
-});
-
-function refresh(begTs, endTs, finish, search) {
-    dataDisplay.value = penaltyData
-        .filter(
-            (v) =>
-                v.date >= new Date(begTs).toISOString().slice(0, 10) &&
-                v.date <= new Date(endTs).toISOString().slice(0, 10)
-        )
-        .filter((v) => finish == -1 || finish == v.done)
-        .filter(
-            (v) =>
-                search == "" ||
-                v.name.toLowerCase().includes(search.toLowerCase())
-        )
-        .sort((lhs, rhs) => lhs.date.localeCompare(rhs.date));
-    pieChartData.value = {
-        labels: penaltyStatus.map((x) => x.name),
-        datasets: [
-            {
-                label: null,
-                data: penaltyStatus.map(
-                    (x) =>
-                        dataDisplay.value.filter((y) => x.id == y.done).length
-                ),
-                backgroundColor: penaltyStatus.map((x) => x.color),
-                borderWidth: 0,
-                hoverOffset: 50,
-            },
-        ],
-    };
-    drawBarChart(dataDisplay.value);
-}
-
-refresh(
-    filterBegTs.value,
-    filterEndTs.value,
-    filterFinish.value,
-    filterSearch.value
-);
-
-function statusToString(i) {
-    if (i == 0) {
-        return "未开始";
-    } else if (i == 1) {
-        return "已完成";
-    } else if (i == 2) {
-        return "勉强过";
-    } else if (i == 3) {
-        return "进行中";
-    } else {
-        return "undefined";
-    }
-}
-
-//  表格填滿顏色
-function statusToColor(i) {
-    if (i == 0) {
-        return "#922B21";
-    } else if (i == 1) {
-        return "#196F3D";
-    } else if (i == 2) {
-        return "#9D9D9D";
-    } else if (i == 3) {
-        return "#4DFFFF";
-    } else {
-        return "#000000";
-    }
-}
-
-// 表格文字顏色
-// i = 0 和 1 時返回白色，其他黑色
-function statusToColorText(i) {
-    if (i == 0 || i == 1) {
-        return "#FFFFFF";
-    } else {
-        return "#000000";
-    }
-}
-
 function truncateStr(s) {
     if (s.length > 32) {
         return s.substring(0, 30) + "...";
     } else {
         return s;
     }
-}
-
-function drawBarChart(dataIn) {
-    var series = Array.from(
-        // @ts-ignore
-        Map.groupBy(dataIn, (d) => d.date),
-        ([key, value]) => [key, value]
-    ).map(function (d) {
-        return {
-            date: d[0],
-            s0: d[1].filter((v) => v.done == 0).length,
-            s1: d[1].filter((v) => v.done == 1).length,
-            s2: d[1].filter((v) => v.done == 2).length,
-            s3: d[1].filter((v) => v.done == 3).length,
-        };
-    });
-
-    let sep = 40;
-    let pad = 10;
-
-    // height = 27vh or 220 (10 for axis)
-    // width = 50*n/220*27vh or 50*n
-
-    let physicalH = 27;
-    let logicalH = 200;
-    let diagramH = logicalH - 50;
-
-    let logicalW = sep * series.length;
-    let physicalW = (logicalW / logicalH) * physicalH;
-
-    let hScale =
-        Math.max(...series.map((d) => d.s0 + d.s1 + d.s2 + d.s3)) / diagramH;
-
-    d3.select("#barChart").selectAll("*").remove();
-
-    const svg = d3
-        .select("#barChart")
-        .attr("width", physicalW + "vh")
-        .attr("viewBox", "0 0 " + logicalW + " " + logicalH);
-
-    svg.selectAll("s0")
-        .data(series)
-        .enter()
-        .append("rect")
-        .attr("x", (_, i) => i * sep)
-        .attr("y", (d) => diagramH - d.s0 / hScale)
-        .attr("width", sep - pad)
-        .attr("height", (d) => d.s0 / hScale)
-        .attr("fill", statusToColor(0));
-
-    svg.selectAll("s1")
-        .data(series)
-        .enter()
-        .append("rect")
-        .attr("x", (_, i) => i * sep)
-        .attr("y", (d) => diagramH - (d.s0 + d.s1) / hScale)
-        .attr("width", sep - pad)
-        .attr("height", (d) => d.s1 / hScale)
-        .attr("fill", statusToColor(1));
-
-    svg.selectAll("s2")
-        .data(series)
-        .enter()
-        .append("rect")
-        .attr("x", (_, i) => i * sep)
-        .attr("y", (d) => diagramH - (d.s0 + d.s1 + d.s2) / hScale)
-        .attr("width", sep - pad)
-        .attr("height", (d) => d.s2 / hScale)
-        .attr("fill", statusToColor(2));
-
-    svg.selectAll("s3")
-        .data(series)
-        .enter()
-        .append("rect")
-        .attr("x", (_, i) => i * sep)
-        .attr("y", (d) => diagramH - (d.s0 + d.s1 + d.s2 + d.s3) / hScale)
-        .attr("width", sep - pad)
-        .attr("height", (d) => d.s3 / hScale)
-        .attr("fill", statusToColor(3));
-
-    const xAxis = d3
-        .scaleBand()
-        .domain(series.map((d) => d.date))
-        .range([0, logicalW])
-        .padding(0.1);
-
-    svg.append("g")
-        .attr("transform", "translate(0," + diagramH + ")")
-        .call(d3.axisBottom(xAxis))
-        .selectAll("text")
-        .style("text-anchor", "end")
-        .attr("transform", "rotate(-45)");
 }
 
 const activateDrawer = (item) => {
@@ -336,12 +137,7 @@ const activateDrawer = (item) => {
 const open_youtube_vod = (link) => {
     window.open(link);
 };
-/*
-const open_youtube_vod = (link, link2) => {
-    window.open(link)
-    window.open(link2)
-}
-*/
+
 const isDrawerActive = ref(false);
 const csvContent = ref({
     id: "",
@@ -352,6 +148,51 @@ const csvContent = ref({
     description: "",
     //youtube_vod_2: ""
 });
+</script>
+<script lang="ts">
+function filterPenaltyData(
+    begTs: number,
+    endTs: number,
+    status: string,
+    search: string
+): typeof penaltyData {
+    return penaltyData
+        .filter(
+            (v) =>
+                v.date >= new Date(begTs).toISOString().slice(0, 10) &&
+                v.date <= new Date(endTs).toISOString().slice(0, 10)
+        )
+        .filter((v) => status == "" || status == v.status)
+        .filter(
+            (v) =>
+                search == "" ||
+                v.name.toLowerCase().includes(search.toLowerCase())
+        )
+        .sort((lhs, rhs) => lhs.date.localeCompare(rhs.date));
+}
+
+function generateDoughnutChartData(
+    filteredData: typeof penaltyData
+): ChartData<"doughnut", number[], string> {
+    return {
+        labels: penaltyStatus.map((x) => x.name),
+        datasets: [
+            {
+                label: null,
+                data: penaltyStatus.map(
+                    (x) => filteredData.filter((y) => x.name == y.status).length
+                ),
+                backgroundColor: penaltyStatus.map((x) => x.color),
+                borderWidth: 0,
+                hoverOffset: 50,
+            },
+        ],
+    };
+}
+
+function queryStatusMetadata(status: string): (typeof penaltyStatus)[0] {
+    return penaltyStatus.filter((x) => x.name == status)[0];
+}
 </script>
 
 <template>
@@ -368,7 +209,7 @@ const csvContent = ref({
             <label style="font-size: 18px">完成状态:</label>
             <n-space vertical>
                 <n-select
-                    v-model:value="filterFinish"
+                    v-model:value="filterStatus"
                     :options="finishOptions"
                     :consistent-menu-width="false"
                 />
@@ -400,26 +241,34 @@ const csvContent = ref({
                 </thead>
 
                 <tbody>
-                    <tr v-for="item in dataDisplay">
+                    <tr v-for="item in filteredData">
                         <td
                             :style="{
-                                'background-color': statusToColor(item.done),
-                                color: statusToColorText(item.done),
+                                'background-color': queryStatusMetadata(
+                                    item.status
+                                ).color,
+                                color: queryStatusMetadata(item.status)
+                                    .textColor,
                             }"
                         >
                             {{ item.date }}
                         </td>
                         <td
                             :style="{
-                                'background-color': statusToColor(item.done),
-                                color: statusToColorText(item.done),
+                                'background-color': queryStatusMetadata(
+                                    item.status
+                                ).color,
+                                color: queryStatusMetadata(item.status)
+                                    .textColor,
                             }"
                         >
                             <n-button
                                 @click="activateDrawer(item)"
                                 :text="true"
                                 :focusable="false"
-                                :text-color="'#FFFFFF'"
+                                :text-color="
+                                    queryStatusMetadata(item.status).textColor
+                                "
                             >
                                 {{ truncateStr(item.name) }}
                             </n-button>
@@ -427,11 +276,14 @@ const csvContent = ref({
 
                         <td
                             :style="{
-                                'background-color': statusToColor(item.done),
-                                color: statusToColorText(item.done),
+                                'background-color': queryStatusMetadata(
+                                    item.status
+                                ).color,
+                                color: queryStatusMetadata(item.status)
+                                    .textColor,
                             }"
                         >
-                            {{ statusToString(item.done) }}
+                            {{ item.status }}
                         </td>
                     </tr>
                 </tbody>
@@ -440,8 +292,8 @@ const csvContent = ref({
         <n-gi>
             <Doughnut
                 ref="pieChart"
-                :options="pieChartConfig"
-                :data="pieChartData"
+                :options="doughnutChartOptions"
+                :data="doughnutChartData"
                 class="pie"
             />
         </n-gi>

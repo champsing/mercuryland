@@ -2,21 +2,25 @@
     {
         "id": 0,
         "color": "#922B21",
+        "textColor": "#FFFFFF",
         "name": "未開始"
     },
     {
         "id": 1,
         "color": "#196F3D",
+        "textColor": "#FFFFFF",
         "name": "已完成"
     },
     {
         "id": 2,
         "color": "#9D9D9D",
+        "textColor": "#000000",
         "name": "勉強過"
     },
     {
         "id": 3,
         "color": "#4DFFFF",
+        "textColor": "#000000",
         "name": "進行中"
     }
 ]
