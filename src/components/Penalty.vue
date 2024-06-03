@@ -33,7 +33,6 @@ import {
 import { Doughnut } from "vue-chartjs";
 import { truncateText, openLink } from "../composables/utils.ts";
 import penaltyData from "../assets/penalty.json";
-//import vodLinkData from "../assets/vod.json";
 import penaltyStatus from "../assets/penalty_status.json";
 
 ChartJS.register(

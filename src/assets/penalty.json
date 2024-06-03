@@ -747,5 +747,12 @@
     "name": "通關冰與火之歌前七關卡",
     "status": "未開始",
     "description": ""
+  },
+  {
+    "id": 107,
+    "date": "2024-06-02",
+    "name": "跟觀眾比賽猜歌",
+    "status": "已完成",
+    "description": ""
   }
 ]
