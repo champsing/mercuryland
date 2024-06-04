@@ -131,11 +131,9 @@ const isDrawerActive = ref(false);
 const penaltyContent = ref({
     id: "",
     date: "",
-    youtube_vod: "", //["",""]
     name: "",
-    done: "",
+    status: "",
     description: "",
-    //youtube_vod_2: ""
 });
 </script>
 <script lang="ts">
