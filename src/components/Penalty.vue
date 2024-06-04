@@ -31,7 +31,7 @@ import {
     ChartData,
 } from "chart.js";
 import { Doughnut } from "vue-chartjs";
-import { truncateText, openLink } from "../composables/utils.ts";
+import { truncateText } from "../composables/utils.ts";
 import penaltyData from "../assets/penalty.json";
 import penaltyStatus from "../assets/penalty_status.json";
 
@@ -131,11 +131,9 @@ const isDrawerActive = ref(false);
 const penaltyContent = ref({
     id: "",
     date: "",
-    youtube_vod: "", //["",""]
     name: "",
-    done: "",
+    status: "",
     description: "",
-    //youtube_vod_2: ""
 });
 </script>
 <script lang="ts">
@@ -288,9 +286,6 @@ function queryStatusMetadata(status: string): (typeof penaltyStatus)[0] {
     <n-drawer v-model:show="isDrawerActive" :width="502" :placement="'right'">
         <n-drawer-content :title="penaltyContent.name">
             {{ penaltyContent.description }}
-            <n-button @click="openLink(penaltyContent.youtube_vod)">
-                直播連結
-            </n-button>
         </n-drawer-content>
     </n-drawer>
 
