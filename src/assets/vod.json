@@ -660,12 +660,7 @@
         "date": "2023-09-17",
         "link": "https://youtube.com/live/l-LdlzEnWaA",
         "title": "【惡靈】遲到一小時 有人會發現嗎？",
-        "tags": [
-            "MC游乐园生存",
-            "MC地下城",
-            "MC盖地图",
-            "MC空岛生存"
-        ],
+        "tags": ["MC跑酷", "Getting Over It"],
         "duration": "02:33:58"
     },
     {
@@ -673,8 +668,8 @@
         "date": "2023-09-17",
         "link": "https://youtube.com/live/Fw-lxbF1FLc",
         "title": "【惡靈】遲到一小時 有人會發現嗎？PART2",
-        "tags": ["MC跑酷", "Getting Over It"],
-        "duration": ""
+        "tags": [],
+        "duration": "00:17:05"
     },
     {
         "id": 86,
