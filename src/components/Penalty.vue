@@ -222,7 +222,7 @@ function queryStatusMetadata(status: string): (typeof penaltyStatus)[0] {
     return penaltyStatus.filter((x) => x.name == status)[0];
 }
 
-function vodLinkOfDate(date: string): Array<string> {
+function vodLinkOfDate(date: string): string[] {
     return vodData.filter((x) => x.date == date).map((x) => x.link)
 }
 </script>
