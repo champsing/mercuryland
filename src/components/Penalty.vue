@@ -194,17 +194,11 @@ function generateDoughnutChartData(
     };
 }
 
-function convertUnixTimestamp(v: string): number {
-    const date = new Date(v); // Or any Date('YYYY-MM-DD')
-    const unixTimestamp = date.getTime();
-    return unixTimestamp
-}
-
 function generateBarChartData(
     filteredData: typeof penaltyData
 ): ChartData<"bar", number[], number> {
     return {
-        labels: filteredData.map((x) => convertUnixTimestamp(x.date)).filter((e, i, a) => e !== a[i - 1]), // may be wrong
+        labels: filteredData.map((x) => new Date(x.date).getTime()).filter((e, i, a) => e !== a[i - 1]), // may be wrong
         datasets: penaltyStatus.map(x => {
             return {
                 label: x.name,
