@@ -30,9 +30,10 @@ import {
     ChartData,
 } from "chart.js";
 import { Bar, Doughnut } from "vue-chartjs";
-import { truncateText } from "../composables/utils.ts";
+import { openLinks, truncateText } from "../composables/utils.ts";
 import penaltyData from "../assets/penalty.json";
 import penaltyStatus from "../assets/penalty_status.json";
+import vodData from "../assets/vod.json"
 import "chartjs-adapter-date-fns";
 
 ChartJS.register(
@@ -156,7 +157,7 @@ const penaltyContent = ref({
 });
 </script>
 
-<script utils lang="ts">
+<script lang="ts">
 function filterPenaltyData(
     begTs: number,
     endTs: number,
@@ -219,6 +220,10 @@ function generateBarChartData(
 
 function queryStatusMetadata(status: string): (typeof penaltyStatus)[0] {
     return penaltyStatus.filter((x) => x.name == status)[0];
+}
+
+function vodLinkOfDate(date: string): Array<string> {
+    return vodData.filter((x) => x.date == date).map((x) => x.link)
 }
 </script>
 
@@ -309,9 +314,9 @@ function queryStatusMetadata(status: string): (typeof penaltyStatus)[0] {
             aria-modal="true"
         >
             {{ penaltyContent.description }}
-            <!-- <n-button @click="openDate()">
-                直播連結
-            </n-button> -->
+            <n-button @click="openLinks(vodLinkOfDate(penaltyContent.date))">
+                直播转盘連結
+            </n-button>
         </n-card>
     </n-modal>
   

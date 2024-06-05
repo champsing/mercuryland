@@ -10,6 +10,12 @@ export function openLink(link: string) {
     window.open(link);
 }
 
+export function openLinks(links: Array<string>) {
+    for (let i = 0; i < links.length; i++) {
+        openLink(links[i]);
+    }
+}
+
 // export function openDate(date: string) {
 //     //switch tab
 //     filterData.begTs = date;
