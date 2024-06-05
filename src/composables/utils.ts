@@ -9,3 +9,9 @@ export function truncateText(str: string, len: number) {
 export function openLink(link: string) {
     window.open(link);
 }
+
+// export function openDate(date: string) {
+//     //switch tab
+//     filterData.begTs = date;
+//     filterData.endTs = date;
+// }

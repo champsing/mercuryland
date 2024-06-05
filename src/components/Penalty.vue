@@ -30,10 +30,11 @@ import {
     ChartOptions,
     ChartData,
 } from "chart.js";
-import { Doughnut } from "vue-chartjs";
+import { Bar, Doughnut } from "vue-chartjs";
 import { truncateText } from "../composables/utils.ts";
 import penaltyData from "../assets/penalty.json";
 import penaltyStatus from "../assets/penalty_status.json";
+import "chartjs-adapter-date-fns";
 
 ChartJS.register(
     Title,
@@ -122,6 +123,21 @@ let doughnutChartOptions = {
     },
 } as ChartOptions<"doughnut">;
 
+let barChartData = ref(generateBarChartData(filteredData.value));
+let barChartOptions = {
+    maintainAspectRatio: false,
+    plugins: {
+        legend: {
+            display: false,
+        },
+    },
+    scales: {
+        x: {
+            type:"time"
+        }
+    }
+} as ChartOptions<"bar">;
+
 const activateDrawer = (item) => {
     isDrawerActive.value = true;
     penaltyContent.value = item;
@@ -136,7 +152,8 @@ const penaltyContent = ref({
     description: "",
 });
 </script>
-<script lang="ts">
+
+<script utils lang="ts">
 function filterPenaltyData(
     begTs: number,
     endTs: number,
@@ -177,6 +194,32 @@ function generateDoughnutChartData(
     };
 }
 
+function convertUnixTimestamp(v: string): number {
+    const date = new Date(v); // Or any Date('YYYY-MM-DD')
+    const unixTimestamp = date.getTime();
+    return unixTimestamp
+}
+
+function generateBarChartData(
+    filteredData: typeof penaltyData
+): ChartData<"bar", number[], number> {
+    return {
+        labels: filteredData.map((x) => convertUnixTimestamp(x.date)).filter((e, i, a) => e !== a[i - 1]), // may be wrong
+        datasets: penaltyStatus.map(x => {
+            return {
+                label: x.name,
+                data: Array.from(
+                    Map.groupBy(penaltyData, (d) => d.date)
+                )
+                    .sort((lhs, rhs) => lhs[0].localeCompare(rhs[0]))
+                    .map(([_, v]) => v.filter((y) => x.name == y.status).length),
+                backgroundColor: x.color,
+                stack: "abc"
+            }
+        })
+    };
+}
+
 function queryStatusMetadata(status: string): (typeof penaltyStatus)[0] {
     return penaltyStatus.filter((x) => x.name == status)[0];
 }
@@ -194,20 +237,11 @@ function queryStatusMetadata(status: string): (typeof penaltyStatus)[0] {
         </n-gi>
         <n-gi>
             <label style="font-size: 18px">完成状态:</label>
-            <n-select
-                v-model:value="filterStatus"
-                :options="finishOptions"
-                :consistent-menu-width="false"
-            />
+            <n-select v-model:value="filterStatus" :options="finishOptions" :consistent-menu-width="false" />
         </n-gi>
         <n-gi>
             <label style="font-size: 18px">搜索:</label>
-            <n-input
-                round
-                placeholder="輸入懲罰內容來搜尋"
-                v-model:value="filterSearch"
-                type="text"
-            />
+            <n-input round placeholder="輸入懲罰內容來搜尋" v-model:value="filterSearch" type="text" />
         </n-gi>
     </n-grid>
 
@@ -226,47 +260,35 @@ function queryStatusMetadata(status: string): (typeof penaltyStatus)[0] {
 
                 <tbody>
                     <tr v-for="item in filteredData">
-                        <td
-                            :style="{
-                                'background-color': queryStatusMetadata(
-                                    item.status
-                                ).color,
-                                color: queryStatusMetadata(item.status)
-                                    .textColor,
-                            }"
-                        >
+                        <td :style="{
+                            'background-color': queryStatusMetadata(
+                                item.status
+                            ).color,
+                            color: queryStatusMetadata(item.status)
+                                .textColor,
+                        }">
                             {{ item.date }}
                         </td>
-                        <td
-                            :style="{
-                                'background-color': queryStatusMetadata(
-                                    item.status
-                                ).color,
-                                color: queryStatusMetadata(item.status)
-                                    .textColor,
-                            }"
-                        >
-                            <n-button
-                                @click="activateDrawer(item)"
-                                :text="true"
-                                :focusable="false"
-                                :text-color="
-                                    queryStatusMetadata(item.status).textColor
-                                "
-                            >
+                        <td :style="{
+                            'background-color': queryStatusMetadata(
+                                item.status
+                            ).color,
+                            color: queryStatusMetadata(item.status)
+                                .textColor,
+                        }">
+                            <n-button @click="activateDrawer(item)" :text="true" :focusable="false" :text-color="queryStatusMetadata(item.status).textColor
+                                ">
                                 {{ truncateText(item.name, 30) }}
                             </n-button>
                         </td>
 
-                        <td
-                            :style="{
-                                'background-color': queryStatusMetadata(
-                                    item.status
-                                ).color,
-                                color: queryStatusMetadata(item.status)
-                                    .textColor,
-                            }"
-                        >
+                        <td :style="{
+                            'background-color': queryStatusMetadata(
+                                item.status
+                            ).color,
+                            color: queryStatusMetadata(item.status)
+                                .textColor,
+                        }">
                             {{ item.status }}
                         </td>
                     </tr>
@@ -274,37 +296,30 @@ function queryStatusMetadata(status: string): (typeof penaltyStatus)[0] {
             </n-table>
         </n-gi>
         <n-gi>
-            <Doughnut
-                ref="pieChart"
-                :options="doughnutChartOptions"
-                :data="doughnutChartData"
-                class="pie"
-            />
+            <Doughnut ref="pieChart" :options="doughnutChartOptions" :data="doughnutChartData" class="pie" />
+        </n-gi>
+        <n-gi :span="3">
+            <Bar ref="barChart" :options="barChartOptions" :data="barChartData" class="bar" />
         </n-gi>
     </n-grid>
 
     <n-drawer v-model:show="isDrawerActive" :width="502" :placement="'right'">
         <n-drawer-content :title="penaltyContent.name">
+            <!-- <n-button @click="openDate()">
+                直播連結
+            </n-button> -->
             {{ penaltyContent.description }}
         </n-drawer-content>
     </n-drawer>
-
-    <div class="time">
-        <svg id="barChart" height="90%"></svg>
-    </div>
-    <hr class="rounded" />
 
     <n-space>
         <br />
     </n-space>
 
-    <n-collapse
-        arrow-placement="right"
-        style="
+    <n-collapse arrow-placement="right" style="
             --n-title-font-size: 24px;
             --n-title-text-color: rgb(11, 118, 225);
-        "
-    >
+        ">
         <n-collapse-item title="懲罰語法" name="punish_syntax">
             <div style="overflow: auto">
                 <n-list bordered>
