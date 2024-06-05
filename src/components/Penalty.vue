@@ -314,6 +314,7 @@ function vodLinkOfDate(date: string): Array<string> {
             aria-modal="true"
         >
             {{ penaltyContent.description }}
+            <n-divider v-if="penaltyContent.description != ''" />
             <n-button @click="openLinks(vodLinkOfDate(penaltyContent.date))">
                 直播转盘連結
             </n-button>
