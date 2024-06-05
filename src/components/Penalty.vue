@@ -2,21 +2,20 @@
 import { ref, Ref } from "vue";
 import {
     NButton,
+    NCard,
     NCollapse,
     NCollapseItem,
     NDatePicker,
-    NDrawer,
     NDivider,
-    NDrawerContent,
     NGrid,
     NGi,
     NSelect,
     NInput,
+    NModal,
     NList,
     NListItem,
     NThing,
     NTable,
-    NSpace,
 } from "naive-ui";
 import {
     Chart as ChartJS,
@@ -142,12 +141,12 @@ let barChartOptions = {
     }
 } as ChartOptions<"bar">;
 
-const activateDrawer = (item) => {
-    isDrawerActive.value = true;
+const activateModal = (item) => {
+    isModalActive.value = true;
     penaltyContent.value = item;
 };
 
-const isDrawerActive = ref(false);
+const isModalActive = ref(false);
 const penaltyContent = ref({
     id: "",
     date: "",
@@ -280,8 +279,7 @@ function queryStatusMetadata(status: string): (typeof penaltyStatus)[0] {
                             color: queryStatusMetadata(item.status)
                                 .textColor,
                         }">
-                            <n-button @click="activateDrawer(item)" :text="true" :focusable="false" :text-color="queryStatusMetadata(item.status).textColor
-                                ">
+                            <n-button @click="activateModal(item)" :text="true" :focusable="false" :text-color="queryStatusMetadata(item.status).textColor">
                                 {{ truncateText(item.name, 30) }}
                             </n-button>
                         </td>
@@ -307,18 +305,24 @@ function queryStatusMetadata(status: string): (typeof penaltyStatus)[0] {
         </n-gi>
     </n-grid>
 
-    <n-drawer v-model:show="isDrawerActive" :width="502" :placement="'right'">
-        <n-drawer-content :title="penaltyContent.name">
+    <n-modal v-model:show="isModalActive">
+        <n-card
+            style="width: 600px"
+            :title="penaltyContent.name"
+            :bordered="false"
+            size="huge"
+            role="dialog"
+            aria-modal="true"
+        >
+            {{ penaltyContent.description }}
             <!-- <n-button @click="openDate()">
                 直播連結
             </n-button> -->
-            {{ penaltyContent.description }}
-        </n-drawer-content>
-    </n-drawer>
+        </n-card>
+    </n-modal>
+  
 
-    <n-space>
-        <br />
-    </n-space>
+    <n-divider />
 
     <n-collapse arrow-placement="right" style="
             --n-title-font-size: 24px;
