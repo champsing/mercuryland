@@ -2,14 +2,14 @@ import json
 
 res = []
 
-for i in range(100, 201):
+for i in range(117, 201):
     res.append(
     {
         "id": i,
         "date": "2024",
         "link": "",
         "title": "【惡靈】",
-        "tags": ["MC原味生存", "MC地下城", "MC盖地图", "MC空岛生存"],
+        "tags": [],
         "duration": ""
     },
 )
