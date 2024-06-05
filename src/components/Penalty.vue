@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, Ref } from "vue";
 import {
     NButton,
     NCollapse,
@@ -110,7 +110,7 @@ let filteredData = defineModel("filteredData", {
     },
 });
 
-let doughnutChartData = ref(generateDoughnutChartData(filteredData.value));
+let doughnutChartData: Ref<any> = ref(generateDoughnutChartData(filteredData.value));
 let doughnutChartOptions = {
     maintainAspectRatio: false,
     plugins: {
@@ -123,7 +123,7 @@ let doughnutChartOptions = {
     },
 } as ChartOptions<"doughnut">;
 
-let barChartData = ref(generateBarChartData(filteredData.value));
+let barChartData: Ref<any> = ref(generateBarChartData(filteredData.value));
 let barChartOptions = {
     maintainAspectRatio: false,
     plugins: {
@@ -214,7 +214,7 @@ function generateBarChartData(
                     .sort((lhs, rhs) => lhs[0].localeCompare(rhs[0]))
                     .map(([_, v]) => v.filter((y) => x.name == y.status).length),
                 backgroundColor: x.color,
-                stack: "abc"
+                stack: "0",
             }
         })
     };
