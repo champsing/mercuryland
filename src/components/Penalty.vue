@@ -106,6 +106,7 @@ let filteredData = defineModel("filteredData", {
     default: filterPenaltyData(0, Date.now(), "", ""),
     set(value) {
         doughnutChartData.value = generateDoughnutChartData(value);
+        barChartData.value = generateBarChartData(value);
         return value;
     },
 });
@@ -133,7 +134,10 @@ let barChartOptions = {
     },
     scales: {
         x: {
-            type:"time"
+            type:"time",
+            time: {
+                minUnit: "day"
+            }
         }
     }
 } as ChartOptions<"bar">;
@@ -209,7 +213,7 @@ function generateBarChartData(
             return {
                 label: x.name,
                 data: Array.from(
-                    Map.groupBy(penaltyData, (d) => d.date)
+                    Map.groupBy(filteredData, (d) => d.date)
                 )
                     .sort((lhs, rhs) => lhs[0].localeCompare(rhs[0]))
                     .map(([_, v]) => v.filter((y) => x.name == y.status).length),
@@ -380,8 +384,8 @@ function queryStatusMetadata(status: string): (typeof penaltyStatus)[0] {
     margin: 0 0 0 0;
 }
 
-.time {
-    height: 30vh;
+.bar {
+    height: 40vh;
     width: 100%;
     padding: 0 0 0 0;
     margin: 0 0 0 0;
