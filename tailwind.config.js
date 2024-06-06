@@ -4,7 +4,8 @@ export default {
     theme: {
         extend: {
             height: {
-                '80vh': '80vh'
+                '80vh': '80vh',
+                '40vh': '40vh'
             }
         },
     },

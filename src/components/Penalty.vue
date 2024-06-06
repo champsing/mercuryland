@@ -33,7 +33,7 @@ import { Bar, Doughnut } from "vue-chartjs";
 import { openLinks, truncateText } from "../composables/utils.ts";
 import penaltyData from "../assets/penalty.json";
 import penaltyStatus from "../assets/penalty_status.json";
-import vodData from "../assets/vod.json"
+import vodData from "../assets/vod.json";
 import "chartjs-adapter-date-fns";
 
 ChartJS.register(
@@ -99,7 +99,9 @@ let filteredData = defineModel("filteredData", {
     },
 });
 
-let doughnutChartData: Ref<any> = ref(generateDoughnutChartData(filteredData.value));
+let doughnutChartData: Ref<any> = ref(
+    generateDoughnutChartData(filteredData.value)
+);
 let doughnutChartOptions = {
     maintainAspectRatio: false,
     plugins: {
@@ -123,11 +125,19 @@ let barChartOptions = {
     scales: {
         x: {
             type: "time",
+            grid: {
+                display: false,
+            },
             time: {
-                minUnit: "day"
-            }
-        }
-    }
+                minUnit: "day",
+            },
+        },
+        y: {
+            grid: {
+                display: false,
+            },
+        },
+    },
 } as ChartOptions<"bar">;
 
 const activateModal = (item) => {
@@ -189,19 +199,21 @@ function generateBarChartData(
     filteredData: typeof penaltyData
 ): ChartData<"bar", number[], number> {
     return {
-        labels: filteredData.map((x) => new Date(x.date).getTime()).filter((e, i, a) => e !== a[i - 1]), // may be wrong
-        datasets: penaltyStatus.map(x => {
+        labels: filteredData
+            .map((x) => new Date(x.date).getTime())
+            .filter((e, i, a) => e !== a[i - 1]), // may be wrong
+        datasets: penaltyStatus.map((x) => {
             return {
                 label: x.name,
-                data: Array.from(
-                    Map.groupBy(filteredData, (d) => d.date)
-                )
+                data: Array.from(Map.groupBy(filteredData, (d) => d.date))
                     .sort((lhs, rhs) => lhs[0].localeCompare(rhs[0]))
-                    .map(([_, v]) => v.filter((y) => x.name == y.status).length),
+                    .map(
+                        ([_, v]) => v.filter((y) => x.name == y.status).length
+                    ),
                 backgroundColor: x.color,
                 stack: "0",
-            }
-        })
+            };
+        }),
     };
 }
 
@@ -210,71 +222,90 @@ function queryStatusMetadata(status: string): (typeof penaltyStatus)[0] {
 }
 
 function vodLinkOfDate(date: string): string[] {
-    return vodData.filter((x) => x.date == date).map((x) => x.link)
+    return vodData.filter((x) => x.date == date).map((x) => x.link);
 }
 </script>
 
 <template>
-    <n-grid x-gap="12" :cols="4" class="main">
+    <n-grid x-gap="12" :cols="4" class="w-11/12">
         <n-gi :span="2">
             <n-date-picker type="daterange" v-model:value="filterDate" />
         </n-gi>
         <n-gi>
             <n-select
-            v-model:value="filterStatus"
-            :options="finishOptions"
-            placeholder="請選擇一種完成狀態"
-            :consistent-menu-width="false" /> <!--but placeholder won't load QQ-->
+                v-model:value="filterStatus"
+                :options="finishOptions"
+                placeholder="請選擇一種完成狀態"
+                :consistent-menu-width="false"
+            />
+            <!--but placeholder won't load QQ-->
         </n-gi>
         <n-gi>
-            <n-input round placeholder="輸入懲罰內容來搜尋" v-model:value="filterSearch" type="text" />
+            <n-input
+                round
+                placeholder="輸入懲罰內容來搜尋"
+                v-model:value="filterSearch"
+                type="text"
+            />
         </n-gi>
     </n-grid>
 
-    <n-divider />
+    <n-divider class="!mt-2 !mb-2" />
 
-    <n-grid x-gap="12" :cols="3" class="main">
-        <n-gi class="detail" :span="2">
-            <n-table :bordered="true" size="small" style="text-align: center">
+    <n-grid x-gap="12" :cols="3" class="w-11/12 h-80vh overflow-y-hidden">
+        <n-gi :span="2" class="h-40vh w-full p-0 m-0 overflow-y-scroll">
+            <n-table :bordered="true" size="small" class="text-center w-full">
                 <thead>
                     <tr>
-                        <td style="font-size: 18px">日期</td>
-                        <td style="font-size: 18px">惩罚内容</td>
-                        <td style="font-size: 18px">完成状况</td>
+                        <td class="font-bold">日期</td>
+                        <td class="font-bold">惩罚内容</td>
+                        <td class="font-bold">完成状况</td>
                     </tr>
                 </thead>
 
                 <tbody>
                     <tr v-for="item in filteredData">
-                        <td :style="{
-                            'background-color': queryStatusMetadata(
-                                item.status
-                            ).color,
-                            color: queryStatusMetadata(item.status)
-                                .textColor,
-                        }">
+                        <td
+                            :style="{
+                                'background-color': queryStatusMetadata(
+                                    item.status
+                                ).color,
+                                color: queryStatusMetadata(item.status)
+                                    .textColor,
+                            }"
+                        >
                             {{ item.date }}
                         </td>
-                        <td :style="{
-                            'background-color': queryStatusMetadata(
-                                item.status
-                            ).color,
-                            color: queryStatusMetadata(item.status)
-                                .textColor,
-                        }">
-                            <n-button @click="activateModal(item)" :text="true" :focusable="false"
-                                :text-color="queryStatusMetadata(item.status).textColor">
+                        <td
+                            :style="{
+                                'background-color': queryStatusMetadata(
+                                    item.status
+                                ).color,
+                                color: queryStatusMetadata(item.status)
+                                    .textColor,
+                            }"
+                        >
+                            <n-button
+                                @click="activateModal(item)"
+                                :text="true"
+                                :focusable="false"
+                                :text-color="
+                                    queryStatusMetadata(item.status).textColor
+                                "
+                            >
                                 {{ truncateText(item.name, 30) }}
                             </n-button>
                         </td>
 
-                        <td :style="{
-                            'background-color': queryStatusMetadata(
-                                item.status
-                            ).color,
-                            color: queryStatusMetadata(item.status)
-                                .textColor,
-                        }">
+                        <td
+                            :style="{
+                                'background-color': queryStatusMetadata(
+                                    item.status
+                                ).color,
+                                color: queryStatusMetadata(item.status)
+                                    .textColor,
+                            }"
+                        >
                             {{ item.status }}
                         </td>
                     </tr>
@@ -282,16 +313,30 @@ function vodLinkOfDate(date: string): string[] {
             </n-table>
         </n-gi>
         <n-gi>
-            <Doughnut ref="pieChart" :options="doughnutChartOptions" :data="doughnutChartData" class="pie" />
+            <Doughnut
+                :options="doughnutChartOptions"
+                :data="doughnutChartData"
+                class="h-40vh w-full p-0 m-0"
+            />
         </n-gi>
         <n-gi :span="3">
-            <Bar ref="barChart" :options="barChartOptions" :data="barChartData" class="bar" />
+            <Bar
+                :options="barChartOptions"
+                :data="barChartData"
+                class="h-40vh w-full p-0 m-0"
+            />
         </n-gi>
     </n-grid>
 
     <n-modal v-model:show="isModalActive">
-        <n-card style="width: 600px" :title="penaltyContent.name" :bordered="false" size="huge" role="dialog"
-            aria-modal="true">
+        <n-card
+            style="width: 600px"
+            :title="penaltyContent.name"
+            :bordered="false"
+            size="huge"
+            role="dialog"
+            aria-modal="true"
+        >
             {{ penaltyContent.description }}
             <n-divider v-if="penaltyContent.description != ''" />
             <n-button @click="openLinks(vodLinkOfDate(penaltyContent.date))">
@@ -300,13 +345,15 @@ function vodLinkOfDate(date: string): string[] {
         </n-card>
     </n-modal>
 
-
     <n-divider />
 
-    <n-collapse arrow-placement="right" style="
+    <n-collapse
+        arrow-placement="right"
+        style="
             --n-title-font-size: 24px;
             --n-title-text-color: rgb(11, 118, 225);
-        ">
+        "
+    >
         <n-collapse-item title="懲罰語法" name="punish_syntax">
             <div style="overflow: auto">
                 <n-list bordered>
@@ -346,44 +393,3 @@ function vodLinkOfDate(date: string): string[] {
         </n-collapse-item>
     </n-collapse>
 </template>
-
-<style scoped>
-.main {
-    width: 90vw;
-}
-
-.detail {
-    height: 45vh;
-    width: 100%;
-    padding: 0 0 0 0;
-    margin: 0 0 0 0;
-    overflow-y: scroll;
-}
-
-.pie {
-    height: 45vh;
-    width: 100%;
-    padding: 0 0 0 0;
-    margin: 0 0 0 0;
-}
-
-.bar {
-    height: 40vh;
-    width: 100%;
-    padding: 0 0 0 0;
-    margin: 0 0 0 0;
-    overflow-x: scroll;
-}
-
-table {
-    width: 100%;
-}
-
-.axis {
-    font: 1px;
-}
-
-.read-the-docs {
-    color: #888;
-}
-</style>
