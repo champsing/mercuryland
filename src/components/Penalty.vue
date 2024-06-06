@@ -59,7 +59,7 @@ let filterDate: Ref<[number, number]> = defineModel("filterDate", {
 });
 
 let filterStatus = defineModel("filterStatus", {
-    default: "",
+    default: null,
     set(value) {
         filteredData.value = filterPenaltyData(
             filterDate.value,
@@ -220,8 +220,11 @@ function vodLinkOfDate(date: string): string[] {
             <n-date-picker type="daterange" v-model:value="filterDate" />
         </n-gi>
         <n-gi>
-            <n-select v-model:value="filterStatus" :options="finishOptions" placeholder="請選擇一種完成狀態"
-                :consistent-menu-width="false" />
+            <n-select
+            v-model:value="filterStatus"
+            :options="finishOptions"
+            placeholder="請選擇一種完成狀態"
+            :consistent-menu-width="false" /> <!--but placeholder won't load QQ-->
         </n-gi>
         <n-gi>
             <n-input round placeholder="輸入懲罰內容來搜尋" v-model:value="filterSearch" type="text" />
