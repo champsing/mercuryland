@@ -20,13 +20,21 @@ import {
 import vodLinkData from "../assets/vod.json";
 import vodSchedule from "../assets/schedule.json";
 
+const vodTimeData = computeVodTime();
+
 let filterBegTs = defineModel("filterBegTs", {
     default: 1577836800000,
     set(value) {
-        filteredData.value = filterVodData(
+        filteredVodLink.value = filterVodLinkData(
+            vodLinkData,
             value,
             filterEndTs.value,
             filterTag.value
+        );
+        filteredVodTime.value = filterVodTimeData(
+            vodTimeData,
+            value,
+            filterEndTs.value,
         );
         return value;
     },
@@ -34,10 +42,16 @@ let filterBegTs = defineModel("filterBegTs", {
 let filterEndTs = defineModel("filterEndTs", {
     default: Date.now(),
     set(value) {
-        filteredData.value = filterVodData(
+        filteredVodLink.value = filterVodLinkData(
+            vodLinkData,
             filterBegTs.value,
             value,
             filterTag.value
+        );
+        filteredVodTime.value = filterVodTimeData(
+            vodTimeData,
+            filterBegTs.value,
+            value
         );
         return value;
     },
@@ -45,7 +59,8 @@ let filterEndTs = defineModel("filterEndTs", {
 let filterTag = defineModel("filterTag", {
     default: "",
     set(value) {
-        filteredData.value = filterVodData(
+        filteredVodLink.value = filterVodLinkData(
+            vodLinkData,
             filterBegTs.value,
             filterEndTs.value,
             value
@@ -61,11 +76,13 @@ let tagOptions = ref(
             return { label: x, value: x };
         })
 );
-let filteredData = defineModel("filteredData", {
-    default: filterVodData(0, Date.now(), ""),
+let filteredVodLink = defineModel("filteredVodLink", {
+    default: filterVodLinkData(vodLinkData, 0, Date.now(), ""),
+});
+let filteredVodTime = defineModel("filteredVodTime", {
+    default: filterVodTimeData(computeVodTime(), 0, Date.now()),
 });
 
-let vodTimeData = computeVodTime();
 </script>
 
 <script lang="ts">
@@ -77,12 +94,13 @@ class VodTimeEntry {
     divider: boolean;
 }
 
-function filterVodData(
+function filterVodLinkData(
+    data: typeof vodLinkData,
     begTs: number,
     endTs: number,
     tag: string
 ): typeof vodLinkData {
-    return vodLinkData
+    return data
         .filter(
             (v) =>
                 v.date >= new Date(begTs).toISOString().slice(0, 10) &&
@@ -90,6 +108,26 @@ function filterVodData(
         )
         .filter((v) => tag == "" || v.tags.includes(tag))
         .sort((lhs, rhs) => rhs.date.localeCompare(lhs.date));
+}
+
+function filterVodTimeData(
+    data: VodTimeEntry[],
+    begTs: number,
+    endTs: number
+): VodTimeEntry[] {
+    let filtered = data
+        .filter(
+            (v) =>
+                v.date >= new Date(begTs).toISOString().slice(0, 10) &&
+                v.date <= new Date(endTs).toISOString().slice(0, 10)
+        );
+    let i0 = filtered.findIndex((x) => x.divider);
+
+    if (i0 == null) {
+        return Array()
+    } else {
+        return filtered.slice(i0);
+    }
 }
 
 function computeVodTime(): VodTimeEntry[] {
@@ -162,7 +200,7 @@ function computeVodTime(): VodTimeEntry[] {
     return re;
 }
 
-function displayTimeOffset(seconds: number): string {
+function showTimeOffset(seconds: number): string {
     if (seconds > 0) {
         return "+ " + formatHMS(seconds);
     } else {
@@ -221,7 +259,7 @@ function showTimeResult(entry: VodTimeEntry): string {
                 </thead>
 
                 <tbody>
-                    <tr v-for="item in filteredData">
+                    <tr v-for="item in filteredVodLink">
                         <td>
                             {{ item.date }}
                         </td>
@@ -266,11 +304,11 @@ function showTimeResult(entry: VodTimeEntry): string {
                 {{ showTimeResult(vodTimeData[vodTimeData.length - 1]) }}
             </n-card>
             <n-card title="计算明细" class="vod-time-2">
-                <template v-for="item in vodTimeData">
+                <template v-for="item in filteredVodTime">
                     <n-divider v-if="item.divider" title-placement="left">
                         {{ item.date }}
                         <n-divider vertical />
-                        {{ displayTimeOffset(item.previous) }}
+                        {{ showTimeOffset(item.previous) }}
                     </n-divider>
                     <div :style="{ 'text-align': 'right' }">
                         <div class="vod-time-text" :style="{ width: '20%' }">
@@ -278,7 +316,7 @@ function showTimeResult(entry: VodTimeEntry): string {
                         </div>
                         <n-divider vertical />
                         <div class="vod-time-text">
-                            {{ displayTimeOffset(item.offset) }}
+                            {{ showTimeOffset(item.offset) }}
                         </div>
                     </div>
                 </template>
