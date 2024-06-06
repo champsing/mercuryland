@@ -65,7 +65,7 @@ let filteredData = defineModel("filteredData", {
     default: filterVodData(0, Date.now(), ""),
 });
 
-let vodTimeData = calculateVodTime();
+let vodTimeData = computeVodTime();
 </script>
 
 <script lang="ts">
@@ -92,7 +92,7 @@ function filterVodData(
         .sort((lhs, rhs) => rhs.date.localeCompare(lhs.date));
 }
 
-function calculateVodTime(): VodTimeEntry[] {
+function computeVodTime(): VodTimeEntry[] {
     let re: VodTimeEntry[] = [];
 
     let sch = vodSchedule.schedule;
