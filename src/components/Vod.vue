@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, Ref } from "vue";
 import {
     NButton,
     NDatePicker,
@@ -7,7 +7,6 @@ import {
     NGi,
     NSelect,
     NTable,
-    NSpace,
     NDivider,
     NCard,
 } from "naive-ui";
@@ -22,67 +21,40 @@ import vodSchedule from "../assets/schedule.json";
 
 const vodTimeData = computeVodTime();
 
-let filterBegTs = defineModel("filterBegTs", {
-    default: 1577836800000,
-    set(value) {
+let filterDate: Ref<[number, number]> = defineModel("filterDate", {
+    default: [1577836800000, Date.now()] as const,
+    set(value: [number, number]) {
         filteredVodLink.value = filterVodLinkData(
             vodLinkData,
-            value,
-            filterEndTs.value,
-            filterTag.value
-        );
-        filteredVodTime.value = filterVodTimeData(
-            vodTimeData,
-            value,
-            filterEndTs.value,
-        );
-        return value;
-    },
-});
-let filterEndTs = defineModel("filterEndTs", {
-    default: Date.now(),
-    set(value) {
-        filteredVodLink.value = filterVodLinkData(
-            vodLinkData,
-            filterBegTs.value,
             value,
             filterTag.value
         );
-        filteredVodTime.value = filterVodTimeData(
-            vodTimeData,
-            filterBegTs.value,
-            value
-        );
+        filteredVodTime.value = filterVodTimeData(vodTimeData, value);
         return value;
     },
 });
-let filterTag = defineModel("filterTag", {
-    default: "",
+let filterTag: Ref<string> = defineModel("filterTag", {
+    default: null,
     set(value) {
         filteredVodLink.value = filterVodLinkData(
             vodLinkData,
-            filterBegTs.value,
-            filterEndTs.value,
+            filterDate.value,
             value
         );
         return value;
     },
 });
 let tagOptions = ref(
-    [...new Set(vodLinkData.flatMap((x) => x.tags))]
-        .concat([""])
-        .sort()
-        .map((x) => {
-            return { label: x, value: x };
-        })
+    [...new Set(vodLinkData.flatMap((x) => x.tags))].sort().map((x) => {
+        return { label: x, value: x };
+    })
 );
 let filteredVodLink = defineModel("filteredVodLink", {
-    default: filterVodLinkData(vodLinkData, 0, Date.now(), ""),
+    default: filterVodLinkData(vodLinkData, [0, Date.now()], null),
 });
 let filteredVodTime = defineModel("filteredVodTime", {
-    default: filterVodTimeData(computeVodTime(), 0, Date.now()),
+    default: filterVodTimeData(computeVodTime(), [0, Date.now()]),
 });
-
 </script>
 
 <script lang="ts">
@@ -96,35 +68,32 @@ class VodTimeEntry {
 
 function filterVodLinkData(
     data: typeof vodLinkData,
-    begTs: number,
-    endTs: number,
+    ts: [number, number],
     tag: string
 ): typeof vodLinkData {
     return data
         .filter(
             (v) =>
-                v.date >= new Date(begTs).toISOString().slice(0, 10) &&
-                v.date <= new Date(endTs).toISOString().slice(0, 10)
+                v.date >= new Date(ts[0]).toISOString().slice(0, 10) &&
+                v.date <= new Date(ts[1]).toISOString().slice(0, 10)
         )
-        .filter((v) => tag == "" || v.tags.includes(tag))
+        .filter((v) => tag == null || v.tags.includes(tag))
         .sort((lhs, rhs) => rhs.date.localeCompare(lhs.date));
 }
 
 function filterVodTimeData(
     data: VodTimeEntry[],
-    begTs: number,
-    endTs: number
+    ts: [number, number]
 ): VodTimeEntry[] {
-    let filtered = data
-        .filter(
-            (v) =>
-                v.date >= new Date(begTs).toISOString().slice(0, 10) &&
-                v.date <= new Date(endTs).toISOString().slice(0, 10)
-        );
+    let filtered = data.filter(
+        (v) =>
+            v.date >= new Date(ts[0]).toISOString().slice(0, 10) &&
+            v.date <= new Date(ts[1]).toISOString().slice(0, 10)
+    );
     let i0 = filtered.findIndex((x) => x.divider);
 
     if (i0 == null) {
-        return Array()
+        return Array();
     } else {
         return filtered.slice(i0);
     }
@@ -220,27 +189,21 @@ function showTimeResult(entry: VodTimeEntry): string {
 
 <template>
     <n-grid x-gap="12" :cols="4" class="main-width">
-        <n-gi>
-            <label style="font-size: 18px">起始日期:</label>
-            <n-date-picker type="date" v-model:value="filterBegTs" />
+        <n-gi :span="2">
+            <n-date-picker type="daterange" v-model:value="filterDate" />
         </n-gi>
         <n-gi>
-            <label style="font-size: 18px">结束日期:</label>
-            <n-date-picker type="date" v-model:value="filterEndTs" />
-        </n-gi>
-        <n-gi>
-            <label style="font-size: 18px">TAG:</label>
-            <n-space vertical>
-                <n-select
-                    v-model:value="filterTag"
-                    :options="tagOptions"
-                    :consistent-menu-width="false"
-                />
-            </n-space>
+            <n-select
+                v-model:value="filterTag"
+                :options="tagOptions"
+                placeholder="请选择直播的TAG"
+                :consistent-menu-width="false"
+            />
         </n-gi>
     </n-grid>
-
+    
     <n-divider />
+
     <n-grid
         x-gap="12"
         :cols="3"
@@ -330,8 +293,9 @@ function showTimeResult(entry: VodTimeEntry): string {
     width: 90vw;
 }
 .main-height {
-    height: 70vh;
+    height: 80vh;
 }
+
 .vod-table {
     height: 100%;
     width: 100%;
@@ -339,21 +303,23 @@ function showTimeResult(entry: VodTimeEntry): string {
     margin: 0 0 0 0;
     overflow-y: scroll;
 }
-
 .vod-time-1 {
-    height: 40%;
+    height: 30%;
 }
-
 .vod-time-2 {
-    height: 60%;
+    height: 70%;
     width: 100%;
     padding: 0 0 0 0;
     margin: 0 0 0 0;
     overflow-y: scroll;
 }
-
 .vod-time-text {
     display: inline-block;
     font-weight: bold;
+}
+
+.n-divider:not(.n-divider--vertical) {
+    margin-top: 12px;
+    margin-bottom: 12px;
 }
 </style>
