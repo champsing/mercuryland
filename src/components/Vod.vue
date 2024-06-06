@@ -19,7 +19,7 @@ import {
 import vodLinkData from "../assets/vod.json";
 import vodSchedule from "../assets/schedule.json";
 
-const vodTimeData = computeVodTime();
+const vodTimeData = calculateVodTime();
 
 let filterDate: Ref<[number, number]> = defineModel("filterDate", {
     default: [1577836800000, Date.now()] as const,
@@ -53,7 +53,7 @@ let filteredVodLink = defineModel("filteredVodLink", {
     default: filterVodLinkData(vodLinkData, [0, Date.now()], null),
 });
 let filteredVodTime = defineModel("filteredVodTime", {
-    default: filterVodTimeData(computeVodTime(), [0, Date.now()]),
+    default: filterVodTimeData(calculateVodTime(), [0, Date.now()]),
 });
 </script>
 
@@ -99,7 +99,7 @@ function filterVodTimeData(
     }
 }
 
-function computeVodTime(): VodTimeEntry[] {
+function calculateVodTime(): VodTimeEntry[] {
     let re: VodTimeEntry[] = [];
 
     let sch = vodSchedule.schedule;

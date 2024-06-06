@@ -46,23 +46,10 @@ ChartJS.register(
     TimeScale
 );
 
-let filterBegTs = defineModel("filterBegTs", {
-    default: 1672502400000,
-    set(value) {
+let filterDate: Ref<[number, number]> = defineModel("filterDate", {
+    default: [1577836800000, Date.now()] as const,
+    set(value: [number, number]) {
         filteredData.value = filterPenaltyData(
-            value,
-            filterEndTs.value,
-            filterStatus.value,
-            filterSearch.value
-        );
-        return value;
-    },
-});
-let filterEndTs = defineModel("filterEndTs", {
-    default: Date.now(),
-    set(value) {
-        filteredData.value = filterPenaltyData(
-            filterBegTs.value,
             value,
             filterStatus.value,
             filterSearch.value
@@ -70,30 +57,31 @@ let filterEndTs = defineModel("filterEndTs", {
         return value;
     },
 });
-let filterStatus = defineModel("filterFinish", {
+
+let filterStatus = defineModel("filterStatus", {
     default: "",
     set(value) {
         filteredData.value = filterPenaltyData(
-            filterBegTs.value,
-            filterEndTs.value,
+            filterDate.value,
             value,
             filterSearch.value
         );
         return value;
     },
 });
+
 let filterSearch = defineModel("filterSearch", {
     default: "",
     set(value) {
         filteredData.value = filterPenaltyData(
-            filterBegTs.value,
-            filterEndTs.value,
+            filterDate.value,
             filterStatus.value,
             value
         );
         return value;
     },
 });
+
 let finishOptions = penaltyStatus
     .map((x) => x.name)
     .concat([""])
@@ -103,7 +91,7 @@ let finishOptions = penaltyStatus
     });
 
 let filteredData = defineModel("filteredData", {
-    default: filterPenaltyData(0, Date.now(), "", ""),
+    default: filterPenaltyData([0, Date.now()], "", ""),
     set(value) {
         doughnutChartData.value = generateDoughnutChartData(value);
         barChartData.value = generateBarChartData(value);
@@ -134,7 +122,7 @@ let barChartOptions = {
     },
     scales: {
         x: {
-            type:"time",
+            type: "time",
             time: {
                 minUnit: "day"
             }
@@ -159,16 +147,15 @@ const penaltyContent = ref({
 
 <script lang="ts">
 function filterPenaltyData(
-    begTs: number,
-    endTs: number,
+    date: [number, number],
     status: string,
     search: string
 ): typeof penaltyData {
     return penaltyData
         .filter(
             (v) =>
-                v.date >= new Date(begTs).toISOString().slice(0, 10) &&
-                v.date <= new Date(endTs).toISOString().slice(0, 10)
+                v.date >= new Date(date[0]).toISOString().slice(0, 10) &&
+                v.date <= new Date(date[1]).toISOString().slice(0, 10)
         )
         .filter((v) => status == "" || status == v.status)
         .filter(
@@ -229,20 +216,14 @@ function vodLinkOfDate(date: string): string[] {
 
 <template>
     <n-grid x-gap="12" :cols="4" class="main">
-        <n-gi>
-            <label style="font-size: 18px">起始日期:</label>
-            <n-date-picker type="date" v-model:value="filterBegTs" />
+        <n-gi :span="2">
+            <n-date-picker type="daterange" v-model:value="filterDate" />
         </n-gi>
         <n-gi>
-            <label style="font-size: 18px">结束日期:</label>
-            <n-date-picker type="date" v-model:value="filterEndTs" />
+            <n-select v-model:value="filterStatus" :options="finishOptions" placeholder="請選擇一種完成狀態"
+                :consistent-menu-width="false" />
         </n-gi>
         <n-gi>
-            <label style="font-size: 18px">完成状态:</label>
-            <n-select v-model:value="filterStatus" :options="finishOptions" :consistent-menu-width="false" />
-        </n-gi>
-        <n-gi>
-            <label style="font-size: 18px">搜索:</label>
             <n-input round placeholder="輸入懲罰內容來搜尋" v-model:value="filterSearch" type="text" />
         </n-gi>
     </n-grid>
@@ -278,7 +259,8 @@ function vodLinkOfDate(date: string): string[] {
                             color: queryStatusMetadata(item.status)
                                 .textColor,
                         }">
-                            <n-button @click="activateModal(item)" :text="true" :focusable="false" :text-color="queryStatusMetadata(item.status).textColor">
+                            <n-button @click="activateModal(item)" :text="true" :focusable="false"
+                                :text-color="queryStatusMetadata(item.status).textColor">
                                 {{ truncateText(item.name, 30) }}
                             </n-button>
                         </td>
@@ -305,14 +287,8 @@ function vodLinkOfDate(date: string): string[] {
     </n-grid>
 
     <n-modal v-model:show="isModalActive">
-        <n-card
-            style="width: 600px"
-            :title="penaltyContent.name"
-            :bordered="false"
-            size="huge"
-            role="dialog"
-            aria-modal="true"
-        >
+        <n-card style="width: 600px" :title="penaltyContent.name" :bordered="false" size="huge" role="dialog"
+            aria-modal="true">
             {{ penaltyContent.description }}
             <n-divider v-if="penaltyContent.description != ''" />
             <n-button @click="openLinks(vodLinkOfDate(penaltyContent.date))">
@@ -320,7 +296,7 @@ function vodLinkOfDate(date: string): string[] {
             </n-button>
         </n-card>
     </n-modal>
-  
+
 
     <n-divider />
 
