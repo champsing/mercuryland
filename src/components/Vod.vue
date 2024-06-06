@@ -146,18 +146,18 @@ function computeVodTime(): VodTimeEntry[] {
             v = v + 1;
         }
 
-        // while (o < ove.length && new Date(ove[v].date) < date) {
-        //     re.push({
-        //         date: ove[o].date,
-        //         offset: -parseHMS(vod[v].duration),
-        //         previous: previous,
-        //         reason: "直播",
-        //         divider: false,
-        //     });
-        //     previous = previous + re[re.length - 1].offset;
+        while (o < ove.length && new Date(ove[o].date) < date) {
+            re.push({
+                date: ove[o].date,
+                offset: parseHMS(ove[o].duration),
+                previous: previous,
+                reason: ove[o].reason,
+                divider: false,
+            });
+            previous = previous + re[re.length - 1].offset;
 
-        //     v = v + 1;
-        // }
+            o = o + 1;
+        }
     }
     return re;
 }
