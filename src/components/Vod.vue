@@ -133,8 +133,6 @@ function computeVodTime(): VodTimeEntry[] {
 
         date.setDate(date.getDate() + 7);
 
-        // while (o + 1 < ove.length && )
-
         while (v < vod.length && new Date(vod[v].date) < date) {
             re.push({
                 date: vod[v].date,
@@ -147,6 +145,19 @@ function computeVodTime(): VodTimeEntry[] {
 
             v = v + 1;
         }
+
+        // while (o < ove.length && new Date(ove[v].date) < date) {
+        //     re.push({
+        //         date: ove[o].date,
+        //         offset: -parseHMS(vod[v].duration),
+        //         previous: previous,
+        //         reason: "直播",
+        //         divider: false,
+        //     });
+        //     previous = previous + re[re.length - 1].offset;
+
+        //     v = v + 1;
+        // }
     }
     return re;
 }
@@ -170,7 +181,7 @@ function showTimeResult(entry: VodTimeEntry): string {
 </script>
 
 <template>
-    <n-grid x-gap="12" :cols="4" class="container">
+    <n-grid x-gap="12" :cols="4" class="main-width">
         <n-gi>
             <label style="font-size: 18px">起始日期:</label>
             <n-date-picker type="date" v-model:value="filterBegTs" />
@@ -192,7 +203,12 @@ function showTimeResult(entry: VodTimeEntry): string {
     </n-grid>
 
     <n-divider />
-    <n-grid x-gap="12" :cols="3" class="container">
+    <n-grid
+        x-gap="12"
+        :cols="3"
+        class="main-width main-height"
+        style="overflow-y: hidden"
+    >
         <n-gi class="vod-table" :span="2">
             <n-table :bordered="true" size="small" style="text-align: center">
                 <thead>
@@ -241,14 +257,15 @@ function showTimeResult(entry: VodTimeEntry): string {
                 </tbody>
             </n-table>
         </n-gi>
-        <n-gi>
+        <n-gi style="overflow-y: hidden">
             <n-card
                 title="剩余时间"
+                class="vod-time-1"
                 :style="{ 'font-weight': 'bold', '--n-font-size': '5vw' }"
             >
                 {{ showTimeResult(vodTimeData[vodTimeData.length - 1]) }}
             </n-card>
-            <n-card title="计算明细" class="vod-time">
+            <n-card title="计算明细" class="vod-time-2">
                 <template v-for="item in vodTimeData">
                     <n-divider v-if="item.divider" title-placement="left">
                         {{ item.date }}
@@ -271,21 +288,26 @@ function showTimeResult(entry: VodTimeEntry): string {
 </template>
 
 <style scoped>
-.container {
+.main-width {
     width: 90vw;
 }
-
-.vod-table {
+.main-height {
     height: 70vh;
+}
+.vod-table {
+    height: 100%;
     width: 100%;
     padding: 0 0 0 0;
     margin: 0 0 0 0;
     overflow-y: scroll;
 }
 
+.vod-time-1 {
+    height: 40%;
+}
 
-.vod-time {
-    height: 40vh;
+.vod-time-2 {
+    height: 60%;
     width: 100%;
     padding: 0 0 0 0;
     margin: 0 0 0 0;
