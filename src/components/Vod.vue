@@ -261,7 +261,7 @@ function showTimeResult(entry: VodTimeEntry): string {
         <n-gi style="overflow-y: hidden">
             <n-card
                 title="剩余时间"
-                class="vod-time-1"
+                class="text-center vod-time-1"
                 :style="{ 'font-weight': 'bold', '--n-font-size': '5vw' }"
             >
                 {{ showTimeResult(vodTimeData[vodTimeData.length - 1]) }}

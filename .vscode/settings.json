@@ -1,0 +1,41 @@
+{
+    "css.validate": false,
+    "tailwindCSS.includeLanguages": {
+        "vue": "html",
+        "vue-html": "html"
+    },
+    "editor.quickSuggestions": {
+		"strings": true
+	},
+    "cSpell.words": [
+        "ALTF",
+        "Banban",
+        "composables",
+        "daterange",
+        "Garten",
+        "Hypixel",
+        "Paon",
+        "Pien",
+        "Smilemo"
+    ],
+    "editor.rulers": [80],
+    "prettier.tabWidth": 4,
+    "[json]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[css]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[html]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[typescript]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[javascript]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[vue]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+}
