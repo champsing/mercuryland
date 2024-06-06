@@ -45,9 +45,11 @@ let filterTag: Ref<string> = defineModel("filterTag", {
     },
 });
 let tagOptions = ref(
-    [...new Set(vodLinkData.flatMap((x) => x.tags))].sort().map((x) => {
-        return { label: x, value: x };
-    })
+    [{ label: "", value: null }].concat(
+        [...new Set(vodLinkData.flatMap((x) => x.tags))].sort().map((x) => {
+            return { label: x, value: x };
+        })
+    )
 );
 let filteredVodLink = defineModel("filteredVodLink", {
     default: filterVodLinkData(vodLinkData, [0, Date.now()], null),
@@ -202,7 +204,7 @@ function showTimeResult(entry: VodTimeEntry): string {
         </n-gi>
     </n-grid>
 
-    <n-divider class="!mt-2 !mb-2"/>
+    <n-divider class="!mt-2 !mb-2" />
 
     <n-grid x-gap="12" :cols="3" class="w-11/12 h-80vh overflow-y-hidden">
         <n-gi :span="2" class="w-full h-full p-0 m-0 overflow-y-scroll">
@@ -261,15 +263,25 @@ function showTimeResult(entry: VodTimeEntry): string {
             >
                 {{ showTimeResult(vodTimeData[vodTimeData.length - 1]) }}
             </n-card>
-            <n-card title="计算明细" class="text-center h-2/3 overflow-y-scroll">
+            <n-card
+                title="计算明细"
+                class="text-center h-2/3 overflow-y-scroll"
+            >
                 <template v-for="item in filteredVodTime">
-                    <n-divider v-if="item.divider" title-placement="left" class="!mt-0 !mb-0">
+                    <n-divider
+                        v-if="item.divider"
+                        title-placement="left"
+                        class="!mt-0 !mb-0"
+                    >
                         {{ item.date }}
                         <n-divider vertical />
                         {{ showTimeOffset(item.previous) }}
                     </n-divider>
                     <div class="text-right">
-                        <div class="w-1/5 inline-block font-bold" :style="{ width: '20%' }">
+                        <div
+                            class="w-1/5 inline-block font-bold"
+                            :style="{ width: '20%' }"
+                        >
                             {{ item.reason }}
                         </div>
                         <n-divider vertical />
