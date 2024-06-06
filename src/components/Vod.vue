@@ -158,6 +158,15 @@ function displayTimeOffset(seconds: number): string {
         return "− " + formatHMS(-seconds);
     }
 }
+
+function showTimeResult(entry: VodTimeEntry): string {
+    let t = entry.previous + entry.offset;
+    if (t > 0) {
+        return formatHMS(t);
+    } else {
+        return formatHMS(0);
+    }
+}
 </script>
 
 <template>
@@ -233,39 +242,26 @@ function displayTimeOffset(seconds: number): string {
             </n-table>
         </n-gi>
         <n-gi>
-            <n-card title="时间计算明细">
-                <div :style="{ 'text-align': 'right' }">
-                    <div
-                        class="vod-time-text"
-                        :style="{ 'text-align': 'right' }"
-                    >
-                        {{ displayTimeOffset(vodTimeData[0].previous) }}
-                    </div>
-                    <n-divider vertical />
-                    <div
-                        class="vod-time-text"
-                        :style="{ width: '20%', 'text-align': 'left' }"
-                    >
-                        初始
-                    </div>
-                </div>
+            <n-card
+                title="剩余时间"
+                :style="{ 'font-weight': 'bold', '--n-font-size': '5vw' }"
+            >
+                {{ showTimeResult(vodTimeData[vodTimeData.length - 1]) }}
+            </n-card>
+            <n-card title="计算明细" class="vod-time">
                 <template v-for="item in vodTimeData">
                     <n-divider v-if="item.divider" title-placement="left">
-                        {{ item.date }}</n-divider
-                    >
+                        {{ item.date }}
+                        <n-divider vertical />
+                        {{ displayTimeOffset(item.previous) }}
+                    </n-divider>
                     <div :style="{ 'text-align': 'right' }">
-                        <div
-                            class="vod-time-text"
-                            :style="{ 'text-align': 'right' }"
-                        >
-                            {{ displayTimeOffset(item.offset) }}
+                        <div class="vod-time-text" :style="{ width: '20%' }">
+                            {{ item.reason }}
                         </div>
                         <n-divider vertical />
-                        <div
-                            class="vod-time-text"
-                            :style="{ width: '20%', 'text-align': 'left' }"
-                        >
-                            {{ item.reason }}
+                        <div class="vod-time-text">
+                            {{ displayTimeOffset(item.offset) }}
                         </div>
                     </div>
                 </template>
@@ -276,12 +272,20 @@ function displayTimeOffset(seconds: number): string {
 
 <style scoped>
 .container {
-    display: block;
     width: 90vw;
 }
 
 .vod-table {
     height: 70vh;
+    width: 100%;
+    padding: 0 0 0 0;
+    margin: 0 0 0 0;
+    overflow-y: scroll;
+}
+
+
+.vod-time {
+    height: 40vh;
     width: 100%;
     padding: 0 0 0 0;
     margin: 0 0 0 0;
