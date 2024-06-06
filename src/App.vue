@@ -16,5 +16,3 @@ import Penalty from "./components/Penalty.vue"
         </n-tabs>
     </n-config-provider>
 </template>
-
-<style scoped></style>

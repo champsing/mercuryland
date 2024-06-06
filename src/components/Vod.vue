@@ -188,7 +188,7 @@ function showTimeResult(entry: VodTimeEntry): string {
 </script>
 
 <template>
-    <n-grid x-gap="12" :cols="4" class="main-width">
+    <n-grid x-gap="12" :cols="4" class="w-11/12">
         <n-gi :span="2">
             <n-date-picker type="daterange" v-model:value="filterDate" />
         </n-gi>
@@ -201,23 +201,18 @@ function showTimeResult(entry: VodTimeEntry): string {
             />
         </n-gi>
     </n-grid>
-    
-    <n-divider />
 
-    <n-grid
-        x-gap="12"
-        :cols="3"
-        class="main-width main-height"
-        style="overflow-y: hidden"
-    >
-        <n-gi class="vod-table" :span="2">
-            <n-table :bordered="true" size="small" style="text-align: center">
+    <n-divider class="!mt-2 !mb-2"/>
+
+    <n-grid x-gap="12" :cols="3" class="w-11/12 h-80vh overflow-y-hidden">
+        <n-gi :span="2" class="w-full h-full p-0 m-0 overflow-y-scroll">
+            <n-table :bordered="true" size="small" class="text-center">
                 <thead>
                     <tr>
-                        <td style="font-size: 18px">日期</td>
-                        <td style="font-size: 18px">直播連結</td>
-                        <td style="font-size: 18px">TAG</td>
-                        <td style="font-size: 18px">直播时数</td>
+                        <td class="font-bold">日期</td>
+                        <td class="font-bold">直播連結</td>
+                        <td class="font-bold">TAG</td>
+                        <td class="font-bold">直播时数</td>
                     </tr>
                 </thead>
 
@@ -258,27 +253,27 @@ function showTimeResult(entry: VodTimeEntry): string {
                 </tbody>
             </n-table>
         </n-gi>
-        <n-gi style="overflow-y: hidden">
+        <n-gi class="overflow-y-hidden">
             <n-card
                 title="剩余时间"
-                class="text-center vod-time-1"
-                :style="{ 'font-weight': 'bold', '--n-font-size': '5vw' }"
+                class="font-bold text-center h-1/3"
+                :style="{ '--n-font-size': '5vw' }"
             >
                 {{ showTimeResult(vodTimeData[vodTimeData.length - 1]) }}
             </n-card>
-            <n-card title="计算明细" class="vod-time-2">
+            <n-card title="计算明细" class="text-center h-2/3 overflow-y-scroll">
                 <template v-for="item in filteredVodTime">
-                    <n-divider v-if="item.divider" title-placement="left">
+                    <n-divider v-if="item.divider" title-placement="left" class="!mt-0 !mb-0">
                         {{ item.date }}
                         <n-divider vertical />
                         {{ showTimeOffset(item.previous) }}
                     </n-divider>
-                    <div :style="{ 'text-align': 'right' }">
-                        <div class="vod-time-text" :style="{ width: '20%' }">
+                    <div class="text-right">
+                        <div class="w-1/5 inline-block font-bold" :style="{ width: '20%' }">
                             {{ item.reason }}
                         </div>
                         <n-divider vertical />
-                        <div class="vod-time-text">
+                        <div class="inline-block font-bold">
                             {{ showTimeOffset(item.offset) }}
                         </div>
                     </div>
@@ -287,39 +282,3 @@ function showTimeResult(entry: VodTimeEntry): string {
         </n-gi>
     </n-grid>
 </template>
-
-<style scoped>
-.main-width {
-    width: 90vw;
-}
-.main-height {
-    height: 80vh;
-}
-
-.vod-table {
-    height: 100%;
-    width: 100%;
-    padding: 0 0 0 0;
-    margin: 0 0 0 0;
-    overflow-y: scroll;
-}
-.vod-time-1 {
-    height: 30%;
-}
-.vod-time-2 {
-    height: 70%;
-    width: 100%;
-    padding: 0 0 0 0;
-    margin: 0 0 0 0;
-    overflow-y: scroll;
-}
-.vod-time-text {
-    display: inline-block;
-    font-weight: bold;
-}
-
-.n-divider:not(.n-divider--vertical) {
-    margin-top: 12px;
-    margin-bottom: 12px;
-}
-</style>

@@ -2,7 +2,11 @@
 export default {
     content: ["./index.html", "./src/**/*.{vue,js,ts,jsx,tsx}"],
     theme: {
-        extend: {},
+        extend: {
+            height: {
+                '80vh': '80vh'
+            }
+        },
     },
     plugins: [],
 };
