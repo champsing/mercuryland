@@ -217,7 +217,7 @@ function generateBarChartData(
     };
 }
 
-function queryStatusMetadata(status: string): (typeof penaltyStatus)[0] {
+function statusOf(status: string): (typeof penaltyStatus)[0] {
     return penaltyStatus.filter((x) => x.name == status)[0];
 }
 
@@ -264,48 +264,22 @@ function vodLinkOfDate(date: string): string[] {
                 </thead>
 
                 <tbody>
+                    <!-- !bg-[#b91c1c] !bg-[#4d7c0f] !bg-[#047857] !bg-[#b45309] -->
+                    <!-- TAILWIND CSS: DO NOT REMOVE ABOVE COMMENT -->
                     <tr v-for="item in filteredData">
-                        <td
-                            :style="{
-                                'background-color': queryStatusMetadata(
-                                    item.status
-                                ).color,
-                                color: queryStatusMetadata(item.status)
-                                    .textColor,
-                            }"
-                        >
+                        <td :class="`!bg-[${statusOf(item.status).color}]`">
                             {{ item.date }}
                         </td>
-                        <td
-                            :style="{
-                                'background-color': queryStatusMetadata(
-                                    item.status
-                                ).color,
-                                color: queryStatusMetadata(item.status)
-                                    .textColor,
-                            }"
-                        >
+                        <td :class="`!bg-[${statusOf(item.status).color}]`">
                             <n-button
                                 @click="activateModal(item)"
                                 :text="true"
                                 :focusable="false"
-                                :text-color="
-                                    queryStatusMetadata(item.status).textColor
-                                "
                             >
                                 {{ truncateText(item.name, 30) }}
                             </n-button>
                         </td>
-
-                        <td
-                            :style="{
-                                'background-color': queryStatusMetadata(
-                                    item.status
-                                ).color,
-                                color: queryStatusMetadata(item.status)
-                                    .textColor,
-                            }"
-                        >
+                        <td :class="`!bg-[${statusOf(item.status).color}]`">
                             {{ item.status }}
                         </td>
                     </tr>
