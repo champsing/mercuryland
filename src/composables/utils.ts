@@ -1,13 +1,3 @@
-export function truncateText(str: string, len: number) {
-    if (str == "3̧̮͎ͧ̄̅̔͑͘d͈̦͔̎̄͋ͮ̓͋a̸̧̡͙̗̻̣̩̓v͕͈̯̟̳̤̀̾ͦ̈Ṅ͙͙̬̝̝̈̀9̴̭̮͈̍ͥ̓͛Gͨ͂ͫ̅͟r̩̟͎̺̜̝͙̓̓ͩC͖̣̓͐̅͛̐̈́͢͞D͚̲̳̈͒̋͑ͧ̚q͓̖ͪ͌̚c͕͓̻̬͇̊̓͟ͅȩ̥̮͖͔͉̉̊́͛b̦̜̦̏͟7̷̛͍͔̅ͤm̨̤̹ͤ̑ͤ͡") {
-        return str
-    } else if (str.length > len) {
-        return str.substring(0, len - 2) + "...";
-    } else {
-        return str;
-    }
-}
-
 export function openLink(link: string) {
     window.open(link);
 }
