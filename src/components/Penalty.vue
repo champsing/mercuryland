@@ -82,16 +82,17 @@ let filterSearch = defineModel("filterSearch", {
     },
 });
 
-let finishOptions = penaltyStatus
-    .map((x) => x.name)
-    .concat([""])
-    .sort()
-    .map((x) => {
-        return { label: x, value: x };
-    });
+let finishOptions = [{ label: "", value: null }].concat(
+    penaltyStatus
+        .map((x) => x.name)
+        .sort()
+        .map((x) => {
+            return { label: x, value: x };
+        })
+);
 
 let filteredData = defineModel("filteredData", {
-    default: filterPenaltyData([0, Date.now()], "", ""),
+    default: filterPenaltyData([0, Date.now()], null, ""),
     set(value) {
         doughnutChartData.value = generateDoughnutChartData(value);
         barChartData.value = generateBarChartData(value);
@@ -170,7 +171,7 @@ function filterPenaltyData(
                 v.date >= new Date(date[0]).toISOString().slice(0, 10) &&
                 v.date <= new Date(date[1]).toISOString().slice(0, 10)
         )
-        .filter((v) => status == "" || status == v.status)
+        .filter((v) => status == null || status == v.status)
         .filter(
             (v) =>
                 search == "" ||
