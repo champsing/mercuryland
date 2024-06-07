@@ -11,7 +11,6 @@ import {
     NCard,
 } from "naive-ui";
 import {
-    truncateText,
     openLink,
     parseHMS,
     formatHMS,
@@ -229,7 +228,7 @@ function showTimeResult(entry: VodTimeEntry): string {
                                 :text="true"
                                 :focusable="false"
                             >
-                                {{ truncateText(item.title, 30) }}
+                                {{ item.title }}
                             </n-button>
                         </td>
                         <td>

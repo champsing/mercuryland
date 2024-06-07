@@ -30,7 +30,7 @@ import {
     ChartData,
 } from "chart.js";
 import { Bar, Doughnut } from "vue-chartjs";
-import { openLinks, truncateText } from "../composables/utils.ts";
+import { openLinks } from "../composables/utils.ts";
 import penaltyData from "../assets/penalty.json";
 import penaltyStatus from "../assets/penalty_status.json";
 import vodData from "../assets/vod.json";
@@ -276,7 +276,7 @@ function vodLinkOfDate(date: string): string[] {
                                 :text="true"
                                 :focusable="false"
                             >
-                                {{ truncateText(item.name, 30) }}
+                                {{ item.name }}
                             </n-button>
                         </td>
                         <td :class="`!bg-[${statusOf(item.status).color}]`">
