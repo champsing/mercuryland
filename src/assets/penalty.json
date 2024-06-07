@@ -141,11 +141,11 @@
         "status": "勉強過",
         "description": [
             {
-                "block": "str",
+                "block": "text",
                 "str": "🏁 "
             },
             {
-                "block": "uri",
+                "block": "link",
                 "str": "投票給過",
                 "uri": "https://discord.com/channels/506120681495199756/566611073977942017/1188877921608286260"
             },
