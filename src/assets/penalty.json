@@ -5,11 +5,11 @@
         "name": "用變聲器直播1天",
         "status": "已完成",
         "description": [
-            {
-                "block": "vod",
-                "str": "惩罚完成链接",
-                "uri": "67"
-            }
+          {
+            "block": "vod",
+            "str": "惩罚完成链接",
+            "uri": "67"
+          }
         ]
     },
     {
@@ -18,11 +18,11 @@
         "name": "玩《女鬼橋》",
         "status": "已完成",
         "description": [
-            {
-                "block": "vod",
-                "str": "惩罚完成链接",
-                "uri": "75"
-            }
+          {
+            "block": "vod",
+            "str": "惩罚完成链接",
+            "uri": "75"
+          }
         ]
     },
     {
@@ -38,11 +38,11 @@
         "name": "玩ALTF4",
         "status": "已完成",
         "description": [
-            {
-                "block": "vod",
-                "str": "惩罚完成链接",
-                "uri": "54"
-            }
+          {
+            "block": "vod",
+            "str": "惩罚完成链接",
+            "uri": "54"
+          }
         ]
     },
     {
@@ -50,7 +50,7 @@
         "date": "2023-02-05",
         "name": "玩RL Craft",
         "status": "未開始",
-        "description": [{ "block": "str", "str": "🆙 增加" }]
+        "description": [{ "block": "text", "str": "🆙 增加" }]
     },
     {
         "id": 27,
@@ -65,11 +65,11 @@
         "name": "繼續玩ALTF4",
         "status": "已完成",
         "description": [
-            {
-                "block": "vod",
-                "str": "惩罚完成链接",
-                "uri": "89"
-            }
+          {
+            "block": "vod",
+            "str": "惩罚完成链接",
+            "uri": "89"
+          }
         ]
     },
     {
@@ -78,11 +78,11 @@
         "name": "玩At Dead of Night",
         "status": "已完成",
         "description": [
-            {
-                "block": "vod",
-                "str": "惩罚完成链接",
-                "uri": "111"
-            }
+          {
+            "block": "vod",
+            "str": "惩罚完成链接",
+            "uri": "111"
+          }
         ]
     },
     {
@@ -140,10 +140,11 @@
         "name": "剪自己的嬌喘影片發DC群",
         "status": "已完成",
         "description": [
-            {
-                "block": "str",
-                "str": "https://youtube.com/clip/Ugkx8GkjUNA3Hxn9jyJcbuvJSme8jY9CFRzC"
-            }
+          {
+            "block": "link",
+            "str": "懲罰完成連結",
+            "uri": "https://youtube.com/clip/Ugkx8GkjUNA3Hxn9jyJcbuvJSme8jY9CFRzC"
+          }
         ]
     },
     {
@@ -229,7 +230,7 @@
         "name": "玩Metro: Last Night",
         "status": "未開始",
         "description": [
-            { "block": "str", "str": "2️⃣ 備案: 玩Super Animal Royale" }
+            { "block": "text", "str": "2️⃣ 備案: 玩Super Animal Royale" }
         ]
     },
     {
@@ -238,10 +239,11 @@
         "name": "唱小蠻腰",
         "status": "已完成",
         "description": [
-            {
-                "block": "str",
-                "str": "https://youtube.com/clip/UgkxrMznUtBi4zOBP4D20WPqbkatV5-cMLS9"
-            }
+          {
+            "block": "link",
+            "str": "懲罰完成連結",
+            "uri": "https://youtube.com/clip/UgkxrMznUtBi4zOBP4D20WPqbkatV5-cMLS9"
+          }
         ]
     },
     {
@@ -257,20 +259,20 @@
       "name": "SkyBlock 100等",
       "status": "勉強過",
       "description": [
-          {
-              "block": "str",
-              "str": "🏁 "
-          },
-          {
-              "block": "url",
-              "str": "投票給過",
-              "uri": "https://discord.com/channels/506120681495199756/566611073977942017/1188877921608286260"
-          },
-          {
-              "block": "image",
-              "str": "投票的截图",
-              "uri": "97.png"
-          }
+        {
+          "block": "text",
+          "str": "🏁 "
+        },
+        {
+          "block": "link",
+          "str": "投票給過",
+          "uri": "https://discord.com/channels/506120681495199756/566611073977942017/1188877921608286260"
+        },
+        {
+          "block": "image",
+          "str": "投票的截图",
+          "uri": "97.png"
+        }
       ]
   },
   {
@@ -286,10 +288,11 @@
         "name": "用腳畫畫",
         "status": "已完成",
         "description": [
-            {
-                "block": "str",
-                "str": "https://discord.com/channels/506120681495199756/529184173680885780/1132606696892674099"
-            }
+          {
+            "block": "link",
+            "str": "懲罰完成連結",
+            "uri": "https://discord.com/channels/506120681495199756/529184173680885780/1132606696892674099"
+          }
         ]
     },
     {
@@ -298,10 +301,11 @@
         "name": "把歌詞都改成喵",
         "status": "已完成",
         "description": [
-            {
-                "block": "str",
-                "str": "https://youtube.com/clip/UgkxvS7iudvzdTxYpVYb2yGZN21AqydW6zsm"
-            }
+          {
+            "block": "link",
+            "str": "懲罰完成連結",
+            "uri": "https://youtube.com/clip/UgkxvS7iudvzdTxYpVYb2yGZN21AqydW6zsm"
+          }
         ]
     },
     {
@@ -330,21 +334,34 @@
         "date": "2023-07-30",
         "name": "打完星鐵主線",
         "status": "進行中",
-        "description": [{ "block": "str", "str": "🆙 增加" }, { "block": "str2", "str": "⚔️ 雅利洛-VI" }]
+        "description": [
+            { 
+                "block": "text",
+                "str": "🆙 增加"
+            },
+            {
+                "block": "br"
+            },
+            {
+                "block": "vod",
+                "": "⚔️ 雅利洛-VI",
+                "uri": "101"
+            }
+        ]
     },
     {
         "id": 72,
         "date": "2023-07-30",
         "name": "深夜台玩恐怖遊戲",
         "status": "已完成",
-        "description": [{ "block": "str", "str": "🆙 增加" }]
+        "description": [{ "block": "text", "str": "🆙 增加" }]
     },
     {
         "id": 75,
         "date": "2023-08-06",
         "name": "通關《壺男》",
         "status": "勉強過",
-        "description": [{ "block": "str", "str": "🏁 懲罰主人給過" }]
+        "description": [{ "block": "text", "str": "🏁 懲罰主人給過" }]
     },
     {
         "id": 95,
@@ -379,7 +396,7 @@
         "date": "2023-08-20",
         "name": "Hypixel 與觀眾同樂時一場內弄死所有觀眾",
         "status": "已完成",
-        "description": [{ "block": "str", "str": "🔄 重抽" }]
+        "description": [{ "block": "text", "str": "🔄 重抽" }]
     },
     {
         "id": 0,
@@ -393,7 +410,7 @@
         "date": "2023-09-10",
         "name": "玩1個小時only up",
         "status": "勉強過",
-        "description": [{ "block": "str", "str": "🏁 玩盜版" }]
+        "description": [{ "block": "text", "str": "🏁 玩盜版" }]
     },
     {
         "id": 24,
@@ -421,14 +438,14 @@
         "date": "2023-09-10",
         "name": "開加班台",
         "status": "已完成",
-        "description": [{ "block": "str", "str": "🆙 增加" }]
+        "description": [{ "block": "text", "str": "🆙 增加" }]
     },
     {
         "id": 93,
         "date": "2023-09-10",
         "name": "nitro",
         "status": "已完成",
-        "description": [{ "block": "str", "str": "🆙 增加" }]
+        "description": [{ "block": "text", "str": "🆙 增加" }]
     },
     {
         "id": 94,
@@ -442,14 +459,14 @@
         "date": "2023-09-17",
         "name": "直播玩螃蟹遊戲",
         "status": "已完成",
-        "description": [{ "block": "str", "str": "📝 原主人修改1次" }]
+        "description": [{ "block": "text", "str": "📝 原主人修改1次" }]
     },
     {
         "id": 57,
         "date": "2023-09-17",
         "name": "直播遊玩鬥陣特攻2直到上升通行證等級20級（超過十級可累積）",
         "status": "已完成",
-        "description": [{ "block": "str", "str": "📝 原主人修改1次" }]
+        "description": [{ "block": "text", "str": "📝 原主人修改1次" }]
     },
     {
         "id": 90,
@@ -477,7 +494,7 @@
         "date": "2023-09-24",
         "name": "直播不能講到d開頭的字 五次懲罰加一 加到懲罰就解禁",
         "status": "已完成",
-        "description": [{ "block": "str", "str": "🆙 增加" }]
+        "description": [{ "block": "text", "str": "🆙 增加" }]
     },
     {
         "id": 48,
@@ -491,7 +508,7 @@
         "date": "2023-09-24",
         "name": "讓ChatGPT同時給小學數學、科學、文學、歷史、地理 各一題選擇題 2分鐘內沒解出來懲罰+1",
         "status": "已完成",
-        "description": [{ "block": "str", "str": "🆙 增加" }]
+        "description": [{ "block": "text", "str": "🆙 增加" }]
     },
     {
         "id": 59,
@@ -526,7 +543,7 @@
         "date": "2023-10-08",
         "name": "直播玩project playtime",
         "status": "未開始",
-        "description": [{ "block": "str", "str": "📝 原主人修改1次" }]
+        "description": [{ "block": "text", "str": "📝 原主人修改1次" }]
     },
     {
         "id": 52,
@@ -554,7 +571,13 @@
         "date": "2023-10-08",
         "name": "直播遊玩黎明死線倖存者或殺手，直到熒虹徽章20個",
         "status": "進行中",
-        "description": [{ "block": "str", "str": "⚔️ 已完成 4 /20個" }]
+        "description": [
+            { 
+                "block": "vod",
+                "str": "⚔️ 已完成 4 /20個",
+                "uri": "98"
+            }
+        ]
     },
     {
         "id": 67,
@@ -604,10 +627,11 @@
         "name": "泡一碗很辣的泡麵邊吃邊玩",
         "status": "已完成",
         "description": [
-            {
-                "block": "str",
-                "str": "https://discord.com/channels/506120681495199756/566611073977942017/1188882035645890691"
-            }
+          {
+            "block": "link",
+            "str": "懲罰完成連結",
+            "uri": "https://discord.com/channels/506120681495199756/566611073977942017/1188882035645890691"
+          }
         ]
     },
     {
@@ -651,10 +675,11 @@
         "name": "懲罰五色選一個 電繪一個以那個色為主題的惡靈",
         "status": "已完成",
         "description": [
-            {
-                "block": "str",
-                "str": "https://discord.com/channels/506120681495199756/566611073977942017/1189169405679112222"
-            }
+          {
+            "block": "link",
+            "str": "懲罰完成連結",
+            "uri": "https://discord.com/channels/506120681495199756/566611073977942017/1189169405679112222"
+          }
         ]
     },
     {

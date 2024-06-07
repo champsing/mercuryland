@@ -326,15 +326,19 @@ function vodLinkOfDate(date: string): string[] {
                     @click="openLink(block.uri)"
                     :text="true"
                     :focusable="false"
-                    >{{ block.str }}</n-button
                 >
+                    {{ block.str }}
+                </n-button>
+
                 <n-button
                     v-if="block.block == 'vod'"
                     @click="openLink(ofId(vodData, parseInt(block.uri)).link)"
                     :text="true"
                     :focusable="false"
-                    >{{ block.str }}</n-button
                 >
+                    {{ block.str }}
+                </n-button>
+
                 <img
                     v-if="block.block == 'image'"
                     :src="`penalty/${block.uri}`"
