@@ -311,11 +311,14 @@ function vodLinkOfDate(date: string): string[] {
             role="dialog"
             aria-modal="true"
         >
+            <template #header-extra>
+                <n-button
+                    @click="openLinks(vodLinkOfDate(penaltyContent.date))"
+                >
+                    直播转盘連結
+                </n-button>
+            </template>
             {{ penaltyContent.description }}
-            <n-divider v-if="penaltyContent.description != ''" />
-            <n-button @click="openLinks(vodLinkOfDate(penaltyContent.date))">
-                直播转盘連結
-            </n-button>
         </n-card>
     </n-modal>
 
