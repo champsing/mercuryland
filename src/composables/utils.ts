@@ -2,6 +2,15 @@ export function openLink(link: string) {
     window.open(link);
 }
 
+export function ofId<T extends {id: number}>(data: T[], id: number): T {
+    for (let i = 0; i < data.length; i++) {
+        if (data[i].id == id) {
+            return data[i]
+        }
+    }
+    return null
+}
+
 export function openLinks(links: Array<string>) {
     for (let i = 0; i < links.length; i++) {
         openLink(links[i]);

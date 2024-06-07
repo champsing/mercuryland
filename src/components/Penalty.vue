@@ -30,7 +30,7 @@ import {
     ChartData,
 } from "chart.js";
 import { Bar, Doughnut } from "vue-chartjs";
-import { openLinks } from "../composables/utils.ts";
+import { openLink, openLinks, ofId } from "../composables/utils.ts";
 import penaltyData from "../assets/penalty.json";
 import penaltyStatus from "../assets/penalty_status.json";
 import vodData from "../assets/vod.json";
@@ -82,16 +82,17 @@ let filterSearch = defineModel("filterSearch", {
     },
 });
 
-let finishOptions = penaltyStatus
-    .map((x) => x.name)
-    .concat([""])
-    .sort()
-    .map((x) => {
-        return { label: x, value: x };
-    });
+let finishOptions = [{ label: "", value: null }].concat(
+    penaltyStatus
+        .map((x) => x.name)
+        .sort()
+        .map((x) => {
+            return { label: x, value: x };
+        })
+);
 
 let filteredData = defineModel("filteredData", {
-    default: filterPenaltyData([0, Date.now()], "", ""),
+    default: filterPenaltyData([0, Date.now()], null, ""),
     set(value) {
         doughnutChartData.value = generateDoughnutChartData(value);
         barChartData.value = generateBarChartData(value);
@@ -140,22 +141,25 @@ let barChartOptions = {
     },
 } as ChartOptions<"bar">;
 
-const activateModal = (item) => {
-    isModalActive.value = true;
-    penaltyContent.value = item;
-};
-
-const isModalActive = ref(false);
-const penaltyContent = ref({
-    id: "",
-    date: "",
-    name: "",
-    status: "",
-    description: "",
+const showModal = ref(false);
+const modalContent: Ref<PenaltyDataEntry> = defineModel("modalContent", {
+    default: null,
+    set(value) {
+        showModal.value = true;
+        return value;
+    },
 });
 </script>
 
 <script lang="ts">
+class PenaltyDataEntry {
+    id: number;
+    date: string;
+    name: string;
+    status: string;
+    description: { block: string; str?: string; uri?: string }[];
+}
+
 function filterPenaltyData(
     date: [number, number],
     status: string,
@@ -167,7 +171,7 @@ function filterPenaltyData(
                 v.date >= new Date(date[0]).toISOString().slice(0, 10) &&
                 v.date <= new Date(date[1]).toISOString().slice(0, 10)
         )
-        .filter((v) => status == "" || status == v.status)
+        .filter((v) => status == null || status == v.status)
         .filter(
             (v) =>
                 search == "" ||
@@ -238,7 +242,6 @@ function vodLinkOfDate(date: string): string[] {
                 placeholder="請選擇一種完成狀態"
                 :consistent-menu-width="false"
             />
-            <!--but placeholder won't load QQ-->
         </n-gi>
         <n-gi>
             <n-input
@@ -272,7 +275,7 @@ function vodLinkOfDate(date: string): string[] {
                         </td>
                         <td :class="`!bg-[${statusOf(item.status).color}]`">
                             <n-button
-                                @click="activateModal(item)"
+                                @click="modalContent = item"
                                 :text="true"
                                 :focusable="false"
                             >
@@ -302,23 +305,43 @@ function vodLinkOfDate(date: string): string[] {
         </n-gi>
     </n-grid>
 
-    <n-modal v-model:show="isModalActive">
+    <n-modal v-model:show="showModal">
         <n-card
             style="width: 600px"
-            :title="penaltyContent.name"
+            :title="modalContent.name"
             :bordered="false"
             size="huge"
             role="dialog"
             aria-modal="true"
         >
             <template #header-extra>
-                <n-button
-                    @click="openLinks(vodLinkOfDate(penaltyContent.date))"
-                >
+                <n-button @click="openLinks(vodLinkOfDate(modalContent.date))">
                     直播转盘連結
                 </n-button>
             </template>
-            {{ penaltyContent.description }}
+            <template v-for="block in modalContent.description">
+                <span v-if="block.block == 'text'">{{ block.str }}</span>
+                <n-button
+                    v-if="block.block == 'link'"
+                    @click="openLink(block.uri)"
+                    :text="true"
+                    :focusable="false"
+                    >{{ block.str }}</n-button
+                >
+                <n-button
+                    v-if="block.block == 'vod'"
+                    @click="openLink(ofId(vodData, parseInt(block.uri)).link)"
+                    :text="true"
+                    :focusable="false"
+                    >{{ block.str }}</n-button
+                >
+                <img
+                    v-if="block.block == 'image'"
+                    :src="`penalty/${block.uri}`"
+                    :alt="block.str"
+                />
+                <br v-if="block.block == 'br'" />
+            </template>
         </n-card>
     </n-modal>
 
