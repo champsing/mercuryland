@@ -340,6 +340,7 @@ function vodLinkOfDate(date: string): string[] {
                     :src="`penalty/${block.uri}`"
                     :alt="block.str"
                 />
+                <br v-if="block.block == 'br'" />
             </template>
         </n-card>
     </n-modal>
