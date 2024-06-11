@@ -142,7 +142,7 @@ let barChartOptions = {
 } as ChartOptions<"bar">;
 
 const showModal = ref(false);
-const modalContent: Ref<PenaltyDataEntry> = defineModel("modalContent", {
+const modalContent: Ref<penaltyDataEntry> = defineModel("modalContent", {
     default: null,
     set(value) {
         showModal.value = true;
@@ -152,7 +152,7 @@ const modalContent: Ref<PenaltyDataEntry> = defineModel("modalContent", {
 </script>
 
 <script lang="ts">
-class PenaltyDataEntry {
+class penaltyDataEntry {
     id: number;
     date: string;
     name: string;

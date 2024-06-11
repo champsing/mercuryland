@@ -28,11 +28,22 @@ export function formatHMS(seconds: number) {
     let m = Math.floor(seconds / 60) % 60;
     let h = Math.floor(seconds / 3600);
 
-    return (
-        h.toString().padStart(2, "0") +
-        ":" +
-        m.toString().padStart(2, "0") +
-        ":" +
-        s.toString().padStart(2, "0")
-    );
+    if (h == 0 && m !== 0)
+        return (
+            m.toString().padStart(2, "0") +
+            ":" +
+            s.toString().padStart(2, "0")
+        );
+    else if (h == 0 && m == 0 && s !== 0)
+        return s.toString().padStart(2, "0");
+    else if (h == 0 && m == 0 && s == 0)
+        return s.toString();
+    else 
+        return (
+            h.toString().padStart(2, "0") +
+            ":" +
+            m.toString().padStart(2, "0") +
+            ":" +
+            s.toString().padStart(2, "0")
+        );
 }
