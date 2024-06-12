@@ -5,11 +5,11 @@
         "name": "用變聲器直播1天",
         "status": "已完成",
         "description": [
-          {
-            "block": "vod",
-            "str": "惩罚完成链接",
-            "uri": "67"
-          }
+            {
+                "block": "vod",
+                "str": "惩罚完成链接",
+                "uri": "67"
+            }
         ]
     },
     {
@@ -18,11 +18,11 @@
         "name": "玩《女鬼橋》",
         "status": "已完成",
         "description": [
-          {
-            "block": "vod",
-            "str": "惩罚完成链接",
-            "uri": "75"
-          }
+            {
+                "block": "vod",
+                "str": "惩罚完成链接",
+                "uri": "75"
+            }
         ]
     },
     {
@@ -38,11 +38,11 @@
         "name": "玩ALTF4",
         "status": "已完成",
         "description": [
-          {
-            "block": "vod",
-            "str": "惩罚完成链接",
-            "uri": "54"
-          }
+            {
+                "block": "vod",
+                "str": "惩罚完成链接",
+                "uri": "54"
+            }
         ]
     },
     {
@@ -65,11 +65,11 @@
         "name": "繼續玩ALTF4",
         "status": "已完成",
         "description": [
-          {
-            "block": "vod",
-            "str": "惩罚完成链接",
-            "uri": "89"
-          }
+            {
+                "block": "vod",
+                "str": "惩罚完成链接",
+                "uri": "89"
+            }
         ]
     },
     {
@@ -78,11 +78,11 @@
         "name": "玩At Dead of Night",
         "status": "已完成",
         "description": [
-          {
-            "block": "vod",
-            "str": "惩罚完成链接",
-            "uri": "111"
-          }
+            {
+                "block": "vod",
+                "str": "惩罚完成链接",
+                "uri": "111"
+            }
         ]
     },
     {
@@ -140,11 +140,11 @@
         "name": "剪自己的嬌喘影片發DC群",
         "status": "已完成",
         "description": [
-          {
-            "block": "link",
-            "str": "懲罰完成連結",
-            "uri": "https://youtube.com/clip/Ugkx8GkjUNA3Hxn9jyJcbuvJSme8jY9CFRzC"
-          }
+            {
+                "block": "link",
+                "str": "懲罰完成連結",
+                "uri": "https://youtube.com/clip/Ugkx8GkjUNA3Hxn9jyJcbuvJSme8jY9CFRzC"
+            }
         ]
     },
     {
@@ -239,11 +239,11 @@
         "name": "唱小蠻腰",
         "status": "已完成",
         "description": [
-          {
-            "block": "link",
-            "str": "懲罰完成連結",
-            "uri": "https://youtube.com/clip/UgkxrMznUtBi4zOBP4D20WPqbkatV5-cMLS9"
-          }
+            {
+                "block": "link",
+                "str": "懲罰完成連結",
+                "uri": "https://youtube.com/clip/UgkxrMznUtBi4zOBP4D20WPqbkatV5-cMLS9"
+            }
         ]
     },
     {
@@ -254,28 +254,28 @@
         "description": []
     },
     {
-      "id": 97,
-      "date": "2023-06-25",
-      "name": "SkyBlock 100等",
-      "status": "勉強過",
-      "description": [
-        {
-          "block": "text",
-          "str": "🏁 "
-        },
-        {
-          "block": "link",
-          "str": "投票給過",
-          "uri": "https://discord.com/channels/506120681495199756/566611073977942017/1188877921608286260"
-        },
-        {
-          "block": "image",
-          "str": "投票的截图",
-          "uri": "97.png"
-        }
-      ]
-  },
-  {
+        "id": 97,
+        "date": "2023-06-25",
+        "name": "SkyBlock 100等",
+        "status": "勉強過",
+        "description": [
+            {
+                "block": "text",
+                "str": "🏁 "
+            },
+            {
+                "block": "link",
+                "str": "投票給過",
+                "uri": "https://discord.com/channels/506120681495199756/566611073977942017/1188877921608286260"
+            },
+            {
+                "block": "image",
+                "str": "投票的截图",
+                "uri": "97.png"
+            }
+        ]
+    },
+    {
         "id": 74,
         "date": "2023-07-02",
         "name": "通關《佛萊迪的五夜驚魂：安全漏洞》",
@@ -288,11 +288,11 @@
         "name": "用腳畫畫",
         "status": "已完成",
         "description": [
-          {
-            "block": "link",
-            "str": "懲罰完成連結",
-            "uri": "https://discord.com/channels/506120681495199756/529184173680885780/1132606696892674099"
-          }
+            {
+                "block": "link",
+                "str": "懲罰完成連結",
+                "uri": "https://discord.com/channels/506120681495199756/529184173680885780/1132606696892674099"
+            }
         ]
     },
     {
@@ -301,11 +301,11 @@
         "name": "把歌詞都改成喵",
         "status": "已完成",
         "description": [
-          {
-            "block": "link",
-            "str": "懲罰完成連結",
-            "uri": "https://youtube.com/clip/UgkxvS7iudvzdTxYpVYb2yGZN21AqydW6zsm"
-          }
+            {
+                "block": "link",
+                "str": "懲罰完成連結",
+                "uri": "https://youtube.com/clip/UgkxvS7iudvzdTxYpVYb2yGZN21AqydW6zsm"
+            }
         ]
     },
     {
@@ -335,7 +335,7 @@
         "name": "打完星鐵主線",
         "status": "進行中",
         "description": [
-            { 
+            {
                 "block": "text",
                 "str": "🆙 增加"
             },
@@ -572,7 +572,7 @@
         "name": "直播遊玩黎明死線倖存者或殺手，直到熒虹徽章20個",
         "status": "進行中",
         "description": [
-            { 
+            {
                 "block": "vod",
                 "str": "⚔️ 已完成 4 /20個",
                 "uri": "98"
@@ -627,11 +627,11 @@
         "name": "泡一碗很辣的泡麵邊吃邊玩",
         "status": "已完成",
         "description": [
-          {
-            "block": "link",
-            "str": "懲罰完成連結",
-            "uri": "https://discord.com/channels/506120681495199756/566611073977942017/1188882035645890691"
-          }
+            {
+                "block": "link",
+                "str": "懲罰完成連結",
+                "uri": "https://discord.com/channels/506120681495199756/566611073977942017/1188882035645890691"
+            }
         ]
     },
     {
@@ -675,11 +675,11 @@
         "name": "懲罰五色選一個 電繪一個以那個色為主題的惡靈",
         "status": "已完成",
         "description": [
-          {
-            "block": "link",
-            "str": "懲罰完成連結",
-            "uri": "https://discord.com/channels/506120681495199756/566611073977942017/1189169405679112222"
-          }
+            {
+                "block": "link",
+                "str": "懲罰完成連結",
+                "uri": "https://discord.com/channels/506120681495199756/566611073977942017/1189169405679112222"
+            }
         ]
     },
     {
@@ -819,7 +819,7 @@
         "id": 103,
         "date": "2024-05-05",
         "name": "通關At Dead of Night",
-        "status": "未開始",
+        "status": "進行中",
         "description": []
     },
     {
