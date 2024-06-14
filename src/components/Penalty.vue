@@ -341,7 +341,7 @@ function vodLinkOfDate(date: string): string[] {
 
                 <img
                     v-if="block.block == 'image'"
-                    :src="`penalty/${block.uri}`"
+                    :src="`./src/assets/images/penalty/${block.uri}`"
                     :alt="block.str"
                 />
                 <br v-if="block.block == 'br'" />
