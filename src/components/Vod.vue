@@ -15,8 +15,8 @@ import {
     parseHMS,
     formatHMS,
 } from "../composables/utils.ts";
-import vodLinkData from "../assets/vod.json";
-import vodSchedule from "../assets/schedule.json";
+import vodLinkData from "../assets/data/vod.json";
+import vodSchedule from "../assets/data/schedule.json";
 
 const vodTimeData = calculateVodTime();
 
