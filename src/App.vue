@@ -23,9 +23,24 @@ let icon = h("img", {
                     <Vod />
                 </div>
             </n-tab-pane>
-            <n-tab-pane name="penalty" tab="惩罚">
+            <n-tab-pane name="penalty" tab="懲罰">
                 <div class="pl-8 pr-8">
                     <Penalty />
+                </div>
+            </n-tab-pane>
+            <n-tab-pane name="Join" tab="加入伺服">
+                <div class="pl-8 pr-8">
+                    <Announcement />
+                </div>
+            </n-tab-pane>
+            <n-tab-pane name="Publication" tab="資料公開">
+                <div class="pl-8 pr-8">
+                    <Announcement />
+                </div>
+            </n-tab-pane>
+            <n-tab-pane name="Admins" tab="聯絡管理員">
+                <div class="pl-8 pr-8">
+                    <Announcement />
                 </div>
             </n-tab-pane>
         </n-tabs>
