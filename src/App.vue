@@ -6,6 +6,7 @@ import Vod from "./components/Vod.vue";
 import Penalty from "./components/Penalty.vue";
 import Publication from "./components/Publication.vue";
 import Admins from "./components/Admins.vue";
+import Join from "./components/Join.vue";
 
 let icon = h("img", {
     src: "/hexagon.svg",
@@ -30,17 +31,17 @@ let icon = h("img", {
                     <Penalty />
                 </div>
             </n-tab-pane>
-            <n-tab-pane name="Join" tab="加入伺服">
+            <n-tab-pane name="join" tab="加入伺服">
                 <div class="pl-8 pr-8">
                     <Join />
                 </div>
             </n-tab-pane>
-            <n-tab-pane name="Publication" tab="資料公開">
+            <n-tab-pane name="publication" tab="資料公開">
                 <div class="pl-8 pr-8">
                     <Publication />
                 </div>
             </n-tab-pane>
-            <n-tab-pane name="Admins" tab="聯絡管理員">
+            <n-tab-pane name="admins" tab="聯絡管理員">
                 <div class="pl-8 pr-8">
                     <Admins />
                 </div>
