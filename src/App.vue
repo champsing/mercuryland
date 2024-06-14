@@ -24,3 +24,13 @@ let icon = h("img", { "src": "/hexagon.svg", "class": "invert h-8 w-8" })
         </n-tabs>
     </n-config-provider>
 </template>
+
+<style>
+.n-tabs-nav {
+    display: block;
+    position: sticky !important;
+    z-index: 1;
+    top: 0 !important;
+    @apply bg-zinc-800
+}   
+</style>
