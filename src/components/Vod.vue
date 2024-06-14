@@ -1,20 +1,18 @@
 <script setup lang="ts">
 import { ref, Ref } from "vue";
 import {
-    NButton,
     NDatePicker,
     NGrid,
     NGi,
     NSelect,
-    NTable,
     NDivider,
     NCard,
 } from "naive-ui";
 import {
-    openLink,
     parseHMS,
     formatHMS,
 } from "../composables/utils.ts";
+import DataTable from "./vod/DataTable.vue"
 import vodLinkData from "../assets/data/vod.json";
 import vodSchedule from "../assets/data/schedule.json";
 
@@ -207,52 +205,7 @@ function showTimeResult(entry: VodTimeEntry): string {
 
     <n-grid x-gap="12" :cols="3" class="w-11/12 h-80vh overflow-y-hidden">
         <n-gi :span="2" class="w-full h-full p-0 m-0 overflow-y-scroll">
-            <n-table :bordered="true" size="small" class="text-center">
-                <thead>
-                    <tr>
-                        <td class="font-bold">日期</td>
-                        <td class="font-bold">直播連結</td>
-                        <td class="font-bold">TAG</td>
-                        <td class="font-bold">直播时数</td>
-                    </tr>
-                </thead>
-
-                <tbody>
-                    <tr v-for="item in filteredVodLink">
-                        <td>
-                            {{ item.date }}
-                        </td>
-                        <td>
-                            <n-button
-                                @click="openLink(item.link)"
-                                :text="true"
-                                :focusable="false"
-                            >
-                                {{ item.title }}
-                            </n-button>
-                        </td>
-                        <td>
-                            <template v-for="(tag, index) in item.tags">
-                                <template v-if="index > 0">
-                                    <n-divider vertical
-                                /></template>
-                                <span
-                                    ><n-button
-                                        @click="filterTag = tag"
-                                        :text="true"
-                                        :focusable="false"
-                                    >
-                                        {{ tag }}
-                                    </n-button>
-                                </span>
-                            </template>
-                        </td>
-                        <td>
-                            {{ item.duration }}
-                        </td>
-                    </tr>
-                </tbody>
-            </n-table>
+            <DataTable :dateMin="filterDate[0]" :dateMax="filterDate[1]" :tagOption="filterTag" />
         </n-gi>
         <n-gi class="overflow-y-hidden">
             <n-card
