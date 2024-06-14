@@ -1,12 +1,16 @@
 <script setup lang="ts">
 import { NTabs, NTabPane, NConfigProvider, darkTheme } from "naive-ui";
+import Welcome from "./components/Welcome.vue";
 import Vod from "./components/Vod.vue";
-import Penalty from "./components/Penalty.vue"
+import Penalty from "./components/Penalty.vue";
 </script>
 
 <template>
     <n-config-provider :theme="darkTheme">
         <n-tabs type="line" default-value="vod" animated>
+            <n-tab-pane name="Welcome" tab="首頁">
+                <Welcome />
+            </n-tab-pane>
             <n-tab-pane name="vod" tab="直播">
                 <Vod />
             </n-tab-pane>
