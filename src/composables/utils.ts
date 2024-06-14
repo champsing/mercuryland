@@ -2,13 +2,13 @@ export function openLink(link: string) {
     window.open(link);
 }
 
-export function ofId<T extends {id: number}>(data: T[], id: number): T {
+export function ofId<T extends { id: number }>(data: T[], id: number): T {
     for (let i = 0; i < data.length; i++) {
         if (data[i].id == id) {
-            return data[i]
+            return data[i];
         }
     }
-    return null
+    return null;
 }
 
 export function openLinks(links: Array<string>) {
@@ -34,5 +34,21 @@ export function formatHMS(seconds: number) {
         m.toString().padStart(2, "0") +
         ":" +
         s.toString().padStart(2, "0")
+    );
+}
+
+export function remainingX(el: Element) {
+    return (
+        document.documentElement.clientWidth -
+        el.getBoundingClientRect().left +
+        window.screenX
+    );
+}
+
+export function remainingY(el: Element) {
+    return (
+        document.documentElement.clientHeight -
+        el.getBoundingClientRect().top +
+        window.scrollY
     );
 }
