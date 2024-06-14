@@ -1,12 +1,15 @@
 <script setup lang="ts">
-import { h } from "vue"
+import { h } from "vue";
 import { NTabs, NTabPane, NConfigProvider, darkTheme } from "naive-ui";
 import Welcome from "./components/Welcome.vue";
 import Vod from "./components/Vod.vue";
 import Penalty from "./components/Penalty.vue";
 
-let icon = h("img", { "src": "/hexagon.svg", "class": "invert h-8 w-8", alt: "hexagon" })
-
+let icon = h("img", {
+    src: "/hexagon.svg",
+    class: "invert h-8 w-8",
+    alt: "hexagon",
+});
 </script>
 
 <template>
@@ -16,10 +19,14 @@ let icon = h("img", { "src": "/hexagon.svg", "class": "invert h-8 w-8", alt: "he
                 <Welcome />
             </n-tab-pane>
             <n-tab-pane name="vod" tab="直播">
-                <Vod />
+                <div class="pl-8 pr-8">
+                    <Vod />
+                </div>
             </n-tab-pane>
             <n-tab-pane name="penalty" tab="惩罚">
-                <Penalty />
+                <div class="pl-8 pr-8">
+                    <Penalty />
+                </div>
             </n-tab-pane>
         </n-tabs>
     </n-config-provider>
@@ -32,6 +39,6 @@ let icon = h("img", { "src": "/hexagon.svg", "class": "invert h-8 w-8", alt: "he
     padding-right: 32px;
     z-index: 1;
     top: 0 !important;
-    @apply bg-zinc-800
-}   
+    @apply bg-zinc-800;
+}
 </style>
