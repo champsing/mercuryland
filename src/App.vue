@@ -1,14 +1,18 @@
 <script setup lang="ts">
+import { h } from "vue"
 import { NTabs, NTabPane, NConfigProvider, darkTheme } from "naive-ui";
 import Welcome from "./components/Welcome.vue";
 import Vod from "./components/Vod.vue";
 import Penalty from "./components/Penalty.vue";
+
+let icon = h("img", { "src": "/hexagon.svg", "class": "invert h-8 w-8" })
+
 </script>
 
 <template>
     <n-config-provider :theme="darkTheme">
         <n-tabs type="line" default-value="vod" animated>
-            <n-tab-pane name="Welcome" tab="首頁">
+            <n-tab-pane name="Welcome" :tab="icon">
                 <Welcome />
             </n-tab-pane>
             <n-tab-pane name="vod" tab="直播">
