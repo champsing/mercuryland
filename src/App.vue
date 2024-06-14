@@ -12,7 +12,7 @@ let icon = h("img", { "src": "/hexagon.svg", "class": "invert h-8 w-8", alt: "he
 <template>
     <n-config-provider :theme="darkTheme">
         <n-tabs type="line" default-value="welcome" animated>
-            <n-tab-pane name="Welcome" :tab="icon">
+            <n-tab-pane name="welcome" :tab="icon">
                 <Welcome />
             </n-tab-pane>
             <n-tab-pane name="vod" tab="直播">
