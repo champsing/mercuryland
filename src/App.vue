@@ -5,7 +5,7 @@ import Welcome from "./components/Welcome.vue";
 import Vod from "./components/Vod.vue";
 import Penalty from "./components/Penalty.vue";
 
-let icon = h("img", { "src": "/hexagon.svg", "class": "invert h-8 w-8" })
+let icon = h("img", { "src": "/hexagon.svg", "class": "invert h-8 w-8", alt: "hexagon" })
 
 </script>
 
@@ -27,8 +27,9 @@ let icon = h("img", { "src": "/hexagon.svg", "class": "invert h-8 w-8" })
 
 <style>
 .n-tabs-nav {
-    display: block;
     position: sticky !important;
+    padding-left: 32px;
+    padding-right: 32px;
     z-index: 1;
     top: 0 !important;
     @apply bg-zinc-800
