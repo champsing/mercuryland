@@ -87,6 +87,6 @@ let tabValue = defineModel("tabValue", {
     background-color: var(--tab-nav-color);
 }
 .n-tabs-pane-wrapper {
-    overflow: visible;
+    overflow: visible !important;
 }
 </style>
