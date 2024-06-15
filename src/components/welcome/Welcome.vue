@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, ref } from "vue";
-import Slide1 from "./welcome/Slide1.vue";
-import Slide2 from "./welcome/Slide2.vue";
+import Slide1 from "./Slide1.vue";
+import Slide2 from "./Slide2.vue";
 import { useElementBounding } from "@vueuse/core";
 
 const el = ref<HTMLInputElement | null>(null);
