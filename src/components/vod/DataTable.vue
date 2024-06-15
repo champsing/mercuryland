@@ -8,6 +8,7 @@ import vodLinkData from "@assets/data/vod.json";
 
 type DataType = (typeof vodLinkData)[0];
 
+const vh = useWindowSize().height;
 const props = defineProps<{
     dateRange: [number, number];
     tagOption?: string;
@@ -97,8 +98,10 @@ const columns = [
 
 function calcStyle(top: number) {
     let pmb = 8; // parent margin
-    let vh = useWindowSize().height;
-    let height = Math.max(vh.value * 0.5, vh.value - window.scrollY - top - pmb);
+    let height = Math.max(
+        vh.value * 0.5,
+        vh.value - window.scrollY - top - pmb
+    );
     return {
         height: "" + height + "px",
     };

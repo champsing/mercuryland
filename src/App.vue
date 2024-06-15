@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { h } from "vue";
+import { h, ref } from "vue";
 import { NTabs, NTabPane, NConfigProvider, darkTheme } from "naive-ui";
 import Welcome from "./components/Welcome.vue";
 import Vod from "./components/vod/Vod.vue";
@@ -7,17 +7,44 @@ import Penalty from "./components/Penalty.vue";
 import Publication from "./components/Publication.vue";
 import Admins from "./components/Admins.vue";
 import Join from "./components/Join.vue";
+import hexagonIcon from "@assets/images/hexagon.svg";
 
 let icon = h("img", {
-    src: "/hexagon.svg",
+    src: hexagonIcon,
     class: "invert h-8 w-8",
     alt: "hexagon",
+});
+let tabStyle = ref({
+    "--tab-nav-color": "transparent",
+});
+let tabValue = defineModel("tabValue", {
+    default: "welcome",
+    set(value: string) {
+        console.log("update ${{ value }}");
+        if (value == "welcome") {
+            tabStyle.value = {
+                "--tab-nav-color": "transparent",
+            };
+        } else {
+            tabStyle.value = {
+                // equivalent to zinc-800
+                "--tab-nav-color": "rgb(39 39 42)",
+            };
+        }
+        return value;
+    },
 });
 </script>
 
 <template>
     <n-config-provider :theme="darkTheme">
-        <n-tabs type="line" default-value="welcome" animated>
+        <n-tabs
+            type="line"
+            default-value="welcome"
+            animated
+            :style="tabStyle"
+            v-model:value="tabValue"
+        >
             <n-tab-pane name="welcome" :tab="icon">
                 <Welcome />
             </n-tab-pane>
@@ -57,6 +84,9 @@ let icon = h("img", {
     padding-right: 32px;
     z-index: 1;
     top: 0 !important;
-    @apply bg-zinc-800;
+    background-color: var(--tab-nav-color);
+}
+.n-tabs-pane-wrapper {
+    overflow: visible;
 }
 </style>

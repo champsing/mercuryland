@@ -15,6 +15,7 @@ class DataType {
     divider: boolean;
 }
 
+const vh = useWindowSize().height;
 const props = defineProps<{ dateRange: [number, number] }>();
 const emit = defineEmits<{ (e: "computedTime", tag: number): void }>();
 const rawData = calcRawData();
@@ -115,10 +116,9 @@ function calcStyle(top: number) {
     let pbb = 1; // parent border
     let pmb = 8; // parent margin
     let p = ppb + pbb + pmb;
-    let vh = useWindowSize().height;
-    let height = Math.max(vh.value * 0.5, vh.value - window.scrollY - top - p);
+    let height = Math.max(vh.value * 0.2, vh.value - window.scrollY - top - p);
     return {
-        "max-height": "" + height + "px",
+        height: "" + height + "px",
     };
 }
 </script>

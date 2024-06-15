@@ -1,6 +1,13 @@
 <script setup lang="ts">
+// import Placeholder from "./welcome/Placeholder.vue"
 </script>
 
 <template>
-    <img src="@assets/images/welcome.png" class="z-0 w-fit -mt-3" alt="Welcome"/>
+    <div class="bottom-0 left-0 h-screen">
+        <img
+            src="@assets/images/welcome.png"
+            class="z-10 w-fit"
+            alt="Welcome"
+        />
+    </div>
 </template>
