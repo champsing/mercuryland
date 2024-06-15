@@ -98,7 +98,7 @@ const columns = [
 function calcStyle(top: number) {
     let pmb = 8; // parent margin
     let vh = useWindowSize().height;
-    let height = Math.max(0, vh.value - window.scrollY - top - pmb);
+    let height = Math.max(vh.value * 0.5, vh.value - window.scrollY - top - pmb);
     return {
         height: "" + height + "px",
     };

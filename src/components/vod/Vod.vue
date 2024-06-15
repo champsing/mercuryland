@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import { ref, Ref } from "vue";
 import { NDatePicker, NGrid, NGi, NSelect, NDivider } from "naive-ui";
-import vodLinkData from "../assets/data/vod.json";
-import DataTable from "./vod/DataTable.vue";
-import TimeSummary from "./vod/TimeSummary.vue";
-import TimeDetail from "./vod/TimeDetail.vue";
+import vodLinkData from "@assets/data/vod.json";
+import DataTable from "./DataTable.vue";
+import TimeSummary from "./TimeSummary.vue";
+import TimeDetail from "./TimeDetail.vue";
 
 let dateRange: Ref<[number, number]> = ref([1577836800000, Date.now()]);
 let tagOption = ref(null);
@@ -18,11 +18,11 @@ let computedTime = ref(0);
 </script>
 
 <template>
-    <n-grid x-gap="12" :cols="4" class="w-11/12">
-        <n-gi :span="2">
+    <n-grid x-gap="12" y-gap="12" :cols="4" class="w-11/12" item-responsive>
+        <n-gi span="4 800:2">
             <n-date-picker type="daterange" v-model:value="dateRange" />
         </n-gi>
-        <n-gi>
+        <n-gi span="4 800:2 1200:1">
             <n-select
                 v-model:value="tagOption"
                 :options="tagMenu"
@@ -34,15 +34,15 @@ let computedTime = ref(0);
 
     <n-divider class="!mt-2 !mb-2" />
 
-    <n-grid x-gap="8" :cols="3" class="w-11/12">
-        <n-gi :span="2" class="w-full p-0 m-0">
+    <n-grid x-gap="8" :cols="3" class="w-11/12" item-responsive>
+        <n-gi span="3 800:2" class="w-full p-0 m-0">
             <DataTable
                 :dateRange="dateRange"
                 :tagOption="tagOption"
                 @updateTag="(tag) => (tagOption = tag)"
             />
         </n-gi>
-        <n-gi>
+        <n-gi span="3 800:1">
             <TimeSummary :t="computedTime" />
             <TimeDetail
                 :dateRange="dateRange"

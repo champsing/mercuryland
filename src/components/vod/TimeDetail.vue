@@ -116,7 +116,7 @@ function calcStyle(top: number) {
     let pmb = 8; // parent margin
     let p = ppb + pbb + pmb;
     let vh = useWindowSize().height;
-    let height = Math.max(0, vh.value - window.scrollY - top - p);
+    let height = Math.max(vh.value * 0.5, vh.value - window.scrollY - top - p);
     return {
         "max-height": "" + height + "px",
     };

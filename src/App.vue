@@ -2,7 +2,7 @@
 import { h } from "vue";
 import { NTabs, NTabPane, NConfigProvider, darkTheme } from "naive-ui";
 import Welcome from "./components/Welcome.vue";
-import Vod from "./components/Vod.vue";
+import Vod from "./components/vod/Vod.vue";
 import Penalty from "./components/Penalty.vue";
 import Publication from "./components/Publication.vue";
 import Admins from "./components/Admins.vue";
