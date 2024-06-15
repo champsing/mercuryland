@@ -2,9 +2,10 @@
 import { ref, Ref } from "vue";
 import { NDatePicker, NGrid, NGi, NSelect, NDivider, NCard } from "naive-ui";
 import { parseHMS, formatHMS } from "../composables/utils.ts";
-import DataTable from "./vod/DataTable.vue";
 import vodLinkData from "../assets/data/vod.json";
 import vodSchedule from "../assets/data/schedule.json";
+import DataTable from "./vod/DataTable.vue";
+import TimeSummary from "./vod/TimeSummary.vue";
 
 const vodTimeData = calculateVodTime();
 
@@ -166,13 +167,8 @@ function showTimeOffset(seconds: number): string {
     }
 }
 
-function showTimeResult(entry: VodTimeEntry): string {
-    let t = entry.previous + entry.offset;
-    if (t > 0) {
-        return formatHMS(t);
-    } else {
-        return formatHMS(0);
-    }
+function computeFinalTime(entry: VodTimeEntry): number {
+    return entry.previous + entry.offset;
 }
 </script>
 
@@ -202,13 +198,7 @@ function showTimeResult(entry: VodTimeEntry): string {
             />
         </n-gi>
         <n-gi class="overflow-y-hidden h-80vh">
-            <n-card
-                title="剩余时间"
-                class="font-bold text-center h-1/3"
-                :style="{ '--n-font-size': '5vw' }"
-            >
-                {{ showTimeResult(vodTimeData[vodTimeData.length - 1]) }}
-            </n-card>
+            <TimeSummary :t="computeFinalTime(vodTimeData[vodTimeData.length - 1])" />
             <n-card
                 title="计算明细"
                 class="text-center h-2/3 overflow-y-scroll"

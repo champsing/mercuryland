@@ -19,7 +19,8 @@
         "naive-ui": "^2.38.2",
         "vfonts": "^0.0.3",
         "vue": "^3.4.15",
-        "vue-chartjs": "^5.3.0"
+        "vue-chartjs": "^5.3.0",
+        "vue-window-size": "^2.0.0"
     },
     "devDependencies": {
         "@types/d3": "^7.4.3",
