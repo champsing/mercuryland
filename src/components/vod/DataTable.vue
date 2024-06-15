@@ -103,7 +103,7 @@ function calcStyle(top: number) {
         vh.value - window.scrollY - top - pmb
     );
     return {
-        maxHeight: "" + height + "px",
+        height: "" + height + "px",
     };
 }
 </script>

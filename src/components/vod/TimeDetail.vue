@@ -118,7 +118,7 @@ function calcStyle(top: number) {
     let p = ppb + pbb + pmb;
     let height = Math.max(vh.value * 0.2, vh.value - window.scrollY - top - p);
     return {
-        maxHeight: "" + height + "px",
+        height: "" + height + "px",
     };
 }
 </script>
