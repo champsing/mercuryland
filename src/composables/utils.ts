@@ -45,7 +45,8 @@ export function remainingX(el: Element) {
     );
 }
 
-export function remainingY(el: Element) {
+export function remainingY(el) {
+
     return (
         document.documentElement.clientHeight -
         el.getBoundingClientRect().top +

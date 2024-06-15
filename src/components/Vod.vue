@@ -193,15 +193,15 @@ function showTimeResult(entry: VodTimeEntry): string {
 
     <n-divider class="!mt-2 !mb-2" />
 
-    <n-grid x-gap="12" :cols="3" class="w-11/12 h-80vh overflow-y-hidden">
-        <n-gi :span="2" class="w-full h-full p-0 m-0 overflow-y-scroll">
+    <n-grid x-gap="12" :cols="3" class="w-11/12 overflow-y-hidden">
+        <n-gi :span="2" class="w-full h-full p-0 m-0">
             <DataTable
                 :dateRange="filterDate"
                 :tagOption="filterTag"
                 @updateTag="(tag) => (filterTag = tag)"
             />
         </n-gi>
-        <n-gi class="overflow-y-hidden">
+        <n-gi class="overflow-y-hidden h-80vh">
             <n-card
                 title="剩余时间"
                 class="font-bold text-center h-1/3"
