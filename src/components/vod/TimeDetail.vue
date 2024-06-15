@@ -111,10 +111,10 @@ function format(seconds: number): string {
 }
 
 function calcStyle(top: number) {
-    let ppb = 20 // parent padding
-    let pbb = 1 // parent border
-    let pmb = 8 // parent margin
-    let p = ppb + pbb + pmb
+    let ppb = 20; // parent padding
+    let pbb = 1; // parent border
+    let pmb = 8; // parent margin
+    let p = ppb + pbb + pmb;
     let vh = useWindowSize().height;
     let height = Math.max(0, vh.value - window.scrollY - top - p);
     return {
@@ -124,10 +124,14 @@ function calcStyle(top: number) {
 </script>
 
 <template>
-    <n-card title="计算明细" class="text-center mb-2">
+    <n-card
+        title="计算明细"
+        class="text-center mb-2"
+        :style="{ '--n-padding-left': 0 }"
+    >
         <UseElementBounding v-slot="{ top }">
             <n-scrollbar :style="calcStyle(top)">
-                <div>
+                <div class="pr-6">
                     <template v-for="item in data">
                         <n-divider
                             v-if="item.divider"
