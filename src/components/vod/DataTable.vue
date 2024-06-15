@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, h } from "vue";
 import { UseElementBounding } from "@vueuse/components";
-import { useWindowSize } from 'vue-window-size';
+import { useWindowSize } from "vue-window-size";
 import { NButton, NDataTable, NDivider } from "naive-ui";
 import { openLink, interleave, parseHMS } from "@composables/utils.ts";
 import vodLinkData from "@assets/data/vod.json";
@@ -96,18 +96,17 @@ const columns = [
 ];
 
 function calcStyle(top: number) {
-    let mb = 8;
+    let pmb = 8; // parent margin
     let vh = useWindowSize().height;
-    let height = Math.max(0, vh.value - window.scrollY - top - mb);
+    let height = Math.max(0, vh.value - window.scrollY - top - pmb);
     return {
         height: "" + height + "px",
-        "margin-bottom": mb,
     };
 }
 </script>
 
 <template>
-    <UseElementBounding v-slot="{ top }">
+    <UseElementBounding v-slot="{ top }" class="mb-2">
         <n-data-table
             :data="data"
             :columns="columns"

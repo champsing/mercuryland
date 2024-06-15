@@ -21,7 +21,7 @@ function calcStyle(width: number) {
     <UseElementBounding v-slot="{ width }">
         <n-card
             title="剩余时间"
-            class="font-bold text-center"
+            class="font-bold text-center mb-2"
             :style="calcStyle(width)"
         >
             {{ text }}

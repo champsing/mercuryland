@@ -1,22 +1,18 @@
 <script setup lang="ts">
 import { ref, Ref } from "vue";
-import { NDatePicker, NGrid, NGi, NSelect, NDivider, NCard } from "naive-ui";
-import { parseHMS, formatHMS } from "../composables/utils.ts";
+import { NDatePicker, NGrid, NGi, NSelect, NDivider } from "naive-ui";
+import { parseHMS } from "../composables/utils.ts";
 import vodLinkData from "../assets/data/vod.json";
 import vodSchedule from "../assets/data/schedule.json";
 import DataTable from "./vod/DataTable.vue";
 import TimeSummary from "./vod/TimeSummary.vue";
+import TimeDetail from "./vod/TimeDetail.vue";
 
 const vodTimeData = calculateVodTime();
 
 let filterDate: Ref<[number, number]> = defineModel("filterDate", {
     default: [1577836800000, Date.now()] as const,
     set(value: [number, number]) {
-        filteredVodLink.value = filterVodLinkData(
-            vodLinkData,
-            value,
-            filterTag.value
-        );
         filteredVodTime.value = filterVodTimeData(vodTimeData, value);
         return value;
     },
@@ -24,11 +20,6 @@ let filterDate: Ref<[number, number]> = defineModel("filterDate", {
 let filterTag: Ref<string> = defineModel("filterTag", {
     default: null,
     set(value) {
-        filteredVodLink.value = filterVodLinkData(
-            vodLinkData,
-            filterDate.value,
-            value
-        );
         return value;
     },
 });
@@ -39,9 +30,6 @@ let tagOptions = ref(
         })
     )
 );
-let filteredVodLink = defineModel("filteredVodLink", {
-    default: filterVodLinkData(vodLinkData, [0, Date.now()], null),
-});
 let filteredVodTime = defineModel("filteredVodTime", {
     default: filterVodTimeData(calculateVodTime(), [0, Date.now()]),
 });
@@ -54,21 +42,6 @@ class VodTimeEntry {
     previous: number;
     reason: string;
     divider: boolean;
-}
-
-function filterVodLinkData(
-    data: typeof vodLinkData,
-    ts: [number, number],
-    tag: string
-): typeof vodLinkData {
-    return data
-        .filter(
-            (v) =>
-                v.date >= new Date(ts[0]).toISOString().slice(0, 10) &&
-                v.date <= new Date(ts[1]).toISOString().slice(0, 10)
-        )
-        .filter((v) => tag == null || v.tags.includes(tag))
-        .sort((lhs, rhs) => rhs.date.localeCompare(lhs.date));
 }
 
 function filterVodTimeData(
@@ -159,14 +132,6 @@ function calculateVodTime(): VodTimeEntry[] {
     return re;
 }
 
-function showTimeOffset(seconds: number): string {
-    if (seconds > 0) {
-        return "+ " + formatHMS(seconds);
-    } else {
-        return "− " + formatHMS(-seconds);
-    }
-}
-
 function computeFinalTime(entry: VodTimeEntry): number {
     return entry.previous + entry.offset;
 }
@@ -189,17 +154,20 @@ function computeFinalTime(entry: VodTimeEntry): number {
 
     <n-divider class="!mt-2 !mb-2" />
 
-    <n-grid x-gap="12" :cols="3" class="w-11/12 overflow-y-hidden">
-        <n-gi :span="2" class="w-full h-full p-0 m-0">
+    <n-grid x-gap="8" :cols="3" class="w-11/12">
+        <n-gi :span="2" class="w-full p-0 m-0">
             <DataTable
                 :dateRange="filterDate"
                 :tagOption="filterTag"
                 @updateTag="(tag) => (filterTag = tag)"
             />
         </n-gi>
-        <n-gi class="overflow-y-hidden h-80vh">
-            <TimeSummary :t="computeFinalTime(vodTimeData[vodTimeData.length - 1])" />
-            <n-card
+        <n-gi>
+            <TimeSummary
+                :t="computeFinalTime(vodTimeData[vodTimeData.length - 1])"
+            />
+            <TimeDetail :dateRange="filterDate" />
+            <!-- <n-card
                 title="计算明细"
                 class="text-center h-2/3 overflow-y-scroll"
             >
@@ -226,7 +194,7 @@ function computeFinalTime(entry: VodTimeEntry): number {
                         </div>
                     </div>
                 </template>
-            </n-card>
+            </n-card> -->
         </n-gi>
     </n-grid>
 </template>
