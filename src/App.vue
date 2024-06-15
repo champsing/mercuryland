@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { h, ref } from "vue";
 import { NTabs, NTabPane, NConfigProvider, darkTheme } from "naive-ui";
-import Welcome from "./components/Welcome.vue";
+import Welcome from "./components/welcome/Welcome.vue";
 import Vod from "./components/vod/Vod.vue";
 import Penalty from "./components/Penalty.vue";
 import Publication from "./components/Publication.vue";
