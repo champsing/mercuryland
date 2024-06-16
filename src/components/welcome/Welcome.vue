@@ -30,7 +30,8 @@ const elStyle = computed(() => {
         <Slide4 />
         <Slide5 />
     </div>
-    <iframe
+    <div>
+        <iframe
         allow="autoplay *; encrypted-media *;"
         frameborder="20"
         height="200"
@@ -42,8 +43,10 @@ const elStyle = computed(() => {
         "
         sandbox="allow-forms allow-popups allow-same-origin allow-scripts allow-storage-access-by-user-activation allow-top-navigation-by-user-activation"
         src="https://embed.music.apple.com/tw/album/alpha/739831644?i=739831648"
-    >
-    </iframe>
+        class="absolute x-center y-gap text-center"
+        >
+        </iframe>
+    </div>
 </template>
 
 <style>

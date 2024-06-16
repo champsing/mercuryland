@@ -7,9 +7,10 @@ import { NDivider } from "naive-ui";
     <div class="h-screen overflow-hidden relative">
         <NextPageButton :page="1" />
         <div class="absolute x-center y-center text-center">
-            <div class="text-white font-bold text-8xl">水星伺服器</div>
+            <br /><br /><br /><br /><br /><br/>
+            <div class="text-white font-bold text-7xl">水星伺服器</div>
             <n-divider />
-            <div class="text-white italic text-5xl">The Mercury Land</div>
+            <div class="text-white italic text-3xl">The Mercury Land</div>
         </div>
         <img
             src="@assets/images/welcome/welcome.png"
