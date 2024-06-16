@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { NButton, NIcon } from "naive-ui";
+import { AngleUp } from "@vicons/fa";
 function action() {
     window.scrollTo({ top: 0, behavior: "smooth" });
 }
