@@ -24,11 +24,10 @@ const slideStyle = computed(() => {
     };
 });
 
-const musicStyle = ref({ top: "" + (vh.value - 230) + "px" });
+const musicStyle = ref({ top: "" + (vh.value - 203) + "px" });
 
 addEventListener("scroll", (_) => {
-    // 230 is magic value, don't touch
-    let top = window.scrollY + vh.value - 230; 
+    let top = window.scrollY + vh.value - 203; 
     musicStyle.value = {
         top: "" + top + "px",
     };
@@ -47,7 +46,7 @@ addEventListener("scroll", (_) => {
         <iframe
             allow="autoplay *; encrypted-media *;"
             frameborder="20"
-            height="200"
+            scrolling="no"
             style="
                 width: 100%;
                 max-width: 660px;
