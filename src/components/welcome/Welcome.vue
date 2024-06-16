@@ -24,7 +24,7 @@ const slideStyle = computed(() => {
     };
 });
 
-const musicStyle = ref({ top: "0px" });
+const musicStyle = ref({ top: "" + (vh.value - 230) + "px" });
 
 addEventListener("scroll", (_) => {
     // 230 is magic value, don't touch
