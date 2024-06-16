@@ -4,7 +4,7 @@ import NextPageButton from "./NextPageButton.vue";
 </script>
 
 <template>
-    <div class="h-screen overflow-hidden bg-neutral-800 relative">
+    <div class="h-screen overflow-hidden bg-black relative">
         <NextPageButton :page="3" />
         <n-grid
             x-gap="0"
