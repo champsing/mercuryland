@@ -6,44 +6,59 @@ import Slide3 from "./Slide3.vue";
 import Slide4 from "./Slide4.vue";
 import Slide5 from "./Slide5.vue";
 import { useElementBounding } from "@vueuse/core";
+import { useWindowSize } from "vue-window-size";
 
-const el = ref<HTMLInputElement | null>(null);
-const elBounding = useElementBounding(el);
-const elStyle = computed(() => {
-    if (el.value == null) {
-        return { "margin-top": "0px" }; // this is important for code to work
+const vh = useWindowSize().height;
+
+const slide = ref<HTMLInputElement | null>(null);
+const slideBounding = useElementBounding(slide);
+const slideStyle = computed(() => {
+    if (slide.value == null) {
+        return { marginTop: "0px" }; // this is important for code to work
     }
-    let s = el.value.style.marginTop;
+    let s = slide.value.style.marginTop;
     let mt = -parseFloat(s.substring(0, s.length - 2));
-    let margin = window.scrollY + elBounding.top.value + mt;
+    let margin = window.scrollY + slideBounding.top.value + mt;
     return {
-        "margin-top": "-" + margin + "px",
+        marginTop: "-" + margin + "px",
+    };
+});
+
+const musicStyle = ref({ top: "0px" });
+
+addEventListener("scroll", (_) => {
+    // 230 is magic value, don't touch
+    let top = window.scrollY + vh.value - 230; 
+    musicStyle.value = {
+        top: "" + top + "px",
     };
 });
 </script>
 
 <template>
-    <div ref="el" :style="elStyle">
+    <div ref="slide" :style="slideStyle">
         <Slide1 />
         <Slide2 />
         <Slide3 />
         <Slide4 />
         <Slide5 />
     </div>
-    <iframe
-        allow="autoplay *; encrypted-media *;"
-        frameborder="20"
-        height="200"
-        style="
-            width: 100%;
-            max-width: 660px;
-            overflow: hidden;
-            background: transparent;
-        "
-        sandbox="allow-forms allow-popups allow-same-origin allow-scripts allow-storage-access-by-user-activation allow-top-navigation-by-user-activation"
-        src="https://embed.music.apple.com/tw/album/alpha/739831644?i=739831648"
-    >
-    </iframe>
+    <div ref="music" class="absolute right-0" :style="musicStyle">
+        <iframe
+            allow="autoplay *; encrypted-media *;"
+            frameborder="20"
+            height="200"
+            style="
+                width: 100%;
+                max-width: 660px;
+                overflow: hidden;
+                background: transparent;
+            "
+            sandbox="allow-forms allow-popups allow-same-origin allow-scripts allow-storage-access-by-user-activation allow-top-navigation-by-user-activation"
+            src="https://embed.music.apple.com/tw/album/alpha/739831644?i=739831648"
+        >
+        </iframe>
+    </div>
 </template>
 
 <style>
