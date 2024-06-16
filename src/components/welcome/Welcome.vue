@@ -2,6 +2,9 @@
 import { computed, ref } from "vue";
 import Slide1 from "./Slide1.vue";
 import Slide2 from "./Slide2.vue";
+import Slide3 from "./Slide3.vue";
+import Slide4 from "./Slide4.vue";
+import Slide5 from "./Slide5.vue";
 import { useElementBounding } from "@vueuse/core";
 
 const el = ref<HTMLInputElement | null>(null);
@@ -23,13 +26,37 @@ const elStyle = computed(() => {
     <div ref="el" :style="elStyle">
         <Slide1 />
         <Slide2 />
+        <Slide3 />
+        <Slide4 />
+        <Slide5 />
     </div>
-    <iframe 
-    allow="autoplay *; encrypted-media *;" 
-    frameborder="20" 
-    height="200" 
-    style="width:100%;max-width:660px;overflow:hidden;background:transparent;" 
-    sandbox="allow-forms allow-popups allow-same-origin allow-scripts allow-storage-access-by-user-activation allow-top-navigation-by-user-activation" 
-    src="https://embed.music.apple.com/tw/album/alpha/739831644?i=739831648">
+    <iframe
+        allow="autoplay *; encrypted-media *;"
+        frameborder="20"
+        height="200"
+        style="
+            width: 100%;
+            max-width: 660px;
+            overflow: hidden;
+            background: transparent;
+        "
+        sandbox="allow-forms allow-popups allow-same-origin allow-scripts allow-storage-access-by-user-activation allow-top-navigation-by-user-activation"
+        src="https://embed.music.apple.com/tw/album/alpha/739831644?i=739831648"
+    >
     </iframe>
 </template>
+
+<style>
+@tailwind utilities;
+@layer utilities {
+    .x-center {
+        @apply left-1/2;
+        @apply -translate-x-1/2;
+    }
+
+    .y-center {
+        @apply top-1/2;
+        @apply -translate-y-1/2;
+    }
+}
+</style>
