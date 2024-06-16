@@ -82,7 +82,7 @@ let tabValue = defineModel("tabValue", {
     position: sticky !important;
     padding-left: 32px;
     padding-right: 32px;
-    z-index: 1;
+    z-index: 10;
     top: 0 !important;
     background-color: var(--tab-nav-color);
 }

@@ -1,14 +1,20 @@
 <script setup lang="ts">
-// import Placeholder from "./welcome/Placeholder.vue"
+import NextPageButton from "./NextPageButton.vue";
 </script>
 
 <template>
-    <div class="h-screen overflow-hidden">
+    <div class="h-screen overflow-hidden relative">
+        <NextPageButton :page="1" />
+        <div class="absolute bottom-1/2 w-full text-center">
+            <div class="text-white font-bold text-8xl">水星伺服器</div>
+        </div>
+        <div class="absolute top-1/2 w-full text-center">
+            <div class="text-white italic text-5xl">The Mercury Land</div>
+        </div>
         <img
-            object-fit="cover"
             src="@assets/images/welcome.png"
-            class="z-10 w-full h-full object-cover"
             alt="Welcome"
+            class="-z-10 w-full h-full object-cover absolute top-0 left-0"
         />
     </div>
 </template>
