@@ -12,7 +12,7 @@ import NextPageButton from "./NextPageButton.vue";
             <div class="text-white italic text-5xl">The Mercury Land</div>
         </div>
         <img
-            src="@assets/images/welcome.png"
+            src="@assets/images/welcome/welcome.png"
             alt="Welcome"
             class="-z-10 w-full h-full object-cover absolute top-0 left-0"
         />
