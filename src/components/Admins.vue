@@ -5,7 +5,7 @@
     <div class="admin_intro">
         伺服器管理員
     </div>
-    <img src="@assets/images/avatar_oreki20.png" />
+    <img src="@assets/images/admin_avatars/avatar_oreki20.png" />
     <div class="oreki">
         惡靈 Oreki
     </div>
@@ -15,7 +15,7 @@
     <div class="youtube_button">
         惡靈YouTube頻道按鈕
     </div>
-    <img src="@assets/images/avatar_champsing.png" />
+    <img src="@assets/images/admin_avatars/avatar_champsing.png" />
     <div class="champsing">
         香榭 Champsing
     </div>
@@ -25,7 +25,7 @@
     <div class="logic">
         邏輯 Logic
     </div>
-    <img src="@assets/images/avatar_logic.png" />
+    <img src="@assets/images/admin_avatars/avatar_logic.png" />
     <div class="logic_intro">
         網站設計
     </div>

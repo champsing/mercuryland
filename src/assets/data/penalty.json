@@ -338,14 +338,6 @@
             {
                 "block": "text",
                 "str": "🆙 增加"
-            },
-            {
-                "block": "br"
-            },
-            {
-                "block": "vod",
-                "str": "⚔️ 雅利洛-VI",
-                "uri": "101"
             }
         ]
     },
@@ -855,6 +847,13 @@
         "date": "2024-06-02",
         "name": "跟觀眾比賽猜歌",
         "status": "已完成",
+        "description": []
+    },
+    {
+        "id": 108,
+        "date": "2024-06-16",
+        "name": "玩Buckshot Roulette",
+        "status": "未開始",
         "description": []
     }
 ]
