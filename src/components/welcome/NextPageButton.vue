@@ -12,7 +12,7 @@ function action() {
 </script>
 
 <template>
-    <div class="absolute bottom-10 w-full text-center">
+    <div class="z-10 absolute bottom-10 w-full text-center">
         <n-button class="w-auto" text rounded @click="action()">
             <template #icon>
                 <n-icon size="128">

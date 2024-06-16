@@ -7,7 +7,7 @@ import NextPageButton from "./NextPageButton.vue";
     <div class="h-screen overflow-hidden bg-teal-800 relative">
         <NextPageButton :page="3" />
         <n-grid
-            x-gap="64"
+            x-gap="0"
             :cols="2"
             item-responsive
             class="absolute x-center w-10/12 h-full"
