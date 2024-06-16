@@ -27,8 +27,8 @@ let tabValue = defineModel("tabValue", {
             };
         } else {
             tabStyle.value = {
-                // equivalent to zinc-800
-                "--tab-nav-color": "rgb(39 39 42)",
+                // equivalent to neutral-800
+                "--tab-nav-color": "rgb(38 38 38)",
             };
         }
         return value;
