@@ -1,13 +1,7 @@
 <script setup lang="ts">
-import { useWindowSize } from "vue-window-size";
 import { NButton, NIcon } from "naive-ui";
-import { AngleDown } from "@vicons/fa";
-
-const props = defineProps<{ page: number }>();
-
-const vh = useWindowSize().height;
 function action() {
-    window.scrollTo({ top: props.page * vh.value, behavior: "smooth" });
+    window.scrollTo({ top: 0, behavior: "smooth" });
 }
 </script>
 
@@ -21,7 +15,7 @@ function action() {
         >
             <template #icon>
                 <n-icon size="128">
-                    <angle-down />
+                    <angle-up />
                 </n-icon>
             </template>
         </n-button>

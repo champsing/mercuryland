@@ -4,6 +4,7 @@ import Slide1 from "./Slide1.vue";
 import Slide2 from "./Slide2.vue";
 import Slide3 from "./Slide3.vue";
 import Slide4 from "./Slide4.vue";
+import Slide5 from "./Slide5.vue";
 import { useElementBounding } from "@vueuse/core";
 
 const el = ref<HTMLInputElement | null>(null);
@@ -27,6 +28,7 @@ const elStyle = computed(() => {
         <Slide2 />
         <Slide3 />
         <Slide4 />
+        <Slide5 />
     </div>
     <iframe
         allow="autoplay *; encrypted-media *;"
