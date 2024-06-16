@@ -8,7 +8,7 @@ import { NDivider } from "naive-ui";
         <NextPageButton :page="1" />
         <div class="absolute x-center y-center text-center">
             <br /><br /><br /><br /><br /><br/>
-            <div class="text-white font-bold text-7xl">水星伺服器</div>
+            <div class="text-white font-bold text-8xl">水星伺服器</div>
             <n-divider />
             <div class="text-white italic text-3xl">The Mercury Land</div>
         </div>
