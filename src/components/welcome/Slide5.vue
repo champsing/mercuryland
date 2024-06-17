@@ -36,7 +36,7 @@ import ReturnTopButton from "./ReturnTopButton.vue";
                         還在猶豫什麼？
                     </div>
                     <n-divider />
-                    <div class="font-bold text-3xl" style="color: aquamarine;">
+                    <div class="text-cyan-400 font-bold text-3xl">
                         立即前往其他分頁，了解如何加入。
                     </div>
                 </div>
