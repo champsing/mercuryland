@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, h } from "vue";
 import { UseElementBounding } from "@vueuse/components";
+// TODO: replaced by vueuse
 import { useWindowSize } from "vue-window-size";
 import { NButton, NDataTable, NDivider } from "naive-ui";
 import { openLink, interleave, parseHMS } from "@composables/utils.ts";

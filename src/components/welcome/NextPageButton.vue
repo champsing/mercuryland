@@ -1,4 +1,5 @@
 <script setup lang="ts">
+// TODO: replaced by vueuse
 import { useWindowSize } from "vue-window-size";
 import { NButton, NIcon } from "naive-ui";
 import { AngleDown } from "@vicons/fa";

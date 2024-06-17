@@ -3,6 +3,7 @@ import { h, ref } from "vue";
 import { NTabs, NTabPane, NConfigProvider, darkTheme } from "naive-ui";
 import Welcome from "./components/welcome/Welcome.vue";
 import Vod from "./components/vod/Vod.vue";
+import GameMap from "./components/GameMap.vue";
 import Penalty from "./components/Penalty.vue";
 import Publication from "./components/Publication.vue";
 import Admins from "./components/Admins.vue";
@@ -47,6 +48,11 @@ let tabValue = defineModel("tabValue", {
         >
             <n-tab-pane name="welcome" :tab="icon">
                 <Welcome />
+            </n-tab-pane>
+            <n-tab-pane name="map" tab="地图">
+                <Suspense>
+                    <GameMap />
+                </Suspense>
             </n-tab-pane>
             <n-tab-pane name="vod" tab="直播">
                 <div class="pl-8 pr-8">
