@@ -49,11 +49,6 @@ let tabValue = defineModel("tabValue", {
             <n-tab-pane name="welcome" :tab="icon">
                 <Welcome />
             </n-tab-pane>
-            <n-tab-pane name="map" tab="地图">
-                <Suspense>
-                    <GameMap />
-                </Suspense>
-            </n-tab-pane>
             <n-tab-pane name="vod" tab="直播">
                 <div class="pl-8 pr-8">
                     <Vod />
@@ -78,6 +73,11 @@ let tabValue = defineModel("tabValue", {
                 <div class="pl-8 pr-8">
                     <Admins />
                 </div>
+            </n-tab-pane>
+            <n-tab-pane name="map" tab="地图">
+                <Suspense>
+                    <GameMap />
+                </Suspense>
             </n-tab-pane>
         </n-tabs>
     </n-config-provider>
