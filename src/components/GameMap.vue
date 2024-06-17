@@ -6,7 +6,7 @@ import { UseElementBounding, UseWindowSize } from "@vueuse/components";
     <UseWindowSize v-slot="{ width, height }">
         <UseElementBounding v-slot="{ top }" class="-mt-3">
             <iframe
-                src="http://yongdafan-26679.portmap.host:22605/"
+                src="http://play.mercuryland.online:25565/"
                 :width="width"
                 :height="height - top"
             >
