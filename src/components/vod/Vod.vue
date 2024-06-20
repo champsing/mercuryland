@@ -18,7 +18,7 @@ let computedTime = ref(0);
 </script>
 
 <template>
-    <n-grid x-gap="12" y-gap="12" :cols="4" class="w-11/12" item-responsive>
+    <n-grid x-gap="12" y-gap="12" cols="4" class="w-11/12" item-responsive>
         <n-gi span="4 800:2">
             <n-date-picker type="daterange" v-model:value="dateRange" />
         </n-gi>

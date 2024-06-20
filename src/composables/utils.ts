@@ -46,7 +46,6 @@ export function remainingX(el: Element) {
 }
 
 export function remainingY(el) {
-
     return (
         document.documentElement.clientHeight -
         el.getBoundingClientRect().top +
@@ -56,4 +55,12 @@ export function remainingY(el) {
 
 export function interleave<T>(arr: T[], x: T): T[] {
     return arr.flatMap((e) => [e, x]).slice(0, -1);
+}
+
+export async function copyToClipboard(text: string) {
+    try {
+        await navigator.clipboard.writeText(text);
+    } catch (err) {
+        console.error("Failed to copy: ", err);
+    }
 }
