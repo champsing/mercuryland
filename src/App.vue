@@ -46,17 +46,6 @@ let tabValue = defineModel("tabValue", {
             :style="tabStyle"
             v-model:value="tabValue"
         >
-
-            <n-tab-pane name="vod" tab="直播">
-                <div class="pl-8 pr-8">
-                    <Vod />
-                </div>
-            </n-tab-pane>
-            <n-tab-pane name="penalty" tab="懲罰">
-                <div class="pl-8 pr-8">
-                    <Penalty />
-                </div>
-            </n-tab-pane>
             <n-tab-pane name="welcome" :tab="icon">
                 <Welcome />
             </n-tab-pane>
@@ -75,10 +64,20 @@ let tabValue = defineModel("tabValue", {
                     <Admins />
                 </div>
             </n-tab-pane>
-            <n-tab-pane name="map" tab="地图">
+            <n-tab-pane name="map" tab="即時地图">
                 <Suspense>
                     <GameMap />
                 </Suspense>
+            </n-tab-pane>
+            <n-tab-pane name="vod" tab="直播">
+                <div class="pl-8 pr-8">
+                    <Vod />
+                </div>
+            </n-tab-pane>
+            <n-tab-pane name="penalty" tab="懲罰">
+                <div class="pl-8 pr-8">
+                    <Penalty />
+                </div>
             </n-tab-pane>
         </n-tabs>
     </n-config-provider>

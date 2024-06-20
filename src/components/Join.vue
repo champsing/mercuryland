@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { NGrid, NGi, NCard, NButton, NTimeline, NTimelineItem, NDivider, NSpace } from "naive-ui";
+import { NGrid, NGi, NCard, NButton, NTimeline, NTimelineItem, NDivider } from "naive-ui";
 import { copyToClipboard, openLink } from "@composables/utils";
 </script>
 
