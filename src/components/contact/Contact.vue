@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { NGrid, NGi } from "naive-ui";
-import ContactCard from "./contact/ContactCard.vue";
+import ContactCard from "./ContactCard.vue";
 </script>
 
 <template>

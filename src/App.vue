@@ -6,7 +6,7 @@ import Vod from "./components/vod/Vod.vue";
 import GameMap from "./components/GameMap.vue";
 import Penalty from "./components/Penalty.vue";
 import Publication from "./components/Publication.vue";
-import Admins from "./components/Admins.vue";
+import Contact from "./components/contact/Contact.vue";
 import Join from "./components/Join.vue";
 import hexagonIcon from "@assets/images/hexagon.svg";
 
@@ -69,9 +69,9 @@ let tabValue = defineModel("tabValue", {
                     <Publication />
                 </div>
             </n-tab-pane>
-            <n-tab-pane name="admins" tab="聯絡管理員">
+            <n-tab-pane name="contact" tab="聯絡">
                 <div class="pl-8 pr-8">
-                    <Admins />
+                    <Contact />
                 </div>
             </n-tab-pane>
             <n-tab-pane name="map" tab="地图">
