@@ -9,7 +9,7 @@ import ContactCard from "./contact/ContactCard.vue";
             <ContactCard
                 name1="惡靈"
                 name2="Oreki"
-                title="水星神, 伺服器總管, 爭議協調與排解委員"
+                :tags="['水星神', '伺服器總管', '爭議協調與排解委員']"
                 discord="oreki20"
             >
                 <img
@@ -22,7 +22,7 @@ import ContactCard from "./contact/ContactCard.vue";
             <ContactCard
                 name1="香榭"
                 name2="Champsing"
-                title="伺服器維護, 網站設計, 爭議協調與排解委員"
+                :tags="['伺服器維護', '網站設計', '爭議協調與排解委員']"
                 discord="champsing"
             >
                 <img
@@ -35,7 +35,7 @@ import ContactCard from "./contact/ContactCard.vue";
             <ContactCard
                 name1="邏輯"
                 name2="Logic"
-                title="摸鱼专家"
+                :tags="['摸鱼专家']"
                 discord="logic_f"
             >
                 <img

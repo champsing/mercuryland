@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import { NCard, NDivider } from "naive-ui";
+import { NCard, NDivider, NTag } from "naive-ui";
 
 const props = defineProps<{
     name1: string;
     name2: string;
-    title: string;
+    tags: string[];
     discord: string;
 }>();
 </script>
@@ -18,7 +18,9 @@ const props = defineProps<{
                 <slot></slot>
             </div>
             <n-divider />
-            {{ props.title }}
+            <template v-for="tag in props.tags">
+                <n-tag class="m-1"> {{ tag }}</n-tag>
+            </template>
         </n-card>
     </div>
 </template>
