@@ -1,9 +1,14 @@
 <script setup lang="ts">
-import { NGrid, NGi } from "naive-ui";
+import { NGrid, NGi, NDivider } from "naive-ui";
 import ContactCard from "./contact/ContactCard.vue";
 </script>
 
 <template>
+    <br/>
+    <div class="text-2xl text-neutral-100 text-center">
+        點擊Discord使用者名稱即可複製到剪貼簿。
+    </div>
+    <n-divider />
     <n-grid x-gap="12" y-gap="12" cols="3" class="w-11/12" item-responsive>
         <n-gi span="3 800:1">
             <ContactCard

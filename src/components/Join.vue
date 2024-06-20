@@ -4,9 +4,7 @@ import { copyToClipboard, openLink } from "@composables/utils";
 </script>
 
 <template>
-    <n-space>
-    </n-space>
-    <n-divider />
+    <br/>
     <div class="text-center">
         <div class="text-6xl perspective-x-30 text-cyan-400">
             現在就立刻加入我們
@@ -39,7 +37,7 @@ import { copyToClipboard, openLink } from "@composables/utils";
     <n-timeline size="large" x-gap="12" :horizontal="true">
         <n-timeline-item title="加入群组" type="success" class="text-20xl">
             加入我們的Discord群組來申請白名單
-            <br />
+            <br/>
             <n-button @click="openLink('https://discord.gg/A2cMZRr')">
                 加入 水星人的夢幻樂園
             </n-button>或使用連結：https://discord.gg/A2cMZRr
