@@ -1,9 +1,12 @@
 <script setup lang="ts">
-import { NGrid, NGi, NCard, NButton, NTimeline, NTimelineItem, NDivider } from "naive-ui";
-import { copyToClipboard } from "@composables/utils";
+import { NGrid, NGi, NCard, NButton, NTimeline, NTimelineItem, NDivider, NSpace } from "naive-ui";
+import { copyToClipboard, openLink } from "@composables/utils";
 </script>
 
 <template>
+    <n-space>
+    </n-space>
+    <n-divider />
     <div class="text-center">
         <div class="text-6xl perspective-x-30 text-cyan-400">
             現在就立刻加入我們
@@ -23,27 +26,34 @@ import { copyToClipboard } from "@composables/utils";
         </n-gi>
         <n-gi span="3 800:1" class="text-center">
             <n-card title="Seed" @click="copyToClipboard('unknown')">
-                <n-button text class="!text-2xl">unknown</n-button>
+                <n-button text class="!text-2xl">暫不公開</n-button>
             </n-card>
         </n-gi>
         <n-gi span="3 800:1" class="text-center">
             <n-card title="Version">
-                <div class="!text-2xl">Minecraft Java 1.21</div>
+                <div class="!text-2xl">正版 Minecraft Java 1.21</div>
             </n-card>
         </n-gi>
     </n-grid>
     <n-divider />
-    <n-timeline size="large">
-        <n-timeline-item title="加入群组" type="success">
-            加入我們的Discord群組來申請白名單 https://discord.gg/A2cMZRr
+    <n-timeline size="large" x-gap="12" :horizontal="true">
+        <n-timeline-item title="加入群组" type="success" class="text-20xl">
+            加入我們的Discord群組來申請白名單
+            <br />
+            <n-button @click="openLink('https://discord.gg/A2cMZRr')">
+                加入 水星人的夢幻樂園
+            </n-button>或使用連結：https://discord.gg/A2cMZRr
         </n-timeline-item>
-        <n-timeline-item title="阅读规则" type="success">
+
+        <n-timeline-item title="阅读规则" type="success" class="join_steps">
             包含《水星法》、《水星伺服器破壞舉報獎勵規則》等。
         </n-timeline-item>
-        <n-timeline-item title="申请白名单" type="success">
+
+        <n-timeline-item title="申请白名单" type="success" class="join_steps">
             在 #申請伺服 打上Minecraft ID
         </n-timeline-item>
-        <n-timeline-item title="等待通过" line-type="dashed" type="success">
+
+        <n-timeline-item title="等待通过" line-type="dashed" type="success" class="join_steps">
             等待白名單申請通過
         </n-timeline-item>
     </n-timeline>
