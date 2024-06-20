@@ -49,6 +49,11 @@ let tabValue = defineModel("tabValue", {
             <n-tab-pane name="welcome" :tab="icon">
                 <Welcome />
             </n-tab-pane>
+            <n-tab-pane name="join" tab="加入">
+                <div class="pl-8 pr-8">
+                    <Join />
+                </div>
+            </n-tab-pane>
             <n-tab-pane name="vod" tab="直播">
                 <div class="pl-8 pr-8">
                     <Vod />
@@ -57,11 +62,6 @@ let tabValue = defineModel("tabValue", {
             <n-tab-pane name="penalty" tab="懲罰">
                 <div class="pl-8 pr-8">
                     <Penalty />
-                </div>
-            </n-tab-pane>
-            <n-tab-pane name="join" tab="加入伺服">
-                <div class="pl-8 pr-8">
-                    <Join />
                 </div>
             </n-tab-pane>
             <n-tab-pane name="publication" tab="資料公開">
