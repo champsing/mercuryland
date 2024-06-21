@@ -54,16 +54,6 @@ let tabValue = defineModel("tabValue", {
                     <Join />
                 </div>
             </n-tab-pane>
-            <n-tab-pane name="vod" tab="直播">
-                <div class="pl-8 pr-8">
-                    <Vod />
-                </div>
-            </n-tab-pane>
-            <n-tab-pane name="penalty" tab="懲罰">
-                <div class="pl-8 pr-8">
-                    <Penalty />
-                </div>
-            </n-tab-pane>
             <n-tab-pane name="publication" tab="資料公開">
                 <div class="pl-8 pr-8">
                     <Publication />
@@ -74,10 +64,20 @@ let tabValue = defineModel("tabValue", {
                     <Contact />
                 </div>
             </n-tab-pane>
-            <n-tab-pane name="map" tab="地图">
+            <n-tab-pane name="map" tab="即時地图">
                 <Suspense>
                     <GameMap />
                 </Suspense>
+            </n-tab-pane>
+            <n-tab-pane name="vod" tab="直播">
+                <div class="pl-8 pr-8">
+                    <Vod />
+                </div>
+            </n-tab-pane>
+            <n-tab-pane name="penalty" tab="懲罰">
+                <div class="pl-8 pr-8">
+                    <Penalty />
+                </div>
             </n-tab-pane>
         </n-tabs>
     </n-config-provider>
