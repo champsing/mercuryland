@@ -1,6 +1,10 @@
 <script setup lang="ts">
-import { NGrid, NGi, NDivider } from "naive-ui";
+import { NGrid, NGi, NDivider, NButton } from "naive-ui";
 import ReturnTopButton from "./ReturnTopButton.vue";
+
+const emit = defineEmits<{
+    (e: "toTab", tab: string): void;
+}>();
 </script>
 
 <template>
@@ -38,6 +42,15 @@ import ReturnTopButton from "./ReturnTopButton.vue";
                     <n-divider />
                     <div class="text-cyan-600 font-bold text-3xl">
                         立即前往其他分頁，了解如何加入。
+                    </div>
+                    <div class="w-full m-auto text-center">
+                        <n-button
+                            class="text-cyan-600"
+                            size="large"
+                            @click="emit('toTab', 'join')"
+                        >
+                            点击加入
+                        </n-button>
                     </div>
                 </div>
             </n-gi>

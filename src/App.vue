@@ -21,7 +21,6 @@ let tabStyle = ref({
 let tabValue = defineModel("tabValue", {
     default: "welcome",
     set(value: string) {
-        console.log("update ${{ value }}");
         if (value == "welcome") {
             tabStyle.value = {
                 "--tab-nav-color": "transparent",
@@ -47,7 +46,7 @@ let tabValue = defineModel("tabValue", {
             v-model:value="tabValue"
         >
             <n-tab-pane name="welcome" :tab="icon">
-                <Welcome />
+                <Welcome @toTab="(value) => tabValue = value"/>
             </n-tab-pane>
             <n-tab-pane name="join" tab="加入">
                 <div class="pl-8 pr-8">

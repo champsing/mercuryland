@@ -11,8 +11,11 @@ import {
     useElementBounding,
 } from "@vueuse/core";
 
-const vh = useWindowSize().height;
+const emit = defineEmits<{
+    (e: "toTab", tab: string): void;
+}>();
 
+const vh = useWindowSize().height;
 const scroll = useWindowScroll();
 
 const slide = ref<HTMLInputElement | null>(null);
@@ -43,7 +46,7 @@ const musicStyle = computed(() => {
         <Slide2 />
         <Slide3 />
         <Slide4 />
-        <Slide5 />
+        <Slide5 @toTab="(value) => emit('toTab', value)"/>
     </div>
     <div ref="music" class="absolute right-0" :style="musicStyle">
         <iframe
