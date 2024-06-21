@@ -29,7 +29,6 @@ import ContactCard from "./ContactCard.vue";
                 name2="Champsing"
                 :tags="['伺服器維護', '網站設計', '爭議協調與排解委員']"
                 discord="champsing"
-                
             >
                 <img
                     src="@assets/images/admin_avatars/avatar_champsing.png"
