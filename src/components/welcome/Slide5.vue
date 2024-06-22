@@ -37,11 +37,11 @@ const emit = defineEmits<{
             <n-gi span="2 800:1" class="relative">
                 <div class="absolute y-center x-center">
                     <div class="text-cyan-400 font-bold text-6xl">
-                        還在猶豫什麼？
+                        還在猶豫什么？
                     </div>
                     <n-divider />
                     <div class="text-cyan-600 font-bold text-3xl">
-                        立即前往其他分頁，了解如何加入。
+                        立即前往其他分页，了解如何加入。
                     </div>
                     <div class="w-full m-auto text-center">
                         <n-button

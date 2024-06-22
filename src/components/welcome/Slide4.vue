@@ -15,11 +15,11 @@ import NextPageButton from "./NextPageButton.vue";
             <n-gi span="2 800:1" class="relative">
                 <div class="absolute y-center x-center">
                     <div class="text-green-400 font-bold text-6xl">
-                        來這裡遇到同好。
+                        來这裡遇到同好。
                     </div>
                     <n-divider />
                     <div class="font-bold text-green-600 text-3xl">
-                        擁有豐富的擴充遊玩內容、玩家自辦活動、以及關服舉行的煙火大會。
+                        擁有豐富的扩充游玩内容、玩家自办活动、以及关服举行的煙火大会。
                     </div>
                 </div>
             </n-gi>
