@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import NextPageButton from "./NextPageButton.vue";
 import { NDivider } from "naive-ui";
+import { ccMix } from "@/composables/utils";
 </script>
 
 <template>
@@ -8,7 +9,7 @@ import { NDivider } from "naive-ui";
         <NextPageButton :page="2" />
         <div class="absolute x-center top-40 text-center w-10/12">
             <div class="text-neutral-400 text-3xl">
-                YouTuber oreki惡灵的粉絲专屬生存Minecraft伺服器
+                {{ ccMix('YouTuber oreki惡靈的粉絲專屬生存Minecraft伺服器') }}
             </div>
             <n-divider />
         </div>

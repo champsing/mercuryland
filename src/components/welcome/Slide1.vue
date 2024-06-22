@@ -1,13 +1,14 @@
 <script setup lang="ts">
 import NextPageButton from "./NextPageButton.vue";
 import { NDivider } from "naive-ui";
+import { ccMix } from "@/composables/utils";
 </script>
 
 <template>
     <div class="h-screen overflow-hidden relative">
         <NextPageButton :page="1" />
         <div class="absolute x-center y-center text-center">
-            <div class="text-white font-bold text-8xl">水星伺服器</div>
+            <div class="text-white font-bold text-8xl">{{ ccMix('水星伺服器') }}</div>
             <n-divider />
             <div class="text-white italic text-3xl">The Mercury Land</div>
         </div>
