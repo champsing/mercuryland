@@ -1,6 +1,10 @@
 <script setup lang="ts">
 import { NGrid, NGi, NCard, NButton, NTimeline, NTimelineItem, NDivider } from "naive-ui";
 import { copyToClipboard, openLink } from "@composables/utils";
+
+const emit = defineEmits<{
+    (e: "toTab", tab: string): void;
+}>();
 </script>
 
 <template>
@@ -38,13 +42,22 @@ import { copyToClipboard, openLink } from "@composables/utils";
         <n-timeline-item title="加入群组" type="success" class="text-20xl">
             加入我們的Discord群組來申請白名單
             <br/>
-            <n-button @click="openLink('https://discord.gg/A2cMZRr')">
+            <n-button @click="openLink('https://discord.gg/A2cMZRr')" class="mt-2 mb-2">
                 加入 水星人的夢幻樂園
-            </n-button>或使用連結：https://discord.gg/A2cMZRr
+            </n-button>
+            <br/>
+            或使用連結：https://discord.gg/A2cMZRr
         </n-timeline-item>
 
         <n-timeline-item title="阅读规则" type="success" class="join_steps">
             包含《水星法》、《水星伺服器破壞舉報獎勵規則》等。
+            <br/>
+            <div class="w-full m-auto  mt-2 mb-2">
+                <n-button @click="emit('toTab', 'publication')"
+                >
+                    點擊加入
+                </n-button>
+            </div>
         </n-timeline-item>
 
         <n-timeline-item title="申请白名单" type="success" class="join_steps">

@@ -50,7 +50,7 @@ let tabValue = defineModel("tabValue", {
             </n-tab-pane>
             <n-tab-pane name="join" tab="加入">
                 <div class="pl-8 pr-8">
-                    <Join />
+                    <Join @toTab="(value) => tabValue = value"/>
                 </div>
             </n-tab-pane>
             <n-tab-pane name="publication" tab="資料公開">

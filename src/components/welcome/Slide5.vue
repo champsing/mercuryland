@@ -43,13 +43,13 @@ const emit = defineEmits<{
                     <div class="text-cyan-600 font-bold text-3xl">
                         立即前往其他分頁，了解如何加入。
                     </div>
-                    <div class="w-full m-auto text-center">
+                    <div class="mt-8">
                         <n-button
                             class="text-cyan-600"
                             size="large"
                             @click="emit('toTab', 'join')"
                         >
-                            点击加入
+                            點擊加入
                         </n-button>
                     </div>
                 </div>
