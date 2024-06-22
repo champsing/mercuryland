@@ -15,13 +15,15 @@ import { ccMix } from "@/composables/utils";
         </div>
         <div class="absolute x-center y-center text-center w-10/12">
             <div class="text-cyan-600 font-bold text-8xl">
-                為粉絲们打造的<br />生存伺服器。
+                {{ ccMix('為粉絲們打造的') }}
+                <br />
+                {{ ccMix('生存伺服器。') }}
             </div>
         </div>
         <div class="absolute x-center bottom-40 text-center w-10/12">
             <n-divider />
             <div class="text-neutral-400 text-3xl">
-                只需加入Discord伺服器和正版Minecraft帳号。一切完全免費。
+                {{ ccMix('只需加入Discord伺服器和正版Minecraft帳號。一切完全免費。') }}
             </div>
         </div>
     </div>
