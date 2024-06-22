@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { NGrid, NGi, NDivider } from "naive-ui";
 import NextPageButton from "./NextPageButton.vue";
+import { ccMix } from "@/composables/utils";
 </script>
 
 <template>
@@ -22,11 +23,15 @@ import NextPageButton from "./NextPageButton.vue";
             <n-gi span="2 800:1" class="relative">
                 <div class="absolute y-center x-center">
                     <div class="text-yellow-400 font-bold text-6xl">
-                        發挥您的創意，建造您夢想中的建筑。
+                        {{ ccMix("發揮您的創意，建造您夢想中的建築。") }}
                     </div>
                     <n-divider />
                     <div class="text-yellow-600 font-bold text-3xl">
-                        絕无思想審查制度。您可以在我們的伺服器复刻世界上的有名建築，或单單只是在這个世界蓋出專属於您的根據地。
+                        {{
+                            ccMix(
+                                "絕無思想審查制度。您可以在我們的伺服器復刻世界上的有名建築，或單單只是在這個世界蓋出專屬於您的根據地。"
+                            )
+                        }}
                     </div>
                 </div>
             </n-gi>
