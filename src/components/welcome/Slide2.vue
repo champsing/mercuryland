@@ -8,19 +8,19 @@ import { NDivider } from "naive-ui";
         <NextPageButton :page="2" />
         <div class="absolute x-center top-40 text-center w-10/12">
             <div class="text-neutral-400 text-3xl">
-                YouTuber oreki惡靈的粉絲專屬生存Minecraft伺服器
+                YouTuber oreki惡灵的粉絲专屬生存Minecraft伺服器
             </div>
             <n-divider />
         </div>
         <div class="absolute x-center y-center text-center w-10/12">
             <div class="text-cyan-600 font-bold text-8xl">
-                為粉絲們打造的<br />生存伺服器。
+                為粉絲们打造的<br />生存伺服器。
             </div>
         </div>
         <div class="absolute x-center bottom-40 text-center w-10/12">
             <n-divider />
             <div class="text-neutral-400 text-3xl">
-                只需加入Discord伺服器和正版Minecraft帳號。一切完全免費。
+                只需加入Discord伺服器和正版Minecraft帳号。一切完全免費。
             </div>
         </div>
     </div>
