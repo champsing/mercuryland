@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { NGrid, NGi, NDivider } from "naive-ui";
-import NextPageButton from "./NextPageButton.vue";
 import { ccMix } from "@/composables/utils";
+import NextPageButton from "./NextPageButton.vue";
 </script>
 
 <template>
