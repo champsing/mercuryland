@@ -38,11 +38,11 @@ const emit = defineEmits<{
             <n-gi span="2 800:1" class="relative">
                 <div class="absolute y-center x-center">
                     <div class="text-cyan-400 font-bold text-6xl">
-                        {{ ccMix('還在猶豫什麼？')}}
+                        {{ ccMix("還在猶豫什麼？")}}
                     </div>
                     <n-divider />
                     <div class="text-cyan-600 font-bold text-3xl">
-                        {{ ccMix('立即前往其他分頁，了解如何加入。')}}
+                        {{ ccMix("立即前往其他分頁，了解如何加入。")}}
                     </div>
                     <div class="mt-8">
                         <n-button
@@ -50,7 +50,7 @@ const emit = defineEmits<{
                             size="large"
                             @click="emit('toTab', 'join')"
                         >
-                            點擊加入
+                        {{ ccMix("點擊加入")}}
                         </n-button>
                     </div>
                 </div>

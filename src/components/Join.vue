@@ -1,6 +1,9 @@
 <script setup lang="ts">
 import { NGrid, NGi, NCard, NButton, NTimeline, NTimelineItem, NDivider } from "naive-ui";
 import { copyToClipboard, openLink } from "@composables/utils";
+import { ccMix } from "@composables/utils";
+//TODO: Server Online Status
+//import { IosRadioButtonOn } from "@vicons/ionicons4";
 
 const emit = defineEmits<{
     (e: "toTab", tab: string): void;
@@ -11,7 +14,7 @@ const emit = defineEmits<{
     <br/>
     <div class="text-center">
         <div class="text-6xl perspective-x-30 text-cyan-400">
-            現在就立刻加入我們
+            {{ ccMix("現在就立刻加入我們") }}
         </div>
     </div>
     <n-divider />
@@ -28,19 +31,19 @@ const emit = defineEmits<{
         </n-gi>
         <n-gi span="3 800:1" class="text-center">
             <n-card title="Seed" @click="copyToClipboard('unknown')">
-                <n-button text class="!text-2xl">暫不公開</n-button>
+                <n-button text class="!text-2xl">{{ ccMix("暫不公開") }}</n-button>
             </n-card>
         </n-gi>
         <n-gi span="3 800:1" class="text-center">
             <n-card title="Version">
-                <div class="!text-2xl">正版 Minecraft Java 1.21</div>
+                <div class="!text-2xl">{{ ccMix("正版") }} Minecraft Java 1.21</div>
             </n-card>
         </n-gi>
     </n-grid>
     <n-divider />
     <n-timeline size="large" x-gap="12" :horizontal="true" class="w-full">
         <n-timeline-item title="加入群组" type="success" class="text-2xl w-1/4">
-            加入我們的Discord群組來申請白名單
+            {{ ccMix("加入我們的Discord群組來申請白名單") }}
             <br/>
             <n-button @click="openLink('https://discord.gg/A2cMZRr')" class="mt-2 mb-2">
                 加入 水星人的夢幻樂園
