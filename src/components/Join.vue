@@ -38,8 +38,8 @@ const emit = defineEmits<{
         </n-gi>
     </n-grid>
     <n-divider />
-    <n-timeline size="large" x-gap="12" :horizontal="true">
-        <n-timeline-item title="加入群组" type="success" class="text-20xl">
+    <n-timeline size="large" x-gap="12" :horizontal="true" class="w-full">
+        <n-timeline-item title="加入群组" type="success" class="text-2xl w-1/4">
             加入我們的Discord群組來申請白名單
             <br/>
             <n-button @click="openLink('https://discord.gg/A2cMZRr')" class="mt-2 mb-2">
@@ -49,7 +49,7 @@ const emit = defineEmits<{
             或使用連結：https://discord.gg/A2cMZRr
         </n-timeline-item>
 
-        <n-timeline-item title="阅读规则" type="success" class="join_steps">
+        <n-timeline-item title="阅读规则" type="success" class="text-2xl w-1/4">
             包含《水星法》、《水星伺服器破壞舉報獎勵規則》等。
             <br/>
             <div class="w-full m-auto  mt-2 mb-2">
@@ -60,11 +60,11 @@ const emit = defineEmits<{
             </div>
         </n-timeline-item>
 
-        <n-timeline-item title="申请白名单" type="success" class="join_steps">
+        <n-timeline-item title="申请白名单" type="success" class="text-2xl w-1/4">
             在 #申請伺服 打上Minecraft ID
         </n-timeline-item>
 
-        <n-timeline-item title="等待通过" line-type="dashed" type="success" class="join_steps">
+        <n-timeline-item title="等待通过" line-type="dashed" type="success" class="text-2xl w-1/4">
             等待白名單申請通過
         </n-timeline-item>
     </n-timeline>
