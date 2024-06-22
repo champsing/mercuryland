@@ -1,3 +1,7 @@
+import { Converter } from "opencc-js";
+
+const ccConvertText = Converter({ from: "tw", to: "cn" });
+
 export function openLink(link: string) {
     window.open(link);
 }
@@ -63,4 +67,14 @@ export async function copyToClipboard(text: string) {
     } catch (err) {
         console.error("Failed to copy: ", err);
     }
+}
+
+export function ccMix(text: string): string {
+    return Array.from(text).map((c) => {
+        if (Math.random() < 0.5) {
+            return c
+        } else {
+            return ccConvertText(c)
+        }
+    }).join("")
 }
