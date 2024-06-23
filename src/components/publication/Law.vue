@@ -8,7 +8,7 @@ import { ccMix } from '@/composables/utils';
         <n-gi span="3 800:1">
             <iframe 
                 width="410" height="400" 
-                src="https://drive.google.com/file/d/17zIPRyN0BpR7TU10ARDJwkKVV-zLpsz8/view?usp=drive_link" 
+                src="https://drive.google.com/file/d/17zIPRyN0BpR7TU10ARDJwkKVV-zLpsz8/preview?usp=drive_link" 
                 title="水星法"
             >
             </iframe>
@@ -22,7 +22,7 @@ import { ccMix } from '@/composables/utils';
         <n-gi span="3 800:1">
             <iframe 
                 width="410" height="400" 
-                src="https://drive.google.com/file/d/1Imw336b2-dnXVQ1dePxOtopQrtRlBoxh/view?usp=drive_link" 
+                src="https://drive.google.com/file/d/1Imw336b2-dnXVQ1dePxOtopQrtRlBoxh/preview?usp=drive_link" 
                 title="水星伺服器破壞舉報獎勵規則"
             >
             </iframe>

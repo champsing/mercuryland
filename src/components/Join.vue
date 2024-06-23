@@ -56,8 +56,7 @@ const emit = defineEmits<{
             包含《水星法》、《水星伺服器破壞舉報獎勵規則》等。
             <br/>
             <div class="w-full m-auto  mt-2 mb-2">
-                <n-button @click="emit('toTab', 'publication')"
-                >
+                <n-button @click="emit('toTab', 'publication')">
                     點擊加入
                 </n-button>
             </div>

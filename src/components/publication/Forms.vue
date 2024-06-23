@@ -22,7 +22,7 @@ import { ccMix } from '@/composables/utils';
         <n-gi span="3 800:1">
             <iframe 
                 width="410" height="400" 
-                src="https://docs.google.com/forms/d/e/1FAIpQLSclP5J7MVBJMQttKlTQiQRSUKxCwFfbKFfaTM71W0V8u41nVw/viewform" 
+                src="https://reurl.cc/EjMy5k" 
                 title="違規舉報"
             >
             </iframe>
