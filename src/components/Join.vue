@@ -30,8 +30,8 @@ const emit = defineEmits<{
             </n-card>
         </n-gi>
         <n-gi span="3 800:1" class="text-center">
-            <n-card title="Seed" @click="copyToClipboard('unknown')">
-                <n-button text class="!text-2xl">{{ ccMix("暫不公開") }}</n-button>
+            <n-card title="Seed" @click="copyToClipboard('-9100272987300380909')">
+                <n-button text class="!text-2xl">{{ ccMix("-9100272987300380909") }}</n-button>
             </n-card>
         </n-gi>
         <n-gi span="3 800:1" class="text-center">
