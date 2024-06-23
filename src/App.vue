@@ -5,7 +5,7 @@ import Welcome from "./components/welcome/Welcome.vue";
 import Vod from "./components/vod/Vod.vue";
 import GameMap from "./components/GameMap.vue";
 import Penalty from "./components/Penalty.vue";
-import Publication from "./components/Publication.vue";
+import Publication from "./components/publication/Publication.vue";
 import Contact from "./components/contact/Contact.vue";
 import Join from "./components/Join.vue";
 import hexagonIcon from "@assets/images/hexagon.svg";

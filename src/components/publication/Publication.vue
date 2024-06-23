@@ -1,0 +1,38 @@
+<script setup lang="ts">
+import { NDivider } from 'naive-ui';
+import { ccMix } from '@/composables/utils';
+import Law from "./Law.vue";
+import Forms from "./Forms.vue";
+import Archive from './Archive.vue';
+</script>
+
+<template>
+    <div class="text-2xl text-neutral-100 text-center mt-4">
+        {{ ccMix("在這裡可以找到所有規則、伺服器名簿與檔案。") }}
+    </div>
+    <n-divider />
+        <div class="text-4xl text-neutral-100 text-left mt-4 mb-6">
+            {{ ccMix("法規與資料") }}
+        </div>
+        <div class="mt-4">
+            <Law>
+            </Law>
+        </div>
+    <n-divider class="!mt-8 !mb-2" />
+        <div class="text-4xl text-neutral-100 text-left mt-4 mb-6">
+            {{ ccMix("表單") }}
+        </div>
+        <div class="mt-4">
+            <Forms>
+            </Forms>
+        </div>
+    <n-divider class="!mt-8 !mb-2" />
+        <div class="text-4xl text-neutral-100 text-left mt-4 mb-6">
+            {{ ccMix("地圖檔") }}
+        </div>
+        <div class="mt-4">
+            <Archive>
+            </Archive>
+        </div>
+    <n-divider />
+</template>

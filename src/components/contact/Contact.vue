@@ -5,8 +5,7 @@ import { ccMix } from "@/composables/utils";
 </script>
 
 <template>
-    <br/>
-    <div class="text-2xl text-neutral-100 text-center">
+    <div class="text-2xl text-neutral-100 text-center mt-4">
         {{ ccMix("點擊Discord使用者名稱即可複製到剪貼簿。") }}
     </div>
     <n-divider />
