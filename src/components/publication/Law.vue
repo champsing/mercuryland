@@ -47,5 +47,21 @@ import { ccMix } from '@/composables/utils';
                 {{ ccMix("查詢您的申請資料。") }}
             </div>
         </n-gi>
+    </n-grid>
+    <n-grid x-gap="12" y-gap="12" cols="3" class="w-11/12 mt-4" item-responsive>
+        <n-gi span="3 800:1">
+            <iframe 
+                width="410" height="400" 
+                src="https://forms.gle/qx9XRHhuojAf7hPj9" 
+                title="申請模組"
+            >
+            </iframe>
+            <div class="text-2xl text-neutral-100 text-center mt-4 mr-10">
+                {{ ccMix("申請模組") }}
+            </div>
+            <div class="text-1xl text-neutral-100 text-center mt-4 mr-8">
+                {{ ccMix("您可以在此申請模組。") }}
+            </div>
+        </n-gi>
     </n-grid> 
 </template>

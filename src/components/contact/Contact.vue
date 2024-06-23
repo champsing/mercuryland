@@ -50,15 +50,16 @@ import { ccMix } from "@/composables/utils";
             </ContactCard>
         </n-gi>
     </n-grid>
-    <div class="items-center">
-            <iframe 
-            width="560" height="315" 
-            src="https://www.youtube.com/embed/YTB35De0Bs8?si=cP5rNghSy_WQLl8m" 
-            title="YouTube video player" 
-            frameborder="100" 
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
-            referrerpolicy="strict-origin-when-cross-origin" 
-            allowfullscreen>
-            </iframe>
-    </div>
+    <n-divider class="!mb-2" />
+    <iframe
+        src="https://www.youtube.com/embed/YTB35De0Bs8?si=cP5rNghSy_WQLl8m" 
+        title="YouTube video player" 
+        frameborder="100"
+        height="400"
+        width="800"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+        referrerpolicy="strict-origin-when-cross-origin" 
+        allowfullscreen
+    >
+    </iframe>
 </template>
