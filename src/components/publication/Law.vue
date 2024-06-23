@@ -36,7 +36,7 @@ import { ccMix } from '@/composables/utils';
         <n-gi span="3 800:1">
             <iframe 
                 width="410" height="400" 
-                src="https://docs.google.com/spreadsheets/d/1srqIISm1Dn908trUeRZgarB5p_2xmdmtK0HGzMEz-yM/edit?usp=drive_link" 
+                src="https://docs.google.com/spreadsheets/d/1srqIISm1Dn908trUeRZgarB5p_2xmdmtK0HGzMEz-yM/preview?usp=drive_link" 
                 title="水星伺服器公開資料清冊"
             >
             </iframe>
