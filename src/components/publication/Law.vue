@@ -8,6 +8,7 @@ import { ccMix } from '@/composables/utils';
         <n-gi span="3 800:1">
             <iframe 
                 width="410" height="400" 
+                frameborder="0"
                 src="https://drive.google.com/file/d/17zIPRyN0BpR7TU10ARDJwkKVV-zLpsz8/preview?usp=drive_link" 
                 title="水星法"
             >
@@ -22,6 +23,7 @@ import { ccMix } from '@/composables/utils';
         <n-gi span="3 800:1">
             <iframe 
                 width="410" height="400" 
+                frameborder="0"
                 src="https://drive.google.com/file/d/1Imw336b2-dnXVQ1dePxOtopQrtRlBoxh/preview?usp=drive_link" 
                 title="水星伺服器破壞舉報獎勵規則"
             >
@@ -36,6 +38,7 @@ import { ccMix } from '@/composables/utils';
         <n-gi span="3 800:1">
             <iframe 
                 width="410" height="400" 
+                frameborder="0"
                 src="https://docs.google.com/spreadsheets/d/1srqIISm1Dn908trUeRZgarB5p_2xmdmtK0HGzMEz-yM/preview?usp=drive_link" 
                 title="水星伺服器公開資料清冊"
             >
@@ -52,6 +55,7 @@ import { ccMix } from '@/composables/utils';
         <n-gi span="3 800:1">
             <iframe 
                 width="410" height="400" 
+                frameborder="0"
                 src="https://forms.gle/qx9XRHhuojAf7hPj9" 
                 title="申請模組"
             >

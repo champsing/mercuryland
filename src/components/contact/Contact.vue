@@ -54,7 +54,7 @@ import { ccMix } from "@/composables/utils";
     <iframe
         src="https://www.youtube.com/embed/YTB35De0Bs8?si=cP5rNghSy_WQLl8m" 
         title="YouTube video player" 
-        frameborder="100"
+        frameborder="0"
         height="400"
         width="800"
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 

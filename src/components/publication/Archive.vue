@@ -34,6 +34,7 @@ import { ccMix, openLink } from '@/composables/utils';
         <n-gi span="3 800:1">
             <iframe 
                 width="410" height="400" 
+                frameborder="0"
                 src="https://drive.google.com/file/d/12ka9h87OkzmSrRiPTPhFhs_-Q-sfcCm7/preview"
                 title="S2 to S5"
             >
@@ -45,6 +46,7 @@ import { ccMix, openLink } from '@/composables/utils';
         <n-gi span="3 800:1">
             <iframe 
                 width="410" height="400" 
+                frameborder="0"
                 src="https://drive.google.com/file/d/11JeFAEeQHUnSpxRajxiJlKt5o7dRTMh6/preview" 
                 title="S6, 7"
             >
