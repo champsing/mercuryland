@@ -48,17 +48,6 @@ const musicStyle = computed(() => {
         <Slide4 />
         <Slide5 />
     </div>
-    <div ref="music" class="absolute right-0" :style="musicStyle">
-        <iframe
-            allow="autoplay *; encrypted-media *;"
-            scrolling="no"
-            height="150"
-            width="300"
-            class="overflow-hidden"
-            src="https://embed.music.apple.com/tw/album/alpha/739831644?i=739831648"
-        >
-        </iframe>
-    </div>
 </template>
 
 <style>
