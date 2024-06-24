@@ -50,6 +50,8 @@ import { ccMix } from "@composables/utils";
             </n-button>
             <br/>
             或使用連結：https://discord.gg/A2cMZRr
+
+        <!-- TODO: Use n-step -->
         </n-timeline-item>
 
         <n-timeline-item title="阅读规则" type="success" class="text-2xl w-1/4">
