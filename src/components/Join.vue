@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { NGrid, NGi, NCard, NButton, NTimeline, NTimelineItem, NDivider } from "naive-ui";
+import { NGrid, NGi, NCard, NButton, NTimeline, NTimelineItem } from "naive-ui";
 import { copyToClipboard, openLink, openLinkSameTab } from "@composables/utils";
 import { ccMix } from "@composables/utils";
 //TODO: Server Online Status
