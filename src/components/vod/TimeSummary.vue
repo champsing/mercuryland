@@ -18,7 +18,7 @@ function calcStyle(width: number) {
 </script>
 
 <template>
-    <UseElementBounding v-slot="{ width }">
+    <use-element-bounding v-slot="{ width }">
         <n-card
             title="剩余时间"
             class="font-bold text-center mb-2"
@@ -26,5 +26,5 @@ function calcStyle(width: number) {
         >
             {{ text }}
         </n-card>
-    </UseElementBounding>
+    </use-element-bounding>
 </template>
