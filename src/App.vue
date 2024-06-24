@@ -2,6 +2,7 @@
 import { h, ref } from "vue";
 import { NTabs, NTabPane, NConfigProvider, darkTheme } from "naive-ui";
 import hexagonIcon from "@assets/images/hexagon.svg";
+import { RouterLink } from "vue-router";
 
 let icon = h("img", {
     src: hexagonIcon,
@@ -33,8 +34,12 @@ let tabValue = defineModel("tabValue", {
     <n-config-provider :theme="darkTheme">
         <nav>
             <router-link to="/" class="tab">Go to Home</router-link>
-            <router-link to="/vod" class="tab">Go to Vod</router-link>
+            <router-link to="/join" class="tab">Go to Join</router-link>
+            <router-link to="/publication" class="tab">Go to Publication</router-link>
+            <router-link to="/contact" class="tab">Go to Contact</router-link>
             <router-link to="/map" class="tab">Go to Map</router-link>
+            <router-link to="/vod" class="tab">Go to Vod</router-link>
+            <router-link to="/penalty" class="tab">Go to Penalty</router-link>
         </nav>
         <router-view />
         <!--         
