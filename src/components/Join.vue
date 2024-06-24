@@ -57,7 +57,7 @@ const emit = defineEmits<{
             <br/>
             <div class="w-full m-auto  mt-2 mb-2">
                 <n-button @click="emit('toTab', 'publication')">
-                    點擊加入
+                    點擊閱讀
                 </n-button>
             </div>
         </n-timeline-item>
