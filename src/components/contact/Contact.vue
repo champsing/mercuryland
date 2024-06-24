@@ -1,14 +1,9 @@
 <script setup lang="ts">
 import { NDivider, NGrid, NGi } from "naive-ui";
 import ContactCard from "./ContactCard.vue";
-import { ccMix } from "@/composables/utils";
 </script>
 
 <template>
-    <div class="text-2xl text-neutral-100 text-center mt-4">
-        {{ ccMix("點擊Discord使用者名稱即可複製到剪貼簿。") }}
-    </div>
-    <n-divider />
     <n-grid x-gap="12" y-gap="12" cols="3" class="w-11/12" item-responsive>
         <n-gi span="3 800:1">
             <ContactCard
@@ -51,15 +46,17 @@ import { ccMix } from "@/composables/utils";
         </n-gi>
     </n-grid>
     <n-divider class="!mb-2" />
-    <iframe
-        src="https://www.youtube.com/embed/YTB35De0Bs8?si=cP5rNghSy_WQLl8m" 
-        title="YouTube video player" 
-        frameborder="0"
-        height="400"
-        width="800"
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
-        referrerpolicy="strict-origin-when-cross-origin" 
-        allowfullscreen
-    >
-    </iframe>
+    <div class="w-full">
+        <iframe
+            class="m-auto"
+            src="https://www.youtube.com/embed/YTB35De0Bs8?si=cP5rNghSy_WQLl8m"
+            title="YouTube video player"
+            frameborder="0"
+            height="400"
+            width="800"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            referrerpolicy="strict-origin-when-cross-origin"
+            allowfullscreen
+        ></iframe>
+    </div>
 </template>

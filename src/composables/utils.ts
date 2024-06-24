@@ -6,6 +6,16 @@ export function openLink(link: string) {
     window.open(link);
 }
 
+export function openLinkSameTab(link: string) {
+    window.open(link, "_self");
+}
+
+export function openLinks(links: Array<string>) {
+    for (let i = 0; i < links.length; i++) {
+        openLink(links[i]);
+    }
+}
+
 export function ofId<T extends { id: number }>(data: T[], id: number): T {
     for (let i = 0; i < data.length; i++) {
         if (data[i].id == id) {
@@ -13,12 +23,6 @@ export function ofId<T extends { id: number }>(data: T[], id: number): T {
         }
     }
     return null;
-}
-
-export function openLinks(links: Array<string>) {
-    for (let i = 0; i < links.length; i++) {
-        openLink(links[i]);
-    }
 }
 
 // parse HH:MM:SS format into seconds

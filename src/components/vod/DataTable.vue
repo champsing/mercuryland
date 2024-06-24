@@ -109,12 +109,12 @@ function calcStyle(top: number) {
 </script>
 
 <template>
-    <UseElementBounding v-slot="{ top }" class="mb-2">
+    <use-element-bounding v-slot="{ top }" class="mb-2">
         <n-data-table
             :data="data"
             :columns="columns"
             flex-height
             :style="calcStyle(top)"
         />
-    </UseElementBounding>
+    </use-element-bounding>
 </template>

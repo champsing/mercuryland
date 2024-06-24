@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { NGrid, NGi, NDivider, NButton } from "naive-ui";
-import { ccMix } from "@/composables/utils";
+import { ccMix, openLinkSameTab } from "@/composables/utils";
 import ReturnTopButton from "./ReturnTopButton.vue";
 
 const emit = defineEmits<{
@@ -48,7 +48,7 @@ const emit = defineEmits<{
                         <n-button
                             class="text-cyan-600"
                             size="large"
-                            @click="emit('toTab', 'join')"
+                            @click="openLinkSameTab('../join')"
                         >
                         {{ ccMix("點擊加入")}}
                         </n-button>

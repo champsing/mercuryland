@@ -7,11 +7,7 @@ import Archive from './Archive.vue';
 </script>
 
 <template>
-    <div class="text-2xl text-neutral-100 text-center mt-4">
-        {{ ccMix("在這裡可以找到所有規則、伺服器名簿與檔案。") }}
-    </div>
     <!-- 如果沒有新版本水星法可以註解起來 -->
-    <n-divider />
         <NewLaw>
         </NewLaw>
     <n-divider />
