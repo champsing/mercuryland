@@ -1,13 +1,13 @@
 <script setup lang="ts">
 import { NGrid, NGi, NCard, NButton, NTimeline, NTimelineItem, NDivider } from "naive-ui";
-import { copyToClipboard, openLink } from "@composables/utils";
+import { copyToClipboard, openLink, openLinkSameTab } from "@composables/utils";
 import { ccMix } from "@composables/utils";
 //TODO: Server Online Status
 //import { IosRadioButtonOn } from "@vicons/ionicons4";
 
-const emit = defineEmits<{
-    (e: "toTab", tab: string): void;
-}>();
+// const emit = defineEmits<{
+//     (e: "toTab", tab: string): void;
+// }>();
 </script>
 
 <template>
@@ -56,7 +56,7 @@ const emit = defineEmits<{
             包含《水星法》、《水星伺服器破壞舉報獎勵規則》等。
             <br/>
             <div class="w-full m-auto  mt-2 mb-2">
-                <n-button @click="emit('toTab', 'publication')">
+                <n-button @click="openLinkSameTab('../publication')">
                     點擊加入
                 </n-button>
             </div>
