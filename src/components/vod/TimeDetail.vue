@@ -1,9 +1,7 @@
 <script setup lang="ts">
 import { computed } from "vue";
 import { NDivider, NCard, NScrollbar } from "naive-ui";
-import { UseElementBounding } from "@vueuse/components";
-// TODO: replaced by vueuse
-import { useWindowSize } from "vue-window-size";
+import { UseElementBounding, UseWindowSize } from "@vueuse/components";
 import { parseHMS, formatHMS } from "@composables/utils.ts";
 import vodLinkData from "@assets/data/vod.json";
 import vodSchedule from "@assets/data/schedule.json";
@@ -16,7 +14,6 @@ class DataType {
     divider: boolean;
 }
 
-const vh = useWindowSize().height;
 const props = defineProps<{ dateRange: [number, number] }>();
 const emit = defineEmits<{ (e: "computedTime", tag: number): void }>();
 const rawData = calcRawData();
@@ -112,12 +109,12 @@ function format(seconds: number): string {
     return seconds > 0 ? "+ " + formatHMS(seconds) : "− " + formatHMS(-seconds);
 }
 
-function calcStyle(top: number) {
+function calcStyle(top: number, vh: number) {
     let ppb = 20; // parent padding
     let pbb = 1; // parent border
     let pmb = 8; // parent margin
     let p = ppb + pbb + pmb;
-    let height = Math.max(vh.value * 0.2, vh.value - window.scrollY - top - p);
+    let height = Math.max(vh * 0.2, vh - window.scrollY - top - p);
     return {
         height: "" + height + "px",
     };
@@ -130,31 +127,33 @@ function calcStyle(top: number) {
         class="text-center mb-2"
         :style="{ '--n-padding-left': 0 }"
     >
-        <UseElementBounding v-slot="{ top }">
-            <n-scrollbar :style="calcStyle(top)">
-                <div class="pr-6">
-                    <template v-for="item in data">
-                        <n-divider
-                            v-if="item.divider"
-                            title-placement="left"
-                            class="!mt-0 !mb-0"
-                        >
-                            {{ item.date }}
-                            <n-divider vertical />
-                            {{ format(item.previous) }}
-                        </n-divider>
-                        <div class="text-right">
-                            <div class="inline-block font-bold">
-                                {{ item.reason }}
+        <UseWindowSize v-slot="{ height }">
+            <UseElementBounding v-slot="{ top }">
+                <n-scrollbar :style="calcStyle(top, height)">
+                    <div class="pr-6">
+                        <template v-for="item in data">
+                            <n-divider
+                                v-if="item.divider"
+                                title-placement="left"
+                                class="!mt-0 !mb-0"
+                            >
+                                {{ item.date }}
+                                <n-divider vertical />
+                                {{ format(item.previous) }}
+                            </n-divider>
+                            <div class="text-right">
+                                <div class="inline-block font-bold">
+                                    {{ item.reason }}
+                                </div>
+                                <n-divider vertical />
+                                <div class="inline-block font-bold">
+                                    {{ format(item.offset) }}
+                                </div>
                             </div>
-                            <n-divider vertical />
-                            <div class="inline-block font-bold">
-                                {{ format(item.offset) }}
-                            </div>
-                        </div>
-                    </template>
-                </div>
-            </n-scrollbar>
-        </UseElementBounding>
+                        </template>
+                    </div>
+                </n-scrollbar>
+            </UseElementBounding>
+        </UseWindowSize>
     </n-card>
 </template>
