@@ -1,13 +1,6 @@
 <script setup lang="ts">
 import { h, ref } from "vue";
 import { NTabs, NTabPane, NConfigProvider, darkTheme } from "naive-ui";
-import Welcome from "./components/welcome/Welcome.vue";
-import Vod from "./components/vod/Vod.vue";
-import GameMap from "./components/GameMap.vue";
-import Penalty from "./components/penalty/Penalty.vue";
-import Publication from "./components/publication/Publication.vue";
-import Contact from "./components/contact/Contact.vue";
-import Join from "./components/Join.vue";
 import hexagonIcon from "@assets/images/hexagon.svg";
 
 let icon = h("img", {
@@ -38,6 +31,13 @@ let tabValue = defineModel("tabValue", {
 
 <template>
     <n-config-provider :theme="darkTheme">
+        <nav>
+            <router-link to="/" class="tab">Go to Home</router-link>
+            <router-link to="/vod" class="tab">Go to Vod</router-link>
+            <router-link to="/map" class="tab">Go to Map</router-link>
+        </nav>
+        <router-view />
+        <!--         
         <n-tabs
             type="line"
             default-value="welcome"
@@ -46,11 +46,11 @@ let tabValue = defineModel("tabValue", {
             v-model:value="tabValue"
         >
             <n-tab-pane name="welcome" :tab="icon">
-                <Welcome @toTab="(value) => tabValue = value"/>
+                <Welcome @toTab="(value) => (tabValue = value)" />
             </n-tab-pane>
             <n-tab-pane name="join" tab="加入">
                 <div class="pl-8 pr-8">
-                    <Join @toTab="(value) => tabValue = value"/>
+                    <Join @toTab="(value) => (tabValue = value)" />
                 </div>
             </n-tab-pane>
             <n-tab-pane name="publication" tab="資料公開">
@@ -78,11 +78,15 @@ let tabValue = defineModel("tabValue", {
                     <Penalty />
                 </div>
             </n-tab-pane>
-        </n-tabs>
+        </n-tabs> -->
     </n-config-provider>
 </template>
 
 <style>
+.tab {
+    @apply text-white
+}
+
 .n-tabs-nav {
     position: sticky !important;
     padding-left: 32px;

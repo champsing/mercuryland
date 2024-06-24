@@ -41,14 +41,14 @@ const musicStyle = computed(() => {
 </script>
 
 <template>
-    <div ref="slide" :style="slideStyle">
+    <div ref="slide">
         <Slide1 />
         <Slide2 />
         <Slide3 />
         <Slide4 />
         <Slide5 @toTab="(value) => emit('toTab', value)"/>
     </div>
-    <div ref="music" class="absolute right-0" :style="musicStyle">
+    <!-- <div ref="music" class="absolute right-0" :style="musicStyle">
         <iframe
             allow="autoplay *; encrypted-media *;"
             scrolling="no"
@@ -58,7 +58,7 @@ const musicStyle = computed(() => {
             src="https://embed.music.apple.com/tw/album/alpha/739831644?i=739831648"
         >
         </iframe>
-    </div>
+    </div> -->
 </template>
 
 <style>
