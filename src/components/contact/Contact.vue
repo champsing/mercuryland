@@ -51,15 +51,17 @@ import { ccMix } from "@/composables/utils";
         </n-gi>
     </n-grid>
     <n-divider class="!mb-2" />
-    <iframe
-        src="https://www.youtube.com/embed/YTB35De0Bs8?si=cP5rNghSy_WQLl8m" 
-        title="YouTube video player" 
-        frameborder="0"
-        height="400"
-        width="800"
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
-        referrerpolicy="strict-origin-when-cross-origin" 
-        allowfullscreen
-    >
-    </iframe>
+    <div class="w-full">
+        <iframe
+            class="m-auto"
+            src="https://www.youtube.com/embed/YTB35De0Bs8?si=cP5rNghSy_WQLl8m"
+            title="YouTube video player"
+            frameborder="0"
+            height="400"
+            width="800"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            referrerpolicy="strict-origin-when-cross-origin"
+            allowfullscreen
+        ></iframe>
+    </div>
 </template>
