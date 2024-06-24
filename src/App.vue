@@ -1,11 +1,58 @@
 <script setup lang="ts">
+import { ref } from "vue";
 import { NConfigProvider, NDivider, darkTheme } from "naive-ui";
 import { RouterLink } from "vue-router";
+import { useElementBounding } from "@vueuse/core";
+
+const tabNav = ref<HTMLInputElement | null>(null);
+const tabNavBounding = useElementBounding(tabNav);
+
+function calcTabNavStyle(path: string) {
+    if (path == "/") {
+        return {};
+    } else {
+        return {
+            backgroundColor: "rgb(38 38 38)",
+        };
+    }
+}
+
+function calcMainStyle(path: string) {
+    if (path == "/") {
+        return {};
+    }
+    if (path == "/map") {
+        return {
+            marginTop: "" + tabNavBounding.height.value + "px",
+        };
+    } else {
+        return {
+            marginTop: "" + (tabNavBounding.height.value + 8) + "px",
+            marginLeft: "auto",
+            marginRight: "auto",
+            width: "91.666%"
+        };
+    }
+}
+
+// const slide = ref<HTMLInputElement | null>(null);
+// const slideBounding = useElementBounding(slide);
+// const slideStyle = computed(() => {
+//     if (slide.value == null) {
+//         return { marginTop: "0px" }; // this is important for code to work
+//     }
+//     let s = slide.value.style.marginTop;
+//     let mt = -parseFloat(s.substring(0, s.length - 2));
+//     let margin = scroll.y.value + slideBounding.top.value + mt;
+//     return {
+//         marginTop: "-" + margin + "px",
+//     };
+// });
 </script>
 
 <template>
     <n-config-provider :theme="darkTheme">
-        <div class="tab-nav">
+        <div ref="tabNav" class="tab-nav w-full" :style="calcTabNavStyle($route.fullPath)">
             <div class="p-3">
                 <router-link to="/" class="tab">
                     <img
@@ -25,7 +72,7 @@ import { RouterLink } from "vue-router";
             </div>
             <n-divider class="!m-0" />
         </div>
-        <div>
+        <div :style="calcMainStyle($route.fullPath)">
             <router-view />
         </div>
     </n-config-provider>
