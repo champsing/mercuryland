@@ -8,7 +8,6 @@ import Archive from './Archive.vue';
 
 <template>
     <!-- 如果沒有新版本水星法可以註解起來 -->
-    <n-divider />
         <NewLaw>
         </NewLaw>
     <n-divider />

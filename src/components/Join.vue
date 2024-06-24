@@ -12,13 +12,12 @@ import { ccMix } from "@composables/utils";
 
 <template>
     <br/>
-    <div class="text-center">
+    <div class="text-center mb-4">
         <div class="text-6xl perspective-x-30 text-cyan-400">
             {{ ccMix("現在就立刻加入我們") }}
         </div>
     </div>
-    <n-divider />
-    <n-grid x-gap="12" y-gap="12" cols="3" class="w-11/12" item-responsive>
+    <n-grid x-gap="12" y-gap="12" cols="3" class="w-11/12 mb-4" item-responsive>
         <n-gi span="3 800:1" class="text-center">
             <n-card
                 title="IP"
@@ -40,7 +39,6 @@ import { ccMix } from "@composables/utils";
             </n-card>
         </n-gi>
     </n-grid>
-    <n-divider />
     <n-timeline size="large" x-gap="12" :horizontal="true" class="w-full">
         <n-timeline-item title="加入群组" type="success" class="text-2xl w-1/4">
             {{ ccMix("加入我們的Discord群組來申請白名單") }}
