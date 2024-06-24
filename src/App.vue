@@ -5,8 +5,8 @@ import { RouterLink } from "vue-router";
 
 <template>
     <n-config-provider :theme="darkTheme">
-        <div>
-            <div>
+        <div class="tab-nav">
+            <div class="p-3">
                 <router-link to="/" class="tab">
                     <img
                         src="@assets/images/hexagon.svg"
@@ -23,9 +23,11 @@ import { RouterLink } from "vue-router";
                 <router-link to="/vod" class="tab"> 直播隨選 </router-link>
                 <router-link to="/penalty" class="tab"> 直播懲罰 </router-link>
             </div>
-            <n-divider class="!mt-1 !mb-1" />
+            <n-divider class="!m-0" />
         </div>
-        <div><router-view /></div>
+        <div>
+            <router-view />
+        </div>
     </n-config-provider>
 </template>
 
@@ -34,6 +36,12 @@ import { RouterLink } from "vue-router";
     @apply text-white;
     @apply text-base;
     @apply ml-4 mr-4;
+}
+
+.tab-nav {
+    @apply sticky;
+    @apply z-10;
+    @apply top-0;
 }
 
 .n-tabs-nav {

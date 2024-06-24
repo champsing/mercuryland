@@ -41,7 +41,7 @@ const musicStyle = computed(() => {
 </script>
 
 <template>
-    <div ref="slide">
+    <div ref="slide" :style="slideStyle">
         <Slide1 />
         <Slide2 />
         <Slide3 />
