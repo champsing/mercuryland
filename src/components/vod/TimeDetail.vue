@@ -127,8 +127,8 @@ function calcStyle(top: number, vh: number) {
         class="text-center mb-2"
         :style="{ '--n-padding-left': 0 }"
     >
-        <UseWindowSize v-slot="{ height }">
-            <UseElementBounding v-slot="{ top }">
+        <use-window-size v-slot="{ height }">
+            <use-element-bounding v-slot="{ top }">
                 <n-scrollbar :style="calcStyle(top, height)">
                     <div class="pr-6">
                         <template v-for="item in data">
@@ -153,7 +153,7 @@ function calcStyle(top: number, vh: number) {
                         </template>
                     </div>
                 </n-scrollbar>
-            </UseElementBounding>
-        </UseWindowSize>
+            </use-element-bounding>
+        </use-window-size>
     </n-card>
 </template>

@@ -39,20 +39,8 @@ import { RouterLink } from "vue-router";
 }
 
 .tab-nav {
-    @apply sticky;
+    @apply fixed;
     @apply z-10;
     @apply top-0;
-}
-
-.n-tabs-nav {
-    position: sticky !important;
-    padding-left: 32px;
-    padding-right: 32px;
-    z-index: 10;
-    top: 0 !important;
-    background-color: var(--tab-nav-color);
-}
-.n-tabs-pane-wrapper {
-    overflow: visible !important;
 }
 </style>

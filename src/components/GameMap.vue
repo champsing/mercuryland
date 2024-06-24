@@ -3,14 +3,14 @@ import { UseElementBounding, UseWindowSize } from "@vueuse/components";
 </script>
 
 <template>
-    <UseWindowSize v-slot="{ width, height }">
-        <UseElementBounding v-slot="{ top }">
+    <use-window-size v-slot="{ width, height }">
+        <use-element-bounding v-slot="{ top }">
             <iframe
                 src="https://play.mercuryland.online:25565/"
                 :width="width"
                 :height="height - top"
             >
             </iframe>
-        </UseElementBounding>
-    </UseWindowSize>
+        </use-element-bounding>
+    </use-window-size>
 </template>
