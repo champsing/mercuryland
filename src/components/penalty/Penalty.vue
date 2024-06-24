@@ -30,10 +30,10 @@ import {
     ChartData,
 } from "chart.js";
 import { Bar, Doughnut } from "vue-chartjs";
-import { openLink, openLinks, ofId } from "../composables/utils.ts";
-import penaltyData from "../assets/data/penalty.json";
-import penaltyStatus from "../assets/data/penalty_status.json";
-import vodData from "../assets/data/vod.json";
+import { openLink, openLinks, ofId } from "../../composables/utils.ts";
+import penaltyData from "../../assets/data/penalty.json";
+import penaltyStatus from "../../assets/data/penalty_status.json";
+import vodData from "../../assets/data/vod.json";
 import "chartjs-adapter-date-fns";
 
 ChartJS.register(

@@ -4,7 +4,7 @@ import { NTabs, NTabPane, NConfigProvider, darkTheme } from "naive-ui";
 import Welcome from "./components/welcome/Welcome.vue";
 import Vod from "./components/vod/Vod.vue";
 import GameMap from "./components/GameMap.vue";
-import Penalty from "./components/Penalty.vue";
+import Penalty from "./components/penalty/Penalty.vue";
 import Publication from "./components/publication/Publication.vue";
 import Contact from "./components/contact/Contact.vue";
 import Join from "./components/Join.vue";
