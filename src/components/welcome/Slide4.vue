@@ -13,7 +13,7 @@ import NextPageButton from "./NextPageButton.vue";
             item-responsive
             class="absolute x-center w-10/12 h-full"
         >
-            <n-gi span="2 800:1" class="relative">
+            <n-gi span="2 768:1" class="relative">
                 <div class="absolute y-center x-center">
                     <div class="text-green-400 font-bold text-6xl">
                         {{ ccMix("來這裡遇到同好。")}}
@@ -24,7 +24,7 @@ import NextPageButton from "./NextPageButton.vue";
                     </div>
                 </div>
             </n-gi>
-            <n-gi span="0 800:1" class="relative">
+            <n-gi span="0 768:1" class="relative">
                 <div class="absolute y-center x-center h-5/6 w-full">
                     <div class="h-1/2 relative">
                         <img
