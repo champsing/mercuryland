@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { NGrid, NGi, NDivider, NButton } from "naive-ui";
-import { ccMix } from "@/composables/utils";
+import { ccMix, openLinkSameTab } from "@/composables/utils";
 import ReturnTopButton from "./ReturnTopButton.vue";
 
 // const emit = defineEmits<{
@@ -44,11 +44,9 @@ import ReturnTopButton from "./ReturnTopButton.vue";
                     <div class="text-cyan-600 font-bold text-3xl">
                         {{ ccMix("立即前往其他分頁，了解如何加入。")}}
                     </div>
-                    <div class="mt-8">
-                        <n-button size="large">
-                            <router-link to="/join" class="tab text-cyan-600">
+                    <div class="mt-8 text-cyan-600">
+                        <n-button size="large" @click="openLinkSameTab('./publication')">
                             {{ ccMix("點擊加入")}}
-                            </router-link>
                         </n-button>
                     </div>
                 </div>
