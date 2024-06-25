@@ -48,7 +48,7 @@ const emit = defineEmits<{
                         <n-button
                             class="text-cyan-600"
                             size="large"
-                            @click="openLinkSameTab('../join')"
+                            @click="openLinkSameTab('/join')"
                         >
                         {{ ccMix("點擊加入")}}
                         </n-button>

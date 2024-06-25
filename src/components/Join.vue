@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { NGrid, NGi, NCard, NButton, NTimeline, NTimelineItem } from "naive-ui";
-import { copyToClipboard, openLink, openLinkSameTab } from "@composables/utils";
-import { ccMix } from "@composables/utils";
+import { ccMix, copyToClipboard, openLink, openLinkSameTab } from "@composables/utils";
 //TODO: Server Online Status
 //import { IosRadioButtonOn } from "@vicons/ionicons4";
 
@@ -56,7 +55,7 @@ import { ccMix } from "@composables/utils";
             包含《水星法》、《水星伺服器破壞舉報獎勵規則》等。
             <br/>
             <div class="w-full m-auto  mt-2 mb-2">
-                <n-button @click="openLinkSameTab('../publication')">
+                <n-button @click="openLinkSameTab('/publication')">
                     點擊閱讀
                 </n-button>
             </div>
