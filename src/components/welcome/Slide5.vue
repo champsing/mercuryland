@@ -45,10 +45,8 @@ import ReturnTopButton from "./ReturnTopButton.vue";
                         {{ ccMix("立即前往其他分頁，了解如何加入。")}}
                     </div>
                     <div class="mt-8">
-                        <n-button
-                            size="large"
-                        >
-                            <router-link to="/publication" class="tab text-cyan-600">
+                        <n-button size="large">
+                            <router-link to="/join" class="tab text-cyan-600">
                             {{ ccMix("點擊加入")}}
                             </router-link>
                         </n-button>
