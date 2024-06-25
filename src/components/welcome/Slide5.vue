@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import { NGrid, NGi, NDivider, NButton } from "naive-ui";
-import { ccMix, openLinkSameTab } from "@/composables/utils";
+import { ccMix } from "@/composables/utils";
 import ReturnTopButton from "./ReturnTopButton.vue";
 
-const emit = defineEmits<{
-    (e: "toTab", tab: string): void;
-}>();
+// const emit = defineEmits<{
+//     (e: "toTab", tab: string): void;
+// }>();
 </script>
 
 <template>
@@ -46,11 +46,11 @@ const emit = defineEmits<{
                     </div>
                     <div class="mt-8">
                         <n-button
-                            class="text-cyan-600"
                             size="large"
-                            @click="openLinkSameTab('/join')"
                         >
-                        {{ ccMix("點擊加入")}}
+                            <router-link to="/publication" class="tab text-cyan-600">
+                            {{ ccMix("點擊加入")}}
+                            </router-link>
                         </n-button>
                     </div>
                 </div>
