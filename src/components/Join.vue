@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { NGrid, NGi, NCard, NButton, NTimeline, NTimelineItem } from "naive-ui";
-import { ccMix, copyToClipboard, openLink } from "@composables/utils";
+import { ccMix, copyToClipboard, openLink, openLinkSameTab } from "@composables/utils";
 //TODO: Server Online Status
 //import { IosRadioButtonOn } from "@vicons/ionicons4";
 
@@ -56,9 +56,9 @@ import { ccMix, copyToClipboard, openLink } from "@composables/utils";
             <br/>
             <div class="w-full m-auto  mt-2 mb-2">
                 <n-button>
-                    <router-link to="/publication" class="tab">
-                        點擊閱讀
-                    </router-link>
+                    <n-button size="large" @click="openLinkSameTab('./publication')">
+                        {{ ccMix("點擊閱讀")}}
+                    </n-button>
                 </n-button>
             </div>
         </n-timeline-item>
