@@ -17,7 +17,7 @@ import ReturnTopButton from "./ReturnTopButton.vue";
             item-responsive
             class="absolute x-center w-10/12 h-full"
         >
-            <n-gi span="0 800:1" class="relative">
+            <n-gi span="0 768:1" class="relative">
                 <div class="absolute y-center x-center h-5/6 w-full">
                     <div class="h-1/2 relative">
                         <img
@@ -35,7 +35,7 @@ import ReturnTopButton from "./ReturnTopButton.vue";
                     </div>
                 </div>
             </n-gi>
-            <n-gi span="2 800:1" class="relative">
+            <n-gi span="2 768:1" class="relative">
                 <div class="absolute y-center x-center">
                     <div class="text-cyan-400 font-bold text-6xl">
                         {{ ccMix("還在猶豫什麼？")}}

@@ -13,14 +13,14 @@ import NextPageButton from "./NextPageButton.vue";
             item-responsive
             class="absolute x-center w-10/12 h-full"
         >
-            <n-gi span="0 800:1" class="relative">
+            <n-gi span="0 768:1" class="relative">
                 <img
                     src="@assets/images/welcome/statue_of_liberty.png"
                     class="absolute y-center x-center h-5/6 object-contain"
                     alt="Welcome"
                 />
             </n-gi>
-            <n-gi span="2 800:1" class="relative">
+            <n-gi span="2 768:1" class="relative">
                 <div class="absolute y-center x-center">
                     <div class="text-yellow-400 font-bold text-6xl">
                         {{ ccMix("發揮您的創意，建造您夢想中的建築。") }}
