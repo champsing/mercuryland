@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { NGrid, NGi, NCard, NButton, NTimeline, NTimelineItem } from "naive-ui";
-import { ccMix, copyToClipboard, openLink, openLinkSameTab } from "@composables/utils";
+import { ccMix, copyToClipboard, openLink } from "@composables/utils";
 //TODO: Server Online Status
 //import { IosRadioButtonOn } from "@vicons/ionicons4";
 
@@ -43,20 +43,20 @@ import { ccMix, copyToClipboard, openLink, openLinkSameTab } from "@composables/
             {{ ccMix("加入我們的Discord群組來申請白名單") }}
             <br/>
             <n-button @click="openLink('https://discord.gg/A2cMZRr')" class="mt-2 mb-2">
-                加入 水星人的夢幻樂園
+                {{ ccMix("加入 水星人的夢幻樂園") }}
             </n-button>
             <br/>
-            或使用連結：https://discord.gg/A2cMZRr
+            {{ ccMix("或使用連結") }}：https://discord.gg/A2cMZRr
 
         <!-- TODO: Use n-step -->
         </n-timeline-item>
 
         <n-timeline-item title="阅读规则" type="success" class="text-2xl w-1/4">
-            包含《水星法》、《水星伺服器破壞舉報獎勵規則》等。
+            {{ ccMix("包含《水星法》、《水星伺服器破壞舉報獎勵規則》等。") }}
             <br/>
             <div class="w-full m-auto  mt-2 mb-2">
                 <n-button>
-                    <n-button size="large" @click="openLinkSameTab('./publication')">
+                    <n-button size="large" @click="openLink('./publication')">
                         {{ ccMix("點擊閱讀")}}
                     </n-button>
                 </n-button>
