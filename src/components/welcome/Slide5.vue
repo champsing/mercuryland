@@ -45,7 +45,7 @@ import ReturnTopButton from "./ReturnTopButton.vue";
                         {{ ccMix("立即前往其他分頁，了解如何加入。")}}
                     </div>
                     <div class="mt-8 text-cyan-600">
-                        <n-button size="large" @click="openLinkSameTab('../join')">
+                        <n-button size="large" @click="openLinkSameTab('https://mercuryland.online/#/join')">
                             {{ ccMix("點擊加入")}}
                         </n-button>
                     </div>

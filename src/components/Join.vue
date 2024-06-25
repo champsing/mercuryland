@@ -55,7 +55,7 @@ import { ccMix, copyToClipboard, openLink } from "@composables/utils";
             {{ ccMix("包含《水星法》、《水星伺服器破壞舉報獎勵規則》等。") }}
             <br/>
             <div class="w-full m-auto  mt-2 mb-2">  
-                <n-button size="large" @click="openLink('../publication')">
+                <n-button size="large" @click="openLink('https://mercuryland.online/#/publication')">
                     {{ ccMix("點擊閱讀")}}
                 </n-button>
             </div>
