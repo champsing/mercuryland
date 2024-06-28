@@ -130,7 +130,7 @@ function prev() {
             description="等待白名單申請通過"
         />
     </n-steps>
-    <n-button-group>
+    <n-button-group class="mt-4">
         <n-button @click="prev">
             <template #icon>
                 <n-icon>
