@@ -13,9 +13,9 @@ import { MdArrowRoundBack, MdArrowRoundForward } from '@vicons/ionicons4'
 let currentStep = ref<number | null>(1);
 //current step
 
-function clickLinkButton(link: string, toBeSetValue: number, setValue: number) {
+function clickLinkButton(link: string, toBePlus1: number) {
     openLink(link);
-    toBeSetValue = setValue;
+    toBePlus1++;
 }
 
 //Prev/Next Button
@@ -73,7 +73,7 @@ function prev() {
         <n-step :title="ccMix('加入群組')" class="text-1xl w-1/4">
             {{ ccMix("加入我們的Discord群組來申請白名單") }}
             <br/>
-            <n-button @click="clickLinkButton('https://discord.gg/A2cMZRr', currentStep, 2)" class="mt-2 mb-2">
+            <n-button @click="clickLinkButton('https://discord.gg/A2cMZRr', currentStep)" class="mt-2 mb-2">
                 {{ ccMix("加入 水星人的夢幻樂園") }}
             </n-button>
             <br/>
@@ -84,7 +84,7 @@ function prev() {
             {{ ccMix("包含《水星法》、《水星伺服器破壞舉報獎勵規則》等。") }} 
             <br/>
             <div class="w-full m-auto  mt-2 mb-2">  
-                <n-button size="large" @click="clickLinkButton('https://mercuryland.online/#/publication', currentStep, 3)">
+                <n-button size="large" @click="clickLinkButton('https://mercuryland.online/#/publication', currentStep)">
                     {{ ccMix("點擊閱讀")}}
                 </n-button>
             </div>
