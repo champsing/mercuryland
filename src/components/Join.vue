@@ -55,9 +55,9 @@ function prev() {
                 title="IP"
                 @click="copyToClipboard('play.mercuryland.online:25565')"
             >
-                <n-button text class="!text-2xl"
-                    >play.mercuryland.online:25565</n-button
-                >
+                <n-button text class="!text-2xl">
+                    play.mercuryland.online:25565
+                </n-button>
             </n-card>
         </n-gi>
         <n-gi span="3 800:1" class="text-center">
@@ -65,9 +65,9 @@ function prev() {
                 title="Seed"
                 @click="copyToClipboard('-9100272987300380909')"
             >
-                <n-button text class="!text-2xl">{{
-                    ccMix("-9100272987300380909")
-                }}</n-button>
+                <n-button text class="!text-2xl">
+                    -9100272987300380909
+                </n-button>
             </n-card>
         </n-gi>
         <n-gi span="3 800:1" class="text-center">
@@ -129,6 +129,22 @@ function prev() {
             description="等待白名單申請通過"
         />
     </n-steps>
+    <n-button-group>
+        <n-button @click="prev">
+          <template #icon>
+            <n-icon>
+              <md-arrow-round-back />
+            </n-icon>
+          </template>
+        </n-button>
+        <n-button @click="next">
+          <template #icon>
+            <n-icon>
+              <md-arrow-round-forward />
+            </n-icon>
+          </template>
+        </n-button>
+      </n-button-group>
 </template>
 
 <style>
