@@ -24,7 +24,8 @@ let currentStep = ref<number | null>(1);
 
 function clickLinkButton(link: string) {
     openLink(link);
-    currentStep.value++;
+    if (currentStep.value < 4) currentStep.value++;
+    else currentStep.value = 1;
 }
 
 //Prev/Next Button
@@ -131,20 +132,20 @@ function prev() {
     </n-steps>
     <n-button-group>
         <n-button @click="prev">
-          <template #icon>
-            <n-icon>
-              <md-arrow-round-back />
-            </n-icon>
-          </template>
+            <template #icon>
+                <n-icon>
+                    <md-arrow-round-back />
+                </n-icon>
+            </template>
         </n-button>
         <n-button @click="next">
-          <template #icon>
-            <n-icon>
-              <md-arrow-round-forward />
-            </n-icon>
-          </template>
+            <template #icon>
+                <n-icon>
+                    <md-arrow-round-forward />
+                </n-icon>
+            </template>
         </n-button>
-      </n-button-group>
+    </n-button-group>
 </template>
 
 <style>
