@@ -19,8 +19,7 @@ import { MdArrowRoundBack, MdArrowRoundForward } from "@vicons/ionicons4";
 //     (e: "toTab", tab: string): void;
 // }>();
 
-let currentStep = ref<number | null>(1);
-//current step
+let currentStep = ref<number | null>(1);//current step
 
 function clickLinkButton(link: string) {
     openLink(link);
@@ -29,7 +28,6 @@ function clickLinkButton(link: string) {
 }
 
 //Prev/Next Button
-
 function next() {
     if (currentStep.value === null) currentStep.value = 1;
     else if (currentStep.value >= 4) currentStep.value = null;
