@@ -67,5 +67,20 @@ import { ccMix } from '@/composables/utils';
                 {{ ccMix("您可以在此申請模組。") }}
             </div>
         </n-gi>
+        <n-gi span="3 800:1">
+            <iframe 
+                width="410" height="400" 
+                frameborder="0"
+                src="https://docs.google.com/document/d/14MiEMa45ubcNPay2V8XUEFi_rdZFdaeA4TgOn7hk7Iw/preview" 
+                title="水星伺服器性能保護法"
+            >
+            </iframe>
+            <div class="text-2xl text-neutral-100 text-center mt-4 mr-10">
+                {{ ccMix("水星伺服器性能保護法") }}
+            </div>
+            <div class="text-1xl text-neutral-100 text-center mt-4 mr-8">
+                {{ ccMix("保護伺服器的穩定運作。") }}
+            </div>
+        </n-gi>
     </n-grid> 
 </template>
