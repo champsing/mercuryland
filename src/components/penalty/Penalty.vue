@@ -224,6 +224,10 @@ function statusOf(status: string): (typeof penaltyStatus)[0] {
 function vodLinkOfDate(date: string): string[] {
     return vodData.filter((x) => x.date == date).map((x) => x.link);
 }
+
+function changeURLPath(URLpath: string) {
+    return new URL(`./src/assets/images/penalty/` + URLpath, import.meta.url).href
+}
 </script>
 
 <template>
@@ -337,7 +341,7 @@ function vodLinkOfDate(date: string): string[] {
 
                 <img
                     v-if="block.block == 'image'"
-                    :src="`./src/assets/images/penalty/${block.uri}`"
+                    :src="changeURLPath(`${block.uri}`)"
                     :alt="block.str"
                 />
                 <br v-if="block.block == 'br'" />
