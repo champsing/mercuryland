@@ -39,15 +39,15 @@ import { ccMix } from '@/composables/utils';
             <iframe 
                 width="410" height="400" 
                 frameborder="0"
-                src="https://docs.google.com/spreadsheets/d/1srqIISm1Dn908trUeRZgarB5p_2xmdmtK0HGzMEz-yM/preview?usp=drive_link" 
-                title="水星伺服器公開資料清冊"
+                src="https://docs.google.com/document/d/14MiEMa45ubcNPay2V8XUEFi_rdZFdaeA4TgOn7hk7Iw/preview" 
+                title="水星伺服器性能保護法"
             >
             </iframe>
             <div class="text-2xl text-neutral-100 text-center mt-4 mr-10">
-                {{ ccMix("《水星伺服器公開資料清冊》") }}
+                {{ ccMix("水星伺服器性能保護法") }}
             </div>
             <div class="text-1xl text-neutral-100 text-center mt-4 mr-8">
-                {{ ccMix("查詢您的申請資料。") }}
+                {{ ccMix("保護伺服器的穩定運作。") }}
             </div>
         </n-gi>
     </n-grid>
@@ -71,15 +71,15 @@ import { ccMix } from '@/composables/utils';
             <iframe 
                 width="410" height="400" 
                 frameborder="0"
-                src="https://docs.google.com/document/d/14MiEMa45ubcNPay2V8XUEFi_rdZFdaeA4TgOn7hk7Iw/preview" 
-                title="水星伺服器性能保護法"
+                src="https://docs.google.com/spreadsheets/d/1srqIISm1Dn908trUeRZgarB5p_2xmdmtK0HGzMEz-yM/preview?usp=drive_link" 
+                title="水星伺服器公開資料清冊"
             >
             </iframe>
             <div class="text-2xl text-neutral-100 text-center mt-4 mr-10">
-                {{ ccMix("水星伺服器性能保護法") }}
+                {{ ccMix("《水星伺服器公開資料清冊》") }}
             </div>
             <div class="text-1xl text-neutral-100 text-center mt-4 mr-8">
-                {{ ccMix("保護伺服器的穩定運作。") }}
+                {{ ccMix("查詢您的申請資料。") }}
             </div>
         </n-gi>
     </n-grid> 
