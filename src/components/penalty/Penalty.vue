@@ -347,6 +347,6 @@ function vodLinkOfDate(date: string): string[] {
 
     <n-divider />
 
-    <PenaltySyntax>
+    <PenaltySyntax class="mb-4">
     </PenaltySyntax>
 </template>
