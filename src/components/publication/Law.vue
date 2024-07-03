@@ -44,7 +44,7 @@ import { ccMix } from '@/composables/utils';
             >
             </iframe>
             <div class="text-2xl text-neutral-100 text-center mt-4 mr-10">
-                {{ ccMix("水星伺服器性能保護法") }}
+                {{ ccMix("《水星伺服器性能保護法》") }}
             </div>
             <div class="text-1xl text-neutral-100 text-center mt-4 mr-8">
                 {{ ccMix("保護伺服器的穩定運作。") }}
