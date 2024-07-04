@@ -12,8 +12,6 @@ import {
 import { ccMix, copyToClipboard, openLink } from "@composables/utils";
 import { ref } from "vue";
 import { MdArrowRoundBack, MdArrowRoundForward } from "@vicons/ionicons4";
-//TODO: Server Online Status
-//import { IosRadioButtonOn } from "@vicons/ionicons4";
 
 // const emit = defineEmits<{
 //     (e: "toTab", tab: string): void;
@@ -145,6 +143,8 @@ function prev() {
         </n-button>
     </n-button-group>
 </template>
+
+
 
 <style>
 .perspective-x-30 {

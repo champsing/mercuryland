@@ -5,7 +5,7 @@ import GameMap from "@components/GameMap.vue";
 import Penalty from "@components/penalty/Penalty.vue";
 import Publication from "@components/publication/Publication.vue";
 import Contact from "@components/contact/Contact.vue";
-import Join from "@components/Join.vue";
+import Join from "@/components/join/Join.vue";
 
 const routes = [
     { path: "/", component: Welcome },
