@@ -226,7 +226,7 @@ function vodLinkOfDate(date: string): string[] {
 }
 
 function changeURLPath(URLpath: string) {
-    return new URL(`./src/assets/images/penalty/` + URLpath, import.meta.url).href
+    return new URL(`./images/penalty/` + URLpath, import.meta.url).href
 }
 </script>
 
