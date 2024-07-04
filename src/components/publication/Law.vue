@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { NGrid, NGi } from 'naive-ui';
-import { ccMix } from '@/composables/utils';
+import { NButton, NGrid, NGi } from 'naive-ui';
+import { ccMix, openLink } from '@/composables/utils';
 </script>
 
 <template>
@@ -14,7 +14,7 @@ import { ccMix } from '@/composables/utils';
             >
             </iframe>
             <div class="text-2xl text-neutral-100 text-center mt-4 mr-10">
-                {{ ccMix("《水星法》") }}
+                    {{ ccMix("《水星法》") }}
             </div>
             <div class="text-1xl text-neutral-100 text-center mt-4 mr-8">
                 {{ ccMix("水星伺服器法律支柱。") }}
@@ -28,10 +28,10 @@ import { ccMix } from '@/composables/utils';
                 title="水星伺服器破壞舉報獎勵規則"
             >
             </iframe>
-            <div class="text-2xl text-neutral-100 text-center mt-4 mr-8">
+            <div class="text-2xl text-neutral-100 text-center mt-4 mr-2">
                 {{ ccMix("《水星伺服器破壞舉報獎勵規則》") }}
             </div>
-            <div class="text-1xl text-neutral-100 text-center mt-4 mr-8">
+            <div class="text-1xl text-neutral-100 text-center mt-4 mr-4">
                 {{ ccMix("舉報破壞伺服器和平的玩家。") }}
             </div>
         </n-gi>
@@ -43,10 +43,17 @@ import { ccMix } from '@/composables/utils';
                 title="水星伺服器性能保護法"
             >
             </iframe>
-            <div class="text-2xl text-neutral-100 text-center mt-4 mr-10">
-                {{ ccMix("《水星伺服器性能保護法》") }}
-            </div>
-            <div class="text-1xl text-neutral-100 text-center mt-4 mr-8">
+            <n-button
+            :text="true"
+            @click="openLink('https://docs.google.com/document/d/14MiEMa45ubcNPay2V8XUEFi_rdZFdaeA4TgOn7hk7Iw/preview')"
+            class="ml-14"
+            >
+                <div class="text-2xl text-neutral-100 text-center mt-4 mr-10">
+                    {{ ccMix("《水星伺服器性能保護法》") }}
+                    
+                </div>
+            </n-button>
+            <div class="text-1xl text-neutral-100 text-center mt-4 mr-2">
                 {{ ccMix("保護伺服器的穩定運作。") }}
             </div>
         </n-gi>
@@ -60,10 +67,16 @@ import { ccMix } from '@/composables/utils';
                 title="申請模組"
             >
             </iframe>
-            <div class="text-2xl text-neutral-100 text-center mt-4 mr-10">
-                {{ ccMix("申請模組") }}
-            </div>
-            <div class="text-1xl text-neutral-100 text-center mt-4 mr-8">
+            <n-button
+            :text="true"
+            @click="openLink('https://forms.gle/qx9XRHhuojAf7hPj9')"
+            class="ml-36"
+            >
+                <div class="text-2xl text-neutral-100 text-center mt-4 mr-10">
+                    {{ ccMix("申請模組") }}
+                </div>
+            </n-button>
+            <div class="text-1xl text-neutral-100 text-center mt-4 mr-4">
                 {{ ccMix("您可以在此申請模組。") }}
             </div>
         </n-gi>
@@ -75,9 +88,15 @@ import { ccMix } from '@/composables/utils';
                 title="水星伺服器公開資料清冊"
             >
             </iframe>
-            <div class="text-2xl text-neutral-100 text-center mt-4 mr-10">
-                {{ ccMix("《水星伺服器公開資料清冊》") }}
-            </div>
+            <n-button
+            :text="true"
+            @click="openLink('https://docs.google.com/spreadsheets/d/1srqIISm1Dn908trUeRZgarB5p_2xmdmtK0HGzMEz-yM/preview?usp=drive_link')"
+            class="ml-12"
+            >
+                <div class="text-2xl text-neutral-100 text-center mt-4 mr-10">
+                    {{ ccMix("《水星伺服器公開資料清冊》") }}
+                </div>
+            </n-button>
             <div class="text-1xl text-neutral-100 text-center mt-4 mr-8">
                 {{ ccMix("查詢您的申請資料。") }}
             </div>
