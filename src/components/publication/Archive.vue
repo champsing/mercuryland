@@ -39,7 +39,7 @@ import { ccMix, openLink } from '@/composables/utils';
                 title="S2 to S5"
             >
             </iframe>
-            <div class="text-2xl text-neutral-100 text-center mt-4 mr-10">
+            <div class="text-2xl text-neutral-100 text-center mt-4 mr-8">
                 {{ ccMix("第二～五季") }}
             </div>
         </n-gi>
@@ -51,7 +51,7 @@ import { ccMix, openLink } from '@/composables/utils';
                 title="S6, 7"
             >
             </iframe>
-            <div class="text-2xl text-neutral-100 text-center mt-4 mr-10">
+            <div class="text-2xl text-neutral-100 text-center mt-4 mr-8">
                 {{ ccMix("第六、七季") }}
             </div>
         </n-gi>
