@@ -23,7 +23,7 @@ import {
                         <n-thing style="text-align: left; font-size: 18px">
                             &lt;日期&gt;: Unix Timestamp<br />
                             &lt;編號&gt;: int &lt;懲罰主文&gt;: string
-                            〔詳細資料〕: additionalMetaData（執行狀態）:
+                            〔詳細資料〕: additionalMetaData（完成狀態）:
                             statusMetaData
                         </n-thing>
                     </n-list-item>
