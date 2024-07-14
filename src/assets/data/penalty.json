@@ -387,8 +387,8 @@
         "id": 66,
         "date": "2023-08-20",
         "name": "破Garten of Banban 2 👻",
-        "status": "進行中",
-        "description": []
+        "status": "勉強過",
+        "description": [{ "block": "text", "str": "🏁 原主人給過" }]
     },
     {
         "id": 91,
