@@ -388,7 +388,14 @@
         "date": "2023-08-20",
         "name": "破Garten of Banban 2 👻",
         "status": "勉強過",
-        "description": [{ "block": "text", "str": "🏁 原主人給過" }]
+        "description": [
+            { "block": "text", "str": "🏁 原主人給過" },
+            {
+                "block": "image",
+                "str": "投票的截图",
+                "uri": "66.png"
+            }
+        ]
     },
     {
         "id": 91,
