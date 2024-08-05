@@ -1041,5 +1041,25 @@
             "Dark Deception"
         ],
         "duration": "02:05:24"
+    },
+    {
+        "id": 122,
+        "date": "2024-07-21",
+        "link": "https://youtube.com/live/0kVUVrhUFNs",
+        "title": "【惡靈】去找熊媽媽玩咯",
+        "tags": [
+            "Dark Deception","PVZ"
+        ],
+        "duration": "02:30:47"
+    },
+    {
+        "id": 123,
+        "date": "2024-07-21",
+        "link": "https://youtube.com/live/2_r0pgopw4w",
+        "title": "【惡靈】直耍播廢",
+        "tags": [
+            "MC游乐园生存","Buckshot Roulette"
+        ],
+        "duration": "02:06:09"
     }
 ]
