@@ -28,14 +28,14 @@
     {
         "id": 73,
         "date": "2023-01-29",
-        "name": "通過ManaCube Insane難度任一關卡",
+        "name": "通過 ManaCube Insane 難度任一關卡",
         "status": "已完成",
         "description": []
     },
     {
         "id": 26,
         "date": "2023-02-05",
-        "name": "玩ALTF4",
+        "name": "玩 ALTF4",
         "status": "已完成",
         "description": [
             {
@@ -48,21 +48,21 @@
     {
         "id": 39,
         "date": "2023-02-05",
-        "name": "玩RL Craft",
+        "name": "玩 RL Craft",
         "status": "未開始",
         "description": [{ "block": "text", "str": "🆙 增加" }]
     },
     {
         "id": 27,
         "date": "2023-03-05",
-        "name": "玩ALTF4 2",
+        "name": "玩 ALTF4 2",
         "status": "未開始",
         "description": []
     },
     {
         "id": 86,
         "date": "2023-03-05",
-        "name": "繼續玩ALTF4",
+        "name": "繼續玩 ALTF4",
         "status": "已完成",
         "description": [
             {
@@ -75,7 +75,7 @@
     {
         "id": 28,
         "date": "2023-03-11",
-        "name": "玩At Dead of Night",
+        "name": "玩 At Dead of Night",
         "status": "已完成",
         "description": [
             {
@@ -95,7 +95,7 @@
     {
         "id": 12,
         "date": "2023-03-19",
-        "name": "抽Nitro",
+        "name": "抽 Nitro",
         "status": "已完成",
         "description": []
     },
@@ -171,14 +171,14 @@
     {
         "id": 36,
         "date": "2023-04-30",
-        "name": "玩Poppy Playtime 第二章",
+        "name": "玩 Poppy Playtime 第二章",
         "status": "已完成",
         "description": []
     },
     {
         "id": 44,
         "date": "2023-04-30",
-        "name": "直播兩小時Hypixel",
+        "name": "直播兩小時 Hypixel",
         "status": "已完成",
         "description": []
     },
@@ -192,7 +192,7 @@
     {
         "id": 35,
         "date": "2023-05-07",
-        "name": "玩PIEN",
+        "name": "玩 PIEN",
         "status": "已完成",
         "description": []
     },
@@ -227,10 +227,10 @@
     {
         "id": 32,
         "date": "2023-06-11",
-        "name": "玩Metro: Last Night",
+        "name": "玩 Metro: Last Night",
         "status": "未開始",
         "description": [
-            { "block": "text", "str": "2️⃣ 備案: 玩Super Animal Royale" }
+            { "block": "text", "str": "2️⃣ 備案: 玩 Super Animal Royale" }
         ]
     },
     {
@@ -318,14 +318,14 @@
     {
         "id": 41,
         "date": "2023-07-23",
-        "name": "玩slimemo",
+        "name": "玩 slimemo",
         "status": "已完成",
         "description": []
     },
     {
         "id": 68,
         "date": "2023-07-23",
-        "name": "做出1.20所有鍛造模板的鎖鏈靴子",
+        "name": "做出 1.20 所有鍛造模板的鎖鏈靴子",
         "status": "未開始",
         "description": []
     },
@@ -379,14 +379,14 @@
     {
         "id": 33,
         "date": "2023-08-20",
-        "name": "玩Muse Dash",
+        "name": "玩 Muse Dash",
         "status": "未開始",
         "description": []
     },
     {
         "id": 66,
         "date": "2023-08-20",
-        "name": "破Garten of Banban 2 👻",
+        "name": "破 Garten of Banban 2 👻",
         "status": "勉強過",
         "description": [
             { "block": "text", "str": "🏁 原主人給過" },
@@ -414,7 +414,7 @@
     {
         "id": 19,
         "date": "2023-09-10",
-        "name": "玩1個小時only up",
+        "name": "玩1個小時 only up",
         "status": "勉強過",
         "description": [{ "block": "text", "str": "🏁 玩盜版" }]
     },
@@ -428,7 +428,7 @@
     {
         "id": 40,
         "date": "2023-09-10",
-        "name": "玩roblox 一個熱門rp遊戲",
+        "name": "玩 roblox 一個熱門rp遊戲",
         "status": "未開始",
         "description": []
     },
@@ -456,7 +456,7 @@
     {
         "id": 94,
         "date": "2023-09-10",
-        "name": "pjskmaster 拿到fullcombo",
+        "name": "pjskmaster 拿到 fullcombo",
         "status": "未開始",
         "description": []
     },
@@ -484,7 +484,7 @@
     {
         "id": 92,
         "date": "2023-09-17",
-        "name": "Hypixel觀眾場2小時",
+        "name": "Hypixel 觀眾場2小時",
         "status": "已完成",
         "description": []
     },
@@ -505,14 +505,14 @@
     {
         "id": 48,
         "date": "2023-09-24",
-        "name": "直播玩LOL隨機單中直到擊殺+助攻50以上",
+        "name": "直播玩 LOL 隨機單中直到擊殺+助攻50以上",
         "status": "未開始",
         "description": []
     },
     {
         "id": 88,
         "date": "2023-09-24",
-        "name": "讓ChatGPT同時給小學數學、科學、文學、歷史、地理 各一題選擇題 2分鐘內沒解出來懲罰+1",
+        "name": "讓 ChatGPT 同時給小學數學、科學、文學、歷史、地理 各一題選擇題 2分鐘內沒解出來懲罰+1",
         "status": "已完成",
         "description": [{ "block": "text", "str": "🆙 增加" }]
     },
@@ -533,21 +533,21 @@
     {
         "id": 30,
         "date": "2023-10-08",
-        "name": "玩Escape the backrooms👻",
+        "name": "玩 Escape the backrooms👻",
         "status": "未開始",
         "description": []
     },
     {
         "id": 34,
         "date": "2023-10-08",
-        "name": "玩party animals",
+        "name": "玩 party animals",
         "status": "未開始",
         "description": []
     },
     {
         "id": 49,
         "date": "2023-10-08",
-        "name": "直播玩project playtime",
+        "name": "直播玩 project playtime",
         "status": "已完成",
         "description": [{ "block": "text", "str": "📝 原主人修改1次" }]
     },
@@ -561,14 +561,14 @@
     {
         "id": 54,
         "date": "2023-10-08",
-        "name": "直播教大家怎麼用Premiere",
+        "name": "直播教大家怎麼用 Premiere",
         "status": "已完成",
         "description": []
     },
     {
         "id": 58,
         "date": "2023-10-08",
-        "name": "直播遊玩德州電鋸殺人狂擊殺10人or逃出5場",
+        "name": "直播遊玩德州電鋸殺人狂擊殺10人 or 逃出5場",
         "status": "未開始",
         "description": []
     },
@@ -588,7 +588,7 @@
     {
         "id": 67,
         "date": "2023-10-08",
-        "name": "破Joyville第一章👻",
+        "name": "破 Joyville 第一章👻",
         "status": "未開始",
         "description": []
     },
@@ -616,7 +616,7 @@
     {
         "id": 9,
         "date": "2023-11-05",
-        "name": "把Outlast 2剩下的部分玩完👻",
+        "name": "把 Outlast 2 剩下的部分玩完👻",
         "status": "已完成",
         "description": []
     },
@@ -650,7 +650,7 @@
     {
         "id": 38,
         "date": "2023-11-05",
-        "name": "玩PVZ",
+        "name": "玩 PVZ",
         "status": "已完成",
         "description": []
     },
@@ -691,14 +691,14 @@
     {
         "id": 31,
         "date": "2023-11-19",
-        "name": "玩Hypixel陰屍路5場成功逃出",
+        "name": "玩 Hypixel 陰屍路5場成功逃出",
         "status": "已完成",
         "description": []
     },
     {
         "id": 43,
         "date": "2023-11-19",
-        "name": "直播同樂MC Bingo 2小時",
+        "name": "直播同樂 MC Bingo 2小時",
         "status": "未開始",
         "description": []
     },
@@ -712,14 +712,14 @@
     {
         "id": 37,
         "date": "2023-11-26",
-        "name": "玩Poppy Playtime 第三章 👻",
+        "name": "玩 Poppy Playtime 第三章 👻",
         "status": "已完成",
         "description": []
     },
     {
         "id": 47,
         "date": "2023-11-26",
-        "name": "直播玩Do Not Feed the Monkeys 2099 單局解完三個籠子",
+        "name": "直播玩 Do Not Feed the Monkeys 2099 單局解完三個籠子",
         "status": "未開始",
         "description": []
     },
@@ -740,7 +740,7 @@
     {
         "id": 61,
         "date": "2023-11-26",
-        "name": "直播遊玩Bloons TD 6",
+        "name": "直播遊玩 Bloons TD 6",
         "status": "未開始",
         "description": []
     },
@@ -775,7 +775,7 @@
     {
         "id": 98,
         "date": "2023-12-24",
-        "name": "valorant五連殺或四連殺一次(或三連殺三次)",
+        "name": "valorant 五連殺或四連殺一次(或三連殺三次)",
         "status": "未開始",
         "description": []
     },
@@ -796,21 +796,21 @@
     {
         "id": 99,
         "date": "2024-02-04",
-        "name": "出影片介紹指令的macros",
+        "name": "出影片介紹指令的 macros",
         "status": "未開始",
         "description": []
     },
     {
         "id": 100,
         "date": "2024-04-14",
-        "name": "唱HEYYEYAAEYAAAEYAEYAA",
+        "name": "唱 HEYYEYAAEYAAAEYAEYAA",
         "status": "已完成",
         "description": []
     },
     {
         "id": 101,
         "date": "2024-04-14",
-        "name": "玩Box: the game",
+        "name": "玩 Box: the game",
         "status": "未開始",
         "description": []
     },
@@ -824,7 +824,7 @@
     {
         "id": 103,
         "date": "2024-05-05",
-        "name": "通關At Dead of Night",
+        "name": "通關 At Dead of Night",
         "status": "進行中",
         "description": []
     },
@@ -838,7 +838,7 @@
     {
         "id": 105,
         "date": "2024-05-27",
-        "name": "玩city skyline II",
+        "name": "玩 city skyline II",
         "status": "未開始",
         "description": []
     },
@@ -859,28 +859,28 @@
     {
         "id": 108,
         "date": "2024-06-16",
-        "name": "玩Buckshot Roulette",
+        "name": "玩 Buckshot Roulette",
         "status": "已完成",
         "description": []
     },
     {
         "id": 109,
         "date": "2024-08-25",
-        "name": "唱chipi chipi chapa chapa dubi dubi daba daba",
+        "name": "唱 chipi chipi chapa chapa dubi dubi daba daba",
         "status": "未開始",
         "description": []
     },
     {
         "id": 110,
         "date": "2024-08-25",
-        "name": "玩FNAF 1",
+        "name": "玩 FNAF 1",
         "status": "未開始",
         "description": []
     },
     {
         "id": 111,
         "date": "2024-08-25",
-        "name": "直播玩Palia 直到三項技能升到五級",
+        "name": "直播玩 Palia 直到三項技能升到五級",
         "status": "未開始",
         "description": []
     },
