@@ -10,7 +10,7 @@ import {
     NSelect,
     NInput,
     NModal,
-    NTable,
+    NTable
 } from "naive-ui";
 import {
     Chart as ChartJS,
@@ -25,7 +25,7 @@ import {
     ChartData,
 } from "chart.js";
 import { Bar, Doughnut } from "vue-chartjs";
-import { openLink, openLinks, ofId } from "../../composables/utils.ts";
+import { openLink, openLinks, ofId, ccMix } from "../../composables/utils.ts";
 import penaltyData from "../../assets/data/penalty.json";
 import penaltyStatus from "../../assets/data/penalty_status.json";
 import vodData from "../../assets/data/vod.json";
@@ -145,6 +145,7 @@ const modalContent: Ref<PenaltyDataEntry> = defineModel("modalContent", {
         return value;
     },
 });
+
 </script>
 
 <script lang="ts">
@@ -344,9 +345,24 @@ function vodLinkOfDate(date: string): string[] {
             </template>
         </n-card>
     </n-modal>
+    
+    <n-card size="small" class="mt-2">
+        <div class="text-center text-yellow-200">
+            <div class="text-1xl">
+                {{ ccMix("將滑鼠移至圖表上可查看數量") }}
+            </div>
+        </div>
+    </n-card>
 
-    <n-divider />
+    <n-divider class="!mt-2 !mb-2" />
 
     <PenaltySyntax class="mb-4">
     </PenaltySyntax>
 </template>
+
+<style>
+.n-card {
+    margin-left: 38%;
+    width: 25%;
+}
+</style>
