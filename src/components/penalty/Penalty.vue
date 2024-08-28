@@ -8,6 +8,7 @@ import {
     NGrid,
     NGi,
     NSelect,
+    NIcon,
     NInput,
     NModal,
     NTable
@@ -31,6 +32,7 @@ import penaltyStatus from "../../assets/data/penalty_status.json";
 import vodData from "../../assets/data/vod.json";
 import PenaltySyntax from "./PenaltySyntax.vue";
 import "chartjs-adapter-date-fns";
+import { InfoCircle } from "@vicons/tabler";
 
 ChartJS.register(
     Title,
@@ -345,24 +347,43 @@ function vodLinkOfDate(date: string): string[] {
             </template>
         </n-card>
     </n-modal>
-    
-    <n-card size="small" class="n-card2 mt-2">
+
+    <!-- <n-card size="small" class="n-card2 mt-2">
         <div class="text-center text-yellow-200">
             <div class="text-1xl">
                 {{ ccMix("將滑鼠移至圖表上可查看數量") }}
             </div>
         </div>
-    </n-card>
+    </n-card> -->
+
+    <VaChip
+        class="vachip2 mt-2 mb-4"
+        color="#3d807c"
+    >
+        <n-icon size="25" class="mt-1 mr-2">
+            <InfoCircle/>
+        </n-icon>
+        <div class="text-center text-amber-200">
+            <div class="text-lg mt-1">
+                {{ ccMix("將滑鼠移至圖表上可查看數量") }}
+            </div>
+        </div>
+    </VaChip>
 
     <n-divider class="!mt-2 !mb-2" />
 
-    <PenaltySyntax class="mb-4">
-    </PenaltySyntax>
+    <PenaltySyntax class="mb-4"> </PenaltySyntax>
 </template>
 
 <style>
 .n-card2 {
-    margin-left: 38%;
+    margin-left: 40%;
     width: 25%;
+}
+.vachip2 {
+    margin-left: 38%;
+    --va-chip-border: 0.2rem solid transparent;
+    --va-chip-font-size: 1.15rem;
+    --va-chip-padding: 0 1.2rem;
 }
 </style>
