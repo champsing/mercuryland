@@ -346,7 +346,7 @@ function vodLinkOfDate(date: string): string[] {
         </n-card>
     </n-modal>
     
-    <n-card size="small" class="mt-2">
+    <n-card size="small" class="n-card2 mt-2">
         <div class="text-center text-yellow-200">
             <div class="text-1xl">
                 {{ ccMix("將滑鼠移至圖表上可查看數量") }}
@@ -361,7 +361,7 @@ function vodLinkOfDate(date: string): string[] {
 </template>
 
 <style>
-.n-card {
+.n-card2 {
     margin-left: 38%;
     width: 25%;
 }
