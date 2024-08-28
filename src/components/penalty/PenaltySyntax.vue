@@ -16,7 +16,7 @@ import {
             --n-title-text-color: rgb(11, 118, 225);
         "
     >
-        <n-collapse-item title="懲罰語法" name="punish_syntax">
+        <!-- <n-collapse-item title="懲罰語法" name="punish_syntax">
             <div style="overflow: auto">
                 <n-list bordered>
                     <n-list-item>
@@ -29,7 +29,7 @@ import {
                     </n-list-item>
                 </n-list>
             </div>
-        </n-collapse-item>
+        </n-collapse-item> -->
         <n-collapse-item title="詳細資料" name="more_information">
             <div>
                 <n-list bordered>
