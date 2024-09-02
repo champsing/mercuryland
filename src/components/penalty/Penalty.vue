@@ -13,6 +13,7 @@ import {
     NModal,
     NTable
 } from "naive-ui";
+import { VaChip } from "vuestic-ui";
 import {
     Chart as ChartJS,
     Title,
@@ -33,6 +34,7 @@ import vodData from "../../assets/data/vod.json";
 import PenaltySyntax from "./PenaltySyntax.vue";
 import "chartjs-adapter-date-fns";
 import { InfoCircle } from "@vicons/tabler";
+
 
 ChartJS.register(
     Title,
