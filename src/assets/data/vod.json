@@ -1048,7 +1048,7 @@
         "link": "https://youtube.com/live/0kVUVrhUFNs",
         "title": "【惡靈】去找熊媽媽玩咯",
         "tags": [
-            "Dark Deception","PVZ"
+            "Dark Deception","冰與火之舞","PVZ"
         ],
         "duration": "02:30:47"
     },
@@ -1081,5 +1081,15 @@
             "MC跑酷","Project Playtime"
         ],
         "duration": "02:08:18"
+    },
+    {
+        "id": 126,
+        "date": "2024-09-01",
+        "link": "https://youtube.com/live/aSGI9xIm5iU",
+        "title": "【惡靈】2024年只剩下四個月了！！",
+        "tags": [
+            "MC跑酷","冰與火之舞"
+        ],
+        "duration": "02:06:50"
     }
 ]
