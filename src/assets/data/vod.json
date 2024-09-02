@@ -1061,5 +1061,25 @@
             "MC游乐园生存","Buckshot Roulette"
         ],
         "duration": "02:06:09"
+    },
+    {
+        "id": 124,
+        "date": "2024-08-18",
+        "link": "https://youtube.com/live/q7-X8jxXlek",
+        "title": "【惡靈】不是故意遲到的，是有心的",
+        "tags": [
+            "MC跑酷","深夜放送"
+        ],
+        "duration": "02:51:18"
+    },
+    {
+        "id": 125,
+        "date": "2024-08-25",
+        "link": "https://youtube.com/live/g4VzAZRvDzw",
+        "title": "【惡靈】耍廢直菠蘿",
+        "tags": [
+            "MC跑酷","Project Playtime"
+        ],
+        "duration": "02:08:18"
     }
 ]
