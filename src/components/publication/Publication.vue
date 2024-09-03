@@ -9,8 +9,8 @@ import Archive from './Archive.vue';
 <template>
     <!-- 如果沒有新版本水星法可以註解起來 -->
         <!-- <NewLaw>
-        </NewLaw>
-    <n-divider /> -->
+        </NewLaw> -->
+    <n-divider />
         <div class="text-4xl text-neutral-100 text-left mt-4 mb-6">
             {{ ccMix("法規與資料") }}
         </div>
