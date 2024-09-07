@@ -51,7 +51,7 @@ function parseOptions(law_document: typeof lawDocument) {
 </script>
 
 <template>
-    <VaSplit :model-value="40">
+    <VaSplit :model-value="40" :limits="[40, 30]">
         <template #start>
             <!-- need to be 23% -->
             <VaMenuList
