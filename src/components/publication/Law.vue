@@ -3,7 +3,6 @@ import { Ref, ref } from "vue";
 import { NIcon } from "naive-ui";
 import { VaButton, VaDivider, VaSplit, VaMenuList } from "vuestic-ui";
 import lawDocument from "@assets/data/law_document.json";
-import NewLaw from "./NewLaw.vue";
 import { WindowNew20Filled } from "@vicons/fluent";
 import { ccMix, openLink } from "@/composables/utils";
 </script>
@@ -52,7 +51,6 @@ function parseOptions(law_document: typeof lawDocument) {
 </script>
 
 <template>
-    <NewLaw class="mb-4" />
     <VaSplit :model-value="40" :limits="[40, 30]">
         <template #start>
             <!-- need to be 23% -->
