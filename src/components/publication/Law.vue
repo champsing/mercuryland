@@ -3,6 +3,7 @@ import { Ref, ref } from "vue";
 import { NIcon } from "naive-ui";
 import { VaButton, VaDivider, VaSplit, VaMenuList } from "vuestic-ui";
 import lawDocument from "@assets/data/law_document.json";
+import NewLaw from "./NewLaw.vue";
 import { WindowNew20Filled } from "@vicons/fluent";
 import { ccMix, openLink } from "@/composables/utils";
 </script>
@@ -51,6 +52,7 @@ function parseOptions(law_document: typeof lawDocument) {
 </script>
 
 <template>
+    <NewLaw class="mb-4" />
     <VaSplit :model-value="40" :limits="[40, 30]">
         <template #start>
             <!-- need to be 23% -->
@@ -60,7 +62,7 @@ function parseOptions(law_document: typeof lawDocument) {
                 @selected="(doc) => findCurrentDoc(doc.text)"
             />
             <!-- group name too low, need mb-2 -->
-            <VaDivider class="mt-2" />
+            <VaDivider class="mt-8" />
             <div class="text-zinc-300 text-center text-3xl mt-4">
                 {{ ccMix(currentDocument.name) }}
             </div>
@@ -75,10 +77,10 @@ function parseOptions(law_document: typeof lawDocument) {
                     color="#38b67d"
                     @click="openLink(currentDocument.url)"
                 >
-                    <n-icon>
+                    <n-icon size="30">
                         <WindowNew20Filled/>
                     </n-icon>
-                    <div class="mt-1 mr-2 text-center">
+                    <div class="mt-1 ml-2 mr-2 text-center">
                         {{ ccMix("在新分頁開啟") }}
                     </div>
                 </VaButton>
@@ -87,12 +89,13 @@ function parseOptions(law_document: typeof lawDocument) {
         <template #end>
             <!-- need calciFrameHeight() -->
             <iframe
-                class="ml-4"
+                class="ml-2"
                 width="800"
                 height="600"
                 frameborder="0"
                 :src="currentDocument.url"
                 title="preview iframe"
+                item-responsive
             >
             </iframe>
         </template>

@@ -1,25 +1,40 @@
 <script setup lang="ts">
-import { NGrid, NGi } from 'naive-ui';
-import { ccMix } from '@/composables/utils';
+import { NGrid, NGi, NIcon } from "naive-ui";
+import { ccMix } from "@/composables/utils";
+
+const publishDate = "2024 年 6 月 24 日";
+const effectiveDate = "2024 年 7 月 1 日";
 </script>
 
 <template>
-    <n-grid x-gap="12" y-gap="12" cols="3" class="w-11/12" item-responsive>
-        <n-gi span="3 800:1"></n-gi>
-        <n-gi span="3 800:1">
-            <iframe 
-                width="410" height="400" 
-                src="https://drive.google.com/file/d/1Lti-30AKf4cz9feAp6sfxyT0p82awT2F/preview?usp=drive_link" 
-                title="水星法公告版本"
-            >
-            </iframe>
-            <div class="text-2xl text-neutral-100 text-center mt-4 mr-10">
-                {{ ccMix("《水星法》公告版本") }}
-            </div>
-            <div class="text-1xl text-neutral-100 text-center mt-4 mr-8">
-                {{ ccMix("公告一週後實施。") }}
+    <n-grid x-gap="12" y-gap="12" cols="2" class="w-11/12" item-responsive>
+        <n-gi span="6 800:1">
+            <n-icon> </n-icon>
+            <div class="ml-20">
+                <div class="text-4xl text-red-400 text-center mt-24">
+                    {{ ccMix("《水星法》新法公告") }}
+                </div>
+                <div class="text-1xl text-red-400 text-center mt-4">
+                    {{ ccMix("修訂之條文於公告一週後實施。") }}
+                </div>
+                <div class="text-1xl text-lime-400 text-center mt-4">
+                    {{ ccMix("公告日期：") + publishDate }}
+                </div>
+                <div
+                    class="text-3xl text-emerald-200 text-center font-bold mt-4"
+                >
+                    {{ ccMix("生效日期：") + effectiveDate }}
+                </div>
             </div>
         </n-gi>
-        <n-gi span="3 800:1"></n-gi>
+        <n-gi span="6 800:1" class="ml-20">
+            <iframe
+                width="410"
+                height="400"
+                src="https://drive.google.com/file/d/1Lti-30AKf4cz9feAp6sfxyT0p82awT2F/preview?usp=drive_link"
+                title="水星法新法公告"
+            >
+            </iframe>
+        </n-gi>
     </n-grid>
 </template>
