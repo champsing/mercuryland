@@ -78,7 +78,7 @@ function parseOptions(law_document: typeof lawDocument) {
                     <n-icon size="30">
                         <WindowNew20Filled/>
                     </n-icon>
-                    <div class="mt-1 ml-2 mr-2 text-center">
+                    <div class="ml-2 mr-2 text-center">
                         {{ ccMix("在新分頁開啟") }}
                     </div>
                 </VaButton>
@@ -93,7 +93,6 @@ function parseOptions(law_document: typeof lawDocument) {
                 frameborder="0"
                 :src="currentDocument.url"
                 title="preview iframe"
-                item-responsive
             >
             </iframe>
         </template>
