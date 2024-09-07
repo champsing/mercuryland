@@ -43,7 +43,6 @@ function parseOptions(law_document: typeof lawDocument) {
         optionArray[i] = {
             id: law_document[i].id,
             text: law_document[i].name,
-            value: law_document[i].name,
             group: law_document[i].group,
         };
     }
