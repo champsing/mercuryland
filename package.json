@@ -10,6 +10,7 @@
     },
     "dependencies": {
         "@ashwamegh/vue-link-preview": "^3.3.0",
+        "@vicons/fluent": "^0.12.0",
         "@vicons/tabler": "^0.12.0",
         "@vueuse/components": "^10.11.0",
         "@vueuse/core": "^10.11.0",
