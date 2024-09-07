@@ -52,7 +52,7 @@ function parseOptions(law_document: typeof lawDocument) {
 </script>
 
 <template>
-    <VaSplit class="doc-split">
+    <VaSplit :model-value="40">
         <template #start>
             <!-- need to be 23% -->
             <VaMenuList
@@ -61,14 +61,14 @@ function parseOptions(law_document: typeof lawDocument) {
                 @selected="(doc) => findCurrentDoc(doc.text)"
             />
             <!-- group name too low, need mb-2 -->
-            <VaDivider />
+            <VaDivider class="mt-2" />
             <div class="text-zinc-300 text-center text-3xl mt-4">
                 {{ ccMix(currentDocument.name) }}
             </div>
             <div class="text-zinc-300 text-center text-lg mt-4">
                 {{ ccMix(currentDocument.description) }}
             </div>
-            <div>
+            <div class="text-center mt-3">
                 <!-- need further adjust -->
                 <VaButton
                     round
@@ -86,9 +86,10 @@ function parseOptions(law_document: typeof lawDocument) {
             </div>
         </template>
         <template #end>
+            <!-- need calciFrameHeight() -->
             <iframe
                 class="ml-4"
-                width="625"
+                width="800"
                 height="600"
                 frameborder="0"
                 :src="currentDocument.url"
