@@ -67,7 +67,7 @@ function parseOptions(law_document: typeof lawDocument) {
             <div class="text-zinc-300 text-center text-lg mt-4">
                 {{ ccMix(currentDocument.description) }}
             </div>
-            <div class="text-center mt-3">
+            <div class="text-center mt-5">
                 <!-- need further adjust -->
                 <VaButton
                     round
@@ -75,7 +75,7 @@ function parseOptions(law_document: typeof lawDocument) {
                     color="#38b67d"
                     @click="openLink(currentDocument.url)"
                 >
-                    <n-icon size="30">
+                    <n-icon size="25">
                         <WindowNew20Filled/>
                     </n-icon>
                     <div class="ml-2 mr-2 text-center">
