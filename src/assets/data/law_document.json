@@ -3,30 +3,35 @@
         "id": 1,
         "name": "《水星法》",
         "description": "水星伺服器法律支柱。",
-        "url": "https://drive.google.com/file/d/17zIPRyN0BpR7TU10ARDJwkKVV-zLpsz8/preview?usp=drive_link"
+        "url": "https://drive.google.com/file/d/17zIPRyN0BpR7TU10ARDJwkKVV-zLpsz8/preview?usp=drive_link",
+        "group": "文件"
     },
     {
         "id": 2,
         "name": "《水星伺服器破壞舉報獎勵規則》",
         "description": "舉報破壞伺服器和平的玩家。",
-        "url": "https://drive.google.com/file/d/1Imw336b2-dnXVQ1dePxOtopQrtRlBoxh/preview?usp=drive_link"
+        "url": "https://drive.google.com/file/d/1Imw336b2-dnXVQ1dePxOtopQrtRlBoxh/preview?usp=drive_link",
+        "group": "文件"
     },
     {
         "id": 3,
         "name": "《水星伺服器性能保護法》",
         "description": "保護伺服器的穩定運作。",
-        "url": "https://docs.google.com/document/d/14MiEMa45ubcNPay2V8XUEFi_rdZFdaeA4TgOn7hk7Iw/preview"
+        "url": "https://docs.google.com/document/d/14MiEMa45ubcNPay2V8XUEFi_rdZFdaeA4TgOn7hk7Iw/preview",
+        "group": "文件"
     },
     {
         "id": 4,
-        "name": "申請模組",
-        "description": "您可以在此申請模組。",
-        "url": "https://forms.gle/qx9XRHhuojAf7hPj9"
+        "name": "《水星伺服器公開資料清冊》",
+        "description": "保護伺服器的穩定運作。",
+        "url": "https://docs.google.com/spreadsheets/d/1srqIISm1Dn908trUeRZgarB5p_2xmdmtK0HGzMEz-yM/preview?usp=drive_link",
+        "group":"試算表"
     },
     {
         "id": 5,
-        "name": "《水星伺服器公開資料清冊》",
-        "description": "保護伺服器的穩定運作。",
-        "url": "https://docs.google.com/spreadsheets/d/1srqIISm1Dn908trUeRZgarB5p_2xmdmtK0HGzMEz-yM/preview?usp=drive_link"
+        "name": "申請模組",
+        "description": "您可以在此申請模組。",
+        "url": "https://forms.gle/qx9XRHhuojAf7hPj9",
+        "group":"表單"
     }
 ]
