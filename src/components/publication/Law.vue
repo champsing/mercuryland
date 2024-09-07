@@ -1,60 +1,43 @@
 <script setup lang="ts">
-import { Ref, ref } from "vue";
-import { VaSplit, VaTab, VaTabs } from "vuestic-ui";
+import { ref } from "vue";
+import { VaSplit, VaMenuList } from "vuestic-ui";
 import lawDocument from "@assets/data/law_document.json";
 
-let docTabValue: Ref<{
-    name: string;
-    link: string;
-}> = defineModel("docTabValue", {
-    default: { name: docList[0], link: docLink[0] },
-    set(value) {
-        let currentTab = ref<number | null>(0); //current tab
-        if (currentTab.value < docList.length) currentTab.value++;
-        else currentTab.value = 0;
-        value.name = docList[currentTab.value];
-        value.link = docLink[currentTab.value];
-        return value;
-    },
-});
+function findDocId(doc: string) {
+    let currentDocument = lawDocument.filter((v) => v.name == doc)[0];
+    previewLink.value = currentDocument.url;
+    
+}
 </script>
 
 <script select-doc lang="ts">
-let docList = lawDocument.map((x) => x.name);
-let docLink = lawDocument.map((x) => x.url);
+let docList = lawDocument.map((x) => x.name)
+let previewLink = ref("")
 </script>
 
 <template>
     <VaSplit class="doc-split">
         <template #start>
             <!-- need to be 23% -->
-            <!-- v-model still not change -->
-            <VaTabs
-                v-model=docTabValue.name
-                class="doc-tab"
-                color="#6794db"
-                vertical
-            >
-                <div class="text-white text-2xl">
-                    <VaTab v-for="title in docList" :key="title" :name="title">
-                        {{ title }}
-                    </VaTab>
-                </div>
-            </VaTabs>
+            <VaMenuList
+                class="text-white text-2xl"
+                :options=docList
+                @selected="(doc) => findDocId(doc)"
+            />
         </template>
-        <template #end v-for="link in docLink">
-            <!-- need to update link alongside title -->
+        <template #end>
             <iframe
                 class="ml-4"
                 width="625"
                 height="600"
                 frameborder="0"
-                :src="`${link}`"
+                :src=previewLink.valueOf()
                 title="preview iframe"
             >
             </iframe>
         </template>
     </VaSplit>
+    <!-- need description text and button to openLink() -->
 </template>
 
 <style lang="scss" scoped>
