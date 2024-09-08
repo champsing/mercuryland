@@ -54,7 +54,7 @@ function parseOptions(law_document: typeof lawDocument) {
     <VaSplit :model-value="40" disabled>
         <template #start>
             <VaMenuList
-                class="text-white text-lg doc-menu-hover"
+                class="text-white text-normal doc-menu-hover"
                 :options="docOptions"
                 @selected="(doc) => findCurrentDoc(doc.text)"
             />
