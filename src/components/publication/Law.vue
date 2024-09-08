@@ -15,13 +15,6 @@ class LawDocEntry {
     url: string;
 }
 
-class LawMenuEntry {
-    id: number;
-    text: string;
-    value: string;
-    group: string;
-}
-
 let currentDocument: Ref<LawDocEntry> = ref({
     id: 0,
     name: "《水星法》",
@@ -33,8 +26,6 @@ let currentDocument: Ref<LawDocEntry> = ref({
 function findCurrentDoc(doc: string) {
     currentDocument.value = lawDocument.filter((v) => v.name == doc)[0];
 }
-
-let docOptions: Ref<LawMenuEntry[]> = ref(parseOptions(lawDocument));
 
 function parseOptions(law_document: typeof lawDocument) {
     let optionArray = [];
@@ -54,7 +45,7 @@ function parseOptions(law_document: typeof lawDocument) {
         <template #start>
             <VaMenuList
                 class="text-white text-normal doc-menu-hover"
-                :options="docOptions"
+                :options="parseOptions(lawDocument)"
                 @selected="(doc) => findCurrentDoc(doc.text)"
             />
             <!-- group name too low, need mb-2 -->
