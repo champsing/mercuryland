@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { Ref, ref } from "vue";
 import { NIcon } from "naive-ui";
-import { VaButton, VaDivider, VaSplit, VaMenuList } from "vuestic-ui";
+import { VaButton, VaDivider, VaSplit } from "vuestic-ui";
+import { VaMenuList } from "vuestic-ui-customized";
 import lawDocument from "@assets/data/law_document.json";
 import { WindowNew20Filled } from "@vicons/fluent";
 import { ccMix, openLink } from "@/composables/utils";
