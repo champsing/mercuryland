@@ -1,8 +1,7 @@
 <script setup lang="ts">
 import { Ref, ref } from "vue";
 import { NIcon } from "naive-ui";
-import { VaButton, VaDivider, VaSplit } from "vuestic-ui";
-import { VaMenuList } from "vuestic-ui-customized";
+import { VaButton, VaDivider, VaSplit, VaMenuList } from "vuestic-ui";
 import lawDocument from "@assets/data/law_document.json";
 import { WindowNew20Filled } from "@vicons/fluent";
 import { ccMix, openLink } from "@/composables/utils";
@@ -54,7 +53,6 @@ function parseOptions(law_document: typeof lawDocument) {
 <template>
     <VaSplit :model-value="40" disabled>
         <template #start>
-            <!-- need to be 23% -->
             <VaMenuList
                 class="text-white text-lg doc-menu-hover"
                 :options="docOptions"
@@ -77,7 +75,7 @@ function parseOptions(law_document: typeof lawDocument) {
                     @click="openLink(currentDocument.url)"
                 >
                     <n-icon size="25">
-                        <WindowNew20Filled/>
+                        <WindowNew20Filled />
                     </n-icon>
                     <div class="ml-2 mr-2 text-center">
                         {{ ccMix("在新分頁開啟") }}
