@@ -51,7 +51,7 @@ function parseOptions(law_document: typeof lawDocument) {
 </script>
 
 <template>
-    <VaSplit :model-value="40" :limits="[40, 30]">
+    <VaSplit :model-value="40" disabled>
         <template #start>
             <!-- need to be 23% -->
             <VaMenuList
@@ -93,8 +93,7 @@ function parseOptions(law_document: typeof lawDocument) {
                 frameborder="0"
                 :src="currentDocument.url"
                 title="preview iframe"
-            >
-            </iframe>
+            />
         </template>
     </VaSplit>
 </template>
