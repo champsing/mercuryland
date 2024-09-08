@@ -31,8 +31,7 @@ let currentDocument: Ref<LawDocEntry> = ref({
 });
 
 function findCurrentDoc(doc: string) {
-    let target = lawDocument.filter((v) => v.name == doc)[0];
-    currentDocument.value = target;
+    currentDocument.value = lawDocument.filter((v) => v.name == doc)[0];
 }
 
 let docOptions: Ref<LawMenuEntry[]> = ref(parseOptions(lawDocument));
