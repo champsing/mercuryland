@@ -11,7 +11,7 @@ import {
     NIcon,
     NInput,
     NModal,
-    NTable
+    NTable,
 } from "naive-ui";
 import {
     Chart as ChartJS,
@@ -147,7 +147,6 @@ const modalContent: Ref<PenaltyDataEntry> = defineModel("modalContent", {
         return value;
     },
 });
-
 </script>
 
 <script lang="ts">
@@ -356,12 +355,9 @@ function vodLinkOfDate(date: string): string[] {
         </div>
     </n-card> -->
 
-    <VaChip
-        class="vachip2 mt-2 mb-4"
-        color="#3d807c"
-    >
+    <VaChip class="vachip2 mt-2 mb-4" color="#3d807c">
         <n-icon size="25" class="mt-1 mr-2">
-            <InfoCircle/>
+            <InfoCircle />
         </n-icon>
         <div class="text-center text-amber-200">
             <div class="text-lg mt-1">
