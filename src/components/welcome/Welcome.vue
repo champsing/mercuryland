@@ -5,9 +5,9 @@ import Slide3 from "./Slide3.vue";
 import Slide4 from "./Slide4.vue";
 import Slide5 from "./Slide5.vue";
 
-const emit = defineEmits<{
-    (e: "toTab", tab: string): void;
-}>();
+// const emit = defineEmits<{
+//     (e: "toTab", tab: string): void;
+// }>();
 </script>
 
 <template>
