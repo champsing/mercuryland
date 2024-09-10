@@ -33,8 +33,8 @@ function next() {
 }
 
 function prev() {
-    if (currentStep.value === 0) currentStep.value = null;
-    else if (currentStep.value === null) currentStep.value = 4;
+    if (currentStep.value === null) currentStep.value = 0;
+    else if (currentStep.value <= 0) currentStep.value = 4;
     else currentStep.value--;
 }
 </script>

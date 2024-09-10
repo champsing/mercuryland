@@ -11,7 +11,7 @@ import {
     NIcon,
     NInput,
     NModal,
-    NTable
+    NTable,
 } from "naive-ui";
 import { VaChip } from "vuestic-ui";
 import {
@@ -27,10 +27,10 @@ import {
     ChartData,
 } from "chart.js";
 import { Bar, Doughnut } from "vue-chartjs";
-import { openLink, openLinks, ofId, ccMix } from "../../composables/utils.ts";
-import penaltyData from "../../assets/data/penalty.json";
-import penaltyStatus from "../../assets/data/penalty_status.json";
-import vodData from "../../assets/data/vod.json";
+import { openLink, openLinks, ofId, ccMix } from "@composables/utils.ts";
+import penaltyData from "@assets/data/penalty.json";
+import penaltyStatus from "@assets/data/penalty_status.json";
+import vodData from "@assets/data/vod.json";
 import PenaltySyntax from "./PenaltySyntax.vue";
 import "chartjs-adapter-date-fns";
 import { InfoCircle } from "@vicons/tabler";
@@ -149,7 +149,6 @@ const modalContent: Ref<PenaltyDataEntry> = defineModel("modalContent", {
         return value;
     },
 });
-
 </script>
 
 <script lang="ts">
@@ -358,12 +357,9 @@ function vodLinkOfDate(date: string): string[] {
         </div>
     </n-card> -->
 
-    <VaChip
-        class="vachip2 mt-2 mb-4"
-        color="#3d807c"
-    >
+    <VaChip class="vachip2 mt-2 mb-4" color="#3d807c">
         <n-icon size="25" class="mt-1 mr-2">
-            <InfoCircle/>
+            <InfoCircle />
         </n-icon>
         <div class="text-center text-amber-200">
             <div class="text-lg mt-1">
