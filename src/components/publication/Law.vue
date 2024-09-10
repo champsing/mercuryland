@@ -1,105 +1,100 @@
 <script setup lang="ts">
-import { NButton, NGrid, NGi } from 'naive-ui';
-import { ccMix, openLink } from '@/composables/utils';
+import { Ref, ref } from "vue";
+import { NIcon } from "naive-ui";
+import { VaButton, VaDivider, VaSplit, VaMenuList } from "vuestic-ui";
+import lawDocument from "@assets/data/law_document.json";
+import { WindowNew20Filled } from "@vicons/fluent";
+import { ccMix, openLink } from "@/composables/utils";
+</script>
+
+<script select-doc lang="ts">
+class LawDocEntry {
+    id: number;
+    name: string;
+    description: string;
+    url: string;
+}
+
+let currentDocument: Ref<LawDocEntry> = ref({
+    id: 0,
+    name: "《水星法》",
+    description: "水星伺服器法律支柱。",
+    url: "https://drive.google.com/file/d/17zIPRyN0BpR7TU10ARDJwkKVV-zLpsz8/preview?usp=drive_link",
+    group: "",
+});
+
+function findCurrentDoc(doc: string) {
+    currentDocument.value = lawDocument.filter((v) => v.name == doc)[0];
+}
+
+function parseOptions(law_document: typeof lawDocument) {
+    let optionArray = [];
+    for (let i = 0; i < law_document.length; i++) {
+        optionArray[i] = {
+            id: law_document[i].id,
+            text: law_document[i].name,
+            group: law_document[i].group,
+        };
+    }
+    return optionArray;
+}
 </script>
 
 <template>
-    <n-grid x-gap="12" y-gap="12" cols="3" class="w-11/12" item-responsive>
-        <n-gi span="3 800:1">
-            <iframe 
-                width="410" height="400" 
+    <VaSplit :model-value="40" disabled>
+        <template #start>
+            <VaMenuList
+                class="text-white text-normal doc-menu-hover"
+                :options="parseOptions(lawDocument)"
+                @selected="(doc) => findCurrentDoc(doc.text)"
+            />
+            <!-- group name too low, need mb-2 -->
+            <VaDivider class="mt-8" />
+            <div class="text-zinc-300 text-center text-3xl mt-4">
+                {{ ccMix(currentDocument.name) }}
+            </div>
+            <div class="text-zinc-300 text-center text-lg mt-4">
+                {{ ccMix(currentDocument.description) }}
+            </div>
+            <div class="text-center mt-5">
+                <!-- need further adjust -->
+                <VaButton
+                    round
+                    size="medium"
+                    color="#38b67d"
+                    @click="openLink(currentDocument.url)"
+                >
+                    <n-icon size="25">
+                        <WindowNew20Filled />
+                    </n-icon>
+                    <div class="ml-2 mr-2 text-center">
+                        {{ ccMix("在新分頁開啟") }}
+                    </div>
+                </VaButton>
+            </div>
+        </template>
+        <template #end>
+            <!-- need calciFrameHeight() -->
+            <iframe
+                class="ml-2"
+                width="800"
+                height="600"
                 frameborder="0"
-                src="https://drive.google.com/file/d/17zIPRyN0BpR7TU10ARDJwkKVV-zLpsz8/preview?usp=drive_link" 
-                title="水星法"
-            >
-            </iframe>
-            <div class="text-2xl text-neutral-100 text-center mt-4 mr-10">
-                    {{ ccMix("《水星法》") }}
-            </div>
-            <div class="text-1xl text-neutral-100 text-center mt-4 mr-8">
-                {{ ccMix("水星伺服器法律支柱。") }}
-            </div>
-        </n-gi>
-        <n-gi span="3 800:1">
-            <iframe 
-                width="410" height="400" 
-                frameborder="0"
-                src="https://drive.google.com/file/d/1Imw336b2-dnXVQ1dePxOtopQrtRlBoxh/preview?usp=drive_link" 
-                title="水星伺服器破壞舉報獎勵規則"
-            >
-            </iframe>
-            <div class="text-2xl text-neutral-100 text-center mt-4 mr-2">
-                {{ ccMix("《水星伺服器破壞舉報獎勵規則》") }}
-            </div>
-            <div class="text-1xl text-neutral-100 text-center mt-4 mr-4">
-                {{ ccMix("舉報破壞伺服器和平的玩家。") }}
-            </div>
-        </n-gi>
-        <n-gi span="3 800:1">
-            <iframe 
-                width="410" height="400" 
-                frameborder="0"
-                src="https://docs.google.com/document/d/14MiEMa45ubcNPay2V8XUEFi_rdZFdaeA4TgOn7hk7Iw/preview" 
-                title="水星伺服器性能保護法"
-            >
-            </iframe>
-            <n-button
-            :text="true"
-            @click="openLink('https://docs.google.com/document/d/14MiEMa45ubcNPay2V8XUEFi_rdZFdaeA4TgOn7hk7Iw/preview')"
-            class="ml-14"
-            >
-                <div class="text-2xl text-neutral-100 text-center mt-4 mr-10">
-                    {{ ccMix("《水星伺服器性能保護法》") }}
-                    
-                </div>
-            </n-button>
-            <div class="text-1xl text-neutral-100 text-center mt-4 mr-2">
-                {{ ccMix("保護伺服器的穩定運作。") }}
-            </div>
-        </n-gi>
-    </n-grid>
-    <n-grid x-gap="12" y-gap="12" cols="3" class="w-11/12 mt-4" item-responsive>
-        <n-gi span="3 800:1">
-            <iframe 
-                width="410" height="400" 
-                frameborder="0"
-                src="https://forms.gle/qx9XRHhuojAf7hPj9" 
-                title="申請模組"
-            >
-            </iframe>
-            <n-button
-            :text="true"
-            @click="openLink('https://forms.gle/qx9XRHhuojAf7hPj9')"
-            class="ml-36"
-            >
-                <div class="text-2xl text-neutral-100 text-center mt-4 mr-10">
-                    {{ ccMix("申請模組") }}
-                </div>
-            </n-button>
-            <div class="text-1xl text-neutral-100 text-center mt-4 mr-4">
-                {{ ccMix("您可以在此申請模組。") }}
-            </div>
-        </n-gi>
-        <n-gi span="3 800:1">
-            <iframe 
-                width="410" height="400" 
-                frameborder="0"
-                src="https://docs.google.com/spreadsheets/d/1srqIISm1Dn908trUeRZgarB5p_2xmdmtK0HGzMEz-yM/preview?usp=drive_link" 
-                title="水星伺服器公開資料清冊"
-            >
-            </iframe>
-            <n-button
-            :text="true"
-            @click="openLink('https://docs.google.com/spreadsheets/d/1srqIISm1Dn908trUeRZgarB5p_2xmdmtK0HGzMEz-yM/preview?usp=drive_link')"
-            class="ml-12"
-            >
-                <div class="text-2xl text-neutral-100 text-center mt-4 mr-10">
-                    {{ ccMix("《水星伺服器公開資料清冊》") }}
-                </div>
-            </n-button>
-            <div class="text-1xl text-neutral-100 text-center mt-4 mr-8">
-                {{ ccMix("查詢您的申請資料。") }}
-            </div>
-        </n-gi>
-    </n-grid> 
+                :src="currentDocument.url"
+                title="preview iframe"
+            />
+        </template>
+    </VaSplit>
 </template>
+
+<style lang="scss" scoped>
+.color-picker {
+    color: #38b67d;
+}
+.doc-menu-hover {
+    --va-menu-item-hover-color: #e13535;
+    --va-menu-item-hover-opacity: 0.6;
+    --va-menu-padding-x: 8px;
+    --va-menu-padding-y: 10px;
+}
+</style>

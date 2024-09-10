@@ -13,6 +13,7 @@ import {
     NModal,
     NTable,
 } from "naive-ui";
+import { VaChip } from "vuestic-ui";
 import {
     Chart as ChartJS,
     Title,
@@ -33,6 +34,7 @@ import vodData from "@assets/data/vod.json";
 import PenaltySyntax from "./PenaltySyntax.vue";
 import "chartjs-adapter-date-fns";
 import { InfoCircle } from "@vicons/tabler";
+
 
 ChartJS.register(
     Title,
@@ -368,7 +370,7 @@ function vodLinkOfDate(date: string): string[] {
 
     <n-divider class="!mt-2 !mb-2" />
 
-    <PenaltySyntax class="mb-4"> </PenaltySyntax>
+    <PenaltySyntax class="mb-4" />
 </template>
 
 <style>
