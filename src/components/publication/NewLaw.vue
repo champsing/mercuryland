@@ -28,6 +28,7 @@ const effectiveDate = "2024 年 7 月 1 日";
             </div>
         </n-gi>
         <n-gi span="10 800:1" class="-ml-20">
+            <!-- want to integrate within the viewer in Law.vue -->
             <iframe
                 width="700"
                 height="400"
