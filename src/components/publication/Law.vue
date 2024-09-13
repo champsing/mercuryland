@@ -4,7 +4,7 @@ import { NIcon } from "naive-ui";
 import { VaButton, VaDivider, VaSplit, VaMenuList } from "vuestic-ui";
 import lawDocument from "@assets/data/law_document.json";
 import { WindowNew20Filled } from "@vicons/fluent";
-import { ccMix, openLink } from "@/composables/utils";
+import { openLink } from "@/composables/utils";
 </script>
 
 <script select-doc lang="ts">
@@ -51,10 +51,10 @@ function parseOptions(law_document: typeof lawDocument) {
             <!-- group name too low, need mb-2 -->
             <VaDivider class="mt-8" />
             <div class="text-zinc-300 text-center text-3xl mt-4">
-                {{ ccMix(currentDocument.name) }}
+                {{ currentDocument.name }}
             </div>
             <div class="text-zinc-300 text-center text-lg mt-4">
-                {{ ccMix(currentDocument.description) }}
+                {{ currentDocument.description }}
             </div>
             <div class="text-center mt-5">
                 <!-- need further adjust -->
@@ -68,7 +68,7 @@ function parseOptions(law_document: typeof lawDocument) {
                         <WindowNew20Filled />
                     </n-icon>
                     <div class="ml-2 mr-2 text-center">
-                        {{ ccMix("在新分頁開啟") }}
+                        在新分頁開啟
                     </div>
                 </VaButton>
             </div>

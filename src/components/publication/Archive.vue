@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { NButton, NCard, NGrid, NGi } from 'naive-ui';
-import { ccMix, openLink } from '@/composables/utils';
+import { openLink } from '@/composables/utils';
 </script>
 
 <template>
@@ -21,11 +21,11 @@ import { ccMix, openLink } from '@/composables/utils';
                         @click="openLink('https://www.mediafire.com/file/91h9afekvfnuymi/mercury_world.rar/file')"
                         >
                         <div class="text-2xl text-neutral-100 mt-4">
-                            {{ ccMix("第一季") }}
+                            第一季
                         </div>
                         </n-button>
                         <br/>
-                            {{ ccMix("[點擊下載]") }}
+                            [點擊下載]
                         
                     </div>
                 </div>
@@ -40,7 +40,7 @@ import { ccMix, openLink } from '@/composables/utils';
             >
             </iframe>
             <div class="text-2xl text-neutral-100 text-center mt-4 mr-8">
-                {{ ccMix("第二～五季") }}
+                第二～五季
             </div>
         </n-gi>
         <n-gi span="3 800:1">
@@ -52,7 +52,7 @@ import { ccMix, openLink } from '@/composables/utils';
             >
             </iframe>
             <div class="text-2xl text-neutral-100 text-center mt-4 mr-8">
-                {{ ccMix("第六、七季") }}
+                第六、七季
             </div>
         </n-gi>
     </n-grid>
@@ -66,7 +66,7 @@ import { ccMix, openLink } from '@/composables/utils';
             >
             </iframe>
             <div class="text-2xl text-neutral-100 text-center mt-4 mr-8">
-                {{ ccMix("第八季") }}
+                第八季
             </div>
         </n-gi>
     </n-grid>

@@ -27,7 +27,7 @@ import {
     ChartData,
 } from "chart.js";
 import { Bar, Doughnut } from "vue-chartjs";
-import { openLink, openLinks, ofId, ccMix } from "@composables/utils.ts";
+import { openLink, openLinks, ofId } from "@composables/utils.ts";
 import penaltyData from "@assets/data/penalty.json";
 import penaltyStatus from "@assets/data/penalty_status.json";
 import vodData from "@assets/data/vod.json";
@@ -349,21 +349,13 @@ function vodLinkOfDate(date: string): string[] {
         </n-card>
     </n-modal>
 
-    <!-- <n-card size="small" class="n-card2 mt-2">
-        <div class="text-center text-yellow-200">
-            <div class="text-1xl">
-                {{ ccMix("將滑鼠移至圖表上可查看數量") }}
-            </div>
-        </div>
-    </n-card> -->
-
     <VaChip class="vachip2 mt-2 mb-4" color="#3d807c">
         <n-icon size="25" class="mt-1 mr-2">
             <InfoCircle />
         </n-icon>
         <div class="text-center text-amber-200">
             <div class="text-lg mt-1">
-                {{ ccMix("將滑鼠移至圖表上可查看數量") }}
+                將滑鼠移至圖表上可查看數量
             </div>
         </div>
     </VaChip>

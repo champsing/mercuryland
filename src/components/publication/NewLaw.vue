@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { NGrid, NGi } from "naive-ui";
-import { ccMix } from "@/composables/utils";
 
 const publishDate = "2024 年 6 月 24 日";
 const effectiveDate = "2024 年 7 月 1 日";
@@ -12,18 +11,18 @@ const effectiveDate = "2024 年 7 月 1 日";
             <!-- <n-icon> </n-icon> -->
             <div class="-ml-28">
                 <div class="text-4xl text-red-400 text-center mt-24">
-                    {{ ccMix("《水星法》新法公告") }}
+                    《水星法》新法公告
                 </div>
                 <div class="text-2xl text-red-400 text-center mt-4">
-                    {{ ccMix("修訂之條文於公告一週後實施。") }}
+                    修訂之條文於公告一週後實施。
                 </div>
                 <div class="text-2xl text-lime-400 text-center mt-4">
-                    {{ ccMix("公告日期：") + publishDate }}
+                    公告日期：{{ publishDate }}
                 </div>
                 <div
                     class="text-3xl text-emerald-200 text-center font-bold mt-4"
                 >
-                    {{ ccMix("生效日期：") + effectiveDate }}
+                    生效日期：{{ effectiveDate }}
                 </div>
             </div>
         </n-gi>

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { NGrid, NGi, NDivider, NButton } from "naive-ui";
-import { ccMix, openLinkSameTab } from "@/composables/utils";
+import { openLinkSameTab } from "@/composables/utils";
 import ReturnTopButton from "./ReturnTopButton.vue";
 
 // const emit = defineEmits<{
@@ -38,15 +38,15 @@ import ReturnTopButton from "./ReturnTopButton.vue";
             <n-gi span="2 768:1" class="relative">
                 <div class="absolute y-center x-center">
                     <div class="text-cyan-400 font-bold text-6xl">
-                        {{ ccMix("還在猶豫什麼？")}}
+                        "還在猶豫什麼？"
                     </div>
                     <n-divider />
                     <div class="text-cyan-600 font-bold text-3xl">
-                        {{ ccMix("立即前往其他分頁，了解如何加入。")}}
+                        "立即前往其他分頁，了解如何加入。"
                     </div>
                     <div class="mt-8 text-cyan-600">
                         <n-button size="large" @click="openLinkSameTab('https://mercuryland.online/#/join')">
-                            {{ ccMix("點擊加入")}}
+                            "點擊加入"
                         </n-button>
                     </div>
                 </div>

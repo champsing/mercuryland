@@ -9,7 +9,7 @@ import {
     NStep,
     NSteps,
 } from "naive-ui";
-import { ccMix, copyToClipboard, openLink } from "@composables/utils";
+import { copyToClipboard, openLink } from "@composables/utils";
 import { ref } from "vue";
 import { MdArrowRoundBack, MdArrowRoundForward } from "@vicons/ionicons4";
 
@@ -43,7 +43,7 @@ function prev() {
     <br />
     <div class="text-center mb-4">
         <div class="text-6xl perspective-x-30 text-cyan-400">
-            {{ ccMix("現在就立刻加入我們") }}
+            現在就立刻加入我們
         </div>
     </div>
     <n-grid x-gap="12" y-gap="12" cols="3" class="w-11/12 mb-4" item-responsive>
@@ -70,7 +70,7 @@ function prev() {
         <n-gi span="3 800:1" class="text-center">
             <n-card title="Version">
                 <div class="!text-2xl">
-                    {{ ccMix("正版") }} Minecraft Java 1.21
+                    正版 Minecraft Java 1.21
                 </div>
             </n-card>
         </n-gi>
@@ -78,21 +78,21 @@ function prev() {
 
     <!-- TODO: prev/next button -->
     <n-steps :current="currentStep" :horizontal="true" class="w-full mt-10">
-        <n-step :title="ccMix('加入群組')" class="text-1xl w-1/4">
-            {{ ccMix("加入水星人的夢幻樂園Discord群组") }}
+        <n-step title="加入群組" class="text-1xl w-1/4">
+            加入水星人的夢幻樂園Discord群組
             <br />
             <n-button
                 @click="clickLinkButton('https://discord.gg/A2cMZRr')"
                 class="mt-2 mb-2"
             >
-                {{ ccMix("點擊加入群组") }}
+                點擊加入群组
             </n-button>
             <br />
-            {{ ccMix("或使用連結") }}：https://discord.gg/A2cMZRr
+            或使用連結：https://discord.gg/A2cMZRr
         </n-step>
 
-        <n-step :title="ccMix('閱讀規則')" class="text-1xl w-1/4">
-            {{ ccMix("包含《水星法》、《水星伺服器破壞舉報獎勵規則》等。") }}
+        <n-step title="閱讀規則" class="text-1xl w-1/4">
+            包含《水星法》、《水星伺服器破壞舉報獎勵規則》等。
             <br />
             <div class="w-full m-auto mt-2 mb-2">
                 <n-button
@@ -102,26 +102,26 @@ function prev() {
                         )
                     "
                 >
-                    {{ ccMix("點擊閱讀规则") }}
+                    點擊閱讀規則
                 </n-button>
             </div>
         </n-step>
 
-        <n-step class="text-1xl w-1/4" :title="ccMix('申請白名單')">
-            {{ ccMix("在 #申請伺服 打上Minecraft ID") }}
+        <n-step class="text-1xl w-1/4" title="申請白名單">
+            在 #申請伺服 打上Minecraft ID
             <br />
             <div class="w-full m-auto mt-2 mb-2">
                 <n-button
                     @click="clickLinkButton('https://discord.gg/CXSQq4nVAH')"
                 >
-                    {{ ccMix("點擊跳转频道") }}
+                    點擊跳轉頻道
                 </n-button>
             </div>
         </n-step>
 
         <n-step
             class="text-1xl w-1/4"
-            :title="ccMix('等待通過')"
+            title="等待通過"
             line-type="dashed"
             description="等待白名單申請通過"
         />
