@@ -83,7 +83,7 @@ function prev() {
                 @click="clickLinkButton('https://discord.gg/A2cMZRr')"
                 class="mt-2 mb-2"
             >
-                點擊加入群组
+                點擊加入群組
             </n-button>
             <br />
             或使用連結：https://discord.gg/A2cMZRr
