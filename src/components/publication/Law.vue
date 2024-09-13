@@ -67,9 +67,7 @@ function parseOptions(law_document: typeof lawDocument) {
                     <n-icon size="25">
                         <WindowNew20Filled />
                     </n-icon>
-                    <div class="ml-2 mr-2 text-center">
-                        在新分頁開啟
-                    </div>
+                    <div class="ml-2 mr-2 text-center">在新分頁開啟</div>
                 </VaButton>
             </div>
         </template>

@@ -17,7 +17,7 @@ import { MdArrowRoundBack, MdArrowRoundForward } from "@vicons/ionicons4";
 //     (e: "toTab", tab: string): void;
 // }>();
 
-let currentStep = ref<number | null>(1);//current step
+let currentStep = ref<number | null>(1); //current step
 
 function clickLinkButton(link: string) {
     openLink(link);
@@ -69,9 +69,7 @@ function prev() {
         </n-gi>
         <n-gi span="3 800:1" class="text-center">
             <n-card title="Version">
-                <div class="!text-2xl">
-                    正版 Minecraft Java 1.21
-                </div>
+                <div class="!text-2xl">正版 Minecraft Java 1.21</div>
             </n-card>
         </n-gi>
     </n-grid>
@@ -143,8 +141,6 @@ function prev() {
         </n-button>
     </n-button-group>
 </template>
-
-
 
 <style>
 .perspective-x-30 {
