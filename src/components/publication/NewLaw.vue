@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { NGrid, NGi, NIcon } from "naive-ui";
+import { NGrid, NGi } from "naive-ui";
 import { ccMix } from "@/composables/utils";
 
 const publishDate = "2024 年 6 月 24 日";
