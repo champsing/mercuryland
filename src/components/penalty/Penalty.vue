@@ -47,7 +47,7 @@ ChartJS.register(
 );
 
 let filterDate: Ref<[number, number]> = defineModel("filterDate", {
-    default: [1577836800000, Date.now()] as const,
+    default: [1672502400000, Date.now()] as const,
     set(value: [number, number]) {
         filteredData.value = filterPenaltyData(
             value,
