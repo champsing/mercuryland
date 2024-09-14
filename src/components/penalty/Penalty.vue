@@ -360,6 +360,14 @@ function vodLinkOfDate(date: string): string[] {
         </div>
     </VaChip>
 
+    <!-- overall list -->
+    <!-- <div v-for="item in penaltyData.filter((x) => x.status == '未開始' || '進行中')">
+        {{ item.name }}
+    </div>
+    <div v-for="item in penaltyData.filter((x) => x.status == '已完成' || '勉強過')">
+        {{ item.name }}
+    </div> -->
+
     <n-divider class="!mt-2 !mb-2" />
 
     <PenaltySyntax class="mb-4" />
