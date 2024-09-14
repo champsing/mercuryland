@@ -7,20 +7,20 @@ import { useElementBounding } from "@vueuse/core";
 const tabNav = ref<HTMLInputElement | null>(null);
 const tabNavBounding = useElementBounding(tabNav);
 
-function calcTabNavStyle(path: string) {
-    if (path == "/") {
-        return {};
-    } else {
-        return {
-            backgroundColor: "rgb(38 38 38)",
-        };
-    }
-}
+// function calcTabNavStyle(path: string) {
+//     if (path == "/") {
+//         return {};
+//     } else {
+//         return {
+//             backgroundColor: "rgb(38 38 38)",
+//         };
+//     }
+// }
 
 function calcMainStyle(path: string) {
-    if (path == "/") {
-        return {};
-    }
+    // if (path == "/") {
+    //     return {};
+    // }
     if (path == "/map") {
         return {
             marginTop: "" + tabNavBounding.height.value + "px",
@@ -30,7 +30,7 @@ function calcMainStyle(path: string) {
             marginTop: "" + (tabNavBounding.height.value + 8) + "px",
             marginLeft: "auto",
             marginRight: "auto",
-            width: "91.666%"
+            width: "91.666%",
         };
     }
 }
@@ -52,9 +52,14 @@ function calcMainStyle(path: string) {
 
 <template>
     <n-config-provider :theme="darkTheme">
-        <div ref="tabNav" class="tab-nav w-full" :style="calcTabNavStyle($route.fullPath)">
+        <!-- don't need calcTabNavStyle($route.fullPath) when no server -->
+        <div
+            ref="tabNav"
+            class="tab-nav w-full"
+            style="background-color: rgb(38 38 38);"
+        >
             <div class="p-3">
-                <router-link to="/" class="tab">
+                <!-- <router-link to="/" class="tab">
                     <img
                         src="@assets/images/hexagon.svg"
                         class="invert h-8 w-8 inline"
@@ -65,9 +70,9 @@ function calcMainStyle(path: string) {
                 <router-link to="/publication" class="tab">
                     資料公開
                 </router-link>
-                <router-link to="/contact" class="tab"> 聯絡我們 </router-link>
+                <router-link to="/contact" class="tab"> 聯絡我們 </router-link> -->
                 <!-- <router-link to="/map" class="tab"> 即時地圖 </router-link> -->
-                <router-link to="/vod" class="tab"> 直播隨選 </router-link>
+                <router-link to="/" class="tab"> 直播隨選 </router-link>
                 <router-link to="/penalty" class="tab"> 直播懲罰 </router-link>
             </div>
             <n-divider class="!m-0" />
