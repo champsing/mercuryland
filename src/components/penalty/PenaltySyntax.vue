@@ -4,7 +4,7 @@ import { VaCard, VaCardContent, VaCardTitle } from "vuestic-ui";
 
 <template>
     <div class="flex flex-wrap gap-5">
-        <VaCard color="primary" class="ml-20">
+        <VaCard gradient color="#28c9c7" class="ml-20">
             <VaCardTitle style="font-size: 16px">詳細資料</VaCardTitle>
             <VaCardContent>
                 <div class="text-base">
@@ -12,7 +12,7 @@ import { VaCard, VaCardContent, VaCardTitle } from "vuestic-ui";
                 </div>
             </VaCardContent>
         </VaCard>
-        <VaCard>
+        <VaCard gradient color="#005c99">
             <VaCardTitle style="font-size: 16px">完成狀態</VaCardTitle>
             <VaCardContent>
                 <div class="text-base">

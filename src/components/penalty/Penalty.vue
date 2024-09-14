@@ -368,8 +368,6 @@ function vodLinkOfDate(date: string): string[] {
         {{ item.name }}
     </div> -->
 
-    <n-divider class="!mt-2 !mb-2" />
-
     <PenaltySyntax class="mb-4" />
 </template>
 
