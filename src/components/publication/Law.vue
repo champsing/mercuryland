@@ -86,9 +86,6 @@ function parseOptions(law_document: typeof lawDocument) {
 </template>
 
 <style lang="scss" scoped>
-.color-picker {
-    color: #38b67d;
-}
 .doc-menu-hover {
     --va-menu-item-hover-color: #e13535;
     --va-menu-item-hover-opacity: 0.6;
