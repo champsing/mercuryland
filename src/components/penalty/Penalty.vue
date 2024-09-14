@@ -145,7 +145,7 @@ const showModal = ref(false);
 const modalContent: Ref<PenaltyDataEntry> = defineModel("modalContent", {
     default: null,
     set(value) {
-        showModal.value = true;
+        showModal.value = !showModal.value;
         return value;
     },
 });
@@ -366,10 +366,6 @@ function vodLinkOfDate(date: string): string[] {
 </template>
 
 <style>
-.n-card2 {
-    margin-left: 40%;
-    width: 25%;
-}
 .vachip2 {
     margin-left: 38%;
     --va-chip-border: 0.2rem solid transparent;
