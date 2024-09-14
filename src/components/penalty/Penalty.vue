@@ -373,7 +373,7 @@ function vodLinkOfDate(date: string): string[] {
 
 <style>
 .vachip2 {
-    margin-left: 38%;
+    margin-left: 38.25%;
     --va-chip-border: 0.2rem solid transparent;
     --va-chip-font-size: 1.15rem;
     --va-chip-padding: 0 1.2rem;
