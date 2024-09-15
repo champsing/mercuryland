@@ -349,7 +349,7 @@ function vodLinkOfDate(date: string): string[] {
     </n-modal>
 
     <div class="left-margin flex flex-wrap gap-5">
-        <VaChip class="vachip2" color="#3d807c">
+        <VaChip class="vachip2" color="#3d807c" readonly>
             <n-icon size="25" class="mt-1 mr-2">
                 <InfoCircle />
             </n-icon>
