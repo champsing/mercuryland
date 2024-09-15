@@ -13,7 +13,7 @@ import {
     NModal,
     NTable,
 } from "naive-ui";
-import { VaChip } from "vuestic-ui";
+import { VaButton, VaButtonGroup, VaChip } from "vuestic-ui";
 import {
     Chart as ChartJS,
     Title,
@@ -34,7 +34,6 @@ import vodData from "@assets/data/vod.json";
 import PenaltySyntax from "./PenaltySyntax.vue";
 import "chartjs-adapter-date-fns";
 import { InfoCircle } from "@vicons/tabler";
-
 
 ChartJS.register(
     Title,
@@ -349,16 +348,22 @@ function vodLinkOfDate(date: string): string[] {
         </n-card>
     </n-modal>
 
-    <VaChip class="vachip2 mt-2 mb-4" color="#3d807c">
-        <n-icon size="25" class="mt-1 mr-2">
-            <InfoCircle />
-        </n-icon>
-        <div class="text-center text-amber-200">
-            <div class="text-lg mt-1">
-                將滑鼠移至圖表上可查看數量
+    <div class="left-margin flex flex-wrap gap-5">
+        <VaChip class="vachip2" color="#3d807c">
+            <n-icon size="25" class="mt-1 mr-2">
+                <InfoCircle />
+            </n-icon>
+            <div class="text-center text-amber-200">
+                <div class="text-lg mt-1">將滑鼠移至圖表上可查看數量</div>
             </div>
+        </VaChip>
+        <div>
+            <VaButtonGroup round class="overall-button">
+                <VaButton color="danger">現存</VaButton>
+                <VaButton color="success">完成</VaButton>
+            </VaButtonGroup>
         </div>
-    </VaChip>
+    </div>
 
     <!-- overall list -->
     <!-- <div v-for="item in penaltyData.filter((x) => x.status == '未開始' || '進行中')">
@@ -373,9 +378,20 @@ function vodLinkOfDate(date: string): string[] {
 
 <style>
 .vachip2 {
-    margin-left: 38.25%;
+    margin-top: 0.5rem;
+    margin-bottom: 1rem;
     --va-chip-border: 0.2rem solid transparent;
     --va-chip-font-size: 1.15rem;
     --va-chip-padding: 0 1.2rem;
+}
+.left-margin {
+    margin-left: 25%;
+}
+.overall-button {
+    margin-top: 0.65rem;
+    --va-button-group-font-size: 1.15rem;
+    --va-button-group-border-radius: 2px;
+    --va-button-group-button-padding: 0.3rem;
+    --va-button-group-button-width: 90px;
 }
 </style>
