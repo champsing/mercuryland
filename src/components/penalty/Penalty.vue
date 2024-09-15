@@ -27,7 +27,7 @@ import {
     ChartData,
 } from "chart.js";
 import { Bar, Doughnut } from "vue-chartjs";
-import { openLink, openLinks, ofId } from "@composables/utils.ts";
+import { openLink, openLinks, ofId, copyToClipboard } from "@composables/utils.ts";
 import penaltyData from "@assets/data/penalty.json";
 import penaltyStatus from "@assets/data/penalty_status.json";
 import vodData from "@assets/data/vod.json";
@@ -140,11 +140,19 @@ let barChartOptions = {
     },
 } as ChartOptions<"bar">;
 
-const showModal = ref(false);
-const modalContent: Ref<PenaltyDataEntry> = defineModel("modalContent", {
+const showPenaltyEntryModal = ref(false);
+const penaltyEntryModalContent: Ref<PenaltyDataEntry> = defineModel("penaltyEntryModalContent", {
     default: null,
     set(value) {
-        showModal.value = !showModal.value;
+        showPenaltyEntryModal.value = !showPenaltyEntryModal.value;
+        return value;
+    },
+});
+const showOverallListModal = ref(false);
+const overallListModalContent = defineModel("overallListModalContent", {
+    default: null,
+    set(value) {
+        overallListModalContent.value = !overallListModalContent.value;
         return value;
     },
 });
@@ -274,7 +282,7 @@ function vodLinkOfDate(date: string): string[] {
                         </td>
                         <td :class="`!bg-[${statusOf(item.status).color}]`">
                             <n-button
-                                @click="modalContent = item"
+                                @click="penaltyEntryModalContent = item"
                                 :text="true"
                                 :focusable="false"
                             >
@@ -304,21 +312,21 @@ function vodLinkOfDate(date: string): string[] {
         </n-gi>
     </n-grid>
 
-    <n-modal v-model:show="showModal">
+    <n-modal v-model:show="showPenaltyEntryModal">
         <n-card
             style="width: 600px"
-            :title="modalContent.name"
+            :title="penaltyEntryModalContent.name"
             :bordered="false"
             size="huge"
             role="dialog"
             aria-modal="true"
         >
             <template #header-extra>
-                <n-button @click="openLinks(vodLinkOfDate(modalContent.date))">
+                <n-button @click="openLinks(vodLinkOfDate(penaltyEntryModalContent.date))">
                     直播转盘連結
                 </n-button>
             </template>
-            <template v-for="block in modalContent.description">
+            <template v-for="block in penaltyEntryModalContent.description">
                 <span v-if="block.block == 'text'">{{ block.str }}</span>
                 <n-button
                     v-if="block.block == 'link'"
@@ -364,6 +372,51 @@ function vodLinkOfDate(date: string): string[] {
             </VaButtonGroup>
         </div>
     </div>
+
+    <!-- 現存 和 完成 -->
+    <n-modal v-model:show="showOverallListModal">
+        <n-card
+            style="width: 600px"
+            :title="overallListModalContent.name"
+            :bordered="false"
+            size="huge"
+            role="dialog"
+            aria-modal="true"
+        >
+            <template #header-extra>
+                <n-button @click="copyToClipboard('')">
+                    複製所有懲罰
+                </n-button>
+            </template>
+            <template v-for="block in overallListModalContent.description">
+                <span v-if="block.block == 'text'">{{ block.str }}</span>
+                <n-button
+                    v-if="block.block == 'link'"
+                    @click="openLink(block.uri)"
+                    :text="true"
+                    :focusable="false"
+                >
+                    {{ block.str }}
+                </n-button>
+
+                <n-button
+                    v-if="block.block == 'vod'"
+                    @click="openLink(ofId(vodData, parseInt(block.uri)).link)"
+                    :text="true"
+                    :focusable="false"
+                >
+                    {{ block.str }}
+                </n-button>
+
+                <img
+                    v-if="block.block == 'image'"
+                    :src="`penalty/${block.uri}`"
+                    :alt="block.str"
+                />
+                <br v-if="block.block == 'br'" />
+            </template>
+        </n-card>
+    </n-modal>
 
     <!-- overall list -->
     <!-- <div v-for="item in penaltyData.filter((x) => x.status == '未開始' || '進行中')">
