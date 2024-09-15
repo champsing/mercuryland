@@ -24,7 +24,7 @@ const data = computed(() => {
                 v.date >=
                     new Date(props.dateRange[0]).toISOString().slice(0, 10) &&
                 v.date <=
-                    new Date(props.dateRange[1]).toISOString().slice(0, 10)
+                    new Date(props.dateRange[1] + 28800000).toISOString().slice(0, 10)
         )
         .filter(
             (v) => props.tagOption == null || v.tags.includes(props.tagOption)

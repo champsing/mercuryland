@@ -21,7 +21,7 @@ const data = computed(() => {
     let filtered = rawData.filter(
         (v: DataType) =>
             v.date >= new Date(props.dateRange[0]).toISOString().slice(0, 10) &&
-            v.date <= new Date(props.dateRange[1]).toISOString().slice(0, 10)
+            v.date <= new Date(props.dateRange[1] + 28800000).toISOString().slice(0, 10)
     );
     let i0 = filtered.findIndex((x: DataType) => x.divider);
 
