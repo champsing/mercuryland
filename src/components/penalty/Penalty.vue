@@ -358,7 +358,7 @@ function vodLinkOfDate(date: string): string[] {
             </div>
         </VaChip>
         <div>
-            <VaButtonGroup round class="overall-button">
+            <VaButtonGroup round class="overall-button" disabled>
                 <VaButton color="danger">現存</VaButton>
                 <VaButton color="success">完成</VaButton>
             </VaButtonGroup>
