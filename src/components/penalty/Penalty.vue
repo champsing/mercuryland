@@ -13,7 +13,12 @@ import {
     NModal,
     NTable,
 } from "naive-ui";
-import { VaButton, VaButtonGroup, VaChip } from "vuestic-ui";
+import {
+    VaButton,
+    VaButtonGroup,
+    VaChip,
+    VaTextarea,
+} from "vuestic-ui";
 import {
     Chart as ChartJS,
     Title,
@@ -27,7 +32,12 @@ import {
     ChartData,
 } from "chart.js";
 import { Bar, Doughnut } from "vue-chartjs";
-import { openLink, openLinks, ofId, copyToClipboard } from "@composables/utils.ts";
+import {
+    openLink,
+    openLinks,
+    ofId,
+    copyToClipboard,
+} from "@composables/utils.ts";
 import penaltyData from "@assets/data/penalty.json";
 import penaltyStatus from "@assets/data/penalty_status.json";
 import vodData from "@assets/data/vod.json";
@@ -141,21 +151,42 @@ let barChartOptions = {
 } as ChartOptions<"bar">;
 
 const showPenaltyEntryModal = ref(false);
-const penaltyEntryModalContent: Ref<PenaltyDataEntry> = defineModel("penaltyEntryModalContent", {
-    default: null,
-    set(value) {
-        showPenaltyEntryModal.value = !showPenaltyEntryModal.value;
-        return value;
-    },
-});
-const showOverallListModal = ref(false);
-const overallListModalContent = defineModel("overallListModalContent", {
-    default: null,
-    set(value) {
-        overallListModalContent.value = !overallListModalContent.value;
-        return value;
-    },
-});
+const penaltyEntryModalContent: Ref<PenaltyDataEntry> = defineModel(
+    "penaltyEntryModalContent",
+    {
+        default: null,
+        set(value) {
+            showPenaltyEntryModal.value = !showPenaltyEntryModal.value;
+            return value;
+        },
+    }
+);
+const showExistModal = ref(false);
+const showCompleteModal = ref(false);
+
+let notYetStartedPenalties = penaltyData
+    .filter((x) => x.status == "未開始")
+    .map((x) => x.name)
+    .join("\n")
+    .toString();
+
+let completedPenalties = penaltyData
+    .filter((x) => x.status == "已完成")
+    .map((x) => x.name)
+    .join("\n")
+    .toString();
+
+let barelyPassedPenalties = penaltyData
+    .filter((x) => x.status == "勉強過")
+    .map((x) => x.name)
+    .join("\n")
+    .toString();
+
+let proceedingPenalties = penaltyData
+    .filter((x) => x.status == "進行中")
+    .map((x) => x.name)
+    .join("\n")
+    .toString();
 </script>
 
 <script lang="ts">
@@ -176,7 +207,8 @@ function filterPenaltyData(
         .filter(
             (v) =>
                 v.date >= new Date(date[0]).toISOString().slice(0, 10) &&
-                v.date <= new Date(date[1] + 28800000).toISOString().slice(0, 10)
+                v.date <=
+                    new Date(date[1] + 28800000).toISOString().slice(0, 10)
         )
         .filter((v) => status == null || status == v.status)
         .filter(
@@ -322,7 +354,11 @@ function vodLinkOfDate(date: string): string[] {
             aria-modal="true"
         >
             <template #header-extra>
-                <n-button @click="openLinks(vodLinkOfDate(penaltyEntryModalContent.date))">
+                <n-button
+                    @click="
+                        openLinks(vodLinkOfDate(penaltyEntryModalContent.date))
+                    "
+                >
                     直播转盘連結
                 </n-button>
             </template>
@@ -366,63 +402,189 @@ function vodLinkOfDate(date: string): string[] {
             </div>
         </VaChip>
         <div>
-            <VaButtonGroup round class="overall-button" disabled>
-                <VaButton color="danger">現存</VaButton>
-                <VaButton color="success">完成</VaButton>
+            <VaButtonGroup round class="overall-button">
+                <VaButton
+                    color="danger"
+                    @click="showExistModal = !showExistModal"
+                >
+                    現存
+                </VaButton>
+                <VaButton
+                    color="success"
+                    @click="showCompleteModal = !showCompleteModal"
+                >
+                    完成
+                </VaButton>
             </VaButtonGroup>
         </div>
     </div>
 
     <!-- 現存 和 完成 -->
-    <n-modal v-model:show="showOverallListModal">
+    <n-modal v-model:show="showExistModal">
         <n-card
             style="width: 600px"
-            :title="overallListModalContent.name"
+            title="懲罰一覽表：現存"
             :bordered="false"
             size="huge"
             role="dialog"
             aria-modal="true"
         >
             <template #header-extra>
-                <n-button @click="copyToClipboard('')">
-                    複製所有懲罰
+                <n-button @click="copyToClipboard(notYetStartedPenalties + '\n' + proceedingPenalties)">
+                    複製所有現存懲罰
                 </n-button>
             </template>
-            <template v-for="block in overallListModalContent.description">
-                <span v-if="block.block == 'text'">{{ block.str }}</span>
-                <n-button
-                    v-if="block.block == 'link'"
-                    @click="openLink(block.uri)"
-                    :text="true"
-                    :focusable="false"
-                >
-                    {{ block.str }}
-                </n-button>
+            <n-grid
+                :x-gap="3"
+                :y-gap="2"
+                :cols="3"
+                class="text-center"
+                screen-responsive
+            >
+                <n-gi>
+                    <div class="text-sm mt-1 text-[#ef3b3b]">未開始</div>
+                    <div class="text-3xl mt-1">
+                        {{
+                            penaltyData.filter((x) => x.status == "未開始")
+                                .length
+                        }}
+                    </div>
+                </n-gi>
+                <n-gi>
+                    <div class="text-sm mt-1 text-[#de8039]">進行中</div>
+                    <div class="text-3xl mt-1">
+                        {{
+                            penaltyData.filter((x) => x.status == "進行中")
+                                .length
+                        }}
+                    </div>
+                </n-gi>
+                <n-gi>
+                    <div class="text-sm mt-1 text-[#eda9a9]">現存總計</div>
+                    <div class="text-3xl mt-1">
+                        {{
+                            penaltyData.filter(
+                                (x) =>
+                                    x.status == "未開始" || x.status == "進行中"
+                            ).length
+                        }}
+                    </div>
+                </n-gi>
+            </n-grid>
+            <n-grid
+                :x-gap="4"
+                :y-gap="4"
+                :cols="2"
+                class="text-center"
+                screen-responsive
+            >
+                <n-gi>
+                    <div class="text-sm mt-4 mb-2">未開始</div>
+                    <VaTextarea
+                        v-model="notYetStartedPenalties"
+                        :maxRows="7"
+                        :resize="false"
+                        readonly
+                    />
+                </n-gi>
+                <n-gi>
+                    <div class="text-sm mt-4 mb-2">進行中</div>
+                    <VaTextarea
+                        v-model="proceedingPenalties"
+                        :maxRows="7"
+                        :resize="false"
+                        readonly
+                    />
+                </n-gi>
+            </n-grid>
+        </n-card>
+    </n-modal>
 
-                <n-button
-                    v-if="block.block == 'vod'"
-                    @click="openLink(ofId(vodData, parseInt(block.uri)).link)"
-                    :text="true"
-                    :focusable="false"
-                >
-                    {{ block.str }}
+    <n-modal v-model:show="showCompleteModal">
+        <n-card
+            style="width: 600px"
+            title="懲罰一覽表：完成"
+            :bordered="false"
+            size="huge"
+            role="dialog"
+            aria-modal="true"
+        >
+            <template #header-extra>
+                <n-button @click="copyToClipboard(completedPenalties + '\n' + barelyPassedPenalties)">
+                    複製所有完成懲罰
                 </n-button>
-
-                <img
-                    v-if="block.block == 'image'"
-                    :src="`penalty/${block.uri}`"
-                    :alt="block.str"
-                />
-                <br v-if="block.block == 'br'" />
             </template>
+            <n-grid
+                :x-gap="3"
+                :y-gap="2"
+                :cols="3"
+                class="text-center"
+                screen-responsive
+            >
+                <n-gi>
+                    <div class="text-sm mt-1 text-[#4be66c]">已完成</div>
+                    <div class="text-3xl mt-1">
+                        {{
+                            penaltyData.filter((x) => x.status == "已完成")
+                                .length
+                        }}
+                    </div>
+                </n-gi>
+                <n-gi>
+                    <div class="text-sm mt-1 text-[#218d37]">勉強過</div>
+                    <div class="text-3xl mt-1">
+                        {{
+                            penaltyData.filter((x) => x.status == "勉強過")
+                                .length
+                        }}
+                    </div>
+                </n-gi>
+                <n-gi>
+                    <div class="text-sm mt-1 text-[#39e3e3]">完成總計</div>
+                    <div class="text-3xl mt-1">
+                        {{
+                            penaltyData.filter(
+                                (x) =>
+                                    x.status == "已完成" || x.status == "勉強過"
+                            ).length
+                        }}
+                    </div>
+                </n-gi>
+            </n-grid>
+            <n-grid
+                :x-gap="4"
+                :y-gap="4"
+                :cols="2"
+                class="text-center"
+                screen-responsive
+            >
+                <n-gi>
+                    <div class="text-sm mt-4 mb-2">已完成</div>
+                    <VaTextarea
+                        v-model="completedPenalties"
+                        :maxRows="7"
+                        :resize="false"
+                        readonly
+                    />
+                </n-gi>
+                <n-gi>
+                    <div class="text-sm mt-4 mb-2">勉強過</div>
+                    <VaTextarea
+                        v-model="barelyPassedPenalties"
+                        :maxRows="7"
+                        :resize="false"
+                        readonly
+                    />
+                </n-gi>
+            </n-grid>
         </n-card>
     </n-modal>
 
     <!-- overall list -->
-    <!-- <div v-for="item in penaltyData.filter((x) => x.status == '未開始' || '進行中')">
+    <!-- <div v-for="item in penaltyData.filter((x) => x.status == '未開始' || x.status == '進行中')">
         {{ item.name }}
     </div>
-    <div v-for="item in penaltyData.filter((x) => x.status == '已完成' || '勉強過')">
+    <div v-for="item in penaltyData.filter((x) => x.status == '已完成' || x.status == '勉強過')">
         {{ item.name }}
     </div> -->
 
