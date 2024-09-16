@@ -206,7 +206,7 @@ function filterPenaltyData(
     return penaltyData
         .filter(
             (v) =>
-                v.date >= new Date(date[0] + 28800000).toISOString().slice(0, 10) &&
+                v.date >= new Date(date[0]).toISOString().slice(0, 10) &&
                 v.date <=
                     new Date(date[1] + 28800000).toISOString().slice(0, 10)
         )
