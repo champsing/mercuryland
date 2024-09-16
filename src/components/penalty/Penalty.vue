@@ -589,14 +589,6 @@ function vodLinkOfDate(date: string): string[] {
         </n-card>
     </n-modal>
 
-    <!-- overall list -->
-    <!-- <div v-for="item in penaltyData.filter((x) => x.status == '未開始' || x.status == '進行中')">
-        {{ item.name }}
-    </div>
-    <div v-for="item in penaltyData.filter((x) => x.status == '已完成' || x.status == '勉強過')">
-        {{ item.name }}
-    </div> -->
-
     <PenaltySyntax class="mb-4" />
 </template>
 
