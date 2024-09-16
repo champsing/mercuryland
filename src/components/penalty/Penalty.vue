@@ -13,12 +13,7 @@ import {
     NModal,
     NTable,
 } from "naive-ui";
-import {
-    VaButton,
-    VaButtonGroup,
-    VaChip,
-    VaTextarea,
-} from "vuestic-ui";
+import { VaButton, VaButtonGroup, VaChip, VaTextarea } from "vuestic-ui";
 import {
     Chart as ChartJS,
     Title,
@@ -430,7 +425,13 @@ function vodLinkOfDate(date: string): string[] {
             aria-modal="true"
         >
             <template #header-extra>
-                <n-button @click="copyToClipboard(notYetStartedPenalties + '\n' + proceedingPenalties)">
+                <n-button
+                    @click="
+                        copyToClipboard(
+                            notYetStartedPenalties + '\n' + proceedingPenalties
+                        )
+                    "
+                >
                     複製所有現存懲罰
                 </n-button>
             </template>
@@ -510,7 +511,13 @@ function vodLinkOfDate(date: string): string[] {
             aria-modal="true"
         >
             <template #header-extra>
-                <n-button @click="copyToClipboard(completedPenalties + '\n' + barelyPassedPenalties)">
+                <n-button
+                    @click="
+                        copyToClipboard(
+                            completedPenalties + '\n' + barelyPassedPenalties
+                        )
+                    "
+                >
                     複製所有完成懲罰
                 </n-button>
             </template>
