@@ -1,8 +1,11 @@
 <script setup lang="ts">
 import { VaCard, VaCardContent, VaCardTitle } from "vuestic-ui";
+import { NDivider } from "naive-ui";
 </script>
 
 <template>
+    <div class="text-4xl text-neutral-100 text-left mt-4">圖例</div>
+    <n-divider class="!mt-3" />
     <div class="flex flex-wrap gap-5">
         <VaCard gradient color="#28c9c7" class="ml-20">
             <VaCardTitle style="font-size: 16px">詳細資料</VaCardTitle>
