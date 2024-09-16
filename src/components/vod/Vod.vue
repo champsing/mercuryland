@@ -6,7 +6,7 @@ import DataTable from "./DataTable.vue";
 import TimeSummary from "./TimeSummary.vue";
 import TimeDetail from "./TimeDetail.vue";
 
-let dateRange: Ref<[number, number]> = ref([1577836800000, Date.now() + 28800000]);
+let dateRange: Ref<[number, number]> = ref([1577865600000, Date.now() + 28800000]); // 15778656 = 15778368 + 288
 let tagOption = ref(null);
 
 let tagMenu = [{ label: "", value: null }].concat(
