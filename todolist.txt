@@ -1,4 +1,4 @@
-1. 一覽表做完
+1. 一覽表做完 完成！！！
 2. 把vod的選擇TAG改造成multiple select
 3. 把penalty的圖表移動到penalty/charts，從penalty/charts傳變數回到penalty
 4. 把penalty重新排版
