@@ -472,11 +472,12 @@ function vodLinkOfDate(date: string): string[] {
                     </div>
                 </n-gi>
             </n-grid>
+            <n-divider class="!mt-2 !mb-1" />
             <n-grid
                 :x-gap="4"
                 :y-gap="4"
                 :cols="2"
-                class="text-center"
+                class="text-center mt-2"
                 screen-responsive
             >
                 <n-gi>
@@ -558,6 +559,7 @@ function vodLinkOfDate(date: string): string[] {
                     </div>
                 </n-gi>
             </n-grid>
+            <n-divider class="!mt-2 !mb-1" />
             <n-grid
                 :x-gap="4"
                 :y-gap="4"
