@@ -75,7 +75,7 @@ let computedTime = ref(0);
                         if (selectedTags == null) {
                             selectedTags = [];
                             selectedTags.push(tag);
-                        } else if (selectedTags.includes(tag)) return;
+                        } else if (selectedTags.includes(tag)) selectedTags.splice(selectedTags.indexOf(tag), 1);
                         else selectedTags.push(tag);
                     }
                 "
