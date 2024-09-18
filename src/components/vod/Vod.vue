@@ -7,7 +7,7 @@ import TimeSummary from "./TimeSummary.vue";
 import TimeDetail from "./TimeDetail.vue";
 
 let dateRange: Ref<[number, number]> = ref([1577836800000, Date.now() + 28800000]);
-let tagOption = ref(null);
+let selectedTags = ref(null);
 
 let tagMenu = [{ label: "", value: null }].concat(
     [...new Set(vodLinkData.flatMap((x) => x.tags))].sort().map((x) => {
@@ -24,8 +24,10 @@ let computedTime = ref(0);
         </n-gi>
         <n-gi span="4 800:2 1200:1">
             <n-select
-                v-model:value="tagOption"
+                v-model:value="selectedTags"
                 :options="tagMenu"
+                multiple
+                filterable
                 placeholder="请选择直播的TAG"
                 :consistent-menu-width="false"
             />
@@ -38,8 +40,14 @@ let computedTime = ref(0);
         <n-gi span="3 800:2" class="w-full p-0 m-0">
             <DataTable
                 :dateRange="dateRange"
-                :tagOption="tagOption"
-                @updateTag="(tag) => (tagOption = tag)"
+                :selectedTags="selectedTags"
+                @updateTag="
+                    (tag) => {
+                        if (selectedTags == null) selectedTags = []
+                        else if (selectedTags.includes(tag)) return
+                        else selectedTags.push(tag);
+                    }
+                "
             />
         </n-gi>
         <n-gi span="3 800:1">
