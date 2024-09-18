@@ -24,10 +24,13 @@ const data = computed(() => {
                 v.date >=
                     new Date(props.dateRange[0]).toISOString().slice(0, 10) &&
                 v.date <=
+                    //prettier-ignore
                     new Date(props.dateRange[1] + 28800000).toISOString().slice(0, 10)
         )
         .filter(
-            (v) => props.selectedTags == null || v.tags.includes.apply(null, props.selectedTags) //還沒完成 符合1個元素就return true
+            (v) =>
+                props.selectedTags == null ||
+                v.tags.includes.apply(null, props.selectedTags) //還沒完成 符合1個元素就return true
         )
         .sort((lhs, rhs) => rhs.date.localeCompare(lhs.date));
 });

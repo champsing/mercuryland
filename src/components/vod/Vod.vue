@@ -6,7 +6,9 @@ import DataTable from "./DataTable.vue";
 import TimeSummary from "./TimeSummary.vue";
 import TimeDetail from "./TimeDetail.vue";
 
+//prettier-ignore
 let dateRange: Ref<[number, number]> = ref([1577836800000, Date.now() + 28800000]);
+
 let selectedTags = ref(null);
 
 let tagMenu = [{ label: "", value: null }].concat(
@@ -43,8 +45,8 @@ let computedTime = ref(0);
                 :selectedTags="selectedTags"
                 @updateTag="
                     (tag) => {
-                        if (selectedTags == null) selectedTags = []
-                        else if (selectedTags.includes(tag)) return
+                        if (selectedTags.includes(tag)) return;
+                        else if (selectedTags == null) selectedTags = [];
                         else selectedTags.push(tag);
                     }
                 "
