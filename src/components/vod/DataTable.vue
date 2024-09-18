@@ -11,7 +11,8 @@ type DataType = (typeof vodLinkData)[0];
 const vh = useWindowSize().height;
 const props = defineProps<{
     dateRange: [number, number];
-    selectedTags?: String[];
+    selectedTags?: string[];
+    strictFiltering: boolean;
 }>();
 const emit = defineEmits<{
     (e: "updateTag", tag: string): void;
@@ -27,11 +28,21 @@ const data = computed(() => {
                     //prettier-ignore
                     new Date(props.dateRange[1] + 28800000).toISOString().slice(0, 10)
         )
-        .filter(
-            (v) =>
-                props.selectedTags == null ||
-                v.tags.includes.apply(null, props.selectedTags) //還沒完成 符合1個元素就return true
-        )
+        .filter((v) => {
+            if (props.strictFiltering == true) {
+                return (
+                    props.selectedTags == null ||
+                    props.selectedTags.toString() == new Array().toString() ||
+                    v.tags.slice().sort().toString() ==
+                        props.selectedTags.slice().sort().toString()
+                );
+            } else
+                return (
+                    props.selectedTags == null ||
+                    props.selectedTags.toString() == new Array().toString() ||
+                    v.tags.includes(props.selectedTags[0])
+                ); //還沒完成 符合1個元素就return true
+        })
         .sort((lhs, rhs) => rhs.date.localeCompare(lhs.date));
 });
 const columns = [

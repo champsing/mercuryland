@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref, Ref } from "vue";
 import { NDatePicker, NGrid, NGi, NSelect, NDivider } from "naive-ui";
+import { VaSwitch } from "vuestic-ui";
 import vodLinkData from "@assets/data/vod.json";
 import DataTable from "./DataTable.vue";
 import TimeSummary from "./TimeSummary.vue";
@@ -9,13 +10,20 @@ import TimeDetail from "./TimeDetail.vue";
 //prettier-ignore
 let dateRange: Ref<[number, number]> = ref([1577836800000, Date.now() + 28800000]);
 
-let selectedTags = ref(null);
+let strictFiltering = ref(false);
 
-let tagMenu = [{ label: "", value: null }].concat(
+let selectedTags: Ref<Array<string>> = ref(null);
+
+let tagMenu: Array<{ label: string; value: any; disabled?: boolean }> = [
+    { label: "", value: null },
+].concat(
     [...new Set(vodLinkData.flatMap((x) => x.tags))].sort().map((x) => {
         return { label: x, value: x };
     })
 );
+
+tagMenu[0] = { label: "", value: null, disabled: true };
+
 let computedTime = ref(0);
 </script>
 
@@ -34,6 +42,17 @@ let computedTime = ref(0);
                 :consistent-menu-width="false"
             />
         </n-gi>
+        <n-gi>
+            <VaSwitch
+                class="ml-4"
+                v-model="strictFiltering"
+                off-color="#1ccba2"
+                color="#3444a2"
+                style="--va-switch-checker-background-color: #252723"
+                false-inner-label="符合一項"
+                true-inner-label="符合全部"
+            />
+        </n-gi>
     </n-grid>
 
     <n-divider class="!mt-2 !mb-2" />
@@ -43,6 +62,7 @@ let computedTime = ref(0);
             <DataTable
                 :dateRange="dateRange"
                 :selectedTags="selectedTags"
+                :strictFiltering="strictFiltering"
                 @updateTag="
                     (tag) => {
                         if (selectedTags == null) {
