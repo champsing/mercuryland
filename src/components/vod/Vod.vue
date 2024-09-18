@@ -37,7 +37,6 @@ let computedTime = ref(0);
                 v-model:value="selectedTags"
                 :options="tagMenu"
                 multiple
-                filterable
                 placeholder="请选择直播的TAG"
                 :consistent-menu-width="false"
             />
