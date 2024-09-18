@@ -40,8 +40,9 @@ const data = computed(() => {
                 return (
                     props.selectedTags == null ||
                     props.selectedTags.toString() == new Array().toString() ||
-                    v.tags.includes(props.selectedTags[0])
-                ); //還沒完成 符合1個元素就return true
+                    new Set(v.tags).intersection(new Set(props.selectedTags))
+                        .size !== 0
+                );
         })
         .sort((lhs, rhs) => rhs.date.localeCompare(lhs.date));
 });
