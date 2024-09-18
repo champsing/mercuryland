@@ -45,8 +45,10 @@ let computedTime = ref(0);
                 :selectedTags="selectedTags"
                 @updateTag="
                     (tag) => {
-                        if (selectedTags.includes(tag)) return;
-                        else if (selectedTags == null) selectedTags = [];
+                        if (selectedTags == null) {
+                            selectedTags = [];
+                            selectedTags.push(tag);
+                        } else if (selectedTags.includes(tag)) return;
                         else selectedTags.push(tag);
                     }
                 "
