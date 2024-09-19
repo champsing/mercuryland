@@ -158,6 +158,7 @@ const penaltyEntryModalContent: Ref<PenaltyDataEntry> = defineModel(
 );
 const showExistModal = ref(false);
 const showCompleteModal = ref(false);
+const useCtrlA = "善用 Ctrl + A 可複製全部項目";
 
 let notYetStartedPenalties = penaltyData
     .filter((x) => x.status == "未開始")
@@ -487,6 +488,7 @@ function vodLinkOfDate(date: string): string[] {
                         :maxRows="7"
                         :resize="false"
                         readonly
+                        :messages="useCtrlA"
                     />
                 </n-gi>
                 <n-gi>
@@ -574,6 +576,7 @@ function vodLinkOfDate(date: string): string[] {
                         :maxRows="7"
                         :resize="false"
                         readonly
+                        :messages="useCtrlA"
                     />
                 </n-gi>
                 <n-gi>
