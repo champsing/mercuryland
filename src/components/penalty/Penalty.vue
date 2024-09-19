@@ -5,6 +5,7 @@ import {
     NCard,
     NDatePicker,
     NDivider,
+    NFlex,
     NGrid,
     NGi,
     NSelect,
@@ -158,7 +159,6 @@ const penaltyEntryModalContent: Ref<PenaltyDataEntry> = defineModel(
 );
 const showExistModal = ref(false);
 const showCompleteModal = ref(false);
-const useCtrlA = "善用 Ctrl + A 可複製全部項目";
 
 let notYetStartedPenalties = penaltyData
     .filter((x) => x.status == "未開始")
@@ -488,8 +488,12 @@ function vodLinkOfDate(date: string): string[] {
                         :maxRows="7"
                         :resize="false"
                         readonly
-                        :messages="useCtrlA"
                     />
+                    <n-flex style="justify-content: start" class="mt-4">
+                        <div class="text-sm">
+                            <kbd>Ctrl</kbd>&nbsp;<kbd>A</kbd>&ensp;可快速複製全部項目
+                        </div>
+                    </n-flex>
                 </n-gi>
                 <n-gi>
                     <div class="text-sm mt-4 mb-2">進行中</div>
@@ -576,8 +580,12 @@ function vodLinkOfDate(date: string): string[] {
                         :maxRows="7"
                         :resize="false"
                         readonly
-                        :messages="useCtrlA"
                     />
+                    <n-flex style="justify-content: start" class="mt-4">
+                        <div class="text-sm">
+                            <kbd>Ctrl</kbd>&nbsp;<kbd>A</kbd>&ensp;可快速複製全部項目
+                        </div>
+                    </n-flex>
                 </n-gi>
                 <n-gi>
                     <div class="text-sm mt-4 mb-2">勉強過</div>
@@ -612,5 +620,20 @@ function vodLinkOfDate(date: string): string[] {
     --va-button-group-border-radius: 2px;
     --va-button-group-button-padding: 0.3rem;
     --va-button-group-button-width: 90px;
+}
+
+kbd {
+    background-color: #e3d0d0;
+    border-radius: 3px;
+    border: 1px solid #b4b4b4;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.2),
+        0 2px 0 0 rgba(255, 255, 255, 0.7) inset;
+    color: #0b17c3d4;
+    display: inline-block;
+    font-size: 0.85em;
+    font-weight: 700;
+    line-height: 1;
+    padding: 2px 4px;
+    white-space: nowrap;
 }
 </style>
