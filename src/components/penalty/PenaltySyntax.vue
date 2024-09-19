@@ -19,7 +19,7 @@ import { NDivider, NFlex } from "naive-ui";
             <VaCardTitle style="font-size: 16px">完成狀態</VaCardTitle>
             <VaCardContent>
                 <div class="text-base">
-                    ✅完成、✅已抽、🏁原主人或投票給過、⏲️⚔️目前已完成進度
+                    ✅已抽、🏁原主人或投票給過、⏲️⚔️目前已完成進度
                 </div>
             </VaCardContent>
         </VaCard>
