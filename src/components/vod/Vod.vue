@@ -58,6 +58,7 @@ let computedTime = ref(0);
                 style="--va-switch-checker-background-color: #252723"
                 false-inner-label="符合一項"
                 true-inner-label="符合全部"
+                screen-responsive
             />
         </n-gi>
     </n-grid>

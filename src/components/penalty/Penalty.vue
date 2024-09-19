@@ -292,7 +292,7 @@ function vodLinkOfDate(date: string): string[] {
 
     <n-grid x-gap="12" :cols="3" class="w-11/12 h-80vh overflow-y-hidden">
         <n-gi :span="2" class="h-40vh w-full p-0 m-0 overflow-y-scroll">
-            <n-table :bordered="true" size="small" class="text-center w-full">
+            <n-table :bordered="true" size="small" class="text-center w-full" item-responsive>
                 <thead>
                     <tr>
                         <td class="font-bold">日期</td>
@@ -388,7 +388,7 @@ function vodLinkOfDate(date: string): string[] {
         </n-card>
     </n-modal>
 
-    <div class="left-margin flex flex-wrap gap-5">
+    <n-flex justify="center" size="small" class="m-auto" item-responsive>
         <VaChip class="vachip2" color="#3d807c" readonly>
             <n-icon size="25" class="mt-1 mr-2">
                 <InfoCircle />
@@ -397,7 +397,7 @@ function vodLinkOfDate(date: string): string[] {
                 <div class="text-lg mt-1">將滑鼠移至圖表上可查看數量</div>
             </div>
         </VaChip>
-        <div>
+        <div> <!--This div is for its own size, don't delete.-->
             <VaButtonGroup round class="overall-button">
                 <VaButton
                     color="danger"
@@ -413,7 +413,7 @@ function vodLinkOfDate(date: string): string[] {
                 </VaButton>
             </VaButtonGroup>
         </div>
-    </div>
+    </n-flex>
 
     <!-- 現存 和 完成 -->
     <n-modal v-model:show="showExistModal">
