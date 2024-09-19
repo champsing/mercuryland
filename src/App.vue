@@ -1,8 +1,16 @@
 <script setup lang="ts">
 import { ref } from "vue";
-import { NConfigProvider, NDivider, darkTheme } from "naive-ui";
+import {
+    NButton,
+    NCard,
+    NConfigProvider,
+    NDivider,
+    NFlex,
+    darkTheme,
+} from "naive-ui";
 import { RouterLink } from "vue-router";
 import { useElementBounding } from "@vueuse/core";
+import { openLink, openLinkSameTab } from "./composables/utils";
 
 const tabNav = ref<HTMLInputElement | null>(null);
 const tabNavBounding = useElementBounding(tabNav);
@@ -56,7 +64,7 @@ function calcMainStyle(path: string) {
         <div
             ref="tabNav"
             class="tab-nav w-full"
-            style="background-color: rgb(38 38 38);"
+            style="background-color: rgb(38 38 38)"
         >
             <div class="p-3">
                 <!-- <router-link to="/" class="tab">
@@ -81,6 +89,33 @@ function calcMainStyle(path: string) {
             <router-view />
         </div>
     </n-config-provider>
+    <n-card class="bottom-card mt-5 m-auto text-center" size="small">
+        <div class="text-center text-base text-slate-800">
+            <n-flex style="justify-content: center">
+                <div style="font-family: playfair display">
+                    Copyright © 2024 The Mercury Land
+                </div>
+                <!-- 
+                    【&nbsp;】：半角スペースと同じサイズの空白
+                    【&thinsp;】：&nbsp;の空白より小さい空白
+                    【&ensp;】：半角スペースより間隔がやや広い空白
+                    【&emsp;】：全角スペースとほぼ同じサイズの空白 
+                -->
+                &ensp;保留一切權利。
+            </n-flex>
+            <!-- <div class="mt-2">隱私權政策&ensp;|&ensp;使用條款&ensp;|&ensp;法律聲明</div> -->
+            <div class="mt-2">
+                <n-button
+                :bordered="false"
+                :focusable="false"
+                tertiary
+                @click=""
+                >
+                    使用條款
+                </n-button>
+            </div>
+        </div>
+    </n-card>
 </template>
 
 <style>
@@ -94,5 +129,10 @@ function calcMainStyle(path: string) {
     @apply fixed;
     @apply z-10;
     @apply top-0;
+}
+
+.bottom-card {
+    width: 90%;
+    --n-color: #a5deeb !important;
 }
 </style>
