@@ -10,7 +10,7 @@ import {
 } from "naive-ui";
 import { RouterLink } from "vue-router";
 import { useElementBounding } from "@vueuse/core";
-import { openLink, openLinkSameTab } from "./composables/utils";
+import { openLinkSameTab } from "./composables/utils";
 
 const tabNav = ref<HTMLInputElement | null>(null);
 const tabNavBounding = useElementBounding(tabNav);
@@ -109,9 +109,10 @@ function calcMainStyle(path: string) {
                 :bordered="false"
                 :focusable="false"
                 tertiary
-                @click=""
+                @click="openLinkSameTab('https://mercuryland.online/#/tos')"
+                disabled
                 >
-                    使用條款
+                    使用條款 - 準備中
                 </n-button>
             </div>
         </div>
