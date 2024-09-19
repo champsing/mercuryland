@@ -2,3 +2,4 @@
 2. 把vod的選擇TAG改造成multiple select 完成！！！
 3. 把penalty的圖表移動到penalty/charts，從penalty/charts傳變數回到penalty
 4. 把penalty重新排版
+5. 懲罰圖例新增可以點的Modal
