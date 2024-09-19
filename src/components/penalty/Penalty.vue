@@ -191,7 +191,7 @@ class PenaltyDataEntry {
     date: string;
     name: string;
     status: string;
-    description: { block: string; str?: string; uri?: string }[];
+    description?: { block: string; str?: string; uri?: string }[];
 }
 
 function filterPenaltyData(
