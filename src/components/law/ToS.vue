@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { ref } from 'vue';
-import { VMarkdownView } from 'vue3-markdown';
-import { NDivider } from 'naive-ui';
-import 'vue3-markdown/dist/style.css';
+import { ref } from "vue";
+import { VMarkdownView } from "vue3-markdown";
+import { NDivider } from "naive-ui";
+import "vue3-markdown/dist/style.css";
 
 const termsOfUse = ref(`
 ### 本聲明是為規範網際網路連接視聽閱覽者（下稱本站閱聽人）存取水星伺服器官網（下稱本站）所提供之多媒體內容，包括但不限於：文字、文件、圖片、影音、壓縮檔與外部連結，所應有之權利與應盡之義務，以及規範本站閱聽人與本站之管理者之權利義務關係。
@@ -28,14 +28,11 @@ const termsOfUse = ref(`
     
 5. 本聲明若有任何未盡之處，本站管理方保留在任何時間，不經告知的情況下隨時更新本聲明內容，本站閱聽人應自行留意本聲明內容是否為最新版本，並應恪遵所有條款之規定。
 `);
-const theme = ref('dark');
+const theme = ref("dark");
 </script>
 
 <template>
     <n-divider />
     <div class="text-4xl text-neutral-100 text-center mt-4 mb-6">使用條款</div>
-    <VMarkdownView
-        :mode="theme"
-        :content="termsOfUse"
-    />
+    <VMarkdownView :mode="theme" :content="termsOfUse" />
 </template>

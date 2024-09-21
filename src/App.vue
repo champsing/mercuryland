@@ -111,7 +111,7 @@ function calcMainStyle(path: string) {
                 tertiary
                 @click="openLinkSameTab('https://mercuryland.online/#/tos')"
                 >
-                    使用條款 - 準備中
+                    使用條款
                 </n-button>
             </div>
         </div>
