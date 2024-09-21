@@ -110,7 +110,6 @@ function calcMainStyle(path: string) {
                 :focusable="false"
                 tertiary
                 @click="openLinkSameTab('https://mercuryland.online/#/tos')"
-                disabled
                 >
                     使用條款 - 準備中
                 </n-button>
