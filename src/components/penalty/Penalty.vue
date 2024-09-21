@@ -392,15 +392,22 @@ function vodLinkOfDate(date: string): string[] {
                 <br v-if="block.block == 'br'" />
             </template>
 
-            <span class="text-base">
-                😇&nbsp;復活&ensp;
-                <div class="penalty-reapply text-2xl text-orange-300">
-                    {{ penaltyEntryModalContent.reapply.times }}
-                </div>
-                &ensp;次
-            </span>
-            <n-divider class="!m-1" />
-            <template v-for="entry in penaltyEntryModalContent.reapply.entries">
+            <template
+                v-if="penaltyEntryModalContent.reapply?.times !== undefined"
+            >
+                <span class="text-base">
+                    😇&nbsp;復活&ensp;
+                    <div class="penalty-reapply text-2xl text-orange-300">
+                        {{ penaltyEntryModalContent.reapply?.times }}
+                    </div>
+                    &ensp;次
+                </span>
+                <n-divider class="!m-1" />
+            </template>
+
+            <template
+                v-for="entry in penaltyEntryModalContent.reapply?.entries"
+            >
                 <div class="mt-1">
                     <n-button
                         @click="openLinks(vodLinkOfDate(entry.date))"
