@@ -192,6 +192,7 @@ class PenaltyDataEntry {
     name: string;
     status: string;
     description?: { block: string; str?: string; uri?: string }[];
+    reapply?: { times: number; entries: { date: string; status: string }[] };
 }
 
 function filterPenaltyData(
@@ -292,7 +293,12 @@ function vodLinkOfDate(date: string): string[] {
 
     <n-grid x-gap="12" :cols="3" class="w-11/12 h-80vh overflow-y-hidden">
         <n-gi :span="2" class="h-40vh w-full p-0 m-0 overflow-y-scroll">
-            <n-table :bordered="true" size="small" class="text-center w-full" item-responsive>
+            <n-table
+                :bordered="true"
+                size="small"
+                class="text-center w-full"
+                item-responsive
+            >
                 <thead>
                     <tr>
                         <td class="font-bold">日期</td>
@@ -385,6 +391,55 @@ function vodLinkOfDate(date: string): string[] {
                 />
                 <br v-if="block.block == 'br'" />
             </template>
+
+            <span class="text-base">
+                😇&nbsp;復活&ensp;
+                <div class="penalty-reapply text-2xl text-orange-300">
+                    {{ penaltyEntryModalContent.reapply.times }}
+                </div>
+                &ensp;次
+            </span>
+            <n-divider class="!m-1" />
+            <template v-for="entry in penaltyEntryModalContent.reapply.entries">
+                <div class="mt-1">
+                    <n-button
+                        @click="openLinks(vodLinkOfDate(entry.date))"
+                        :text="true"
+                        :focusable="false"
+                    >
+                        {{ entry.date }}
+                    </n-button>
+                    &ensp;
+                    <!-- !text-[#b91c1c] !text-[#4d7c0f] !text-[#047857] !text-[#b45309] -->
+                    <div class="penalty-reapply text-sm">
+                        <div
+                            v-if="entry.status == '未開始'"
+                            class="!text-[#b91c1c]"
+                        >
+                            ◼
+                        </div>
+                        <div
+                            v-if="entry.status == '已完成'"
+                            class="!text-[#4d7c0f]"
+                        >
+                            ◼
+                        </div>
+                        <div
+                            v-if="entry.status == '勉強過'"
+                            class="!text-[#047857]"
+                        >
+                            ◼
+                        </div>
+                        <div
+                            v-if="entry.status == '進行中'"
+                            class="!text-[#b45309]"
+                        >
+                            ◼
+                        </div>
+                    </div>
+                    &nbsp;{{ entry.status }}
+                </div>
+            </template>
         </n-card>
     </n-modal>
 
@@ -397,7 +452,8 @@ function vodLinkOfDate(date: string): string[] {
                 <div class="text-lg mt-1">將滑鼠移至圖表上可查看數量</div>
             </div>
         </VaChip>
-        <div> <!--This div is for its own size, don't delete.-->
+        <div>
+            <!--This div is for its own size, don't delete.-->
             <VaButtonGroup round class="overall-button">
                 <VaButton
                     color="danger"
@@ -491,7 +547,8 @@ function vodLinkOfDate(date: string): string[] {
                     />
                     <n-flex style="justify-content: start" class="mt-4">
                         <div class="text-sm">
-                            <kbd>Ctrl</kbd>&nbsp;<kbd>A</kbd>&ensp;可快速複製全部項目
+                            <kbd>Ctrl</kbd
+                            >&nbsp;<kbd>A</kbd>&ensp;可快速複製全部項目
                         </div>
                     </n-flex>
                 </n-gi>
@@ -583,7 +640,8 @@ function vodLinkOfDate(date: string): string[] {
                     />
                     <n-flex style="justify-content: start" class="mt-4">
                         <div class="text-sm">
-                            <kbd>Ctrl</kbd>&nbsp;<kbd>A</kbd>&ensp;可快速複製全部項目
+                            <kbd>Ctrl</kbd
+                            >&nbsp;<kbd>A</kbd>&ensp;可快速複製全部項目
                         </div>
                     </n-flex>
                 </n-gi>
@@ -620,6 +678,11 @@ function vodLinkOfDate(date: string): string[] {
     --va-button-group-border-radius: 2px;
     --va-button-group-button-padding: 0.3rem;
     --va-button-group-button-width: 90px;
+}
+
+.penalty-reapply {
+    display: inline-block;
+    white-space: nowrap;
 }
 
 kbd {

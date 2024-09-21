@@ -11,7 +11,7 @@ import { NDivider, NFlex } from "naive-ui";
             <VaCardTitle style="font-size: 16px">詳細資料</VaCardTitle>
             <VaCardContent>
                 <div class="text-base">
-                    🆙增加、🔁重抽、2️⃣備案、📝原主人修改n次、➕其他後來增加的條件
+                    🆙增加、🔁重抽、2️⃣備案、😇復活、📝原主人修改n次、➕其他後來增加的條件
                 </div>
             </VaCardContent>
         </VaCard>
