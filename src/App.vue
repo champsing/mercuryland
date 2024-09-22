@@ -79,7 +79,7 @@ function calcMainStyle(path: string) {
                     資料公開
                 </router-link>
                 <!-- <router-link to="/map" class="tab"> 即時地圖 </router-link> -->
-                <router-link to="/" class="tab"> 直播隨選 </router-link>
+                <router-link to="/vod" class="tab"> 直播隨選 </router-link>
                 <router-link to="/penalty" class="tab"> 直播懲罰 </router-link>
                 <router-link to="/contact" class="tab"> 聯絡我們 </router-link>
             </div>
