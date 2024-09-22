@@ -863,6 +863,9 @@
                 "str": "✅已抽"
             },
             {
+                "block": "br"
+            },
+            {
                 "block": "text",
                 "str": "Hypixel 與觀眾同樂時一場內弄死所有觀眾"
             }
