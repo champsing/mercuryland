@@ -15,15 +15,15 @@ import { openLinkSameTab } from "./composables/utils";
 const tabNav = ref<HTMLInputElement | null>(null);
 const tabNavBounding = useElementBounding(tabNav);
 
-// function calcTabNavStyle(path: string) {
-//     if (path == "/") {
-//         return {};
-//     } else {
-//         return {
-//             backgroundColor: "rgb(38 38 38)",
-//         };
-//     }
-// }
+function calcTabNavStyle(path: string) {
+    if (path == "/") {
+        return {};
+    } else {
+        return {
+            backgroundColor: "rgb(38 38 38)",
+        };
+    }
+}
 
 function calcMainStyle(path: string) {
     // if (path == "/") {
@@ -64,17 +64,17 @@ function calcMainStyle(path: string) {
         <div
             ref="tabNav"
             class="tab-nav w-full"
-            style="background-color: rgb(38 38 38)"
+            :style="calcTabNavStyle($route.fullPath)"
         >
             <div class="p-3">
-                <!-- <router-link to="/" class="tab">
+                <router-link to="/" class="tab">
                     <img
                         src="@assets/images/hexagon.svg"
                         class="invert h-8 w-8 inline"
                         alt="hexagon"
                     />
-                </router-link> -->
-                <!-- <router-link to="/join" class="tab"> 加入伺服 </router-link> -->
+                </router-link>
+                <router-link to="/join" class="tab"> 加入伺服 </router-link>
                 <router-link to="/publication" class="tab">
                     資料公開
                 </router-link>
