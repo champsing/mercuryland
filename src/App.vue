@@ -26,9 +26,9 @@ function calcTabNavStyle(path: string) {
 }
 
 function calcMainStyle(path: string) {
-    // if (path == "/") {
-    //     return {};
-    // }
+    if (path == "/") {
+        return {};
+    }
     if (path == "/map") {
         return {
             marginTop: "" + tabNavBounding.height.value + "px",
