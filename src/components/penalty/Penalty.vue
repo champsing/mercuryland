@@ -395,13 +395,15 @@ function vodLinkOfDate(date: string): string[] {
             <template
                 v-if="penaltyEntryModalContent.reapply?.times !== undefined"
             >
-                <span class="text-base">
-                    😇&nbsp;復活&ensp;
-                    <div class="penalty-reapply text-2xl text-orange-300">
-                        {{ penaltyEntryModalContent.reapply?.times }}
-                    </div>
-                    &ensp;次
-                </span>
+                <div class="mt-3">
+                    <span class="text-base">
+                        😇&nbsp;復活&ensp;
+                        <div class="penalty-reapply text-2xl text-orange-300">
+                            {{ penaltyEntryModalContent.reapply?.times }}
+                        </div>
+                        &ensp;次
+                    </span>
+                </div>
                 <n-divider class="!m-1" />
             </template>
 
