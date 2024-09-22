@@ -556,8 +556,8 @@ function vodLinkOfDate(date: string): string[] {
                     />
                     <n-flex style="justify-content: start" class="mt-4">
                         <div class="text-sm">
-                            <kbd>Ctrl</kbd
-                            >&nbsp;<kbd>A</kbd>&ensp;可快速複製全部項目
+                            <kbd>Ctrl</kbd>
+                            &nbsp;<kbd>A</kbd>&ensp;可快速複製全部項目
                         </div>
                     </n-flex>
                 </n-gi>
@@ -649,8 +649,8 @@ function vodLinkOfDate(date: string): string[] {
                     />
                     <n-flex style="justify-content: start" class="mt-4">
                         <div class="text-sm">
-                            <kbd>Ctrl</kbd
-                            >&nbsp;<kbd>A</kbd>&ensp;可快速複製全部項目
+                            <kbd>Ctrl</kbd>
+                            &nbsp;<kbd>A</kbd>&ensp;可快速複製全部項目
                         </div>
                     </n-flex>
                 </n-gi>
