@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import { ref, Ref } from "vue";
-import { NDatePicker, NGrid, NGi, NSelect, NDivider } from "naive-ui";
-import { VaSwitch } from "vuestic-ui";
+import { NDatePicker, NGrid, NGi, NSelect, NDivider, NIcon } from "naive-ui";
+import { VaButton, VaSwitch } from "vuestic-ui";
 import vodLinkData from "@assets/data/vod.json";
 import DataTable from "./DataTable.vue";
 import TimeSummary from "./TimeSummary.vue";
 import TimeDetail from "./TimeDetail.vue";
-import { Add24Regular } from "@vicons/fluent";
+import { Add24Regular, Info24Regular } from "@vicons/fluent";
 
 //prettier-ignore
 let dateRange: Ref<[number, number]> = ref([1577836800000, Date.now() + 28800000]);
@@ -60,6 +60,19 @@ let computedTime = ref(0);
                 true-inner-label="符合全部"
                 screen-responsive
             />
+            <VaButton
+                preset="plain"
+                color="#FFFFFF"
+                class="ml-12 mt-1"
+                disabled
+            >
+                <n-icon size="25" class="mr-2">
+                    <Info24Regular />
+                </n-icon>
+                <div class="text-center">
+                    <div class="text-lg">規則說明</div>
+                </div>
+            </VaButton>
         </n-gi>
     </n-grid>
 
@@ -76,7 +89,8 @@ let computedTime = ref(0);
                         if (selectedTags == null) {
                             selectedTags = [];
                             selectedTags.push(tag);
-                        } else if (selectedTags.includes(tag)) selectedTags.splice(selectedTags.indexOf(tag), 1);
+                        } else if (selectedTags.includes(tag))
+                            selectedTags.splice(selectedTags.indexOf(tag), 1);
                         else selectedTags.push(tag);
                     }
                 "

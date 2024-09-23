@@ -40,6 +40,7 @@ import vodData from "@assets/data/vod.json";
 import PenaltySyntax from "./PenaltySyntax.vue";
 import "chartjs-adapter-date-fns";
 import { InfoCircle } from "@vicons/tabler";
+import { Info24Regular } from "@vicons/fluent";
 
 ChartJS.register(
     Title,
@@ -478,6 +479,14 @@ function vodLinkOfDate(date: string): string[] {
                 </VaButton>
             </VaButtonGroup>
         </div>
+        <VaButton preset="plain" color="#FFFFFF" class="ml-4 mb-1" disabled>
+            <n-icon size="25" class="mr-2">
+                <Info24Regular />
+            </n-icon>
+            <div class="text-center">
+                <div class="text-lg">規則說明</div>
+            </div>
+        </VaButton>
     </n-flex>
 
     <!-- 現存 和 完成 -->

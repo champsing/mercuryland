@@ -1,7 +1,7 @@
 {
     "name": "mercuryland",
     "private": true,
-    "version": "2.4.2_20240922",
+    "version": "2.4.3_20240923",
     "type": "module",
     "scripts": {
         "dev": "vite",
