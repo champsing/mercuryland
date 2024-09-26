@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Ref, ref } from "vue";
+import { Ref, ref, computed } from "vue";
 import { NButton, NCard, NDivider, NModal, NTable } from "naive-ui";
 import penaltyData from "@assets/data/penalty.json";
 import penaltyStatus from "@assets/data/penalty_status.json";
@@ -19,27 +19,6 @@ class PenaltyDataEntry {
     status: string;
     description?: { block: string; str?: string; uri?: string }[];
     reapply?: { times: number; entries: { date: string; status: string }[] };
-}
-
-function filterPenaltyData(
-    date: [number, number],
-    status: string,
-    search: string
-): typeof penaltyData {
-    return penaltyData
-        .filter(
-            (v) =>
-                v.date >= new Date(date[0]).toISOString().slice(0, 10) &&
-                v.date <=
-                    new Date(date[1] + 28800000).toISOString().slice(0, 10)
-        )
-        .filter((v) => status == null || status == v.status)
-        .filter(
-            (v) =>
-                search == "" ||
-                v.name.toLowerCase().includes(search.toLowerCase())
-        )
-        .sort((lhs, rhs) => lhs.date.localeCompare(rhs.date));
 }
 
 function statusOf(status: string): (typeof penaltyStatus)[0] {
@@ -62,11 +41,28 @@ const penaltyEntryModalContent: Ref<PenaltyDataEntry> = defineModel(
     }
 );
 
-let filteredData = filterPenaltyData(
-    props.dateRange,
-    props.status,
-    props.search
-);
+const filteredData = computed(() => filterPenaltyData(props.dateRange, props.status, props.search));
+
+function filterPenaltyData(
+    date: [number, number],
+    status: string,
+    search: string
+): typeof penaltyData {
+    return penaltyData
+        .filter(
+            (v) =>
+                v.date >= new Date(date[0]).toISOString().slice(0, 10) &&
+                v.date <=
+                    new Date(date[1] + 28800000).toISOString().slice(0, 10)
+        )
+        .filter((v) => status == null || status == v.status)
+        .filter(
+            (v) =>
+                search == "" ||
+                v.name.toLowerCase().includes(search.toLowerCase())
+        )
+        .sort((lhs, rhs) => lhs.date.localeCompare(rhs.date));
+}
 </script>
 
 <template>
