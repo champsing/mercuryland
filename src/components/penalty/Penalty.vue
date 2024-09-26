@@ -676,7 +676,8 @@ function vodLinkOfDate(date: string): string[] {
         </n-card>
     </n-modal>
 
-    <PenaltySyntax class="mb-4" />
+    <PenaltySyntax />
+    <n-divider class="mt-2" />
 </template>
 
 <style>

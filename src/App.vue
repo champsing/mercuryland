@@ -89,8 +89,8 @@ function calcMainStyle(path: string) {
             <router-view />
         </div>
     </n-config-provider>
-    <n-card class="bottom-card mt-5 m-auto text-center" size="small">
-        <div class="text-center text-base text-slate-800">
+    <n-card class="bottom-card mt-2 m-auto text-center" size="small">
+        <div class="text-center text-base text-zinc-200">
             <n-flex style="justify-content: center">
                 <div style="font-family: playfair display">
                     Copyright © 2024 The Mercury Land
@@ -106,12 +106,12 @@ function calcMainStyle(path: string) {
             <!-- <div class="mt-2">隱私權政策&ensp;|&ensp;使用條款&ensp;|&ensp;法律聲明</div> -->
             <div class="mt-2">
                 <n-button
-                :bordered="false"
-                :focusable="false"
-                tertiary
-                @click="openLinkSameTab('https://mercuryland.online/#/tos')"
+                    :bordered="false"
+                    :focusable="false"
+                    tertiary
+                    @click="openLinkSameTab('https://mercuryland.online/#/tos')"
                 >
-                    使用條款
+                    <div class="text-zinc-200">使用條款</div>
                 </n-button>
             </div>
         </div>
@@ -133,6 +133,6 @@ function calcMainStyle(path: string) {
 
 .bottom-card {
     width: 90%;
-    --n-color: #a5deeb !important;
+    --n-color: #12181c !important;
 }
 </style>

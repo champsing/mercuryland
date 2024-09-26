@@ -3,6 +3,7 @@ import {
     NButton,
     NButtonGroup,
     NCard,
+    NDivider,
     NGrid,
     NGi,
     NIcon,
@@ -140,6 +141,7 @@ function prev() {
             </template>
         </n-button>
     </n-button-group>
+    <n-divider class="mt-2" />
 </template>
 
 <style>
