@@ -1,8 +1,9 @@
 <script setup lang="ts">
-import { NDivider } from "naive-ui";
+import { NDivider, NIcon } from "naive-ui";
 import Law from "./Law.vue";
 // import NewLaw from "./NewLaw.vue"; //如果沒有新版本水星法可以註解起來
 import Archive from "./Archive.vue";
+import { WindowNew20Filled } from "@vicons/fluent";
 </script>
 
 <template>
@@ -14,7 +15,16 @@ import Archive from "./Archive.vue";
         <Law />
     </div>
     <n-divider class="!mt-6 !mb-2" />
-    <div class="text-4xl text-neutral-100 text-left mt-4 mb-6">地圖檔</div>
+    <div class="flex flex-row gap-10 text-neutral-100 mt-4 mb-10">
+        <div class="text-4xl">地圖檔</div>
+        <div class="flex flex-row gap-1">
+            <n-icon size="25">
+                <WindowNew20Filled />
+            </n-icon>
+            <div class="text-base text-center">將開啟新分頁</div>
+        </div>
+    </div>
+
     <div class="mt-4">
         <Archive />
     </div>
