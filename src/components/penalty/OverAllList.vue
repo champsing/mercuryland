@@ -10,7 +10,13 @@ import {
     NIcon,
     NModal,
 } from "naive-ui";
-import { VaButton, VaButtonGroup, VaChip, VaTextarea } from "vuestic-ui";
+import {
+    VaButton,
+    VaButtonGroup,
+    VaChip,
+    VaModal,
+    VaTextarea,
+} from "vuestic-ui";
 import penaltyData from "@assets/data/penalty.json";
 import { copyToClipboard } from "@/composables/utils";
 import { InfoCircle } from "@vicons/tabler";
@@ -18,6 +24,7 @@ import { Info24Regular } from "@vicons/fluent";
 
 const showExistModal = ref(false);
 const showCompleteModal = ref(false);
+const showRuleDescModal = ref(false);
 
 let notYetStartedPenalties = penaltyData
     .filter((x) => x.status == "未開始")
@@ -72,7 +79,13 @@ let proceedingPenalties = penaltyData
                     </VaButton>
                 </VaButtonGroup>
             </div>
-            <VaButton preset="plain" color="#FFFFFF" class="ml-4 mt-2" disabled>
+            <VaButton
+                preset="plain"
+                color="#FFFFFF"
+                class="ml-4 mt-2"
+                @click="showRuleDescModal = !showRuleDescModal"
+                disabled
+            >
                 <n-icon size="25" class="mr-2">
                     <Info24Regular />
                 </n-icon>
@@ -91,6 +104,13 @@ let proceedingPenalties = penaltyData
             </div>
         </VaChip>
     </n-flex>
+
+    <!-- 規則說明 -->
+    <VaModal v-model="showRuleDescModal" >
+        <h3 class="text-pretty">
+            直播懲罰規則說明
+        </h3>
+    </VaModal>
 
     <!-- 現存 和 完成 -->
     <n-modal v-model:show="showExistModal">

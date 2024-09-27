@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, Ref } from "vue";
 import { NDatePicker, NGrid, NGi, NSelect, NDivider, NIcon } from "naive-ui";
-import { VaButton, VaSwitch } from "vuestic-ui";
+import { VaButton, VaModal, VaSwitch } from "vuestic-ui";
 import vodLinkData from "@assets/data/vod.json";
 import DataTable from "./DataTable.vue";
 import TimeSummary from "./TimeSummary.vue";
@@ -28,6 +28,8 @@ let tagMenu: Array<{ label: string; value: any; disabled?: boolean }> = [
 tagMenu[0] = { label: "", value: null, disabled: true };
 
 let computedTime = ref(0);
+
+const showRuleDescModal = ref(false);
 </script>
 
 <template>
@@ -64,6 +66,7 @@ let computedTime = ref(0);
                 preset="plain"
                 color="#FFFFFF"
                 class="ml-12 mt-1"
+                @click="showRuleDescModal = !showRuleDescModal"
                 disabled
             >
                 <n-icon size="25" class="mr-2">
@@ -75,6 +78,13 @@ let computedTime = ref(0);
             </VaButton>
         </n-gi>
     </n-grid>
+
+    <!-- 規則說明 -->
+    <VaModal v-model="showRuleDescModal" >
+        <h3 class="text-pretty">
+            加班台規則說明
+        </h3>
+    </VaModal>
 
     <n-divider class="!mt-2 !mb-2" />
 
