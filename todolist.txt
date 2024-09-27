@@ -3,3 +3,5 @@
 3. 把penalty的圖表移動到penalty/charts，從penalty/charts傳變數回到penalty 完成！！！(暫時沒打算繼續，感覺圖表不是很需要了)
 4. 把penalty重新排版 完成！！！
 5. 懲罰圖例新增可以點的Modal
+6. 規則說明的Modal做完
+7. 顏色調乾淨來，別傷眼睛
