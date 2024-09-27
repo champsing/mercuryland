@@ -70,6 +70,13 @@ let finishOptions = [{ label: "", value: null }].concat(
                 :dateRange="filterDate"
                 :status="filterStatus"
                 :search="filterSearch"
+                @updateStatus="
+                    (status) => {
+                        if (filterStatus == null)
+                            filterStatus = status;
+                        else filterStatus = null;
+                    }
+                "
             />
         </n-gi>
         <n-gi>

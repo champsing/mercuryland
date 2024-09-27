@@ -12,6 +12,10 @@ const props = defineProps<{
     search: string;
 }>();
 
+const emit = defineEmits<{
+    (e: "updateStatus", status: string): void;
+}>();
+
 class PenaltyDataEntry {
     id: number;
     date: string;
@@ -41,7 +45,9 @@ const penaltyEntryModalContent: Ref<PenaltyDataEntry> = defineModel(
     }
 );
 
-const filteredData = computed(() => filterPenaltyData(props.dateRange, props.status, props.search));
+const filteredData = computed(() =>
+    filterPenaltyData(props.dateRange, props.status, props.search)
+);
 
 function filterPenaltyData(
     date: [number, number],
@@ -97,7 +103,13 @@ function filterPenaltyData(
                     </n-button>
                 </td>
                 <td :class="`!bg-[${statusOf(item.status).color}]`">
-                    {{ item.status }}
+                    <n-button
+                        @click="() => emit('updateStatus', item.status)"
+                        :text="true"
+                        :focusable="false"
+                    >
+                        {{ item.status }}
+                    </n-button>
                 </td>
             </tr>
         </tbody>

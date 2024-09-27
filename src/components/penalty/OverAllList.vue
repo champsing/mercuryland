@@ -95,12 +95,21 @@ let proceedingPenalties = penaltyData
             </VaButton>
         </n-flex>
 
-        <VaChip class="vachip2 mt-4" color="#3d807c" readonly>
+        <VaChip class="vachip2 mt-8" color="#3d807c" readonly>
             <n-icon size="25" class="mt-1 mr-2">
                 <InfoCircle />
             </n-icon>
             <div class="text-center text-amber-200">
                 <div class="text-lg mt-1">圖表維護中，敬請期待開放</div>
+            </div>
+        </VaChip>
+
+        <VaChip class="vachip2" color="#59753f" readonly>
+            <n-icon size="25" class="mt-1 mr-2">
+                <InfoCircle />
+            </n-icon>
+            <div class="text-center text-yellow-300">
+                <div class="text-lg mt-1">點擊完成狀態可快速切換</div>
             </div>
         </VaChip>
     </n-flex>
