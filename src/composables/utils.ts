@@ -1,5 +1,7 @@
 // import { Converter } from "opencc-js";
 
+import { useToast } from "vuestic-ui";
+
 // const ccConvertText = Converter({ from: "tw", to: "cn" });
 
 export function openLink(link: string) {
@@ -68,6 +70,10 @@ export function interleave<T>(arr: T[], x: T): T[] {
 export async function copyToClipboard(text: string) {
     try {
         await navigator.clipboard.writeText(text);
+        useToast().init({
+            duration: 2000,
+            message: '已複製',
+        });
     } catch (err) {
         console.error("Failed to copy: ", err);
     }

@@ -38,6 +38,10 @@ function prev() {
     else if (currentStep.value <= 0) currentStep.value = 4;
     else currentStep.value--;
 }
+
+const serverIP = "play.mercuryland.online:25565";
+const seed = -9100272987300380909;
+const version = 1.21;
 </script>
 
 <template>
@@ -51,26 +55,23 @@ function prev() {
         <n-gi span="3 800:1" class="text-center">
             <n-card
                 title="IP"
-                @click="copyToClipboard('play.mercuryland.online:25565')"
+                @click="copyToClipboard(serverIP)"
             >
                 <n-button text class="!text-2xl">
-                    play.mercuryland.online:25565
+                    {{ serverIP }}
                 </n-button>
             </n-card>
         </n-gi>
         <n-gi span="3 800:1" class="text-center">
-            <n-card
-                title="Seed"
-                @click="copyToClipboard('-9100272987300380909')"
-            >
+            <n-card title="Seed" @click="copyToClipboard(seed.toString())">
                 <n-button text class="!text-2xl">
-                    -9100272987300380909
+                    {{ seed }}
                 </n-button>
             </n-card>
         </n-gi>
         <n-gi span="3 800:1" class="text-center">
             <n-card title="Version">
-                <div class="!text-2xl">正版 Minecraft Java 1.21</div>
+                <div class="!text-2xl">正版 Minecraft Java {{ version }}</div>
             </n-card>
         </n-gi>
     </n-grid>
