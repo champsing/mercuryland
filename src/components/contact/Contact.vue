@@ -59,4 +59,5 @@ import ContactCard from "./ContactCard.vue";
             allowfullscreen
         ></iframe>
     </div>
+    <n-divider class="!mb-2" />
 </template>
