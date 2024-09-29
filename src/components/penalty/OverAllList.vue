@@ -117,7 +117,6 @@ let proceedingPenalties = penaltyData
     <VaModal
         v-model="showRuleDescModal"
         title="規則說明"
-        :blur="true"
         hide-default-actions
         :closeButton="true"
     >
