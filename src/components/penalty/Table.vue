@@ -182,7 +182,7 @@ function filterPenaltyData(
                 <div class="mt-3">
                     <span class="text-base">
                         😇&nbsp;復活&ensp;
-                        <div class="penalty-reapply text-2xl text-orange-300">
+                        <div class="same-line text-2xl text-orange-300">
                             {{ penaltyEntryModalContent.reapply?.times }}
                         </div>
                         &ensp;次

@@ -129,7 +129,7 @@ const notEffectivePenalties = [
     --va-button-group-button-width: 90px;
 }
 
-.penalty-reapply {
+.same-line {
     display: inline-block;
     white-space: nowrap;
 }
