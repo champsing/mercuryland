@@ -84,7 +84,6 @@ let proceedingPenalties = penaltyData
                 color="#FFFFFF"
                 class="ml-4 mt-2"
                 @click="showRuleDescModal = !showRuleDescModal"
-                disabled
             >
                 <n-icon size="25" class="mr-2">
                     <Info24Regular />
@@ -115,10 +114,43 @@ let proceedingPenalties = penaltyData
     </n-flex>
 
     <!-- 規則說明 -->
-    <VaModal v-model="showRuleDescModal" >
-        <h3 class="text-pretty">
-            直播懲罰規則說明
-        </h3>
+    <VaModal
+        v-model="showRuleDescModal"
+        title="規則說明"
+        :blur="true"
+        hide-default-actions
+        :closeButton="true"
+    >
+        <span class="text-3xl"> 直播懲罰規則說明 </span>
+        <div class="text-2xl mt-2">●概述</div>
+        <div class="text-bg mt-2">
+            惡靈會在直播的時候跟觀眾打賭該局遊戲加減懲罰的賭注，然後在直播最後以隨機輪盤抽出當天的懲罰數量。
+            <br />
+            每個懲罰會各自擁有一個完成狀態，分別有：未開始、已完成、勉強過、進行中。
+        </div>
+        <div class="text-bg mt-4">
+            <div class="penalty-reapply !text-[#b91c1c]">▲未開始</div>
+            ：尚未開始嘗試完成該懲罰，沒有進度
+            <br />
+            <div class="penalty-reapply !text-[#4d7c0f]">▲已完成</div>
+            ：已經完成該懲罰主文要求的全部條件
+            <br />
+            <div class="penalty-reapply !text-[#047857]">▲勉強過</div>
+            ：該懲罰的原主人或是投票決定讓惡靈在沒有完成主文要求的全部條件下完成該懲罰
+            <br />
+            <div class="penalty-reapply !text-[#b45309]">▲進行中</div>
+            ：正在嘗試完成，已經有進度的懲罰
+        </div>
+        <div class="text-2xl mt-4">●加班台懲罰</div>
+        <div class="text-bg mt-2">
+            如果懲罰主文要求加班台時數，則只有在該懲罰生成「之後」加的班才會被計算進該懲罰的完成進度裡。
+            <br />
+            例如：
+            <br />
+            01/01被懲罰加班台2小時，01/02惡靈有加班時數47分鐘，則這47分鐘可以被計算進01/01的「加班台2小時」懲罰裡。
+            <br />
+            反之，若在01/03也有懲罰加班台2小時懲罰，01/02的47分鐘就不會被進算進01/03懲罰完成進度裡。
+        </div>
     </VaModal>
 
     <!-- 現存 和 完成 -->
