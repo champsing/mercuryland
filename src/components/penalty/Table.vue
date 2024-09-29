@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { Ref, ref, computed } from "vue";
 import { NButton, NCard, NDivider, NModal, NTable } from "naive-ui";
+import { VaButton } from "vuestic-ui";
 import penaltyData from "@assets/data/penalty.json";
 import penaltyStatus from "@assets/data/penalty_status.json";
 import vodData from "@assets/data/vod.json";
@@ -152,6 +153,20 @@ function filterPenaltyData(
                 >
                     {{ block.str }}
                 </n-button>
+
+                <VaButton
+                    v-if="block.block == 'penalty'"
+                    @click="() => {
+                        penaltyEntryModalContent = ofId(penaltyData, parseInt(block.uri));
+                        showPenaltyEntryModal = !showPenaltyEntryModal;
+                    }"
+                    class="mt-1"
+                    color="#30e0e7"
+                    size="small"
+                    round
+                >
+                    {{ ofId(penaltyData, parseInt(block.uri)).date }}．{{ ofId(penaltyData, parseInt(block.uri)).name }}
+                </VaButton>
 
                 <img
                     v-if="block.block == 'image'"
