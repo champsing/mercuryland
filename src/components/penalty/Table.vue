@@ -204,7 +204,7 @@ function filterPenaltyData(
                     </n-button>
                     &ensp;
                     <!-- !text-[#b91c1c] !text-[#4d7c0f] !text-[#047857] !text-[#b45309] -->
-                    <div class="penalty-reapply text-sm">
+                    <div class="same-line text-sm">
                         <div
                             v-if="entry.status == '未開始'"
                             class="!text-[#b91c1c]"
