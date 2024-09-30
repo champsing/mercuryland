@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { Ref } from "vue";
 import { NDatePicker, NDivider, NGrid, NGi, NSelect, NInput } from "naive-ui";
-import { VaTextarea } from "vuestic-ui";
 import penaltyStatus from "@assets/data/penalty_status.json";
 import OverAllList from "./OverAllList.vue";
 import PenaltyTable from "./Table.vue";
@@ -37,15 +36,6 @@ let finishOptions = [{ label: "", value: null }].concat(
         })
 );
 
-const notEffectivePenalties = [
-    "玩左邊的「默念對方名字，抽三張牌看答案」",
-    "麥塊蓋故宮",
-    "唸一遍所有馬來西亞官方郵局的地址",
-    "直播玩雀魂觀眾場",
-    "玩歐卡*買五星貨車",
-]
-    .join("\n")
-    .toString();
 </script>
 
 <script lang="ts"></script>
@@ -91,17 +81,6 @@ const notEffectivePenalties = [
         </n-gi>
         <n-gi>
             <OverAllList />
-            <div class="flex flex-col text-center">
-                <div class="text-sm mt-4 text-zinc-200">尚未生效的懲罰</div>
-                <div class="text-sm mt-4 text-zinc-200">
-                    <VaTextarea
-                        v-model="notEffectivePenalties"
-                        :maxRows="7"
-                        :resize="false"
-                        readonly
-                    />
-                </div>
-            </div>
         </n-gi>
     </n-grid>
 

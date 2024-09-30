@@ -11,9 +11,9 @@ import {
     NModal,
 } from "naive-ui";
 import {
+    VaAlert,
     VaButton,
     VaButtonGroup,
-    VaChip,
     VaModal,
     VaTextarea,
 } from "vuestic-ui";
@@ -49,11 +49,21 @@ let proceedingPenalties = penaltyData
     .map((x) => x.name)
     .join("\n")
     .toString();
+
+const notEffectivePenalties = [
+    "玩左邊的「默念對方名字，抽三張牌看答案」",
+    "麥塊蓋故宮",
+    "唸一遍所有馬來西亞官方郵局的地址",
+    "直播玩雀魂觀眾場",
+    "玩歐卡*買五星貨車",
+]
+    .join("\n")
+    .toString();
 </script>
 
 <template>
-    <n-flex size="small" vertical class="m-auto ml-4" item-responsive>
-        <n-flex justify="center" size="small" class="m-auto" item-responsive>
+    <n-flex size="small" vertical class="m-auto" item-responsive>
+        <n-flex size="small" class="m-auto" item-responsive>
             <!-- <VaChip class="vachip2" color="#3d807c" readonly>
             <n-icon size="25" class="mt-1 mr-2">
                 <InfoCircle />
@@ -94,23 +104,39 @@ let proceedingPenalties = penaltyData
             </VaButton>
         </n-flex>
 
-        <VaChip class="vachip2 mt-8" color="#3d807c" readonly>
-            <n-icon size="25" class="mt-1 mr-2">
-                <InfoCircle />
-            </n-icon>
-            <div class="text-center text-amber-200">
-                <div class="text-lg mt-1">圖表維護中，敬請期待開放</div>
+        <VaAlert class="mt-7" color="#3d807c">
+            <div class="flex flex-row">
+                <n-icon size="25" class="mr-2">
+                    <InfoCircle />
+                </n-icon>
+                <div class="text-center text-amber-200">
+                    <div class="text-lg">圖表維護中，敬請期待開放</div>
+                </div>
             </div>
-        </VaChip>
+        </VaAlert>
 
-        <VaChip class="vachip2" color="#59753f" readonly>
-            <n-icon size="25" class="mt-1 mr-2">
-                <InfoCircle />
-            </n-icon>
-            <div class="text-center text-yellow-300">
-                <div class="text-lg mt-1">點擊完成狀態可快速切換</div>
+        <VaAlert class="mt-2" color="#59753f">
+            <div class="flex flex-row">
+                <n-icon size="25" class="mt-1 mr-2">
+                    <InfoCircle />
+                </n-icon>
+                <div class="text-center text-yellow-300">
+                    <div class="text-lg mt-1">點擊完成狀態可快速切換</div>
+                </div>
             </div>
-        </VaChip>
+        </VaAlert>
+
+        <div class="flex flex-col text-center">
+            <div class="text-sm mt-4 text-zinc-200">尚未生效的懲罰</div>
+            <div class="text-sm mt-1 text-zinc-200">
+                <VaTextarea
+                    v-model="notEffectivePenalties"
+                    :maxRows="7"
+                    :resize="false"
+                    readonly
+                />
+            </div>
+        </div>
     </n-flex>
 
     <!-- 規則說明 -->
