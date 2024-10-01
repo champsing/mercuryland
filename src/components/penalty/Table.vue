@@ -23,7 +23,7 @@ class PenaltyDataEntry {
     name: string;
     status: string;
     description?: { block: string; str?: string; uri?: string }[];
-    reapply?: { times: number; entries: { date: string; status: string }[] };
+    reapply?: { entries: { date: string; status: string }[] };
 }
 
 function statusOf(status: string): (typeof penaltyStatus)[0] {
@@ -177,13 +177,13 @@ function filterPenaltyData(
             </template>
 
             <template
-                v-if="penaltyEntryModalContent.reapply?.times !== undefined"
+                v-if="penaltyEntryModalContent.reapply !== undefined"
             >
                 <div class="mt-3">
                     <span class="text-base">
                         😇&nbsp;復活&ensp;
                         <div class="same-line text-2xl text-orange-300">
-                            {{ penaltyEntryModalContent.reapply?.times }}
+                            {{ penaltyEntryModalContent.reapply?.entries.length }}
                         </div>
                         &ensp;次
                     </span>

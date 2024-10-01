@@ -376,7 +376,6 @@
         "status": "已完成",
         "description": [{ "block": "text", "str": "🔄 重抽" }],
         "reapply": {
-            "times": 1,
             "entries": [
                 {
                     "date": "2024-09-22",
