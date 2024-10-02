@@ -13,6 +13,7 @@ import {
 import { copyToClipboard, openLink } from "@composables/utils";
 import { ref } from "vue";
 import { MdArrowRoundBack, MdArrowRoundForward } from "@vicons/ionicons4";
+import { VaButton } from "vuestic-ui";
 
 // const emit = defineEmits<{
 //     (e: "toTab", tab: string): void;
@@ -81,12 +82,15 @@ const version = 1.21;
         <n-step title="加入群組" class="text-1xl w-1/4">
             加入水星人的夢幻樂園Discord群組
             <br />
-            <n-button
+            <VaButton
+                preset="secondary"
+                color="#FFFFFF"
+                border-color="#969494"
                 @click="clickLinkButton('https://discord.gg/A2cMZRr')"
                 class="mt-2 mb-2"
             >
                 點擊加入群組
-            </n-button>
+            </VaButton>
             <br />
             或使用連結：https://discord.gg/A2cMZRr
         </n-step>
@@ -95,15 +99,14 @@ const version = 1.21;
             包含《水星法》、《水星伺服器破壞舉報獎勵規則》等。
             <br />
             <div class="w-full m-auto mt-2 mb-2">
-                <n-button
-                    @click="
-                        clickLinkButton(
-                            'https://mercuryland.online/#/publication'
-                        )
-                    "
+                <VaButton
+                    preset="secondary"
+                    color="#FFFFFF"
+                    border-color="#969494"
+                    to="publication"
                 >
                     點擊閱讀規則
-                </n-button>
+                </VaButton>
             </div>
         </n-step>
 
@@ -111,11 +114,14 @@ const version = 1.21;
             在 #申請伺服 打上Minecraft ID
             <br />
             <div class="w-full m-auto mt-2 mb-2">
-                <n-button
+                <VaButton
+                    preset="secondary"
+                    color="#FFFFFF"
+                    border-color="#969494"
                     @click="clickLinkButton('https://discord.gg/CXSQq4nVAH')"
                 >
                     點擊跳轉頻道
-                </n-button>
+                </VaButton>
             </div>
         </n-step>
 

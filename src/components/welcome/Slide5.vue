@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { NGrid, NGi, NDivider, NButton } from "naive-ui";
+import { VaButton } from "vuestic-ui";
+import { NGrid, NGi, NDivider } from "naive-ui";
 import { openLinkSameTab } from "@/composables/utils";
 import ReturnTopButton from "./ReturnTopButton.vue";
 
@@ -44,10 +45,10 @@ import ReturnTopButton from "./ReturnTopButton.vue";
                     <div class="text-cyan-600 font-bold text-3xl">
                         立即前往其他分頁，了解如何加入。
                     </div>
-                    <div class="mt-8 text-cyan-600">
-                        <n-button size="large" @click="openLinkSameTab('https://mercuryland.online/#/join')">
+                    <div class="mt-8">
+                        <VaButton preset="primary" size="large" to="join" border-color="#0891b2" color="#FFFFFF">
                             點擊加入
-                        </n-button>
+                        </VaButton>
                     </div>
                 </div>
             </n-gi>

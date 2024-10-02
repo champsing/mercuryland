@@ -1,16 +1,15 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import {
-    NButton,
     NCard,
     NConfigProvider,
     NDivider,
     NFlex,
     darkTheme,
 } from "naive-ui";
+import { VaButton } from "vuestic-ui";
 import { RouterLink } from "vue-router";
 import { useElementBounding } from "@vueuse/core";
-import { openLinkSameTab } from "./composables/utils";
 
 const tabNav = ref<HTMLInputElement | null>(null);
 const tabNavBounding = useElementBounding(tabNav);
@@ -105,14 +104,13 @@ function calcMainStyle(path: string) {
             </n-flex>
             <!-- <div class="mt-2">隱私權政策&ensp;|&ensp;使用條款&ensp;|&ensp;法律聲明</div> -->
             <div class="mt-2">
-                <n-button
-                    :bordered="false"
-                    :focusable="false"
-                    tertiary
-                    @click="openLinkSameTab('https://mercuryland.online/#/tos')"
+                <VaButton
+                    preset="secondary"
+                    border-color="#363636"
+                    to="tos"
                 >
                     <div class="text-zinc-200">使用條款</div>
-                </n-button>
+                </VaButton>
             </div>
         </div>
     </n-card>
