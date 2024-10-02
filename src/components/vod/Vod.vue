@@ -67,7 +67,6 @@ const showRuleDescModal = ref(false);
                 color="#FFFFFF"
                 class="ml-12 mt-1"
                 @click="showRuleDescModal = !showRuleDescModal"
-                disabled
             >
                 <n-icon size="25" class="mr-2">
                     <Info24Regular />
@@ -80,10 +79,36 @@ const showRuleDescModal = ref(false);
     </n-grid>
 
     <!-- 規則說明 -->
-    <VaModal v-model="showRuleDescModal" >
-        <h3 class="text-pretty">
-            加班台規則說明
-        </h3>
+    <VaModal
+        v-model="showRuleDescModal"
+        title="規則說明"
+        hide-default-actions
+        :closeButton="true"
+        :blur="true"
+    >
+        <span class="text-3xl"> 直播時數規則說明 </span>
+        <div class="text-2xl mt-2">●概述</div>
+        <div class="text-bg mt-2">
+            惡靈公布直播紀錄檔時，此處會同步更新計算加班台的剩餘時數，並標上當天遊玩的遊戲，供使用者藉由上方的標籤篩選功能找到自己想看的遊戲直播。
+        </div>
+        <div class="text-2xl mt-2">●時數計算說明</div>
+        <div class="text-bg mt-2">
+            在計算明細表中，會以「計劃」、「直播」等項目的時數互相加減得出剩餘時數。
+            <br />
+            「計劃」為惡靈的常規直播時數，目前落在2小時左右，因此以2小時計算。
+            <br />
+            每次直播的時數沒意外的話以YouTube影片時長為準。若直播紀錄檔被和諧了，則以2小時計算。
+            <br />
+            有時在直播懲罰會生成加班台懲罰，此處也會以「懲罰」項目來增加剩餘的加班台時數。
+            <br />
+            若有其他因素導致時數加減也會以獨立項目處理。
+            <br />
+            伺服器時間每週三 00:00 會在計算明細表生成一項「計劃」。
+        </div>
+        <div class="text-2xl mt-2">●不可抗力因素</div>
+        <div class="text-bg mt-2">
+            若惡靈在直播過程中斷網或停電，則中間嘗試恢復的多次黑畫面直播紀錄檔將不會被採計，直到恢復1分鐘以上的穩定直播為止。
+        </div>
     </VaModal>
 
     <n-divider class="!mt-2 !mb-2" />
