@@ -38,8 +38,6 @@ let finishOptions = [{ label: "", value: null }].concat(
 
 </script>
 
-<script lang="ts"></script>
-
 <template>
     <n-grid x-gap="12" :cols="4" class="w-11/12">
         <n-gi :span="2">
