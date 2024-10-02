@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { VaButton } from "vuestic-ui";
 import { NGrid, NGi, NDivider } from "naive-ui";
-import { openLinkSameTab } from "@/composables/utils";
 import ReturnTopButton from "./ReturnTopButton.vue";
 
 // const emit = defineEmits<{
