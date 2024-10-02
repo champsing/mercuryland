@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { NDivider, NIcon } from "naive-ui";
 import Law from "./Law.vue";
-//import NewLaw from "./NewLaw.vue"; //如果沒有新版本水星法可以註解起來
+// import NewLaw from "./NewLaw.vue"; //如果沒有新版本水星法可以註解起來
 import Archive from "./Archive.vue";
 import { WindowNew20Filled } from "@vicons/fluent";
 </script>
