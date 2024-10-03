@@ -30,6 +30,7 @@ tagMenu[0] = { label: "", value: null, disabled: true };
 let computedTime = ref(0);
 
 const showRuleDescModal = ref(false);
+const showVodDescImg = ref(false);
 </script>
 
 <template>
@@ -95,20 +96,38 @@ const showRuleDescModal = ref(false);
         <div class="text-bg mt-2">
             在計算明細表中，會以「計劃」、「直播」等項目的時數互相加減得出剩餘時數。
             <br />
-            「計劃」為惡靈的常規直播時數，目前落在2小時左右，因此以2小時計算。
+            1. 「計劃」為惡靈的常規直播時數，目前落在2小時左右，因此以2小時計算。
             <br />
-            每次直播的時數沒意外的話以YouTube影片時長為準。若直播紀錄檔被和諧了，則以2小時計算。
+            2. 每次直播的時數沒意外的話以YouTube影片時長為準。若直播紀錄檔被和諧了，則以2小時計算。
             <br />
-            有時在直播懲罰會生成加班台懲罰，此處也會以「懲罰」項目來增加剩餘的加班台時數。
+            3. 有時在直播懲罰會生成加班台懲罰，此處也會以「懲罰」項目來增加剩餘的加班台時數。
             <br />
-            若有其他因素導致時數加減也會以獨立項目處理。
+            4. 若有其他因素導致時數加減也會以獨立項目處理。
             <br />
-            伺服器時間每週三 00:00 會在計算明細表生成一項「計劃」。
+            5. 伺服器時間每週三 00:00 會在計算明細表生成一項「計劃」。
+            <br />
+            <VaButton
+                class="mt-2"
+                preset="primary"
+                border-color="info"
+                color="info"
+                gradient
+                @click="showVodDescImg = !showVodDescImg"
+            >
+                查看說明圖例
+            </VaButton>
         </div>
+
         <div class="text-2xl mt-2">●不可抗力因素</div>
         <div class="text-bg mt-2">
             若惡靈在直播過程中斷網或停電，則中間嘗試恢復的多次黑畫面直播紀錄檔將不會被採計，直到恢復1分鐘以上的穩定直播為止。
         </div>
+    </VaModal>
+
+    <VaModal v-model="showVodDescImg"
+        hide-default-actions
+    >
+        <img src="@assets/images/vod_time.png" alt="直播時數規則說明" />
     </VaModal>
 
     <n-divider class="!mt-2 !mb-2" />
