@@ -1,5 +1,6 @@
 {
     "name": "mercuryland",
+    "private": true,
     "version": "2.5.3",
     "type": "module",
     "scripts": {
