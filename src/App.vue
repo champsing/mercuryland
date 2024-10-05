@@ -10,7 +10,6 @@ import {
 import { VaButton } from "vuestic-ui";
 import { RouterLink } from "vue-router";
 import { useElementBounding } from "@vueuse/core";
-import { openLink } from "./composables/utils";
 
 const tabNav = ref<HTMLInputElement | null>(null);
 const tabNavBounding = useElementBounding(tabNav);
@@ -116,7 +115,7 @@ function calcMainStyle(path: string) {
                 <VaButton
                     preset="secondary"
                     border-color="#363636"
-                    @click="openLink('https://www.youtube.com/watch?v=Yir_XAcccmY')"
+                    href="https://www.youtube.com/watch?v=Yir_XAcccmY"
                 >
                     <div class="text-zinc-200">使用教學</div>
                 </VaButton>

@@ -10,7 +10,7 @@ import {
     NStep,
     NSteps,
 } from "naive-ui";
-import { copyToClipboard, openLink } from "@composables/utils";
+import { copyToClipboard } from "@composables/utils";
 import { ref } from "vue";
 import { MdArrowRoundBack, MdArrowRoundForward } from "@vicons/ionicons4";
 import { VaButton } from "vuestic-ui";
@@ -21,8 +21,7 @@ import { VaButton } from "vuestic-ui";
 
 let currentStep = ref<number | null>(1); //current step
 
-function clickLinkButton(link: string) {
-    openLink(link);
+function clickLinkButton() {
     if (currentStep.value < 4) currentStep.value++;
     else currentStep.value = 1;
 }
@@ -86,7 +85,8 @@ const version = 1.21;
                 preset="secondary"
                 color="#FFFFFF"
                 border-color="#969494"
-                @click="clickLinkButton('https://discord.gg/A2cMZRr')"
+                @click="clickLinkButton()"
+                href="https://discord.gg/A2cMZRr"
                 class="mt-2 mb-2"
             >
                 點擊加入群組
@@ -118,7 +118,8 @@ const version = 1.21;
                     preset="secondary"
                     color="#FFFFFF"
                     border-color="#969494"
-                    @click="clickLinkButton('https://discord.gg/CXSQq4nVAH')"
+                    @click="clickLinkButton()"
+                    href="https://discord.gg/CXSQq4nVAH"
                 >
                     點擊跳轉頻道
                 </VaButton>

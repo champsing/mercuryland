@@ -74,7 +74,7 @@ function parseOptions(law_document: typeof lawDocument) {
                     round
                     size="medium"
                     color="#38b67d"
-                    @click="openLink(currentDocument.url)"
+                    :href="currentDocument.url"
                 >
                     <n-icon size="25">
                         <WindowNew20Filled />
