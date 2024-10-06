@@ -55,7 +55,7 @@ function parseOptions(law_document: typeof lawDocument) {
                 </VaButton>
             </div> -->
             <VaMenuList
-                class="text-white text-normal doc-menu-hover"
+                class="text-white text-lg doc-menu-hover"
                 :options="parseOptions(lawDocument)"
                 @selected="(doc) => findCurrentDoc(doc.text)"
             />
@@ -96,11 +96,15 @@ function parseOptions(law_document: typeof lawDocument) {
     </VaSplit>
 </template>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .doc-menu-hover {
     --va-menu-item-hover-color: #e13535;
     --va-menu-item-hover-opacity: 0.6;
     --va-menu-padding-x: 8px;
     --va-menu-padding-y: 10px;
+}
+
+.va-menu-list__group-name {
+    top: -6px !important;
 }
 </style>
