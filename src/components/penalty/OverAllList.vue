@@ -51,7 +51,6 @@ let proceedingPenalties = penaltyData
     .toString();
 
 const notEffectivePenalties = [
-    "玩左邊的「默念對方名字，抽三張牌看答案」",
     "麥塊蓋故宮",
     "唸一遍所有馬來西亞官方郵局的地址",
     "直播玩雀魂觀眾場",
