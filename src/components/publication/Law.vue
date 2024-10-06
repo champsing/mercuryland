@@ -4,7 +4,6 @@ import { NIcon } from "naive-ui";
 import { VaButton, VaDivider, VaSplit, VaMenuList } from "vuestic-ui";
 import lawDocument from "@assets/data/law_document.json";
 import { WindowNew20Filled } from "@vicons/fluent";
-import { openLink } from "@/composables/utils";
 </script>
 
 <script select-doc lang="ts">
