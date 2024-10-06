@@ -87,6 +87,7 @@ const version = 1.21;
                 border-color="#969494"
                 @click="clickLinkButton()"
                 href="https://discord.gg/A2cMZRr"
+                target="_blank"
                 class="mt-2 mb-2"
             >
                 點擊加入群組
@@ -120,6 +121,7 @@ const version = 1.21;
                     border-color="#969494"
                     @click="clickLinkButton()"
                     href="https://discord.gg/CXSQq4nVAH"
+                    target="_blank"
                 >
                     點擊跳轉頻道
                 </VaButton>

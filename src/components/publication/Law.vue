@@ -74,6 +74,7 @@ function parseOptions(law_document: typeof lawDocument) {
                     size="medium"
                     color="#38b67d"
                     :href="currentDocument.url"
+                    target="_blank"
                 >
                     <n-icon size="25">
                         <WindowNew20Filled />

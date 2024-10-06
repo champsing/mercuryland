@@ -116,6 +116,7 @@ function calcMainStyle(path: string) {
                     preset="secondary"
                     border-color="#363636"
                     href="https://www.youtube.com/watch?v=Yir_XAcccmY"
+                    target="_blank"
                 >
                     <div class="text-zinc-200">使用教學</div>
                 </VaButton>
