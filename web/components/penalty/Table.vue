@@ -24,6 +24,7 @@ class PenaltyDataEntry {
     status: string;
     description?: { block: string; str?: string; uri?: string }[];
     reapply?: { entries: { date: string; status: string }[] };
+    steamID?: number;
 }
 
 function statusOf(status: string): (typeof penaltyStatus)[0] {
@@ -136,6 +137,7 @@ function filterPenaltyData(
             </template>
             <template v-for="block in penaltyEntryModalContent.description">
                 <span v-if="block.block == 'text'">{{ block.str }}</span>
+
                 <n-button
                     v-if="block.block == 'link'"
                     @click="openLink(block.uri)"
@@ -156,16 +158,23 @@ function filterPenaltyData(
 
                 <VaButton
                     v-if="block.block == 'penalty'"
-                    @click="() => {
-                        penaltyEntryModalContent = ofId(penaltyData, parseInt(block.uri));
-                        showPenaltyEntryModal = !showPenaltyEntryModal;
-                    }"
+                    @click="
+                        () => {
+                            penaltyEntryModalContent = ofId(
+                                penaltyData,
+                                parseInt(block.uri)
+                            );
+                            showPenaltyEntryModal = !showPenaltyEntryModal;
+                        }
+                    "
                     class="mt-1"
                     color="#30e0e7"
                     size="small"
                     round
                 >
-                    {{ ofId(penaltyData, parseInt(block.uri)).date }}．{{ ofId(penaltyData, parseInt(block.uri)).name }}
+                    {{ ofId(penaltyData, parseInt(block.uri)).date }}．{{
+                        ofId(penaltyData, parseInt(block.uri)).name
+                    }}
                 </VaButton>
 
                 <img
@@ -173,17 +182,28 @@ function filterPenaltyData(
                     :src="`penalty/${block.uri}`"
                     :alt="block.str"
                 />
+
                 <br v-if="block.block == 'br'" />
             </template>
 
-            <template
-                v-if="penaltyEntryModalContent.reapply !== undefined"
-            >
+            <template v-if="penaltyEntryModalContent.steamID !== undefined">
+                <n-divider class="!m-2" />
+                <iframe
+                    :src="`https://store.steampowered.com/widget/${penaltyEntryModalContent.steamID}/`"
+                    frameborder="0"
+                    width="520"
+                    height="150"
+                />
+            </template>
+
+            <template v-if="penaltyEntryModalContent.reapply !== undefined">
                 <div class="mt-3">
                     <span class="text-base">
                         😇&nbsp;復活&ensp;
                         <div class="same-line text-2xl text-orange-300">
-                            {{ penaltyEntryModalContent.reapply?.entries.length }}
+                            {{
+                                penaltyEntryModalContent.reapply?.entries.length
+                            }}
                         </div>
                         &ensp;次
                     </span>
