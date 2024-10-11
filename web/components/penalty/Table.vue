@@ -47,6 +47,8 @@ const penaltyEntryModalContent: Ref<PenaltyDataEntry> = defineModel(
     }
 );
 
+const showPenaltyScreenshotModal = ref(false);
+
 const filteredData = computed(() =>
     filterPenaltyData(props.dateRange, props.status, props.search)
 );
@@ -177,11 +179,24 @@ function filterPenaltyData(
                     }}
                 </VaButton>
 
-                <img
-                    v-if="block.block == 'image'"
-                    :src="`penalty/${block.uri}`"
-                    :alt="block.str"
-                />
+                <div v-if="block.block == 'image'">
+                    <VaButton
+                        @click="
+                            showPenaltyScreenshotModal =
+                                !showPenaltyScreenshotModal
+                        "
+                        gradient
+                        class="mt-2"
+                        color="#0e8110"
+                        size="medium"
+                    >
+                        查看證明圖片
+                    </VaButton>
+                </div>
+
+                <n-modal v-model:show="showPenaltyScreenshotModal">
+                    <img :src="`penalty/${block.uri}`" :alt="block.str" />
+                </n-modal>
 
                 <br v-if="block.block == 'br'" />
             </template>
