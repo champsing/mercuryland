@@ -20,12 +20,12 @@
         "noUnusedParameters": true,
         "noFallthroughCasesInSwitch": true,
         "paths": {
-            "@/*": ["./src/*"],
-            "@assets/*": ["./src/assets/*"],
-            "@components/*": ["./src/components/*"],
-            "@composables/*": ["./src/composables/*"],
+            "@/*": ["./web/*"],
+            "@assets/*": ["./web/assets/*"],
+            "@components/*": ["./web/components/*"],
+            "@composables/*": ["./web/composables/*"],
         }
     },
-    "include": ["src/**/*.ts", "src/**/*.tsx", "src/**/*.vue","src/**/**/*.vue"],
+    "include": ["web/**/*.ts", "web/**/*.tsx", "web/**/*.vue"],
     "references": [{ "path": "./tsconfig.node.json" }]
 }

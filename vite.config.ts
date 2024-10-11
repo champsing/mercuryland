@@ -22,10 +22,10 @@ export default defineConfig({
     },
     resolve: {
         alias: {
-            '@': fileURLToPath(new URL('./src', import.meta.url)),
-            '@assets': fileURLToPath(new URL('./src/assets', import.meta.url)),
-            '@components': fileURLToPath(new URL('./src/components', import.meta.url)),
-            '@composables': fileURLToPath(new URL('./src/composables', import.meta.url)),
+            '@': fileURLToPath(new URL('./web', import.meta.url)),
+            '@assets': fileURLToPath(new URL('./web/assets', import.meta.url)),
+            '@components': fileURLToPath(new URL('./web/components', import.meta.url)),
+            '@composables': fileURLToPath(new URL('./web/composables', import.meta.url)),
         }
     },
 });
