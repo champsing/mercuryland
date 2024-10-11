@@ -62,6 +62,28 @@ const notEffectivePenalties = [
 
 <template>
     <n-flex size="small" vertical class="m-auto" item-responsive>
+        <VaAlert class="mt-2" color="#3d807c" closeable>
+            <div class="flex flex-row">
+                <n-icon size="25" class="mr-2">
+                    <InfoCircle />
+                </n-icon>
+                <div class="text-center text-amber-200">
+                    <div class="text-lg">圖表維護中，敬請期待開放</div>
+                </div>
+            </div>
+        </VaAlert>
+
+        <VaAlert class="mt-2" color="#59753f" closeable>
+            <div class="flex flex-row">
+                <n-icon size="25" class="mt-1 mr-2">
+                    <InfoCircle />
+                </n-icon>
+                <div class="text-center text-yellow-300">
+                    <div class="text-lg mt-1">點擊完成狀態可快速切換</div>
+                </div>
+            </div>
+        </VaAlert>
+
         <n-flex size="small" class="m-auto" item-responsive>
             <!-- <VaChip class="vachip2" color="#3d807c" readonly>
             <n-icon size="25" class="mt-1 mr-2">
@@ -102,28 +124,6 @@ const notEffectivePenalties = [
                 </div>
             </VaButton>
         </n-flex>
-
-        <VaAlert class="mt-7" color="#3d807c">
-            <div class="flex flex-row">
-                <n-icon size="25" class="mr-2">
-                    <InfoCircle />
-                </n-icon>
-                <div class="text-center text-amber-200">
-                    <div class="text-lg">圖表維護中，敬請期待開放</div>
-                </div>
-            </div>
-        </VaAlert>
-
-        <VaAlert class="mt-2" color="#59753f">
-            <div class="flex flex-row">
-                <n-icon size="25" class="mt-1 mr-2">
-                    <InfoCircle />
-                </n-icon>
-                <div class="text-center text-yellow-300">
-                    <div class="text-lg mt-1">點擊完成狀態可快速切換</div>
-                </div>
-            </div>
-        </VaAlert>
 
         <div class="flex flex-col text-center">
             <div class="text-sm mt-4 text-zinc-200">尚未生效的懲罰</div>
