@@ -22,7 +22,7 @@ class PenaltyDataEntry {
     date: string;
     name: string;
     status: string;
-    description?: { block: string; str?: string; uri?: string }[];
+    description?: { block: string; text?: string; uri?: string }[];
     reapply?: { entries: { date: string; status: string }[] };
     steamID?: number;
 }
@@ -138,7 +138,7 @@ function filterPenaltyData(
                 </n-button>
             </template>
             <template v-for="block in penaltyEntryModalContent.description">
-                <span v-if="block.block == 'text'">{{ block.str }}</span>
+                <span v-if="block.block == 'text'">{{ block.text }}</span>
 
                 <n-button
                     v-if="block.block == 'link'"
@@ -146,7 +146,7 @@ function filterPenaltyData(
                     :text="true"
                     :focusable="false"
                 >
-                    {{ block.str }}
+                    {{ block.text }}
                 </n-button>
 
                 <n-button
@@ -155,7 +155,7 @@ function filterPenaltyData(
                     :text="true"
                     :focusable="false"
                 >
-                    {{ block.str }}
+                    {{ block.text }}
                 </n-button>
 
                 <VaButton
@@ -195,7 +195,7 @@ function filterPenaltyData(
                 </div>
 
                 <n-modal v-model:show="showPenaltyScreenshotModal">
-                    <img :src="`penalty/${block.uri}`" :alt="block.str" />
+                    <img :src="`penalty/${block.uri}`" :alt="block.text" />
                 </n-modal>
 
                 <br v-if="block.block == 'br'" />
