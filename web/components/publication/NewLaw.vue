@@ -5,7 +5,7 @@ const effectiveDate = "2024 年 7 月 1 日";
 
 <template>
     <div class="flex flex-row justify-center gap-32">
-        <!-- <n-icon> </n-icon> -->
+        <!-- <VaIcon> </VaIcon> -->
         <div class="flex flex-col text-center">
             <div class="text-4xl text-red-400 mt-4">《水星法》新法公告</div>
             <div class="text-xl text-red-400 mt-4">

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { useWindowSize } from "@vueuse/core";
-import { NButton, NIcon } from "naive-ui";
+import { NButton } from "naive-ui";
+import { VaIcon } from "vuestic-ui";
 import { AngleDown } from "@vicons/fa";
 
 const props = defineProps<{ page: number }>();
@@ -20,9 +21,9 @@ function action() {
             @click="action()"
         >
             <template #icon>
-                <n-icon size="128">
+                <VaIcon size="128px">
                     <angle-down />
-                </n-icon>
+                </VaIcon>
             </template>
         </n-button>
     </div>

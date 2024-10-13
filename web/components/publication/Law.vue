@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { Ref, ref } from "vue";
-import { NIcon } from "naive-ui";
-import { VaButton, VaDivider, VaSplit, VaMenuList } from "vuestic-ui";
+import { VaButton, VaDivider, VaIcon, VaSplit, VaMenuList } from "vuestic-ui";
 import lawDocument from "@assets/data/law_document.json";
 import { WindowNew20Filled } from "@vicons/fluent";
 </script>
@@ -76,9 +75,9 @@ function parseOptions(law_document: typeof lawDocument) {
                     :href="currentDocument.url"
                     target="_blank"
                 >
-                    <n-icon size="25">
+                    <VaIcon size="large">
                         <WindowNew20Filled />
-                    </n-icon>
+                    </VaIcon>
                     <div class="ml-2 mr-2 text-center">在新分頁開啟</div>
                 </VaButton>
             </div>

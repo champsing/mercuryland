@@ -7,13 +7,13 @@ import {
     NFlex,
     NGrid,
     NGi,
-    NIcon,
     NModal,
 } from "naive-ui";
 import {
     VaAlert,
     VaButton,
     VaButtonGroup,
+    VaIcon,
     VaModal,
     VaTextarea,
 } from "vuestic-ui";
@@ -64,9 +64,9 @@ const notEffectivePenalties = [
     <n-flex size="small" vertical class="m-auto" item-responsive>
         <VaAlert class="mt-2" color="#3d807c" closeable>
             <div class="flex flex-row">
-                <n-icon size="25" class="mr-2">
+                <VaIcon size="large" class="mr-2">
                     <InfoCircle />
-                </n-icon>
+                </VaIcon>
                 <div class="text-center text-amber-200">
                     <div class="text-lg">圖表維護中，敬請期待開放</div>
                 </div>
@@ -75,9 +75,9 @@ const notEffectivePenalties = [
 
         <VaAlert class="mt-2" color="#59753f" closeable>
             <div class="flex flex-row">
-                <n-icon size="25" class="mt-1 mr-2">
+                <VaIcon size="large" class="mt-1 mr-2">
                     <InfoCircle />
-                </n-icon>
+                </VaIcon>
                 <div class="text-center text-yellow-300">
                     <div class="text-lg mt-1">點擊完成狀態可快速切換</div>
                 </div>
@@ -86,9 +86,9 @@ const notEffectivePenalties = [
 
         <n-flex size="small" class="m-auto" item-responsive>
             <!-- <VaChip class="vachip2" color="#3d807c" readonly>
-            <n-icon size="25" class="mt-1 mr-2">
+            <VaIcon size="large" class="mt-1 mr-2">
                 <InfoCircle />
-            </n-icon>
+            </VaIcon>
             <div class="text-center text-amber-200">
                 <div class="text-lg mt-1">將滑鼠移至圖表上可查看數量</div>
             </div>
@@ -116,9 +116,9 @@ const notEffectivePenalties = [
                 class="ml-4 mt-2"
                 @click="showRuleDescModal = !showRuleDescModal"
             >
-                <n-icon size="25" class="mr-2">
+                <VaIcon size="large" class="mr-2">
                     <Info24Regular />
-                </n-icon>
+                </VaIcon>
                 <div class="text-center">
                     <div class="text-lg">規則說明</div>
                 </div>

@@ -6,14 +6,13 @@ import {
     NDivider,
     NGrid,
     NGi,
-    NIcon,
     NStep,
     NSteps,
 } from "naive-ui";
 import { copyToClipboard } from "@composables/utils";
 import { ref } from "vue";
 import { MdArrowRoundBack, MdArrowRoundForward } from "@vicons/ionicons4";
-import { VaButton } from "vuestic-ui";
+import { VaButton, VaIcon } from "vuestic-ui";
 
 // const emit = defineEmits<{
 //     (e: "toTab", tab: string): void;
@@ -138,16 +137,16 @@ const version = 1.21;
     <n-button-group class="mt-4">
         <n-button @click="prev">
             <template #icon>
-                <n-icon>
+                <VaIcon>
                     <md-arrow-round-back />
-                </n-icon>
+                </VaIcon>
             </template>
         </n-button>
         <n-button @click="next">
             <template #icon>
-                <n-icon>
+                <VaIcon>
                     <md-arrow-round-forward />
-                </n-icon>
+                </VaIcon>
             </template>
         </n-button>
     </n-button-group>

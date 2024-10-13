@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, Ref } from "vue";
-import { NDatePicker, NGrid, NGi, NSelect, NDivider, NIcon } from "naive-ui";
-import { VaButton, VaModal, VaSwitch } from "vuestic-ui";
+import { NDatePicker, NGrid, NGi, NSelect, NDivider } from "naive-ui";
+import { VaButton, VaIcon, VaModal, VaSwitch } from "vuestic-ui";
 import vodLinkData from "@assets/data/vod.json";
 import DataTable from "./DataTable.vue";
 import TimeSummary from "./TimeSummary.vue";
@@ -69,9 +69,9 @@ const showVodDescImg = ref(false);
                 class="ml-12 mt-1"
                 @click="showRuleDescModal = !showRuleDescModal"
             >
-                <n-icon size="25" class="mr-2">
+                <VaIcon size="large" class="mr-2">
                     <Info24Regular />
-                </n-icon>
+                </VaIcon>
                 <div class="text-center">
                     <div class="text-lg">規則說明</div>
                 </div>

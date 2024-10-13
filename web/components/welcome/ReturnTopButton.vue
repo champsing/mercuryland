@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { NButton, NIcon } from "naive-ui";
+import { NButton } from "naive-ui";
+import { VaIcon } from "vuestic-ui";
 import { AngleUp } from "@vicons/fa";
 function action() {
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -15,9 +16,9 @@ function action() {
             @click="action()"
         >
             <template #icon>
-                <n-icon size="128">
+                <VaIcon size="128px">
                     <angle-up />
-                </n-icon>
+                </VaIcon>
             </template>
         </n-button>
     </div>
