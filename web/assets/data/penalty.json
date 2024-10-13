@@ -7,7 +7,7 @@
         "description": [
             {
                 "block": "vod",
-                "str": "惩罚完成链接",
+                "text": "惩罚完成链接",
                 "uri": "67"
             }
         ]
@@ -20,7 +20,7 @@
         "description": [
             {
                 "block": "vod",
-                "str": "惩罚完成链接",
+                "text": "惩罚完成链接",
                 "uri": "75"
             }
         ],
@@ -40,7 +40,7 @@
         "description": [
             {
                 "block": "vod",
-                "str": "惩罚完成链接",
+                "text": "惩罚完成链接",
                 "uri": "54"
             }
         ],
@@ -51,7 +51,7 @@
         "date": "2023-02-05",
         "name": "玩 RL Craft",
         "status": "未開始",
-        "description": [{ "block": "text", "str": "🆙 增加" }]
+        "description": [{ "block": "text", "text": "🆙 增加" }]
     },
     {
         "id": 27,
@@ -68,7 +68,7 @@
         "description": [
             {
                 "block": "vod",
-                "str": "惩罚完成链接",
+                "text": "惩罚完成链接",
                 "uri": "89"
             }
         ],
@@ -82,7 +82,7 @@
         "description": [
             {
                 "block": "vod",
-                "str": "惩罚完成链接",
+                "text": "惩罚完成链接",
                 "uri": "111"
             }
         ],
@@ -140,7 +140,7 @@
         "description": [
             {
                 "block": "link",
-                "str": "懲罰完成連結",
+                "text": "懲罰完成連結",
                 "uri": "https://youtube.com/clip/Ugkx8GkjUNA3Hxn9jyJcbuvJSme8jY9CFRzC"
             }
         ]
@@ -222,7 +222,7 @@
         "name": "玩 Metro: Last Night",
         "status": "未開始",
         "description": [
-            { "block": "text", "str": "2️⃣ 備案: 玩 Super Animal Royale" }
+            { "block": "text", "text": "2️⃣ 備案: 玩 Super Animal Royale" }
         ],
         "steamID": 287390
     },
@@ -234,7 +234,7 @@
         "description": [
             {
                 "block": "link",
-                "str": "懲罰完成連結",
+                "text": "懲罰完成連結",
                 "uri": "https://youtube.com/clip/UgkxrMznUtBi4zOBP4D20WPqbkatV5-cMLS9"
             }
         ]
@@ -253,16 +253,16 @@
         "description": [
             {
                 "block": "text",
-                "str": "🏁 "
+                "text": "🏁 "
             },
             {
                 "block": "link",
-                "str": "投票給過",
+                "text": "投票給過",
                 "uri": "https://discord.com/channels/506120681495199756/566611073977942017/1188877921608286260"
             },
             {
                 "block": "image",
-                "str": "投票的截图",
+                "text": "投票的截图",
                 "uri": "97.png"
             }
         ]
@@ -282,7 +282,7 @@
         "description": [
             {
                 "block": "link",
-                "str": "懲罰完成連結",
+                "text": "懲罰完成連結",
                 "uri": "https://discord.com/channels/506120681495199756/529184173680885780/1132606696892674099"
             }
         ]
@@ -295,7 +295,7 @@
         "description": [
             {
                 "block": "link",
-                "str": "懲罰完成連結",
+                "text": "懲罰完成連結",
                 "uri": "https://youtube.com/clip/UgkxvS7iudvzdTxYpVYb2yGZN21AqydW6zsm"
             }
         ]
@@ -327,7 +327,7 @@
         "description": [
             {
                 "block": "text",
-                "str": "🆙 增加"
+                "text": "🆙 增加"
             }
         ]
     },
@@ -336,7 +336,7 @@
         "date": "2023-07-30",
         "name": "深夜台玩恐怖遊戲 👻",
         "status": "已完成",
-        "description": [{ "block": "text", "str": "🆙 增加" }]
+        "description": [{ "block": "text", "text": "🆙 增加" }]
     },
     {
         "id": 75,
@@ -344,10 +344,10 @@
         "name": "通關《壺男》",
         "status": "勉強過",
         "description": [
-            { "block": "text", "str": "🏁 懲罰主人給過" },
+            { "block": "text", "text": "🏁 懲罰主人給過" },
             {
                 "block": "image",
-                "str": "給過的截圖",
+                "text": "給過的截圖",
                 "uri": "75.png"
             }
         ],
@@ -378,10 +378,10 @@
         "name": "破 Garten of Banban 2 👻",
         "status": "勉強過",
         "description": [
-            { "block": "text", "str": "🏁 原主人給過" },
+            { "block": "text", "text": "🏁 原主人給過" },
             {
                 "block": "image",
-                "str": "給過的截图",
+                "text": "給過的截图",
                 "uri": "66.png"
             }
         ],
@@ -392,7 +392,7 @@
         "date": "2023-08-20",
         "name": "Hypixel 與觀眾同樂時一場內弄死所有觀眾",
         "status": "已完成",
-        "description": [{ "block": "text", "str": "🔄 重抽" }],
+        "description": [{ "block": "text", "text": "🔄 重抽" }],
         "reapply": {
             "entries": [
                 {
@@ -413,7 +413,7 @@
         "date": "2023-09-10",
         "name": "玩1個小時 only up",
         "status": "勉強過",
-        "description": [{ "block": "text", "str": "🏁 玩盜版" }],
+        "description": [{ "block": "text", "text": "🏁 玩盜版" }],
         "steamID": 2562240
     },
     {
@@ -440,14 +440,14 @@
         "date": "2023-09-10",
         "name": "開加班台",
         "status": "已完成",
-        "description": [{ "block": "text", "str": "🆙 增加" }]
+        "description": [{ "block": "text", "text": "🆙 增加" }]
     },
     {
         "id": 93,
         "date": "2023-09-10",
         "name": "nitro",
         "status": "已完成",
-        "description": [{ "block": "text", "str": "🆙 增加" }]
+        "description": [{ "block": "text", "text": "🆙 增加" }]
     },
     {
         "id": 94,
@@ -460,7 +460,7 @@
         "date": "2023-09-17",
         "name": "直播玩螃蟹遊戲",
         "status": "已完成",
-        "description": [{ "block": "text", "str": "📝 原主人修改1次" }],
+        "description": [{ "block": "text", "text": "📝 原主人修改1次" }],
         "steamID": 1782210
     },
     {
@@ -468,7 +468,7 @@
         "date": "2023-09-17",
         "name": "直播遊玩鬥陣特攻2直到上升通行證等級20級（超過十級可累積）",
         "status": "已完成",
-        "description": [{ "block": "text", "str": "📝 原主人修改1次" }]
+        "description": [{ "block": "text", "text": "📝 原主人修改1次" }]
     },
     {
         "id": 90,
@@ -493,7 +493,7 @@
         "date": "2023-09-24",
         "name": "直播不能講到d開頭的字 五次懲罰加一 加到懲罰就解禁",
         "status": "已完成",
-        "description": [{ "block": "text", "str": "🆙 增加" }]
+        "description": [{ "block": "text", "text": "🆙 增加" }]
     },
     {
         "id": 48,
@@ -506,7 +506,7 @@
         "date": "2023-09-24",
         "name": "讓 ChatGPT 同時給小學數學、科學、文學、歷史、地理 各一題選擇題 2分鐘內沒解出來懲罰+1",
         "status": "已完成",
-        "description": [{ "block": "text", "str": "🆙 增加" }]
+        "description": [{ "block": "text", "text": "🆙 增加" }]
     },
     {
         "id": 59,
@@ -539,7 +539,7 @@
         "date": "2023-10-08",
         "name": "直播玩 project playtime",
         "status": "已完成",
-        "description": [{ "block": "text", "str": "📝 原主人修改1次" }],
+        "description": [{ "block": "text", "text": "📝 原主人修改1次" }],
         "steamID": 1961460
     },
     {
@@ -569,7 +569,7 @@
         "description": [
             {
                 "block": "vod",
-                "str": "⚔️ 已完成 4 /20個",
+                "text": "⚔️ 已完成 4 /20個",
                 "uri": "98"
             }
         ],
@@ -621,7 +621,7 @@
         "description": [
             {
                 "block": "link",
-                "str": "懲罰完成連結",
+                "text": "懲罰完成連結",
                 "uri": "https://discord.com/channels/506120681495199756/566611073977942017/1188882035645890691"
             }
         ]
@@ -664,7 +664,7 @@
         "description": [
             {
                 "block": "link",
-                "str": "懲罰完成連結",
+                "text": "懲罰完成連結",
                 "uri": "https://discord.com/channels/506120681495199756/566611073977942017/1189169405679112222"
             }
         ]
@@ -913,7 +913,7 @@
         "description": [
             {
                 "block": "text",
-                "str": "✅已抽"
+                "text": "✅已抽"
             },
             {
                 "block": "br"
