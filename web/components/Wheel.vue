@@ -82,8 +82,14 @@ const modal2 = reactive({
 </script>
 
 <template>
+    <div class="flex w-full justify-end">
+        <div class="text-lime-400 font-bold text-4xl bg-black text-right">
+            BETA
+        </div>
+    </div>
+    
     <div class="flex w-full justify-evenly">
-        <div class="wheel-wrapper w-2/5" ref="wheelContainer"></div>
+        <div class="wheel-wrapper w-2/5 -mt-20" ref="wheelContainer"></div>
         <div class="w-1/5">
             <div class="va-h4">待抽区</div>
             <VaTextarea
@@ -111,7 +117,7 @@ const modal2 = reactive({
     </div>
     <VaModal v-model="modal.show" noDismiss closeButton hide-default-actions>
         <div class="flex justify-between">
-            <div class="text-lg">
+            <div class="text-3xl">
                 {{ modal.text }}
             </div>
             <VaButton :disabled="modal.move" @click="move" class="mr-2">
