@@ -7,6 +7,7 @@ import Publication from "@components/publication/Publication.vue";
 // import GameMap from "@components/GameMap.vue";
 import Contact from "@components/contact/Contact.vue";
 import ToS from "./components/law/ToS.vue";
+import Wheel from "./components/Wheel.vue";
 
 const routes = [
     { path: "/", component: Welcome },
@@ -16,6 +17,7 @@ const routes = [
     { path: "/vod", component: Vod },
     { path: "/penalty", component: Penalty },
     { path: "/contact", component: Contact },
+    { path: "/wheel", component: Wheel },
     { path: "/tos", component: ToS}
 ];
 
