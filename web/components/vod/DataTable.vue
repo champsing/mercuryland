@@ -2,7 +2,8 @@
 import { computed, h } from "vue";
 import { UseElementBounding } from "@vueuse/components";
 import { useWindowSize } from "@vueuse/core";
-import { NButton, NDataTable, NDivider } from "naive-ui";
+import { NButton, NDataTable } from "naive-ui";
+import { VaDivider } from "vuestic-ui";
 import { openLink, interleave, parseHMS } from "@composables/utils.ts";
 import vodLinkData from "@assets/data/vod.json";
 
@@ -93,7 +94,7 @@ const columns = [
                                 )
                             ),
                             h(
-                                NDivider,
+                                VaDivider,
                                 { vertical: true },
                                 { default: () => null }
                             )

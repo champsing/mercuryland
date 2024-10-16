@@ -1,18 +1,11 @@
 <script setup lang="ts">
 import { ref } from "vue";
-import {
-    NButton,
-    NCard,
-    NDivider,
-    NFlex,
-    NGrid,
-    NGi,
-    NModal,
-} from "naive-ui";
+import { NButton, NCard, NFlex, NGrid, NGi, NModal } from "naive-ui";
 import {
     VaAlert,
     VaButton,
     VaButtonGroup,
+    VaDivider,
     VaIcon,
     VaModal,
     VaTextarea,
@@ -63,7 +56,7 @@ const notEffectivePenalties = [
 <template>
     <n-flex size="small" vertical class="m-auto" item-responsive>
         <VaAlert class="mt-2" color="#3d807c" closeable>
-            <div class="flex flex-row">
+            <div class="flex flex-row items-center w-72">
                 <VaIcon size="large" class="mr-2">
                     <InfoCircle />
                 </VaIcon>
@@ -74,12 +67,12 @@ const notEffectivePenalties = [
         </VaAlert>
 
         <VaAlert class="mt-2" color="#59753f" closeable>
-            <div class="flex flex-row">
-                <VaIcon size="large" class="mt-1 mr-2">
+            <div class="flex flex-row items-center w-72">
+                <VaIcon size="large" class="mr-2">
                     <InfoCircle />
                 </VaIcon>
                 <div class="text-center text-yellow-300">
-                    <div class="text-lg mt-1">點擊完成狀態可快速切換</div>
+                    <div class="text-lg">點擊完成狀態可快速切換</div>
                 </div>
             </div>
         </VaAlert>
@@ -103,7 +96,7 @@ const notEffectivePenalties = [
                         現存
                     </VaButton>
                     <VaButton
-                        color="success"
+                        color="#3D9209"
                         @click="showCompleteModal = !showCompleteModal"
                     >
                         完成
@@ -235,7 +228,7 @@ const notEffectivePenalties = [
                     </div>
                 </n-gi>
             </n-grid>
-            <n-divider class="!mt-2 !mb-1" />
+            <VaDivider class="!mt-2 !mb-1" />
             <n-grid
                 :x-gap="4"
                 :y-gap="4"
@@ -328,7 +321,7 @@ const notEffectivePenalties = [
                     </div>
                 </n-gi>
             </n-grid>
-            <n-divider class="!mt-2 !mb-1" />
+            <VaDivider class="!mt-2 !mb-1" />
             <n-grid
                 :x-gap="4"
                 :y-gap="4"

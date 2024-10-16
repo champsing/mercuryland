@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import NextPageButton from "./NextPageButton.vue";
-import { NDivider } from "naive-ui";
+import { VaDivider } from "vuestic-ui";
 </script>
 
 <template>
@@ -10,7 +10,7 @@ import { NDivider } from "naive-ui";
             <div class="text-neutral-400 text-3xl">
                 YouTuber oreki惡靈的粉絲專屬生存Minecraft伺服器
             </div>
-            <n-divider />
+            <VaDivider class="mt-6" />
         </div>
         <div class="absolute x-center y-center text-center w-10/12">
             <div class="text-cyan-600 font-bold text-8xl">
@@ -20,7 +20,7 @@ import { NDivider } from "naive-ui";
             </div>
         </div>
         <div class="absolute x-center bottom-40 text-center w-10/12 hidden md:block">
-            <n-divider />
+            <VaDivider class="mb-6" />
             <div class="text-neutral-400 text-3xl">
                 只需加入Discord伺服器和正版Minecraft帳號。一切完全免費。
             </div>

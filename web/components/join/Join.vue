@@ -3,12 +3,12 @@ import {
     NButton,
     NButtonGroup,
     NCard,
-    NDivider,
     NGrid,
     NGi,
     NStep,
     NSteps,
 } from "naive-ui";
+import { VaDivider } from "vuestic-ui";
 import { copyToClipboard } from "@composables/utils";
 import { ref } from "vue";
 import { MdArrowRoundBack, MdArrowRoundForward } from "@vicons/ionicons4";
@@ -150,7 +150,7 @@ const version = 1.21;
             </template>
         </n-button>
     </n-button-group>
-    <n-divider class="mt-2" />
+    <VaDivider class="mt-2" />
 </template>
 
 <style>

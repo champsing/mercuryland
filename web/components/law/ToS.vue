@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { VMarkdownView } from "vue3-markdown";
-import { NDivider } from "naive-ui";
+import { VaDivider } from "vuestic-ui";
 import "vue3-markdown/dist/style.css";
 
 const termsOfUse = ref(`
@@ -32,7 +32,7 @@ const theme = ref("dark");
 </script>
 
 <template>
-    <n-divider />
+    <VaDivider />
     <div class="text-4xl text-neutral-100 text-center mt-4 mb-6">使用條款</div>
     <VMarkdownView :mode="theme" :content="termsOfUse" />
 </template>

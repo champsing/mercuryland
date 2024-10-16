@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { Ref, ref, computed } from "vue";
-import { NButton, NCard, NDivider, NModal, NTable } from "naive-ui";
-import { VaButton } from "vuestic-ui";
+import { NButton, NCard, NModal, NTable } from "naive-ui";
+import { VaButton, VaDivider } from "vuestic-ui";
 import penaltyData from "@assets/data/penalty.json";
 import penaltyStatus from "@assets/data/penalty_status.json";
 import vodData from "@assets/data/vod.json";
@@ -202,7 +202,7 @@ function filterPenaltyData(
             </template>
 
             <template v-if="penaltyEntryModalContent.steamID !== undefined">
-                <n-divider class="!m-2" />
+                <VaDivider class="!m-2" />
                 <iframe
                     :src="`https://store.steampowered.com/widget/${penaltyEntryModalContent.steamID}/`"
                     frameborder="0"
@@ -223,7 +223,7 @@ function filterPenaltyData(
                         &ensp;次
                     </span>
                 </div>
-                <n-divider class="!m-1" />
+                <VaDivider class="!m-1" />
             </template>
 
             <template

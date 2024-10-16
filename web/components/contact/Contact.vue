@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { NDivider, NGrid, NGi } from "naive-ui";
+import { NGrid, NGi } from "naive-ui";
+import { VaDivider } from "vuestic-ui";
 import ContactCard from "./ContactCard.vue";
 </script>
 
@@ -45,7 +46,7 @@ import ContactCard from "./ContactCard.vue";
             </ContactCard>
         </n-gi>
     </n-grid>
-    <n-divider class="!mb-2" />
+    <VaDivider class="!mb-2" />
     <div class="w-full">
         <iframe
             class="m-auto"
@@ -59,5 +60,5 @@ import ContactCard from "./ContactCard.vue";
             allowfullscreen
         ></iframe>
     </div>
-    <n-divider class="!mb-2" />
+    <VaDivider class="!mb-2" />
 </template>
