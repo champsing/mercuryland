@@ -62,6 +62,7 @@ onMounted(() => {
         items: [{ label: "" }],
         itemLabelRadiusMax: 0.4,
         itemBackgroundColors: ["#ffffff", "#ff0000", "#00ff00"],
+        isInteractive: false,
         overlayImage: overlay,
         onRest: rest,
         onCurrentIndexChange: tick,
