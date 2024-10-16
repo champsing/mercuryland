@@ -7,7 +7,7 @@ let wheel: Wheel = null;
 
 const textArea = defineModel("textArea", {
     type: String,
-    default: "<s>1</s>\n2\n3\n4\n5\n6",
+    default: "",
     set(value: string) {
         if (wheel != null) {
             wheel.items = value.split("\n").map((x) => {
@@ -56,15 +56,15 @@ function tick() {
 }
 
 onMounted(() => {
-    const overlay = new Image();
-    overlay.src = "/pointer.svg";
+    // const overlay = new Image();
+    // overlay.src = "/pointer.svg";
 
     const props = {
         items: [{ label: "" }],
         itemLabelRadiusMax: 0.4,
         itemBackgroundColors: ["#ffffff", "#ff0000", "#00ff00"],
         isInteractive: false,
-        overlayImage: overlay,
+        // overlayImage: overlay,
         onRest: rest,
         onCurrentIndexChange: tick,
     };
