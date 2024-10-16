@@ -64,7 +64,7 @@ onMounted(() => {
     // overlay.src = "/pointer.svg";
 
     const props = {
-        items: [{ label: "" }],
+        items: [],
         itemLabelRadiusMax: 0.4,
         itemBackgroundColors: [
             "#dc2626",
