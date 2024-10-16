@@ -31,8 +31,7 @@ function rest() {
     audio.play();
     modal.text = wheel.items[wheel.getCurrentIndex()].label;
     modal.show = true;
-
-    move()
+    modal.move = false;
 }
 
 function move() {
@@ -47,6 +46,8 @@ function move() {
         )
         .map((x: { label: string }) => x.label)
         .join("\n");
+
+    modal.move = true;
 }
 
 function tick() {
@@ -73,6 +74,7 @@ onMounted(() => {
 const modal = reactive({
     show: false,
     text: "",
+    move: false,
 });
 const modal2 = reactive({
     show: false,
@@ -108,8 +110,13 @@ const modal2 = reactive({
         </div>
     </div>
     <VaModal v-model="modal.show" noDismiss closeButton hide-default-actions>
-        <div class="text-lg">
-            {{ modal.text }}
+        <div class="flex justify-between">
+            <div class="text-lg">
+                {{ modal.text }}
+            </div>
+            <VaButton :disabled="modal.move" @click="move" class="mr-2">
+                移动
+            </VaButton>
         </div>
     </VaModal>
     <VaModal v-model="modal2.show" noDismiss @ok="textArea2 = ''">
