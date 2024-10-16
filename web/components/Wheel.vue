@@ -1,35 +1,36 @@
 <script setup lang="ts">
 import { Wheel } from "spin-wheel";
-import { ref, onMounted, onUpdated } from "vue";
+import { ref, onMounted } from "vue";
 import { VaTextarea } from "vuestic-ui";
+const wheelContainer = ref(null);
+let wheel: Wheel = null;
 
 const textArea = defineModel("textArea", {
     type: String,
     default: "",
     set(value: string) {
+        if (wheel != null) {
+            wheel.items = value.split("\n").map((x) => {
+                return {
+                    label: x,
+                };
+            });
+        }
+
         return value;
     },
 });
 
-const numItems = 2;
-
-const wheelContainer = ref(null);
-let wheel = null;
-
-const wheelProps = {
-    items: [],
-    itemLabelRadiusMax: 0.4,
-};
-
-for (let i = 0; i < numItems; i++) {
-    wheelProps.items.push({
-        label: "item " + i,
-    });
-}
-
 onMounted(() => {
-    wheel = new Wheel(wheelContainer.value, wheelProps);
-    wheel.itemBackgroundColors = ["#12181c", "#363636"];
+    const props = {
+        items: [{ label: "" }],
+        itemLabelRadiusMax: 0.4,
+        itemBackgroundColors: ["#ffffff", "#ff0000", "#00ff00"],
+    };
+    wheel = new Wheel(wheelContainer.value, props);
+    const img = new Image()
+    img.src = "/pointer.svg"
+    wheel.overlayImage = img
 });
 
 // onUpdated(() => {
@@ -41,8 +42,15 @@ onMounted(() => {
 </script>
 
 <template>
-    <div class="flex">
-        <div class="wheel-wrapper" ref="wheelContainer"></div>
-        <VaTextarea v-model="textArea" color="#ffffff"/>
+    <div class="flex w-full justify-evenly">
+        <div class="wheel-wrapper w-2/5" ref="wheelContainer"></div>
+        <div class="w-2/5">
+            <VaTextarea
+                v-model="textArea"
+                color="#ffffff"
+                :resize="false"
+                class="w-full h-96 mt-8"
+            />
+        </div>
     </div>
 </template>
