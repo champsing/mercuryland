@@ -23,7 +23,7 @@ const textArea = defineModel("textArea", {
 const textArea2 = defineModel("textArea2", { type: String, default: "" });
 
 function spin() {
-    wheel.spin(10000);
+    wheel.spin(1000 + Math.round(Math.random() * 1000));
 }
 
 function rest() {
