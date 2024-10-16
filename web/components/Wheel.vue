@@ -10,11 +10,14 @@ const textArea = defineModel("textArea", {
     default: "",
     set(value: string) {
         if (wheel != null) {
-            wheel.items = value.split("\n").map((x) => {
-                return {
-                    label: x,
-                };
-            });
+            wheel.items = value
+                .split("\n")
+                .filter((x) => x != "")
+                .map((x) => {
+                    return {
+                        label: x,
+                    };
+                });
         }
 
         return value;
@@ -50,6 +53,10 @@ function move() {
 function tick() {
     var audio = new Audio("/disconnect.mp3");
     audio.play();
+}
+
+function count(text: string): number {
+    return text.split("\n").filter((x) => x != "").length;
 }
 
 onMounted(() => {
@@ -105,7 +112,7 @@ const modal2 = reactive({
     <div class="flex w-full justify-evenly">
         <div class="wheel-wrapper w-2/5 -mt-20" ref="wheelContainer"></div>
         <div class="w-1/5">
-            <div class="va-h4">待抽区</div>
+            <div class="va-h4">待抽区 ({{ count(textArea) }}个)</div>
             <VaTextarea
                 v-model="textArea"
                 color="#ffffff"
@@ -116,7 +123,7 @@ const modal2 = reactive({
             <div class="h-44"></div>
         </div>
         <div class="w-1/5">
-            <div class="va-h4">抽中区</div>
+            <div class="va-h4">抽中区 ({{ count(textArea2) }}个)</div>
             <VaTextarea
                 v-model="textArea2"
                 color="#ffffff"
