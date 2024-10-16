@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed } from "vue";
-import { NDivider, NCard, NScrollbar } from "naive-ui";
+import { NCard, NScrollbar } from "naive-ui";
+import { VaDivider } from "vuestic-ui";
 import { UseElementBounding, UseWindowSize } from "@vueuse/components";
 import { parseHMS, formatHMS } from "@composables/utils.ts";
 import vodLinkData from "@assets/data/vod.json";
@@ -21,7 +22,10 @@ const data = computed(() => {
     let filtered = rawData.filter(
         (v: DataType) =>
             v.date >= new Date(props.dateRange[0]).toISOString().slice(0, 10) &&
-            v.date <= new Date(props.dateRange[1] + 28800000).toISOString().slice(0, 10)
+            v.date <=
+                new Date(props.dateRange[1] + 28800000)
+                    .toISOString()
+                    .slice(0, 10)
     );
     let i0 = filtered.findIndex((x: DataType) => x.divider);
 
@@ -132,21 +136,27 @@ function calcStyle(top: number, vh: number) {
                 <n-scrollbar :style="calcStyle(top, height)">
                     <div class="pr-6">
                         <template v-for="item in data">
-                            <n-divider
+                            <VaDivider
                                 v-if="item.divider"
-                                title-placement="left"
-                                class="!mt-0 !mb-0"
+                                orientation="left"
+                                class="!mt-2 !mb-0"
                             >
-                                {{ item.date }}
-                                <n-divider vertical />
-                                {{ format(item.previous) }}
-                            </n-divider>
-                            <div class="text-right">
-                                <div class="inline-block font-bold">
+                                <div class="flex">
+                                    <div>
+                                        {{ item.date }}
+                                    </div>
+                                    <VaDivider vertical class="-mt-2 -mb-2"/>
+                                    <div>
+                                        {{ format(item.previous) }}
+                                    </div>
+                                </div>
+                            </VaDivider>
+                            <div class="flex justify-end text-right mt-2">
+                                <div class="font-bold">
                                     {{ item.reason }}
                                 </div>
-                                <n-divider vertical />
-                                <div class="inline-block font-bold">
+                                <VaDivider vertical />
+                                <div class="font-bold">
                                     {{ format(item.offset) }}
                                 </div>
                             </div>

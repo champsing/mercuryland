@@ -1,18 +1,14 @@
 <script setup lang="ts">
 import { ref } from "vue";
-import {
-    NCard,
-    NConfigProvider,
-    NDivider,
-    NFlex,
-    darkTheme,
-} from "naive-ui";
-import { VaButton } from "vuestic-ui";
+import { NConfigProvider, darkTheme } from "naive-ui";
+import { VaButton, VaDivider, useColors } from "vuestic-ui";
 import { RouterLink } from "vue-router";
 import { useElementBounding } from "@vueuse/core";
 
 const tabNav = ref<HTMLInputElement | null>(null);
 const tabNavBounding = useElementBounding(tabNav);
+
+useColors().applyPreset("dark");
 
 function calcTabNavStyle(path: string) {
     if (path == "/") {
@@ -83,47 +79,41 @@ function calcMainStyle(path: string) {
                 <router-link to="/wheel" class="tab"> 幸运转盘 </router-link>
                 <router-link to="/contact" class="tab"> 聯絡我們 </router-link>
             </div>
-            <n-divider class="!m-0" />
+            <VaDivider class="!m-0 transparent-divider" />
         </div>
         <div :style="calcMainStyle($route.fullPath)">
             <router-view />
         </div>
     </n-config-provider>
-    <n-card class="bottom-card mt-2 m-auto text-center" size="small">
-        <div class="text-center text-base text-zinc-200">
-            <n-flex style="justify-content: center">
-                <div style="font-family: playfair display">
-                    Copyright © 2024 The Mercury Land
-                </div>
-                <!-- 
+    <div class="text-center text-base text-zinc-200 pt-4 pb-4 bg-zinc-900">
+        <div class="flex justify-center">
+            <div style="font-family: playfair display">
+                Copyright © 2024 The Mercury Land
+            </div>
+            <!-- 
                     【&nbsp;】：半角スペースと同じサイズの空白
                     【&thinsp;】：&nbsp;の空白より小さい空白
                     【&ensp;】：半角スペースより間隔がやや広い空白
                     【&emsp;】：全角スペースとほぼ同じサイズの空白 
                 -->
-                &ensp;保留一切權利。
-            </n-flex>
-            <!-- <div class="mt-2">隱私權政策&ensp;|&ensp;使用條款&ensp;|&ensp;法律聲明</div> -->
-            <div class="mt-2">
-                <VaButton
-                    preset="secondary"
-                    border-color="#363636"
-                    to="tos"
-                >
-                    <div class="text-zinc-200">使用條款</div>
-                </VaButton>
-                <n-divider vertical />
-                <VaButton
-                    preset="secondary"
-                    border-color="#363636"
-                    href="https://www.youtube.com/watch?v=Yir_XAcccmY"
-                    target="_blank"
-                >
-                    <div class="text-zinc-200">使用教學</div>
-                </VaButton>
-            </div>
+            &ensp;保留一切權利。
         </div>
-    </n-card>
+        <!-- <div class="mt-2">隱私權政策&ensp;|&ensp;使用條款&ensp;|&ensp;法律聲明</div> -->
+        <div class="flex justify-center mt-2">
+            <VaButton preset="secondary" border-color="#363636" to="tos">
+                <div class="text-zinc-200">使用條款</div>
+            </VaButton>
+            <VaDivider vertical />
+            <VaButton
+                preset="secondary"
+                border-color="#363636"
+                href="https://www.youtube.com/watch?v=Yir_XAcccmY"
+                target="_blank"
+            >
+                <div class="text-zinc-200">使用教學</div>
+            </VaButton>
+        </div>
+    </div>
 </template>
 
 <style>
@@ -142,5 +132,9 @@ function calcMainStyle(path: string) {
 .bottom-card {
     width: 90%;
     --n-color: #12181c !important;
+}
+
+.transparent-divider {
+    opacity: 70%;
 }
 </style>

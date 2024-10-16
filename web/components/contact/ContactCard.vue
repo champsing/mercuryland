@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { copyToClipboard } from "@/composables/utils";
-import { NButton, NCard, NDivider, NTag } from "naive-ui";
+import { NButton, NCard, NTag } from "naive-ui";
+import { VaDivider } from "vuestic-ui";
 
 const props = defineProps<{
     name1: string;
@@ -33,7 +34,7 @@ const props = defineProps<{
             <div class="w-full aspect-square">
                 <slot></slot>
             </div>
-            <n-divider />
+            <VaDivider />
             <template v-for="tag in props.tags">
                 <n-tag class="m-1"> {{ tag }} </n-tag>
             </template>

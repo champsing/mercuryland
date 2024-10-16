@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, Ref } from "vue";
-import { NDatePicker, NGrid, NGi, NSelect, NDivider } from "naive-ui";
-import { VaButton, VaIcon, VaModal, VaSwitch } from "vuestic-ui";
+import { NDatePicker, NGrid, NGi, NSelect } from "naive-ui";
+import { VaButton, VaDivider, VaIcon, VaModal, VaSwitch } from "vuestic-ui";
 import vodLinkData from "@assets/data/vod.json";
 import DataTable from "./DataTable.vue";
 import TimeSummary from "./TimeSummary.vue";
@@ -130,7 +130,7 @@ const showVodDescImg = ref(false);
         <img src="@assets/images/vod_time.png" alt="直播時數規則說明" />
     </VaModal>
 
-    <n-divider class="!mt-2 !mb-2" />
+    <VaDivider class="!mt-2 !mb-2" />
 
     <n-grid x-gap="8" :cols="3" class="w-11/12" item-responsive>
         <n-gi span="3 800:2" class="w-full p-0 m-0">

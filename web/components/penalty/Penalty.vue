@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { Ref } from "vue";
-import { NDatePicker, NDivider, NGrid, NGi, NSelect, NInput } from "naive-ui";
+import { NDatePicker, NGrid, NGi, NSelect, NInput } from "naive-ui";
+import { VaDivider } from "vuestic-ui";
 import penaltyStatus from "@assets/data/penalty_status.json";
 import OverAllList from "./OverAllList.vue";
 import PenaltyTable from "./Table.vue";
@@ -61,7 +62,7 @@ let finishOptions = [{ label: "", value: null }].concat(
         </n-gi>
     </n-grid>
 
-    <n-divider class="!m-2" />
+    <VaDivider class="!m-2" />
 
     <n-grid x-gap="12" :cols="3" class="w-11/12 h-80vh overflow-y-hidden">
         <n-gi :span="2" class="h-80vh w-full p-0 m-0 overflow-y-scroll">
@@ -85,8 +86,6 @@ let finishOptions = [{ label: "", value: null }].concat(
     <div class="mt-8">
         <PenaltySyntax />
     </div>
-
-    <n-divider class="mt-2" />
 </template>
 
 <style>

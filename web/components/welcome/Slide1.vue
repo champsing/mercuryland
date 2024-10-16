@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import NextPageButton from "./NextPageButton.vue";
-import { NDivider } from "naive-ui";
+import { VaDivider } from "vuestic-ui";
 </script>
 
 <template>
@@ -8,7 +8,7 @@ import { NDivider } from "naive-ui";
         <NextPageButton :page="1" />
         <div class="absolute x-center y-center text-center">
             <div class="text-white font-bold text-8xl">水星伺服器</div>
-            <n-divider />
+            <VaDivider class="mt-6 mb-6 transparent-divider" />
             <div class="text-white italic text-3xl">The Mercury Land</div>
         </div>
         <img

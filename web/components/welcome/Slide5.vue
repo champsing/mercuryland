@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { VaButton } from "vuestic-ui";
-import { NGrid, NGi, NDivider } from "naive-ui";
+import { VaButton, VaDivider } from "vuestic-ui";
+import { NGrid, NGi } from "naive-ui";
 import ReturnTopButton from "./ReturnTopButton.vue";
 
 // const emit = defineEmits<{
@@ -40,12 +40,12 @@ import ReturnTopButton from "./ReturnTopButton.vue";
                     <div class="text-cyan-400 font-bold text-6xl">
                         還在猶豫什麼？
                     </div>
-                    <n-divider />
+                    <VaDivider class="mt-6 mb-6" />
                     <div class="text-cyan-600 font-bold text-3xl">
                         立即前往其他分頁，了解如何加入。
                     </div>
                     <div class="mt-8">
-                        <VaButton preset="primary" size="large" to="join" border-color="#0891b2" color="#FFFFFF">
+                        <VaButton preset="primary" size="large" to="join" border-color="#0891b2" color="#0891b2">
                             點擊加入
                         </VaButton>
                     </div>
