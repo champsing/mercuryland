@@ -134,7 +134,7 @@ const version = 1.21;
             description="等待白名單申請通過"
         />
     </n-steps>
-    <n-button-group class="mt-4">
+    <n-button-group class="mt-4 mb-6">
         <n-button @click="prev">
             <template #icon>
                 <VaIcon>
@@ -150,7 +150,6 @@ const version = 1.21;
             </template>
         </n-button>
     </n-button-group>
-    <VaDivider class="mt-2" />
 </template>
 
 <style>

@@ -82,10 +82,10 @@ let finishOptions = [{ label: "", value: null }].concat(
             <OverAllList />
         </n-gi>
     </n-grid>
-
-    <div class="mt-8">
-        <PenaltySyntax />
+    <div class="mt-8 mb-4">
+        <PenaltySyntax class=""/>
     </div>
+    
 </template>
 
 <style>
