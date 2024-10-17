@@ -8,7 +8,6 @@ import {
     NStep,
     NSteps,
 } from "naive-ui";
-import { VaDivider } from "vuestic-ui";
 import { copyToClipboard } from "@composables/utils";
 import { ref } from "vue";
 import { MdArrowRoundBack, MdArrowRoundForward } from "@vicons/ionicons4";

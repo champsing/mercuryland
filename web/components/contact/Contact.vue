@@ -47,7 +47,7 @@ import ContactCard from "./ContactCard.vue";
         </n-gi>
     </n-grid>
     <VaDivider class="!mb-2" />
-    <div class="w-full">
+    <div class="w-full mb-6">
         <iframe
             class="m-auto"
             src="https://www.youtube.com/embed/YTB35De0Bs8?si=cP5rNghSy_WQLl8m"
@@ -60,5 +60,4 @@ import ContactCard from "./ContactCard.vue";
             allowfullscreen
         ></iframe>
     </div>
-    <VaDivider class="!mb-2" />
 </template>
