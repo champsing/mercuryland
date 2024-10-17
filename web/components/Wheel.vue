@@ -10,11 +10,14 @@ const textArea = defineModel("textArea", {
     default: "",
     set(value: string) {
         if (wheel != null) {
-            wheel.items = value.split("\n").map((x) => {
-                return {
-                    label: x,
-                };
-            });
+            wheel.items = value
+                .split("\n")
+                .filter((x) => x != "")
+                .map((x) => {
+                    return {
+                        label: x,
+                    };
+                });
         }
 
         return value;
@@ -31,7 +34,6 @@ function rest() {
     audio.play();
     modal.text = wheel.items[wheel.getCurrentIndex()].label;
     modal.show = true;
-    modal.move = false;
 }
 
 function move() {
@@ -46,8 +48,6 @@ function move() {
         )
         .map((x: { label: string }) => x.label)
         .join("\n");
-
-    modal.move = true;
 }
 
 function tick() {
@@ -55,14 +55,36 @@ function tick() {
     audio.play();
 }
 
+function count(text: string): number {
+    return text.split("\n").filter((x) => x != "").length;
+}
+
 onMounted(() => {
     // const overlay = new Image();
     // overlay.src = "/pointer.svg";
 
     const props = {
-        items: [{ label: "" }],
+        items: [],
         itemLabelRadiusMax: 0.4,
-        itemBackgroundColors: ["#ffffff", "#ff0000", "#00ff00"],
+        itemBackgroundColors: [
+            "#dc2626",
+            "#ea580c",
+            "#d97706",
+            "#ca8a04",
+            "#65a30d",
+            "#16a34a",
+            "#059669",
+            "#0d9488",
+            "#0891b2",
+            "#0284c7",
+            "#2563eb",
+            "#4f46e5",
+            "#7c3aed",
+            "#9333ea",
+            "#c026d3",
+            "#db2777",
+            "#e11d48",
+        ],
         isInteractive: false,
         // overlayImage: overlay,
         onRest: rest,
@@ -74,7 +96,6 @@ onMounted(() => {
 const modal = reactive({
     show: false,
     text: "",
-    move: false,
 });
 const modal2 = reactive({
     show: false,
@@ -87,11 +108,11 @@ const modal2 = reactive({
             BETA
         </div>
     </div>
-    
+
     <div class="flex w-full justify-evenly">
         <div class="wheel-wrapper w-2/5 -mt-20" ref="wheelContainer"></div>
         <div class="w-1/5">
-            <div class="va-h4">待抽区</div>
+            <div class="va-h4">待抽区 ({{ count(textArea) }}个)</div>
             <VaTextarea
                 v-model="textArea"
                 color="#ffffff"
@@ -102,7 +123,7 @@ const modal2 = reactive({
             <div class="h-44"></div>
         </div>
         <div class="w-1/5">
-            <div class="va-h4">抽中区</div>
+            <div class="va-h4">抽中区 ({{ count(textArea2) }}个)</div>
             <VaTextarea
                 v-model="textArea2"
                 color="#ffffff"
@@ -115,14 +136,15 @@ const modal2 = reactive({
             <div class="h-44"></div>
         </div>
     </div>
-    <VaModal v-model="modal.show" noDismiss closeButton hide-default-actions>
-        <div class="flex justify-between">
-            <div class="text-3xl">
-                {{ modal.text }}
-            </div>
-            <VaButton :disabled="modal.move" @click="move" class="mr-2">
-                移动
-            </VaButton>
+    <VaModal
+        v-model="modal.show"
+        noDismiss
+        @ok="move"
+        ok-text="移动"
+        cancel-text="取消"
+    >
+        <div class="text-3xl">
+            {{ modal.text }}
         </div>
     </VaModal>
     <VaModal v-model="modal2.show" noDismiss @ok="textArea2 = ''">
