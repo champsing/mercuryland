@@ -3,7 +3,7 @@ import { Wheel } from "spin-wheel";
 import { ref, onMounted, reactive } from "vue";
 import { VaTextarea, VaButton, VaModal } from "vuestic-ui";
 const wheelContainer = ref(null);
-const isSpinDisabled = ref(false);
+const isSpinning = ref(false);
 let wheel: Wheel = null;
 
 const textArea = defineModel("textArea", {
@@ -27,7 +27,7 @@ const textArea = defineModel("textArea", {
 const textArea2 = defineModel("textArea2", { type: String, default: "" });
 
 function spin() {
-    isSpinDisabled.value = !isSpinDisabled.value;
+    isSpinning.value = true;
     wheel.spin(1000 + Math.round(Math.random() * 1000));
 }
 
@@ -36,7 +36,7 @@ function rest() {
     audio.play();
     modal.text = wheel.items[wheel.getCurrentIndex()].label;
     modal.show = true;
-    isSpinDisabled.value = !isSpinDisabled.value;
+    isSpinning.value = false;
 }
 
 function move() {
@@ -122,7 +122,7 @@ const modal2 = reactive({
                 :resize="false"
                 class="w-full h-96 mt-8"
             />
-            <VaButton class="w-full mt-8" @click="spin" :disabled="isSpinDisabled"> 旋转 </VaButton>
+            <VaButton class="w-full mt-8" @click="spin" :disabled="isSpinning"> 旋转 </VaButton>
             <div class="h-44"></div>
         </div>
         <div class="w-1/5">
