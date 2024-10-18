@@ -1,12 +1,11 @@
 <script setup lang="ts">
 import { VaCard, VaCardContent, VaCardTitle, VaDivider } from "vuestic-ui";
-import { NFlex } from "naive-ui";
 </script>
 
 <template>
     <div class="text-4xl text-neutral-100 text-left mt-4">圖例</div>
     <VaDivider class="!mt-3" />
-    <n-flex justify="center" class="m-auto" item-responsive>
+    <div class="m-auto flex flex-row justify-center gap-5" item-responsive>
         <VaCard gradient color="#28c9c7" class="ml-2">
             <VaCardTitle style="font-size: 16px">詳細資料</VaCardTitle>
             <VaCardContent>
@@ -23,5 +22,5 @@ import { NFlex } from "naive-ui";
                 </div>
             </VaCardContent>
         </VaCard>
-    </n-flex>
+    </div>
 </template>

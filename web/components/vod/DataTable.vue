@@ -2,8 +2,8 @@
 import { computed, h } from "vue";
 import { UseElementBounding } from "@vueuse/components";
 import { useWindowSize } from "@vueuse/core";
-import { NButton, NDataTable } from "naive-ui";
-import { VaDivider } from "vuestic-ui";
+import { NDataTable } from "naive-ui";
+import { VaButton, VaDivider } from "vuestic-ui";
 import { openLink, interleave, parseHMS } from "@composables/utils.ts";
 import vodLinkData from "@assets/data/vod.json";
 
@@ -61,10 +61,12 @@ const columns = [
         className: "!text-center",
         render(row: DataType) {
             return h(
-                NButton,
+                VaButton,
                 {
-                    text: true,
-                    focusable: false,
+                    preset: "plain",
+                    size: "small",
+                    color: "#d9d9d9", //non-aggressive white
+                    hoverMaskColor: "#5bc6a1", //same as NextPageButton and ReturnTopButton
                     onClick: () => openLink(row.link),
                 },
                 { default: () => row.title }
@@ -84,10 +86,15 @@ const columns = [
                         interleave(
                             row.tags.map((x) =>
                                 h(
-                                    NButton,
+                                    VaButton,
                                     {
-                                        text: true,
-                                        focusable: false,
+                                        preset: "plain",
+                                        size: "small",
+                                        color: "#d9d9d9", //non-aggressive white
+                                        hoverMaskColor: "#5bc6a1", //same as NextPageButton and ReturnTopButton
+                                        hoverOpacity: 1,
+                                        pressedMaskColor: "info",
+                                        pressedOpacity: 1,
                                         onClick: () => emit("updateTag", x),
                                     },
                                     { default: () => x }

@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { useWindowSize } from "@vueuse/core";
-import { NButton } from "naive-ui";
-import { VaIcon } from "vuestic-ui";
+import { VaButton, VaIcon } from "vuestic-ui";
 import { AngleDown } from "@vicons/fa";
 
 const props = defineProps<{ page: number }>();
@@ -13,18 +12,20 @@ function action() {
 </script>
 
 <template>
-    <div class="z-10 absolute bottom-10 w-full text-center">
-        <n-button
+    <div class="z-10 absolute -bottom-2 w-full text-center">
+        <VaButton
             class="w-auto opacity-30 hover:opacity-100"
-            text
-            rounded
+            round
+            color="#5bc6a1"
+            preset="secondary"
+            :hover-opacity="0"
+            :pressed-opacity="0"
+            size="small"
             @click="action()"
         >
-            <template #icon>
-                <VaIcon size="128px">
-                    <angle-down />
-                </VaIcon>
-            </template>
-        </n-button>
+            <VaIcon size="128px">
+                <angle-down />
+            </VaIcon>
+        </VaButton>
     </div>
 </template>
