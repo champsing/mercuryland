@@ -3,6 +3,7 @@ import { ref, Ref } from "vue";
 import { NGrid, NGi, NSelect } from "naive-ui";
 import {
     VaButton,
+    VaCollapse,
     VaDatePicker,
     VaDivider,
     VaIcon,
@@ -16,7 +17,10 @@ import TimeDetail from "./TimeDetail.vue";
 import { Add24Regular, Info24Regular } from "@vicons/fluent";
 
 //prettier-ignore
-let dateRange: Ref<[number, number]> = ref([1577836800000, Date.now() + 28800000]);
+let dateRange = defineModel(
+    "dateRange", {
+    default: {start: new Date(1577836800000), end: new Date(Date.now() + 28800000)},
+});
 
 let strictFiltering = ref(false);
 
@@ -44,7 +48,13 @@ const showVodDescImg = ref(false);
     <div class="mt-8 ml-auto mr-auto w-11/12">
         <n-grid x-gap="12" y-gap="12" cols="4" class="w-11/12" item-responsive>
             <n-gi span="4 800:2">
-                <VaDatePicker /> 
+                <VaCollapse header="選擇日期範圍">
+                    <div class="flex">
+                        <VaDatePicker v-model="dateRange" mode="range" />
+                        <VaDatePicker v-model="dateRange" mode="range" />
+                    </div>
+                </VaCollapse>
+
                 <!-- not yet -->
             </n-gi>
             <n-gi span="4 800:2 1200:1">
@@ -94,7 +104,7 @@ const showVodDescImg = ref(false);
             title="規則說明"
             hide-default-actions
             :closeButton="true"
-            :blur="true"
+            z-index="20"
         >
             <span class="text-3xl"> 直播時數規則說明 </span>
             <div class="text-2xl mt-2">●概述</div>

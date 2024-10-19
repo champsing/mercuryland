@@ -11,7 +11,7 @@ type DataType = (typeof vodLinkData)[0];
 
 const vh = useWindowSize().height;
 const props = defineProps<{
-    dateRange: [number, number];
+    dateRange: { start: Date; end: Date };
     selectedTags?: string[];
     strictFiltering: boolean;
 }>();
@@ -24,10 +24,11 @@ const data = computed(() => {
         .filter(
             (v) =>
                 v.date >=
-                    new Date(props.dateRange[0]).toISOString().slice(0, 10) &&
+                    //prettier-ignore
+                    props.dateRange.start.toISOString().slice(0, 10) &&
                 v.date <=
                     //prettier-ignore
-                    new Date(props.dateRange[1] + 28800000).toISOString().slice(0, 10)
+                    new Date(props.dateRange.end.getTime() + 28800000).toISOString().slice(0, 10)
         )
         .filter((v) => {
             if (props.strictFiltering == true) {
@@ -67,6 +68,8 @@ const columns = [
                     size: "small",
                     color: "#d9d9d9", //non-aggressive white
                     hoverMaskColor: "#5bc6a1", //same as NextPageButton and ReturnTopButton
+                    hoverOpacity: 1,
+                    pressedOpacity: 1,
                     onClick: () => openLink(row.link),
                 },
                 { default: () => row.title }
