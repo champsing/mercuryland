@@ -15,15 +15,15 @@ class DataType {
     divider: boolean;
 }
 
-const props = defineProps<{ dateRange: [number, number] }>();
+const props = defineProps<{ dateRange: {start: Date, end: Date} }>();
 const emit = defineEmits<{ (e: "computedTime", tag: number): void }>();
 const rawData = calcRawData();
 const data = computed(() => {
     let filtered = rawData.filter(
         (v: DataType) =>
-            v.date >= new Date(props.dateRange[0]).toISOString().slice(0, 10) &&
+            v.date >= props.dateRange.start.toISOString().slice(0, 10) &&
             v.date <=
-                new Date(props.dateRange[1] + 28800000)
+                new Date(props.dateRange.end.getTime() + 28800000)
                     .toISOString()
                     .slice(0, 10)
     );
