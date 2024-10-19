@@ -97,7 +97,7 @@ const tabs = [
 
 <style>
 .va-navbar {
-    --va-navbar-padding-y: 0.4rem;
+    --va-navbar-padding-y: 0.6rem;
 }
 
 .bottom-card {
