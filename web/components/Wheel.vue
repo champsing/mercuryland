@@ -216,8 +216,8 @@ const modal2 = reactive({
             <div v-if="clearRightArea == true" class="same-line text-2xl ">抽中區</div>
             <div v-if="clearRightArea == false" class="same-line text-2xl ">待抽區</div>
             吗?
-            <div v-if="clearRightArea == true" class="text-4xl text-right text-[#1aedab]">抽中區→</div>
-            <div v-if="clearRightArea == false" class="text-4xl text-right text-[#bae64c]">←待抽區</div>
+            <div v-if="clearRightArea == true" class="text-4xl text-right text-[#1aedab]">清→</div>
+            <div v-if="clearRightArea == false" class="text-4xl text-right text-[#bae64c]">←清</div>
         </VaModal>
     </div>
 </template>
