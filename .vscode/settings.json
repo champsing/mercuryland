@@ -9,6 +9,7 @@
 	},
     "cSpell.words": [
         "ALTF",
+        "ashwamegh",
         "Banban",
         "composables",
         "daterange",
@@ -16,7 +17,10 @@
         "Hypixel",
         "Paon",
         "Pien",
-        "Smilemo"
+        "Smilemo",
+        "tailwindcss",
+        "vfonts",
+        "vuestic"
     ],
     "editor.rulers": [80],
     "prettier.tabWidth": 4,
