@@ -8,6 +8,7 @@ import {
     VaNavbarItem,
 } from "vuestic-ui";
 import { RouterLink } from "vue-router";
+import Login from "@components/Login.vue";
 
 useColors().applyPreset("dark");
 
@@ -42,10 +43,17 @@ const tabs = [
                 </router-link>
             </VaNavbarItem>
         </template>
+        <template #right>
+            <VaNavbarItem class="navbar-item-slot">
+                <div class="mr-4">
+                    <Login />
+                </div>
+            </VaNavbarItem>
+        </template>
     </VaNavbar>
     <div class="min-h-screen">
         <n-config-provider :theme="darkTheme">
-            <router-view />    
+            <router-view />
         </n-config-provider>
     </div>
     <div class="text-center text-base text-zinc-200 pt-4 pb-4 bg-zinc-900">

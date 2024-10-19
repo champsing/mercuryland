@@ -11,6 +11,7 @@
         "actix",
         "ALTF",
         "ashwamegh",
+        "axios",
         "Banban",
         "composables",
         "daterange",
