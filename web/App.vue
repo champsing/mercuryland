@@ -11,19 +11,6 @@ import { RouterLink } from "vue-router";
 
 useColors().applyPreset("dark");
 
-function calcMainStyle(path: string) {
-    if (path == "/") {
-        return {};
-    } else {
-        return {
-            marginTop: "8px",
-            marginLeft: "auto",
-            marginRight: "auto",
-            width: "91.666%",
-        };
-    }
-}
-
 const tabs = [
     { path: "/join", label: "加入伺服" },
     { path: "/publication", label: "資料公開" },
@@ -58,9 +45,7 @@ const tabs = [
     </VaNavbar>
     <div class="min-h-screen">
         <n-config-provider :theme="darkTheme">
-            <div :style="calcMainStyle($route.fullPath)">
-                <router-view />
-            </div>
+            <router-view />    
         </n-config-provider>
     </div>
     <div class="text-center text-base text-zinc-200 pt-4 pb-4 bg-zinc-900">

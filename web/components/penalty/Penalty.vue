@@ -36,56 +36,56 @@ let finishOptions = [{ label: "", value: null }].concat(
             return { label: x, value: x };
         })
 );
-
 </script>
 
 <template>
-    <n-grid x-gap="12" :cols="4" class="w-11/12">
-        <n-gi :span="2">
-            <n-date-picker type="daterange" v-model:value="filterDate" />
-        </n-gi>
-        <n-gi>
-            <n-select
-                v-model:value="filterStatus"
-                :options="finishOptions"
-                placeholder="請選擇一種完成狀態"
-                :consistent-menu-width="false"
-            />
-        </n-gi>
-        <n-gi>
-            <n-input
-                round
-                placeholder="輸入懲罰內容來搜尋"
-                v-model:value="filterSearch"
-                type="text"
-            />
-        </n-gi>
-    </n-grid>
+    <div class="mt-4 ml-auto mr-auto w-11/12">
+        <n-grid x-gap="12" :cols="4">
+            <n-gi :span="2">
+                <n-date-picker type="daterange" v-model:value="filterDate" />
+            </n-gi>
+            <n-gi>
+                <n-select
+                    v-model:value="filterStatus"
+                    :options="finishOptions"
+                    placeholder="請選擇一種完成狀態"
+                    :consistent-menu-width="false"
+                />
+            </n-gi>
+            <n-gi>
+                <n-input
+                    round
+                    placeholder="輸入懲罰內容來搜尋"
+                    v-model:value="filterSearch"
+                    type="text"
+                />
+            </n-gi>
+        </n-grid>
 
-    <VaDivider class="!m-2" />
+        <VaDivider class="!m-2" />
 
-    <n-grid x-gap="12" :cols="3" class="w-11/12 h-80vh overflow-y-hidden">
-        <n-gi :span="2" class="h-80vh w-full p-0 m-0 overflow-y-scroll">
-            <PenaltyTable
-                :dateRange="filterDate"
-                :status="filterStatus"
-                :search="filterSearch"
-                @updateStatus="
-                    (status) => {
-                        if (filterStatus == null) filterStatus = status;
-                        else filterStatus = null;
-                    }
-                "
-            />
-        </n-gi>
-        <n-gi>
-            <OverAllList />
-        </n-gi>
-    </n-grid>
-    <div class="mt-8 mb-6">
-        <PenaltySyntax />
+        <n-grid x-gap="12" :cols="3" class="w-11/12 h-80vh overflow-y-hidden">
+            <n-gi :span="2" class="h-80vh w-full p-0 m-0 overflow-y-scroll">
+                <PenaltyTable
+                    :dateRange="filterDate"
+                    :status="filterStatus"
+                    :search="filterSearch"
+                    @updateStatus="
+                        (status) => {
+                            if (filterStatus == null) filterStatus = status;
+                            else filterStatus = null;
+                        }
+                    "
+                />
+            </n-gi>
+            <n-gi>
+                <OverAllList />
+            </n-gi>
+        </n-grid>
+        <div class="mt-8 mb-6">
+            <PenaltySyntax />
+        </div>
     </div>
-    
 </template>
 
 <style>

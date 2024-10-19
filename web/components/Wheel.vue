@@ -113,53 +113,59 @@ const modal2 = reactive({
 </script>
 
 <template>
-    <div class="flex w-full justify-end">
-        <div class="text-lime-400 font-bold text-4xl bg-black text-right">
-            BETA
+    <div class="mt-8 ml-auto mr-auto w-11/12">
+        <div class="flex w-full justify-end">
+            <div class="text-lime-400 font-bold text-4xl bg-black text-right">
+                BETA
+            </div>
         </div>
-    </div>
 
-    <div class="flex w-full justify-evenly">
-        <div class="wheel-wrapper w-2/5 -mt-20" ref="wheelContainer"></div>
-        <div class="w-1/5">
-            <div class="va-h4">待抽区 ({{ count(textArea) }}个)</div>
-            <VaTextarea
-                v-model="textArea"
-                color="#ffffff"
-                :resize="false"
-                class="w-full h-96 mt-8"
-            />
-            <VaButton class="w-full mt-8" @click="spin" :disabled="isSpinning">
-                旋转
-            </VaButton>
-            <div class="h-44"></div>
+        <div class="flex w-full justify-evenly">
+            <div class="wheel-wrapper w-2/5 -mt-20" ref="wheelContainer"></div>
+            <div class="w-1/5">
+                <div class="va-h4">待抽区 ({{ count(textArea) }}个)</div>
+                <VaTextarea
+                    v-model="textArea"
+                    color="#ffffff"
+                    :resize="false"
+                    class="w-full h-96 mt-8"
+                />
+                <VaButton
+                    class="w-full mt-8"
+                    @click="spin"
+                    :disabled="isSpinning"
+                >
+                    旋转
+                </VaButton>
+                <div class="h-44"></div>
+            </div>
+            <div class="w-1/5">
+                <div class="va-h4">抽中区 ({{ count(textArea2) }}个)</div>
+                <VaTextarea
+                    v-model="textArea2"
+                    color="#ffffff"
+                    :resize="false"
+                    class="w-full h-96 mt-8"
+                />
+                <VaButton class="w-full mt-8" @click="modal2.show = true">
+                    清空
+                </VaButton>
+                <div class="h-44"></div>
+            </div>
         </div>
-        <div class="w-1/5">
-            <div class="va-h4">抽中区 ({{ count(textArea2) }}个)</div>
-            <VaTextarea
-                v-model="textArea2"
-                color="#ffffff"
-                :resize="false"
-                class="w-full h-96 mt-8"
-            />
-            <VaButton class="w-full mt-8" @click="modal2.show = true">
-                清空
-            </VaButton>
-            <div class="h-44"></div>
-        </div>
+        <VaModal
+            v-model="modal.show"
+            noDismiss
+            @ok="move"
+            ok-text="移动"
+            cancel-text="取消"
+        >
+            <div class="text-3xl">
+                {{ modal.text }}
+            </div>
+        </VaModal>
+        <VaModal v-model="modal2.show" noDismiss @ok="textArea2 = ''">
+            您确定要清空抽中区吗?
+        </VaModal>
     </div>
-    <VaModal
-        v-model="modal.show"
-        noDismiss
-        @ok="move"
-        ok-text="移动"
-        cancel-text="取消"
-    >
-        <div class="text-3xl">
-            {{ modal.text }}
-        </div>
-    </VaModal>
-    <VaModal v-model="modal2.show" noDismiss @ok="textArea2 = ''">
-        您确定要清空抽中区吗?
-    </VaModal>
 </template>
