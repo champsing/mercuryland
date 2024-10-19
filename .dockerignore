@@ -1,0 +1,13 @@
+# Vue.JS
+node_modules
+dist
+
+# Rust
+target
+
+# App
+data
+
+# Editor
+.vscode/*
+.DS_Store
