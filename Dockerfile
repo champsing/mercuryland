@@ -16,4 +16,4 @@ COPY --from=build-npm /build/dist ./dist
 COPY --from=build-rs /build/target/release/mercury_land ./
 
 EXPOSE 8080
-ENTRYPOINT [ "./mercury/mercury_land" ]
+ENTRYPOINT [ "./mercury_land" ]
