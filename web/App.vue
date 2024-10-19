@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { ref } from "vue";
 import { NConfigProvider, darkTheme } from "naive-ui";
 import {
     VaButton,
