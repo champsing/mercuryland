@@ -69,8 +69,9 @@ function rest() {
 
 function move() {
     // copy text to new area
-    textArea2.value += modal.text;
     textArea2.value += "\n";
+    textArea2.value += modal.text;
+    
 
     // delete text in old area
     textArea.value = wheel.items
