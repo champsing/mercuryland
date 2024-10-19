@@ -1,0 +1,20 @@
+name: Build Docker Image
+on:
+    push:
+        branches:
+            - main
+jobs:
+    push_to_github_io:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Check out Source Code
+              uses: actions/checkout@v4
+            - name: Build Docker Image
+              run: | 
+                docker build -t mercury .
+                docker images
+                docker save --output mercury.tar mercury
+            - uses: actions/upload-artifact@v4
+              with:
+                name: mercury.tar
+                path: ./mercury.tar
