@@ -98,13 +98,4 @@ const tabs = [
 .va-navbar {
     --va-navbar-padding-y: 0.6rem;
 }
-
-.bottom-card {
-    width: 90%;
-    --n-color: #12181c !important;
-}
-
-.transparent-divider {
-    opacity: 70%;
-}
 </style>

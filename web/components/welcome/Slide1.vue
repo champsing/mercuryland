@@ -8,7 +8,7 @@ import { VaDivider } from "vuestic-ui";
         <NextPageButton :page="1" />
         <div class="absolute x-center y-center text-center">
             <div class="text-white font-bold text-8xl">水星伺服器</div>
-            <VaDivider class="mt-6 mb-6 transparent-divider" />
+            <VaDivider class="mt-6 mb-6 opacity-70" />
             <div class="text-white italic text-3xl">The Mercury Land</div>
         </div>
         <img
