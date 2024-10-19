@@ -1,9 +1,11 @@
 <script setup lang="ts">
 import { Wheel } from "spin-wheel";
 import { ref, onMounted, reactive } from "vue";
-import { VaTextarea, VaButton, VaModal } from "vuestic-ui";
+import { VaTextarea, VaButton, VaModal, VaSwitch } from "vuestic-ui";
 const wheelContainer = ref(null);
-const isSpinning = ref(false);
+const isSpinning = ref(false); //轉盤旋轉中
+const isLeftAreaLocked = ref(false); //鎖定待抽區
+const clearRightArea = ref(true); //清除右邊區域
 const re = /x[1-9][0-9]*$/;
 
 let wheel: Wheel = null;
@@ -27,15 +29,33 @@ const textArea = defineModel("textArea", {
                     };
                 });
         }
-
+        if (count(textArea.value) !== 0)
+            isSpinning.value = false; //若左邊數量不為0，則可以旋轉
+        else isSpinning.value = true;
         return value;
     },
 });
+
 const textArea2 = defineModel("textArea2", { type: String, default: "" });
 
+function checkLeftTextAreaNull() {
+    if (count(textArea.value) == 0) {
+        isSpinning.value = true; //若空轉，當旋轉結束會變無限響鈴火警。
+        clearRightArea.value = true; //此時左邊一定為空，強制只能清除右邊。
+        isLeftAreaLocked.value = false; //此時左邊一定為空，可以輸入。
+        return true;
+    }
+}
+
+
 function spin() {
-    isSpinning.value = true;
-    wheel.spin(1000 + Math.round(Math.random() * 1000));
+    if (checkLeftTextAreaNull()) return;
+    else {
+        isSpinning.value = true; //旋轉、清空開關
+        isLeftAreaLocked.value = true; //鎖住待抽區
+        clearRightArea.value = true; //強制只能清除右邊
+        wheel.spin(1000 + Math.round(Math.random() * 1000));
+    }
 }
 
 function rest() {
@@ -43,7 +63,8 @@ function rest() {
     audio.play();
     modal.text = wheel.items[wheel.getCurrentIndex()].label;
     modal.show = true;
-    isSpinning.value = false;
+    isLeftAreaLocked.value = false; //解鎖待抽區
+    isSpinning.value = false; //解鎖旋轉、清空開關
 }
 
 function move() {
@@ -58,6 +79,8 @@ function move() {
         )
         .map((x: { label: string }) => x.label)
         .join("\n");
+
+    checkLeftTextAreaNull();
 }
 
 function tick() {
@@ -129,6 +152,7 @@ const modal2 = reactive({
                     color="#ffffff"
                     :resize="false"
                     class="w-full h-96 mt-8"
+                    :readonly="isLeftAreaLocked"
                 />
                 <VaButton
                     class="w-full mt-8"
@@ -147,9 +171,22 @@ const modal2 = reactive({
                     :resize="false"
                     class="w-full h-96 mt-8"
                 />
-                <VaButton class="w-full mt-8" @click="modal2.show = true">
-                    清空
-                </VaButton>
+                <div class="flex w-full justify-between">
+                    <VaButton class="w-3/5 mt-8" @click="modal2.show = true">
+                        清空
+                    </VaButton>
+                    <VaSwitch
+                        class="mt-8"
+                        v-model="clearRightArea"
+                        off-color="#1ccba2"
+                        color="#3444a2"
+                        style="--va-switch-checker-background-color: #252723"
+                        false-inner-label="待抽區"
+                        true-inner-label="抽中區"
+                        :disabled="isSpinning"
+                    />
+                </div>
+
                 <div class="h-44"></div>
             </div>
         </div>
@@ -164,8 +201,23 @@ const modal2 = reactive({
                 {{ modal.text }}
             </div>
         </VaModal>
-        <VaModal v-model="modal2.show" noDismiss @ok="textArea2 = ''">
-            您确定要清空抽中区吗?
+        <VaModal
+            v-model="modal2.show"
+            noDismiss
+            @ok="
+                () => {
+                    if (clearRightArea == true) textArea2 = '';
+                    else textArea = '';
+                    checkLeftTextAreaNull();
+                }
+            "
+        >
+            您确定要清空
+            <div v-if="clearRightArea == true" class="same-line text-2xl ">抽中區</div>
+            <div v-if="clearRightArea == false" class="same-line text-2xl ">待抽區</div>
+            吗?
+            <div v-if="clearRightArea == true" class="text-4xl text-right text-[#1aedab]">抽中區→</div>
+            <div v-if="clearRightArea == false" class="text-4xl text-right text-[#bae64c]">←待抽區</div>
         </VaModal>
     </div>
 </template>
