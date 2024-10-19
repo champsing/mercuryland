@@ -104,7 +104,7 @@ const showVodDescImg = ref(false);
             title="規則說明"
             hide-default-actions
             :closeButton="true"
-            z-index="20"
+            z-index="4"
         >
             <span class="text-3xl"> 直播時數規則說明 </span>
             <div class="text-2xl mt-2">●概述</div>
@@ -146,7 +146,7 @@ const showVodDescImg = ref(false);
             </div>
         </VaModal>
 
-        <VaModal v-model="showVodDescImg" hide-default-actions>
+        <VaModal v-model="showVodDescImg" hide-default-actions z-index="5">
             <img src="@assets/images/vod_time.png" alt="直播時數規則說明" />
         </VaModal>
 
