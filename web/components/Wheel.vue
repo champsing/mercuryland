@@ -39,7 +39,7 @@ function spin() {
 }
 
 function rest() {
-    var audio = new Audio("/bell_ring.mp3");
+    var audio = new Audio("/sounds/rest.mp3");
     audio.play();
     modal.text = wheel.items[wheel.getCurrentIndex()].label;
     modal.show = true;
@@ -61,7 +61,7 @@ function move() {
 }
 
 function tick() {
-    var audio = new Audio("/disconnect.mp3");
+    var audio = new Audio("/sounds/tick.mp3");
     audio.play();
 }
 
