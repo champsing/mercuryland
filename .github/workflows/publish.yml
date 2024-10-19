@@ -29,6 +29,6 @@ jobs:
                 git fetch origin
                 git add -A
                 git reset --soft origin/main
-                git commit -m "sync from git workflow"
+                git commit -m "sync from git workflow" || true
                 git push origin main
                 cd ..
