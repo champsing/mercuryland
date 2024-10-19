@@ -4,7 +4,8 @@ on:
         branches:
             - main
 jobs:
-    push_to_github_io:
+    build:
+        name: Build Docker Image
         runs-on: ubuntu-latest
         steps:
             - name: Check out Source Code

@@ -4,7 +4,8 @@ on:
         branches:
             - main
 jobs:
-    push_to_github_io:
+    push:
+        name: Push To github.io
         runs-on: ubuntu-latest
         steps:
             - name: Install Node.js
