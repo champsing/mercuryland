@@ -141,6 +141,7 @@ function calcStyle(top: number) {
             :columns="columns"
             flex-height
             :style="calcStyle(top)"
+            class="z-0"
         />
     </use-element-bounding>
 </template>
