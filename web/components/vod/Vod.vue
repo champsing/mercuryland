@@ -1,13 +1,14 @@
 <script setup lang="ts">
 import { ref, Ref } from "vue";
-import { NGrid, NGi, NSelect } from "naive-ui";
+import { NGrid, NGi } from "naive-ui";
 import {
     VaButton,
-    VaCollapse,
-    VaDatePicker,
+    VaChip,
+    VaDateInput,
     VaDivider,
     VaIcon,
     VaModal,
+    VaSelect,
     VaSwitch,
 } from "vuestic-ui";
 import vodLinkData from "@assets/data/vod.json";
@@ -24,9 +25,9 @@ let dateRange = defineModel(
 
 let strictFiltering = ref(false);
 
-let isDownListOpened = ref(false);
-
 let selectedTags: Ref<Array<string>> = ref(null);
+
+let tagList = [...new Set(vodLinkData.flatMap((x) => x.tags))].sort();
 
 let tagMenu: Array<{ label: string; value: any; disabled?: boolean }> = [
     { label: "", value: null },
@@ -42,38 +43,63 @@ let computedTime = ref(0);
 
 const showRuleDescModal = ref(false);
 const showVodDescImg = ref(false);
+// const monthNames = [
+//     "一月",
+//     "二月",
+//     "三月",
+//     "四月",
+//     "五月",
+//     "六月",
+//     "七月",
+//     "八月",
+//     "九月",
+//     "十月",
+//     "十一月",
+//     "十二月",
+// ];
 </script>
 
 <template>
-    <div class="mt-8 ml-auto mr-auto w-11/12">
-        <n-grid x-gap="12" y-gap="12" cols="4" class="w-11/12" item-responsive>
-            <n-gi span="4 800:2">
-                <VaCollapse header="選擇日期範圍">
-                    <div class="flex">
-                        <VaDatePicker v-model="dateRange" mode="range" />
-                        <VaDatePicker v-model="dateRange" mode="range" />
-                    </div>
-                </VaCollapse>
-
-                <!-- not yet -->
-            </n-gi>
-            <n-gi span="4 800:2 1200:1">
-                <n-select
-                    v-model:show="isDownListOpened"
-                    v-model:value="selectedTags"
-                    :options="tagMenu"
+    <div class="mt-4 ml-auto mr-auto w-11/12 z-10">
+        <div class="flex flex-row w-full justify-center gap-10">
+            <div class="w-1/8 flex flex-row">
+                <VaDateInput
+                    label="選擇日期範圍"
+                    v-model="dateRange"
+                    mode="range"
+                />
+                <!-- need more adjusting -->
+            </div>
+            <div class="w-1/4">
+                <VaSelect
+                    v-model="selectedTags"
+                    :options="tagList"
                     multiple
                     placeholder="请选择直播的TAG"
-                    :consistent-menu-width="false"
                 >
-                    <template v-if="isDownListOpened" #arrow>
-                        <Add24Regular />
+                    <template #content>
+                        <VaChip
+                            v-for="chip in selectedTags"
+                            size="small"
+                            class="mr-1 my-1"
+                            closeable
+                            @update:model-value="
+                                selectedTags = selectedTags.filter(
+                                    (v) => v !== chip
+                                )
+                            "
+                        >
+                            {{ chip }}
+                        </VaChip>
+                        <VaIcon size="20">
+                            <Add24Regular />
+                        </VaIcon>
                     </template>
-                </n-select>
-            </n-gi>
-            <n-gi>
+                </VaSelect>
+            </div>
+            <!-- not yet -->
+            <div class="w-1/8">
                 <VaSwitch
-                    class="ml-4"
                     v-model="strictFiltering"
                     off-color="#1ccba2"
                     color="#3444a2"
@@ -82,10 +108,12 @@ const showVodDescImg = ref(false);
                     true-inner-label="符合全部"
                     screen-responsive
                 />
+            </div>
+            <div class="w-1/8">
                 <VaButton
                     preset="plain"
                     color="#FFFFFF"
-                    class="ml-12 mt-1"
+                    class="mt-1"
                     @click="showRuleDescModal = !showRuleDescModal"
                 >
                     <VaIcon size="large" class="mr-2">
@@ -95,8 +123,8 @@ const showVodDescImg = ref(false);
                         <div class="text-lg">規則說明</div>
                     </div>
                 </VaButton>
-            </n-gi>
-        </n-grid>
+            </div>
+        </div>
 
         <!-- 規則說明 -->
         <VaModal
