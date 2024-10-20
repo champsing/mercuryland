@@ -164,10 +164,8 @@ const showVodDescImg = ref(false);
                                 selectedTags = [];
                                 selectedTags.push(tag);
                             } else if (selectedTags.includes(tag))
-                                selectedTags.splice(
-                                    selectedTags.indexOf(tag),
-                                    1
-                                );
+                                //prettier-ignore
+                                selectedTags.splice(selectedTags.indexOf(tag), 1);
                             else selectedTags.push(tag);
                         }
                     "

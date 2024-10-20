@@ -15,7 +15,7 @@ class DataType {
     divider: boolean;
 }
 
-const props = defineProps<{ dateRange: {start: Date, end: Date} }>();
+const props = defineProps<{ dateRange: { start: Date; end: Date } }>();
 const emit = defineEmits<{ (e: "computedTime", tag: number): void }>();
 const rawData = calcRawData();
 const data = computed(() => {
@@ -29,11 +29,8 @@ const data = computed(() => {
     );
     let i0 = filtered.findIndex((x: DataType) => x.divider);
 
-    if (i0 == null) {
-        return Array();
-    } else {
-        return filtered.slice(i0);
-    }
+    if (i0 == null) return Array();
+    else return filtered.slice(i0);
 });
 
 const lastItem = rawData[rawData.length - 1];
@@ -145,7 +142,7 @@ function calcStyle(top: number, vh: number) {
                                     <div>
                                         {{ item.date }}
                                     </div>
-                                    <VaDivider vertical class="-mt-2 -mb-2"/>
+                                    <VaDivider vertical class="-mt-2 -mb-2" />
                                     <div>
                                         {{ format(item.previous) }}
                                     </div>

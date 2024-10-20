@@ -29,9 +29,9 @@ const textArea = defineModel("textArea", {
                     };
                 });
         }
-        if (count(textArea.value) !== 0)
-            isSpinning.value = false; //若左邊數量不為0，則可以旋轉
-        else isSpinning.value = true;
+        //若左邊數量不為0，則可以旋轉
+        count(textArea.value) !== 0 ? isSpinning.value = false : isSpinning.value = true;
+        
         return value;
     },
 });
@@ -46,7 +46,6 @@ function checkLeftTextAreaNull() {
         return true;
     }
 }
-
 
 function spin() {
     if (checkLeftTextAreaNull()) return;
@@ -207,18 +206,17 @@ const modal2 = reactive({
             noDismiss
             @ok="
                 () => {
-                    if (clearRightArea == true) textArea2 = '';
-                    else textArea = '';
+                    clearRightArea == true ? textArea2 = '' : textArea = '';
                     checkLeftTextAreaNull();
                 }
             "
         >
             您确定要清空
-            <div v-if="clearRightArea == true" class="same-line text-2xl ">抽中區</div>
-            <div v-if="clearRightArea == false" class="same-line text-2xl ">待抽區</div>
+            <div v-if="clearRightArea" class="same-line text-2xl ">抽中區</div>
+            <div v-else class="same-line text-2xl ">待抽區</div>
             吗?
-            <div v-if="clearRightArea == true" class="text-4xl text-right text-[#1aedab]">清→</div>
-            <div v-if="clearRightArea == false" class="text-4xl text-right text-[#bae64c]">←清</div>
+            <div v-if="clearRightArea" class="text-4xl text-right text-[#1aedab]">清→</div>
+            <div v-else class="text-4xl text-right text-[#bae64c]">←清</div>
         </VaModal>
     </div>
 </template>

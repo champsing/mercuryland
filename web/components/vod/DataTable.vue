@@ -31,14 +31,14 @@ const data = computed(() => {
                     new Date(props.dateRange.end.getTime() + 28800000).toISOString().slice(0, 10)
         )
         .filter((v) => {
-            if (props.strictFiltering == true) {
+            if (props.strictFiltering == true)
                 return (
                     props.selectedTags == null ||
                     props.selectedTags.toString() == new Array().toString() ||
                     v.tags.slice().sort().toString() ==
                         props.selectedTags.slice().sort().toString()
                 );
-            } else
+            else
                 return (
                     props.selectedTags == null ||
                     props.selectedTags.toString() == new Array().toString() ||

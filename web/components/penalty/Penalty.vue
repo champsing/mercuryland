@@ -72,8 +72,7 @@ let finishOptions = [{ label: "", value: null }].concat(
                     :search="filterSearch"
                     @updateStatus="
                         (status) => {
-                            if (filterStatus == null) filterStatus = status;
-                            else filterStatus = null;
+                            filterStatus == null ? filterStatus = status : filterStatus = null;
                         }
                     "
                 />

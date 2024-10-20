@@ -48,9 +48,8 @@ function logout() {
 // auth token
 function tick() {
     let token = localStorage.getItem("token");
-    if (token == null) {
-        modal.auth = false;
-    } else {
+    if (token == null) modal.auth = false;
+    else {
         axios
             .post("/api/auth/tick", {
                 token: token,

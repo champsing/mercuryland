@@ -20,8 +20,7 @@ import { VaButton, VaIcon } from "vuestic-ui";
 let currentStep = ref<number | null>(1); //current step
 
 function clickLinkButton() {
-    if (currentStep.value < 4) currentStep.value++;
-    else currentStep.value = 1;
+    currentStep.value < 4 ? currentStep.value++ : currentStep.value = 1;
 }
 
 //Prev/Next Button
