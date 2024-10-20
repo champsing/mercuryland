@@ -146,16 +146,16 @@ const notEffectivePenalties = [
             每個懲罰會各自擁有一個完成狀態，分別有：未開始、已完成、勉強過、進行中。
         </div>
         <div class="text-bg mt-4">
-            <div class="same-line !text-[#b91c1c]">▲未開始</div>
+            <div class="inline !text-[#b91c1c]">▲未開始</div>
             ：尚未開始嘗試完成該懲罰，沒有進度
             <br />
-            <div class="same-line !text-[#4d7c0f]">▲已完成</div>
+            <div class="inline !text-[#4d7c0f]">▲已完成</div>
             ：已經完成該懲罰主文要求的全部條件
             <br />
-            <div class="same-line !text-[#047857]">▲勉強過</div>
+            <div class="inline !text-[#047857]">▲勉強過</div>
             ：該懲罰的原主人或是投票決定讓惡靈在沒有完成主文要求的全部條件下完成該懲罰
             <br />
-            <div class="same-line !text-[#b45309]">▲進行中</div>
+            <div class="inline !text-[#b45309]">▲進行中</div>
             ：正在嘗試完成，已經有進度的懲罰
         </div>
         <div class="text-2xl mt-4">●加班台懲罰</div>

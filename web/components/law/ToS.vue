@@ -52,7 +52,7 @@ import { VaDivider } from "vuestic-ui";
                 <li>
                     <!-- 4.2. -->
                     下載本站檔案或瀏覽本站提供之外部連結時，本站閱聽人應自行留意檔案安全與網路資通隱私權等，若檔案或連結因夾帶病毒而導致使用者電腦遭植入第三方木馬程式、竊取資料或資料完整性遭損害等任何損失，本站
-                    <div class="same-line text-red-500 font-bold text-2xl">
+                    <div class="inline text-red-500 font-bold text-2xl">
                         完全不負任何責任   
                     </div>。
                 </li>

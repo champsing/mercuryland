@@ -88,25 +88,12 @@ let finishOptions = [{ label: "", value: null }].concat(
 </template>
 
 <style>
-.vachip2 {
-    margin-top: 0.5rem;
-    margin-bottom: 1rem;
-    --va-chip-border: 0.2rem solid transparent;
-    --va-chip-font-size: 1.15rem;
-    --va-chip-padding: 0 1.2rem;
-}
-
 .overall-button {
     margin-top: 0.65rem;
     --va-button-group-font-size: 1.15rem;
     --va-button-group-border-radius: 2px;
     --va-button-group-button-padding: 0.3rem;
     --va-button-group-button-width: 90px;
-}
-
-.same-line {
-    display: inline-block;
-    white-space: nowrap;
 }
 
 kbd {

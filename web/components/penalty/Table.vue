@@ -215,10 +215,9 @@ function filterPenaltyData(
                 <div class="mt-3">
                     <span class="text-base">
                         😇&nbsp;復活&ensp;
-                        <div class="same-line text-2xl text-orange-300">
-                            {{
-                                penaltyEntryModalContent.reapply?.entries.length
-                            }}
+                        <div class="inline text-2xl text-orange-300">
+                            <!-- prettier-ignore -->
+                            {{ penaltyEntryModalContent.reapply?.entries.length }}
                         </div>
                         &ensp;次
                     </span>
@@ -239,7 +238,7 @@ function filterPenaltyData(
                     </n-button>
                     &ensp;
                     <!-- !text-[#b91c1c] !text-[#4d7c0f] !text-[#047857] !text-[#b45309] -->
-                    <div class="same-line text-sm">
+                    <div class="inline-block text-sm">
                         <div
                             v-if="entry.status == '未開始'"
                             class="!text-[#b91c1c]"

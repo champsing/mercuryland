@@ -212,8 +212,8 @@ const modal2 = reactive({
             "
         >
             您确定要清空
-            <div v-if="clearRightArea" class="same-line text-2xl ">抽中區</div>
-            <div v-else class="same-line text-2xl ">待抽區</div>
+            <div v-if="clearRightArea" class="inline text-2xl">抽中區</div>
+            <div v-else class="inline text-2xl ">待抽區</div>
             吗?
             <div v-if="clearRightArea" class="text-4xl text-right text-[#1aedab]">清→</div>
             <div v-else class="text-4xl text-right text-[#bae64c]">←清</div>
