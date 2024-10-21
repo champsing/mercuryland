@@ -8,7 +8,7 @@ import vodData from "@assets/data/vod.json";
 import { openLink, openLinks, ofId } from "@/composables/utils";
 
 const props = defineProps<{
-    dateRange: [number, number];
+    dateRange: { start: Date, end: Date };
     status?: string;
     search: string;
 }>();
@@ -54,16 +54,16 @@ const filteredData = computed(() =>
 );
 
 function filterPenaltyData(
-    date: [number, number],
+    dateRange: { start: Date, end: Date },
     status: string,
     search: string
 ): typeof penaltyData {
     return penaltyData
         .filter(
             (v) =>
-                v.date >= new Date(date[0]).toISOString().slice(0, 10) &&
+                v.date >= dateRange.start.toISOString().slice(0, 10) &&
                 v.date <=
-                    new Date(date[1] + 28800000).toISOString().slice(0, 10)
+                    new Date(dateRange.end.getTime() + 28800000).toISOString().slice(0, 10)
         )
         .filter((v) => status == null || status == v.status)
         .filter(

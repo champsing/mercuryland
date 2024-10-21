@@ -42,13 +42,13 @@ let proceedingPenalties = penaltyData
     .join("\n")
     .toString();
 
-const notEffectivePenalties = ["0.5個懲罰","直播玩雀魂觀眾場", "玩歐卡*買五星貨車"]
+const notEffectivePenalties = ["0.5個懲罰*","直播玩雀魂觀眾場", "玩歐卡*買五星貨車"]
     .join("\n")
     .toString();
 </script>
 
 <template>
-    <div class="flex flex-col m-auto">
+    <div class="flex flex-col m-auto mt-0">
         <VaAlert class="mt-2" color="#3d807c" closeable>
             <div class="flex flex-row items-center w-72">
                 <VaIcon size="large" class="mr-2">

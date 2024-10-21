@@ -1,16 +1,14 @@
 <script setup lang="ts">
-import { Ref } from "vue";
-import { NDatePicker, NGrid, NGi, NSelect, NInput } from "naive-ui";
-import { VaDivider } from "vuestic-ui";
+import { VaDateInput, VaDivider, VaInput, VaSelect } from "vuestic-ui";
 import penaltyStatus from "@assets/data/penalty_status.json";
 import OverAllList from "./OverAllList.vue";
 import PenaltyTable from "./Table.vue";
 import PenaltySyntax from "./Syntax.vue";
 
-let filterDate: Ref<[number, number]> = defineModel("filterDate", {
-    default: [1672502400000, Date.now() + 28800000] as const,
-    set(value: [number, number]) {
-        return value;
+let filterDate = defineModel("filterDate", {
+    default: {
+        start: new Date(1672502400000),
+        end: new Date(Date.now() + 28800000),
     },
 });
 
@@ -28,59 +26,66 @@ let filterSearch = defineModel("filterSearch", {
     },
 });
 
-let finishOptions = [{ label: "", value: null }].concat(
-    penaltyStatus
-        .map((x) => x.name)
-        .sort()
-        .map((x) => {
-            return { label: x, value: x };
-        })
-);
+let finishOptions = penaltyStatus.map((x) => x.name).sort();
+
+function formatDate(date: Date) {
+    return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
+}
+
+function parseDate(text) {
+    const [year, month, day] = text.split("-");
+    return new Date(year, month - 1, day);
+}
 </script>
 
 <template>
     <div class="mt-4 m-auto w-11/12">
-        <n-grid x-gap="12" :cols="4">
-            <n-gi :span="2">
-                <n-date-picker type="daterange" v-model:value="filterDate" />
-            </n-gi>
-            <n-gi>
-                <n-select
-                    v-model:value="filterStatus"
+        <div class="flex flex-row w-full justify-center gap-10">
+            <div class="w-1/5">
+                <VaDateInput
+                    v-model="filterDate"
+                    :format-date="formatDate"
+                    :parse-date="parseDate"
+                    manual-input
+                    mode="auto"
+                />
+            </div>
+            <div class="w-1/5">
+                <VaSelect
+                    v-model="filterStatus"
                     :options="finishOptions"
                     placeholder="請選擇一種完成狀態"
-                    :consistent-menu-width="false"
                 />
-            </n-gi>
-            <n-gi>
-                <n-input
-                    round
+            </div>
+            <div class="w-1/5">
+                <VaInput
                     placeholder="輸入懲罰內容來搜尋"
-                    v-model:value="filterSearch"
-                    type="text"
+                    v-model="filterSearch"
                 />
-            </n-gi>
-        </n-grid>
+            </div>
+        </div>
 
         <VaDivider class="!m-2" />
 
-        <n-grid x-gap="12" :cols="3" class="w-11/12 h-80vh overflow-y-hidden">
-            <n-gi :span="2" class="h-80vh w-full p-0 m-0 overflow-y-scroll">
+        <div class="flex flex-row">
+            <div class="h-80vh w-2/3 p-0 m-0 overflow-y-scroll">
                 <PenaltyTable
+                    class=""
                     :dateRange="filterDate"
                     :status="filterStatus"
                     :search="filterSearch"
                     @updateStatus="
                         (status) => {
-                            filterStatus == null ? filterStatus = status : filterStatus = null;
+                            filterStatus == null
+                                ? (filterStatus = status)
+                                : (filterStatus = null);
                         }
                     "
                 />
-            </n-gi>
-            <n-gi>
-                <OverAllList />
-            </n-gi>
-        </n-grid>
+            </div>
+            <OverAllList />
+        </div>
+        
         <div class="mt-8 mb-6">
             <PenaltySyntax />
         </div>
