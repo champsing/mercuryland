@@ -15,7 +15,7 @@ import vodLinkData from "@assets/data/vod.json";
 import DataTable from "./DataTable.vue";
 import TimeSummary from "./TimeSummary.vue";
 import TimeDetail from "./TimeDetail.vue";
-import { Add24Regular, Info24Regular } from "@vicons/fluent";
+import { Info24Regular } from "@vicons/fluent";
 
 //prettier-ignore
 let dateRange = defineModel(
@@ -28,16 +28,6 @@ let strictFiltering = ref(false);
 let selectedTags: Ref<Array<string>> = ref(null);
 
 let tagList = [...new Set(vodLinkData.flatMap((x) => x.tags))].sort();
-
-let tagMenu: Array<{ label: string; value: any; disabled?: boolean }> = [
-    { label: "", value: null },
-].concat(
-    [...new Set(vodLinkData.flatMap((x) => x.tags))].sort().map((x) => {
-        return { label: x, value: x };
-    })
-);
-
-tagMenu[0] = { label: "", value: null, disabled: true };
 
 let computedTime = ref(0);
 
@@ -57,29 +47,41 @@ const showVodDescImg = ref(false);
 //     "十一月",
 //     "十二月",
 // ];
+
+function updateTag(tag: string) {
+    if (selectedTags.value == null) {
+        selectedTags.value = [];
+        selectedTags.value.push(tag);
+    } else if (selectedTags.value.includes(tag))
+        //prettier-ignore
+        selectedTags.value = selectedTags.value.filter((x) => x !== tag);
+    else selectedTags.value.push(tag);
+}
 </script>
 
 <template>
     <div class="mt-4 ml-auto mr-auto w-11/12 z-10">
         <div class="flex flex-row w-full justify-center gap-10">
             <div class="w-1/8 flex flex-row">
-                <VaDateInput
-                    label="選擇日期範圍"
-                    v-model="dateRange"
-                    mode="range"
-                />
+                <VaDateInput v-model="dateRange" mode="range" />
                 <!-- need more adjusting -->
             </div>
-            <div class="w-1/4">
+            <div class="w-1/8">
                 <VaSelect
                     v-model="selectedTags"
                     :options="tagList"
                     multiple
+                    clearable
                     placeholder="请选择直播的TAG"
+                    dropdownIcon="va-plus"
                 >
+                    <!-- has a problem, sometimes the first entry won't show as 
+                    a chip until the second entry is selected and removed. -->
                     <template #content>
                         <VaChip
                             v-for="chip in selectedTags"
+                            color="#90dc52"
+                            outline
                             size="small"
                             class="mr-1 my-1"
                             closeable
@@ -91,9 +93,6 @@ const showVodDescImg = ref(false);
                         >
                             {{ chip }}
                         </VaChip>
-                        <VaIcon size="20">
-                            <Add24Regular />
-                        </VaIcon>
                     </template>
                 </VaSelect>
             </div>
@@ -186,17 +185,7 @@ const showVodDescImg = ref(false);
                     :dateRange="dateRange"
                     :selectedTags="selectedTags"
                     :strictFiltering="strictFiltering"
-                    @updateTag="
-                        (tag) => {
-                            if (selectedTags == null) {
-                                selectedTags = [];
-                                selectedTags.push(tag);
-                            } else if (selectedTags.includes(tag))
-                                //prettier-ignore
-                                selectedTags.splice(selectedTags.indexOf(tag), 1);
-                            else selectedTags.push(tag);
-                        }
-                    "
+                    @updateTag="(tag) => updateTag(tag)"
                 />
             </n-gi>
             <n-gi span="3 800:1">
