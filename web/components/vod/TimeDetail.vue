@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed } from "vue";
-import { NCard, NScrollbar } from "naive-ui";
-import { VaDivider } from "vuestic-ui";
+import { NCard } from "naive-ui";
+import { VaDivider, VaScrollContainer } from "vuestic-ui";
 import { UseElementBounding, UseWindowSize } from "@vueuse/components";
 import { parseHMS, formatHMS } from "@composables/utils.ts";
 import vodLinkData from "@assets/data/vod.json";
@@ -130,7 +130,12 @@ function calcStyle(top: number, vh: number) {
     >
         <use-window-size v-slot="{ height }">
             <use-element-bounding v-slot="{ top }">
-                <n-scrollbar :style="calcStyle(top, height)">
+                <VaScrollContainer
+                    vertical
+                    color="#e0feb4"
+                    size="medium"
+                    :style="calcStyle(top, height)"
+                >
                     <div class="pr-6">
                         <template v-for="item in data">
                             <VaDivider
@@ -159,7 +164,7 @@ function calcStyle(top: number, vh: number) {
                             </div>
                         </template>
                     </div>
-                </n-scrollbar>
+                </VaScrollContainer>
             </use-element-bounding>
         </use-window-size>
     </n-card>
