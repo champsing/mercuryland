@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { ref, Ref } from "vue";
-import { NGrid, NGi } from "naive-ui";
 import {
     VaButton,
     VaChip,
@@ -179,23 +178,24 @@ function updateTag(tag: string) {
 
         <VaDivider class="!mt-2 !mb-2" />
 
-        <n-grid x-gap="8" :cols="3" class="w-11/12" item-responsive>
-            <n-gi span="3 800:2" class="w-full p-0 m-0">
-                <DataTable
-                    :dateRange="dateRange"
-                    :selectedTags="selectedTags"
-                    :strictFiltering="strictFiltering"
-                    @updateTag="(tag) => updateTag(tag)"
-                />
-            </n-gi>
-            <n-gi span="3 800:1">
+        <div class="flex flex-row gap-2">
+            <div class="w-2/3">
+              <DataTable
+                :dateRange="dateRange"
+                :selectedTags="selectedTags"
+                :strictFiltering="strictFiltering"
+                @updateTag="(tag) => updateTag(tag)"
+            />  
+            </div>
+            
+            <div class="flex flex-col w-1/3">
                 <TimeSummary :t="computedTime" />
                 <TimeDetail
                     :dateRange="dateRange"
                     @computedTime="(time) => (computedTime = time)"
                 />
-            </n-gi>
-        </n-grid>
+            </div>
+        </div>
     </div>
 </template>
 
