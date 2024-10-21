@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { ref } from "vue";
-import { NButton, NCard, NFlex, NGrid, NGi, NModal } from "naive-ui";
 import {
     VaAlert,
     VaButton,
@@ -54,7 +53,7 @@ const notEffectivePenalties = [
 </script>
 
 <template>
-    <n-flex size="small" vertical class="m-auto" item-responsive>
+    <div class="flex flex-col m-auto">
         <VaAlert class="mt-2" color="#3d807c" closeable>
             <div class="flex flex-row items-center w-72">
                 <VaIcon size="large" class="mr-2">
@@ -77,7 +76,7 @@ const notEffectivePenalties = [
             </div>
         </VaAlert>
 
-        <n-flex size="small" class="m-auto" item-responsive>
+        <div class="flex m-auto" item-responsive>
             <!-- <VaChip class="vachip2" color="#3d807c" readonly>
             <VaIcon size="large" class="mt-1 mr-2">
                 <InfoCircle />
@@ -116,7 +115,7 @@ const notEffectivePenalties = [
                     <div class="text-lg">規則說明</div>
                 </div>
             </VaButton>
-        </n-flex>
+        </div>
 
         <div class="flex flex-col text-center">
             <div class="text-sm mt-4 text-zinc-200">尚未生效的懲罰</div>
@@ -129,7 +128,7 @@ const notEffectivePenalties = [
                 />
             </div>
         </div>
-    </n-flex>
+    </div>
 
     <!-- 規則說明 -->
     <VaModal
@@ -171,189 +170,148 @@ const notEffectivePenalties = [
     </VaModal>
 
     <!-- 現存 和 完成 -->
-    <n-modal v-model:show="showExistModal">
-        <n-card
-            style="width: 600px"
-            title="懲罰一覽表：現存"
-            :bordered="false"
-            size="huge"
-            role="dialog"
-            aria-modal="true"
-        >
-            <template #header-extra>
-                <n-button
-                    @click="
-                        copyToClipboard(
-                            notYetStartedPenalties + '\n' + proceedingPenalties
-                        )
-                    "
-                >
-                    複製所有現存懲罰
-                </n-button>
-            </template>
-            <n-grid
-                :x-gap="3"
-                :y-gap="2"
-                :cols="3"
-                class="text-center"
-                screen-responsive
+    <VaModal
+        v-model="showExistModal"
+        title="懲罰一覽表"
+        :bordered="false"
+        size="small"
+        hide-default-actions
+    >
+        <div class="flex flex-row mb-8">
+            <div class="text-xl flex-grow">懲罰一覽表：現存</div>
+            <VaButton
+                color="warning"
+                gradient
+                class="-mt-2"
+                @click="
+                    copyToClipboard(
+                        notYetStartedPenalties + '\n' + proceedingPenalties
+                    )
+                "
             >
-                <n-gi>
-                    <div class="text-sm mt-1 text-[#ef3b3b]">未開始</div>
-                    <div class="text-3xl mt-1">
-                        {{
-                            penaltyData.filter((x) => x.status == "未開始")
-                                .length
-                        }}
-                    </div>
-                </n-gi>
-                <n-gi>
-                    <div class="text-sm mt-1 text-[#de8039]">進行中</div>
-                    <div class="text-3xl mt-1">
-                        {{
-                            penaltyData.filter((x) => x.status == "進行中")
-                                .length
-                        }}
-                    </div>
-                </n-gi>
-                <n-gi>
-                    <div class="text-sm mt-1 text-[#eda9a9]">現存總計</div>
-                    <div class="text-3xl mt-1">
-                        {{
-                            penaltyData.filter(
-                                (x) =>
-                                    x.status == "未開始" || x.status == "進行中"
-                            ).length
-                        }}
-                    </div>
-                </n-gi>
-            </n-grid>
-            <VaDivider class="!mt-2 !mb-1" />
-            <n-grid
-                :x-gap="4"
-                :y-gap="4"
-                :cols="2"
-                class="text-center mt-2"
-                screen-responsive
-            >
-                <n-gi>
-                    <div class="text-sm mt-4 mb-2">未開始</div>
-                    <VaTextarea
-                        v-model="notYetStartedPenalties"
-                        :maxRows="7"
-                        :resize="false"
-                        readonly
-                    />
-                    <n-flex style="justify-content: start" class="mt-4">
-                        <div class="text-sm">
-                            <kbd>Ctrl</kbd>
-                            &nbsp;<kbd>A</kbd>&ensp;可快速複製全部項目
-                        </div>
-                    </n-flex>
-                </n-gi>
-                <n-gi>
-                    <div class="text-sm mt-4 mb-2">進行中</div>
-                    <VaTextarea
-                        v-model="proceedingPenalties"
-                        :maxRows="7"
-                        :resize="false"
-                        readonly
-                    />
-                </n-gi>
-            </n-grid>
-        </n-card>
-    </n-modal>
+                複製所有現存懲罰
+            </VaButton>
+        </div>
 
-    <n-modal v-model:show="showCompleteModal">
-        <n-card
-            style="width: 600px"
-            title="懲罰一覽表：完成"
-            :bordered="false"
-            size="huge"
-            role="dialog"
-            aria-modal="true"
-        >
-            <template #header-extra>
-                <n-button
-                    @click="
-                        copyToClipboard(
-                            completedPenalties + '\n' + barelyPassedPenalties
-                        )
-                    "
-                >
-                    複製所有完成懲罰
-                </n-button>
-            </template>
-            <n-grid
-                :x-gap="3"
-                :y-gap="2"
-                :cols="3"
-                class="text-center"
-                screen-responsive
+        <div class="flex justify-center text-center gap-32 ml-4">
+            <div class="flex flex-col">
+                <div class="text-sm mt-1 text-[#ef3b3b]">未開始</div>
+                <div class="text-3xl mt-1">
+                    {{ penaltyData.filter((x) => x.status == "未開始").length }}
+                </div>
+            </div>
+            <div class="flex flex-col">
+                <div class="text-sm mt-1 text-[#de8039]">進行中</div>
+                <div class="text-3xl mt-1">
+                    {{ penaltyData.filter((x) => x.status == "進行中").length }}
+                </div>
+            </div>
+            <div class="flex flex-col">
+                <div class="text-sm mt-1 text-[#eda9a9]">現存總計</div>
+                <div class="text-3xl mt-1">
+                    {{
+                        penaltyData.filter(
+                            (x) => x.status == "未開始" || x.status == "進行中"
+                        ).length
+                    }}
+                </div>
+            </div>
+        </div>
+        <VaDivider class="!mt-2 !mb-1" />
+        <div class="flex text-center justify-between">
+            <div class="flex flex-col">
+                <div class="text-sm mt-4 mb-2">未開始</div>
+                <VaTextarea
+                    v-model="notYetStartedPenalties"
+                    :maxRows="7"
+                    :resize="false"
+                    readonly
+                />
+            </div>
+            <div class="flex flex-col">
+                <div class="text-sm mt-4 mb-2">進行中</div>
+                <VaTextarea
+                    v-model="proceedingPenalties"
+                    :maxRows="7"
+                    :resize="false"
+                    readonly
+                />
+            </div>
+        </div>
+        <div class="flex justify-start mt-4 text-sm">
+            <kbd>Ctrl</kbd>&nbsp;<kbd>A</kbd>&ensp;可快速複製全部項目
+        </div>
+    </VaModal>
+
+    <VaModal
+        v-model="showCompleteModal"
+        title="懲罰一覽表"
+        :bordered="false"
+        size="small"
+        hide-default-actions
+    >
+        <div class="flex flex-row mb-8">
+            <div class="text-xl flex-grow">懲罰一覽表：完成</div>
+            <VaButton
+                color="success"
+                gradient
+                class="-mt-2"
+                @click="
+                    copyToClipboard(
+                        completedPenalties + '\n' + barelyPassedPenalties
+                    )
+                "
             >
-                <n-gi>
-                    <div class="text-sm mt-1 text-[#4be66c]">已完成</div>
-                    <div class="text-3xl mt-1">
-                        {{
-                            penaltyData.filter((x) => x.status == "已完成")
-                                .length
-                        }}
-                    </div>
-                </n-gi>
-                <n-gi>
-                    <div class="text-sm mt-1 text-[#218d37]">勉強過</div>
-                    <div class="text-3xl mt-1">
-                        {{
-                            penaltyData.filter((x) => x.status == "勉強過")
-                                .length
-                        }}
-                    </div>
-                </n-gi>
-                <n-gi>
-                    <div class="text-sm mt-1 text-[#39e3e3]">完成總計</div>
-                    <div class="text-3xl mt-1">
-                        {{
-                            penaltyData.filter(
-                                (x) =>
-                                    x.status == "已完成" || x.status == "勉強過"
-                            ).length
-                        }}
-                    </div>
-                </n-gi>
-            </n-grid>
-            <VaDivider class="!mt-2 !mb-1" />
-            <n-grid
-                :x-gap="4"
-                :y-gap="4"
-                :cols="2"
-                class="text-center"
-                screen-responsive
-            >
-                <n-gi>
-                    <div class="text-sm mt-4 mb-2">已完成</div>
-                    <VaTextarea
-                        v-model="completedPenalties"
-                        :maxRows="7"
-                        :resize="false"
-                        readonly
-                    />
-                    <n-flex style="justify-content: start" class="mt-4">
-                        <div class="text-sm">
-                            <kbd>Ctrl</kbd>
-                            &nbsp;<kbd>A</kbd>&ensp;可快速複製全部項目
-                        </div>
-                    </n-flex>
-                </n-gi>
-                <n-gi>
-                    <div class="text-sm mt-4 mb-2">勉強過</div>
-                    <VaTextarea
-                        v-model="barelyPassedPenalties"
-                        :maxRows="7"
-                        :resize="false"
-                        readonly
-                    />
-                </n-gi>
-            </n-grid>
-        </n-card>
-    </n-modal>
+                複製所有完成懲罰
+            </VaButton>
+        </div>
+        <div class="flex justify-center text-center gap-32 ml-4">
+            <div class="flex flex-col">
+                <div class="text-sm mt-1 text-[#4be66c]">已完成</div>
+                <div class="text-3xl mt-1">
+                    {{ penaltyData.filter((x) => x.status == "已完成").length }}
+                </div>
+            </div>
+            <div class="flex flex-col">
+                <div class="text-sm mt-1 text-[#218d37]">勉強過</div>
+                <div class="text-3xl mt-1">
+                    {{ penaltyData.filter((x) => x.status == "勉強過").length }}
+                </div>
+            </div>
+            <div class="flex flex-col">
+                <div class="text-sm mt-1 text-[#39e3e3]">完成總計</div>
+                <div class="text-3xl mt-1">
+                    {{
+                        penaltyData.filter(
+                            (x) => x.status == "已完成" || x.status == "勉強過"
+                        ).length
+                    }}
+                </div>
+            </div>
+        </div>
+        <VaDivider class="!mt-2 !mb-1" />
+        <div class="flex justify-between text-center">
+            <div class="flex flex-col">
+                <div class="text-sm mt-4 mb-2">已完成</div>
+                <VaTextarea
+                    v-model="completedPenalties"
+                    :maxRows="7"
+                    :resize="false"
+                    readonly
+                />
+            </div>
+            <div class="flex flex-col">
+                <div class="text-sm mt-4 mb-2">勉強過</div>
+                <VaTextarea
+                    v-model="barelyPassedPenalties"
+                    :maxRows="7"
+                    :resize="false"
+                    readonly
+                />
+            </div>
+        </div>
+        <div class="flex justify-start mt-4 text-sm">
+            <kbd>Ctrl</kbd>&nbsp;<kbd>A</kbd>&ensp;可快速複製全部項目
+        </div>
+    </VaModal>
 </template>
