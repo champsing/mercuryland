@@ -66,7 +66,7 @@ const columns = [
                 {
                     preset: "plain",
                     size: "small",
-                    color: "#d9d9d9", //non-aggressive white
+                    color: "textPrimary",
                     hoverMaskColor: "#5bc6a1", //same as NextPageButton and ReturnTopButton
                     hoverOpacity: 1,
                     pressedOpacity: 1,
@@ -93,7 +93,7 @@ const columns = [
                                     {
                                         preset: "plain",
                                         size: "small",
-                                        color: "#d9d9d9", //non-aggressive white
+                                        color: "textPrimary",
                                         hoverMaskColor: "#5bc6a1", //same as NextPageButton and ReturnTopButton
                                         hoverOpacity: 1,
                                         pressedMaskColor: "info",
