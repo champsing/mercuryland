@@ -42,12 +42,7 @@ let proceedingPenalties = penaltyData
     .join("\n")
     .toString();
 
-const notEffectivePenalties = [
-    "麥塊蓋故宮",
-    "唸一遍所有馬來西亞官方郵局的地址",
-    "直播玩雀魂觀眾場",
-    "玩歐卡*買五星貨車",
-]
+const notEffectivePenalties = ["0.5個懲罰","直播玩雀魂觀眾場", "玩歐卡*買五星貨車"]
     .join("\n")
     .toString();
 </script>
@@ -131,11 +126,7 @@ const notEffectivePenalties = [
     </div>
 
     <!-- 規則說明 -->
-    <VaModal
-        v-model="showRuleDescModal"
-        title="規則說明"
-        hide-default-actions
-    >
+    <VaModal v-model="showRuleDescModal" title="規則說明" hide-default-actions>
         <span class="text-3xl"> 直播懲罰規則說明 </span>
         <div class="text-2xl mt-2">●概述</div>
         <div class="text-bg mt-2">
