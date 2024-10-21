@@ -42,7 +42,7 @@ const version = 1.21;
 </script>
 
 <template>
-    <div class="mt-8 ml-auto mr-auto w-11/12">
+    <div class="mt-8 m-auto w-11/12">
         <div class="text-center mb-4">
             <div class="text-6xl perspective-x-30 text-cyan-400">
                 現在就立刻加入我們

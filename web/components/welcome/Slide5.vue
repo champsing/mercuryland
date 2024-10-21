@@ -46,7 +46,9 @@ import ReturnTopButton from "./ReturnTopButton.vue";
                     </div>
                     <div class="mt-8">
                         <VaButton preset="primary" size="large" to="join" border-color="#0891b2" color="#0891b2">
-                            點擊加入
+                            <div class="text-cyan-200">
+                                點擊加入
+                            </div>
                         </VaButton>
                     </div>
                 </div>

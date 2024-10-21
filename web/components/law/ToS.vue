@@ -3,7 +3,7 @@ import { VaDivider } from "vuestic-ui";
 </script>
 
 <template>
-    <div class="mt-8 ml-auto mr-auto w-11/12">
+    <div class="mt-8 m-auto w-11/12">
         <div class="text-4xl text-neutral-100 text-center mt-4">
             使用條款
         </div>

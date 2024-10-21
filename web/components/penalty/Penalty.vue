@@ -39,7 +39,7 @@ let finishOptions = [{ label: "", value: null }].concat(
 </script>
 
 <template>
-    <div class="mt-4 ml-auto mr-auto w-11/12">
+    <div class="mt-4 m-auto w-11/12">
         <n-grid x-gap="12" :cols="4">
             <n-gi :span="2">
                 <n-date-picker type="daterange" v-model:value="filterDate" />

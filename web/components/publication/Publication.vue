@@ -7,7 +7,7 @@ import { WindowNew20Filled } from "@vicons/fluent";
 </script>
 
 <template>
-    <div class="mt-4 ml-auto mr-auto w-11/12">
+    <div class="mt-4 m-auto w-11/12">
         <!-- 如果沒有新版本水星法可以註解起來 -->
         <!-- 
         <NewLaw /> 

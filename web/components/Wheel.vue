@@ -136,7 +136,7 @@ const modal2 = reactive({
 </script>
 
 <template>
-    <div class="mt-8 ml-auto mr-auto w-11/12">
+    <div class="mt-8 m-auto w-11/12">
         <div class="flex w-full justify-end">
             <div class="text-lime-400 font-bold text-4xl bg-black text-right">
                 BETA

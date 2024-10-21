@@ -69,7 +69,7 @@ function parseDate(text) {
 </script>
 
 <template>
-    <div class="mt-4 ml-auto mr-auto w-11/12 z-10">
+    <div class="mt-4 m-auto w-11/12 z-10">
         <div class="flex flex-row w-full justify-center gap-10">
             <div class="w-1/8 flex flex-row">
                 <VaDateInput
