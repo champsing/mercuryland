@@ -19,8 +19,8 @@ import { Info24Regular } from "@vicons/fluent";
 //prettier-ignore
 let dateRange = defineModel(
     "dateRange", {
-    //1677600000 = 2023 03 01 12:00 AM Taipei ST, 8 hours = 28800 seconds
-    default: {start: new Date(1677600000000), end: new Date(Date.now() + 28800000)}
+    //1582992000 = 2020 03 01 12:00 AM Taipei ST; 8 hours = 28800 seconds
+    default: {start: new Date(1582992000000), end: new Date(Date.now() + 28800000)}
 });
 
 let strictFiltering = ref(false);
