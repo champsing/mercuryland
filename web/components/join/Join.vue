@@ -1,17 +1,16 @@
 <script setup lang="ts">
-import {
-    NButton,
-    NButtonGroup,
-    NCard,
-    NGrid,
-    NGi,
-    NStep,
-    NSteps,
-} from "naive-ui";
+import { NStep, NSteps } from "naive-ui";
 import { copyToClipboard } from "@composables/utils";
 import { ref } from "vue";
 import { MdArrowRoundBack, MdArrowRoundForward } from "@vicons/ionicons4";
-import { VaButton, VaIcon } from "vuestic-ui";
+import {
+    VaButton,
+    VaButtonGroup,
+    VaCard,
+    VaCardContent,
+    VaCardTitle,
+    VaIcon,
+} from "vuestic-ui";
 
 // const emit = defineEmits<{
 //     (e: "toTab", tab: string): void;
@@ -20,7 +19,7 @@ import { VaButton, VaIcon } from "vuestic-ui";
 let currentStep = ref<number | null>(1); //current step
 
 function clickLinkButton() {
-    currentStep.value < 4 ? currentStep.value++ : currentStep.value = 1;
+    currentStep.value < 4 ? currentStep.value++ : (currentStep.value = 1);
 }
 
 //Prev/Next Button
@@ -48,44 +47,52 @@ const version = 1.21;
                 現在就立刻加入我們
             </div>
         </div>
-        <n-grid
-            x-gap="12"
-            y-gap="12"
-            cols="3"
-            class="w-11/12 mb-4"
-            item-responsive
-        >
-            <n-gi span="3 800:1" class="text-center">
-                <n-card title="IP" @click="copyToClipboard(serverIP)">
-                    <n-button text class="!text-2xl">
-                        {{ serverIP }}
-                    </n-button>
-                </n-card>
-            </n-gi>
-            <n-gi span="3 800:1" class="text-center">
-                <n-card title="Seed" @click="copyToClipboard(seed.toString())">
-                    <n-button text class="!text-2xl">
-                        {{ seed }}
-                    </n-button>
-                </n-card>
-            </n-gi>
-            <n-gi span="3 800:1" class="text-center">
-                <n-card title="Version">
-                    <div class="!text-2xl">
+        <div class="flex justify-center text-center gap-16">
+            <VaCard class="w-1/3">
+                <VaCardTitle style="font-size: 16px"> IP </VaCardTitle>
+                <VaCardContent>
+                    <VaButton
+                        color="textPrimary"
+                        preset="plain"
+                        @click="copyToClipboard(serverIP)"
+                    >
+                        <span class="text-2xl">
+                            {{ serverIP }}
+                        </span>
+                    </VaButton>
+                </VaCardContent>
+            </VaCard>
+            <VaCard class="w-1/3">
+                <VaCardTitle style="font-size: 16px"> Seed </VaCardTitle>
+                <VaCardContent>
+                    <VaButton
+                        preset="plain"
+                        color="textPrimary"
+                        @click="copyToClipboard(seed.toString())"
+                    >
+                        <span class="text-2xl">
+                            {{ seed }}
+                        </span>
+                    </VaButton>
+                </VaCardContent>
+            </VaCard>
+            <VaCard class="w-1/3">
+                <VaCardTitle style="font-size: 16px"> Version </VaCardTitle>
+                <VaCardContent>
+                    <span class="text-2xl">
                         正版 Minecraft Java {{ version }}
-                    </div>
-                </n-card>
-            </n-gi>
-        </n-grid>
+                    </span>
+                </VaCardContent>
+            </VaCard>
+        </div>
 
-        <!-- TODO: prev/next button -->
         <n-steps :current="currentStep" :horizontal="true" class="w-full mt-10">
             <n-step title="加入群組" class="text-1xl w-1/4">
                 加入水星人的夢幻樂園Discord群組
                 <br />
                 <VaButton
                     preset="secondary"
-                    color="#FFFFFF"
+                    color="textPrimary"
                     border-color="#969494"
                     @click="clickLinkButton()"
                     href="https://discord.gg/A2cMZRr"
@@ -95,6 +102,7 @@ const version = 1.21;
                     點擊加入群組
                 </VaButton>
                 <br />
+
                 或使用連結：https://discord.gg/A2cMZRr
             </n-step>
 
@@ -104,7 +112,7 @@ const version = 1.21;
                 <div class="w-full m-auto mt-2 mb-2">
                     <VaButton
                         preset="secondary"
-                        color="#FFFFFF"
+                        color="textPrimary"
                         border-color="#969494"
                         to="publication"
                     >
@@ -119,7 +127,7 @@ const version = 1.21;
                 <div class="w-full m-auto mt-2 mb-2">
                     <VaButton
                         preset="secondary"
-                        color="#FFFFFF"
+                        color="textPrimary"
                         border-color="#969494"
                         @click="clickLinkButton()"
                         href="https://discord.gg/CXSQq4nVAH"
@@ -137,22 +145,23 @@ const version = 1.21;
                 description="等待白名單申請通過"
             />
         </n-steps>
-        <n-button-group class="mt-4 mb-6">
-            <n-button @click="prev">
-                <template #icon>
-                    <VaIcon>
-                        <md-arrow-round-back />
-                    </VaIcon>
-                </template>
-            </n-button>
-            <n-button @click="next">
-                <template #icon>
-                    <VaIcon>
-                        <md-arrow-round-forward />
-                    </VaIcon>
-                </template>
-            </n-button>
-        </n-button-group>
+        <VaButtonGroup
+            color="secondary"
+            border-color="warning"
+            gradient
+            class="mt-4 mb-6"
+        >
+            <VaButton preset="secondary" @click="prev">
+                <VaIcon>
+                    <md-arrow-round-back />
+                </VaIcon>
+            </VaButton>
+            <VaButton preset="secondary" @click="next">
+                <VaIcon>
+                    <md-arrow-round-forward />
+                </VaIcon>
+            </VaButton>
+        </VaButtonGroup>
     </div>
 </template>
 
