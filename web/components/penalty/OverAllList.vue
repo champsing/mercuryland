@@ -135,7 +135,6 @@ const notEffectivePenalties = [
         v-model="showRuleDescModal"
         title="規則說明"
         hide-default-actions
-        :closeButton="true"
     >
         <span class="text-3xl"> 直播懲罰規則說明 </span>
         <div class="text-2xl mt-2">●概述</div>
@@ -173,7 +172,6 @@ const notEffectivePenalties = [
     <VaModal
         v-model="showExistModal"
         title="懲罰一覽表"
-        :bordered="false"
         size="small"
         hide-default-actions
     >
@@ -246,7 +244,6 @@ const notEffectivePenalties = [
     <VaModal
         v-model="showCompleteModal"
         title="懲罰一覽表"
-        :bordered="false"
         size="small"
         hide-default-actions
     >
