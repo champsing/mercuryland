@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { Ref, ref, computed } from "vue";
-import { NButton, NCard, NModal, NTable } from "naive-ui";
-import { VaButton, VaDivider } from "vuestic-ui";
+import { NButton, NTable } from "naive-ui";
+import { VaButton, VaDivider, VaModal } from "vuestic-ui";
 import penaltyData from "@assets/data/penalty.json";
 import penaltyStatus from "@assets/data/penalty_status.json";
 import vodData from "@assets/data/vod.json";
@@ -119,90 +119,98 @@ function filterPenaltyData(
         </tbody>
     </n-table>
 
-    <n-modal v-model:show="showPenaltyEntryModal">
-        <n-card
-            style="width: 600px"
-            :title="penaltyEntryModalContent.name"
-            :bordered="false"
-            size="huge"
-            role="dialog"
-            aria-modal="true"
-        >
-            <template #header-extra>
-                <n-button
-                    @click="
-                        openLinks(vodLinkOfDate(penaltyEntryModalContent.date))
-                    "
-                >
-                    直播转盘連結
-                </n-button>
-            </template>
+    <VaModal v-model="showPenaltyEntryModal" hide-default-actions size="small">
+        <!-- 本體 -->
+        <div class="flex flex-row">
+            <div class="text-xl flex-grow">
+                {{ penaltyEntryModalContent.name }}
+            </div>
+            <VaButton
+                color="info"
+                gradient
+                class="-mt-2"
+                @click="openLinks(vodLinkOfDate(penaltyEntryModalContent.date))"
+            >
+                直播转盘連結
+            </VaButton>
+        </div>
+        <!-- 補充說明 -->
+        <div>
             <template v-for="block in penaltyEntryModalContent.description">
-                <span v-if="block.block == 'text'">{{ block.text }}</span>
+                <div class="mt-4">
+                    <span v-if="block.block == 'text'">{{ block.text }}</span>
 
-                <n-button
-                    v-if="block.block == 'link'"
-                    @click="openLink(block.uri)"
-                    :text="true"
-                    :focusable="false"
-                >
-                    {{ block.text }}
-                </n-button>
-
-                <n-button
-                    v-if="block.block == 'vod'"
-                    @click="openLink(ofId(vodData, parseInt(block.uri)).link)"
-                    :text="true"
-                    :focusable="false"
-                >
-                    {{ block.text }}
-                </n-button>
-
-                <VaButton
-                    v-if="block.block == 'penalty'"
-                    @click="
-                        () => {
-                            penaltyEntryModalContent = ofId(
-                                penaltyData,
-                                parseInt(block.uri)
-                            );
-                            showPenaltyEntryModal = !showPenaltyEntryModal;
-                        }
-                    "
-                    class="mt-1"
-                    color="#30e0e7"
-                    size="small"
-                    round
-                >
-                    {{ ofId(penaltyData, parseInt(block.uri)).date }}．{{
-                        ofId(penaltyData, parseInt(block.uri)).name
-                    }}
-                </VaButton>
-
-                <div v-if="block.block == 'image'">
                     <VaButton
+                        v-if="block.block == 'link'"
+                        @click="openLink(block.uri)"
+                        preset="plain"
+                        color="textPrimary"
+                    >
+                        <div class="inline-block">{{ block.text }}（連結）</div>
+                    </VaButton>
+
+                    <VaButton
+                        v-if="block.block == 'vod'"
+                        @click="
+                            openLink(ofId(vodData, parseInt(block.uri)).link)
+                        "
+                        color="#c82828"
+                        size="small"
+                        round
+                    >
+                        {{ ofId(vodData, parseInt(block.uri)).date }}．{{
+                            ofId(vodData, parseInt(block.uri)).title
+                        }}
+                    </VaButton>
+
+                    <VaButton
+                        v-if="block.block == 'penalty'"
+                        @click="
+                            () => {
+                                penaltyEntryModalContent = ofId(
+                                    penaltyData,
+                                    parseInt(block.uri)
+                                );
+                                showPenaltyEntryModal = !showPenaltyEntryModal;
+                            }
+                        "
+                        color="#8fc1ff"
+                        size="small"
+                        round
+                    >
+                        {{ ofId(penaltyData, parseInt(block.uri)).date }}．{{
+                            ofId(penaltyData, parseInt(block.uri)).name
+                        }}
+                    </VaButton>
+
+                    <VaButton
+                        v-if="block.block == 'image'"
                         @click="
                             showPenaltyScreenshotModal =
                                 !showPenaltyScreenshotModal
                         "
                         gradient
-                        class="mt-2"
                         color="#0e8110"
                         size="medium"
                     >
                         查看證明圖片
                     </VaButton>
+
+                    <VaModal
+                        v-model="showPenaltyScreenshotModal"
+                        hide-default-actions
+                    >
+                        <img :src="`penalty/${block.uri}`" :alt="block.text" />
+                    </VaModal>
+
+                    <br v-if="block.block == 'br'" />
                 </div>
-
-                <n-modal v-model:show="showPenaltyScreenshotModal">
-                    <img :src="`penalty/${block.uri}`" :alt="block.text" />
-                </n-modal>
-
-                <br v-if="block.block == 'br'" />
             </template>
 
-            <template v-if="penaltyEntryModalContent.steamID !== undefined">
-                <VaDivider class="!m-2" />
+            <template
+                v-if="penaltyEntryModalContent.steamID !== undefined"
+            >
+                <VaDivider class="!mt-4 !mb-2" />
                 <iframe
                     :src="`https://store.steampowered.com/widget/${penaltyEntryModalContent.steamID}/`"
                     frameborder="0"
@@ -229,13 +237,13 @@ function filterPenaltyData(
                 v-for="entry in penaltyEntryModalContent.reapply?.entries"
             >
                 <div class="mt-1">
-                    <n-button
+                    <VaButton
                         @click="openLinks(vodLinkOfDate(entry.date))"
-                        :text="true"
-                        :focusable="false"
+                        preset="plain"
+                        color="textPrimary"
                     >
                         {{ entry.date }}
-                    </n-button>
+                    </VaButton>
                     &ensp;
                     <!-- !text-[#b91c1c] !text-[#4d7c0f] !text-[#047857] !text-[#b45309] -->
                     <div class="inline-block text-sm">
@@ -267,6 +275,6 @@ function filterPenaltyData(
                     &nbsp;{{ entry.status }}
                 </div>
             </template>
-        </n-card>
-    </n-modal>
+        </div>
+    </VaModal>
 </template>

@@ -6,8 +6,11 @@
         "status": "已完成",
         "description": [
             {
+                "block": "text",
+                "text": "觀看懲罰成果"
+            },
+            {
                 "block": "vod",
-                "text": "惩罚完成链接",
                 "uri": "67"
             }
         ]
@@ -19,8 +22,11 @@
         "status": "已完成",
         "description": [
             {
+                "block": "text",
+                "text": "觀看懲罰成果"
+            },
+            {
                 "block": "vod",
-                "text": "惩罚完成链接",
                 "uri": "75"
             }
         ],
@@ -39,8 +45,11 @@
         "status": "已完成",
         "description": [
             {
+                "block": "text",
+                "text": "觀看懲罰成果"
+            },
+            {
                 "block": "vod",
-                "text": "惩罚完成链接",
                 "uri": "54"
             }
         ],
@@ -67,8 +76,11 @@
         "status": "已完成",
         "description": [
             {
+                "block": "text",
+                "text": "觀看懲罰成果"
+            },
+            {
                 "block": "vod",
-                "text": "惩罚完成链接",
                 "uri": "89"
             }
         ],
@@ -81,8 +93,11 @@
         "status": "已完成",
         "description": [
             {
+                "block": "text",
+                "text": "觀看懲罰成果"
+            },
+            {
                 "block": "vod",
-                "text": "惩罚完成链接",
                 "uri": "111"
             }
         ],
@@ -140,7 +155,7 @@
         "description": [
             {
                 "block": "link",
-                "text": "懲罰完成連結",
+                "text": "觀看懲罰成果",
                 "uri": "https://youtube.com/clip/Ugkx8GkjUNA3Hxn9jyJcbuvJSme8jY9CFRzC"
             }
         ]
@@ -234,7 +249,7 @@
         "description": [
             {
                 "block": "link",
-                "text": "懲罰完成連結",
+                "text": "觀看懲罰成果",
                 "uri": "https://youtube.com/clip/UgkxrMznUtBi4zOBP4D20WPqbkatV5-cMLS9"
             }
         ]
@@ -252,12 +267,8 @@
         "status": "勉強過",
         "description": [
             {
-                "block": "text",
-                "text": "🏁 "
-            },
-            {
                 "block": "link",
-                "text": "投票給過",
+                "text": "🏁投票給過",
                 "uri": "https://discord.com/channels/506120681495199756/566611073977942017/1188877921608286260"
             },
             {
@@ -282,7 +293,7 @@
         "description": [
             {
                 "block": "link",
-                "text": "懲罰完成連結",
+                "text": "觀看懲罰成果",
                 "uri": "https://discord.com/channels/506120681495199756/529184173680885780/1132606696892674099"
             }
         ]
@@ -295,7 +306,7 @@
         "description": [
             {
                 "block": "link",
-                "text": "懲罰完成連結",
+                "text": "觀看懲罰成果",
                 "uri": "https://youtube.com/clip/UgkxvS7iudvzdTxYpVYb2yGZN21AqydW6zsm"
             }
         ]
@@ -568,8 +579,11 @@
         "status": "進行中",
         "description": [
             {
+                "block": "text",
+                "text": "⚔️ 已完成 4 /20個"
+            },
+            {
                 "block": "vod",
-                "text": "⚔️ 已完成 4 /20個",
                 "uri": "98"
             }
         ],
@@ -621,7 +635,7 @@
         "description": [
             {
                 "block": "link",
-                "text": "懲罰完成連結",
+                "text": "觀看懲罰成果",
                 "uri": "https://discord.com/channels/506120681495199756/566611073977942017/1188882035645890691"
             }
         ]
@@ -664,7 +678,7 @@
         "description": [
             {
                 "block": "link",
-                "text": "懲罰完成連結",
+                "text": "觀看懲罰成果",
                 "uri": "https://discord.com/channels/506120681495199756/566611073977942017/1189169405679112222"
             }
         ]
