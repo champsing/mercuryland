@@ -65,8 +65,9 @@ function updateTag(tag: string) {
                 <VaDateInput v-model="dateRange" mode="range" />
                 <!-- need more adjusting -->
             </div>
-            <div class="w-1/8">
+            <div class="w-2/5">
                 <VaSelect
+                    class="w-full"
                     v-model="selectedTags"
                     :options="tagList"
                     multiple
