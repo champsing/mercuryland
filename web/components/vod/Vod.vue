@@ -19,7 +19,8 @@ import { Info24Regular } from "@vicons/fluent";
 //prettier-ignore
 let dateRange = defineModel(
     "dateRange", {
-    default: {start: new Date(1577836800000), end: new Date(Date.now() + 28800000)},
+    //1677600000 = 2023 03 01 12:00 AM Taipei ST, 8 hours = 28800 seconds
+    default: {start: new Date(1677600000000), end: new Date(Date.now() + 28800000)}
 });
 
 let strictFiltering = ref(false);
@@ -56,13 +57,28 @@ function updateTag(tag: string) {
         selectedTags.value = selectedTags.value.filter((x) => x !== tag);
     else selectedTags.value.push(tag);
 }
+
+function formatDate(date) {
+    return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
+}
+
+function parseDate(text) {
+    const [year, month, day] = text.split("-");
+    return new Date(year, month - 1, day);
+}
 </script>
 
 <template>
     <div class="mt-4 ml-auto mr-auto w-11/12 z-10">
         <div class="flex flex-row w-full justify-center gap-10">
             <div class="w-1/8 flex flex-row">
-                <VaDateInput v-model="dateRange" mode="range" />
+                <VaDateInput
+                    v-model="dateRange"
+                    :format-date="formatDate"
+                    :parse-date="parseDate"
+                    manual-input
+                    mode="auto"
+                />
                 <!-- need more adjusting -->
             </div>
             <div class="w-2/5">
@@ -181,14 +197,14 @@ function updateTag(tag: string) {
 
         <div class="flex flex-row gap-2">
             <div class="w-2/3">
-              <DataTable
-                :dateRange="dateRange"
-                :selectedTags="selectedTags"
-                :strictFiltering="strictFiltering"
-                @updateTag="(tag) => updateTag(tag)"
-            />  
+                <DataTable
+                    :dateRange="dateRange"
+                    :selectedTags="selectedTags"
+                    :strictFiltering="strictFiltering"
+                    @updateTag="(tag) => updateTag(tag)"
+                />
             </div>
-            
+
             <div class="flex flex-col w-1/3">
                 <TimeSummary :t="computedTime" />
                 <TimeDetail
