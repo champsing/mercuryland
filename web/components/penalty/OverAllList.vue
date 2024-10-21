@@ -60,17 +60,6 @@ const notEffectivePenalties = ["0.5個懲罰*","直播玩雀魂觀眾場", "玩�
             </div>
         </VaAlert>
 
-        <VaAlert class="mt-2" color="#59753f" closeable>
-            <div class="flex flex-row items-center w-72">
-                <VaIcon size="large" class="mr-2">
-                    <InfoCircle />
-                </VaIcon>
-                <div class="text-center text-yellow-300">
-                    <div class="text-lg">點擊完成狀態可快速切換</div>
-                </div>
-            </div>
-        </VaAlert>
-
         <div class="flex m-auto" item-responsive>
             <!-- <VaChip class="vachip2" color="#3d807c" readonly>
             <VaIcon size="large" class="mt-1 mr-2">

@@ -1,14 +1,14 @@
 <script setup lang="ts">
 import { Ref, ref, computed } from "vue";
-import { NButton, NTable } from "naive-ui";
-import { VaButton, VaDivider, VaModal } from "vuestic-ui";
+import { NTable } from "naive-ui";
+import { VaButton, VaDivider, VaIcon, VaModal, VaPopover } from "vuestic-ui";
 import penaltyData from "@assets/data/penalty.json";
 import penaltyStatus from "@assets/data/penalty_status.json";
 import vodData from "@assets/data/vod.json";
 import { openLink, openLinks, ofId } from "@/composables/utils";
 
 const props = defineProps<{
-    dateRange: { start: Date, end: Date };
+    dateRange: { start: Date; end: Date };
     status?: string;
     search: string;
 }>();
@@ -54,7 +54,7 @@ const filteredData = computed(() =>
 );
 
 function filterPenaltyData(
-    dateRange: { start: Date, end: Date },
+    dateRange: { start: Date; end: Date },
     status: string,
     search: string
 ): typeof penaltyData {
@@ -63,7 +63,9 @@ function filterPenaltyData(
             (v) =>
                 v.date >= dateRange.start.toISOString().slice(0, 10) &&
                 v.date <=
-                    new Date(dateRange.end.getTime() + 28800000).toISOString().slice(0, 10)
+                    new Date(dateRange.end.getTime() + 28800000)
+                        .toISOString()
+                        .slice(0, 10)
         )
         .filter((v) => status == null || status == v.status)
         .filter(
@@ -86,7 +88,12 @@ function filterPenaltyData(
             <tr>
                 <td class="font-bold">日期</td>
                 <td class="font-bold">惩罚内容</td>
-                <td class="font-bold">完成状况</td>
+                <VaPopover icon="info" message="點擊完成狀態可快速切換">
+                    <td class="font-bold">
+                        完成状况
+                        <VaIcon name="help_outline" />
+                    </td>
+                </VaPopover>
             </tr>
         </thead>
 
@@ -98,22 +105,26 @@ function filterPenaltyData(
                     {{ item.date }}
                 </td>
                 <td :class="`!bg-[${statusOf(item.status).color}]`">
-                    <n-button
+                    <VaButton
                         @click="penaltyEntryModalContent = item"
-                        :text="true"
-                        :focusable="false"
+                        preset="plain"
+                        color="textPrimary"
                     >
-                        {{ item.name }}
-                    </n-button>
+                        <span class="text-sm">
+                            {{ item.name }}
+                        </span>
+                    </VaButton>
                 </td>
                 <td :class="`!bg-[${statusOf(item.status).color}]`">
-                    <n-button
+                    <VaButton
                         @click="() => emit('updateStatus', item.status)"
-                        :text="true"
-                        :focusable="false"
+                        preset="plain"
+                        color="textPrimary"
                     >
-                        {{ item.status }}
-                    </n-button>
+                        <span class="text-sm">
+                            {{ item.status }}
+                        </span>
+                    </VaButton>
                 </td>
             </tr>
         </tbody>
@@ -207,9 +218,7 @@ function filterPenaltyData(
                 </div>
             </template>
 
-            <template
-                v-if="penaltyEntryModalContent.steamID !== undefined"
-            >
+            <template v-if="penaltyEntryModalContent.steamID !== undefined">
                 <VaDivider class="!mt-4 !mb-2" />
                 <iframe
                     :src="`https://store.steampowered.com/widget/${penaltyEntryModalContent.steamID}/`"
