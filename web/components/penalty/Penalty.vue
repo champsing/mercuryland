@@ -55,6 +55,9 @@ function parseDate(text) {
                     v-model="filterStatus"
                     :options="finishOptions"
                     placeholder="請選擇一種完成狀態"
+                    clearable
+                    :clear-value="null"
+                    @update:model-value="console.log(filterStatus)"
                 />
             </div>
             <div class="w-1/5">
