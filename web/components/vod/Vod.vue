@@ -48,13 +48,17 @@ const showVodDescImg = ref(false);
 //     "十二月",
 // ];
 
+function tagAlreadyExist(tag: string) {
+    selectedTags.value = selectedTags.value.filter((x) => x !== tag);
+    if (selectedTags.value.toString() == new Array().toString())
+        selectedTags.value = null;
+}
+
 function updateTag(tag: string) {
     if (selectedTags.value == null) {
-        selectedTags.value = [];
+        selectedTags.value = new Array();
         selectedTags.value.push(tag);
-    } else if (selectedTags.value.includes(tag))
-        //prettier-ignore
-        selectedTags.value = selectedTags.value.filter((x) => x !== tag);
+    } else if (selectedTags.value.includes(tag)) tagAlreadyExist(tag);
     else selectedTags.value.push(tag);
 }
 
@@ -90,9 +94,14 @@ function parseDate(text) {
                     clearable
                     placeholder="请选择直播的TAG"
                     dropdownIcon="va-plus"
+                    @update:model-value="
+                        if (selectedTags.toString() == new Array().toString())
+                            selectedTags = null;
+                    "
                 >
-                    <!-- has a problem, sometimes the first entry won't show as 
+                    <!-- [SOLVED] has a problem, sometimes the first entry won't show as 
                     a chip until the second entry is selected and removed. -->
+                    <!-- [SOLUTION] by setting selectTags to null every time it becomes an empty array. -->
                     <template #content>
                         <VaChip
                             v-for="chip in selectedTags"
@@ -101,11 +110,7 @@ function parseDate(text) {
                             size="small"
                             class="mr-1 my-1"
                             closeable
-                            @update:model-value="
-                                selectedTags = selectedTags.filter(
-                                    (v) => v !== chip
-                                )
-                            "
+                            @update:model-value="tagAlreadyExist(chip)"
                         >
                             {{ chip }}
                         </VaChip>
