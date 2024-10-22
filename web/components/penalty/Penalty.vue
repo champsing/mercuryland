@@ -1,9 +1,21 @@
 <script setup lang="ts">
-import { VaDateInput, VaDivider, VaInput, VaSelect } from "vuestic-ui";
+import {
+    VaButton,
+    VaDateInput,
+    VaDivider,
+    VaIcon,
+    VaInput,
+    VaModal,
+    VaSelect,
+} from "vuestic-ui";
 import penaltyStatus from "@assets/data/penalty_status.json";
 import OverAllList from "./OverAllList.vue";
 import PenaltyTable from "./Table.vue";
 import PenaltySyntax from "./Syntax.vue";
+import { Info24Regular } from "@vicons/fluent";
+import { ref } from "vue";
+
+const showRuleDescModal = ref(false);
 
 let filterDate = defineModel("filterDate", {
     default: {
@@ -40,8 +52,8 @@ function parseDate(text) {
 
 <template>
     <div class="mt-4 m-auto w-11/12">
-        <div class="flex flex-row w-full justify-center gap-10">
-            <div class="w-1/5">
+        <div class="flex flex-row justify-center gap-10">
+            <div class="w-3/8">
                 <VaDateInput
                     v-model="filterDate"
                     :format-date="formatDate"
@@ -50,7 +62,7 @@ function parseDate(text) {
                     mode="auto"
                 />
             </div>
-            <div class="w-1/5">
+            <div class="w-3/8">
                 <VaSelect
                     v-model="filterStatus"
                     :options="finishOptions"
@@ -59,11 +71,24 @@ function parseDate(text) {
                     :clear-value="null"
                 />
             </div>
-            <div class="w-1/5">
+            <div class="w-3/8">
                 <VaInput
                     placeholder="輸入懲罰內容來搜尋"
                     v-model="filterSearch"
                 />
+            </div>
+            <div class="w-1/8">
+                <VaButton
+                    class="mt-1"
+                    preset="plain"
+                    color="#FFFFFF"
+                    @click="showRuleDescModal = !showRuleDescModal"
+                >
+                    <VaIcon size="large" class="mr-2">
+                        <Info24Regular />
+                    </VaIcon>
+                    <div class="text-lg text-center">規則說明</div>
+                </VaButton>
             </div>
         </div>
 
@@ -72,7 +97,6 @@ function parseDate(text) {
         <div class="flex flex-row">
             <div class="h-80vh w-2/3 p-0 m-0 overflow-y-scroll">
                 <PenaltyTable
-                    class=""
                     :dateRange="filterDate"
                     :status="filterStatus"
                     :search="filterSearch"
@@ -87,11 +111,45 @@ function parseDate(text) {
             </div>
             <OverAllList />
         </div>
-        
+
         <div class="mt-8 mb-6">
             <PenaltySyntax />
         </div>
     </div>
+
+    <!-- 規則說明 -->
+    <VaModal v-model="showRuleDescModal" title="規則說明" hide-default-actions>
+        <span class="text-3xl"> 直播懲罰規則說明 </span>
+        <div class="text-2xl mt-2">●概述</div>
+        <div class="text-bg mt-2">
+            惡靈會在直播的時候跟觀眾打賭該局遊戲加減懲罰的賭注，然後在直播最後以隨機輪盤抽出當天的懲罰數量。
+            <br />
+            每個懲罰會各自擁有一個完成狀態，分別有：未開始、已完成、勉強過、進行中。
+        </div>
+        <div class="text-bg mt-4">
+            <div class="inline !text-[#b91c1c]">▲未開始</div>
+            ：尚未開始嘗試完成該懲罰，沒有進度
+            <br />
+            <div class="inline !text-[#4d7c0f]">▲已完成</div>
+            ：已經完成該懲罰主文要求的全部條件
+            <br />
+            <div class="inline !text-[#047857]">▲勉強過</div>
+            ：該懲罰的原主人或是投票決定讓惡靈在沒有完成主文要求的全部條件下完成該懲罰
+            <br />
+            <div class="inline !text-[#b45309]">▲進行中</div>
+            ：正在嘗試完成，已經有進度的懲罰
+        </div>
+        <div class="text-2xl mt-4">●加班台懲罰</div>
+        <div class="text-bg mt-2">
+            如果懲罰主文要求加班台時數，則只有在該懲罰生成「之後」加的班才會被計算進該懲罰的完成進度裡。
+            <br />
+            例如：
+            <br />
+            01/01被懲罰加班台2小時，01/02惡靈有加班時數47分鐘，則這47分鐘可以被計算進01/01的「加班台2小時」懲罰裡。
+            <br />
+            反之，若在01/03也有懲罰加班台2小時懲罰，01/02的47分鐘就不會被算進01/03懲罰完成進度裡。
+        </div>
+    </VaModal>
 </template>
 
 <style>

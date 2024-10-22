@@ -139,8 +139,8 @@ function parseDate(text) {
                     <VaIcon size="large" class="mr-2">
                         <Info24Regular />
                     </VaIcon>
-                    <div class="text-center">
-                        <div class="text-lg">規則說明</div>
+                    <div class="text-lg text-center">
+                        規則說明
                     </div>
                 </VaButton>
             </div>
