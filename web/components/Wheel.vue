@@ -29,9 +29,11 @@ const textArea = defineModel("textArea", {
                     };
                 });
         }
+
         //若左邊數量不為0，則可以旋轉
+        //prettier-ignore
         count(textArea.value) !== 0 ? isSpinning.value = false : isSpinning.value = true;
-        
+
         return value;
     },
 });
@@ -68,9 +70,11 @@ function rest() {
 
 function move() {
     // copy text to new area
-    textArea2.value += "\n";
-    textArea2.value += modal.text;
-    
+    if (textArea2.value == "") textArea2.value += modal.text;
+    else {
+        textArea2.value += "\n";
+        textArea2.value += modal.text;
+    }
 
     // delete text in old area
     textArea.value = wheel.items
@@ -206,15 +210,16 @@ const modal2 = reactive({
             noDismiss
             @ok="
                 () => {
-                    clearRightArea == true ? textArea2 = '' : textArea = '';
+                    clearRightArea == true ? (textArea2 = '') : (textArea = '');
                     checkLeftTextAreaNull();
                 }
             "
         >
             您确定要清空
             <div v-if="clearRightArea" class="inline text-2xl">抽中區</div>
-            <div v-else class="inline text-2xl ">待抽區</div>
+            <div v-else class="inline text-2xl">待抽區</div>
             吗?
+            <!-- prettier-ignore -->
             <div v-if="clearRightArea" class="text-4xl text-right text-[#1aedab]">清→</div>
             <div v-else class="text-4xl text-right text-[#bae64c]">←清</div>
         </VaModal>
