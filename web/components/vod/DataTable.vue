@@ -71,6 +71,7 @@ const columns = [
                     hoverOpacity: 1,
                     pressedOpacity: 1,
                     href: row.link,
+                    target: "_blank",
                     rel: "noreferrer noopener"
                 },
                 { default: () => row.title }
