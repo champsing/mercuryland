@@ -97,6 +97,7 @@ const version = 1.21;
                     @click="clickLinkButton()"
                     href="https://discord.gg/A2cMZRr"
                     target="_blank"
+                    rel="noopener noreferrer"
                     class="mt-2 mb-2"
                 >
                     點擊加入群組
@@ -115,6 +116,7 @@ const version = 1.21;
                         color="textPrimary"
                         border-color="#969494"
                         to="publication"
+                        target="_blank"
                     >
                         點擊閱讀規則
                     </VaButton>
@@ -132,6 +134,7 @@ const version = 1.21;
                         @click="clickLinkButton()"
                         href="https://discord.gg/CXSQq4nVAH"
                         target="_blank"
+                        rel="noopener noreferrer"
                     >
                         點擊跳轉頻道
                     </VaButton>

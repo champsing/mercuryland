@@ -4,17 +4,9 @@ import { useToast } from "vuestic-ui";
 
 // const ccConvertText = Converter({ from: "tw", to: "cn" });
 
-export function openLink(link: string) {
-    window.open(link);
-}
-
-export function openLinkSameTab(link: string) {
-    window.open(link, "_self");
-}
-
 export function openLinks(links: Array<string>) {
     for (let i = 0; i < links.length; i++) {
-        openLink(links[i]);
+        window.open(links[i]);
     }
 }
 

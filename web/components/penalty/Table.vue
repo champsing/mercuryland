@@ -5,7 +5,7 @@ import { VaButton, VaDivider, VaIcon, VaModal, VaPopover } from "vuestic-ui";
 import penaltyData from "@assets/data/penalty.json";
 import penaltyStatus from "@assets/data/penalty_status.json";
 import vodData from "@assets/data/vod.json";
-import { openLink, openLinks, ofId } from "@/composables/utils";
+import { openLinks, ofId } from "@/composables/utils";
 
 const props = defineProps<{
     dateRange: { start: Date; end: Date };
@@ -153,7 +153,8 @@ function filterPenaltyData(
 
                     <VaButton
                         v-if="block.block == 'link'"
-                        @click="openLink(block.uri)"
+                        :href="block.uri"
+                        rel="noopener noreferrer"
                         preset="plain"
                         color="textPrimary"
                     >
@@ -162,9 +163,9 @@ function filterPenaltyData(
 
                     <VaButton
                         v-if="block.block == 'vod'"
-                        @click="
-                            openLink(ofId(vodData, parseInt(block.uri)).link)
-                        "
+                        :href="ofId(vodData, parseInt(block.uri)).link"
+                        target="_blank"
+                        rel="noopener noreferrer"
                         color="#c82828"
                         size="small"
                         round

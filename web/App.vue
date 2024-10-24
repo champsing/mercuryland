@@ -80,6 +80,7 @@ const tabs = [
                 border-color="#363636"
                 href="https://www.youtube.com/watch?v=Yir_XAcccmY"
                 target="_blank"
+                rel="noopener noreferrer"
             >
                 <div class="text-zinc-200">使用教學</div>
             </VaButton>

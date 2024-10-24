@@ -74,6 +74,7 @@ function parseOptions(law_document: typeof lawDocument) {
                     color="#38b67d"
                     :href="currentDocument.url"
                     target="_blank"
+                    rel="noopener noreferrer"
                 >
                     <VaIcon size="large">
                         <WindowNew20Filled />

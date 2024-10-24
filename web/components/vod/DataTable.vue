@@ -4,7 +4,7 @@ import { UseElementBounding } from "@vueuse/components";
 import { useWindowSize } from "@vueuse/core";
 import { NDataTable } from "naive-ui";
 import { VaButton, VaDivider } from "vuestic-ui";
-import { openLink, interleave, parseHMS } from "@composables/utils.ts";
+import { interleave, parseHMS } from "@composables/utils.ts";
 import vodLinkData from "@assets/data/vod.json";
 
 type DataType = (typeof vodLinkData)[0];
@@ -70,7 +70,8 @@ const columns = [
                     hoverMaskColor: "#5bc6a1", //same as NextPageButton and ReturnTopButton
                     hoverOpacity: 1,
                     pressedOpacity: 1,
-                    onClick: () => openLink(row.link),
+                    href: row.link,
+                    rel: "noreferrer noopener"
                 },
                 { default: () => row.title }
             );
