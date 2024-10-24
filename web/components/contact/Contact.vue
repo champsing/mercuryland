@@ -13,7 +13,7 @@ import ContactCard from "./ContactCard.vue";
                 discord="oreki20"
             >
                 <img
-                    src="@assets/images/admin_avatars/avatar_oreki20.png"
+                    src="@assets/images/admin_avatars/oreki20.png"
                     class="w-full h-full object-contain"
                 />
             </ContactCard>
@@ -24,7 +24,7 @@ import ContactCard from "./ContactCard.vue";
                 discord="champsing"
             >
                 <img
-                    src="@assets/images/admin_avatars/avatar_champsing.png"
+                    src="@assets/images/admin_avatars/champsing.png"
                     class="w-full h-full object-contain"
                 />
             </ContactCard>
@@ -35,7 +35,7 @@ import ContactCard from "./ContactCard.vue";
                 discord="logic_f"
             >
                 <img
-                    src="@assets/images/admin_avatars/avatar_logic.png"
+                    src="@assets/images/admin_avatars/logic.png"
                     class="w-full h-full object-contain"
                 />
             </ContactCard>
