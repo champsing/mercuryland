@@ -14,7 +14,7 @@ import NextPageButton from "./NextPageButton.vue";
             class="absolute x-center w-10/12 h-full"
         >
             <n-gi span="2 768:1" class="relative">
-                <div class="absolute y-center x-center">
+                <div class="flex flex-col w-55% absolute x-center y-center">
                     <div class="text-green-400 font-bold text-6xl">
                         來這裡遇到同好。
                     </div>
@@ -25,7 +25,7 @@ import NextPageButton from "./NextPageButton.vue";
                 </div>
             </n-gi>
             <n-gi span="0 768:1" class="relative">
-                <div class="absolute y-center x-center h-5/6 w-full">
+                <div class="flex flex-col absolute y-center x-center h-5/6 w-full">
                     <div class="h-1/2 relative">
                         <img
                             src="@assets/images/welcome/s2_firework_1.png"

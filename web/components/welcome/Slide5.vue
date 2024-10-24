@@ -18,7 +18,7 @@ import ReturnTopButton from "./ReturnTopButton.vue";
             class="absolute x-center w-10/12 h-full"
         >
             <n-gi span="0 768:1" class="relative">
-                <div class="absolute y-center x-center h-5/6 w-full">
+                <div class="flex flex-col absolute y-center x-center h-5/6 w-full">
                     <div class="h-1/2 relative">
                         <img
                             src="@assets/images/welcome/s1_close_1.png"
@@ -36,7 +36,7 @@ import ReturnTopButton from "./ReturnTopButton.vue";
                 </div>
             </n-gi>
             <n-gi span="2 768:1" class="relative">
-                <div class="absolute y-center x-center">
+                <div class="flex flex-col absolute y-center x-center">
                     <div class="text-cyan-400 font-bold text-6xl">
                         還在猶豫什麼？
                     </div>
