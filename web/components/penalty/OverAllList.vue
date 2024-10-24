@@ -16,29 +16,21 @@ import { InfoCircle } from "@vicons/tabler";
 const showExistModal = ref(false);
 const showCompleteModal = ref(false);
 
-let notYetStartedPenalties = penaltyData
-    .filter((x) => x.status == "未開始")
-    .map((x) => x.name)
-    .join("\n")
-    .toString();
+function queryStatusPenaties(status: string) {
+    return penaltyData
+        .filter((x) => x.status == status)
+        .map((x) => x.name)
+        .join("\n")
+        .toString();
+}
 
-let completedPenalties = penaltyData
-    .filter((x) => x.status == "已完成")
-    .map((x) => x.name)
-    .join("\n")
-    .toString();
+let notYetStartedPenalties = queryStatusPenaties("未開始");
 
-let barelyPassedPenalties = penaltyData
-    .filter((x) => x.status == "勉強過")
-    .map((x) => x.name)
-    .join("\n")
-    .toString();
+let completedPenalties = queryStatusPenaties("已完成");
 
-let proceedingPenalties = penaltyData
-    .filter((x) => x.status == "進行中")
-    .map((x) => x.name)
-    .join("\n")
-    .toString();
+let barelyPassedPenalties = queryStatusPenaties("勉強過");
+
+let proceedingPenalties = queryStatusPenaties("進行中");
 
 const notEffectivePenalties = ["0.5個懲罰*","直播玩雀魂觀眾場", "玩歐卡*買五星貨車"]
     .join("\n")
