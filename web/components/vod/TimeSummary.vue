@@ -19,7 +19,7 @@ function calcStyle(width: number) {
 
 <template>
     <use-element-bounding v-slot="{ width }">
-        <VaCard :style="calcStyle(width)">
+        <VaCard :style="calcStyle(width)" class="vod-card">
             <VaCardTitle style="font-size: 20px; justify-content: center;">
                 剩余时间
             </VaCardTitle>

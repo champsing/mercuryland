@@ -233,4 +233,9 @@ function parseDate(text) {
 .n-base-suffix__arrow {
     --n-arrow-size: 20px;
 }
+
+.vod-card {
+    background-color: var(--va-background-element) !important;
+    --va-card-box-shadow: 0px;
+}
 </style>
