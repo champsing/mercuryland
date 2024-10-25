@@ -1,43 +1,42 @@
 <script setup lang="ts">
-import { NStep, NSteps } from "naive-ui";
 import { copyToClipboard } from "@composables/utils";
 import { ref } from "vue";
-import { MdArrowRoundBack, MdArrowRoundForward } from "@vicons/ionicons4";
 import {
     VaButton,
-    VaButtonGroup,
     VaCard,
     VaCardContent,
     VaCardTitle,
-    VaIcon,
+    VaInput,
+    VaStepper,
 } from "vuestic-ui";
 
-// const emit = defineEmits<{
-//     (e: "toTab", tab: string): void;
-// }>();
+let currentStep = ref<number | null>(0); //current step
 
-let currentStep = ref<number | null>(1); //current step
+// For handwriting Chinese prev/next button set
+// function next() {
+//     if (currentStep.value === null) currentStep.value = 0;
+//     else if (currentStep.value >= 3) currentStep.value = null;
+//     else currentStep.value++;
+// }
 
-function clickLinkButton() {
-    currentStep.value < 4 ? currentStep.value++ : (currentStep.value = 1);
-}
-
-//Prev/Next Button
-function next() {
-    if (currentStep.value === null) currentStep.value = 1;
-    else if (currentStep.value >= 4) currentStep.value = null;
-    else currentStep.value++;
-}
-
-function prev() {
-    if (currentStep.value === null) currentStep.value = 0;
-    else if (currentStep.value <= 0) currentStep.value = 4;
-    else currentStep.value--;
-}
+// function prev() {
+//     if (currentStep.value === null) currentStep.value = 0;
+//     else if (currentStep.value <= 0) currentStep.value = 3;
+//     else currentStep.value--;
+// }
 
 const serverIP = "play.mercuryland.online:25565";
 const seed = -9100272987300380909;
 const version = 1.21;
+const discordInvitation = "https://discord.gg/A2cMZRr";
+const applyWhitelist = "https://discord.gg/CXSQq4nVAH";
+
+const steps = [
+    { label: "加入群組" },
+    { label: "閱讀規則" },
+    { label: "申請白名單" },
+    { label: "等待通過" },
+];
 </script>
 
 <template>
@@ -86,16 +85,22 @@ const version = 1.21;
             </VaCard>
         </div>
 
-        <n-steps :current="currentStep" :horizontal="true" class="w-full mt-10">
-            <n-step title="加入群組" class="text-1xl w-1/4">
+        <VaStepper
+            color="info"
+            v-model="currentStep"
+            :steps="steps"
+            class="w-full mt-10"
+            finishButtonHidden
+        >
+            <template #step-content-0>
                 加入水星人的夢幻樂園Discord群組
                 <br />
                 <VaButton
                     preset="secondary"
                     color="textPrimary"
                     border-color="#969494"
-                    @click="clickLinkButton()"
-                    href="https://discord.gg/A2cMZRr"
+                    @click="currentStep++"
+                    :href="discordInvitation"
                     target="_blank"
                     rel="noopener noreferrer"
                     class="mt-2 mb-2"
@@ -103,11 +108,10 @@ const version = 1.21;
                     點擊加入群組
                 </VaButton>
                 <br />
-
-                或使用連結：https://discord.gg/A2cMZRr
-            </n-step>
-
-            <n-step title="閱讀規則" class="text-1xl w-1/4">
+                或使用連結：
+                <VaInput v-model="discordInvitation" readonly />
+            </template>
+            <template #step-content-1>
                 包含《水星法》、《水星伺服器破壞舉報獎勵規則》等。
                 <br />
                 <div class="w-full m-auto mt-2 mb-2">
@@ -117,13 +121,13 @@ const version = 1.21;
                         border-color="#969494"
                         to="publication"
                         target="_blank"
+                        @click="currentStep++"
                     >
                         點擊閱讀規則
                     </VaButton>
                 </div>
-            </n-step>
-
-            <n-step class="text-1xl w-1/4" title="申請白名單">
+            </template>
+            <template #step-content-2>
                 在 #申請伺服 打上Minecraft ID
                 <br />
                 <div class="w-full m-auto mt-2 mb-2">
@@ -131,24 +135,21 @@ const version = 1.21;
                         preset="secondary"
                         color="textPrimary"
                         border-color="#969494"
-                        @click="clickLinkButton()"
-                        href="https://discord.gg/CXSQq4nVAH"
+                        @click="currentStep++"
+                        :href="applyWhitelist"
                         target="_blank"
                         rel="noopener noreferrer"
                     >
                         點擊跳轉頻道
                     </VaButton>
                 </div>
-            </n-step>
+            </template>
+            <template #step-content-3> 等待白名單申請通過 </template>
+        </VaStepper>
 
-            <n-step
-                class="text-1xl w-1/4"
-                title="等待通過"
-                line-type="dashed"
-                description="等待白名單申請通過"
-            />
-        </n-steps>
-        <VaButtonGroup
+        <!-- TODO: I still want to handwrite a Chinese prev/next button set; 
+        but currently the previous/next button provided by Vuestic is quite enough.-->
+        <!-- <VaButtonGroup
             color="secondary"
             border-color="warning"
             gradient
@@ -164,7 +165,7 @@ const version = 1.21;
                     <md-arrow-round-forward />
                 </VaIcon>
             </VaButton>
-        </VaButtonGroup>
+        </VaButtonGroup> -->
     </div>
 </template>
 
