@@ -15,11 +15,13 @@ const statusMetaData = ref(false);
 <template>
     <div class="text-4xl text-neutral-100 text-left mt-4">圖例</div>
     <VaDivider class="!mt-3" />
-    <div class="m-auto flex flex-row justify-center gap-5" item-responsive>
+    <div class="text-sm text-neutral-100 ml-6 mb-3 text-center">
+        點擊卡片以查看更多資訊
+    </div>
+    <div class="flex flex-row justify-center gap-3" item-responsive>
         <VaCard
             gradient
             color="#28c9c7"
-            class="ml-2"
             @click="additionalMetaData = !additionalMetaData"
         >
             <VaCardTitle style="font-size: 16px">詳細資料</VaCardTitle>
