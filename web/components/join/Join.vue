@@ -93,7 +93,7 @@ const steps = [
             finishButtonHidden
         >
             <template #step-content-0>
-                加入水星人的夢幻樂園Discord群組
+                <div class="text-2xl">加入水星人的夢幻樂園Discord群組</div>
                 <br />
                 <VaButton
                     preset="secondary"
@@ -103,7 +103,7 @@ const steps = [
                     :href="discordInvitation"
                     target="_blank"
                     rel="noopener noreferrer"
-                    class="mt-2 mb-2"
+                    class="mb-2"
                 >
                     點擊加入群組
                 </VaButton>
@@ -112,7 +112,9 @@ const steps = [
                 <VaInput v-model="discordInvitation" readonly />
             </template>
             <template #step-content-1>
-                包含《水星法》、《水星伺服器破壞舉報獎勵規則》等。
+                <div class="text-2xl">
+                    前往「資料公開」，閱讀包含《水星法》、<br />《水星伺服器破壞舉報獎勵規則》等規則。
+                </div>
                 <br />
                 <div class="w-full m-auto mt-2 mb-2">
                     <VaButton
@@ -128,7 +130,7 @@ const steps = [
                 </div>
             </template>
             <template #step-content-2>
-                在 #申請伺服 打上Minecraft ID
+                <div class="text-2xl">在 #申請伺服 打上Minecraft ID</div>
                 <br />
                 <div class="w-full m-auto mt-2 mb-2">
                     <VaButton
@@ -144,7 +146,11 @@ const steps = [
                     </VaButton>
                 </div>
             </template>
-            <template #step-content-3> 等待白名單申請通過 </template>
+            <template #step-content-3>
+                <div class="text-2xl">
+                    等待白名單申請通過期間，您可自行嘗試連接伺服器；<br />若成功進入遊玩，即代表申請成功。
+                </div>
+            </template>
         </VaStepper>
 
         <!-- TODO: I still want to handwrite a Chinese prev/next button set; 
