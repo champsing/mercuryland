@@ -121,26 +121,15 @@ function parseDate(text) {
     <VaModal v-model="showRuleDescModal" title="規則說明" hide-default-actions>
         <span class="text-3xl"> 直播懲罰規則說明 </span>
         <div class="text-2xl mt-2">●概述</div>
-        <div class="text-bg mt-2">
+        <div class="text-base mt-2">
             惡靈會在直播的時候跟觀眾打賭該局遊戲加減懲罰的賭注，然後在直播最後以隨機輪盤抽出當天的懲罰數量。
             <br />
             每個懲罰會各自擁有一個完成狀態，分別有：未開始、已完成、勉強過、進行中。
-        </div>
-        <div class="text-bg mt-4">
-            <div class="inline !text-[#b91c1c]">▲未開始</div>
-            ：尚未開始嘗試完成該懲罰，沒有進度
             <br />
-            <div class="inline !text-[#4d7c0f]">▲已完成</div>
-            ：已經完成該懲罰主文要求的全部條件
-            <br />
-            <div class="inline !text-[#047857]">▲勉強過</div>
-            ：該懲罰的原主人或是投票決定讓惡靈在沒有完成主文要求的全部條件下完成該懲罰
-            <br />
-            <div class="inline !text-[#b45309]">▲進行中</div>
-            ：正在嘗試完成，已經有進度的懲罰
+            關於各完成狀態的說明，請點擊下方圖例中的「完成狀態」查看。
         </div>
         <div class="text-2xl mt-4">●加班台懲罰</div>
-        <div class="text-bg mt-2">
+        <div class="text-base mt-2">
             如果懲罰主文要求加班台時數，則只有在該懲罰生成「之後」加的班才會被計算進該懲罰的完成進度裡。
             <br />
             例如：
