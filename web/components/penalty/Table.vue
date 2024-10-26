@@ -29,7 +29,7 @@ class PenaltyDataEntry {
     date: string;
     name: string;
     status: string;
-    description?: { block: string; text?: string; uri?: string;}[];
+    description?: { block: string; text?: string; uri?: string }[];
     reapply?: { entries: { date: string; status: string }[] };
     steamID?: number;
     progress?: number;
@@ -114,7 +114,7 @@ function filterPenaltyData(
                 </td>
                 <td :class="`!bg-[${statusOf(item.status).color}]`">
                     <VaButton
-                        @click="penaltyEntryModalContent = item."
+                        @click="penaltyEntryModalContent = item"
                         preset="plain"
                         color="textPrimary"
                     >
@@ -154,7 +154,7 @@ function filterPenaltyData(
             </VaButton>
         </div>
         <!-- 補充說明 -->
-        <div class="mt-4">
+        <div v-if="penaltyEntryModalContent.description !== undefined" class="mt-4">
             <template v-for="block in penaltyEntryModalContent.description">
                 <div>
                     <span v-if="block.block == 'text'">{{ block.text }}</span>
@@ -222,13 +222,14 @@ function filterPenaltyData(
                         v-if="block.block == 'image'"
                         v-model="showPenaltyScreenshotModal"
                         hide-default-actions
-                        style="--va-modal-padding: 0px; width: max-content; left: 300px;"
+                        style="
+                            --va-modal-padding: 0px;
+                            width: max-content;
+                            left: 300px;
+                        "
                     >
                         <!-- left need to be calc() -->
-                        <img
-                            :src="`penalty/${block.uri}`"
-                            :alt="block.text"
-                        />
+                        <img :src="`penalty/${block.uri}`" :alt="block.text" />
                     </VaModal>
 
                     <br v-if="block.block == 'br'" />
