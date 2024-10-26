@@ -29,7 +29,7 @@ class PenaltyDataEntry {
     date: string;
     name: string;
     status: string;
-    description?: { block: string; text?: string; uri?: string }[];
+    description?: { block: string; text?: string; uri?: string;}[];
     reapply?: { entries: { date: string; status: string }[] };
     steamID?: number;
     progress?: number;
@@ -114,7 +114,7 @@ function filterPenaltyData(
                 </td>
                 <td :class="`!bg-[${statusOf(item.status).color}]`">
                     <VaButton
-                        @click="penaltyEntryModalContent = item"
+                        @click="penaltyEntryModalContent = item."
                         preset="plain"
                         color="textPrimary"
                     >
