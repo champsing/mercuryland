@@ -932,9 +932,6 @@
                 "text": "✅已抽"
             },
             {
-                "block": "br"
-            },
-            {
                 "block": "penalty",
                 "uri": "91"
             }

@@ -154,9 +154,9 @@ function filterPenaltyData(
             </VaButton>
         </div>
         <!-- 補充說明 -->
-        <div>
+        <div class="mt-4">
             <template v-for="block in penaltyEntryModalContent.description">
-                <div class="mt-4">
+                <div>
                     <span v-if="block.block == 'text'">{{ block.text }}</span>
 
                     <VaButton
@@ -177,6 +177,7 @@ function filterPenaltyData(
                         color="#c82828"
                         size="small"
                         round
+                        class="mt-4"
                     >
                         {{ ofId(vodData, parseInt(block.uri)).date }}．{{
                             ofId(vodData, parseInt(block.uri)).title
@@ -197,6 +198,7 @@ function filterPenaltyData(
                         color="#8fc1ff"
                         size="small"
                         round
+                        class="mt-4"
                     >
                         {{ ofId(penaltyData, parseInt(block.uri)).date }}．{{
                             ofId(penaltyData, parseInt(block.uri)).name
