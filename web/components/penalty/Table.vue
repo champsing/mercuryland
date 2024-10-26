@@ -222,8 +222,13 @@ function filterPenaltyData(
                         v-if="block.block == 'image'"
                         v-model="showPenaltyScreenshotModal"
                         hide-default-actions
+                        style="--va-modal-padding: 0px; width: max-content; left: 300px;"
                     >
-                        <img :src="`penalty/${block.uri}`" :alt="block.text" />
+                        <!-- left need to be calc() -->
+                        <img
+                            :src="`penalty/${block.uri}`"
+                            :alt="block.text"
+                        />
                     </VaModal>
 
                     <br v-if="block.block == 'br'" />
