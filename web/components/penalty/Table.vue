@@ -1,7 +1,14 @@
 <script setup lang="ts">
 import { Ref, ref, computed } from "vue";
 import { NTable } from "naive-ui";
-import { VaButton, VaDivider, VaIcon, VaModal, VaPopover } from "vuestic-ui";
+import {
+    VaButton,
+    VaDivider,
+    VaIcon,
+    VaModal,
+    VaPopover,
+    VaProgressBar,
+} from "vuestic-ui";
 import penaltyData from "@assets/data/penalty.json";
 import penaltyStatus from "@assets/data/penalty_status.json";
 import vodData from "@assets/data/vod.json";
@@ -25,6 +32,7 @@ class PenaltyDataEntry {
     description?: { block: string; text?: string; uri?: string }[];
     reapply?: { entries: { date: string; status: string }[] };
     steamID?: number;
+    progress?: number;
 }
 
 function statusOf(status: string): (typeof penaltyStatus)[0] {
@@ -209,6 +217,7 @@ function filterPenaltyData(
                     </VaButton>
 
                     <VaModal
+                        v-if="block.block == 'image'"
                         v-model="showPenaltyScreenshotModal"
                         hide-default-actions
                     >
@@ -217,6 +226,15 @@ function filterPenaltyData(
 
                     <br v-if="block.block == 'br'" />
                 </div>
+            </template>
+
+            <template v-if="penaltyEntryModalContent.progress !== undefined">
+                <VaProgressBar
+                    class="mt-4"
+                    :model-value="penaltyEntryModalContent.progress"
+                    content-inside
+                    show-percent
+                />
             </template>
 
             <template v-if="penaltyEntryModalContent.steamID !== undefined">
