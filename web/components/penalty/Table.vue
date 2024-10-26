@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Ref, ref, computed } from "vue";
+import { ref, computed } from "vue";
 import { NTable } from "naive-ui";
 import {
     VaButton,
@@ -24,16 +24,16 @@ const emit = defineEmits<{
     (e: "updateStatus", status: string): void;
 }>();
 
-class PenaltyDataEntry {
-    id: number;
-    date: string;
-    name: string;
-    status: string;
-    description?: { block: string; text?: string; uri?: string }[];
-    reapply?: { entries: { date: string; status: string }[] };
-    steamID?: number;
-    progress?: number;
-}
+// class PenaltyDataEntry {
+//     id: number;
+//     date: string;
+//     name: string;
+//     status: string;
+//     description?: { block: string; text?: string; uri?: string }[];
+//     reapply?: { entries: { date: string; status: string }[] };
+//     steamID?: number;
+//     progress?: number;
+// }
 
 function statusOf(status: string): (typeof penaltyStatus)[0] {
     return penaltyStatus.filter((x) => x.name == status)[0];
@@ -44,7 +44,7 @@ function vodLinkOfDate(date: string): string[] {
 }
 
 const showPenaltyEntryModal = ref(false);
-const penaltyEntryModalContent: Ref<PenaltyDataEntry> = defineModel(
+const penaltyEntryModalContent = defineModel(
     "penaltyEntryModalContent",
     {
         default: null,
