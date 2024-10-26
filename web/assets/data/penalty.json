@@ -30,7 +30,7 @@
                 "uri": "75"
             }
         ],
-        "steamID": 1611430 
+        "steamID": 1611430
     },
     {
         "id": 73,
@@ -571,6 +571,7 @@
         "date": "2023-10-08",
         "name": "直播遊玩黎明死線倖存者或殺手，直到熒虹徽章20個",
         "status": "進行中",
+        "progress": 20,
         "description": [
             {
                 "block": "text",
@@ -581,8 +582,7 @@
                 "uri": "98"
             }
         ],
-        "steamID": 381210,
-        "progress": 20
+        "steamID": 381210
     },
     {
         "id": 67,
@@ -903,6 +903,7 @@
         "date": "2024-09-15",
         "name": "玩三個小時的恐怖遊戲",
         "status": "進行中",
+        "progress": 40,
         "description": [
             {
                 "block": "text",
@@ -912,8 +913,7 @@
                 "block": "text",
                 "text": "2024-10-14 1:43:52 ~ END"
             }
-        ],
-        "progress": 40
+        ]
     },
     {
         "id": 118,
