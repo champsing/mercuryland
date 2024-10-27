@@ -1073,10 +1073,18 @@
     },
     {
         "id": 131,
-        "date": "2024-10-14",
+        "date": "2024-10-13",
         "link": "https://youtube.com/live/F94-YE5Xna8",
         "title": "【惡靈】廢耍播直",
         "tags": ["MC游乐园生存","FNAF：安全漏洞"],
         "duration": "02:58:39"
+    },
+    {
+        "id": 132,
+        "date": "2024-10-20",
+        "link": "https://youtube.com/live/NK5FIHgMpXc",
+        "title": "【惡靈】一週一次耍廢時間",
+        "tags": ["MC游乐园生存","FNAF：安全漏洞"],
+        "duration": "02:31:23"
     }
 ]
