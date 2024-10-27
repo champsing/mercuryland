@@ -90,6 +90,7 @@ const tabs = [
 
 <style>
 .va-navbar {
+    --va-navbar-padding-x: 0.7rem;
     --va-navbar-padding-y: 0.6rem;
 }
 </style>
