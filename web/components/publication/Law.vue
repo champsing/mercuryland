@@ -58,7 +58,6 @@ function parseOptions(law_document: typeof lawDocument) {
                 :options="parseOptions(lawDocument)"
                 @selected="(doc) => findCurrentDoc(doc.text)"
             />
-            <!-- group name too low, need mb-2 -->
             <VaDivider class="mt-8" />
             <div class="text-zinc-300 text-center text-3xl mt-4">
                 {{ currentDocument.name }}
@@ -67,7 +66,6 @@ function parseOptions(law_document: typeof lawDocument) {
                 {{ currentDocument.description }}
             </div>
             <div class="text-center mt-5">
-                <!-- need further adjust -->
                 <VaButton
                     round
                     size="medium"
