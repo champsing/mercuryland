@@ -6,7 +6,7 @@ dist
 target
 
 # App
-data
+/data
 
 # Editor
 .vscode/*
