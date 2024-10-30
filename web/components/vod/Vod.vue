@@ -16,11 +16,12 @@ import TimeSummary from "./TimeSummary.vue";
 import TimeDetail from "./TimeDetail.vue";
 import { Info24Regular } from "@vicons/fluent";
 
-//prettier-ignore
-let dateRange = defineModel(
-    "dateRange", {
+let dateRange = defineModel("dateRange", {
     //1582992000 = 2020 03 01 12:00 AM Taipei ST; 8 hours = 28800 seconds
-    default: {start: new Date(1582992000000), end: new Date(Date.now() + 28800000)}
+    default: {
+        start: new Date(1582992000000),
+        end: new Date(Date.now() + 28800000),
+    },
 });
 
 let strictFiltering = ref(false);
@@ -83,7 +84,7 @@ function parseDate(text) {
                     manual-input
                     mode="auto"
                 />
-                <!-- need more adjusting -->
+                <!--[DONE] need more adjusting -->
             </div>
             <div class="w-2/5">
                 <VaSelect
@@ -139,9 +140,7 @@ function parseDate(text) {
                     <VaIcon size="large" class="mr-2">
                         <Info24Regular />
                     </VaIcon>
-                    <div class="text-lg text-center">
-                        規則說明
-                    </div>
+                    <div class="text-lg text-center">規則說明</div>
                 </VaButton>
             </div>
         </div>
