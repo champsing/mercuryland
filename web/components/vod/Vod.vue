@@ -127,7 +127,6 @@ function parseDate(text) {
                     style="--va-switch-checker-background-color: #252723"
                     false-inner-label="符合一項"
                     true-inner-label="符合全部"
-                    screen-responsive
                 />
             </div>
             <div class="w-1/8">
@@ -150,6 +149,7 @@ function parseDate(text) {
             v-model="showRuleDescModal"
             title="規則說明"
             hide-default-actions
+            close-button
             z-index="4"
         >
             <span class="text-3xl"> 直播時數規則說明 </span>

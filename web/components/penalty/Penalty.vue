@@ -52,7 +52,7 @@ function parseDate(text) {
 
 <template>
     <div class="mt-4 m-auto w-11/12">
-        <div class="flex flex-row justify-center gap-10">
+        <div class="flex-row justify-center gap-10 hidden xl:flex">
             <div class="w-3/8">
                 <VaDateInput
                     v-model="filterDate"
@@ -118,7 +118,12 @@ function parseDate(text) {
     </div>
 
     <!-- 規則說明 -->
-    <VaModal v-model="showRuleDescModal" title="規則說明" hide-default-actions>
+    <VaModal
+        v-model="showRuleDescModal"
+        title="規則說明"
+        hide-default-actions
+        close-button
+    >
         <span class="text-3xl"> 直播懲罰規則說明 </span>
         <div class="text-2xl mt-2">●概述</div>
         <div class="text-base mt-2">
