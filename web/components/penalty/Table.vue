@@ -138,7 +138,7 @@ function filterPenaltyData(
         </tbody>
     </n-table>
 
-    <VaModal v-model="showPenaltyEntryModal" hide-default-actions size="small">
+    <VaModal v-model="showPenaltyEntryModal" hide-default-actions size="small" close-button>
         <!-- 本體 -->
         <div class="flex flex-row">
             <div class="text-xl flex-grow">
@@ -227,6 +227,7 @@ function filterPenaltyData(
                             width: max-content;
                             left: 300px;
                         "
+                        ok-text="完成"
                     >
                         <!-- left need to be calc() -->
                         <img :src="`penalty/${block.uri}`" :alt="block.text" />

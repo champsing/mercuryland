@@ -49,7 +49,7 @@ const statusMetaData = ref(false);
         </VaCard>
     </div>
 
-    <VaModal v-model="additionalMetaData" hide-default-actions>
+    <VaModal v-model="additionalMetaData" hide-default-actions close-button>
         <div class="text-base">
             🆙增加：抽中「懲罰 + X」所轉化的額外懲罰，會被標上此標籤
             <br />
@@ -69,7 +69,7 @@ const statusMetaData = ref(false);
             ➕其他：其他後來增加的條件
         </div>
     </VaModal>
-    <VaModal v-model="statusMetaData" hide-default-actions>
+    <VaModal v-model="statusMetaData" hide-default-actions close-button>
         <div class="text-base">
             <div class="inline !text-[#b91c1c]">▲未開始</div>
             ：尚未開始嘗試完成該懲罰，沒有進度

@@ -201,7 +201,7 @@ function parseDate(text) {
             </div>
         </VaModal>
 
-        <VaModal v-model="showVodDescImg" hide-default-actions z-index="5">
+        <VaModal v-model="showVodDescImg" hide-default-actions close-button z-index="5">
             <img src="@assets/images/vod_time.png" alt="直播時數規則說明" />
         </VaModal>
 

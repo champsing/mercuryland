@@ -99,6 +99,7 @@ const notEffectivePenalties = ["0.5個懲罰*","直播玩雀魂觀眾場", "玩�
         v-model="showExistModal"
         title="懲罰一覽表"
         size="small"
+        close-button
         hide-default-actions
     >
         <div class="flex flex-row mb-8">
@@ -172,6 +173,7 @@ const notEffectivePenalties = ["0.5個懲罰*","直播玩雀魂觀眾場", "玩�
         title="懲罰一覽表"
         size="small"
         hide-default-actions
+        close-button
     >
         <div class="flex flex-row mb-8">
             <div class="text-xl flex-grow">懲罰一覽表：完成</div>
