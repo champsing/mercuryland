@@ -902,20 +902,24 @@
         "id": 117,
         "date": "2024-09-15",
         "name": "玩三個小時的恐怖遊戲",
-        "status": "進行中",
-        "progress": 77,
+        "status": "已完成",
+        "progress": 100,
         "description": [
             {
                 "block": "text",
-                "text": "⏲️ 已完成 2.3 /3小時"
+                "text": "⏲️ 已完成 3 /3小時"
             },
             {
                 "block": "text",
-                "text": "2024-10-13 1:43:52 ~ END"
+                "text": "2024-10-13 1:44:00 ~ END"
             },
             {
                 "block": "text",
                 "text": "2024-10-20 1:27:00 ~ END"
+            },
+            {
+                "block": "text",
+                "text": "2024-11-03 1:41:00 ~ END"
             },
             {
                 "block": "vod",
@@ -924,6 +928,10 @@
             {
                 "block": "vod",
                 "uri": "132"
+            },
+            {
+                "block": "vod",
+                "uri": "133"
             }
         ]
     },
