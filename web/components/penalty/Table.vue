@@ -3,6 +3,7 @@ import { ref, computed } from "vue";
 import { NTable } from "naive-ui";
 import {
     VaButton,
+    VaChip,
     VaDivider,
     VaIcon,
     VaModal,
@@ -44,16 +45,13 @@ function vodLinkOfDate(date: string): string[] {
 }
 
 const showPenaltyEntryModal = ref(false);
-const penaltyEntryModalContent = defineModel(
-    "penaltyEntryModalContent",
-    {
-        default: null,
-        set(value) {
-            showPenaltyEntryModal.value = !showPenaltyEntryModal.value;
-            return value;
-        },
-    }
-);
+const penaltyEntryModalContent = defineModel("penaltyEntryModalContent", {
+    default: null,
+    set(value) {
+        showPenaltyEntryModal.value = !showPenaltyEntryModal.value;
+        return value;
+    },
+});
 
 const showPenaltyScreenshotModal = ref(false);
 
@@ -138,7 +136,12 @@ function filterPenaltyData(
         </tbody>
     </n-table>
 
-    <VaModal v-model="showPenaltyEntryModal" hide-default-actions size="small" close-button>
+    <VaModal
+        v-model="showPenaltyEntryModal"
+        hide-default-actions
+        size="small"
+        close-button
+    >
         <!-- 本體 -->
         <div class="flex flex-row">
             <div class="text-xl flex-grow">
@@ -153,8 +156,19 @@ function filterPenaltyData(
                 直播转盘連結
             </VaButton>
         </div>
+        <VaChip
+            outline
+            size="small"
+            :color="`${statusOf(penaltyEntryModalContent.status).color}`"
+            class="mt-1 mb-2"
+        >
+            ● {{ penaltyEntryModalContent.status }}
+        </VaChip>
         <!-- 補充說明 -->
-        <div v-if="penaltyEntryModalContent.description !== undefined" class="mt-4">
+        <div
+            v-if="penaltyEntryModalContent.description !== undefined"
+            class="mt-4"
+        >
             <template v-for="block in penaltyEntryModalContent.description">
                 <div>
                     <span v-if="block.block == 'text'">{{ block.text }}</span>
@@ -177,7 +191,7 @@ function filterPenaltyData(
                         color="#c82828"
                         size="small"
                         round
-                        class="mt-4"
+                        class="mt-2"
                     >
                         {{ ofId(vodData, parseInt(block.uri)).date }}．{{
                             ofId(vodData, parseInt(block.uri)).title
