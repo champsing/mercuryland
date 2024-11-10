@@ -32,7 +32,7 @@ let barelyPassedPenalties = queryStatusPenaties("勉強過");
 
 let proceedingPenalties = queryStatusPenaties("進行中");
 
-const notEffectivePenalties = ["玩歐卡*買五星貨車"]
+const notEffectivePenalties = []
     .join("\n")
     .toString();
 </script>
