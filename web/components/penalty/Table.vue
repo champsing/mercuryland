@@ -157,6 +157,7 @@ function filterPenaltyData(
             </VaButton>
         </div>
         <VaChip
+            readonly
             outline
             size="small"
             :color="`${statusOf(penaltyEntryModalContent.status).color}`"
