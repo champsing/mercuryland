@@ -1,12 +1,16 @@
 <script setup lang="ts">
 import { Wheel } from "spin-wheel";
 import { ref, onMounted, reactive } from "vue";
-import { VaTextarea, VaButton, VaModal, VaSwitch } from "vuestic-ui";
+import { VaChip, VaTextarea, VaButton, VaModal, VaSwitch } from "vuestic-ui";
 const wheelContainer = ref(null);
 const isSpinning = ref(false); //轉盤旋轉中
 const isLeftAreaLocked = ref(false); //鎖定待抽區
 const clearRightArea = ref(true); //清除右邊區域
 const re = /x[1-9][0-9]*$/;
+
+let identifier = Math.round(Math.random() * 10000);
+
+while (identifier < 1000) identifier = Math.round(Math.random() * 10000);
 
 let wheel: Wheel = null;
 
@@ -97,9 +101,6 @@ function count(text: string): number {
 }
 
 onMounted(() => {
-    // const overlay = new Image();
-    // overlay.src = "/pointer.svg";
-
     const props = {
         items: [],
         itemLabelRadiusMax: 0.4,
@@ -142,13 +143,18 @@ const modal2 = reactive({
 <template>
     <div class="mt-8 m-auto w-11/12">
         <div class="flex w-full justify-end">
+            <div>
+                <VaChip color="#e16004" class="mt-4 mr-3" readonly> BETA </VaChip>
+            </div>
+
             <div class="text-lime-400 font-bold text-4xl bg-black text-right">
-                BETA
+                {{ identifier }}
             </div>
         </div>
 
         <div class="flex w-full justify-evenly">
             <div class="wheel-wrapper w-2/5 -mt-20" ref="wheelContainer"></div>
+
             <div class="w-1/5">
                 <div class="va-h4">待抽区 ({{ count(textArea) }}个)</div>
                 <VaTextarea
@@ -194,6 +200,7 @@ const modal2 = reactive({
                 <div class="h-44"></div>
             </div>
         </div>
+
         <VaModal
             v-model="modal.show"
             noDismiss
