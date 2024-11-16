@@ -97,7 +97,6 @@ const items = computed(() =>
     <VaDataTable
         :items="items"
         class="text-center w-full"
-        virtual-scroller
         sticky-header
     >
         <template #header(日期)="{ label }">
