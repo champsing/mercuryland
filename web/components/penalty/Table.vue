@@ -127,9 +127,7 @@ const items = computed(() =>
         <template #cell(懲罰內容)="{ value }">
             <div class="text-center">
                 <VaButton
-                    @click="
-                        PEMContent = items.filter((x) => x.懲罰內容 === value)
-                    "
+                    @click="PEMContent = penaltyData.filter((x) => x.name == value)[0]"
                     preset="plain"
                     color="textPrimary"
                 >
