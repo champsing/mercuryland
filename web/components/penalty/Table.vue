@@ -4,6 +4,7 @@ import { NTable } from "naive-ui";
 import {
     VaButton,
     VaChip,
+    // VaDataTable,
     VaDivider,
     VaIcon,
     VaModal,
@@ -44,21 +45,6 @@ function vodLinkOfDate(date: string): string[] {
     return vodData.filter((x) => x.date == date).map((x) => x.link);
 }
 
-const showPenaltyEntryModal = ref(false);
-const penaltyEntryModalContent = defineModel("penaltyEntryModalContent", {
-    default: null,
-    set(value) {
-        showPenaltyEntryModal.value = !showPenaltyEntryModal.value;
-        return value;
-    },
-});
-
-const showPenaltyScreenshotModal = ref(false);
-
-const filteredData = computed(() =>
-    filterPenaltyData(props.dateRange, props.status, props.search)
-);
-
 function filterPenaltyData(
     dateRange: { start: Date; end: Date },
     status: string,
@@ -81,9 +67,90 @@ function filterPenaltyData(
         )
         .sort((lhs, rhs) => lhs.date.localeCompare(rhs.date));
 }
+
+// function statusBackground(row) {
+//     return { class: ["penalty-background-color"] };
+// }
+
+const showPEM = ref(false); // showPenaltyEntryModal
+const PEMContent = defineModel("PEMContent", {
+    default: null,
+    set(value) {
+        showPEM.value = !showPEM.value;
+        return value;
+    },
+}); // penaltyEntryModalContent
+
+const showPenaltyScreenshotModal = ref(false);
+
+const filteredData = computed(() =>
+    filterPenaltyData(props.dateRange, props.status, props.search)
+);
+
+// const items = penaltyData.slice().map(({ date, name, status }) => ({
+//     日期: date,
+//     懲罰內容: name,
+//     完成狀態: status,
+// }));
 </script>
 
 <template>
+    <!-- <VaDataTable
+        :items="items"
+        class="text-center w-full"
+        virtual-scroller
+        sticky-header
+        :row-bind="true && statusBackground"
+    >
+        <template #header(日期)="{ label }">
+            <div class="text-sm text-center bg-black">
+                {{ label }}
+            </div>
+        </template>
+        <template #header(懲罰內容)="{ label }">
+            <div class="text-sm text-center bg-black">
+                {{ label }}
+            </div>
+        </template>
+        <template #header(完成狀態)="{ label }">
+            <VaPopover icon="info" message="點擊完成狀態可快速切換">
+                <div class="text-sm">
+                    {{ label }}
+                    <VaIcon name="help_outline" />
+                </div>
+            </VaPopover>
+        </template>
+
+        <template #cell(日期)="{ value }">
+            <div class="text-center">
+                {{ value }}
+            </div>
+        </template>
+        <template #cell(懲罰內容)="{ value }">
+            <div class="text-center">
+                <VaButton
+                    @click="
+                        PEMContent = items.filter((x) => x.懲罰內容 === value)
+                    "
+                    preset="plain"
+                    color="textPrimary"
+                >
+                    {{ value }}
+                </VaButton>
+            </div>
+        </template>
+        <template #cell(完成狀態)="{ value }">
+            <div class="text-center">
+                <VaButton
+                    @click="() => emit('updateStatus', value)"
+                    preset="plain"
+                    color="textPrimary"
+                >
+                    {{ value }}
+                </VaButton>
+            </div>
+        </template>
+    </VaDataTable> -->
     <n-table
         :bordered="true"
         size="small"
@@ -112,7 +179,7 @@ function filterPenaltyData(
                 </td>
                 <td :class="`!bg-[${statusOf(item.status).color}]`">
                     <VaButton
-                        @click="penaltyEntryModalContent = item"
+                        @click="PEMContent = item"
                         preset="plain"
                         color="textPrimary"
                     >
@@ -136,22 +203,17 @@ function filterPenaltyData(
         </tbody>
     </n-table>
 
-    <VaModal
-        v-model="showPenaltyEntryModal"
-        hide-default-actions
-        size="small"
-        close-button
-    >
+    <VaModal v-model="showPEM" hide-default-actions size="small" close-button>
         <!-- 本體 -->
         <div class="flex flex-row">
             <div class="text-xl flex-grow">
-                {{ penaltyEntryModalContent.name }}
+                {{ PEMContent.name }}
             </div>
             <VaButton
                 color="info"
                 gradient
                 class="-mt-2"
-                @click="openLinks(vodLinkOfDate(penaltyEntryModalContent.date))"
+                @click="openLinks(vodLinkOfDate(PEMContent.date))"
             >
                 直播转盘連結
             </VaButton>
@@ -160,17 +222,14 @@ function filterPenaltyData(
             readonly
             outline
             size="small"
-            :color="`${statusOf(penaltyEntryModalContent.status).color}`"
+            :color="`${statusOf(PEMContent.status).color}`"
             class="mt-1 mb-2"
         >
-            ● {{ penaltyEntryModalContent.status }}
+            ● {{ PEMContent.status }}
         </VaChip>
         <!-- 補充說明 -->
-        <div
-            v-if="penaltyEntryModalContent.description !== undefined"
-            class="mt-4"
-        >
-            <template v-for="block in penaltyEntryModalContent.description">
+        <div v-if="PEMContent.description !== undefined" class="mt-4">
+            <template v-for="block in PEMContent.description">
                 <div>
                     <span v-if="block.block == 'text'">{{ block.text }}</span>
 
@@ -203,11 +262,11 @@ function filterPenaltyData(
                         v-if="block.block == 'penalty'"
                         @click="
                             () => {
-                                penaltyEntryModalContent = ofId(
+                                PEMContent = ofId(
                                     penaltyData,
                                     parseInt(block.uri)
                                 );
-                                showPenaltyEntryModal = !showPenaltyEntryModal;
+                                showPEM = !showPEM;
                             }
                         "
                         color="#8fc1ff"
@@ -252,32 +311,32 @@ function filterPenaltyData(
                 </div>
             </template>
 
-            <template v-if="penaltyEntryModalContent.progress !== undefined">
+            <template v-if="PEMContent.progress !== undefined">
                 <VaProgressBar
                     class="mt-4"
-                    :model-value="penaltyEntryModalContent.progress"
+                    :model-value="PEMContent.progress"
                     content-inside
                     show-percent
                 />
             </template>
 
-            <template v-if="penaltyEntryModalContent.steamID !== undefined">
+            <template v-if="PEMContent.steamID !== undefined">
                 <VaDivider class="!mt-4 !mb-2" />
                 <iframe
-                    :src="`https://store.steampowered.com/widget/${penaltyEntryModalContent.steamID}/`"
+                    :src="`https://store.steampowered.com/widget/${PEMContent.steamID}/`"
                     frameborder="0"
                     width="520"
                     height="150"
                 />
             </template>
 
-            <template v-if="penaltyEntryModalContent.reapply !== undefined">
+            <template v-if="PEMContent.reapply !== undefined">
                 <div class="mt-3">
                     <span class="text-base">
                         😇&nbsp;復活&ensp;
                         <div class="inline text-2xl text-orange-300">
                             <!-- prettier-ignore -->
-                            {{ penaltyEntryModalContent.reapply?.entries.length }}
+                            {{ PEMContent.reapply?.entries.length }}
                         </div>
                         &ensp;次
                     </span>
@@ -285,9 +344,7 @@ function filterPenaltyData(
                 <VaDivider class="!m-1" />
             </template>
 
-            <template
-                v-for="entry in penaltyEntryModalContent.reapply?.entries"
-            >
+            <template v-for="entry in PEMContent.reapply?.entries">
                 <div class="mt-1">
                     <VaButton
                         @click="openLinks(vodLinkOfDate(entry.date))"
@@ -299,28 +356,7 @@ function filterPenaltyData(
                     &ensp;
                     <!-- !text-[#b91c1c] !text-[#4d7c0f] !text-[#047857] !text-[#b45309] -->
                     <div class="inline-block text-sm">
-                        <div
-                            v-if="entry.status == '未開始'"
-                            class="!text-[#b91c1c]"
-                        >
-                            ◼
-                        </div>
-                        <div
-                            v-if="entry.status == '已完成'"
-                            class="!text-[#4d7c0f]"
-                        >
-                            ◼
-                        </div>
-                        <div
-                            v-if="entry.status == '勉強過'"
-                            class="!text-[#047857]"
-                        >
-                            ◼
-                        </div>
-                        <div
-                            v-if="entry.status == '進行中'"
-                            class="!text-[#b45309]"
-                        >
+                        <div :class="`!text-[${statusOf(entry.status).color}]`">
                             ◼
                         </div>
                     </div>
