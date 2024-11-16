@@ -82,11 +82,13 @@ const filteredData = computed(() =>
     filterPenaltyData(props.dateRange, props.status, props.search)
 );
 
-const items = filteredData.value.slice().map(({ date, name, status }) => ({
-    日期: date,
-    懲罰內容: name,
-    完成狀態: status,
-}));
+const items = computed(() =>
+    filteredData.value.slice().map(({ date, name, status }) => ({
+        日期: date,
+        懲罰內容: name,
+        完成狀態: status,
+    }))
+);
 </script>
 
 <template>
