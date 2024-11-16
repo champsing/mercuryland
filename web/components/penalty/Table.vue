@@ -1,10 +1,9 @@
 <script setup lang="ts">
 import { ref, computed } from "vue";
-import { NTable } from "naive-ui";
 import {
     VaButton,
     VaChip,
-    // VaDataTable,
+    VaDataTable,
     VaDivider,
     VaIcon,
     VaModal,
@@ -14,7 +13,7 @@ import {
 import penaltyData from "@assets/data/penalty.json";
 import penaltyStatus from "@assets/data/penalty_status.json";
 import vodData from "@assets/data/vod.json";
-import { openLinks, ofId } from "@/composables/utils";
+import { openLinks, ofId, truncateString } from "@/composables/utils";
 
 const props = defineProps<{
     dateRange: { start: Date; end: Date };
@@ -68,10 +67,6 @@ function filterPenaltyData(
         .sort((lhs, rhs) => lhs.date.localeCompare(rhs.date));
 }
 
-// function statusBackground(row) {
-//     return { class: ["penalty-background-color"] };
-// }
-
 const showPEM = ref(false); // showPenaltyEntryModal
 const PEMContent = defineModel("PEMContent", {
     default: null,
@@ -87,20 +82,21 @@ const filteredData = computed(() =>
     filterPenaltyData(props.dateRange, props.status, props.search)
 );
 
-// const items = penaltyData.slice().map(({ date, name, status }) => ({
-//     日期: date,
-//     懲罰內容: name,
-//     完成狀態: status,
-// }));
+const items = filteredData.value.slice().map(({ date, name, status }) => ({
+    日期: date,
+    懲罰內容: name,
+    完成狀態: status,
+}));
 </script>
 
 <template>
-    <!-- <VaDataTable
+    <!-- !bg-[#b91c1c] !bg-[#4d7c0f] !bg-[#047857] !bg-[#b45309] -->
+    <!-- TAILWIND CSS: DO NOT REMOVE ABOVE COMMENT -->
+    <VaDataTable
         :items="items"
         class="text-center w-full"
         virtual-scroller
         sticky-header
-        :row-bind="true && statusBackground"
     >
         <template #header(日期)="{ label }">
             <div class="text-sm text-center bg-black">
@@ -108,17 +104,17 @@ const filteredData = computed(() =>
             </div>
         </template>
         <template #header(懲罰內容)="{ label }">
-            <div class="text-sm text-center bg-black">
+            <div class="text-sm text-center">
                 {{ label }}
             </div>
         </template>
         <template #header(完成狀態)="{ label }">
-            <VaPopover icon="info" message="點擊完成狀態可快速切換">
-                <div class="text-sm">
+            <div class="text-sm text-center">
+                <VaPopover icon="info" message="點擊完成狀態可快速切換">
                     {{ label }}
                     <VaIcon name="help_outline" />
-                </div>
-            </VaPopover>
+                </VaPopover>
+            </div>
         </template>
 
         <template #cell(日期)="{ value }">
@@ -135,12 +131,12 @@ const filteredData = computed(() =>
                     preset="plain"
                     color="textPrimary"
                 >
-                    {{ value }}
+                    {{ truncateString(value, 25) }}
                 </VaButton>
             </div>
         </template>
         <template #cell(完成狀態)="{ value }">
-            <div class="text-center">
+            <div class="text-center" :class="`!bg-[${statusOf(value).color}]`">
                 <VaButton
                     @click="() => emit('updateStatus', value)"
                     preset="plain"
@@ -150,8 +146,8 @@ const filteredData = computed(() =>
                 </VaButton>
             </div>
         </template>
-    </VaDataTable> -->
-    <n-table
+    </VaDataTable>
+    <!-- <n-table
         :bordered="true"
         size="small"
         class="text-center w-full"
@@ -171,8 +167,9 @@ const filteredData = computed(() =>
         </thead>
 
         <tbody>
-            <!-- !bg-[#b91c1c] !bg-[#4d7c0f] !bg-[#047857] !bg-[#b45309] -->
-            <!-- TAILWIND CSS: DO NOT REMOVE ABOVE COMMENT -->
+        -->
+
+    <!--
             <tr v-for="item in filteredData">
                 <td :class="`!bg-[${statusOf(item.status).color}]`">
                     {{ item.date }}
@@ -201,7 +198,7 @@ const filteredData = computed(() =>
                 </td>
             </tr>
         </tbody>
-    </n-table>
+    </n-table> -->
 
     <VaModal v-model="showPEM" hide-default-actions size="small" close-button>
         <!-- 本體 -->

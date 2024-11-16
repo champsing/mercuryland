@@ -95,7 +95,7 @@ function parseDate(text) {
         <VaDivider class="!m-2" />
 
         <div class="flex flex-row">
-            <div class="h-80vh w-2/3 p-0 m-0 overflow-y-scroll">
+            <div class="h-80vh w-4/5 p-0 pr-4 m-0 overflow-y-scroll">
                 <PenaltyTable
                     :dateRange="filterDate"
                     :status="filterStatus"
