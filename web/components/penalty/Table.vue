@@ -41,7 +41,10 @@ function statusOf(status: string): (typeof penaltyStatus)[0] {
 }
 
 function vodLinkOfDate(date: string): string[] {
-    return vodData.filter((x) => x.date == date).map((x) => x.link);
+    let linkIDArray = vodData.filter((x) => x.date == date).map((x) => x.link);
+    for (let i = 0; i < linkIDArray.length; i++)
+        linkIDArray[i] = "https://youtube.com/live/" + linkIDArray[i];
+    return linkIDArray;
 }
 
 function filterPenaltyData(
@@ -94,11 +97,7 @@ const items = computed(() =>
 <template>
     <!-- !bg-[#b91c1c] !bg-[#4d7c0f] !bg-[#047857] !bg-[#b45309] -->
     <!-- TAILWIND CSS: DO NOT REMOVE ABOVE COMMENT -->
-    <VaDataTable
-        :items="items"
-        class="text-center w-full"
-        sticky-header
-    >
+    <VaDataTable :items="items" class="text-center w-full" sticky-header>
         <template #header(日期)="{ label }">
             <div class="text-sm text-center bg-black">
                 {{ label }}
@@ -126,7 +125,11 @@ const items = computed(() =>
         <template #cell(懲罰內容)="{ value }">
             <div class="text-center">
                 <VaButton
-                    @click="PEMContent = penaltyData.filter((x) => x.name == value)[0]"
+                    @click="
+                        PEMContent = penaltyData.filter(
+                            (x) => x.name == value
+                        )[0]
+                    "
                     preset="plain"
                     color="textPrimary"
                 >
@@ -146,58 +149,6 @@ const items = computed(() =>
             </div>
         </template>
     </VaDataTable>
-    <!-- <n-table
-        :bordered="true"
-        size="small"
-        class="text-center w-full"
-        item-responsive
-    >
-        <thead>
-            <tr>
-                <td class="font-bold">日期</td>
-                <td class="font-bold">惩罚内容</td>
-                <VaPopover icon="info" message="點擊完成狀態可快速切換">
-                    <td class="font-bold">
-                        完成状况
-                        <VaIcon name="help_outline" />
-                    </td>
-                </VaPopover>
-            </tr>
-        </thead>
-
-        <tbody>
-        -->
-
-    <!--
-            <tr v-for="item in filteredData">
-                <td :class="`!bg-[${statusOf(item.status).color}]`">
-                    {{ item.date }}
-                </td>
-                <td :class="`!bg-[${statusOf(item.status).color}]`">
-                    <VaButton
-                        @click="PEMContent = item"
-                        preset="plain"
-                        color="textPrimary"
-                    >
-                        <span class="text-sm">
-                            {{ item.name }}
-                        </span>
-                    </VaButton>
-                </td>
-                <td :class="`!bg-[${statusOf(item.status).color}]`">
-                    <VaButton
-                        @click="() => emit('updateStatus', item.status)"
-                        preset="plain"
-                        color="textPrimary"
-                    >
-                        <span class="text-sm">
-                            {{ item.status }}
-                        </span>
-                    </VaButton>
-                </td>
-            </tr>
-        </tbody>
-    </n-table> -->
 
     <VaModal v-model="showPEM" hide-default-actions size="small" close-button>
         <!-- 本體 -->
@@ -241,7 +192,9 @@ const items = computed(() =>
 
                     <VaButton
                         v-if="block.block == 'vod'"
-                        :href="ofId(vodData, parseInt(block.uri)).link"
+                        :href="`https://youtube.com/live/${
+                            ofId(vodData, parseInt(block.uri)).link
+                        }`"
                         target="_blank"
                         rel="noopener noreferrer"
                         color="#c82828"

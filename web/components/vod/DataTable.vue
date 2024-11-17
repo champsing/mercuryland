@@ -70,7 +70,7 @@ const columns = [
                     hoverMaskColor: "#5bc6a1", //same as NextPageButton and ReturnTopButton
                     hoverOpacity: 1,
                     pressedOpacity: 1,
-                    href: row.link,
+                    href: 'https://youtube.com/live/' + row.link,
                     target: "_blank",
                     rel: "noreferrer noopener"
                 },
