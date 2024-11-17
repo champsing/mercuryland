@@ -1,3 +1,42 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+    @font-face {
+        font-family: "Mona Song TC";
+        src: url("@assets/fonts/mona-song-tc.otf") format("opentype");
+        font-weight: 400;
+        font-style: normal;
+    }
+    
+    @font-face {
+        font-family: "Taipei Sans Regular";
+        src: url("@assets/fonts/taipei-sans-tc-regular.ttf") format("truetype");
+        font-weight: 400;
+        font-style: normal;
+    }
+
+    @font-face {
+        font-family: "Taipei Sans Bold";
+        src: url("@assets/fonts/taipei-sans-tc-bold.ttf") format("truetype");
+        font-weight: 400;
+        font-style: normal;
+    }
+
+    @font-face {
+        font-family: "Taipei Sans Light";
+        src: url("@assets/fonts/taipei-sans-tc-light.ttf") format("truetype");
+        font-weight: 400;
+        font-style: normal;
+    }
+}
+
+/* 
+.woff files: Use format('woff')
+.woff2 files: Use format('woff2')
+.ttf files: Use format('truetype')
+.otf files: Use format('opentype')
+.eot files: Use format('embedded-opentype')
+.svg files: Use format('svg')
+*/
