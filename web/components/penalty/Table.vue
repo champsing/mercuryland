@@ -100,7 +100,12 @@ const items = computed(() =>
     <VaDataTable :items="items" class="text-center w-full" sticky-header>
         <template #header(日期)="{ label }">
             <div class="text-sm text-center bg-black">
-                {{ label }}
+                <div class="text-sm text-center">
+                <VaPopover icon="info" message="點擊日期可開啟當天所有直播紀錄檔">
+                    {{ label }}
+                    <VaIcon name="help_outline" />
+                </VaPopover>
+            </div>
             </div>
         </template>
         <template #header(懲罰內容)="{ label }">
