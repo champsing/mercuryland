@@ -119,7 +119,14 @@ const items = computed(() =>
 
         <template #cell(日期)="{ value }">
             <div class="text-center">
-                {{ value }}
+                <VaButton
+                    color="textPrimary"
+                    preset="plain"
+                    class=""
+                    @click="openLinks(vodLinkOfDate(value))"
+                >
+                    {{ value }}
+                </VaButton>
             </div>
         </template>
         <template #cell(懲罰內容)="{ value }">
@@ -152,28 +159,19 @@ const items = computed(() =>
 
     <VaModal v-model="showPEM" hide-default-actions size="small" close-button>
         <!-- 本體 -->
-        <div class="flex flex-row">
-            <div class="text-xl flex-grow">
-                {{ PEMContent.name }}
-            </div>
-            <VaButton
-                color="info"
-                gradient
-                class="-mt-2"
-                @click="openLinks(vodLinkOfDate(PEMContent.date))"
+        <div class="text-xl">
+            {{ PEMContent.name }}
+            <VaChip
+                readonly
+                outline
+                size="small"
+                :color="`${statusOf(PEMContent.status).color}`"
+                class="ml-4"
             >
-                直播转盘連結
-            </VaButton>
+                ● {{ PEMContent.status }}
+            </VaChip>
         </div>
-        <VaChip
-            readonly
-            outline
-            size="small"
-            :color="`${statusOf(PEMContent.status).color}`"
-            class="mt-1 mb-2"
-        >
-            ● {{ PEMContent.status }}
-        </VaChip>
+
         <!-- 補充說明 -->
         <div v-if="PEMContent.description !== undefined" class="mt-4">
             <template v-for="block in PEMContent.description">
@@ -259,59 +257,63 @@ const items = computed(() =>
                     <br v-if="block.block == 'br'" />
                 </div>
             </template>
-
-            <template v-if="PEMContent.progress !== undefined">
-                <VaProgressBar
-                    class="mt-4"
-                    :model-value="PEMContent.progress"
-                    content-inside
-                    show-percent
-                />
-            </template>
-
-            <template v-if="PEMContent.steamID !== undefined">
-                <VaDivider class="!mt-4 !mb-2" />
-                <iframe
-                    :src="`https://store.steampowered.com/widget/${PEMContent.steamID}/`"
-                    frameborder="0"
-                    width="520"
-                    height="150"
-                />
-            </template>
-
-            <template v-if="PEMContent.reapply !== undefined">
-                <div class="mt-3">
-                    <span class="text-base">
-                        😇&nbsp;復活&ensp;
-                        <div class="inline text-2xl text-orange-300">
-                            <!-- prettier-ignore -->
-                            {{ PEMContent.reapply?.entries.length }}
-                        </div>
-                        &ensp;次
-                    </span>
-                </div>
-                <VaDivider class="!m-1" />
-            </template>
-
-            <template v-for="entry in PEMContent.reapply?.entries">
-                <div class="mt-1">
-                    <VaButton
-                        @click="openLinks(vodLinkOfDate(entry.date))"
-                        preset="plain"
-                        color="textPrimary"
-                    >
-                        {{ entry.date }}
-                    </VaButton>
-                    &ensp;
-                    <!-- !text-[#b91c1c] !text-[#4d7c0f] !text-[#047857] !text-[#b45309] -->
-                    <div class="inline-block text-sm">
-                        <div :class="`!text-[${statusOf(entry.status).color}]`">
-                            ◼
-                        </div>
-                    </div>
-                    &nbsp;{{ entry.status }}
-                </div>
-            </template>
         </div>
+
+        <!-- 進度條 -->
+        <template v-if="PEMContent.progress !== undefined">
+            <VaProgressBar
+                class="mt-4"
+                :model-value="PEMContent.progress"
+                content-inside
+                show-percent
+            />
+        </template>
+
+        <!-- 復活 -->
+        <template v-if="PEMContent.reapply !== undefined">
+            <div class="mt-3">
+                <span class="text-base">
+                    😇&nbsp;復活&ensp;
+                    <div class="inline text-2xl text-orange-300">
+                        <!-- prettier-ignore -->
+                        {{ PEMContent.reapply?.entries.length }}
+                    </div>
+                    &ensp;次
+                </span>
+            </div>
+            <VaDivider class="!m-1" />
+        </template>
+
+        <!-- 復活次數 -->
+        <template v-for="entry in PEMContent.reapply?.entries">
+            <div class="mt-1">
+                <VaButton
+                    @click="openLinks(vodLinkOfDate(entry.date))"
+                    preset="plain"
+                    color="textPrimary"
+                >
+                    {{ entry.date }}
+                </VaButton>
+                &ensp;
+                <!-- !text-[#b91c1c] !text-[#4d7c0f] !text-[#047857] !text-[#b45309] -->
+                <div class="inline-block text-sm">
+                    <div :class="`!text-[${statusOf(entry.status).color}]`">
+                        ◼
+                    </div>
+                </div>
+                &nbsp;{{ entry.status }}
+            </div>
+        </template>
+
+        <!-- steam store page -->
+        <template v-if="PEMContent.steamID !== undefined">
+            <VaDivider class="!mt-4 !mb-2" />
+            <iframe
+                :src="`https://store.steampowered.com/widget/${PEMContent.steamID}/`"
+                frameborder="0"
+                width="520"
+                height="150"
+            />
+        </template>
     </VaModal>
 </template>
