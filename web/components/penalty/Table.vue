@@ -97,7 +97,7 @@ const items = computed(() =>
 <template>
     <!-- !bg-[#b91c1c] !bg-[#4d7c0f] !bg-[#047857] !bg-[#b45309] -->
     <!-- TAILWIND CSS: DO NOT REMOVE ABOVE COMMENT -->
-    <VaDataTable :items="items" class="text-center w-full" sticky-header>
+    <VaDataTable :items="items" class="text-center w-full" virtual-scroller sticky-header>
         <template #header(日期)="{ label }">
             <div class="text-sm text-center bg-black">
                 <div class="text-sm text-center">
