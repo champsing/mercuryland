@@ -81,7 +81,7 @@
             },
             {
                 "block": "vod",
-                "uri": "89"
+                "uri": "90"
             }
         ],
         "steamID": 1137460
@@ -98,7 +98,7 @@
             },
             {
                 "block": "vod",
-                "uri": "111"
+                "uri": "112"
             }
         ],
         "steamID": 1450830
@@ -265,7 +265,7 @@
                 "text": "🏁投票給過",
                 "uri": "https://discord.com/channels/506120681495199756/566611073977942017/1188877921608286260"
             },
-            { "block": "image", "text": "投票的截图", "uri": "97.png" }
+            { "block": "image", "text": "投票的截图", "uri": "30.png" }
         ]
     },
     {
@@ -341,7 +341,7 @@
         "status": "勉強過",
         "description": [
             { "block": "text", "text": "🏁 懲罰主人給過" },
-            { "block": "image", "text": "給過的截圖", "uri": "75.png" }
+            { "block": "image", "text": "給過的截圖", "uri": "39.png" }
         ],
         "steamID": 240720
     },
@@ -371,7 +371,7 @@
         "status": "勉強過",
         "description": [
             { "block": "text", "text": "🏁 原主人給過" },
-            { "block": "image", "text": "給過的截图", "uri": "66.png" }
+            { "block": "image", "text": "給過的截图", "uri": "43.png" }
         ],
         "steamID": 2262770
     },
@@ -552,7 +552,7 @@
         "progress": 20,
         "description": [
             { "block": "text", "text": "⚔️ 已完成 4 /20個" },
-            { "block": "vod", "uri": "98" }
+            { "block": "vod", "uri": "99" }
         ],
         "steamID": 381210
     },
@@ -895,15 +895,15 @@
             },
             {
                 "block": "vod",
-                "uri": "131"
-            },
-            {
-                "block": "vod",
                 "uri": "132"
             },
             {
                 "block": "vod",
                 "uri": "133"
+            },
+            {
+                "block": "vod",
+                "uri": "134"
             }
         ]
     },
@@ -925,7 +925,7 @@
             },
             {
                 "block": "penalty",
-                "uri": "91"
+                "uri": "44"
             }
         ]
     },
