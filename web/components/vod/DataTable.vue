@@ -45,13 +45,15 @@ const data = computed(() => {
         .sort((lhs, rhs) => rhs.date.localeCompare(lhs.date));
 });
 
+const CENTER = "center" as const;
+
 const columns = [
     {
         key: "date",
         name: "date",
         label: "日期",
-        thAlign: "center" as const,
-        tdAlign: "center" as const,
+        thAlign: CENTER,
+        tdAlign: CENTER,
         sortable: true,
         sortingOptions: ["desc" as const, "asc" as const, null], // because these two string is defined as constants in src.
     },
@@ -59,24 +61,24 @@ const columns = [
         key: "title",
         name: "title",
         label: "直播標題",
-        thAlign: "center" as const,
-        tdAlign: "center" as const,
+        thAlign: CENTER,
+        tdAlign: CENTER,
         width: 20
     },
     {
         key: "tags",
         name: "tags",
         label: "TAG",
-        thAlign: "center" as const,
-        tdAlign: "center" as const,
+        thAlign: CENTER,
+        tdAlign: CENTER,
         width: 20
     },
     {
         key: "duration",
         name: "duration",
         label: "直播時長",
-        thAlign: "center" as const,
-        tdAlign: "center" as const,
+        thAlign: CENTER,
+        tdAlign: CENTER,
         sortable: true,
     },
 ];
@@ -102,6 +104,11 @@ function calcStyle(top: number) {
             virtual-scroller
             sticky-header
         >
+            <template v-for="item in columns" #[`header(${item.name})`]="{ label }">
+                <div class="text-sm text-center">
+                    {{ label }}
+                </div>
+            </template>
             <template #cell(title)="{ value, row }">
                 <!-- same as NextPageButton and ReturnTopButton -->
                 <VaButton
