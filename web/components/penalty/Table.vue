@@ -97,15 +97,23 @@ const items = computed(() =>
 <template>
     <!-- !bg-[#b91c1c] !bg-[#4d7c0f] !bg-[#047857] !bg-[#b45309] -->
     <!-- TAILWIND CSS: DO NOT REMOVE ABOVE COMMENT -->
-    <VaDataTable :items="items" class="text-center w-full" virtual-scroller sticky-header>
+    <VaDataTable
+        :items="items"
+        class="text-center w-full"
+        virtual-scroller
+        sticky-header
+    >
         <template #header(日期)="{ label }">
             <div class="text-sm text-center bg-black">
                 <div class="text-sm text-center">
-                <VaPopover icon="info" message="點擊日期可開啟當天所有直播紀錄檔">
-                    {{ label }}
-                    <VaIcon name="help_outline" />
-                </VaPopover>
-            </div>
+                    <VaPopover
+                        icon="info"
+                        message="點擊日期可開啟當天所有直播紀錄檔"
+                    >
+                        {{ label }}
+                        <VaIcon name="help_outline" />
+                    </VaPopover>
+                </div>
             </div>
         </template>
         <template #header(懲罰內容)="{ label }">
