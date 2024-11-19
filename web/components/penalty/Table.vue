@@ -81,18 +81,32 @@ const PEMContent = defineModel("PEMContent", {
 
 const showPenaltyScreenshotModal = ref(false);
 
-const filteredData = computed(() =>
-    filterPenaltyData(props.dateRange, props.status, props.search)
+// [DONE] 修正成跟 DataTable.vue 裡面一樣使用 columns {row} 形式
+const items = computed(() =>
+    filterPenaltyData(props.dateRange, props.status, props.search).slice()
 );
 
-// TODO: 修正成跟 DataTable.vue 裡面一樣使用 columns {row} 形式
-const items = computed(() =>
-    filteredData.value.slice().map(({ date, name, status }) => ({
-        日期: date,
-        懲罰內容: name,
-        完成狀態: status,
-    }))
-);
+const CENTER = "center" as const;
+
+const columns = [
+    {
+        key: "date",
+        label: "日期",
+        tdAlign: CENTER,
+        thAlign: CENTER,
+        width: 140,
+        sortable: true,
+        sortingOptions: ["desc" as const, "asc" as const, null],
+    },
+    { key: "name", label: "內容", tdAlign: CENTER, thAlign: CENTER },
+    {
+        key: "status",
+        label: "完成狀態",
+        tdAlign: CENTER,
+        thAlign: CENTER,
+        width: 140,
+    },
+];
 </script>
 
 <template>
@@ -100,30 +114,29 @@ const items = computed(() =>
     <!-- TAILWIND CSS: DO NOT REMOVE ABOVE COMMENT -->
     <VaDataTable
         :items="items"
-        class="text-center w-full"
+        :columns="columns"
+        class="w-full"
         virtual-scroller
         sticky-header
     >
-        <template #header(日期)="{ label }">
-            <div class="text-sm text-center bg-black">
-                <div class="text-sm text-center">
-                    <VaPopover
-                        icon="info"
-                        message="點擊日期可開啟當天所有直播紀錄檔"
-                    >
-                        {{ label }}
-                        <VaIcon name="help_outline" />
-                    </VaPopover>
-                </div>
+        <template #header(date)="{ label }">
+            <div class="text-sm">
+                <VaPopover
+                    icon="info"
+                    message="點擊日期可開啟當天所有直播紀錄檔"
+                >
+                    {{ label }}
+                    <VaIcon name="help_outline" />
+                </VaPopover>
             </div>
         </template>
-        <template #header(懲罰內容)="{ label }">
-            <div class="text-sm text-center">
+        <template #header(name)="{ label }">
+            <div class="text-sm">
                 {{ label }}
             </div>
         </template>
-        <template #header(完成狀態)="{ label }">
-            <div class="text-sm text-center">
+        <template #header(status)="{ label }">
+            <div class="text-sm">
                 <VaPopover icon="info" message="點擊完成狀態可快速切換">
                     {{ label }}
                     <VaIcon name="help_outline" />
@@ -131,7 +144,7 @@ const items = computed(() =>
             </div>
         </template>
 
-        <template #cell(日期)="{ value }">
+        <template #cell(date)="{ value }">
             <div class="text-center">
                 <VaButton
                     color="textPrimary"
@@ -143,14 +156,10 @@ const items = computed(() =>
                 </VaButton>
             </div>
         </template>
-        <template #cell(懲罰內容)="{ value }">
+        <template #cell(name)="{ value, row }">
             <div class="text-center">
                 <VaButton
-                    @click="
-                        PEMContent = penaltyData.filter(
-                            (x) => x.name == value
-                        )[0]
-                    "
+                    @click="PEMContent = row.rowData"
                     preset="plain"
                     color="textPrimary"
                 >
@@ -158,7 +167,7 @@ const items = computed(() =>
                 </VaButton>
             </div>
         </template>
-        <template #cell(完成狀態)="{ value }">
+        <template #cell(status)="{ value }">
             <div class="text-center" :class="`!bg-[${statusOf(value).color}]`">
                 <VaButton
                     @click="() => emit('updateStatus', value)"
