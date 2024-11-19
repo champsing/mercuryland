@@ -821,6 +821,12 @@
         "date": "2024-06-16",
         "name": "玩 Buckshot Roulette",
         "status": "已完成",
+        "description": [
+            {
+                "block": "vod",
+                "uri": "124"
+            }
+        ],
         "steamID": 2835570
     },
     {
