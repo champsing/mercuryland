@@ -50,7 +50,6 @@ const CENTER = "center" as const;
 const columns = [
     {
         key: "date",
-        name: "date",
         label: "日期",
         thAlign: CENTER,
         tdAlign: CENTER,
@@ -59,7 +58,6 @@ const columns = [
     },
     {
         key: "title",
-        name: "title",
         label: "直播標題",
         thAlign: CENTER,
         tdAlign: CENTER,
@@ -67,7 +65,6 @@ const columns = [
     },
     {
         key: "tags",
-        name: "tags",
         label: "TAG",
         thAlign: CENTER,
         tdAlign: CENTER,
@@ -75,7 +72,6 @@ const columns = [
     },
     {
         key: "duration",
-        name: "duration",
         label: "直播時長",
         thAlign: CENTER,
         tdAlign: CENTER,
@@ -104,7 +100,7 @@ function calcStyle(top: number) {
             virtual-scroller
             sticky-header
         >
-            <template v-for="item in columns" #[`header(${item.name})`]="{ label }">
+            <template v-for="item in columns" #[`header(${item.key})`]="{ label }">
                 <div class="text-sm text-center">
                     {{ label }}
                 </div>
