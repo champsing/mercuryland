@@ -85,6 +85,7 @@ const filteredData = computed(() =>
     filterPenaltyData(props.dateRange, props.status, props.search)
 );
 
+// TODO: 修正成跟 DataTable.vue 裡面一樣使用 columns {row} 形式
 const items = computed(() =>
     filteredData.value.slice().map(({ date, name, status }) => ({
         日期: date,

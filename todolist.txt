@@ -1,5 +1,3 @@
-1. 懲罰圖例新增可以點的Modal 完成!
-2. 把Naive-UI替換
-3. Vod Collapse換成Dropdown 完成!
-4. 支持網頁編輯Vod
-5. 轉盤結果支持Traceback ID
+1. 把Naive-UI替換 剩下Welcome的NGrid了嗚嗚
+2. 支持網頁編輯Vod
+3. 轉盤結果支持Traceback ID 做好隨機四位數了但還沒接後端
