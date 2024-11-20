@@ -7,7 +7,7 @@ target
 
 # App
 /data
-# resequencing_id
+resequencing_id
 
 # Editor
 .vscode/*
