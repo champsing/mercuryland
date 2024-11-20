@@ -6,7 +6,7 @@ import { useToast } from "vuestic-ui";
 
 export function openLinks(links: Array<string>) {
     for (let i = 0; i < links.length; i++) {
-        window.open(links[i], null, "noopenner");
+        window.open(links[i], "_blank", "noopener noreferrer");
     }
 }
 
