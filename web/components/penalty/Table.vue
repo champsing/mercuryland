@@ -30,7 +30,12 @@ class PenaltyDataEntry {
     date: string;
     name: string;
     status: string;
-    description?: { block: string; text?: string; uri?: string }[];
+    description?: {
+        type: string;
+        text?: string;
+        uri_str?: string;
+        uri_num?: number;
+    }[];
     reapply?: { entries: { date: string; status: string }[] };
     steamID?: number;
     progress?: number;
@@ -49,8 +54,6 @@ const PEMContent: Ref<PenaltyDataEntry> = defineModel("PEMContent", {
         return value;
     },
 }); // penaltyEntryModalContent
-
-
 
 // [DONE] 修正成跟 DataTable.vue 裡面一樣使用 columns {row} 形式
 const items = computed(() =>
@@ -119,7 +122,7 @@ function filterPenaltyData(
         :items="items"
         :columns="columns"
         class="w-full"
-        style="--va-data-table-hover-color: #357286;"
+        style="--va-data-table-hover-color: #357286"
         virtual-scroller
         sticky-header
         hoverable
@@ -204,11 +207,11 @@ function filterPenaltyData(
         <div v-if="PEMContent.description !== undefined" class="mt-4">
             <template v-for="block in PEMContent.description">
                 <div>
-                    <span v-if="block.block == 'text'">{{ block.text }}</span>
+                    <span v-if="block.type == 'text'">{{ block.text }}</span>
 
                     <VaButton
-                        v-if="block.block == 'link'"
-                        :href="block.uri"
+                        v-if="block.type == 'link'"
+                        :href="block.uri_str"
                         rel="noopener noreferrer"
                         preset="plain"
                         color="textPrimary"
@@ -217,10 +220,10 @@ function filterPenaltyData(
                     </VaButton>
 
                     <VaButton
-                        v-if="block.block == 'vod'"
-                        :href="YOUTUBE_LIVE + `${
-                            ofId(vodData, parseInt(block.uri)).link
-                        }`"
+                        v-if="block.type == 'vod'"
+                        :href="
+                            YOUTUBE_LIVE + `${ofId(vodData, block.uri_num).link}`
+                        "
                         target="_blank"
                         rel="noopener noreferrer"
                         color="#c82828"
@@ -228,19 +231,16 @@ function filterPenaltyData(
                         round
                         class="mt-2"
                     >
-                        {{ ofId(vodData, parseInt(block.uri)).date }}．{{
-                            ofId(vodData, parseInt(block.uri)).title
+                        {{ ofId(vodData, block.uri_num).date }}．{{
+                            ofId(vodData, block.uri_num).title
                         }}
                     </VaButton>
 
                     <VaButton
-                        v-if="block.block == 'penalty'"
+                        v-if="block.type == 'penalty'"
                         @click="
                             () => {
-                                PEMContent = ofId(
-                                    penaltyData,
-                                    parseInt(block.uri)
-                                );
+                                PEMContent = ofId(penaltyData, block.uri_num);
                                 showPEM = !showPEM;
                             }
                         "
@@ -249,13 +249,13 @@ function filterPenaltyData(
                         round
                         class="mt-4"
                     >
-                        {{ ofId(penaltyData, parseInt(block.uri)).date }}．{{
-                            ofId(penaltyData, parseInt(block.uri)).name
+                        {{ ofId(penaltyData, block.uri_num).date }}．{{
+                            ofId(penaltyData, block.uri_num).name
                         }}
                     </VaButton>
 
                     <VaButton
-                        v-if="block.block == 'image'"
+                        v-if="block.type == 'image'"
                         @click="
                             showPenaltyScreenshotModal =
                                 !showPenaltyScreenshotModal
@@ -268,7 +268,7 @@ function filterPenaltyData(
                     </VaButton>
 
                     <VaModal
-                        v-if="block.block == 'image'"
+                        v-if="block.type == 'image'"
                         v-model="showPenaltyScreenshotModal"
                         hide-default-actions
                         style="
@@ -279,10 +279,10 @@ function filterPenaltyData(
                         ok-text="完成"
                     >
                         <!-- left need to be calc() -->
-                        <img :src="`penalty/${block.uri}`" :alt="block.text" />
+                        <img :src="`penalty/${block.uri_str}`" :alt="block.text" />
                     </VaModal>
 
-                    <br v-if="block.block == 'br'" />
+                    <br v-if="block.type == 'br'" />
                 </div>
             </template>
         </div>
