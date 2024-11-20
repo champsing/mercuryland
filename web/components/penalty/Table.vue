@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed } from "vue";
+import { ref, Ref, computed } from "vue";
 import {
     VaButton,
     VaChip,
@@ -25,16 +25,57 @@ const emit = defineEmits<{
     (e: "updateStatus", status: string): void;
 }>();
 
-// class PenaltyDataEntry {
-//     id: number;
-//     date: string;
-//     name: string;
-//     status: string;
-//     description?: { block: string; text?: string; uri?: string }[];
-//     reapply?: { entries: { date: string; status: string }[] };
-//     steamID?: number;
-//     progress?: number;
-// }
+class PenaltyDataEntry {
+    id: number;
+    date: string;
+    name: string;
+    status: string;
+    description?: { block: string; text?: string; uri?: string }[];
+    reapply?: { entries: { date: string; status: string }[] };
+    steamID?: number;
+    progress?: number;
+}
+
+const CENTER = "center" as const;
+const YOUTUBE_LIVE = "https://youtube.com/live/";
+
+const showPEM = ref(false); // showPenaltyEntryModal
+const showPenaltyScreenshotModal = ref(false);
+
+const PEMContent: Ref<PenaltyDataEntry> = defineModel("PEMContent", {
+    default: null,
+    set(value) {
+        showPEM.value = !showPEM.value;
+        return value;
+    },
+}); // penaltyEntryModalContent
+
+
+
+// [DONE] 修正成跟 DataTable.vue 裡面一樣使用 columns {row} 形式
+const items = computed(() =>
+    filterPenaltyData(props.dateRange, props.status, props.search).slice()
+);
+
+const columns = [
+    {
+        key: "date",
+        label: "日期",
+        tdAlign: CENTER,
+        thAlign: CENTER,
+        width: 140,
+        sortable: true,
+        sortingOptions: ["desc" as const, "asc" as const, null],
+    },
+    { key: "name", label: "內容", tdAlign: CENTER, thAlign: CENTER },
+    {
+        key: "status",
+        label: "完成狀態",
+        tdAlign: CENTER,
+        thAlign: CENTER,
+        width: 140,
+    },
+];
 
 function statusOf(status: string): (typeof penaltyStatus)[0] {
     return penaltyStatus.filter((x) => x.name == status)[0];
@@ -43,7 +84,7 @@ function statusOf(status: string): (typeof penaltyStatus)[0] {
 function vodLinkOfDate(date: string): string[] {
     let linkIDArray = vodData.filter((x) => x.date == date).map((x) => x.link);
     for (let i = 0; i < linkIDArray.length; i++)
-        linkIDArray[i] = "https://youtube.com/live/" + linkIDArray[i];
+        linkIDArray[i] = YOUTUBE_LIVE + linkIDArray[i];
     return linkIDArray;
 }
 
@@ -69,44 +110,6 @@ function filterPenaltyData(
         )
         .sort((lhs, rhs) => lhs.date.localeCompare(rhs.date));
 }
-
-const showPEM = ref(false); // showPenaltyEntryModal
-const PEMContent = defineModel("PEMContent", {
-    default: null,
-    set(value) {
-        showPEM.value = !showPEM.value;
-        return value;
-    },
-}); // penaltyEntryModalContent
-
-const showPenaltyScreenshotModal = ref(false);
-
-// [DONE] 修正成跟 DataTable.vue 裡面一樣使用 columns {row} 形式
-const items = computed(() =>
-    filterPenaltyData(props.dateRange, props.status, props.search).slice()
-);
-
-const CENTER = "center" as const;
-
-const columns = [
-    {
-        key: "date",
-        label: "日期",
-        tdAlign: CENTER,
-        thAlign: CENTER,
-        width: 140,
-        sortable: true,
-        sortingOptions: ["desc" as const, "asc" as const, null],
-    },
-    { key: "name", label: "內容", tdAlign: CENTER, thAlign: CENTER },
-    {
-        key: "status",
-        label: "完成狀態",
-        tdAlign: CENTER,
-        thAlign: CENTER,
-        width: 140,
-    },
-];
 </script>
 
 <template>
@@ -213,7 +216,7 @@ const columns = [
 
                     <VaButton
                         v-if="block.block == 'vod'"
-                        :href="`https://youtube.com/live/${
+                        :href="YOUTUBE_LIVE + `${
                             ofId(vodData, parseInt(block.uri)).link
                         }`"
                         target="_blank"

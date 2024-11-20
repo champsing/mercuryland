@@ -16,7 +16,7 @@ import TimeSummary from "./TimeSummary.vue";
 import TimeDetail from "./TimeDetail.vue";
 import { Info24Regular } from "@vicons/fluent";
 
-let dateRange = defineModel("dateRange", {
+const dateRange = defineModel("dateRange", {
     //1582992000 = 2020 03 01 12:00 AM Taipei ST; 8 hours = 28800 seconds
     default: {
         start: new Date(1582992000000),
@@ -24,13 +24,13 @@ let dateRange = defineModel("dateRange", {
     },
 });
 
-let strictFiltering = ref(false);
+const strictFiltering = ref(false);
 
-let selectedTags: Ref<Array<string>> = ref(null);
+const selectedTags: Ref<Array<string>> = ref(null);
 
-let tagList = [...new Set(vodLinkData.flatMap((x) => x.tags))].sort();
+const tagList = [...new Set(vodLinkData.flatMap((x) => x.tags))].sort();
 
-let computedTime = ref(0);
+const computedTime = ref(0);
 
 const showRuleDescModal = ref(false);
 const showVodDescImg = ref(false);
@@ -63,11 +63,20 @@ function updateTag(tag: string) {
     else selectedTags.value.push(tag);
 }
 
-function formatDate(date: Date) {
-    return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
+function formatDate(date: Date): string {
+    let year = date.getFullYear();
+    let month = date.getMonth() + 1;
+    let day = date.getDate();
+    if (month >= 10) {
+        if (day >= 10) return `${year}-${month}-${day}`;
+        else return `${year}-${month}-0${day}`;
+    } else {
+        if (day >= 10) return `${year}-0${month}-${day}`;
+        else return `${year}-0${month}-0${day}`;
+    }
 }
 
-function parseDate(text) {
+function parseDate(text): Date {
     const [year, month, day] = text.split("-");
     return new Date(year, month - 1, day);
 }
@@ -201,7 +210,12 @@ function parseDate(text) {
             </div>
         </VaModal>
 
-        <VaModal v-model="showVodDescImg" hide-default-actions close-button z-index="5">
+        <VaModal
+            v-model="showVodDescImg"
+            hide-default-actions
+            close-button
+            z-index="5"
+        >
             <img src="@assets/images/vod_time.png" alt="直播時數規則說明" />
         </VaModal>
 
