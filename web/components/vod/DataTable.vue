@@ -97,8 +97,10 @@ function calcStyle(top: number) {
             :items="data"
             :columns="columns"
             :style="calcStyle(top)"
+            style="--va-data-table-hover-color: #357286;"
             virtual-scroller
             sticky-header
+            hoverable
         >
             <template v-for="item in columns" #[`header(${item.key})`]="{ label }">
                 <div class="text-sm text-center">
@@ -118,6 +120,7 @@ function calcStyle(top: number) {
                     :href="`https://youtube.com/live/${row.rowData.link}`"
                     target="_blank"
                     rel="noreferrer noopener"
+                    class="mt-1"
                 >
                     {{ value }}
                 </VaButton>
@@ -134,6 +137,7 @@ function calcStyle(top: number) {
                         pressedMaskColor="info"
                         :pressedOpacity="1"
                         @click="() => emit('updateTag', tag)"
+                        class="mt-1"
                     >
                         {{ tag }}
                     </VaButton>

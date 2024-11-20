@@ -119,8 +119,10 @@ function filterPenaltyData(
         :items="items"
         :columns="columns"
         class="w-full"
+        style="--va-data-table-hover-color: #357286;"
         virtual-scroller
         sticky-header
+        hoverable
     >
         <template #header(date)="{ label }">
             <div class="text-sm">
