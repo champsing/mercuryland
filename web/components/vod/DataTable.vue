@@ -107,6 +107,12 @@ function calcStyle(top: number) {
                     {{ label }}
                 </div>
             </template>
+
+            <!-- for checking day of week -->
+            <!-- <template #cell(date)="{ value }">
+                {{ value }}  {{ new Date(value).getDay() }}
+            </template> -->
+
             <template #cell(title)="{ value, row }">
                 <!-- same as NextPageButton and ReturnTopButton -->
                 <VaButton
