@@ -152,6 +152,7 @@ function filterPenaltyData(
             </div>
         </template>
 
+        <!-- check day of week:  {{ new Date(value).getDay() }} -->
         <template #cell(date)="{ value }">
             <div class="text-center">
                 <VaButton
@@ -164,6 +165,7 @@ function filterPenaltyData(
                 </VaButton>
             </div>
         </template>
+
         <template #cell(name)="{ value, row }">
             <div class="text-center">
                 <VaButton
