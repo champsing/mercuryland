@@ -4,7 +4,11 @@ use super::{Claims, PRIVATE_KEY};
 use actix_web::{post, web, HttpResponse, Responder};
 use jwt::SignWithKey;
 use serde::Deserialize;
-use std::time::{SystemTime, UNIX_EPOCH};
+use std::{
+    fs::OpenOptions,
+    io::Write,
+    time::{SystemTime, UNIX_EPOCH},
+};
 
 #[derive(Debug, Deserialize)]
 struct Request {
@@ -20,7 +24,21 @@ pub async fn handler(request: web::Json<Request>) -> Result<impl Responder, Serv
             iat: now,
             exp: now + 3600,
         };
-        let token = claims.sign_with_key(&*PRIVATE_KEY)?;
+        let token = claims.clone().sign_with_key(&*PRIVATE_KEY)?;
+
+        let log = "[Login] User ".to_string()
+            + &request.username
+            + " loggeed in on "
+            + &claims.clone().iat.to_string()
+            + ", whose session expires on "
+            + &claims.clone().exp.to_string()
+            + ".";
+        let log_file = OpenOptions::new()
+            .append(true)
+            .create(true)
+            .open("/data/login_history.log");
+        writeln!(log_file?, "{log}")?;
+
         Ok(HttpResponse::Ok().body(token))
     } else {
         Ok(HttpResponse::Forbidden().finish())
