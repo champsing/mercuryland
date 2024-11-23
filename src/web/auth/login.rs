@@ -36,7 +36,7 @@ pub async fn handler(request: web::Json<Request>) -> Result<impl Responder, Serv
         let log_file = OpenOptions::new()
             .append(true)
             .create(true)
-            .open("/data/login_history.log");
+            .open("data/login_history.log");
         writeln!(log_file?, "{log}")?;
 
         Ok(HttpResponse::Ok().body(token))
