@@ -219,7 +219,7 @@
                 "text": "🏁投票給過",
                 "uri_str": "https://discord.com/channels/506120681495199756/566611073977942017/1188877921608286260"
             },
-            { "type": "image", "text": "投票的截图", "uri_str": "30.png" }
+            { "type": "image", "text": "投票的截图", "uri_str": "23625-2.png" }
         ]
     },
     {
@@ -325,7 +325,7 @@
         "status": "勉強過",
         "description": [
             { "type": "text", "text": "🏁 懲罰主人給過" },
-            { "type": "image", "text": "給過的截圖", "uri_str": "39.png" }
+            { "type": "image", "text": "給過的截圖", "uri_str": "23806.png" }
         ],
         "steamID": 240720
     },
@@ -342,7 +342,7 @@
         "status": "勉強過",
         "description": [
             { "type": "text", "text": "🏁 原主人給過" },
-            { "type": "image", "text": "給過的截图", "uri_str": "43.png" }
+            { "type": "image", "text": "給過的截图", "uri_str": "23820-1.png" }
         ],
         "steamID": 2262770
     },
