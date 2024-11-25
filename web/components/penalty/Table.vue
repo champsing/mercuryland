@@ -224,7 +224,8 @@ function filterPenaltyData(
                     <VaButton
                         v-if="block.type == 'vod'"
                         :href="
-                            YOUTUBE_LIVE + `${ofId(vodData, block.uri_num).link}`
+                            YOUTUBE_LIVE +
+                            `${ofId(vodData, block.uri_num).link}`
                         "
                         target="_blank"
                         rel="noopener noreferrer"
@@ -281,7 +282,10 @@ function filterPenaltyData(
                         ok-text="完成"
                     >
                         <!-- left need to be calc() -->
-                        <img :src="`penalty/${block.uri_str}`" :alt="block.text" />
+                        <img
+                            :src="`penalty/${block.uri_str}`"
+                            :alt="block.text"
+                        />
                     </VaModal>
 
                     <br v-if="block.type == 'br'" />
@@ -325,7 +329,7 @@ function filterPenaltyData(
                     {{ entry.date }}
                 </VaButton>
                 &ensp;
-                <!-- !text-[#b91c1c] !text-[#4d7c0f] !text-[#047857] !text-[#b45309] -->
+                <!-- colorsOfStatus -->
                 <div class="inline-block text-sm">
                     <div :class="`!text-[${statusOf(entry.status).color}]`">
                         ◼
