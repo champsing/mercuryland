@@ -118,6 +118,8 @@ const notEffectivePenalties = []
             </VaButton>
         </div>
 
+        <!-- Colors below are specially picked, don't use statusColorSet constant. -->
+         
         <div class="flex justify-center text-center gap-32 ml-4">
             <div class="flex flex-col">
                 <div class="text-sm mt-1 text-[#ef3b3b]">未開始</div>
