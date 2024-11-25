@@ -7,7 +7,8 @@ async fn main() -> std::io::Result<()> {
     HttpServer::new(move || {
         App::new()
             .service(web::ping::handler)
-            .service(web::auth::login::handler)
+            .service(web::auth::login::login_handler)
+            .service(web::auth::login::logout_logging)
             .service(web::auth::tick::handler)
             .service(Files::new("/", "./dist").index_file("index.html"))
     })
