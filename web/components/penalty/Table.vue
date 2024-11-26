@@ -11,9 +11,9 @@ import {
     VaProgressBar,
 } from "vuestic-ui";
 import penaltyData from "@assets/data/penalty.json";
-import penaltyStatus from "@assets/data/penalty_status.json";
 import vodData from "@assets/data/vod.json";
 import { openLinks, ofId, truncateString } from "@/composables/utils";
+import { statusOf } from "@/composables/penalty";
 
 const props = defineProps<{
     dateRange: { start: Date; end: Date };
@@ -79,10 +79,6 @@ const columns = [
         width: 140,
     },
 ];
-
-function statusOf(status: string): (typeof penaltyStatus)[0] {
-    return penaltyStatus.filter((x) => x.name == status)[0];
-}
 
 function vodLinkOfDate(date: string): string[] {
     let linkIDArray = vodData.filter((x) => x.date == date).map((x) => x.link);

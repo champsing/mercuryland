@@ -14,6 +14,7 @@ import vodLinkData from "@assets/data/vod.json";
 import DataTable from "./DataTable.vue";
 import TimeSummary from "./TimeSummary.vue";
 import TimeDetail from "./TimeDetail.vue";
+import { formatDate, parseDate } from "@/composables/utils";
 import { Info24Regular } from "@vicons/fluent";
 
 const dateRange = defineModel("dateRange", {
@@ -63,23 +64,6 @@ function updateTag(tag: string) {
     else selectedTags.value.push(tag);
 }
 
-function formatDate(date: Date): string {
-    let year = date.getFullYear();
-    let month = date.getMonth() + 1;
-    let day = date.getDate();
-    if (month >= 10) {
-        if (day >= 10) return `${year}-${month}-${day}`;
-        else return `${year}-${month}-0${day}`;
-    } else {
-        if (day >= 10) return `${year}-0${month}-${day}`;
-        else return `${year}-0${month}-0${day}`;
-    }
-}
-
-function parseDate(text): Date {
-    const [year, month, day] = text.split("-");
-    return new Date(year, month - 1, day);
-}
 </script>
 
 <template>

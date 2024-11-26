@@ -9,10 +9,10 @@ import {
     VaIcon,
     VaModal,
 } from "vuestic-ui";
-import penaltyStatus from "@assets/data/penalty_status.json";
+import { statusOf } from "@/composables/penalty";
 
 function colorOfStatus(status: string): string {
-    return penaltyStatus.filter((x) => x.name == status)[0]?.color;
+    return statusOf(status).color;
 }
 
 const statusColorSet = [

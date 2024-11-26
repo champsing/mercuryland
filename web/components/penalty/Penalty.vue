@@ -12,6 +12,7 @@ import penaltyStatus from "@assets/data/penalty_status.json";
 import OverAllList from "./OverAllList.vue";
 import PenaltyTable from "./Table.vue";
 import PenaltySyntax from "./Syntax.vue";
+import { formatDate, parseDate } from "@/composables/utils";
 import { Info24Regular } from "@vicons/fluent";
 import { ref } from "vue";
 
@@ -39,24 +40,6 @@ let filterSearch = defineModel("filterSearch", {
 });
 
 let finishOptions = penaltyStatus.map((x) => x.name).sort();
-
-function formatDate(date: Date): string {
-    let year = date.getFullYear();
-    let month = date.getMonth() + 1;
-    let day = date.getDate();
-    if (month >= 10) {
-        if (day >= 10) return `${year}-${month}-${day}`;
-        else return `${year}-${month}-0${day}`;
-    } else {
-        if (day >= 10) return `${year}-0${month}-${day}`;
-        else return `${year}-0${month}-0${day}`;
-    }
-}
-
-function parseDate(text): Date {
-    const [year, month, day] = text.split("-");
-    return new Date(year, month - 1, day);
-}
 </script>
 
 <template>
