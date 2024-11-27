@@ -28,6 +28,8 @@ const showExtraConditionDesc = ref(false);
 </script>
 
 <template>
+    <!-- !text-[#b91c1c] !text-[#4d7c0f] !text-[#047857] !text-[#b45309] -->
+    <!-- TAILWIND CSS: DO NOT REMOVE ABOVE COMMENT -->
     <div class="text-4xl text-neutral-100 text-left mt-4">圖例</div>
     <VaDivider class="!mt-3" />
     <div class="text-sm text-neutral-100 ml-6 mb-3 text-center">
