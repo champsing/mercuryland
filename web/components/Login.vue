@@ -3,12 +3,6 @@ import { reactive } from "vue";
 import { VaInput, VaButton, VaModal } from "vuestic-ui";
 import axios from "axios";
 
-// Get the client's IP address 原來要await他resolve
-let clientIP = await fetch("https://api.ipify.org?format=json")
-    .then((response) => response.json())
-    .then((data) => data.ip)
-    .catch((error) => console.error("Error fetching IP address:", error));
-
 const modal = reactive({
     show: false, // should we show the modal
     auth: false, // is currently authenticated
@@ -104,6 +98,14 @@ tick();
 setInterval(() => {
     tick();
 }, 1000 * 60 * 10); // 10 minutes
+</script>
+
+<script get-ip lang="ts">
+// Get the client's IP address 原來要await他resolve
+let clientIP = await fetch("https://api.ipify.org?format=json")
+    .then((response) => response.json())
+    .then((data) => data.ip)
+    .catch((error) => console.error("Error fetching IP address:", error));
 </script>
 
 <template>
