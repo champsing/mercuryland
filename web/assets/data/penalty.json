@@ -777,8 +777,14 @@
         "id": 24414.2,
         "date": "2024-04-14",
         "name": "玩 Box: the game",
-        "status": "未開始",
-        "steamID": 879850
+        "status": "已完成",
+        "steamID": 879850,
+        "description": [
+            {
+                "type": "vod",
+                "uri_num": 143
+            }
+        ]
     },
     {
         "id": 24505.1,
@@ -791,7 +797,8 @@
         "date": "2024-05-05",
         "name": "通關 At Dead of Night",
         "status": "進行中",
-        "steamID": 1450830
+        "steamID": 1450830,
+        "progress": 41
     },
     {
         "id": 24527.1,
@@ -1008,5 +1015,11 @@
         "name": "玩Dreambound",
         "status": "未開始",
         "steamID": 2071120
+    },
+    {
+        "id": 241201,
+        "date": "2024-12-01",
+        "name": "直播玩DC小遊戲colonist電腦1v3勝利",
+        "status": "未開始"
     }
 ]
