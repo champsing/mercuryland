@@ -44,7 +44,7 @@ let finishOptions = penaltyStatus.map((x) => x.name).sort();
 
 <template>
     <div class="mt-4 m-auto w-11/12">
-        <div class="flex-row justify-center gap-10 hidden xl:flex">
+        <div class="flex-row justify-evenly hidden xl:flex">
             <div class="w-3/8">
                 <VaDateInput
                     v-model="filterDate"
@@ -63,8 +63,9 @@ let finishOptions = penaltyStatus.map((x) => x.name).sort();
                     :clear-value="null"
                 />
             </div>
-            <div class="w-3/8">
+            <div class="w-1/4">
                 <VaInput
+                    class="w-full"
                     placeholder="輸入懲罰內容來搜尋"
                     v-model="filterSearch"
                 />
