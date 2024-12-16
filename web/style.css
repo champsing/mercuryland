@@ -2,7 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-@layer base {
+/* @layer base {
     @font-face {
         font-family: "Mona Song TC";
         src: url("@assets/fonts/mona-song-tc.otf") format("opentype");
@@ -11,7 +11,7 @@
     }
     
     @font-face {
-        font-family: "Taipei Sans Regular";
+        font-family: "Taipei Sans";
         src: url("@assets/fonts/taipei-sans-tc-regular.ttf") format("truetype");
         font-weight: 400;
         font-style: normal;
@@ -30,7 +30,7 @@
         font-weight: 400;
         font-style: normal;
     }
-}
+} */
 
 /* 
 .woff files: Use format('woff')
