@@ -32,3 +32,5 @@ sea-query-rusqlite = { version = "0.7", features = [
 ] }
 # utility
 derive_more = { version = "1.0", features = ["display", "from"] }
+log = "0.4"
+env_logger = "0.11"
