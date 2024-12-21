@@ -69,10 +69,14 @@ const tabs = [
                 -->
             &ensp;保留一切權利。
         </div>
-        <!-- <div class="mt-2">隱私權政策&ensp;|&ensp;使用條款&ensp;|&ensp;法律聲明</div> -->
+        <!-- <div class="mt-2">使用條款&ensp;|&ensp;隱私權政策&ensp;|&ensp;法律聲明</div> -->
         <div class="flex justify-center mt-2">
             <VaButton preset="secondary" border-color="#363636" to="tos">
                 <div class="text-zinc-200">使用條款</div>
+            </VaButton>
+            <VaDivider vertical />
+            <VaButton preset="secondary" border-color="#363636" to="privacy">
+                <div class="text-zinc-200">隱私權政策</div>
             </VaButton>
             <VaDivider vertical />
             <VaButton
