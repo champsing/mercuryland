@@ -14,17 +14,32 @@ const form = reactive({
     password: "",
 });
 
+let sessionUsername = reactive(null);
+
 function beforeOk(hide: CallableFunction) {
     axios
         .post("/api/auth/login", {
             username: form.username,
             password: form.password,
+            ip: clientIP
         })
         .then((response) => {
             localStorage.setItem("token", response.data);
+            sessionUsername = form.username;
             form.username = "";
             form.password = "";
             modal.auth = true;
+
+            let log =
+                "[LOGIN] User " +
+                sessionUsername +
+                " logged in on " +
+                new Date(Date.now()) +
+                " at " +
+                clientIP +
+                ".";
+            console.log(log);
+
             hide();
         })
         .catch((_) => {
@@ -43,14 +58,29 @@ function beforeCancel(hide: CallableFunction) {
 function logout() {
     localStorage.removeItem("token");
     modal.auth = false;
+
+    let log =
+        "[LOGOUT] User " +
+        sessionUsername +
+        " logged out on " +
+        new Date(Date.now()) +
+        " at " +
+        clientIP +
+        ".";
+    console.log(log);
+
+    axios.post("/api/auth/login", {
+        username: sessionUsername,
+        ip: clientIP
+    });
+    sessionUsername = null;
 }
 
 // auth token
 function tick() {
     let token = localStorage.getItem("token");
-    if (token == null) {
-        modal.auth = false;
-    } else {
+    if (token == null) modal.auth = false;
+    else {
         axios
             .post("/api/auth/tick", {
                 token: token,
@@ -68,6 +98,14 @@ tick();
 setInterval(() => {
     tick();
 }, 1000 * 60 * 10); // 10 minutes
+</script>
+
+<script get-ip lang="ts">
+// Get the client's IP address 原來要await他resolve
+let clientIP = await fetch("https://api.ipify.org?format=json")
+    .then((response) => response.json())
+    .then((data) => data.ip)
+    .catch((error) => console.error("Error fetching IP address:", error));
 </script>
 
 <template>

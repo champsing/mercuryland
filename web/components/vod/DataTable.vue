@@ -1,13 +1,9 @@
 <script setup lang="ts">
-import { computed, h } from "vue";
+import { computed } from "vue";
 import { UseElementBounding } from "@vueuse/components";
 import { useWindowSize } from "@vueuse/core";
-import { NDataTable } from "naive-ui";
-import { VaButton, VaDivider } from "vuestic-ui";
-import { openLink, interleave, parseHMS } from "@composables/utils.ts";
+import { VaButton, VaDataTable, VaDivider } from "vuestic-ui";
 import vodLinkData from "@assets/data/vod.json";
-
-type DataType = (typeof vodLinkData)[0];
 
 const vh = useWindowSize().height;
 const props = defineProps<{
@@ -31,14 +27,14 @@ const data = computed(() => {
                     new Date(props.dateRange.end.getTime() + 28800000).toISOString().slice(0, 10)
         )
         .filter((v) => {
-            if (props.strictFiltering == true) {
+            if (props.strictFiltering == true)
                 return (
                     props.selectedTags == null ||
                     props.selectedTags.toString() == new Array().toString() ||
                     v.tags.slice().sort().toString() ==
                         props.selectedTags.slice().sort().toString()
                 );
-            } else
+            else
                 return (
                     props.selectedTags == null ||
                     props.selectedTags.toString() == new Array().toString() ||
@@ -48,77 +44,38 @@ const data = computed(() => {
         })
         .sort((lhs, rhs) => rhs.date.localeCompare(lhs.date));
 });
+
+const CENTER = "center" as const;
+
 const columns = [
     {
-        title: "日期",
         key: "date",
-        className: "!text-center",
-        sorter: (row1: DataType, row2: DataType) =>
-            new Date(row1.date).getTime() - new Date(row2.date).getTime(),
+        label: "日期",
+        thAlign: CENTER,
+        tdAlign: CENTER,
+        sortable: true,
+        sortingOptions: ["desc" as const, "asc" as const, null], // because these two string is defined as constants in src.
     },
     {
-        title: "直播連結",
         key: "title",
-        className: "!text-center",
-        render(row: DataType) {
-            return h(
-                VaButton,
-                {
-                    preset: "plain",
-                    size: "small",
-                    color: "#d9d9d9", //non-aggressive white
-                    hoverMaskColor: "#5bc6a1", //same as NextPageButton and ReturnTopButton
-                    hoverOpacity: 1,
-                    pressedOpacity: 1,
-                    onClick: () => openLink(row.link),
-                },
-                { default: () => row.title }
-            );
-        },
+        label: "直播標題",
+        thAlign: CENTER,
+        tdAlign: CENTER,
+        width: 20
     },
     {
-        title: "TAG",
         key: "tags",
-        className: "!text-center",
-        render(row: (typeof vodLinkData)[0]) {
-            return h(
-                "div",
-                {},
-                {
-                    default: () =>
-                        interleave(
-                            row.tags.map((x) =>
-                                h(
-                                    VaButton,
-                                    {
-                                        preset: "plain",
-                                        size: "small",
-                                        color: "#d9d9d9", //non-aggressive white
-                                        hoverMaskColor: "#5bc6a1", //same as NextPageButton and ReturnTopButton
-                                        hoverOpacity: 1,
-                                        pressedMaskColor: "info",
-                                        pressedOpacity: 1,
-                                        onClick: () => emit("updateTag", x),
-                                    },
-                                    { default: () => x }
-                                )
-                            ),
-                            h(
-                                VaDivider,
-                                { vertical: true },
-                                { default: () => null }
-                            )
-                        ),
-                }
-            );
-        },
+        label: "TAG",
+        thAlign: CENTER,
+        tdAlign: CENTER,
+        width: 20
     },
     {
-        title: "直播时数",
         key: "duration",
-        className: "!text-center",
-        sorter: (row1: DataType, row2: DataType) =>
-            parseHMS(row1.duration) - parseHMS(row2.duration),
+        label: "直播時長",
+        thAlign: CENTER,
+        tdAlign: CENTER,
+        sortable: true,
     },
 ];
 
@@ -136,11 +93,67 @@ function calcStyle(top: number) {
 
 <template>
     <use-element-bounding v-slot="{ top }" class="mb-2">
-        <n-data-table
-            :data="data"
+        <VaDataTable
+            :items="data"
             :columns="columns"
-            flex-height
             :style="calcStyle(top)"
-        />
+            style="--va-data-table-hover-color: #357286;"
+            virtual-scroller
+            sticky-header
+            hoverable
+        >
+            <template v-for="item in columns" #[`header(${item.key})`]="{ label }">
+                <div class="text-sm text-center">
+                    {{ label }}
+                </div>
+            </template>
+
+            <!-- for checking day of week -->
+            <!-- <template #cell(date)="{ value }">
+                {{ value }}  {{ new Date(value).getDay() }}
+            </template> -->
+
+            <template #cell(title)="{ value, row }">
+                <!-- same as NextPageButton and ReturnTopButton -->
+                <VaButton
+                    preset="plain"
+                    size="small"
+                    color="textPrimary"
+                    hoverMaskColor="#5bc6a1"
+                    hoverOpacity="1"
+                    pressedMaskColor="info"
+                    :pressedOpacity="1"
+                    :href="`https://youtube.com/live/${row.rowData.link}`"
+                    target="_blank"
+                    rel="noreferrer noopener"
+                    class="mt-1"
+                >
+                    {{ value }}
+                </VaButton>
+            </template>
+            <template #cell(tags)="{ row }">
+                <!-- same as NextPageButton and ReturnTopButton -->
+                <template v-for="tag in row.rowData.tags">
+                    <VaButton
+                        preset="plain"
+                        size="small"
+                        color="textPrimary"
+                        hoverMaskColor="#5bc6a1"
+                        hoverOpacity="1"
+                        pressedMaskColor="info"
+                        :pressedOpacity="1"
+                        @click="() => emit('updateTag', tag)"
+                        class="mt-1"
+                    >
+                        {{ tag }}
+                    </VaButton>
+                    <VaDivider
+                        vertical
+                        class="inline"
+                        v-if="tag !== row.rowData.tags.slice().reverse()[0]"
+                    />
+                </template>
+            </template>
+        </VaDataTable>
     </use-element-bounding>
 </template>

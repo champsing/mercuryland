@@ -39,7 +39,7 @@ const props = defineProps<{
                 <div class="flex-grow">
                     <VaChip
                         class="m-1 text-sm"
-                        color="#d9d9d9"
+                        color="textPrimary"
                         outline
                         readonly
                         v-for="tag in props.tags"
@@ -52,7 +52,7 @@ const props = defineProps<{
                     <br />
                     <VaButton
                         preset="plain"
-                        color="#d9d9d9"
+                        color="textPrimary"
                         hover-mask-color="#5bc6a1"
                         hover-opacity="1"
                         @click="copyToClipboard(props.discord.toString())"

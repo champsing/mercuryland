@@ -21,20 +21,12 @@ let currentDocument: Ref<LawDocEntry> = ref({
     group: "",
 });
 
+const lawDocOptions = lawDocument
+    .slice()
+    .map(({ id, name, group }) => ({ id: id, text: name, group: group }));
+
 function findCurrentDoc(doc: string) {
     currentDocument.value = lawDocument.filter((v) => v.name == doc)[0];
-}
-
-function parseOptions(law_document: typeof lawDocument) {
-    let optionArray = [];
-    for (let i = 0; i < law_document.length; i++) {
-        optionArray[i] = {
-            id: law_document[i].id,
-            text: law_document[i].name,
-            group: law_document[i].group,
-        };
-    }
-    return optionArray;
 }
 
 // const newMercuryLaw: LawDocEntry = {
@@ -55,10 +47,9 @@ function parseOptions(law_document: typeof lawDocument) {
             </div> -->
             <VaMenuList
                 class="text-white text-lg doc-menu-hover"
-                :options="parseOptions(lawDocument)"
+                :options="lawDocOptions"
                 @selected="(doc) => findCurrentDoc(doc.text)"
             />
-            <!-- group name too low, need mb-2 -->
             <VaDivider class="mt-8" />
             <div class="text-zinc-300 text-center text-3xl mt-4">
                 {{ currentDocument.name }}
@@ -67,13 +58,13 @@ function parseOptions(law_document: typeof lawDocument) {
                 {{ currentDocument.description }}
             </div>
             <div class="text-center mt-5">
-                <!-- need further adjust -->
                 <VaButton
                     round
                     size="medium"
                     color="#38b67d"
                     :href="currentDocument.url"
                     target="_blank"
+                    rel="noopener noreferrer"
                 >
                     <VaIcon size="large">
                         <WindowNew20Filled />

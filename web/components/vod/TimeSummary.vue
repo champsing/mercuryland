@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed } from "vue";
 import { UseElementBounding } from "@vueuse/components";
-import { NCard } from "naive-ui";
+import { VaCard, VaCardTitle, VaCardContent } from "vuestic-ui";
 import { formatHMS } from "@composables/utils.ts";
 
 const props = defineProps<{ t: number }>();
@@ -12,19 +12,20 @@ function calcStyle(width: number) {
     let w = width - p * 2;
     let size = Math.floor(w / 5);
     return {
-        "--n-font-size": "" + size + "px",
+        "font-size": "" + size + "px",
     };
 }
 </script>
 
 <template>
     <use-element-bounding v-slot="{ width }">
-        <n-card
-            title="剩余时间"
-            class="font-bold text-center mb-2"
-            :style="calcStyle(width)"
-        >
-            {{ text }}
-        </n-card>
+        <VaCard :style="calcStyle(width)" class="vod-card">
+            <VaCardTitle style="font-size: 20px; justify-content: center;">
+                剩余时间
+            </VaCardTitle>
+            <VaCardContent class="font-bold text-center mb-2">
+                {{ text }}
+            </VaCardContent>
+        </VaCard>
     </use-element-bounding>
 </template>

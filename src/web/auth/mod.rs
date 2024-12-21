@@ -6,7 +6,7 @@ use jwt::{Header, Token, VerifyWithKey};
 use rand::RngCore;
 use serde::{Deserialize, Serialize};
 use sha2::Sha256;
-use std::sync::LazyLock;
+use std::{clone::Clone, sync::LazyLock};
 
 static PRIVATE_KEY: LazyLock<Hmac<Sha256>> = LazyLock::new(|| {
     let mut rng = rand::thread_rng();
@@ -15,7 +15,7 @@ static PRIVATE_KEY: LazyLock<Hmac<Sha256>> = LazyLock::new(|| {
     Hmac::new_from_slice(&bytes).expect("fail to generate HMAC key.")
 });
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 struct Claims {
     iat: u64,
     exp: u64,

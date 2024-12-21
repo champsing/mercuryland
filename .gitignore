@@ -6,7 +6,8 @@ dist
 target
 
 # App
-data
+/data
+resequencing_id
 
 # Editor
 .vscode/*

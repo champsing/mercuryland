@@ -1,7 +1,15 @@
 <script setup lang="ts">
 import { computed } from "vue";
-import { NCard, NScrollbar } from "naive-ui";
-import { VaDivider } from "vuestic-ui";
+import {
+    VaCard,
+    VaCardContent,
+    VaDivider,
+    VaScrollContainer,
+    VaList,
+    VaListLabel,
+    VaListItem,
+    VaListItemSection,
+} from "vuestic-ui";
 import { UseElementBounding, UseWindowSize } from "@vueuse/components";
 import { parseHMS, formatHMS } from "@composables/utils.ts";
 import vodLinkData from "@assets/data/vod.json";
@@ -15,7 +23,7 @@ class DataType {
     divider: boolean;
 }
 
-const props = defineProps<{ dateRange: {start: Date, end: Date} }>();
+const props = defineProps<{ dateRange: { start: Date; end: Date } }>();
 const emit = defineEmits<{ (e: "computedTime", tag: number): void }>();
 const rawData = calcRawData();
 const data = computed(() => {
@@ -29,11 +37,8 @@ const data = computed(() => {
     );
     let i0 = filtered.findIndex((x: DataType) => x.divider);
 
-    if (i0 == null) {
-        return Array();
-    } else {
-        return filtered.slice(i0);
-    }
+    if (i0 == null) return Array();
+    else return filtered.slice(i0);
 });
 
 const lastItem = rawData[rawData.length - 1];
@@ -126,44 +131,60 @@ function calcStyle(top: number, vh: number) {
 </script>
 
 <template>
-    <n-card
-        title="计算明细"
-        class="text-center mb-2"
-        :style="{ '--n-padding-left': 0 }"
-    >
-        <use-window-size v-slot="{ height }">
-            <use-element-bounding v-slot="{ top }">
-                <n-scrollbar :style="calcStyle(top, height)">
-                    <div class="pr-6">
-                        <template v-for="item in data">
-                            <VaDivider
-                                v-if="item.divider"
-                                orientation="left"
-                                class="!mt-2 !mb-0"
-                            >
-                                <div class="flex">
-                                    <div>
-                                        {{ item.date }}
-                                    </div>
-                                    <VaDivider vertical class="-mt-2 -mb-2"/>
-                                    <div>
-                                        {{ format(item.previous) }}
-                                    </div>
-                                </div>
-                            </VaDivider>
-                            <div class="flex justify-end text-right mt-2">
-                                <div class="font-bold">
-                                    {{ item.reason }}
-                                </div>
-                                <VaDivider vertical />
-                                <div class="font-bold">
-                                    {{ format(item.offset) }}
-                                </div>
-                            </div>
-                        </template>
-                    </div>
-                </n-scrollbar>
-            </use-element-bounding>
-        </use-window-size>
-    </n-card>
+    <VaCard style="--va-card-padding: 0rem" class="h-full vod-card">
+        <VaCardContent>
+            <VaList style="--va-list-label-padding: 1rem">
+                <VaListLabel class="text-xl" color="textPrimary">
+                    计算明细
+                </VaListLabel>
+                <use-window-size v-slot="{ height }">
+                    <use-element-bounding v-slot="{ top }">
+                        <VaScrollContainer
+                            vertical
+                            color="#e0feb4"
+                            size="medium"
+                            :style="calcStyle(top, height)"
+                        >
+                            <template v-for="item in data">
+                                <VaListItem class="text-center mb-2">
+                                    <VaListItemSection>
+                                        <VaDivider
+                                            v-if="item.divider"
+                                            orientation="left"
+                                            class="mb-3"
+                                        >
+                                            <div class="flex">
+                                                <div>
+                                                    {{ item.date }}
+                                                </div>
+                                                <VaDivider
+                                                    vertical
+                                                    class="-mt-2 -mb-2"
+                                                />
+                                                <div>
+                                                    {{ format(item.previous) }}
+                                                </div>
+                                            </div>
+                                        </VaDivider>
+
+                                        <div
+                                            class="flex justify-end text-right mr-2"
+                                        >
+                                            <div class="font-bold">
+                                                {{ item.reason }}
+                                            </div>
+                                            <VaDivider vertical />
+                                            <div class="font-bold">
+                                                {{ format(item.offset) }}
+                                            </div>
+                                        </div>
+                                    </VaListItemSection>
+                                </VaListItem>
+                            </template>
+                        </VaScrollContainer>
+                    </use-element-bounding>
+                </use-window-size>
+            </VaList>
+        </VaCardContent>
+    </VaCard>
 </template>

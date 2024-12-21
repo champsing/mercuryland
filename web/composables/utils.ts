@@ -4,17 +4,9 @@ import { useToast } from "vuestic-ui";
 
 // const ccConvertText = Converter({ from: "tw", to: "cn" });
 
-export function openLink(link: string) {
-    window.open(link);
-}
-
-export function openLinkSameTab(link: string) {
-    window.open(link, "_self");
-}
-
 export function openLinks(links: Array<string>) {
     for (let i = 0; i < links.length; i++) {
-        openLink(links[i]);
+        window.open(links[i], "_blank", "noopener noreferrer");
     }
 }
 
@@ -47,6 +39,24 @@ export function formatHMS(seconds: number) {
     );
 }
 
+export function formatDate(date: Date): string {
+    let year = date.getFullYear();
+    let month = date.getMonth() + 1;
+    let day = date.getDate();
+    if (month >= 10) {
+        if (day >= 10) return `${year}-${month}-${day}`;
+        else return `${year}-${month}-0${day}`;
+    } else {
+        if (day >= 10) return `${year}-0${month}-${day}`;
+        else return `${year}-0${month}-0${day}`;
+    }
+}
+
+export function parseDate(text): Date {
+    const [year, month, day] = text.split("-");
+    return new Date(year, month - 1, day);
+}
+
 export function remainingX(el: Element) {
     return (
         document.documentElement.clientWidth -
@@ -63,9 +73,9 @@ export function remainingY(el) {
     );
 }
 
-export function interleave<T>(arr: T[], x: T): T[] {
-    return arr.flatMap((e) => [e, x]).slice(0, -1);
-}
+// export function interleave<T>(arr: T[], x: T): T[] {
+//     return arr.flatMap((e) => [e, x]).slice(0, -1);
+// }
 
 export async function copyToClipboard(text: string) {
     try {
@@ -88,3 +98,11 @@ export async function copyToClipboard(text: string) {
 //         }
 //     }).join("")
 // }
+
+export function truncateString(str, num) {
+    if (str.length > num) {
+      return str.slice(0, num) + "...";
+    } else {
+      return str;
+    }
+}

@@ -3,18 +3,18 @@ import { VaDivider } from "vuestic-ui";
 </script>
 
 <template>
-    <div class="mt-8 ml-auto mr-auto w-11/12">
+    <div class="mt-8 m-auto w-11/12">
         <div class="text-4xl text-neutral-100 text-center mt-4">
             使用條款
         </div>
         <VaDivider />
         <div class="mt-4 mb-6 text-2xl">
-            本聲明是為規範網際網路連接視聽閱覽者（下稱本站閱聽人）存取水星伺服器官網（下稱本站）所提供之多媒體內容，包括但不限於：文字、文件、圖片、影音、壓縮檔與外部連結，所應有之權利與應盡之義務，以及規範本站閱聽人與本站之管理者之權利義務關係。
+            本聲明是為規範網際網路連接視聽閱覽者（下稱「本站閱聽人」）存取水星伺服器官網（下稱「本站」）所提供之多媒體內容，包括但不限於：文字、文件、圖片、影音、壓縮檔與外部連結，所應有之權利與應盡之義務，以及規範本站閱聽人與本站之管理者之權利義務關係。
         </div>
         <ol>
             <li>
                 <!-- 1. -->
-                本站之管理者（下稱本站管理方），若未經正常程序變更，為水星伺服器管理委員會。
+                本站之管理者（下稱「本站管理方」），若未經正常程序變更，為水星伺服器管理委員會。
                 <ol>
                     <li>
                         <!-- 1.1. -->
@@ -52,7 +52,7 @@ import { VaDivider } from "vuestic-ui";
                 <li>
                     <!-- 4.2. -->
                     下載本站檔案或瀏覽本站提供之外部連結時，本站閱聽人應自行留意檔案安全與網路資通隱私權等，若檔案或連結因夾帶病毒而導致使用者電腦遭植入第三方木馬程式、竊取資料或資料完整性遭損害等任何損失，本站
-                    <div class="same-line text-red-500 font-bold text-2xl">
+                    <div class="inline text-red-500 font-bold text-2xl">
                         完全不負任何責任   
                     </div>。
                 </li>

@@ -17,7 +17,7 @@ const tabs = [
     { path: "/publication", label: "資料公開" },
     { path: "/vod", label: "直播隨選" },
     { path: "/penalty", label: "直播懲罰" },
-    { path: "/wheel", label: "幸运转盘" },
+    { path: "/wheel", label: "幸運轉盤" },
     { path: "/contact", label: "聯絡我們" },
 ];
 </script>
@@ -69,10 +69,14 @@ const tabs = [
                 -->
             &ensp;保留一切權利。
         </div>
-        <!-- <div class="mt-2">隱私權政策&ensp;|&ensp;使用條款&ensp;|&ensp;法律聲明</div> -->
+        <!-- <div class="mt-2">使用條款&ensp;|&ensp;隱私權政策&ensp;|&ensp;法律聲明</div> -->
         <div class="flex justify-center mt-2">
             <VaButton preset="secondary" border-color="#363636" to="tos">
                 <div class="text-zinc-200">使用條款</div>
+            </VaButton>
+            <VaDivider vertical />
+            <VaButton preset="secondary" border-color="#363636" to="privacy">
+                <div class="text-zinc-200">隱私權政策</div>
             </VaButton>
             <VaDivider vertical />
             <VaButton
@@ -80,6 +84,7 @@ const tabs = [
                 border-color="#363636"
                 href="https://www.youtube.com/watch?v=Yir_XAcccmY"
                 target="_blank"
+                rel="noopener noreferrer"
             >
                 <div class="text-zinc-200">使用教學</div>
             </VaButton>
@@ -89,6 +94,7 @@ const tabs = [
 
 <style>
 .va-navbar {
+    --va-navbar-padding-x: 0.7rem;
     --va-navbar-padding-y: 0.6rem;
 }
 </style>

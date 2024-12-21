@@ -1,14 +1,22 @@
 <script setup lang="ts">
-import { Ref, ref, computed } from "vue";
-import { NButton, NCard, NModal, NTable } from "naive-ui";
-import { VaButton, VaDivider } from "vuestic-ui";
+import { ref, Ref, computed } from "vue";
+import {
+    VaButton,
+    VaChip,
+    VaDataTable,
+    VaDivider,
+    VaIcon,
+    VaModal,
+    VaPopover,
+    VaProgressBar,
+} from "vuestic-ui";
 import penaltyData from "@assets/data/penalty.json";
-import penaltyStatus from "@assets/data/penalty_status.json";
 import vodData from "@assets/data/vod.json";
-import { openLink, openLinks, ofId } from "@/composables/utils";
+import { openLinks, ofId, truncateString } from "@/composables/utils";
+import { statusOf } from "@/composables/penalty";
 
 const props = defineProps<{
-    dateRange: [number, number];
+    dateRange: { start: Date; end: Date };
     status?: string;
     search: string;
 }>();
@@ -22,48 +30,76 @@ class PenaltyDataEntry {
     date: string;
     name: string;
     status: string;
-    description?: { block: string; text?: string; uri?: string }[];
+    description?: {
+        type: string;
+        text?: string;
+        uri_str?: string;
+        uri_num?: number;
+    }[];
     reapply?: { entries: { date: string; status: string }[] };
     steamID?: number;
+    progress?: number;
 }
 
-function statusOf(status: string): (typeof penaltyStatus)[0] {
-    return penaltyStatus.filter((x) => x.name == status)[0];
-}
+const CENTER = "center" as const;
+const YOUTUBE_LIVE = "https://youtube.com/live/";
 
-function vodLinkOfDate(date: string): string[] {
-    return vodData.filter((x) => x.date == date).map((x) => x.link);
-}
-
-const showPenaltyEntryModal = ref(false);
-const penaltyEntryModalContent: Ref<PenaltyDataEntry> = defineModel(
-    "penaltyEntryModalContent",
-    {
-        default: null,
-        set(value) {
-            showPenaltyEntryModal.value = !showPenaltyEntryModal.value;
-            return value;
-        },
-    }
-);
-
+const showPEM = ref(false); // showPenaltyEntryModal
 const showPenaltyScreenshotModal = ref(false);
 
-const filteredData = computed(() =>
-    filterPenaltyData(props.dateRange, props.status, props.search)
+const PEMContent: Ref<PenaltyDataEntry> = defineModel("PEMContent", {
+    default: null,
+    set(value) {
+        showPEM.value = !showPEM.value;
+        return value;
+    },
+}); // penaltyEntryModalContent
+
+// [DONE] 修正成跟 DataTable.vue 裡面一樣使用 columns {row} 形式
+const items = computed(() =>
+    filterPenaltyData(props.dateRange, props.status, props.search).slice()
 );
 
+const columns = [
+    {
+        key: "date",
+        label: "日期",
+        tdAlign: CENTER,
+        thAlign: CENTER,
+        width: 140,
+        sortable: true,
+        sortingOptions: ["desc" as const, "asc" as const, null],
+    },
+    { key: "name", label: "內容", tdAlign: CENTER, thAlign: CENTER },
+    {
+        key: "status",
+        label: "完成狀態",
+        tdAlign: CENTER,
+        thAlign: CENTER,
+        width: 140,
+    },
+];
+
+function vodLinkOfDate(date: string): string[] {
+    let linkIDArray = vodData.filter((x) => x.date == date).map((x) => x.link);
+    for (let i = 0; i < linkIDArray.length; i++)
+        linkIDArray[i] = YOUTUBE_LIVE + linkIDArray[i];
+    return linkIDArray;
+}
+
 function filterPenaltyData(
-    date: [number, number],
+    dateRange: { start: Date; end: Date },
     status: string,
     search: string
 ): typeof penaltyData {
     return penaltyData
         .filter(
             (v) =>
-                v.date >= new Date(date[0]).toISOString().slice(0, 10) &&
+                v.date >= dateRange.start.toISOString().slice(0, 10) &&
                 v.date <=
-                    new Date(date[1] + 28800000).toISOString().slice(0, 10)
+                    new Date(dateRange.end.getTime() + 28800000)
+                        .toISOString()
+                        .slice(0, 10)
         )
         .filter((v) => status == null || status == v.status)
         .filter(
@@ -76,198 +112,238 @@ function filterPenaltyData(
 </script>
 
 <template>
-    <n-table
-        :bordered="true"
-        size="small"
-        class="text-center w-full"
-        item-responsive
+    <!-- !bg-[#b91c1c] !bg-[#4d7c0f] !bg-[#047857] !bg-[#b45309] -->
+    <!-- TAILWIND CSS: DO NOT REMOVE ABOVE COMMENT -->
+    <VaDataTable
+        :items="items"
+        :columns="columns"
+        class="w-full"
+        style="--va-data-table-hover-color: #357286"
+        virtual-scroller
+        sticky-header
+        hoverable
     >
-        <thead>
-            <tr>
-                <td class="font-bold">日期</td>
-                <td class="font-bold">惩罚内容</td>
-                <td class="font-bold">完成状况</td>
-            </tr>
-        </thead>
-
-        <tbody>
-            <!-- !bg-[#b91c1c] !bg-[#4d7c0f] !bg-[#047857] !bg-[#b45309] -->
-            <!-- TAILWIND CSS: DO NOT REMOVE ABOVE COMMENT -->
-            <tr v-for="item in filteredData">
-                <td :class="`!bg-[${statusOf(item.status).color}]`">
-                    {{ item.date }}
-                </td>
-                <td :class="`!bg-[${statusOf(item.status).color}]`">
-                    <n-button
-                        @click="penaltyEntryModalContent = item"
-                        :text="true"
-                        :focusable="false"
-                    >
-                        {{ item.name }}
-                    </n-button>
-                </td>
-                <td :class="`!bg-[${statusOf(item.status).color}]`">
-                    <n-button
-                        @click="() => emit('updateStatus', item.status)"
-                        :text="true"
-                        :focusable="false"
-                    >
-                        {{ item.status }}
-                    </n-button>
-                </td>
-            </tr>
-        </tbody>
-    </n-table>
-
-    <n-modal v-model:show="showPenaltyEntryModal">
-        <n-card
-            style="width: 600px"
-            :title="penaltyEntryModalContent.name"
-            :bordered="false"
-            size="huge"
-            role="dialog"
-            aria-modal="true"
-        >
-            <template #header-extra>
-                <n-button
-                    @click="
-                        openLinks(vodLinkOfDate(penaltyEntryModalContent.date))
-                    "
+        <template #header(date)="{ label }">
+            <div class="text-sm">
+                <VaPopover
+                    icon="info"
+                    message="點擊日期可開啟當天所有直播紀錄檔"
                 >
-                    直播转盘連結
-                </n-button>
-            </template>
-            <template v-for="block in penaltyEntryModalContent.description">
-                <span v-if="block.block == 'text'">{{ block.text }}</span>
+                    {{ label }}
+                    <VaIcon name="help_outline" />
+                </VaPopover>
+            </div>
+        </template>
+        <template #header(name)="{ label }">
+            <div class="text-sm">
+                {{ label }}
+            </div>
+        </template>
+        <template #header(status)="{ label }">
+            <div class="text-sm">
+                <VaPopover icon="info" message="點擊完成狀態可快速切換">
+                    {{ label }}
+                    <VaIcon name="help_outline" />
+                </VaPopover>
+            </div>
+        </template>
 
-                <n-button
-                    v-if="block.block == 'link'"
-                    @click="openLink(block.uri)"
-                    :text="true"
-                    :focusable="false"
-                >
-                    {{ block.text }}
-                </n-button>
-
-                <n-button
-                    v-if="block.block == 'vod'"
-                    @click="openLink(ofId(vodData, parseInt(block.uri)).link)"
-                    :text="true"
-                    :focusable="false"
-                >
-                    {{ block.text }}
-                </n-button>
-
+        <!-- check day of week:  {{ new Date(value).getDay() }} -->
+        <template #cell(date)="{ value }">
+            <div class="text-center">
                 <VaButton
-                    v-if="block.block == 'penalty'"
-                    @click="
-                        () => {
-                            penaltyEntryModalContent = ofId(
-                                penaltyData,
-                                parseInt(block.uri)
-                            );
-                            showPenaltyEntryModal = !showPenaltyEntryModal;
-                        }
-                    "
-                    class="mt-1"
-                    color="#30e0e7"
-                    size="small"
-                    round
+                    color="textPrimary"
+                    preset="plain"
+                    class=""
+                    @click="openLinks(vodLinkOfDate(value))"
                 >
-                    {{ ofId(penaltyData, parseInt(block.uri)).date }}．{{
-                        ofId(penaltyData, parseInt(block.uri)).name
-                    }}
+                    {{ value }}
                 </VaButton>
+            </div>
+        </template>
 
-                <div v-if="block.block == 'image'">
+        <template #cell(name)="{ value, row }">
+            <div class="text-center">
+                <VaButton
+                    @click="PEMContent = row.rowData"
+                    preset="plain"
+                    color="textPrimary"
+                >
+                    {{ truncateString(value, 25) }}
+                </VaButton>
+            </div>
+        </template>
+        <template #cell(status)="{ value }">
+            <div class="text-center" :class="`!bg-[${statusOf(value).color}]`">
+                <VaButton
+                    @click="() => emit('updateStatus', value)"
+                    preset="plain"
+                    color="textPrimary"
+                >
+                    {{ value }}
+                </VaButton>
+            </div>
+        </template>
+    </VaDataTable>
+
+    <VaModal v-model="showPEM" hide-default-actions size="small" close-button>
+        <!-- 本體 -->
+        <div class="text-xl">
+            {{ PEMContent.name }}
+            <VaChip
+                readonly
+                outline
+                size="small"
+                :color="`${statusOf(PEMContent.status).color}`"
+                class="ml-4"
+            >
+                ● {{ PEMContent.status }}
+            </VaChip>
+        </div>
+
+        <!-- 補充說明 -->
+        <div v-if="PEMContent.description !== undefined" class="mt-4">
+            <template v-for="block in PEMContent.description">
+                <div>
+                    <span v-if="block.type == 'text'">{{ block.text }}</span>
+
                     <VaButton
+                        v-if="block.type == 'link'"
+                        :href="block.uri_str"
+                        rel="noopener noreferrer"
+                        preset="plain"
+                        color="textPrimary"
+                    >
+                        <div class="inline-block">{{ block.text }}（連結）</div>
+                    </VaButton>
+
+                    <VaButton
+                        v-if="block.type == 'vod'"
+                        :href="
+                            YOUTUBE_LIVE +
+                            `${ofId(vodData, block.uri_num).link}`
+                        "
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        color="#c82828"
+                        size="small"
+                        round
+                        class="mt-2"
+                    >
+                        {{ ofId(vodData, block.uri_num).date }}．{{
+                            ofId(vodData, block.uri_num).title
+                        }}
+                    </VaButton>
+
+                    <VaButton
+                        v-if="block.type == 'penalty'"
+                        @click="
+                            () => {
+                                PEMContent = ofId(penaltyData, block.uri_num);
+                                showPEM = !showPEM;
+                            }
+                        "
+                        color="#8fc1ff"
+                        size="small"
+                        round
+                        class="mt-4"
+                    >
+                        {{ ofId(penaltyData, block.uri_num).date }}．{{
+                            ofId(penaltyData, block.uri_num).name
+                        }}
+                    </VaButton>
+
+                    <VaButton
+                        v-if="block.type == 'image'"
                         @click="
                             showPenaltyScreenshotModal =
                                 !showPenaltyScreenshotModal
                         "
                         gradient
-                        class="mt-2"
                         color="#0e8110"
                         size="medium"
                     >
                         查看證明圖片
                     </VaButton>
-                </div>
 
-                <n-modal v-model:show="showPenaltyScreenshotModal">
-                    <img :src="`penalty/${block.uri}`" :alt="block.text" />
-                </n-modal>
-
-                <br v-if="block.block == 'br'" />
-            </template>
-
-            <template v-if="penaltyEntryModalContent.steamID !== undefined">
-                <VaDivider class="!m-2" />
-                <iframe
-                    :src="`https://store.steampowered.com/widget/${penaltyEntryModalContent.steamID}/`"
-                    frameborder="0"
-                    width="520"
-                    height="150"
-                />
-            </template>
-
-            <template v-if="penaltyEntryModalContent.reapply !== undefined">
-                <div class="mt-3">
-                    <span class="text-base">
-                        😇&nbsp;復活&ensp;
-                        <div class="same-line text-2xl text-orange-300">
-                            {{
-                                penaltyEntryModalContent.reapply?.entries.length
-                            }}
-                        </div>
-                        &ensp;次
-                    </span>
-                </div>
-                <VaDivider class="!m-1" />
-            </template>
-
-            <template
-                v-for="entry in penaltyEntryModalContent.reapply?.entries"
-            >
-                <div class="mt-1">
-                    <n-button
-                        @click="openLinks(vodLinkOfDate(entry.date))"
-                        :text="true"
-                        :focusable="false"
+                    <VaModal
+                        v-if="block.type == 'image'"
+                        v-model="showPenaltyScreenshotModal"
+                        hide-default-actions
+                        style="
+                            --va-modal-padding: 0px;
+                            width: max-content;
+                            left: 300px;
+                        "
+                        ok-text="完成"
                     >
-                        {{ entry.date }}
-                    </n-button>
-                    &ensp;
-                    <!-- !text-[#b91c1c] !text-[#4d7c0f] !text-[#047857] !text-[#b45309] -->
-                    <div class="same-line text-sm">
-                        <div
-                            v-if="entry.status == '未開始'"
-                            class="!text-[#b91c1c]"
-                        >
-                            ◼
-                        </div>
-                        <div
-                            v-if="entry.status == '已完成'"
-                            class="!text-[#4d7c0f]"
-                        >
-                            ◼
-                        </div>
-                        <div
-                            v-if="entry.status == '勉強過'"
-                            class="!text-[#047857]"
-                        >
-                            ◼
-                        </div>
-                        <div
-                            v-if="entry.status == '進行中'"
-                            class="!text-[#b45309]"
-                        >
-                            ◼
-                        </div>
-                    </div>
-                    &nbsp;{{ entry.status }}
+                        <!-- left need to be calc() -->
+                        <img
+                            :src="`penalty/${block.uri_str}`"
+                            :alt="block.text"
+                        />
+                    </VaModal>
+
+                    <br v-if="block.type == 'br'" />
                 </div>
             </template>
-        </n-card>
-    </n-modal>
+        </div>
+
+        <!-- 進度條 -->
+        <template v-if="PEMContent.progress !== undefined">
+            <VaProgressBar
+                class="mt-4"
+                :model-value="PEMContent.progress"
+                content-inside
+                show-percent
+            />
+        </template>
+
+        <!-- 復活 -->
+        <template v-if="PEMContent.reapply !== undefined">
+            <div class="mt-3">
+                <span class="text-base">
+                    😇&nbsp;復活&ensp;
+                    <div class="inline text-2xl text-orange-300">
+                        <!-- prettier-ignore -->
+                        {{ PEMContent.reapply?.entries.length }}
+                    </div>
+                    &ensp;次
+                </span>
+            </div>
+            <VaDivider class="!m-1" />
+        </template>
+
+        <!-- 復活次數 -->
+        <template v-for="entry in PEMContent.reapply?.entries">
+            <div class="mt-1">
+                <VaButton
+                    @click="openLinks(vodLinkOfDate(entry.date))"
+                    preset="plain"
+                    color="textPrimary"
+                >
+                    {{ entry.date }}
+                </VaButton>
+                &ensp;
+                <!-- colorsOfStatus -->
+                <div class="inline-block text-sm">
+                    <div :class="`!text-[${statusOf(entry.status).color}]`">
+                        ◼
+                    </div>
+                </div>
+                &nbsp;{{ entry.status }}
+            </div>
+        </template>
+
+        <!-- steam store page -->
+        <template v-if="PEMContent.steamID !== undefined">
+            <VaDivider class="!mt-4 !mb-2" />
+            <iframe
+                :src="`https://store.steampowered.com/widget/${PEMContent.steamID}/`"
+                frameborder="0"
+                width="520"
+                height="150"
+            />
+        </template>
+    </VaModal>
 </template>

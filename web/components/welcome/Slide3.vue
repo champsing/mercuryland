@@ -21,7 +21,7 @@ import NextPageButton from "./NextPageButton.vue";
                 />
             </n-gi>
             <n-gi span="2 768:1" class="relative">
-                <div class="absolute y-center x-center">
+                <div class="flex flex-col w-3/5 absolute x-center y-center">
                     <div class="text-yellow-400 font-bold text-6xl">
                         發揮您的創意，建造您夢想中的建築。
                     </div>

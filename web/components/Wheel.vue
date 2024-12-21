@@ -1,12 +1,16 @@
 <script setup lang="ts">
 import { Wheel } from "spin-wheel";
 import { ref, onMounted, reactive } from "vue";
-import { VaTextarea, VaButton, VaModal, VaSwitch } from "vuestic-ui";
+import { VaChip, VaTextarea, VaButton, VaModal, VaSwitch } from "vuestic-ui";
 const wheelContainer = ref(null);
 const isSpinning = ref(false); //轉盤旋轉中
 const isLeftAreaLocked = ref(false); //鎖定待抽區
 const clearRightArea = ref(true); //清除右邊區域
 const re = /x[1-9][0-9]*$/;
+
+let identifier = Math.round(Math.random() * 10000);
+
+while (identifier < 1000) identifier = Math.round(Math.random() * 10000);
 
 let wheel: Wheel = null;
 
@@ -29,9 +33,11 @@ const textArea = defineModel("textArea", {
                     };
                 });
         }
-        if (count(textArea.value) !== 0)
-            isSpinning.value = false; //若左邊數量不為0，則可以旋轉
-        else isSpinning.value = true;
+
+        //若左邊數量不為0，則可以旋轉
+        //prettier-ignore
+        count(textArea.value) !== 0 ? isSpinning.value = false : isSpinning.value = true;
+
         return value;
     },
 });
@@ -46,7 +52,6 @@ function checkLeftTextAreaNull() {
         return true;
     }
 }
-
 
 function spin() {
     if (checkLeftTextAreaNull()) return;
@@ -69,9 +74,11 @@ function rest() {
 
 function move() {
     // copy text to new area
-    textArea2.value += "\n";
-    textArea2.value += modal.text;
-    
+    if (textArea2.value == "") textArea2.value += modal.text;
+    else {
+        textArea2.value += "\n";
+        textArea2.value += modal.text;
+    }
 
     // delete text in old area
     textArea.value = wheel.items
@@ -137,15 +144,20 @@ const modal2 = reactive({
 </script>
 
 <template>
-    <div class="mt-8 ml-auto mr-auto w-11/12">
+    <div class="mt-8 m-auto w-11/12">
         <div class="flex w-full justify-end">
+            <div>
+                <VaChip color="#e16004" class="mt-4 mr-3" readonly> BETA </VaChip>
+            </div>
+
             <div class="text-lime-400 font-bold text-4xl bg-black text-right">
-                BETA
+                {{ identifier }}
             </div>
         </div>
 
         <div class="flex w-full justify-evenly">
             <div class="wheel-wrapper w-2/5 -mt-20" ref="wheelContainer"></div>
+
             <div class="w-1/5">
                 <div class="va-h4">待抽区 ({{ count(textArea) }}个)</div>
                 <VaTextarea
@@ -191,6 +203,7 @@ const modal2 = reactive({
                 <div class="h-44"></div>
             </div>
         </div>
+
         <VaModal
             v-model="modal.show"
             noDismiss
@@ -207,18 +220,18 @@ const modal2 = reactive({
             noDismiss
             @ok="
                 () => {
-                    if (clearRightArea == true) textArea2 = '';
-                    else textArea = '';
+                    clearRightArea == true ? (textArea2 = '') : (textArea = '');
                     checkLeftTextAreaNull();
                 }
             "
         >
             您确定要清空
-            <div v-if="clearRightArea == true" class="same-line text-2xl ">抽中區</div>
-            <div v-if="clearRightArea == false" class="same-line text-2xl ">待抽區</div>
+            <div v-if="clearRightArea" class="inline text-2xl">抽中區</div>
+            <div v-else class="inline text-2xl">待抽區</div>
             吗?
-            <div v-if="clearRightArea == true" class="text-4xl text-right text-[#1aedab]">清→</div>
-            <div v-if="clearRightArea == false" class="text-4xl text-right text-[#bae64c]">←清</div>
+            <!-- prettier-ignore -->
+            <div v-if="clearRightArea" class="text-4xl text-right text-[#1aedab]">清→</div>
+            <div v-else class="text-4xl text-right text-[#bae64c]">←清</div>
         </VaModal>
     </div>
 </template>
