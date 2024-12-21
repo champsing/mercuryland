@@ -6,7 +6,7 @@ const email = "0.flunky-sojourn@icloud.com";
 
 <template>
     <div class="mt-8 m-auto w-11/12">
-        <div class="text-4xl text-neutral-100 text-center mt-4">使用條款</div>
+        <div class="text-4xl text-neutral-100 text-center mt-4">隱私權政策</div>
         <VaDivider />
         <div class="mt-4 mb-4 text-2xl">
             本聲明是為規範網際網路連接視聽閱覽者（下稱「您」）存取水星伺服器官網（下稱「本站」）時，所提供之可識別數據、網路連接記錄等可直接識別特定個人連接本站或存取本站提供之內容與服務之身份資訊或資料（下稱個人資料）的蒐集、處理、管理、保存方式，與告知您對於您的個人資料的相關權利事項。
