@@ -58,7 +58,7 @@ const email = "0.flunky-sojourn@icloud.com";
             </li>
         </ol>
         <div class="paragraph-title">二、個人資料的保護</div>
-        <span class="ml-64"> 我們採取以下措施保護您的個人資料： </span>
+        <span class="ml-60"> 我們採取以下措施保護您的個人資料： </span>
         <ol class="mt-2">
             <li>
                 <!-- 2.1. -->
@@ -74,7 +74,7 @@ const email = "0.flunky-sojourn@icloud.com";
             </li>
         </ol>
         <div class="paragraph-title">三、瀏覽外部連結時的資料處理</div>
-        <div class="ml-64">
+        <div class="ml-60">
             本網站可能包含指向其他網站的連結。
             <br />
             我們無法控制這些第三方網站的隱私權政策及其資料處理方式。
@@ -130,14 +130,14 @@ const email = "0.flunky-sojourn@icloud.com";
             </li>
         </ol>
         <div class="paragraph-title">六、隱私權政策的更新</div>
-        <span class="ml-64">
+        <span class="ml-60">
             我們保留隨時修改本隱私權政策的權利。若有重大變更，我們將透過電子郵件或網站公告通知您。建議您定期查閱本政策，以確保瞭解最新內容。
         </span>
         <div class="paragraph-title">七、聯絡方式</div>
-        <div class="ml-64">
+        <div class="ml-60">
             若您對本隱私權政策有任何疑問，或需行使您的個人資料權利，請使用電子郵件，或前往「聯絡我們」分頁尋找網站管理人員的Discord，我們將竭誠為您服務。
         </div>
-        <div class="ml-64 mt-4">
+        <div class="ml-60 mt-4">
             電子郵件信箱：
             <VaInput v-model="email" readonly />
             <VaButton
@@ -161,11 +161,11 @@ const email = "0.flunky-sojourn@icloud.com";
     font-size: 1.5rem;
     margin-top: 1rem;
     margin-bottom: 0.75rem;
-    margin-left: 16rem;
+    margin-left: 14rem;
 }
 
 ol li {
-    margin-left: 16rem;
+    margin-left: 14rem;
     list-style: decimal;
     list-style-position: inside;
 }
