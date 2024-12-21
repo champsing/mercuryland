@@ -17,5 +17,18 @@ rsa = "0.9"
 sha2 = "0.10"
 hmac = "0.12"
 jwt = "0.16"
+# database
+rusqlite = { version = "0.32", features = [
+    "bundled",
+    "uuid",
+    "serde_json",
+    "chrono",
+] }
+sea-query = "0.32"
+sea-query-rusqlite = { version = "0.7", features = [
+    "with-chrono",
+    "with-json",
+    "with-uuid",
+] }
 # utility
 derive_more = { version = "1.0", features = ["display", "from"] }
