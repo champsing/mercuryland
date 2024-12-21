@@ -1,6 +1,6 @@
 CREATE TABLE IF NOT EXISTS `wheel_record` (
     `id` INTEGER PRIMARY KEY NOT NULL,
-    `key` TEXT NOT NULL,
+    `secret` TEXT NOT NULL,
     `content` TEXT NOT NULL,
     `updated_at` DATETIME NOT NULL
 );
