@@ -94,8 +94,8 @@ function count(text: string): number {
 }
 
 onMounted(() => {
-    // const overlay = new Image();
-    // overlay.src = "/pointer.svg";
+    const overlay = new Image();
+    overlay.src = "/pointer.svg";
 
     const props = {
         items: [],
@@ -120,7 +120,7 @@ onMounted(() => {
             "#e11d48",
         ],
         isInteractive: false,
-        // overlayImage: overlay,
+        overlayImage: overlay,
         onRest: rest,
         onCurrentIndexChange: tick,
     };
