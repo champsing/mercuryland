@@ -24,7 +24,8 @@
             "@assets/*": ["./web/assets/*"],
             "@components/*": ["./web/components/*"],
             "@composables/*": ["./web/composables/*"],
-        }
+        },
+        "types": ["vite/client"]
     },
     "include": ["web/**/*.ts", "web/**/*.tsx", "web/**/*.vue"],
     "references": [{ "path": "./tsconfig.node.json" }]

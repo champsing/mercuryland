@@ -3,6 +3,7 @@ import { Wheel } from "spin-wheel";
 import { ref, onMounted, reactive } from "vue";
 import { VaChip, VaTextarea, VaButton, VaModal, VaSwitch } from "vuestic-ui";
 import axios from "axios";
+import { BASE_URL } from "@/composables/utils";
 
 const wheelContainer = ref(null);
 const isSpinning = ref(false); //轉盤旋轉中
@@ -14,7 +15,7 @@ let wheelConnect = reactive({
     id: 0,
     secret: ""
 })
-axios.get("/api/wheel/create").then((response) => {
+axios.get(BASE_URL + "/api/wheel/create").then((response) => {
     wheelConnect.id = response.data.id
     wheelConnect.secret = response.data.secret
 
@@ -56,7 +57,7 @@ const textArea2 = defineModel("textArea2", {
     default: "", 
     set(value: string) {
         let content = value.split("\n").filter((x) => x != "")
-        axios.post("/api/wheel/update", {
+        axios.post(BASE_URL + "/api/wheel/update", {
             id: wheelConnect.id,
             secret: wheelConnect.secret,
             content: content,

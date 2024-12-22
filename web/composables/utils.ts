@@ -1,8 +1,6 @@
-// import { Converter } from "opencc-js";
-
 import { useToast } from "vuestic-ui";
 
-// const ccConvertText = Converter({ from: "tw", to: "cn" });
+export const BASE_URL = import.meta.env.PROD ? 'https://api.mercuryland.online' : 'http://127.0.0.1:8080' 
 
 export function openLinks(links: Array<string>) {
     for (let i = 0; i < links.length; i++) {

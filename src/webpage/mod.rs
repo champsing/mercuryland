@@ -3,6 +3,7 @@ pub mod ping;
 pub mod wheel;
 
 use crate::error::ServerError;
+use actix_cors::Cors;
 use actix_files::{Files, NamedFile};
 use actix_web::{web, App, HttpServer, Responder};
 
@@ -13,8 +14,13 @@ pub async fn index() -> Result<impl Responder, ServerError> {
 }
 
 pub async fn run() -> Result<(), ServerError> {
-    HttpServer::new(move || {
+    HttpServer::new(|| {
+        let cors = Cors::default()
+            .allow_any_origin()
+            .allowed_methods(vec!["GET", "POST"]);
+
         App::new()
+            .wrap(cors)
             .service(ping::handler)
             .service(auth::login::login_handler)
             .service(auth::login::logout_logging)
