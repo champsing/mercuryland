@@ -2,7 +2,7 @@ name: Build Docker Image
 on:
     push:
         tags:
-            - build-docker
+            - '*'
 
 jobs:
     build:
