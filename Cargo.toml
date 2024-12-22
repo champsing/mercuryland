@@ -30,7 +30,11 @@ sea-query-rusqlite = { version = "0.7", features = [
     "with-json",
     "with-uuid",
 ] }
+# discord
+serenity = "0.12.4"
+poise = "0.6.1"
 # utility
+tokio = { version = "1.41", features = ["rt-multi-thread"] }
 derive_more = { version = "1.0", features = ["display", "from"] }
 log = "0.4"
 env_logger = "0.11"

@@ -5,6 +5,7 @@ use std::{fs, sync::LazyLock};
 pub struct Config {
     pub username: String,
     pub password: String,
+    pub discord: String,
 }
 
 pub static CONFIG: LazyLock<Config> = LazyLock::new(|| {

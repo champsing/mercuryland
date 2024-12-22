@@ -6,9 +6,10 @@ pub enum ServerError {
     SystemTime(std::time::SystemTimeError),
     Io(std::io::Error),
     Jwt(jwt::Error),
+    Json(serde_json::Error),
     Rusqlite(rusqlite::Error),
     SeaQuery(sea_query::error::Error),
-    Json(serde_json::Error),
+    Serenity(serenity::Error),
     #[from(skip)]
     Internal(String),
 }

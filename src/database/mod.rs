@@ -1,11 +1,11 @@
 mod migration;
-pub mod wheel;
+pub(crate) mod wheel;
 
 use rusqlite::Connection;
 use crate::error::ServerError;
 use std::fs;
 
-pub fn get_connection() -> Result<Connection, rusqlite::Error> {
+pub(crate) fn get_connection() -> Result<Connection, rusqlite::Error> {
     const DATABASE: &str = "data/sqlite.db";
     Connection::open(DATABASE)
 }
