@@ -16,11 +16,14 @@ jobs:
                 docker build -t mercury .
                 docker images
                 docker save --output mercury.tar mercury
-            - uses: actions/upload-artifact@v4
-              with:
-                name: mercury.tar
-                path: ./mercury.tar
-            - uses: kolpav/purge-artifacts-action@v1
+            - name: Purge Artifacts
+              uses: kolpav/purge-artifacts-action@v1
               with:
                 token: ${{ secrets.GITHUB_TOKEN }}
                 expire-in: 7days # Setting this to 0 will delete all artifacts
+            - name: Upload Artifacts
+              uses: actions/upload-artifact@v4
+              with:
+                name: mercury.tar
+                path: ./mercury.tar
+
