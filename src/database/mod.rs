@@ -1,4 +1,5 @@
 mod migration;
+pub mod wheel;
 
 use rusqlite::Connection;
 use crate::error::ServerError;

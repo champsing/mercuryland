@@ -451,7 +451,10 @@ checksum = "7e36cc9d416881d2e24f9a963be5fb1cd90966419ac844274161d10488b3e825"
 dependencies = [
  "android-tzdata",
  "iana-time-zone",
+ "js-sys",
  "num-traits",
+ "serde",
+ "wasm-bindgen",
  "windows-targets",
 ]
 
@@ -1190,6 +1193,7 @@ version = "2.7.0"
 dependencies = [
  "actix-files",
  "actix-web",
+ "chrono",
  "derive_more 1.0.0",
  "env_logger",
  "hmac",
@@ -1203,6 +1207,7 @@ dependencies = [
  "serde",
  "serde_json",
  "sha2",
+ "uuid",
 ]
 
 [[package]]
@@ -1664,6 +1669,12 @@ dependencies = [
 ]
 
 [[package]]
+name = "sha1_smol"
+version = "1.0.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "bbfa15b3dddfee50a0fff136974b3e1bde555604ba463834a7eb7deb6417705d"
+
+[[package]]
 name = "sha2"
 version = "0.10.8"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1943,6 +1954,11 @@ name = "uuid"
 version = "1.11.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "f8c5f0a0af699448548ad1a2fbf920fb4bee257eae39953ba95cb84891a0446a"
+dependencies = [
+ "getrandom",
+ "serde",
+ "sha1_smol",
+]
 
 [[package]]
 name = "v_htmlescape"
