@@ -2,15 +2,24 @@
 import { Wheel } from "spin-wheel";
 import { ref, onMounted, reactive } from "vue";
 import { VaChip, VaTextarea, VaButton, VaModal, VaSwitch } from "vuestic-ui";
+import axios from "axios";
+
 const wheelContainer = ref(null);
 const isSpinning = ref(false); //轉盤旋轉中
 const isLeftAreaLocked = ref(false); //鎖定待抽區
 const clearRightArea = ref(true); //清除右邊區域
 const re = /x[1-9][0-9]*$/;
 
-let identifier = Math.round(Math.random() * 10000);
+let identifier = reactive({
+    display: "----",
+    secret: ""
+})
+axios.get("/api/wheel/create").then((response) => {
+    identifier.display = response.data.id.toString(16).padStart(4, '0').toUpperCase()
+    identifier.secret = response.data.secret
 
-while (identifier < 1000) identifier = Math.round(Math.random() * 10000);
+    console.log(identifier)
+})
 
 let wheel: Wheel = null;
 
@@ -151,7 +160,7 @@ const modal2 = reactive({
             </div>
 
             <div class="text-lime-400 font-bold text-4xl bg-black text-right">
-                {{ identifier }}
+                {{ identifier.display }}
             </div>
         </div>
 
