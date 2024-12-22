@@ -1,7 +1,13 @@
 <script setup lang="ts">
 import { reactive } from "vue";
 import { VaInput, VaButton, VaModal } from "vuestic-ui";
+import { Client, Account, OAuthProvider } from "appwrite";
 import axios from "axios";
+
+const client = new Client();
+client.setProject("mercuryland");
+
+const account = new Account(client);
 
 const modal = reactive({
     show: false, // should we show the modal
@@ -16,12 +22,47 @@ const form = reactive({
 
 let sessionUsername = reactive(null);
 
-function beforeOk(hide: CallableFunction) {
+async function GoogleLogin() {
+    account.createOAuth2Session(
+        OAuthProvider.Google,
+        "https://mercuryland.online/",
+        "https://mercuryland.online/"
+    );
+    sessionUsername = (await account.get()).name;
+    axios
+        .post("/api/auth/login", {
+            username: sessionUsername,
+            ip: clientIP,
+        })
+        .then((response) => {
+            localStorage.setItem("token", response.data);
+            form.username = "";
+            form.password = "";
+            modal.auth = true;
+            let log =
+                "[LOGIN] User " +
+                sessionUsername +
+                " logged in on " +
+                new Date(Date.now()) +
+                " at " +
+                clientIP +
+                ".";
+            console.log(log);
+        })
+        .catch((_) => {
+            form.password = "";
+            modal.fail = true;
+            modal.auth = false;
+        });
+    modal.show = false;
+}
+
+function beforeOk(hide?: CallableFunction) {
     axios
         .post("/api/auth/login", {
             username: form.username,
             password: form.password,
-            ip: clientIP
+            ip: clientIP,
         })
         .then((response) => {
             localStorage.setItem("token", response.data);
@@ -56,6 +97,7 @@ function beforeCancel(hide: CallableFunction) {
 }
 
 function logout() {
+    account.deleteSession("current");
     localStorage.removeItem("token");
     modal.auth = false;
 
@@ -71,7 +113,7 @@ function logout() {
 
     axios.post("/api/auth/login", {
         username: sessionUsername,
-        ip: clientIP
+        ip: clientIP,
     });
     sessionUsername = null;
 }
@@ -110,6 +152,9 @@ let clientIP = await fetch("https://api.ipify.org?format=json")
 
 <template>
     <template v-if="modal.auth">
+        <div>
+            {{ sessionUsername }}
+        </div>
         <VaButton @click="modal.show = true">登出</VaButton>
         <VaModal v-model="modal.show" @ok="logout()">
             <div>您确定要登出吗?</div>
@@ -124,7 +169,10 @@ let clientIP = await fetch("https://api.ipify.org?format=json")
             :before-ok="beforeOk"
             :before-cancel="beforeCancel"
         >
-            <div class="flex items-baseline justify-evenly h-14">
+            <div
+                id="username-sign-in"
+                class="flex items-baseline justify-evenly h-14"
+            >
                 <VaInput
                     v-model="form.username"
                     label="Username"
@@ -140,6 +188,16 @@ let clientIP = await fetch("https://api.ipify.org?format=json")
                     :error="modal.fail"
                     @input="modal.fail = false"
                 />
+            </div>
+            <div id="sign-in-with-google" class="text-center mt-6 mr-2" v-if="!modal.auth">
+                <VaButton
+                    preset="secondary"
+                    color="textPrimary"
+                    border-color="textPrimary"
+                    @click="GoogleLogin()"
+                >
+                    Log in with Google
+                </VaButton>
             </div>
         </VaModal>
     </template>
