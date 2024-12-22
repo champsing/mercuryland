@@ -10,15 +10,15 @@ const isLeftAreaLocked = ref(false); //鎖定待抽區
 const clearRightArea = ref(true); //清除右邊區域
 const re = /x[1-9][0-9]*$/;
 
-let identifier = reactive({
-    display: "----",
+let wheelConnect = reactive({
+    id: 0,
     secret: ""
 })
 axios.get("/api/wheel/create").then((response) => {
-    identifier.display = response.data.id.toString(16).padStart(4, '0').toUpperCase()
-    identifier.secret = response.data.secret
+    wheelConnect.id = response.data.id
+    wheelConnect.secret = response.data.secret
 
-    console.log(identifier)
+    console.log(wheelConnect)
 })
 
 let wheel: Wheel = null;
@@ -51,7 +51,19 @@ const textArea = defineModel("textArea", {
     },
 });
 
-const textArea2 = defineModel("textArea2", { type: String, default: "" });
+const textArea2 = defineModel("textArea2", { 
+    type: String, 
+    default: "", 
+    set(value: string) {
+        let content = value.split("\n").filter((x) => x != "")
+        axios.post("/api/wheel/update", {
+            id: wheelConnect.id,
+            secret: wheelConnect.secret,
+            content: content,
+        })
+        return value;
+    }
+});
 
 function checkLeftTextAreaNull() {
     if (count(textArea.value) == 0) {
@@ -160,7 +172,7 @@ const modal2 = reactive({
             </div>
 
             <div class="text-lime-400 font-bold text-4xl bg-black text-right">
-                {{ identifier.display }}
+                {{ wheelConnect.id.toString(16).padStart(4, '0').toUpperCase() }}
             </div>
         </div>
 
