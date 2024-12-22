@@ -1,7 +1,7 @@
-<!-- <script setup lang="ts">
+<script setup lang="ts">
 import { reactive } from "vue";
 import { VaInput, VaButton, VaModal } from "vuestic-ui";
-// import { Client, Account, OAuthProvider } from "appwrite";
+import { Client, Account, OAuthProvider } from "appwrite";
 import axios from "axios";
 
 const client = new Client();
@@ -203,5 +203,4 @@ let clientIP = await fetch("https://api.ipify.org?format=json")
     </template>
 </template>
 
-<style scoped></style> -->
-<template></template>
+<style scoped></style>
