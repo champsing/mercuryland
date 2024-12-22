@@ -16,6 +16,8 @@ async fn main() -> std::io::Result<()> {
             .service(web::auth::login::login_handler)
             .service(web::auth::login::logout_logging)
             .service(web::auth::tick::handler)
+            .service(web::wheel::create::handler)
+            .service(web::wheel::update::handler)
             .service(Files::new("/", "dist/").index_file("index.html"))
             .default_service(actix_web::web::to(mercury_land::index))
     })
