@@ -12,27 +12,21 @@ pub async fn index() -> Result<impl Responder, ServerError> {
         .map_err(|e| e.into())
 }
 
-pub fn init() -> Result<(), ServerError> {
-    tokio::runtime::Builder::new_multi_thread()
-        .enable_all()
-        .build()
-        .unwrap()
-        .block_on(async {
-            HttpServer::new(move || {
-                App::new()
-                    .service(ping::handler)
-                    .service(auth::login::login_handler)
-                    .service(auth::login::logout_logging)
-                    .service(auth::tick::handler)
-                    .service(wheel::create::handler)
-                    .service(wheel::update::handler)
-                    .service(Files::new("/", "dist/").index_file("index.html"))
-                    .default_service(web::to(index))
-            })
-            .bind(("0.0.0.0", 8080))?
-            .run()
-            .await
-        })?;
+pub async fn run() -> Result<(), ServerError> {
+    HttpServer::new(move || {
+        App::new()
+            .service(ping::handler)
+            .service(auth::login::login_handler)
+            .service(auth::login::logout_logging)
+            .service(auth::tick::handler)
+            .service(wheel::create::handler)
+            .service(wheel::update::handler)
+            .service(Files::new("/", "dist/").index_file("index.html"))
+            .default_service(web::to(index))
+    })
+    .bind(("0.0.0.0", 8080))?
+    .run()
+    .await?;
 
     Ok(())
 }
