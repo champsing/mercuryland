@@ -10,6 +10,7 @@ pub async fn run() -> Result<(), ServerError> {
     HttpServer::new(|| {
         let cors = Cors::default()
             .allow_any_origin()
+            .allow_any_header()
             .allowed_methods(vec!["GET", "POST"]);
 
         App::new()
