@@ -15,7 +15,7 @@ pub async fn fetch_wheel(
         Ok(i) => i,
     };
 
-    let content: Vec<String> = {
+    let mut content: (i64, Vec<String>) = {
         let mut connection = database::get_connection()?;
         let transaction = connection.transaction()?;
         let w = match Wheel::by_id(id, &transaction)? {
@@ -26,9 +26,15 @@ pub async fn fetch_wheel(
             }
             Some(w) => w,
         };
-        serde_json::from_value(w.content)?
+        (w.updated_at.timestamp(), serde_json::from_value(w.content).expect("Can't find the content"))
     };
+    
+    for i in 0..content.1.len() {
+        content.1[i] = format!("{}. {}", i + 1, content.1[i]);
+    }
 
-    ctx.say(content.join("\n")).await?;
+    let content: String = format!("<t:{}:D>\n{}", content.0, content.1.join("\n"));
+
+    ctx.say(content).await?;
     Ok(())
 }

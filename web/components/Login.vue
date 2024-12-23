@@ -3,6 +3,7 @@ import { reactive } from "vue";
 import { VaInput, VaButton, VaModal } from "vuestic-ui";
 import { Client, Account, OAuthProvider } from "appwrite";
 import axios from "axios";
+import { BASE_URL } from "@/composables/utils";
 
 const client = new Client();
 client.setProject("mercuryland");
@@ -30,7 +31,7 @@ async function GoogleLogin() {
     );
     sessionUsername = (await account.get()).name;
     axios
-        .post("/api/auth/login", {
+        .post(BASE_URL + "/api/auth/login", {
             username: sessionUsername,
             ip: clientIP,
         })
@@ -59,7 +60,7 @@ async function GoogleLogin() {
 
 function beforeOk(hide?: CallableFunction) {
     axios
-        .post("/api/auth/login", {
+        .post(BASE_URL + "/api/auth/login", {
             username: form.username,
             password: form.password,
             ip: clientIP,
@@ -111,7 +112,7 @@ function logout() {
         ".";
     console.log(log);
 
-    axios.post("/api/auth/login", {
+    axios.post(BASE_URL + "/api/auth/login", {
         username: sessionUsername,
         ip: clientIP,
     });
@@ -124,7 +125,7 @@ function tick() {
     if (token == null) modal.auth = false;
     else {
         axios
-            .post("/api/auth/tick", {
+            .post(BASE_URL + "/api/auth/tick", {
                 token: token,
             })
             .then((response) => {
