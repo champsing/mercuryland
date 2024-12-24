@@ -1,9 +1,12 @@
+use std::iter::once;
+
 use poise;
 
 use crate::{
     database::{self, wheel::Wheel},
     error::ServerError,
 };
+use itertools::Itertools;
 
 #[poise::command(slash_command)]
 pub async fn fetch_wheel(
@@ -15,7 +18,7 @@ pub async fn fetch_wheel(
         Ok(i) => i,
     };
 
-    let mut content: (i64, Vec<String>) = {
+    let (time, content): (_, Vec<String>) = {
         let mut connection = database::get_connection()?;
         let transaction = connection.transaction()?;
         let w = match Wheel::by_id(id, &transaction)? {
@@ -26,15 +29,19 @@ pub async fn fetch_wheel(
             }
             Some(w) => w,
         };
-        (w.updated_at.timestamp(), serde_json::from_value(w.content).expect("Can't find the content"))
+        (
+            w.updated_at.timestamp(),
+            serde_json::from_value(w.content).expect("Can't find the content"),
+        )
     };
-    
-    for i in 0..content.1.len() {
-        content.1[i] = format!("{}. {}", i + 1, content.1[i]);
-    }
 
-    let content: String = format!("<t:{}:D>\n{}", content.0, content.1.join("\n"));
+    let content = content
+        .into_iter()
+        .enumerate()
+        .map(|(i, s)| format!("{}. {}", i, s));
 
-    ctx.say(content).await?;
+    let message = once(format!("<t:{}:D>", time)).chain(content).join("\n");
+
+    ctx.say(message).await?;
     Ok(())
 }
