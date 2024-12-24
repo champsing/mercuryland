@@ -12,7 +12,7 @@ const clearRightArea = ref(true); //清除右邊區域
 const re = /x[1-9][0-9]*$/;
 
 let wheelConnect = reactive({
-    id: 0,
+    id: -1,
     secret: ""
 })
 axios.get(BASE_URL + "/api/wheel/create").then((response) => {
@@ -172,8 +172,8 @@ const modal2 = reactive({
                 <VaChip color="#e16004" class="mt-4 mr-3" readonly> BETA </VaChip>
             </div>
 
-            <div class="text-lime-400 font-bold text-4xl bg-black text-right">
-                {{ wheelConnect.id.toString(16).padStart(4, '0').toUpperCase() }}
+            <div class="text-lime-400 font-bold text-4xl text-right">
+                {{ wheelConnect.id == -1 ? '----' : wheelConnect.id.toString(16).padStart(4, '0').toUpperCase() }}
             </div>
         </div>
 
