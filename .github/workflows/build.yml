@@ -17,9 +17,8 @@ jobs:
           docker images
           docker save --output mercury.tar mercury
       - name: Upload Artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: mercury.tar
-          path: ./mercury.tar
-          retention-days: 1
+        run: |
+          apt-get install -y jq
+          curl -F file=@hello.txt $( curl -H 'Content-Type: application/json' -d '{"access_code": "${{ secrets.QNAP_ACCESS }}", "composed_link_id": "${{ secrets.QNAP_LINK_ID }}", "overwrite": true, "path": "/"}' -X POST https://www.myqnapcloud.com/ajax/share_upload_link | jq -r '.result.upload_url')
+
 
