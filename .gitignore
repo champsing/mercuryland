@@ -9,6 +9,9 @@ target
 /data
 resequencing_id
 
+# Docker
+mercury.tar
+
 # Editor
 .vscode/*
 !.vscode/extensions.json

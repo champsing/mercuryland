@@ -24,7 +24,7 @@ pub async fn fetch_wheel(
         let w = match Wheel::by_id(id, &transaction)? {
             None => {
                 return Err(ServerError::Internal(String::from(
-                    "Wheel id does not exists",
+                    "Wheel id does not exist",
                 )))
             }
             Some(w) => w,
