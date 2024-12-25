@@ -2,6 +2,7 @@ use crate::{config::CONFIG, error::ServerError};
 
 use super::{Claims, PRIVATE_KEY};
 use actix_web::{post, web, HttpResponse, Responder};
+use chrono::DateTime;
 use jwt::SignWithKey;
 use serde::Deserialize;
 use std::{
@@ -40,15 +41,16 @@ pub async fn login_handler(request: web::Json<Request>) -> Result<impl Responder
     if CONFIG.username == request.username && CONFIG.password == request.password {
         let claims = struct_claims();
         let token = claims.clone().sign_with_key(&*PRIVATE_KEY)?;
-
+        let iat_date_string = DateTime::from_timestamp(claims.clone().iat as i64, 0).expect("Can't get time").to_string();
+        let exp_date_string = DateTime::from_timestamp(claims.clone().exp as i64, 0).expect("Can't get time").to_string();
         let log = "[Login] User ".to_string()
             + &request.username
             + " logged in on "
-            + &claims.clone().iat.to_string()
+            + &iat_date_string
             + " at "
             + &request.ip
             + ", whose session expires on "
-            + &claims.clone().exp.to_string()
+            + &exp_date_string
             + ".";
         let log_file = OpenOptions::new()
             .append(true)
