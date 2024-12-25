@@ -1,14 +1,15 @@
-name: Check
+name: Pull Request Check
 on:
-  push:
-    branches:
-      - main
+  pull_request: 
+    types: [opened, synchronize]
+    branches: 
+      - prod
 jobs:
-  frontend:
-    name: Frontend Check
+  vue_js:
+    name: Test Vue.js
     runs-on: ubuntu-latest
     steps:
-      - name: Install Node.js
+      - name: Setup Node.js
         uses: actions/setup-node@v4
       - name: Check out Source Code
         uses: actions/checkout@v4
@@ -18,11 +19,23 @@ jobs:
           npm install
       - name: Build
         run: npm run build
-  backend:
-    name: Backend Check
+  rust:
+    name: Test Rust Test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup Rust Toolchain
+        run: rustup toolchain add nightly
+      - name: Check out Source Code
+        uses: actions/checkout@v4
+      - name: Test
+        run: cargo test
+      - name: Build
+        run: cargo build --release
+  docker:
+    name: Test Docker
     runs-on: ubuntu-latest
     steps:
       - name: Check out Source Code
         uses: actions/checkout@v4
-      - name: Build Docker Image
+      - name: Build
         run: docker build -t mercury .

@@ -27,11 +27,13 @@
         "Paon",
         "Pien",
         "rusqlite",
+        "rustup",
         "serde",
         "Smilemo",
         "stderrlog",
         "tailwindcss",
         "vfonts",
+        "vite",
         "vuestic"
     ],
     "editor.rulers": [80],
