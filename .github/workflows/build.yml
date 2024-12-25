@@ -18,6 +18,6 @@ jobs:
           docker save --output mercury.tar mercury
       - name: Upload Artifacts
         run: |
-          curl -F file=@hello.txt $( curl -H 'Content-Type: application/json' -d '{"access_code": "${{ secrets.QNAP_ACCESS }}", "composed_link_id": "${{ secrets.QNAP_LINK_ID }}", "overwrite": true, "path": "/"}' -X POST https://www.myqnapcloud.com/ajax/share_upload_link | jq -r '.result.upload_url')
+          curl -F file=@mercury.tar $( curl -H 'Content-Type: application/json' -d '{"access_code": "${{ secrets.QNAP_ACCESS }}", "composed_link_id": "${{ secrets.QNAP_LINK_ID }}", "overwrite": true, "path": "/"}' -X POST https://www.myqnapcloud.com/ajax/share_upload_link | jq -r '.result.upload_url')
 
 
