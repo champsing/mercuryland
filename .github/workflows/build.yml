@@ -1,25 +1,25 @@
 name: Build Docker Image
 on:
-    push:
-        tags:
-            - '*'
+  push:
+    branches: 
+      prod
 
 jobs:
-    build:
-        name: Build Docker Image
-        runs-on: ubuntu-latest
-        steps:
-            - name: Check out Source Code
-              uses: actions/checkout@v4
-            - name: Build Docker Image
-              run: | 
-                docker build -t mercury .
-                docker images
-                docker save --output mercury.tar mercury
-            - name: Upload Artifacts
-              uses: actions/upload-artifact@v4
-              with:
-                name: mercury.tar
-                path: ./mercury.tar
-                retention-days: 7 # keep 7 days
+  build:
+    name: Build Docker Image
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out Source Code
+        uses: actions/checkout@v4
+      - name: Build Docker Image
+        run: | 
+          docker build -t mercury .
+          docker images
+          docker save --output mercury.tar mercury
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: mercury.tar
+          path: ./mercury.tar
+          retention-days: 1
 
