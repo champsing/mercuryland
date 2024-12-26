@@ -10,4 +10,4 @@ jobs:
     if: ${{ github.event.label.name == 'merge' }}
     runs-on: ubuntu-latest
     steps:
-      - run: echo Hello
+      - run: echo ${{ github.event.pull_request.mergeable }}
