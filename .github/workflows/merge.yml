@@ -1,12 +1,13 @@
 name: Merge to prod
 on:
-  issue_comment: 
-    types: [created]
+  pull_request: 
+    types: [labeled]
+    branches: [prod]
 
 jobs:
   merge:
     name: Merge Pull Request
-    if: ${{ github.event.issue.pull_request && github.event.comment.body == '/merge' }}
+    if: ${{ github.event.label.name == 'merge' }}
     runs-on: ubuntu-latest
     steps:
       - run: echo Hello
