@@ -10,4 +10,18 @@ jobs:
     if: ${{ github.event.label.name == 'merge' }}
     runs-on: ubuntu-latest
     steps:
-      - run: echo ${{ github.event.pull_request.mergeable }}
+      - name: Check Merge Condition
+        if: ${{ github.event.pull_request.mergeable == false }}
+        run: |
+          echo the merge condition is not met
+          exit 1
+      - name: Check out Source Code
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GIT_PAT }}
+      - name: Merge to prod
+        run: |
+          git checkout ${{ github.base_ref }}
+          git merge ${{ github.head_ref }}
+          git push
+          
