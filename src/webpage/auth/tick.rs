@@ -10,7 +10,7 @@ struct Request {
     token: String,
 }
 
-#[post("/api/auth/tick")]
+#[post("/auth/tick")]
 pub async fn handler(request: web::Json<Request>) -> Result<impl Responder, ServerError> {
     let now = SystemTime::now().duration_since(UNIX_EPOCH)?.as_secs();
 

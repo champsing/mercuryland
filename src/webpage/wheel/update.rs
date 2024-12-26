@@ -13,7 +13,7 @@ struct Request {
     content: Vec<String>,
 }
 
-#[post("/api/wheel/update")]
+#[post("/wheel/update")]
 pub async fn handler(request: web::Json<Request>) -> Result<impl Responder, ServerError> {
     let mut connection = database::get_connection()?;
     let transaction = connection.transaction()?;

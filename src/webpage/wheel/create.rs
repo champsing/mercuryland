@@ -12,7 +12,7 @@ struct Response {
     secret: String,
 }
 
-#[get("/api/wheel/create")]
+#[get("/wheel/create")]
 pub async fn handler() -> Result<impl Responder, ServerError> {
     let mut connection = database::get_connection()?;
     let transaction = connection.transaction()?;

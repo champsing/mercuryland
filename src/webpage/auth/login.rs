@@ -36,7 +36,7 @@ fn struct_claims() -> Claims {
     };
 }
 
-#[post("/api/auth/login")]
+#[post("/auth/login")]
 pub async fn login_handler(request: web::Json<Request>) -> Result<impl Responder, ServerError> {
     if CONFIG.username == request.username && CONFIG.password == request.password {
         let claims = struct_claims();
@@ -64,7 +64,7 @@ pub async fn login_handler(request: web::Json<Request>) -> Result<impl Responder
     }
 }
 
-#[post("/api/auth/logout")]
+#[post("/auth/logout")]
 pub async fn logout_logging(request: web::Json<Logout>) -> String {
     let claims = struct_claims();
     let log = "[Login] User ".to_string()

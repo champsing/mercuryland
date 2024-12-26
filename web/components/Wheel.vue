@@ -13,14 +13,14 @@ const re = /x[1-9][0-9]*$/;
 
 let wheelConnect = reactive({
     id: -1,
-    secret: ""
-})
-axios.get(BASE_URL + "/api/wheel/create").then((response) => {
-    wheelConnect.id = response.data.id
-    wheelConnect.secret = response.data.secret
+    secret: "",
+});
+axios.get(BASE_URL + "/wheel/create").then((response) => {
+    wheelConnect.id = response.data.id;
+    wheelConnect.secret = response.data.secret;
 
-    console.log(wheelConnect)
-})
+    console.log(wheelConnect);
+});
 
 let wheel: Wheel = null;
 
@@ -52,19 +52,33 @@ const textArea = defineModel("textArea", {
     },
 });
 
-const textArea2 = defineModel("textArea2", { 
-    type: String, 
-    default: "", 
+const textArea2 = defineModel("textArea2", {
+    type: String,
+    default: "",
     set(value: string) {
-        let content = value.split("\n").filter((x) => x != "")
-        axios.post(BASE_URL + "/api/wheel/update", {
+        let content = value.split("\n").filter((x) => x != "");
+        axios.post(BASE_URL + "/wheel/update", {
             id: wheelConnect.id,
             secret: wheelConnect.secret,
             content: content,
-        })
+        });
         return value;
-    }
+    },
 });
+
+function submit() {
+    axios
+        .post(BASE_URL + "/wheel/submit", {
+            id: wheelConnect.id,
+            secret: wheelConnect.secret,
+        })
+        .then((response) => {
+            console.log(response);
+        })
+        .catch((error) => {
+            console.log(error);
+        });
+}
 
 function checkLeftTextAreaNull() {
     if (count(textArea.value) == 0) {
@@ -163,17 +177,29 @@ const modal = reactive({
 const modal2 = reactive({
     show: false,
 });
+const modal3 = reactive({
+    show: false,
+});
 </script>
 
 <template>
     <div class="mt-8 m-auto w-11/12">
         <div class="flex w-full justify-end">
             <div>
-                <VaChip color="#e16004" class="mt-4 mr-3" readonly> BETA </VaChip>
+                <VaChip color="#e16004" class="mt-4 mr-3" readonly>
+                    BETA
+                </VaChip>
             </div>
 
             <div class="text-lime-400 font-bold text-4xl text-right">
-                {{ wheelConnect.id == -1 ? '----' : wheelConnect.id.toString(16).padStart(4, '0').toUpperCase() }}
+                {{
+                    wheelConnect.id == -1
+                        ? "----"
+                        : wheelConnect.id
+                              .toString(16)
+                              .padStart(4, "0")
+                              .toUpperCase()
+                }}
             </div>
         </div>
 
@@ -195,6 +221,13 @@ const modal2 = reactive({
                     :disabled="isSpinning"
                 >
                     旋转
+                </VaButton>
+                <VaButton
+                    class="w-full mt-8"
+                    @click="modal3.show = true"
+                    :disabled="isSpinning"
+                >
+                    完成抽選
                 </VaButton>
                 <div class="h-44"></div>
             </div>
@@ -221,7 +254,6 @@ const modal2 = reactive({
                         :disabled="isSpinning"
                     />
                 </div>
-
                 <div class="h-44"></div>
             </div>
         </div>
@@ -254,6 +286,17 @@ const modal2 = reactive({
             <!-- prettier-ignore -->
             <div v-if="clearRightArea" class="text-4xl text-right text-[#1aedab]">清→</div>
             <div v-else class="text-4xl text-right text-[#bae64c]">←清</div>
+        </VaModal>
+        <VaModal
+            v-model="modal3.show"
+            noDismiss
+            @ok="submit"
+            ok-text="送出"
+            cancel-text="取消"
+        >
+            <div class="text-3xl">
+                確認送出?
+            </div>
         </VaModal>
     </div>
 </template>
