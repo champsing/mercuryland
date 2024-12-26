@@ -14,7 +14,7 @@ struct Request {
     secret: String,
 }
 
-#[post("/wheel/submit")]
+#[post("/api/wheel/submit")]
 pub async fn handler(
     request: web::Json<Request>,
 ) -> Result<impl Responder, ServerError> {
