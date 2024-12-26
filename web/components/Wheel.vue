@@ -57,7 +57,7 @@ const textArea2 = defineModel("textArea2", {
     default: "",
     set(value: string) {
         let content = value.split("\n").filter((x) => x != "");
-        axios.post(BASE_URL + "/wheel/update", {
+        axios.post(BASE_URL + "/api/wheel/update", {
             id: wheelConnect.id,
             secret: wheelConnect.secret,
             content: content,
@@ -68,7 +68,7 @@ const textArea2 = defineModel("textArea2", {
 
 function submit() {
     axios
-        .post(BASE_URL + "/wheel/submit", {
+        .post(BASE_URL + "/api/wheel/submit", {
             id: wheelConnect.id,
             secret: wheelConnect.secret,
         })

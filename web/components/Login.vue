@@ -31,7 +31,7 @@ async function GoogleLogin() {
     );
     sessionUsername = (await account.get()).name;
     axios
-        .post(BASE_URL + "/auth/login", {
+        .post(BASE_URL + "/api/auth/login", {
             username: sessionUsername,
             ip: clientIP,
         })
@@ -60,7 +60,7 @@ async function GoogleLogin() {
 
 function beforeOk(hide?: CallableFunction) {
     axios
-        .post(BASE_URL + "/auth/login", {
+        .post(BASE_URL + "/api/auth/login", {
             username: form.username,
             password: form.password,
             ip: clientIP,
@@ -112,7 +112,7 @@ function logout() {
         ".";
     console.log(log);
 
-    axios.post(BASE_URL + "/auth/login", {
+    axios.post(BASE_URL + "/api/auth/login", {
         username: sessionUsername,
         ip: clientIP,
     });
@@ -125,7 +125,7 @@ function tick() {
     if (token == null) modal.auth = false;
     else {
         axios
-            .post(BASE_URL + "/auth/tick", {
+            .post(BASE_URL + "/api/auth/tick", {
                 token: token,
             })
             .then((response) => {

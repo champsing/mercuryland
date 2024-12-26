@@ -1,6 +1,6 @@
 use actix_web::{get, HttpResponse, Responder};
 
-#[get("/ping")]
+#[get("/api/ping")]
 pub async fn handler() -> impl Responder {
     HttpResponse::Ok().finish()
 }
