@@ -21,7 +21,8 @@ jobs:
           token: ${{ secrets.GIT_PAT }}
       - name: Merge to prod
         run: |
-          git checkout ${{ github.base_ref }}
-          git merge ${{ github.head_ref }}
-          git push
+          git fetch
+          git checkout origin/${{ github.base_ref }}
+          git merge origin/${{ github.head_ref }}
+          git push origin HEAD:${{ github.base_ref }}
           
