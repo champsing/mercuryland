@@ -1,5 +1,6 @@
 use actix_web::ResponseError;
 use derive_more::{Display, From};
+use google_youtube3::yup_oauth2;
 
 #[derive(Debug, Display, From)]
 pub enum ServerError {
@@ -10,6 +11,7 @@ pub enum ServerError {
     Rusqlite(rusqlite::Error),
     SeaQuery(sea_query::error::Error),
     Serenity(serenity::Error),
+    YupOauth2(yup_oauth2::Error),
     #[from(skip)]
     Internal(String),
 }
