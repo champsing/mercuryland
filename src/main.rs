@@ -1,32 +1,47 @@
+use mercury_land::{discord, error::ServerError, webpage, youtube};
 use std::thread;
 use stderrlog;
-use mercury_land::{discord, error::ServerError, webpage};
 
 fn main() -> Result<(), ServerError> {
     stderrlog::new().module(module_path!()).init().unwrap();
-
     mercury_land::database::init()?;
 
-    let discord = thread::spawn(|| -> Result<(), ServerError> {
-        tokio::runtime::Builder::new_multi_thread()
-        .enable_all()
-        .build()?
-        .block_on(async { discord::run().await })?;
+    let webpage = thread::spawn(|| {
+        let res = tokio::runtime::Builder::new_current_thread()
+            .enable_all()
+            .build()?
+            .block_on(async { webpage::run().await });
 
-        Ok(())
-    });
-    
-    let webpage = thread::spawn(|| -> Result<(), ServerError> {
-        tokio::runtime::Builder::new_multi_thread()
-        .enable_all()
-        .build()?
-        .block_on(async { webpage::run().await })?;
-
-        Ok(())
+        if let Some(err) = res.err() {
+            log::error!("discord bot failed: {}", err)
+        }
     });
 
-    discord.join().unwrap()?;
+    let discord = thread::spawn(|| {
+        let res = tokio::runtime::Builder::new_multi_thread()
+            .enable_all()
+            .build()?
+            .block_on(async { discord::run().await });
+
+        if let Some(err) = res.err() {
+            log::error!("discord bot failed: {}", err)
+        }
+    });
+
+    let youtube = thread::spawn(|| {
+        let res = tokio::runtime::Builder::new_current_thread()
+            .enable_all()
+            .build()?
+            .block_on(async { youtube::run().await });
+
+        if let Some(err) = res.err() {
+            log::error!("discord bot failed: {}", err)
+        }
+    });
+
     webpage.join().unwrap()?;
+    discord.join().unwrap()?;
+    youtube.join().unwrap()?;
 
     Ok(())
 }
