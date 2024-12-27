@@ -9,19 +9,21 @@ fn main() -> Result<(), ServerError> {
     let webpage = thread::spawn(|| {
         let res = tokio::runtime::Builder::new_current_thread()
             .enable_all()
-            .build()?
-            .block_on(async { webpage::run().await });
+            .build()
+            .map_err(|err| ServerError::from(err))
+            .and_then(|rt| rt.block_on(async { webpage::run().await }));
 
         if let Some(err) = res.err() {
-            log::error!("discord bot failed: {}", err)
+            log::error!("webpage failed: {}", err)
         }
     });
 
     let discord = thread::spawn(|| {
         let res = tokio::runtime::Builder::new_multi_thread()
             .enable_all()
-            .build()?
-            .block_on(async { discord::run().await });
+            .build()
+            .map_err(|err| ServerError::from(err))
+            .and_then(|rt| rt.block_on(async { discord::run().await }));
 
         if let Some(err) = res.err() {
             log::error!("discord bot failed: {}", err)
@@ -31,17 +33,18 @@ fn main() -> Result<(), ServerError> {
     let youtube = thread::spawn(|| {
         let res = tokio::runtime::Builder::new_current_thread()
             .enable_all()
-            .build()?
-            .block_on(async { youtube::run().await });
+            .build()
+            .map_err(|err| ServerError::from(err))
+            .and_then(|rt| rt.block_on(async { youtube::run().await }));
 
         if let Some(err) = res.err() {
-            log::error!("discord bot failed: {}", err)
+            log::error!("youtube bot failed: {}", err)
         }
     });
 
-    webpage.join().unwrap()?;
-    discord.join().unwrap()?;
-    youtube.join().unwrap()?;
+    webpage.join().unwrap();
+    discord.join().unwrap();
+    youtube.join().unwrap();
 
     Ok(())
 }
