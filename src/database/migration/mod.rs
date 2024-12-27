@@ -28,10 +28,10 @@ pub fn run_migration(transaction: &rusqlite::Transaction) -> Result<(), ServerEr
     migrate!(1, "001_wheel_tables.sql");
 
     if version != VERSION {
-        Err(ServerError::Internal(format!(
+        Err(format!(
             "fail to migrate database from version {} to version {}",
             version, VERSION
-        )))
+        ).into())
     } else {
         // PRAGMA does not support value binding
         transaction.execute(format!("PRAGMA user_version = {};", version).as_str(), ())?;

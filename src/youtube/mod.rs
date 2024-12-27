@@ -1,3 +1,5 @@
+mod bot;
+
 use crate::{config::CONFIG, error::ServerError};
 use google_youtube3::{hyper_rustls, hyper_util, yup_oauth2, YouTube};
 
@@ -19,19 +21,9 @@ pub async fn run() -> Result<(), ServerError> {
                 .build(),
         );
 
-    let hub = YouTube::new(client, auth);
-
-    let result = hub
-        .live_streams()
-        .list(&vec!["snippet".into()])
-        .mine(true)
-        .doit()
-        .await;
-
-    match result {
-        Err(e) => println!("Error: {}", e),
-        Ok(res) => println!("Result: {:?}", res),
-    }
+    bot::YoutubeBot::new(YouTube::new(client, auth))
+        .start()
+        .await?;
 
     Ok(())
 }

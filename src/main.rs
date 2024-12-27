@@ -4,34 +4,39 @@ use stderrlog;
 
 fn main() -> Result<(), ServerError> {
     stderrlog::new().module(module_path!()).init().unwrap();
-
     mercury_land::database::init()?;
 
-    let discord = thread::spawn(|| -> Result<(), ServerError> {
-        tokio::runtime::Builder::new_multi_thread()
+    let webpage = thread::spawn(|| {
+        let res = tokio::runtime::Builder::new_current_thread()
             .enable_all()
             .build()?
-            .block_on(async { discord::run().await })?;
+            .block_on(async { webpage::run().await });
 
-        Ok(())
+        if let Some(err) = res.err() {
+            log::error!("discord bot failed: {}", err)
+        }
     });
 
-    let webpage = thread::spawn(|| -> Result<(), ServerError> {
-        tokio::runtime::Builder::new_current_thread()
+    let discord = thread::spawn(|| {
+        let res = tokio::runtime::Builder::new_multi_thread()
             .enable_all()
             .build()?
-            .block_on(async { webpage::run().await })?;
+            .block_on(async { discord::run().await });
 
-        Ok(())
+        if let Some(err) = res.err() {
+            log::error!("discord bot failed: {}", err)
+        }
     });
 
-    let youtube = thread::spawn(|| -> Result<(), ServerError> {
-        tokio::runtime::Builder::new_current_thread()
+    let youtube = thread::spawn(|| {
+        let res = tokio::runtime::Builder::new_current_thread()
             .enable_all()
             .build()?
-            .block_on(async { youtube::run().await })?;
+            .block_on(async { youtube::run().await });
 
-        Ok(())
+        if let Some(err) = res.err() {
+            log::error!("discord bot failed: {}", err)
+        }
     });
 
     webpage.join().unwrap()?;

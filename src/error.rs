@@ -12,7 +12,7 @@ pub enum ServerError {
     SeaQuery(sea_query::error::Error),
     Serenity(serenity::Error),
     YupOauth2(yup_oauth2::Error),
-    #[from(skip)]
+    Google(google_youtube3::Error),
     Internal(String),
 }
 
