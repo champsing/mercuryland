@@ -7,6 +7,7 @@ RUN cargo build --release
 FROM scratch
 WORKDIR /mercury
 COPY --from=build-rs /build/target/release/mercury_land ./
+COPY --from=build-rs /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
 
 EXPOSE 8080
 ENTRYPOINT [ "./mercury_land" ]

@@ -3,9 +3,8 @@ mod video;
 
 use crate::{config::CONFIG, error::ServerError};
 use google_youtube3::{
-    api::Video, common::Connector, hyper_util, yup_oauth2, YouTube,
+    api::Video, common::Connector, hyper_util, hyper_rustls, yup_oauth2, YouTube,
 };
-use hyper_rustls;
 use regex::Regex;
 use std::{thread, time::Duration};
 use video as h;
@@ -24,7 +23,7 @@ pub async fn run() -> Result<(), ServerError> {
     let client = hyper_util::client::legacy::Client::builder(hyper_util::rt::TokioExecutor::new())
         .build(
             hyper_rustls::HttpsConnectorBuilder::new()
-                .with_webpki_roots()?
+                .with_native_roots()?
                 .https_only()
                 .enable_all_versions()
                 .build(),

@@ -33,11 +33,10 @@ sea-query-rusqlite = { version = "0.7", features = [
 ] }
 # discord
 poise = "0.6.1"
-serenity = "*"
+serenity = "0.12.4"
 # youtube
 google-youtube3 = "6.0"
-hyper-rustls = { version = "*", features = ["webpki-roots"] }
-reqwest = "*"
+reqwest = "0.12"
 # logging
 log = "0.4"
 env_logger = { version = "0.11", features = [] }
