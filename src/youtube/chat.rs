@@ -79,11 +79,12 @@ pub mod coin {
         if let Some(author) = author(chat) {
             if event_type(chat) == Some(&String::from("textMessageEvent")) {
                 let coin;
+                let now = Utc::now();
                 {
                     let mut ctx = CONTEXT.lock().await;
 
                     // reset all quota after 1 day
-                    if Utc::now() > ctx.date + TimeDelta::days(1) {
+                    if now > ctx.date + TimeDelta::days(1) {
                         ctx.date += TimeDelta::days(1);
                         ctx.quota.clear();
                     }
@@ -101,6 +102,7 @@ pub mod coin {
                 let transaction = connection.transaction()?;
                 let mut user = User::get_or_create(author, &transaction)?;
                 user.coin += coin;
+                user.updated_at = now;
                 user.update(&transaction)?;
                 transaction.commit()?;
             }
