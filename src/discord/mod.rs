@@ -1,4 +1,5 @@
-pub mod wheel;
+mod coin;
+mod wheel;
 
 use crate::{config::CONFIG, error::ServerError};
 use poise;
@@ -9,7 +10,7 @@ type Context<'a> = poise::Context<'a, Data, ServerError>;
 
 pub async fn run() -> Result<(), ServerError> {
     let options = poise::FrameworkOptions {
-        commands: vec![wheel::fetch_wheel()],
+        commands: vec![wheel::fetch_wheel(), coin::coin()],
         ..Default::default()
     };
     let framework = poise::Framework::builder()
