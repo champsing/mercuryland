@@ -14,7 +14,7 @@ pub async fn run() -> Result<(), ServerError> {
 
     let auth = yup_oauth2::InstalledFlowAuthenticator::builder(
         CONFIG.youtube.clone(),
-        yup_oauth2::InstalledFlowReturnMethod::HTTPPortRedirect(CONFIG.oauth_redirect_port.clone()),
+        yup_oauth2::InstalledFlowReturnMethod::HTTPPortRedirect(25566),
     )
     .persist_tokens_to_disk("data/youtube.conf")
     .build()

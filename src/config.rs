@@ -1,6 +1,6 @@
+use google_youtube3::yup_oauth2::ApplicationSecret;
 use serde::{Deserialize, Serialize};
 use std::{fs, sync::LazyLock};
-use google_youtube3::yup_oauth2::ApplicationSecret;
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Config {
@@ -8,7 +8,6 @@ pub struct Config {
     pub password: String,
     pub discord: String,
     pub youtube: ApplicationSecret,
-    pub oauth_redirect_port: u16
 }
 
 pub static CONFIG: LazyLock<Config> = LazyLock::new(|| {
