@@ -10,7 +10,7 @@ use std::{thread, time::Duration};
 use video as h;
 
 pub async fn run() -> Result<(), ServerError> {
-    const CHANNEL_ID: &str = "UCllMvuz1DIPIoqNnur7_Pig";
+    const CHANNEL_ID: &str = "UCHir2DYN4kcH-MpPIT6sXTQ"; // oreki channel id
 
     let auth = yup_oauth2::InstalledFlowAuthenticator::builder(
         CONFIG.youtube.clone(),
