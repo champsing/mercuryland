@@ -36,7 +36,8 @@
         "tailwindcss",
         "vfonts",
         "vite",
-        "vuestic"
+        "vuestic",
+        "webpki"
     ],
     "editor.rulers": [80],
     "prettier.tabWidth": 4,
