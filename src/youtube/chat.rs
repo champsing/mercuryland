@@ -80,7 +80,7 @@ pub mod coin {
     {
         if let Some(author) = author(chat) {
             if event_type(chat) == Some(&String::from("textMessageEvent")) {
-                let coin;
+                let mut coin;
                 let now = Utc::now();
                 {
                     let mut ctx = CONTEXT.lock().await;
@@ -100,10 +100,15 @@ pub mod coin {
                     if !ctx.quota.contains_key(author) {
                         // first message in a day
                         coin = FIRST_MSG;
-                        ctx.quota.insert(author.clone(), DAY_QUOTA - FIRST_MSG);
+                        ctx.quota.insert(author.clone(), DAY_QUOTA);
                     } else {
                         coin = OTHER_MSG;
-                        *ctx.quota.get_mut(author).unwrap() -= OTHER_MSG;
+                    }
+                    
+                    // do not add coin if it's above quota.
+                    *ctx.quota.get_mut(author).unwrap() -= coin;
+                    if ctx.quota[author] < 0 {
+                        coin += ctx.quota[author];
                     }
                 }
                 let mut connection = get_connection()?;
