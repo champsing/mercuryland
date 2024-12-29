@@ -10,11 +10,11 @@ use std::{thread, time::Duration};
 use video as h;
 
 pub async fn run() -> Result<(), ServerError> {
-    const CHANNEL_ID: &str = "UCalt_7k09pL6OxW36grt6Ug";
+    const CHANNEL_ID: &str = "UCllMvuz1DIPIoqNnur7_Pig";
 
     let auth = yup_oauth2::InstalledFlowAuthenticator::builder(
         CONFIG.youtube.clone(),
-        yup_oauth2::InstalledFlowReturnMethod::HTTPRedirect,
+        yup_oauth2::InstalledFlowReturnMethod::HTTPPortRedirect(CONFIG.oauth_redirect_port.clone()),
     )
     .persist_tokens_to_disk("data/youtube.conf")
     .build()
