@@ -100,7 +100,7 @@ pub mod coin {
                 let mut connection = get_connection()?;
                 let transaction = connection.transaction()?;
                 let mut user = User::get_or_create(author, &transaction)?;
-                user.coin = coin;
+                user.coin += coin;
                 user.update(&transaction)?;
                 transaction.commit()?;
             }
