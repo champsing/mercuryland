@@ -74,10 +74,6 @@ pub async fn logout_logging(request: web::Json<Logout>) -> String {
         + " at "
         + &request.ip
         + ".";
-    let log_file = OpenOptions::new()
-        .append(true)
-        .create(true)
-        .open("data/login_history.log");
-    writeln!(log_file.expect("Can't find log file."), "{log}").expect("Can't write log.");
+    log::info!("{}", log);
     return log;
 }
