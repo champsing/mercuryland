@@ -1759,6 +1759,7 @@ dependencies = [
  "actix-cors",
  "actix-files",
  "actix-web",
+ "async-trait",
  "chrono",
  "derive_more 1.0.0",
  "env_logger",

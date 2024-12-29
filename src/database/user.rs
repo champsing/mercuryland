@@ -67,6 +67,24 @@ impl User {
         Ok(value.transpose()?)
     }
 
+    pub fn get_or_create(
+        id: impl Into<String>,
+        transaction: &Transaction,
+    ) -> Result<Self, ServerError> {
+        let id = id.into();
+        if let Some(user) = Self::by_id(id.clone(), transaction)? {
+            Ok(user)
+        } else {
+            let user = Self {
+                id,
+                coin: 0,
+                updated_at: Utc::now(),
+            };
+            user.insert(transaction)?;
+            Ok(user)
+        }
+    }
+
     pub fn update(&self, transaction: &Transaction) -> Result<(), ServerError> {
         let (query, values) = Query::update()
             .table(UserIden::Table)
