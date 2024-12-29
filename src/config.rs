@@ -7,7 +7,8 @@ pub struct Config {
     pub username: String,
     pub password: String,
     pub discord: String,
-    pub youtube: ApplicationSecret
+    pub youtube: ApplicationSecret,
+    pub oauth_redirect_port: u16
 }
 
 pub static CONFIG: LazyLock<Config> = LazyLock::new(|| {
