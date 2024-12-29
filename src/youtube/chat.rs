@@ -32,15 +32,25 @@ fn author(chat: &LiveChatMessage) -> Option<&String> {
 }
 
 pub mod log {
+    use chrono::Utc;
+    use std::{fs::OpenOptions, io::Write};
+
     use super::*;
 
     pub async fn run<C>(_: &YouTube<C>, chat: &LiveChatMessage) -> Result<(), ServerError>
     where
         C: Connector,
     {
+        let message_log = OpenOptions::new().append(true).create(true).open(format!(
+            "data/msg_logs/message_log_{}.log",
+            Utc::now().date_naive().to_string()
+        ));
         if let Some(author) = author(chat) {
             if let Some(message) = message(chat) {
                 println!("{}: {}", author, message);
+
+                writeln!(message_log.expect("Can't find log file."), "{}: {}", author, message)
+                    .expect("Can't write log.");
             }
         }
 
