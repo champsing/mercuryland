@@ -63,12 +63,14 @@ pub mod coin {
     struct Context {
         date: DateTime<Utc>,
         quota: HashMap<String, i64>,
+        spam: HashMap<String, DateTime<Utc>>
     }
 
     static CONTEXT: LazyLock<Mutex<Context>> = LazyLock::new(|| {
         Mutex::new(Context {
             date: Utc::now(),
             quota: HashMap::new(),
+            spam: HashMap::new(),
         })
     });
 
@@ -88,6 +90,12 @@ pub mod coin {
                         ctx.date += TimeDelta::days(1);
                         ctx.quota.clear();
                     }
+
+                    // do not record coins if messages are within 30 seconds
+                    if ctx.spam.contains_key(author) && now < ctx.spam[author] + TimeDelta::seconds(30) {
+                        return Ok(());
+                    }
+                    ctx.spam.insert(author.clone(), now);
 
                     if !ctx.quota.contains_key(author) {
                         // first message in a day
