@@ -1,9 +1,8 @@
 use mercury_land::{discord, error::ServerError, webpage, youtube};
 use std::thread;
-use stderrlog;
 
 fn main() -> Result<(), ServerError> {
-    stderrlog::new().module(module_path!()).init().unwrap();
+    env_logger::init();
     mercury_land::database::init()?;
 
     let webpage = thread::spawn(|| {

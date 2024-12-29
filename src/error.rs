@@ -13,6 +13,7 @@ pub enum ServerError {
     Serenity(serenity::Error),
     YupOauth2(yup_oauth2::Error),
     Google(google_youtube3::Error),
+    Reqwest(reqwest::Error),
     Internal(String),
 }
 

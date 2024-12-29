@@ -1,11 +1,10 @@
-use std::thread;
-use std::time::Duration;
-
 use crate::error::ServerError;
-use google_youtube3::api::{LiveBroadcast, LiveChatMessage};
+use google_youtube3::api::{LiveBroadcast, LiveChatMessage, Video};
 use google_youtube3::common::Connector;
 use google_youtube3::YouTube;
-use log::*;
+use regex::Regex;
+use std::thread;
+use std::time::Duration;
 
 pub(super) struct YoutubeBot<C>
 where
@@ -24,36 +23,67 @@ where
 
     pub async fn start(&self) -> Result<(), ServerError> {
         loop {
-            let part = vec!["snippet".into()];
-            let (_, res) = self
-                .youtube
-                .live_broadcasts()
-                .list(&part)
-                .broadcast_status("active")
-                .mine(true)
-                .doit()
-                .await?;
-
-            if let Some(broadcasts) = res.items {
-                if let Some(broadcast) = broadcasts.first() {
-                    self.handle_broadcast(broadcast).await?;
-                }
+            if let Some(id) = self.is_broadcast_ready().await? {
+                let broadcast = self
+                    .get_video(&id)
+                    .await?
+                    .ok_or::<ServerError>(format!("cannot find broadcast {}", id).into())?;
+                self.handle_broadcast(&broadcast).await?;
             }
 
-            thread::sleep(Duration::from_secs(600));
+            thread::sleep(Duration::from_secs(60));
         }
     }
 
-    async fn handle_broadcast(&self, broadcast: &LiveBroadcast) -> Result<(), ServerError> {
+    async fn is_broadcast_ready(&self) -> Result<Option<String>, ServerError> {
+        const CHANNEL_ID: &str = "UCalt_7k09pL6OxW36grt6Ug";
+        let response = reqwest::get(format!(
+            "https://www.youtube.com/channel/{}/live",
+            CHANNEL_ID
+        ))
+        .await?;
+        let text = response.text().await?;
+
+        if text.matches("\"isLive\":true").count() >= 2 {
+            let re = Regex::new(r#"video_id=([_0-9a-zA-Z]*)"}"#).unwrap();
+            if let Some(captures) = re.captures(&text) {
+                let id = &captures[1];
+                return Ok(Some(id.into()));
+            }
+            log::error!("broadcast is ready but no id found");
+        }
+
+        Ok(None)
+    }
+
+    async fn get_video(&self, id: &String) -> Result<Option<Video>, ServerError> {
+        let part = vec!["liveStreamingDetails".into()];
+        let (_, res) = self
+            .youtube
+            .videos()
+            .list(&part)
+            .add_id(id)
+            .doit()
+            .await?;
+
+        if let Some(videos) = res.items {
+            if let Some(video) = videos.into_iter().next() {
+                // select the first broadcast available
+                return Ok(Some(video));
+            }
+        }
+
+        return Ok(None);
+    }
+
+    async fn handle_broadcast(&self, broadcast: &Video) -> Result<(), ServerError> {
         let live_chat_id = broadcast
-            .snippet
+            .live_streaming_details
             .as_ref()
-            .map(|x| x.live_chat_id.as_ref())
+            .map(|x| x.active_live_chat_id.as_ref())
             .flatten()
             .ok_or::<ServerError>(String::from("no live chat id").into())?;
         let part = vec!["snippet".into(), "authorDetails".into()];
-
-        info!("Youtube broadcast started");
 
         let mut next_page: Option<String> = None;
         loop {
@@ -95,7 +125,7 @@ where
     }
 
     async fn handle_message(&self, message: &LiveChatMessage) -> Result<(), ServerError> {
-        log::info!("{:?}", message);
+        println!("-------------- {:?}", message);
 
         Ok(())
     }
