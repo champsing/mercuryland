@@ -1,8 +1,9 @@
 mod migration;
 pub(crate) mod wheel;
+pub(crate) mod user;
 
-use rusqlite::Connection;
 use crate::error::ServerError;
+use rusqlite::Connection;
 use std::fs;
 
 pub(crate) fn get_connection() -> Result<Connection, rusqlite::Error> {
@@ -17,6 +18,21 @@ pub fn init() -> Result<(), ServerError> {
     let tran = conn.transaction()?;
     migration::run_migration(&tran)?;
     tran.commit()?;
-    
+
     Ok(())
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_init() -> Result<(), ServerError> {
+        let mut connection = Connection::open_in_memory()?;
+        let transaction = connection.transaction()?;
+        migration::run_migration(&transaction)?;
+        transaction.commit()?;
+
+        Ok(())
+    }
 }
