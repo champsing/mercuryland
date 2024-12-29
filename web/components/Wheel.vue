@@ -225,7 +225,7 @@ const modal3 = reactive({
                 <VaButton
                     class="w-full mt-8"
                     @click="modal3.show = true"
-                    :disabled="isSpinning"
+                    :disabled="true"
                 >
                     完成抽選
                 </VaButton>
