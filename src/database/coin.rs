@@ -7,37 +7,37 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
 #[enum_def]
-pub struct User {
+pub struct Coin {
     pub id: String,
     pub coin: i64,
     pub updated_at: DateTime<Utc>,
 }
 
-impl PartialEq for User {
+impl PartialEq for Coin {
     fn eq(&self, other: &Self) -> bool {
         self.id == other.id
     }
 }
 
-impl Eq for User {}
+impl Eq for Coin {}
 
-impl TryFrom<&Row<'_>> for User {
+impl TryFrom<&Row<'_>> for Coin {
     type Error = rusqlite::Error;
 
     fn try_from(value: &Row<'_>) -> Result<Self, Self::Error> {
         Ok(Self {
-            id: value.get(UserIden::Id.as_str())?,
-            coin: value.get(UserIden::Coin.as_str())?,
-            updated_at: value.get(UserIden::UpdatedAt.as_str())?,
+            id: value.get(CoinIden::Id.as_str())?,
+            coin: value.get(CoinIden::Coin.as_str())?,
+            updated_at: value.get(CoinIden::UpdatedAt.as_str())?,
         })
     }
 }
 
-impl User {
+impl Coin {
     pub fn insert(&self, transaction: &Transaction) -> Result<(), ServerError> {
         let (query, values) = Query::insert()
-            .into_table(UserIden::Table)
-            .columns([UserIden::Id, UserIden::Coin, UserIden::UpdatedAt])
+            .into_table(CoinIden::Table)
+            .columns([CoinIden::Id, CoinIden::Coin, CoinIden::UpdatedAt])
             .values([
                 self.id.clone().into(),
                 self.coin.into(),
@@ -54,14 +54,14 @@ impl User {
         transaction: &Transaction,
     ) -> Result<Option<Self>, ServerError> {
         let (query, values) = Query::select()
-            .columns([UserIden::Id, UserIden::Coin, UserIden::UpdatedAt])
-            .from(UserIden::Table)
-            .and_where(Expr::col(UserIden::Id).eq(id.into()))
+            .columns([CoinIden::Id, CoinIden::Coin, CoinIden::UpdatedAt])
+            .from(CoinIden::Table)
+            .and_where(Expr::col(CoinIden::Id).eq(id.into()))
             .build_rusqlite(SqliteQueryBuilder);
 
         let mut statement = transaction.prepare(&query)?;
         let value = statement
-            .query_and_then(&*values.as_params(), |row| User::try_from(row))?
+            .query_and_then(&*values.as_params(), |row| Coin::try_from(row))?
             .next();
 
         Ok(value.transpose()?)
@@ -87,9 +87,9 @@ impl User {
 
     pub fn update(&self, transaction: &Transaction) -> Result<(), ServerError> {
         let (query, values) = Query::update()
-            .table(UserIden::Table)
-            .values([(UserIden::Coin, self.coin.into())])
-            .and_where(Expr::col(UserIden::Id).eq(self.id.clone()))
+            .table(CoinIden::Table)
+            .values([(CoinIden::Coin, self.coin.into())])
+            .and_where(Expr::col(CoinIden::Id).eq(self.id.clone()))
             .build_rusqlite(SqliteQueryBuilder);
         transaction.execute(&query, &*values.as_params())?;
 
@@ -111,7 +111,7 @@ mod tests {
         tran.commit()?;
 
         let tran = conn.transaction()?;
-        let user = User {
+        let user = Coin {
             id: String::from("test_id"),
             coin: 0,
             updated_at: Utc::now(),
@@ -130,7 +130,7 @@ mod tests {
         tran.commit()?;
 
         let tran = conn.transaction()?;
-        let mut u = User {
+        let mut u = Coin {
             id: String::from("test_id"),
             coin: 0,
             updated_at: Utc::now(),
@@ -139,7 +139,7 @@ mod tests {
         tran.commit()?;
 
         let tran = conn.transaction()?;
-        let u0 = User::by_id(u.id.clone(), &tran)?.expect("no value");
+        let u0 = Coin::by_id(u.id.clone(), &tran)?.expect("no value");
         assert_eq!(u.coin, u0.coin);
         tran.finish()?;
 
@@ -149,7 +149,7 @@ mod tests {
         tran.commit()?;
 
         let tran = conn.transaction()?;
-        let u1 = User::by_id(u.id.clone(), &tran)?.expect("no value");
+        let u1 = Coin::by_id(u.id.clone(), &tran)?.expect("no value");
         assert_eq!(u.coin, u1.coin);
         tran.finish()?;
 

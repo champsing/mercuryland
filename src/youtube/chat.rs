@@ -49,7 +49,7 @@ pub mod log {
 }
 
 pub mod coin {
-    use crate::database::{get_connection, user::User};
+    use crate::database::{get_connection, coin::Coin};
 
     use super::*;
     use chrono::{DateTime, TimeDelta, Utc};
@@ -113,7 +113,7 @@ pub mod coin {
                 }
                 let mut connection = get_connection()?;
                 let transaction = connection.transaction()?;
-                let mut user = User::get_or_create(author, &transaction)?;
+                let mut user = Coin::get_or_create(author, &transaction)?;
                 user.coin += coin;
                 user.updated_at = now;
                 user.update(&transaction)?;
