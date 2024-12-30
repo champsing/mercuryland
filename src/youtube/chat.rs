@@ -1,10 +1,21 @@
 use crate::error::ServerError;
+use chrono::{DateTime, Utc};
 use google_youtube3::{api::LiveChatMessage, common::Connector, YouTube};
 
 fn event_type(chat: &LiveChatMessage) -> Option<&String> {
     if let Some(content) = chat.snippet.as_ref() {
         if let Some(type_) = content.type_.as_ref() {
             return Some(type_);
+        }
+    }
+
+    None
+}
+
+fn published_at(chat: &LiveChatMessage) -> Option<DateTime<Utc>> {
+    if let Some(content) = chat.snippet.as_ref() {
+        if let Some(message) = content.published_at.as_ref() {
+            return Some(*message);
         }
     }
 
@@ -31,6 +42,16 @@ fn author(chat: &LiveChatMessage) -> Option<&String> {
     None
 }
 
+fn is_sponsor(chat: &LiveChatMessage) -> Option<bool> {
+    if let Some(content) = chat.author_details.as_ref() {
+        if let Some(is_sponsor) = content.is_chat_sponsor.as_ref() {
+            return Some(*is_sponsor);
+        }
+    }
+
+    None
+}
+
 pub mod log {
     use super::*;
 
@@ -49,75 +70,25 @@ pub mod log {
 }
 
 pub mod coin {
-    use crate::database::{get_connection, coin::Coin};
-
     use super::*;
-    use chrono::{DateTime, TimeDelta, Utc};
+    use crate::coin::CoinManager;
     use serenity::futures::lock::Mutex;
-    use std::{collections::HashMap, sync::LazyLock};
+    use std::sync::LazyLock;
 
-    const FIRST_MSG: i64 = 10;
-    const OTHER_MSG: i64 = 1;
-    const DAY_QUOTA: i64 = 50;
-
-    struct Context {
-        date: DateTime<Utc>,
-        quota: HashMap<String, i64>,
-        spam: HashMap<String, DateTime<Utc>>
-    }
-
-    static CONTEXT: LazyLock<Mutex<Context>> = LazyLock::new(|| {
-        Mutex::new(Context {
-            date: Utc::now(),
-            quota: HashMap::new(),
-            spam: HashMap::new(),
-        })
-    });
+    static CONTEXT: LazyLock<Mutex<CoinManager>> = LazyLock::new(|| Mutex::new(CoinManager::new()));
 
     pub async fn run<C>(_: &YouTube<C>, chat: &LiveChatMessage) -> Result<(), ServerError>
     where
         C: Connector,
     {
-        if let Some(author) = author(chat) {
-            if event_type(chat) == Some(&String::from("textMessageEvent")) {
-                let mut coin;
-                let now = Utc::now();
-                {
-                    let mut ctx = CONTEXT.lock().await;
-
-                    // reset all quota after 1 day
-                    if now > ctx.date + TimeDelta::days(1) {
-                        ctx.date += TimeDelta::days(1);
-                        ctx.quota.clear();
-                    }
-
-                    // do not record coins if messages are within 30 seconds
-                    if ctx.spam.contains_key(author) && now < ctx.spam[author] + TimeDelta::seconds(30) {
-                        return Ok(());
-                    }
-                    ctx.spam.insert(author.clone(), now);
-
-                    if !ctx.quota.contains_key(author) {
-                        // first message in a day
-                        coin = FIRST_MSG;
-                        ctx.quota.insert(author.clone(), DAY_QUOTA);
-                    } else {
-                        coin = OTHER_MSG;
-                    }
-                    
-                    // do not add coin if it's above quota.
-                    *ctx.quota.get_mut(author).unwrap() -= coin;
-                    if ctx.quota[author] < 0 {
-                        coin += ctx.quota[author];
+        if let Some(event_type) = event_type(chat) {
+            if let Some(published_at) = published_at(chat) {
+                if let Some(author) = author(chat) {
+                    if let Some(is_sponsor) = is_sponsor(chat) {
+                        let mut manager = CONTEXT.lock().await;
+                        manager.apply(author, is_sponsor, event_type, published_at)?;
                     }
                 }
-                let mut connection = get_connection()?;
-                let transaction = connection.transaction()?;
-                let mut user = Coin::get_or_create(author, &transaction)?;
-                user.coin += coin;
-                user.updated_at = now;
-                user.update(&transaction)?;
-                transaction.commit()?;
             }
         }
 
