@@ -10,6 +10,7 @@ use serde::{Deserialize, Serialize};
 pub struct Coin {
     pub id: String,
     pub coin: i64,
+    pub display: String,
     pub updated_at: DateTime<Utc>,
 }
 
@@ -28,6 +29,7 @@ impl TryFrom<&Row<'_>> for Coin {
         Ok(Self {
             id: value.get(CoinIden::Id.as_str())?,
             coin: value.get(CoinIden::Coin.as_str())?,
+            display: value.get(CoinIden::Display.as_str())?,
             updated_at: value.get(CoinIden::UpdatedAt.as_str())?,
         })
     }
@@ -37,10 +39,16 @@ impl Coin {
     pub fn insert(&self, transaction: &Transaction) -> Result<(), ServerError> {
         let (query, values) = Query::insert()
             .into_table(CoinIden::Table)
-            .columns([CoinIden::Id, CoinIden::Coin, CoinIden::UpdatedAt])
+            .columns([
+                CoinIden::Id,
+                CoinIden::Coin,
+                CoinIden::Display,
+                CoinIden::UpdatedAt,
+            ])
             .values([
                 self.id.clone().into(),
                 self.coin.into(),
+                self.display.clone().into(),
                 self.updated_at.into(),
             ])?
             .build_rusqlite(SqliteQueryBuilder);
@@ -54,7 +62,12 @@ impl Coin {
         transaction: &Transaction,
     ) -> Result<Option<Self>, ServerError> {
         let (query, values) = Query::select()
-            .columns([CoinIden::Id, CoinIden::Coin, CoinIden::UpdatedAt])
+            .columns([
+                CoinIden::Id,
+                CoinIden::Coin,
+                CoinIden::Display,
+                CoinIden::UpdatedAt,
+            ])
             .from(CoinIden::Table)
             .and_where(Expr::col(CoinIden::Id).eq(id.into()))
             .build_rusqlite(SqliteQueryBuilder);
@@ -69,6 +82,7 @@ impl Coin {
 
     pub fn get_or_create(
         id: impl Into<String>,
+        display: impl Into<String>,
         transaction: &Transaction,
     ) -> Result<Self, ServerError> {
         let id = id.into();
@@ -78,6 +92,7 @@ impl Coin {
             let user = Self {
                 id,
                 coin: 0,
+                display: display.into(),
                 updated_at: Utc::now(),
             };
             user.insert(transaction)?;
@@ -88,7 +103,11 @@ impl Coin {
     pub fn update(&self, transaction: &Transaction) -> Result<(), ServerError> {
         let (query, values) = Query::update()
             .table(CoinIden::Table)
-            .values([(CoinIden::Coin, self.coin.into())])
+            .values([
+                (CoinIden::Coin, self.coin.into()),
+                (CoinIden::Display, self.display.clone().into()),
+                (CoinIden::UpdatedAt, self.updated_at.into()),
+            ])
             .and_where(Expr::col(CoinIden::Id).eq(self.id.clone()))
             .build_rusqlite(SqliteQueryBuilder);
         transaction.execute(&query, &*values.as_params())?;
@@ -114,6 +133,7 @@ mod tests {
         let user = Coin {
             id: String::from("test_id"),
             coin: 0,
+            display: String::from("test_user_1"),
             updated_at: Utc::now(),
         };
         user.insert(&tran)?;
@@ -133,6 +153,7 @@ mod tests {
         let mut u = Coin {
             id: String::from("test_id"),
             coin: 0,
+            display: String::from("test_user_1"),
             updated_at: Utc::now(),
         };
         u.insert(&tran)?;
@@ -141,16 +162,22 @@ mod tests {
         let tran = conn.transaction()?;
         let u0 = Coin::by_id(u.id.clone(), &tran)?.expect("no value");
         assert_eq!(u.coin, u0.coin);
+        assert_eq!(u.display, u0.display);
+        assert_eq!(u.updated_at, u0.updated_at);
         tran.finish()?;
 
         let tran = conn.transaction()?;
         u.coin = 10;
+        u.display = String::from("test_user_2");
+        u.updated_at = Utc::now();
         u.update(&tran)?;
         tran.commit()?;
 
         let tran = conn.transaction()?;
         let u1 = Coin::by_id(u.id.clone(), &tran)?.expect("no value");
         assert_eq!(u.coin, u1.coin);
+        assert_eq!(u.display, u1.display);
+        assert_eq!(u.updated_at, u1.updated_at);
         tran.finish()?;
 
         Ok(())

@@ -23,33 +23,34 @@ impl CoinChatManager {
 
     pub fn chat(
         &mut self,
-        author: &String,
+        author_id: &String,
+        author_name: &String,
         is_sponsor: bool,
         event_type: &String,
         now: DateTime<Utc>,
     ) -> Result<(), ServerError> {
-        let coin = if is_text_message(event_type) && !self.is_spam(author, now) {
+        let coin = if is_text_message(event_type) && !self.is_spam(author_id, now) {
             self.reset_quota(now);
 
             // initial coin based on if user exists
-            let coin = if self.quota.contains_key(author) {
+            let coin = if self.quota.contains_key(author_id) {
                 self.config.coin_per_message(is_sponsor)
             } else {
                 self.config.first_message_coin(is_sponsor)
             };
             // apply quota
-            self.apply_quota(coin, author, is_sponsor)
+            self.apply_quota(coin, author_id, is_sponsor)
         } else {
             0
         };
 
         if coin != 0 {
-            println!("[+] user {} receive ${}", author, coin);
+            println!("[+] user {} receive ${}", author_id, coin);
 
             let mut connection = get_connection()?;
             let transaction = connection.transaction()?;
 
-            let mut record = Coin::get_or_create(author, &transaction)?;
+            let mut record = Coin::get_or_create(author_id, author_name, &transaction)?;
             record.coin += coin;
             record.updated_at = now;
             record.update(&transaction)?;
@@ -60,12 +61,12 @@ impl CoinChatManager {
         Ok(())
     }
 
-    fn is_spam(&mut self, author: &String, now: DateTime<Utc>) -> bool {
-        let is_spam =
-            self.spam.contains_key(author) && now < self.spam[author] + TimeDelta::seconds(30);
+    fn is_spam(&mut self, author_id: &String, now: DateTime<Utc>) -> bool {
+        let is_spam = self.spam.contains_key(author_id)
+            && now < self.spam[author_id] + TimeDelta::seconds(30);
 
         if !is_spam {
-            self.spam.insert(author.clone(), now);
+            self.spam.insert(author_id.clone(), now);
         }
 
         is_spam

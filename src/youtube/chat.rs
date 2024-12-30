@@ -41,10 +41,20 @@ fn message(chat: &LiveChatMessage) -> Option<&String> {
     None
 }
 
-fn author(chat: &LiveChatMessage) -> Option<&String> {
+fn author_id(chat: &LiveChatMessage) -> Option<&String> {
     if let Some(content) = chat.author_details.as_ref() {
         if let Some(id) = content.channel_id.as_ref() {
             return Some(id);
+        }
+    }
+
+    None
+}
+
+fn author_name(chat: &LiveChatMessage) -> Option<&String> {
+    if let Some(content) = chat.author_details.as_ref() {
+        if let Some(name) = content.display_name.as_ref() {
+            return Some(name);
         }
     }
 
@@ -69,10 +79,10 @@ pub mod logging {
     where
         C: Connector,
     {
-        unwrap_or_return!(author, chat);
+        unwrap_or_return!(author_id, chat);
         unwrap_or_return!(message, chat);
 
-        println!("{}: {}", author, message);
+        println!("{}: {}", author_id, message);
 
         Ok(())
     }
@@ -93,11 +103,12 @@ pub mod coin {
     {
         unwrap_or_return!(event_type, chat);
         unwrap_or_return!(published_at, chat);
-        unwrap_or_return!(author, chat);
+        unwrap_or_return!(author_id, chat);
+        unwrap_or_return!(author_name, chat);
         unwrap_or_return!(is_sponsor, chat);
 
         let mut manager = CONTEXT.lock().await;
-        manager.chat(author, is_sponsor, event_type, published_at)?;
+        manager.chat(author_id, author_name, is_sponsor, event_type, published_at)?;
 
         Ok(())
     }
@@ -119,7 +130,7 @@ pub mod command {
     {
         unwrap_or_return!(event_type, chat);
         unwrap_or_return!(published_at, chat);
-        unwrap_or_return!(author, chat);
+        unwrap_or_return!(author_id, chat);
         unwrap_or_return!(message, chat);
 
         if event_type != "textMessageEvent" {
@@ -140,7 +151,7 @@ pub mod command {
 
             let manager = CONTEXT.lock().await;
             manager
-                .buy_booster(author, level, &content, published_at)
+                .buy_booster(author_id, level, &content, published_at)
                 .await?;
         }
 
