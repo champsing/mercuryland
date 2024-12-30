@@ -2,6 +2,15 @@ use crate::error::ServerError;
 use chrono::{DateTime, Utc};
 use google_youtube3::{api::LiveChatMessage, common::Connector, YouTube};
 
+macro_rules! unwrap_or_return {
+    ($name:ident, $source:ident) => {
+        let $name = match $name($source) {
+            Some(x) => x,
+            None => return Ok(()),
+        };
+    };
+}
+
 fn event_type(chat: &LiveChatMessage) -> Option<&String> {
     if let Some(content) = chat.snippet.as_ref() {
         if let Some(type_) = content.type_.as_ref() {
@@ -52,18 +61,18 @@ fn is_sponsor(chat: &LiveChatMessage) -> Option<bool> {
     None
 }
 
-pub mod log {
+pub mod logging {
     use super::*;
 
+    #[allow(dead_code)]
     pub async fn run<C>(_: &YouTube<C>, chat: &LiveChatMessage) -> Result<(), ServerError>
     where
         C: Connector,
     {
-        if let Some(author) = author(chat) {
-            if let Some(message) = message(chat) {
-                println!("{}: {}", author, message);
-            }
-        }
+        unwrap_or_return!(author, chat);
+        unwrap_or_return!(message, chat);
+
+        println!("{}: {}", author, message);
 
         Ok(())
     }
@@ -71,25 +80,68 @@ pub mod log {
 
 pub mod coin {
     use super::*;
-    use crate::coin::CoinManager;
+    use crate::coin::youtube::CoinChatManager;
     use serenity::futures::lock::Mutex;
     use std::sync::LazyLock;
 
-    static CONTEXT: LazyLock<Mutex<CoinManager>> = LazyLock::new(|| Mutex::new(CoinManager::new()));
+    static CONTEXT: LazyLock<Mutex<CoinChatManager>> =
+        LazyLock::new(|| Mutex::new(CoinChatManager::new()));
 
     pub async fn run<C>(_: &YouTube<C>, chat: &LiveChatMessage) -> Result<(), ServerError>
     where
         C: Connector,
     {
-        if let Some(event_type) = event_type(chat) {
-            if let Some(published_at) = published_at(chat) {
-                if let Some(author) = author(chat) {
-                    if let Some(is_sponsor) = is_sponsor(chat) {
-                        let mut manager = CONTEXT.lock().await;
-                        manager.youtube_engagement(author, is_sponsor, event_type, published_at)?;
-                    }
-                }
+        unwrap_or_return!(event_type, chat);
+        unwrap_or_return!(published_at, chat);
+        unwrap_or_return!(author, chat);
+        unwrap_or_return!(is_sponsor, chat);
+
+        let mut manager = CONTEXT.lock().await;
+        manager.chat(author, is_sponsor, event_type, published_at)?;
+
+        Ok(())
+    }
+}
+
+pub mod command {
+    use super::*;
+    use crate::coin::command::CoinCommandManager;
+    use itertools::Itertools;
+    use serenity::futures::lock::Mutex;
+    use std::sync::LazyLock;
+
+    static CONTEXT: LazyLock<Mutex<CoinCommandManager>> =
+        LazyLock::new(|| Mutex::new(CoinCommandManager::new()));
+
+    pub async fn run<C>(_: &YouTube<C>, chat: &LiveChatMessage) -> Result<(), ServerError>
+    where
+        C: Connector,
+    {
+        unwrap_or_return!(event_type, chat);
+        unwrap_or_return!(published_at, chat);
+        unwrap_or_return!(author, chat);
+        unwrap_or_return!(message, chat);
+
+        if event_type != "textMessageEvent" {
+            return Ok(());
+        }
+
+        if message.starts_with("/booster ") {
+            let mut split = message.split_ascii_whitespace();
+            let _ = split.next(); // the first one is command, ignore.
+
+            let level = split.next().unwrap_or("").parse().unwrap_or(0);
+            if level == 0 {
+                log::warn!("{}: incorrect level", message);
+                return Ok(());
             }
+
+            let content = split.join(" ");
+
+            let manager = CONTEXT.lock().await;
+            manager
+                .buy_booster(author, level, &content, published_at)
+                .await?;
         }
 
         Ok(())

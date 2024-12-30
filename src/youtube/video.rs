@@ -14,13 +14,12 @@ fn chat_id(video: &Video) -> Option<&String> {
 }
 
 pub mod chat {
+    use google_youtube3::api::LiveChatMessage;
+
     use super::super::chat as h;
     use super::*;
 
-    pub async fn handle<C>(
-        api: &YouTube<C>,
-        video: &Video,
-    ) -> Result<(), ServerError>
+    pub async fn handle<C>(api: &YouTube<C>, video: &Video) -> Result<(), ServerError>
     where
         C: Connector,
     {
@@ -47,10 +46,11 @@ pub mod chat {
                 let polling_ms = res.polling_interval_millis.unwrap_or(0);
 
                 // process messages
-                if let Some(messages) = res.items {
-                    for message in messages {
-                        h::log::run(api, &message).await?;
-                        h::coin::run(api, &message).await?;
+                if let Some(chats) = res.items {
+                    for chat in chats {
+                        if let Err(err) = run_chat(api, &chat).await {
+                            log::error!("{:?} for {:?}", err, chat);
+                        }
                     }
                 }
 
@@ -62,6 +62,17 @@ pub mod chat {
                 thread::sleep(Duration::from_millis(polling_ms as u64));
             }
         }
+
+        Ok(())
+    }
+
+    async fn run_chat<C>(api: &YouTube<C>, chat: &LiveChatMessage) -> Result<(), ServerError>
+    where
+        C: Connector,
+    {
+        // h::log::run(api, &message).await?;
+        h::coin::run(api, &chat).await?;
+        h::command::run(api, &chat).await?;
 
         Ok(())
     }
