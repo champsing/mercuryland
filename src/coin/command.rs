@@ -20,7 +20,7 @@ impl CoinCommandManager {
         content: &String,
         now: DateTime<Utc>,
     ) -> Result<(), ServerError> {
-        const CHANNEL_ID: u64 = 1248793225767026758;
+        const CHANNEL_ID: u64 = 1191054301255180469; // 水星交易所
 
         let mut connection = get_connection()?;
         let transaction = connection.transaction()?;
