@@ -3,10 +3,13 @@ mod video;
 
 use crate::{config::CONFIG, error::ServerError};
 use google_youtube3::{
-    api::Video, common::Connector, hyper_util, hyper_rustls, yup_oauth2, YouTube,
+    api::Video, common::Connector, hyper_rustls, hyper_util, yup_oauth2, YouTube,
 };
 use regex::Regex;
-use std::{thread, time::Duration};
+use std::{
+    thread::{self},
+    time::Duration,
+};
 use video as h;
 
 pub async fn run() -> Result<(), ServerError> {

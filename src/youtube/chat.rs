@@ -86,7 +86,7 @@ pub mod coin {
                 if let Some(author) = author(chat) {
                     if let Some(is_sponsor) = is_sponsor(chat) {
                         let mut manager = CONTEXT.lock().await;
-                        manager.apply(author, is_sponsor, event_type, published_at)?;
+                        manager.youtube_engagement(author, is_sponsor, event_type, published_at)?;
                     }
                 }
             }

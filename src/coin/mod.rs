@@ -59,7 +59,7 @@ impl CoinManager {
         }
     }
 
-    pub fn apply(
+    pub fn youtube_engagement(
         &mut self,
         author: &String,
         is_sponsor: bool,
