@@ -1,7 +1,7 @@
 mod coin;
 mod wheel;
 
-use std::sync::OnceLock;
+use once_cell::sync::OnceCell as OnceLock;
 
 use crate::{config::CONFIG, error::ServerError};
 use poise;
@@ -14,16 +14,12 @@ type Context<'a> = poise::Context<'a, Data, ServerError>;
 
 static HTTP: OnceLock<Arc<Http>> = OnceLock::new();
 
-// untested
 pub async fn send_message(
     channel_id: ChannelId,
     files: Vec<CreateAttachment>,
     map: &impl serde::Serialize,
 ) -> Result<(), ServerError> {
-    if let Some(http) = HTTP.get() {
-        http.send_message(channel_id, files, map).await?;
-    }
-
+    HTTP.wait().send_message(channel_id, files, map).await?;
     Ok(())
 }
 

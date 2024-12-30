@@ -1768,6 +1768,7 @@ dependencies = [
  "itertools",
  "jwt",
  "log",
+ "once_cell",
  "poise",
  "rand",
  "regex",
