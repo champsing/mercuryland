@@ -13,10 +13,10 @@ use std::{
 use video as h;
 
 pub async fn run() -> Result<(), ServerError> {
-    const CHANNEL_ID: &str = "UCHir2DYN4kcH-MpPIT6sXTQ"; // oreki channel id
+    let channel_id: &str = CONFIG.youtube_channel_id.as_str(); // oreki channel id
 
     let auth = yup_oauth2::InstalledFlowAuthenticator::builder(
-        CONFIG.youtube.clone(),
+        CONFIG.yt_chat_viewer.clone(),
         yup_oauth2::InstalledFlowReturnMethod::HTTPPortRedirect(25566),
     )
     .persist_tokens_to_disk("data/youtube.conf")
@@ -34,7 +34,7 @@ pub async fn run() -> Result<(), ServerError> {
     let api = YouTube::new(client, auth);
 
     loop {
-        if let Some(id) = get_broadcast_id(&api, CHANNEL_ID).await? {
+        if let Some(id) = get_broadcast_id(&api, channel_id).await? {
             if let Some(video) = video_from_id(&api, &id).await? {
                 h::chat::handle(&api, &video).await?;
             } else {

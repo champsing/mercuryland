@@ -40,7 +40,7 @@ pub async fn run() -> Result<(), ServerError> {
         .build();
 
     let mut client = ClientBuilder::new(
-        &CONFIG.discord,
+        &CONFIG.discord_bot_token,
         GatewayIntents::non_privileged() | GatewayIntents::MESSAGE_CONTENT,
     )
     .framework(framework)

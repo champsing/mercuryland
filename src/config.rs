@@ -6,8 +6,10 @@ use std::{fs, sync::LazyLock};
 pub struct Config {
     pub username: String,
     pub password: String,
-    pub discord: String,
-    pub youtube: ApplicationSecret,
+    pub discord_bot_token: String,
+    pub discord_channel_id: String,
+    pub youtube_channel_id: String,
+    pub yt_chat_viewer: ApplicationSecret,
 }
 
 pub static CONFIG: LazyLock<Config> = LazyLock::new(|| {
