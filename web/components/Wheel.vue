@@ -15,7 +15,7 @@ let wheelConnect = reactive({
     id: -1,
     secret: "",
 });
-axios.get(BASE_URL + "/wheel/create").then((response) => {
+axios.get(BASE_URL + "/api/wheel/create").then((response) => {
     wheelConnect.id = response.data.id;
     wheelConnect.secret = response.data.secret;
 
