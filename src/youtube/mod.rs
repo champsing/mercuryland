@@ -14,6 +14,7 @@ use google_youtube3::{
     YouTube,
 };
 use regex::Regex;
+use serenity::all::ChannelId;
 use std::{
     future::Future,
     pin::Pin,
@@ -22,18 +23,18 @@ use std::{
 };
 use video as h;
 
-pub struct FlowDelegate1;
-impl DeviceFlowDelegate for FlowDelegate1 {
+pub struct FlowDelegateForDiscord(pub ChannelId);
+impl DeviceFlowDelegate for FlowDelegateForDiscord {
     fn present_user_code<'a>(
         &'a self,
         device_auth_resp: &'a DeviceAuthResponse,
     ) -> Pin<Box<dyn Future<Output = ()> + Send + 'a>> {
-        Box::pin(present_user_code(device_auth_resp))
+        Box::pin(present_user_code(device_auth_resp, self.0))
     }
 }
-async fn present_user_code(device_auth_resp: &DeviceAuthResponse) {
+async fn present_user_code(device_auth_resp: &DeviceAuthResponse, channel_id: ChannelId) {
     discord::send_text(
-        CONFIG.discord_channel_id.admin.into(),
+        channel_id,
         &format!(
             "Please enter {} at {} and grant access to this application",
             device_auth_resp.user_code, device_auth_resp.verification_uri
@@ -42,7 +43,7 @@ async fn present_user_code(device_auth_resp: &DeviceAuthResponse) {
     .await
     .unwrap();
     discord::send_text(
-        CONFIG.discord_channel_id.admin.into(),
+        channel_id,
         &format!("Do not close this application until you either denied or granted access."),
     )
     .await
@@ -52,7 +53,7 @@ async fn present_user_code(device_auth_resp: &DeviceAuthResponse) {
         Err(_) => device_auth_resp.expires_at, // Fallback to printing in UTC
     };
     discord::send_text(
-        CONFIG.discord_channel_id.admin.into(),
+        channel_id,
         &format!("You have time until {}.", printable_time),
     )
     .await
@@ -64,7 +65,7 @@ pub async fn run() -> Result<(), ServerError> {
 
     let auth = yup_oauth2::DeviceFlowAuthenticator::builder(CONFIG.yt_chat_viewer.clone())
         .persist_tokens_to_disk("data/youtube.conf")
-        .flow_delegate(Box::new(FlowDelegate1))
+        .flow_delegate(Box::new(FlowDelegateForDiscord(CONFIG.discord_channel_id.admin.into())))
         .build()
         .await?;
 
