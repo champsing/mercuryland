@@ -8,11 +8,20 @@ use poise;
 use poise::serenity_prelude::{ClientBuilder, GatewayIntents};
 use serenity::all::{ChannelId, CreateAttachment, Http};
 use std::sync::Arc;
+use serde_json::json;
 
 type Data = ();
 type Context<'a> = poise::Context<'a, Data, ServerError>;
 
 static HTTP: OnceLock<Arc<Http>> = OnceLock::new();
+
+pub async fn send_text(
+    channel_id: ChannelId,
+    text: &String,
+) -> Result<(), ServerError> {
+    send_message(channel_id, vec![], &json!({"content": text})).await?;
+    Ok(())
+}
 
 pub async fn send_message(
     channel_id: ChannelId,

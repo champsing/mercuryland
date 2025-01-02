@@ -1,6 +1,6 @@
 use super::config::CoinConfig;
 pub use crate::database::coin::Coin;
-use crate::{database::get_connection, discord, error::ServerError};
+use crate::{config::CONFIG, database::get_connection, discord, error::ServerError};
 use chrono::{DateTime, Utc};
 use serde_json::json;
 
@@ -20,7 +20,7 @@ impl CoinCommandManager {
         content: &String,
         now: DateTime<Utc>,
     ) -> Result<(), ServerError> {
-        const CHANNEL_ID: u64 = 1191054301255180469; // 水星交易所
+        let channel_id: u64 = CONFIG.discord_channel_id.public; // 水星交易所
 
         let mut connection = get_connection()?;
         let transaction = connection.transaction()?;
@@ -35,7 +35,7 @@ impl CoinCommandManager {
                 println!("[-] {} buy a level-{} booster for {}", user, level, content);
 
                 let content = format!("惩罚加倍: {}×{}", content, level);
-                discord::send_message(CHANNEL_ID.into(), vec![], &json!({"content": content}))
+                discord::send_message(channel_id.into(), vec![], &json!({"content": content}))
                     .await?;
             }
         }

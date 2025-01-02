@@ -7,9 +7,15 @@ pub struct Config {
     pub username: String,
     pub password: String,
     pub discord_bot_token: String,
-    pub discord_channel_id: String,
+    pub discord_channel_id: DiscordChannelID,
     pub youtube_channel_id: String,
     pub yt_chat_viewer: ApplicationSecret,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct DiscordChannelID {
+    pub admin: u64,
+    pub public: u64,
 }
 
 pub static CONFIG: LazyLock<Config> = LazyLock::new(|| {
