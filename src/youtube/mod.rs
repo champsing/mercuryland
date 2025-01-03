@@ -2,7 +2,7 @@ mod chat;
 mod video;
 
 use crate::{config::CONFIG, discord, error::ServerError};
-use actix_web::cookie::time::UtcOffset;
+use actix_web::{cookie::time::{format_description, UtcOffset}};
 use google_youtube3::{
     api::Video,
     common::Connector,
@@ -32,29 +32,43 @@ impl DeviceFlowDelegate for FlowDelegateForDiscord {
         Box::pin(present_user_code(device_auth_resp, self.0))
     }
 }
+
 async fn present_user_code(device_auth_resp: &DeviceAuthResponse, channel_id: ChannelId) {
     discord::send_text(
         channel_id,
         &format!(
-            "Please enter {} at {} and grant access to this application",
-            device_auth_resp.user_code, device_auth_resp.verification_uri
+            "請在 {} 輸入 {} 以授予本應用程式權限。",
+            device_auth_resp.verification_uri, device_auth_resp.user_code
         ),
     )
     .await
     .unwrap();
+
     discord::send_text(
         channel_id,
-        &format!("Do not close this application until you either denied or granted access."),
+        &format!("除非您已完成驗證或拒絕授權本應用程式，否則請勿關閉驗證視窗。"),
     )
     .await
     .unwrap();
+
     let printable_time = match UtcOffset::current_local_offset() {
         Ok(offset) => device_auth_resp.expires_at.to_offset(offset),
         Err(_) => device_auth_resp.expires_at, // Fallback to printing in UTC
     };
+
+    let format = format_description::parse(
+        "[year]-[month]-[day] [hour]:[minute]:[second] UTC[offset_hour \
+              sign:mandatory]",
+    );
+
+    let formatted_time = match format {
+        Ok(format) => printable_time.format(&format),
+        Err(_) => Ok(printable_time.to_string()),
+    };
+
     discord::send_text(
         channel_id,
-        &format!("You have time until {}.", printable_time),
+        &format!("驗證碼將在 {} 後失效。", formatted_time.unwrap()),
     )
     .await
     .unwrap();
@@ -65,7 +79,9 @@ pub async fn run() -> Result<(), ServerError> {
 
     let auth = yup_oauth2::DeviceFlowAuthenticator::builder(CONFIG.yt_chat_viewer.clone())
         .persist_tokens_to_disk("data/youtube.conf")
-        .flow_delegate(Box::new(FlowDelegateForDiscord(CONFIG.discord_channel_id.admin.into())))
+        .flow_delegate(Box::new(FlowDelegateForDiscord(
+            CONFIG.discord_channel_id.admin.into(),
+        )))
         .build()
         .await?;
 
