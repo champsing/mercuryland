@@ -15,12 +15,7 @@ use google_youtube3::{
 };
 use regex::Regex;
 use serenity::all::ChannelId;
-use std::{
-    future::Future,
-    pin::Pin,
-    thread::{self},
-    time::Duration,
-};
+use std::{fs::OpenOptions, future::Future, pin::Pin, thread, time::Duration};
 use video as h;
 
 pub struct FlowDelegateForDiscord(pub ChannelId);
@@ -77,6 +72,10 @@ pub async fn present_user_code(device_auth_resp: &DeviceAuthResponse, channel_id
 pub async fn run() -> Result<(), ServerError> {
     let channel_id: &str = CONFIG.youtube_channel_id.as_str(); // oreki channel id
 
+    if OpenOptions::new().read(true).open("data/youtube_chat_viewer.conf").is_err() {
+        discord::send_text(CONFIG.discord_channel_id.admin.into(), &format!("您正在執行的操作是授權我們存取您的 Google 帳號以讀取您帳號旗下的 YouTube 頻道，用於讀取惡靈直播聊天室的訊息。")).await?;
+    }
+    
     let auth = yup_oauth2::DeviceFlowAuthenticator::builder(CONFIG.yt_chat_viewer.clone())
         .persist_tokens_to_disk("data/youtube_chat_viewer.conf")
         .flow_delegate(Box::new(FlowDelegateForDiscord(
