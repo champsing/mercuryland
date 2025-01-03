@@ -35,7 +35,7 @@ pub async fn send_message(
 
 pub async fn run() -> Result<(), ServerError> {
     let options = poise::FrameworkOptions {
-        commands: vec![wheel::fetch_wheel(), coin::coin()],
+        commands: vec![wheel::fetch_wheel(), coin::coin(), link::link()],
         ..Default::default()
     };
     let framework = poise::Framework::builder()
