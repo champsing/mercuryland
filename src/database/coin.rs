@@ -9,6 +9,7 @@ use serde::{Deserialize, Serialize};
 #[enum_def]
 pub struct Coin {
     pub id: String,
+    pub discord_id: String,
     pub coin: i64,
     pub display: String,
     pub updated_at: DateTime<Utc>,
@@ -28,6 +29,7 @@ impl TryFrom<&Row<'_>> for Coin {
     fn try_from(value: &Row<'_>) -> Result<Self, Self::Error> {
         Ok(Self {
             id: value.get(CoinIden::Id.as_str())?,
+            discord_id: value.get(CoinIden::DiscordId.as_str())?,
             coin: value.get(CoinIden::Coin.as_str())?,
             display: value.get(CoinIden::Display.as_str())?,
             updated_at: value.get(CoinIden::UpdatedAt.as_str())?,
@@ -41,12 +43,14 @@ impl Coin {
             .into_table(CoinIden::Table)
             .columns([
                 CoinIden::Id,
+                CoinIden::DiscordId,
                 CoinIden::Coin,
                 CoinIden::Display,
                 CoinIden::UpdatedAt,
             ])
             .values([
                 self.id.clone().into(),
+                self.discord_id.clone().into(),
                 self.coin.into(),
                 self.display.clone().into(),
                 self.updated_at.into(),
@@ -64,6 +68,7 @@ impl Coin {
         let (query, values) = Query::select()
             .columns([
                 CoinIden::Id,
+                CoinIden::DiscordId,
                 CoinIden::Coin,
                 CoinIden::Display,
                 CoinIden::UpdatedAt,
@@ -91,6 +96,7 @@ impl Coin {
         } else {
             let user = Self {
                 id,
+                discord_id: String::new(),
                 coin: 0,
                 display: display.into(),
                 updated_at: Utc::now(),
@@ -132,6 +138,7 @@ mod tests {
         let tran = conn.transaction()?;
         let user = Coin {
             id: String::from("test_id"),
+            discord_id: String::from("test_discord_id"),
             coin: 0,
             display: String::from("test_user_1"),
             updated_at: Utc::now(),
@@ -152,6 +159,7 @@ mod tests {
         let tran = conn.transaction()?;
         let mut u = Coin {
             id: String::from("test_id"),
+            discord_id: String::from("test_discord_id"),
             coin: 0,
             display: String::from("test_user_1"),
             updated_at: Utc::now(),
