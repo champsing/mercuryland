@@ -33,7 +33,7 @@ impl DeviceFlowDelegate for FlowDelegateForDiscord {
     }
 }
 
-async fn present_user_code(device_auth_resp: &DeviceAuthResponse, channel_id: ChannelId) {
+pub async fn present_user_code(device_auth_resp: &DeviceAuthResponse, channel_id: ChannelId) {
     discord::send_text(
         channel_id,
         &format!(
@@ -78,7 +78,7 @@ pub async fn run() -> Result<(), ServerError> {
     let channel_id: &str = CONFIG.youtube_channel_id.as_str(); // oreki channel id
 
     let auth = yup_oauth2::DeviceFlowAuthenticator::builder(CONFIG.yt_chat_viewer.clone())
-        .persist_tokens_to_disk("data/youtube.conf")
+        .persist_tokens_to_disk("data/youtube_chat_viewer.conf")
         .flow_delegate(Box::new(FlowDelegateForDiscord(
             CONFIG.discord_channel_id.admin.into(),
         )))

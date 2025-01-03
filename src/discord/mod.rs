@@ -1,5 +1,6 @@
 mod coin;
 mod wheel;
+mod link;
 
 use once_cell::sync::OnceCell as OnceLock;
 

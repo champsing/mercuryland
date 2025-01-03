@@ -1,0 +1,1 @@
+ALTER TABLE `coin` ADD `discord_id` TEXT NOT NULL DEFAULT 'UNKNOWN';

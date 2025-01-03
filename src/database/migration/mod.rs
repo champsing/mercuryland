@@ -29,6 +29,7 @@ pub fn run_migration(transaction: &rusqlite::Transaction) -> Result<(), ServerEr
     migrate!(2, "002_user_tables.sql");
     migrate!(3, "003_rename_user.sql");
     migrate!(4, "004_coin_add_col.sql");
+    migrate!(5, "005_coin_add_col_discord_id.sql");
 
     if version != VERSION {
         Err(format!(
