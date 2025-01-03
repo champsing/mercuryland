@@ -18,6 +18,6 @@ pub async fn coin(
         }
     };
 
-    ctx.say(format!("{}", coin)).await?;
+    ctx.say(format!("您目前有 {} 水星幣。", coin)).await?;
     Ok(())
 }

@@ -2,7 +2,7 @@ mod chat;
 mod video;
 
 use crate::{config::CONFIG, discord, error::ServerError};
-use actix_web::{cookie::time::{format_description, UtcOffset}};
+use actix_web::cookie::time::{format_description, UtcOffset};
 use google_youtube3::{
     api::Video,
     common::Connector,
