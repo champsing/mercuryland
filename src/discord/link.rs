@@ -1,54 +1,36 @@
-use crate::{config::CONFIG, error::ServerError, youtube::FlowDelegateForDiscord};
-use google_youtube3::{
-    hyper_rustls, hyper_util,
-    yup_oauth2::{self},
-    YouTube,
-};
+use crate::{coin::youtube::Coin, database::{self, verify::Verify as VerifyFlow}, error::ServerError};
+use chrono::Utc;
 use poise;
 
 #[poise::command(slash_command)]
-pub async fn link(ctx: super::Context<'_>) -> Result<(), ServerError> {
-    let user_id = ctx.author().id.to_string();
-
-    let private_channel =
-        serenity::http::Http::create_private_channel(ctx.http(), &serde_json::json!(ctx.author()))
-            .await?;
-
-    // construct OAuth2 authenticator
-    let auth = yup_oauth2::DeviceFlowAuthenticator::builder(CONFIG.yt_chat_viewer.clone())
-        .persist_tokens_to_disk(format!("data/dc_connections/{}.conf", user_id))
-        .flow_delegate(Box::new(FlowDelegateForDiscord(private_channel.id.into())))
-        .build()
-        .await?;
-
-    // construct hyper client
-    let client = hyper_util::client::legacy::Client::builder(hyper_util::rt::TokioExecutor::new())
-        .build(
-            hyper_rustls::HttpsConnectorBuilder::new()
-                .with_native_roots()?
-                .https_only()
-                .enable_all_versions()
-                .build(),
-        );
-
-    let api = YouTube::new(client, auth);
-
-    // triggers the youtube client to get the channel id
-    let youtube_channel_id = api
-        .channels()
-        .list(&vec!["id".into()])
-        .mine(true)
-        .doit()
-        .await?;
-    
-    println!("{:?}", youtube_channel_id);
+pub async fn link(
+    ctx: super::Context<'_>,
+    #[description = "your verification code"] code: String,
+) -> Result<(), ServerError> {
+    // ctx.say("您正在執行的操作是授權我們存取您的 Google 帳號以讀取您帳號旗下的 YouTube 頻道，用於將您的 Discord 帳號與 YouTube 頻道建立內部資料庫連結。").await?;
 
     // Here should be the database connection to store the channel id
-    // let coin = {
-    //     let mut connection = database::get_connection()?;
-    //     let transaction = connection.transaction()?;
-    // };
+    let _ = {
+        let mut connection = database::get_connection()?;
+        let transaction = connection.transaction()?;
+        
+        let yotube_channel_id = match VerifyFlow::by_code(code, &transaction)? {
+            Some(v) => v.yt_ch_id,
+            None => return Err(String::from("驗證碼錯誤或不存在").into()),
+        };
 
-    // ctx.say(format!("{}", coin)).await?;
+        let _ = match Coin::by_id(yotube_channel_id, &transaction)? {
+            Some(mut r) => {
+                r.discord_id = ctx.author().id.to_string();
+                r.updated_at = Utc::now();
+                r.update(&transaction)?;
+                transaction.commit()?;
+            }
+            None => return Err(String::from("YouTube 頻道不存在，請先使用 </coin:1322897222991351848> 或在直播聊天室留言以建立您的 YouTube 頻道記錄。").into()),
+        };
+        
+    };
+    
+    ctx.say(format!("{}", "您已成功連結您的帳號至 YouTube 頻道")).await?;
     Ok(())
 }
