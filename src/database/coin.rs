@@ -61,7 +61,7 @@ impl Coin {
         Ok(())
     }
 
-    pub fn by_id(
+    pub fn by_youtube(
         id: impl Into<String>,
         transaction: &Transaction,
     ) -> Result<Option<Self>, ServerError> {
@@ -85,13 +85,39 @@ impl Coin {
         Ok(value.transpose()?)
     }
 
+    pub fn by_discord(
+        id: impl Into<String>,
+        transaction: &Transaction,
+    ) -> Result<Option<Self>, ServerError> {
+        let (query, values) = Query::select()
+            .columns([
+                CoinIden::Id,
+                CoinIden::DiscordId,
+                CoinIden::Coin,
+                CoinIden::Display,
+                CoinIden::UpdatedAt,
+            ])
+            .from(CoinIden::Table)
+            .and_where(Expr::col(CoinIden::DiscordId).eq(id.into()))
+            .build_rusqlite(SqliteQueryBuilder);
+
+        let mut statement = transaction.prepare(&query)?;
+        let value = statement
+            .query_and_then(&*values.as_params(), |row| Coin::try_from(row))?
+            .next();
+
+        Ok(value.transpose()?)
+    }
+
     pub fn get_or_create(
         id: impl Into<String>,
         display: impl Into<String>,
         transaction: &Transaction,
     ) -> Result<Self, ServerError> {
         let id = id.into();
-        if let Some(user) = Self::by_id(id.clone(), transaction)? {
+        if let Some(user) = Self::by_youtube(id.clone(), transaction)? {
+            Ok(user)
+        } else if let Some(user) = Self::by_discord(id.clone(), transaction)? {
             Ok(user)
         } else {
             let user = Self {
@@ -168,10 +194,14 @@ mod tests {
         tran.commit()?;
 
         let tran = conn.transaction()?;
-        let u0 = Coin::by_id(u.id.clone(), &tran)?.expect("no value");
+        let u0 = Coin::by_youtube(u.id.clone(), &tran)?.expect("no value");
+        let u1 = Coin::by_discord(u.discord_id.clone(), &tran)?.expect("no value");
         assert_eq!(u.coin, u0.coin);
         assert_eq!(u.display, u0.display);
         assert_eq!(u.updated_at, u0.updated_at);
+        assert_eq!(u.coin, u1.coin);
+        assert_eq!(u.display, u1.display);
+        assert_eq!(u.updated_at, u1.updated_at);
         tran.finish()?;
 
         let tran = conn.transaction()?;
@@ -182,7 +212,7 @@ mod tests {
         tran.commit()?;
 
         let tran = conn.transaction()?;
-        let u1 = Coin::by_id(u.id.clone(), &tran)?.expect("no value");
+        let u1 = Coin::by_youtube(u.id.clone(), &tran)?.expect("no value");
         assert_eq!(u.coin, u1.coin);
         assert_eq!(u.display, u1.display);
         assert_eq!(u.updated_at, u1.updated_at);

@@ -10,6 +10,7 @@ pub struct Config {
     pub discord_channel_id: DiscordChannelID,
     pub youtube_channel_id: String,
     pub yt_chat_viewer: ApplicationSecret,
+    pub dcyt_link: ApplicationSecret,
 }
 
 #[derive(Debug, Serialize, Deserialize)]

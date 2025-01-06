@@ -29,22 +29,7 @@ impl DeviceFlowDelegate for FlowDelegateForDiscord {
 }
 
 pub async fn present_user_code(device_auth_resp: &DeviceAuthResponse, channel_id: ChannelId) {
-    discord::send_text(
-        channel_id,
-        &format!(
-            "請在 {} 輸入 {} 以授予本應用程式權限。",
-            device_auth_resp.verification_uri, device_auth_resp.user_code
-        ),
-    )
-    .await
-    .unwrap();
-
-    discord::send_text(
-        channel_id,
-        &format!("除非您已完成驗證或拒絕授權本應用程式，否則請勿關閉驗證視窗。"),
-    )
-    .await
-    .unwrap();
+    
 
     let printable_time = match UtcOffset::current_local_offset() {
         Ok(offset) => device_auth_resp.expires_at.to_offset(offset),
@@ -63,7 +48,12 @@ pub async fn present_user_code(device_auth_resp: &DeviceAuthResponse, channel_id
 
     discord::send_text(
         channel_id,
-        &format!("驗證碼將在 {} 後失效。", formatted_time.unwrap()),
+        &format!(
+            "請在 {} 輸入 {} 以授予本應用程式權限。\n
+            除非您已完成驗證或拒絕授權本應用程式，否則請勿關閉驗證視窗。\n
+            驗證碼將在 {} 後失效。",
+            device_auth_resp.verification_uri, device_auth_resp.user_code, formatted_time.unwrap()
+        ),
     )
     .await
     .unwrap();

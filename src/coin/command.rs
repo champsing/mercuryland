@@ -25,7 +25,7 @@ impl CoinCommandManager {
         let mut connection = get_connection()?;
         let transaction = connection.transaction()?;
 
-        if let Some(mut record) = Coin::by_id(user, &transaction)? {
+        if let Some(mut record) = Coin::by_youtube(user, &transaction)? {
             let cost = self.config.booster_cost(level);
             if record.coin >= cost {
                 record.coin -= cost;
