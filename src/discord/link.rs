@@ -47,7 +47,6 @@ pub async fn link(ctx: super::Context<'_>) -> Result<(), ServerError> {
     let private_channel = author.create_dm_channel(ctx).await?;
 
     let auth = yup_oauth2::DeviceFlowAuthenticator::builder(CONFIG.dcyt_link.clone())
-        .persist_tokens_to_disk(format!("data/dc_connects/{}.conf", author.id))
         .flow_delegate(Box::new(FlowDelegateForDiscord(private_channel.id.into())))
         .build()
         .await?;
