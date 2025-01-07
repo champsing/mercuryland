@@ -1,10 +1,9 @@
-use std::sync::RwLock;
+use std::fs;
 
 use crate::{
     coin::youtube::Coin,
     config::CONFIG,
     database::{self},
-    discord,
     error::ServerError,
     youtube::FlowDelegateForDiscord,
 };
@@ -14,30 +13,41 @@ use google_youtube3::{
     hyper_util::{self},
     yup_oauth2, YouTube,
 };
-use poise;
-use serenity::{builder::CreateMessage, model::channel::MessageFlags};
+use poise::{self, reply::CreateReply, serenity_prelude::CreateMessage};
+
+async fn check_exist(context: super::Context<'_>) -> Result<bool, ServerError> {
+    let mut connection = database::get_connection()?;
+    let transaction = connection.transaction()?;
+    let existence = match Coin::by_discord(context.author().id.get().to_string(), &transaction) {
+        Ok(Some(_)) => true,
+        Ok(None) => false,
+        Err(_) => return Err(String::from("Account already linked").into()),
+    };
+    Ok(existence)
+}
 
 #[poise::command(slash_command)]
 pub async fn link(ctx: super::Context<'_>) -> Result<(), ServerError> {
-    let _check_exist = {
-        let mut connection = database::get_connection()?;
-        let transaction = connection.transaction()?;
-        let _ = match Coin::by_discord(ctx.author().id.get().to_string(), &transaction) {
-            Ok(..) => {
-                drop(transaction);
-                return discord::send_message(ctx.channel_id(), vec![], &CreateMessage::new().content("您已經將本帳號連結到某個 YouTube 頻道了。\n如要綁定其他 YouTube 頻道，請先解除連結或使用不同 Discord 帳號。").flags(MessageFlags::EPHEMERAL)).await;
-            }
-            Err(..) => false,
-        };
-    };
+    let author = ctx.author();
 
-    let private_channel = ctx.author().create_dm_channel(ctx).await?;
+    if check_exist(ctx).await? == true {
+        ctx.send(
+            CreateReply::default()
+            .content("您已經將本帳號連結到某個 YouTube 頻道了。\n如要綁定其他 YouTube 頻道，請先使用 </unlink> 解除連結或使用不同 Discord 帳號。")
+            .ephemeral(true)
+        ).await?;
+        return Ok(());
+    }
+
+    ctx.reply("現在開始連結 Discord 帳號至 YouTube 頻道。請依照私訊說明操作。").await?;
 
     // if the author hasn't completed OAuth2 yet
-    ctx.author().dm(ctx, CreateMessage::new().content("您正在執行的操作是授權我們存取您的 Google 帳號以讀取您帳號旗下的 YouTube 頻道，用於將您的 Discord 帳號與 YouTube 頻道建立內部資料庫連結。")).await?;
+    author.dm(ctx, CreateMessage::new().content("您正在執行的操作是授權我們存取您的 Google 帳號以讀取您帳號旗下的 YouTube 頻道，用於將您的 Discord 帳號與 YouTube 頻道建立內部資料庫連結。")).await?;
+
+    let private_channel = author.create_dm_channel(ctx).await?;
 
     let auth = yup_oauth2::DeviceFlowAuthenticator::builder(CONFIG.dcyt_link.clone())
-        .persist_tokens_to_disk(format!("data/dc_connects/{}.conf", ctx.author().id))
+        .persist_tokens_to_disk(format!("data/dc_connects/{}.conf", author.id))
         .flow_delegate(Box::new(FlowDelegateForDiscord(private_channel.id.into())))
         .build()
         .await?;
@@ -62,35 +72,100 @@ pub async fn link(ctx: super::Context<'_>) -> Result<(), ServerError> {
     let channel = match yt_ch_list.1.items {
         Some(c) => match c[0].id.clone() {
             Some(id) => id,
-            None => return discord::send_message(ctx.channel_id(), vec![], &CreateMessage::new().content("找不到您帳號中的 YouTube 頻道。\n請先於 YouTube 建立頻道，或更換其他 Google 帳號再試一次。").flags(MessageFlags::EPHEMERAL)).await
+            None => {
+                ctx.send(
+                    CreateReply::default()
+                    .content("找不到您帳號中的 YouTube 頻道。\n請先於 YouTube 建立頻道，或更換其他 Google 帳號再試一次。")
+                    .ephemeral(true)
+                ).await?;
+                return Ok(());
+            }
         },
-        None => return discord::send_message(ctx.channel_id(), vec![], &CreateMessage::new().content("找不到您帳號中的 YouTube 頻道。\n請先於 YouTube 建立頻道，或更換其他 Google 帳號再試一次。").flags(MessageFlags::EPHEMERAL)).await
+        None => {
+            ctx.send(
+                CreateReply::default()
+                .content("找不到您帳號中的 YouTube 頻道。\n請先於 YouTube 建立頻道，或更換其他 Google 帳號再試一次。")
+                .ephemeral(true)
+            ).await?;
+            return Ok(());
+        }
     };
 
-    println!("{:?}", channel);
+    let mut no_channel_found = false;
 
     // Here should be the database connection to store the channel id
     let _ = {
         let mut connection = database::get_connection()?;
         let transaction = connection.transaction()?;
 
-        let _ = match Coin::by_youtube(channel, &transaction)? {
-            Some(mut r) => {
-                r.discord_id = ctx.author().id.to_string();
+        let _ = match Coin::by_youtube(channel, &transaction) {
+            Ok(Some(mut r)) => {
+                r.discord_id = author.id.get();
                 r.updated_at = Utc::now();
                 r.update(&transaction)?;
                 transaction.commit()?;
-            }
-            None => {
-                return Err(String::from(
-                    "YouTube 頻道不存在，請先在直播聊天室留言以建立您的 YouTube 頻道記錄。",
-                )
-                .into())
-            }
+            },
+            Ok(None) => no_channel_found = true,
+            Err(_) => return Err(String::from("Database error.").into())
         };
     };
 
-    ctx.say(format!("{}", "您已成功連結您的帳號至 YouTube 頻道"))
-        .await?;
+    if no_channel_found {
+        ctx.send(
+            CreateReply::default()
+            .content("您的 YouTube 頻道不存在於資料庫，請先在直播聊天室留言以建立您的 YouTube 頻道記錄。")
+            .ephemeral(true)
+        ).await?;
+        return Ok(());
+    }
+
+    author.dm(ctx, CreateMessage::new().content("您已成功連結您的帳號至 YouTube 頻道。")).await?;
+    Ok(())
+}
+
+#[poise::command(slash_command)]
+pub async fn unlink(ctx: super::Context<'_>) -> Result<(), ServerError> {
+    let author = ctx.author();
+
+    if check_exist(ctx).await? == false {
+        ctx.send(
+            CreateReply::default()
+            .content("您還沒有將本帳號連結到 YouTube 頻道。\n如要綁定 YouTube 頻道，請使用 </link>。")
+            .ephemeral(true)
+        ).await?;
+        return Ok(());
+    }
+
+    let _ = fs::remove_file(format!("data/dc_connects/{}.conf", author.id))?;
+
+    let mut id_not_found = false;
+    // Here should be the database connection to store the channel id
+    let _ = {
+        let mut connection = database::get_connection()?;
+        let transaction = connection.transaction()?;
+
+        let _ = match Coin::by_discord(ctx.author().id.get().to_string(), &transaction) {
+            Ok(Some(mut r)) => {
+                r.discord_id = 0;
+                r.updated_at = Utc::now();
+                r.update(&transaction)?;
+                transaction.commit()?;
+            },
+            Ok(None) => id_not_found = true,
+            Err(_) => return Err(String::from("Account not yet linked").into())
+        };
+    };
+
+    if id_not_found {
+        ctx.send(
+            CreateReply::default()
+            .content("您還沒有將本帳號連結到 YouTube 頻道。\n如要綁定 YouTube 頻道，請使用 </link>。")
+            .ephemeral(true)
+            
+        ).await?;
+        return Ok(());
+    }
+
+    ctx.reply("您已成功解除連結您的 YouTube 頻道。").await?;
     Ok(())
 }

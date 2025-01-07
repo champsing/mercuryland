@@ -49,9 +49,7 @@ pub async fn present_user_code(device_auth_resp: &DeviceAuthResponse, channel_id
     discord::send_text(
         channel_id,
         &format!(
-            "請在 {} 輸入 {} 以授予本應用程式權限。\n
-            除非您已完成驗證或拒絕授權本應用程式，否則請勿關閉驗證視窗。\n
-            驗證碼將在 {} 後失效。",
+            "請在 {} 輸入 {} 以授予本應用程式權限。\n除非您已完成驗證或拒絕授權本應用程式，否則請勿關閉驗證視窗。\n驗證碼將在 {} 後失效。",
             device_auth_resp.verification_uri, device_auth_resp.user_code, formatted_time.unwrap()
         ),
     )

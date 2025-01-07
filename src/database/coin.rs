@@ -9,7 +9,7 @@ use serde::{Deserialize, Serialize};
 #[enum_def]
 pub struct Coin {
     pub id: String,
-    pub discord_id: String,
+    pub discord_id: u64,
     pub coin: i64,
     pub display: String,
     pub updated_at: DateTime<Utc>,
@@ -122,7 +122,7 @@ impl Coin {
         } else {
             let user = Self {
                 id,
-                discord_id: String::new(),
+                discord_id: 0,
                 coin: 0,
                 display: display.into(),
                 updated_at: Utc::now(),
@@ -137,6 +137,7 @@ impl Coin {
             .table(CoinIden::Table)
             .values([
                 (CoinIden::Coin, self.coin.into()),
+                (CoinIden::DiscordId, self.discord_id.into()),
                 (CoinIden::Display, self.display.clone().into()),
                 (CoinIden::UpdatedAt, self.updated_at.into()),
             ])
@@ -164,7 +165,7 @@ mod tests {
         let tran = conn.transaction()?;
         let user = Coin {
             id: String::from("test_id"),
-            discord_id: String::from("test_discord_id"),
+            discord_id: 0,
             coin: 0,
             display: String::from("test_user_1"),
             updated_at: Utc::now(),
@@ -185,7 +186,7 @@ mod tests {
         let tran = conn.transaction()?;
         let mut u = Coin {
             id: String::from("test_id"),
-            discord_id: String::from("test_discord_id"),
+            discord_id: 0,
             coin: 0,
             display: String::from("test_user_1"),
             updated_at: Utc::now(),
@@ -195,7 +196,7 @@ mod tests {
 
         let tran = conn.transaction()?;
         let u0 = Coin::by_youtube(u.id.clone(), &tran)?.expect("no value");
-        let u1 = Coin::by_discord(u.discord_id.clone(), &tran)?.expect("no value");
+        let u1 = Coin::by_discord(u.discord_id.clone().to_string(), &tran)?.expect("no value");
         assert_eq!(u.coin, u0.coin);
         assert_eq!(u.display, u0.display);
         assert_eq!(u.updated_at, u0.updated_at);
