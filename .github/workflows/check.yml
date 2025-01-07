@@ -1,11 +1,12 @@
 name: Pull Request Check
 on:
   pull_request: 
-    types: [opened, synchronize]
+    types: [opened, synchronize, labeled]
     branches: [prod]
 jobs:
   vue_js:
     name: Test Vue.js
+    if: ${{ github.event.label.name == 'front' }}
     runs-on: ubuntu-latest
     steps:
       - name: Setup Node.js
@@ -20,6 +21,7 @@ jobs:
         run: npm run build
   rust:
     name: Test Rust Test
+    if: ${{ github.event.label.name == 'back' }}
     runs-on: ubuntu-latest
     steps:
       - name: Setup Rust Toolchain
@@ -32,6 +34,7 @@ jobs:
         run: cargo build --release
   docker:
     name: Test Docker
+    if: ${{ github.event.label.name == 'back' }}
     runs-on: ubuntu-latest
     steps:
       - name: Check out Source Code
