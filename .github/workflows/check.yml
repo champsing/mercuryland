@@ -21,7 +21,7 @@ jobs:
         run: npm run build
   rust:
     name: Test Rust Test
-    if: ${{ github.event.label.name == 'end' }}
+    if: ${{ github.event.label.name == 'back' }}
     runs-on: ubuntu-latest
     steps:
       - name: Setup Rust Toolchain
@@ -34,7 +34,7 @@ jobs:
         run: cargo build --release
   docker:
     name: Test Docker
-    if: ${{ github.event.label.name == 'end' }}
+    if: ${{ github.event.label.name == 'back' }}
     runs-on: ubuntu-latest
     steps:
       - name: Check out Source Code
