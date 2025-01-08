@@ -2,7 +2,7 @@ name: Pull Request Check
 on:
   pull_request: 
     types: [opened, synchronize, labeled]
-    branches: [prod]
+    branches: [prod-web, prod-back]
 jobs:
   vue_js:
     name: Test Vue.js
