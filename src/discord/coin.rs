@@ -7,7 +7,8 @@ use poise;
 #[poise::command(slash_command)]
 pub async fn coin(
     ctx: super::Context<'_>,
-    #[description = "The channel id of youtube account, use your discord id if ignored."] channel: Option<String>,
+    #[description = "YouTube channel ID, use your Discord account if ignored"]
+    #[description_localized("zh-TW", "YouTube 頻道 ID，若忽略則使用您的 Discord 帳號")] channel: Option<String>,
 ) -> Result<(), ServerError> {
     let coin = {
         let mut connection = database::get_connection()?;
