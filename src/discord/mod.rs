@@ -1,25 +1,25 @@
 mod coin;
-mod wheel;
+mod help;
 mod link;
+mod wheel;
 
 use once_cell::sync::OnceCell as OnceLock;
 
 use crate::{config::CONFIG, error::ServerError};
-use poise;
 use poise::serenity_prelude::{ClientBuilder, GatewayIntents};
-use serenity::all::{ChannelId, CreateAttachment, Http};
-use std::sync::Arc;
+use poise::{self};
 use serde_json::json;
+use serenity::all::{ChannelId, CreateAttachment, Http};
+use std::collections::HashMap;
+use std::sync::{Arc, RwLock};
+use std::time::Duration;
 
 type Data = ();
 type Context<'a> = poise::Context<'a, Data, ServerError>;
 
 static HTTP: OnceLock<Arc<Http>> = OnceLock::new();
 
-pub async fn send_text(
-    channel_id: ChannelId,
-    text: &String,
-) -> Result<(), ServerError> {
+pub async fn send_text(channel_id: ChannelId, text: &String) -> Result<(), ServerError> {
     send_message(channel_id, vec![], &json!({"content": text})).await?;
     Ok(())
 }
@@ -34,10 +34,91 @@ pub async fn send_message(
 }
 
 pub async fn run() -> Result<(), ServerError> {
+    let zh_tw = "zh-TW".to_string();
+
     let options = poise::FrameworkOptions {
-        commands: vec![wheel::fetch_wheel(), coin::coin(), link::link(), link::unlink()],
+        commands: vec![
+            poise::Command {
+                name: String::from("fetch_wheel"),
+                description: Some(String::from(
+                    "Fetch the text in the Drawn Zone of the specified wheel",
+                )),
+                description_localizations: HashMap::from([(
+                    zh_tw.clone(),
+                    String::from("獲取輪盤抽中區"),
+                )]),
+                help_text: Some(String::from(
+                    "獲取輪盤抽中區",
+                )),
+                ..wheel::fetch_wheel()
+            },
+            poise::Command {
+                name: String::from("coin"),
+                description: Some(String::from("Query your Mercury Coin balance")),
+                description_localizations: HashMap::from([(
+                    zh_tw.clone(),
+                    String::from("查詢水星幣餘額"),
+                )]),
+                help_text: Some(String::from(
+                    "查詢您的水星幣餘額。",
+                )),
+                ..coin::coin()
+            },
+            poise::Command {
+                name: String::from("link"),
+                description: Some(String::from(
+                    "Link your Discord account to your YouTube channel record",
+                )),
+                description_localizations: HashMap::from([(
+                    zh_tw.clone(),
+                    String::from("連結 Discord 帳號至 YouTube 頻道，24小時內限用一次"),
+                )]),
+                help_text: Some(String::from(
+                    "連結您的 Discord 帳號至 YouTube 頻道後，即可直接使用 </coin> 指令查詢餘額。目前同一 Discord 帳號僅可連結1個 YouTube 頻道。",
+                )),
+                cooldown_config: RwLock::new(
+                    poise::CooldownConfig {
+                        user: Some(Duration::from_secs(86400)),
+                        global: None,
+                        guild: None,
+                        channel: None,
+                        member: None,
+                        __non_exhaustive: ()
+                    }),
+                ..link::link()
+            },
+            poise::Command {
+                name: String::from("unlink"),
+                description: Some(String::from(
+                    "Unlink your Discord account and your YouTube channel record",
+                )),
+                description_localizations: HashMap::from([(
+                    zh_tw.clone(),
+                    String::from("斷開 YouTube 頻道與 Discord 帳號的連結"),
+                )]),
+                help_text: Some(String::from(
+                    "將連結斷開後，使用 </coin> 查詢餘額重新需要輸入 YouTube Channel ID，直至連結新 Discord 帳號。",
+                )),
+                ..link::unlink()
+            },
+            poise::Command {
+                name: String::from("help"),
+                description: Some(String::from(
+                    "Show help text",
+                )),
+                description_localizations: HashMap::from([(
+                    zh_tw.clone(),
+                    String::from("顯示指令使用教學"),
+                )]),
+                help_text: Some(String::from(
+                    "顯示指令使用教學",
+                )),
+                ..help::help()
+            },
+        ],
         ..Default::default()
     };
+
     let framework = poise::Framework::builder()
         .setup(move |ctx, _ready, framework| {
             Box::pin(async move {

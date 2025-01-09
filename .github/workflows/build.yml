@@ -2,7 +2,7 @@ name: Build Docker Image
 on:
   push:
     branches: 
-      prod
+      prod-back
 
 jobs:
   build:

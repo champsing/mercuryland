@@ -1,5 +1,3 @@
-use std::fs;
-
 use crate::{
     coin::youtube::Coin,
     config::CONFIG,
@@ -124,7 +122,6 @@ pub async fn link(ctx: super::Context<'_>) -> Result<(), ServerError> {
 
 #[poise::command(slash_command)]
 pub async fn unlink(ctx: super::Context<'_>) -> Result<(), ServerError> {
-    let author = ctx.author();
 
     if check_exist(ctx).await? == false {
         ctx.send(
@@ -134,9 +131,7 @@ pub async fn unlink(ctx: super::Context<'_>) -> Result<(), ServerError> {
         ).await?;
         return Ok(());
     }
-
-    let _ = fs::remove_file(format!("data/dc_connects/{}.conf", author.id))?;
-
+    
     let mut id_not_found = false;
     // Here should be the database connection to store the channel id
     let _ = {
