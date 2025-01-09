@@ -71,7 +71,7 @@ pub async fn run() -> Result<(), ServerError> {
                 )),
                 description_localizations: HashMap::from([(
                     zh_tw.clone(),
-                    String::from("連結 Discord 帳號至 YouTube 頻道"),
+                    String::from("連結 Discord 帳號至 YouTube 頻道，24小時內限用一次"),
                 )]),
                 help_text: Some(String::from(
                     "連結您的 Discord 帳號至 YouTube 頻道後，即可直接使用 </coin> 指令查詢餘額。目前同一 Discord 帳號僅可連結1個 YouTube 頻道。",
