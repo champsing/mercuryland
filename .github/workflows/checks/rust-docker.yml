@@ -1,0 +1,26 @@
+name: Pull Request Check Rust And Docker
+on:
+  pull_request: 
+    types: [opened, synchronize]
+    branches: prod-back
+jobs:
+  rust:
+    name: Test Rust Test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup Rust Toolchain
+        run: rustup toolchain add nightly
+      - name: Check out Source Code
+        uses: actions/checkout@v4
+      - name: Test
+        run: cargo test
+      - name: Build
+        run: cargo build --release
+  docker:
+    name: Test Docker
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out Source Code
+        uses: actions/checkout@v4
+      - name: Build
+        run: docker build -t mercury .

@@ -1,0 +1,20 @@
+name: Pull Request Check VueJS
+on:
+  pull_request: 
+    types: [opened, synchronize]
+    branches: prod-web
+jobs:
+  vue_js:
+    name: Test Vue.js
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+      - name: Check out Source Code
+        uses: actions/checkout@v4
+      - name: Install Dependencies
+        run: |
+          npm install -g vue-tsc vite 
+          npm install
+      - name: Build
+        run: npm run build
