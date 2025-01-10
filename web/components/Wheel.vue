@@ -243,7 +243,11 @@ const modal3 = reactive({
                 >
                     旋转
                 </VaButton>
-                <VaButton class="w-full mt-8" @click="modal3.show = true">
+                <VaButton
+                    class="w-full mt-8"
+                    @click="modal3.show = true"
+                    :disabled="isSpinning || count(textArea2) == 0"
+                >
                     完成抽選
                 </VaButton>
                 <div class="h-44"></div>
@@ -311,7 +315,9 @@ const modal3 = reactive({
             :before-ok="submit"
             :before-cancel="beforeCancel"
         >
-            <div class="items-baseline text-xl text-center">請輸入轉盤廣播密碼</div>
+            <div class="items-baseline text-xl text-center">
+                請輸入轉盤廣播密碼
+            </div>
             <div
                 id="submit-wheel"
                 class="flex items-baseline justify-evenly h-14 mt-4"
