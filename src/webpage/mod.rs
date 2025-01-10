@@ -22,6 +22,7 @@ pub async fn run() -> Result<(), ServerError> {
             .service(auth::tick::handler)
             .service(wheel::create::handler)
             .service(wheel::update::handler)
+            .service(wheel::submit::handler)
     })
     .bind(("0.0.0.0", 8080))?
     .run()

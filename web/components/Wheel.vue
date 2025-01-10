@@ -1,10 +1,18 @@
 <script setup lang="ts">
 import { Wheel } from "spin-wheel";
 import { ref, onMounted, reactive } from "vue";
-import { VaChip, VaTextarea, VaButton, VaModal, VaSwitch } from "vuestic-ui";
+import {
+    VaTextarea,
+    VaButton,
+    VaModal,
+    VaSwitch,
+    VaInput,
+    useToast,
+} from "vuestic-ui";
 import axios from "axios";
 import { BASE_URL } from "@/composables/utils";
 
+const OREKI_WHEEL_PASSWORD = ref("422613");
 const wheelContainer = ref(null);
 const isSpinning = ref(false); //轉盤旋轉中
 const isLeftAreaLocked = ref(false); //鎖定待抽區
@@ -66,18 +74,35 @@ const textArea2 = defineModel("textArea2", {
     },
 });
 
-function submit() {
-    axios
-        .post(BASE_URL + "/api/wheel/submit", {
-            id: wheelConnect.id,
-            secret: wheelConnect.secret,
-        })
-        .then((response) => {
-            console.log(response);
-        })
-        .catch((error) => {
-            console.log(error);
-        });
+function submit(hide?: CallableFunction) {
+    if (modal3.password == OREKI_WHEEL_PASSWORD.value) {
+        axios
+            .post(BASE_URL + "/api/wheel/submit", {
+                id: wheelConnect.id,
+                secret: wheelConnect.secret,
+            })
+            .then((response) => {
+                console.log(response);
+                useToast().init({
+                    duration: 2000,
+                    message: "已廣播至Discord",
+                });
+                hide();
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    } else {
+        modal3.password = "";
+        modal3.fail = true;
+    }
+}
+
+function beforeCancel(hide: CallableFunction) {
+    modal3.password = "";
+    modal3.fail = false;
+    modal3.show = false;
+    hide();
 }
 
 function checkLeftTextAreaNull() {
@@ -179,18 +204,14 @@ const modal2 = reactive({
 });
 const modal3 = reactive({
     show: false,
+    password: "",
+    fail: false,
 });
 </script>
 
 <template>
     <div class="mt-8 m-auto w-11/12">
         <div class="flex w-full justify-end">
-            <div>
-                <VaChip color="#e16004" class="mt-4 mr-3" readonly>
-                    BETA
-                </VaChip>
-            </div>
-
             <div class="text-lime-400 font-bold text-4xl text-right">
                 {{
                     wheelConnect.id == -1
@@ -222,11 +243,7 @@ const modal3 = reactive({
                 >
                     旋转
                 </VaButton>
-                <VaButton
-                    class="w-full mt-8"
-                    @click="modal3.show = true"
-                    :disabled="true"
-                >
+                <VaButton class="w-full mt-8" @click="modal3.show = true">
                     完成抽選
                 </VaButton>
                 <div class="h-44"></div>
@@ -289,13 +306,26 @@ const modal3 = reactive({
         </VaModal>
         <VaModal
             v-model="modal3.show"
-            noDismiss
-            @ok="submit"
-            ok-text="送出"
+            ok-text="登录"
             cancel-text="取消"
+            :before-ok="submit"
+            :before-cancel="beforeCancel"
         >
-            <div class="text-3xl">
-                確認送出?
+            <div class="items-baseline text-xl text-center">請輸入轉盤廣播密碼</div>
+            <div
+                id="submit-wheel"
+                class="flex items-baseline justify-evenly h-14 mt-4"
+            >
+                <VaInput
+                    v-model="modal3.password"
+                    label="轉盤廣播密碼"
+                    type="password"
+                    name="password"
+                    immediate-validation
+                    error-messages="Submission failed"
+                    :error="modal3.fail"
+                    @input="modal3.fail = false"
+                />
             </div>
         </VaModal>
     </div>
