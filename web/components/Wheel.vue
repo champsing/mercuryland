@@ -239,7 +239,7 @@ const modal3 = reactive({
                 <VaButton
                     class="w-full mt-8"
                     @click="spin"
-                    :disabled="isSpinning"
+                    :disabled="isSpinning || count(textArea) == 0"
                 >
                     旋转
                 </VaButton>
@@ -310,7 +310,7 @@ const modal3 = reactive({
         </VaModal>
         <VaModal
             v-model="modal3.show"
-            ok-text="登录"
+            ok-text="廣播到Discord"
             cancel-text="取消"
             :before-ok="submit"
             :before-cancel="beforeCancel"
