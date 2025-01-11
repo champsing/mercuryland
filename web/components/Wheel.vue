@@ -51,11 +51,6 @@ const textArea = defineModel("textArea", {
                     };
                 });
         }
-
-        //若左邊數量不為0，則可以旋轉
-        //prettier-ignore
-        count(textArea.value) !== 0 ? isSpinning.value = false : isSpinning.value = true;
-
         return value;
     },
 });
@@ -105,17 +100,15 @@ function beforeCancel(hide: CallableFunction) {
     hide();
 }
 
-function checkLeftTextAreaNull() {
-    if (count(textArea.value) == 0) {
-        isSpinning.value = true; //若空轉，當旋轉結束會變無限響鈴火警。
-        clearRightArea.value = true; //此時左邊一定為空，強制只能清除右邊。
-        isLeftAreaLocked.value = false; //此時左邊一定為空，可以輸入。
-        return true;
-    }
+function initializeWheel() {
+    isSpinning.value = false;
+    clearRightArea.value = true; //此時左邊一定為空，強制只能清除右邊。
+    isLeftAreaLocked.value = false; //此時左邊一定為空，可以輸入。
 }
 
 function spin() {
-    if (checkLeftTextAreaNull()) return;
+    // prettier-ignore
+    if (count(textArea.value) == 0) return; //若空轉，當旋轉結束會變無限響鈴火警。
     else {
         isSpinning.value = true; //旋轉、清空開關
         isLeftAreaLocked.value = true; //鎖住待抽區
@@ -149,7 +142,7 @@ function move() {
         .map((x: { label: string }) => x.label)
         .join("\n");
 
-    checkLeftTextAreaNull();
+    if (count(textArea.value) == 0) initializeWheel();
 }
 
 function tick() {
@@ -296,7 +289,7 @@ const modal3 = reactive({
             @ok="
                 () => {
                     clearRightArea == true ? (textArea2 = '') : (textArea = '');
-                    checkLeftTextAreaNull();
+                    initializeWheel();
                 }
             "
         >
