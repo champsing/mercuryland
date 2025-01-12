@@ -43,7 +43,7 @@ pub mod chat {
 
                 // get arguments for next request
                 next_page = res.next_page_token;
-                let polling_ms = res.polling_interval_millis.unwrap_or(0);
+                let polling_ms = 1000.max(res.polling_interval_millis.unwrap_or(0)) as u64;
 
                 // process messages
                 if let Some(chats) = res.items {
@@ -59,7 +59,7 @@ pub mod chat {
                     break;
                 }
 
-                thread::sleep(Duration::from_millis(polling_ms as u64));
+                thread::sleep(Duration::from_millis(polling_ms));
             }
         }
 
