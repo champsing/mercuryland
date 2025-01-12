@@ -5,6 +5,8 @@ fn main() -> Result<(), ServerError> {
     env_logger::init();
     mercury_land::database::init()?;
 
+    println!("======== server starting! ========");
+
     let webpage = thread::spawn(|| loop {
         let res = tokio::runtime::Builder::new_multi_thread()
             .enable_all()
