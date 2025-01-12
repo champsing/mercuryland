@@ -21,9 +21,7 @@ pub async fn help(
     #[description_localized("zh-TW", "要顯示的指令")] command: Option<String>,
 ) -> Result<(), ServerError> {
     let config = poise::builtins::HelpConfiguration {
-        extra_text_at_bottom: "\
-Type ?help command for more info on a command.
-You can edit your message to the bot and the bot will edit its response.",
+        extra_text_at_bottom: "請輸入您想查詢的指令（如：link、coin，不包含斜線）",
         ..Default::default()
     };
     poise::builtins::help(ctx, command.as_deref(), config).await?;
