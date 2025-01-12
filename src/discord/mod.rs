@@ -79,6 +79,18 @@ pub async fn run() -> Result<(), ServerError> {
                 ..coin::coin()
             },
             poise::Command {
+                name: String::from("give"),
+                description: Some(String::from("[Admin] give user coins")),
+                description_localizations: HashMap::from([(
+                    zh_tw.clone(),
+                    String::from("???"),
+                )]),
+                help_text: Some(String::from(
+                    "????",
+                )),
+                ..give::give()
+            },
+            poise::Command {
                 name: String::from("link"),
                 description: Some(String::from(
                     "Link your Discord account to your YouTube channel record",
