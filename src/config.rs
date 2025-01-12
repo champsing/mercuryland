@@ -17,6 +17,8 @@ pub struct Config {
 pub struct DiscordChannelID {
     pub admin: u64,
     pub public: u64,
+    pub penalty: u64,
+    pub test: u64
 }
 
 pub static CONFIG: LazyLock<Config> = LazyLock::new(|| {
