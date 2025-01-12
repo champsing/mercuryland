@@ -6,7 +6,7 @@ use crate::{
 use poise;
 
 #[poise::command(slash_command)]
-pub async fn coin(
+pub async fn give(
     ctx: super::Context<'_>,
     channel: String,
     amount: i64,
