@@ -16,6 +16,7 @@ pub struct Config {
 pub struct DiscordConfig {
     pub token: String,
     pub exchange: u64,
+    pub penalty: u64,
     pub admin: Vec<u64>,
 }
 
