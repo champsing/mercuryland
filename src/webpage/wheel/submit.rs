@@ -1,5 +1,6 @@
 use std::iter::once;
 use itertools::Itertools;
+use serenity::all::CreateMessage;
 
 use crate::{
     config::CONFIG, database::{self, wheel::Wheel}, discord, error::ServerError
@@ -17,7 +18,8 @@ struct Request {
 pub async fn handler(request: web::Json<Request>) -> Result<impl Responder, ServerError> {
     let mut connection = database::get_connection()?;
     let transaction = connection.transaction()?;
-    let penalty_channel_id: u64 = CONFIG.discord_channel_id.penalty; // 惡靈懲罰
+
+    let penalty_channel_id: u64 = CONFIG.discord.penalty; // 惡靈懲罰
 
     let w = match Wheel::by_id(request.id, &transaction)? {
         None => return Ok(HttpResponse::NotFound().finish()),
@@ -39,7 +41,7 @@ pub async fn handler(request: web::Json<Request>) -> Result<impl Responder, Serv
 
     let message = once(format!("<t:{}:D>", time)).chain(content).join("\n");
 
-    discord::send_message(penalty_channel_id.into(), vec![], &serde_json::json!({"content": message})).await?; // 惡靈懲罰
+    discord::Receiver::ChannelId(penalty_channel_id).message(CreateMessage::new().content(message)).await?;
 
     Ok(HttpResponse::Ok().finish())
 }

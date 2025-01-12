@@ -1,4 +1,5 @@
 mod coin;
+mod give;
 mod help;
 mod link;
 mod wheel;
@@ -8,8 +9,7 @@ use once_cell::sync::OnceCell as OnceLock;
 use crate::{config::CONFIG, error::ServerError};
 use poise::serenity_prelude::{ClientBuilder, GatewayIntents};
 use poise::{self};
-use serde_json::json;
-use serenity::all::{ChannelId, CreateAttachment, Http};
+use serenity::all::{CreateMessage, Http};
 use std::collections::HashMap;
 use std::sync::{Arc, RwLock};
 use std::time::Duration;
@@ -19,19 +19,33 @@ type Context<'a> = poise::Context<'a, Data, ServerError>;
 
 static HTTP: OnceLock<Arc<Http>> = OnceLock::new();
 
-pub async fn send_text(channel_id: ChannelId, text: &String) -> Result<(), ServerError> {
-    send_message(channel_id, vec![], &json!({"content": text})).await?;
-    Ok(())
+#[derive(Debug, Clone, Copy)]
+pub enum Receiver {
+    ChannelId(u64),
+    UserId(u64),
 }
 
-pub async fn send_message(
-    channel_id: ChannelId,
-    files: Vec<CreateAttachment>,
-    map: &impl serde::Serialize,
-) -> Result<(), ServerError> {
-    HTTP.wait().send_message(channel_id, files, map).await?;
-    Ok(())
+impl Receiver {
+    pub async fn message(&self, message: CreateMessage) -> Result<(), ServerError> {
+        match self {
+            Receiver::ChannelId(id) => {
+                let channel_id = serenity::model::id::ChannelId::from(*id);
+                channel_id.send_message(HTTP.wait(), message).await?;
+            }
+            Receiver::UserId(id) => {
+                let user_id = serenity::model::id::UserId::from(*id);
+                user_id.direct_message(HTTP.wait(), message).await?;
+            }
+        }
+
+        Ok(())
+    }
 }
+
+// pub async fn send_text(channel_id: ChannelId, text: &String) -> Result<(), ServerError> {
+//     send_message(channel_id, vec![], &json!({"content": text})).await?;
+//     Ok(())
+// }
 
 pub async fn run() -> Result<(), ServerError> {
     let zh_tw = "zh-TW".to_string();
@@ -131,7 +145,7 @@ pub async fn run() -> Result<(), ServerError> {
         .build();
 
     let mut client = ClientBuilder::new(
-        &CONFIG.discord_bot_token,
+        &CONFIG.discord.token,
         GatewayIntents::non_privileged() | GatewayIntents::MESSAGE_CONTENT,
     )
     .framework(framework)

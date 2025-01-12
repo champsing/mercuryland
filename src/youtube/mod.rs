@@ -14,11 +14,11 @@ use google_youtube3::{
     YouTube,
 };
 use regex::Regex;
-use serenity::all::ChannelId;
+use serenity::all::CreateMessage;
 use std::{fs::OpenOptions, future::Future, pin::Pin, thread, time::Duration};
 use video as h;
 
-pub struct FlowDelegateForDiscord(pub ChannelId);
+pub struct FlowDelegateForDiscord(pub discord::Receiver);
 impl DeviceFlowDelegate for FlowDelegateForDiscord {
     fn present_user_code<'a>(
         &'a self,
@@ -28,9 +28,7 @@ impl DeviceFlowDelegate for FlowDelegateForDiscord {
     }
 }
 
-pub async fn present_user_code(device_auth_resp: &DeviceAuthResponse, channel_id: ChannelId) {
-    
-
+pub async fn present_user_code(device_auth_resp: &DeviceAuthResponse, recv: discord::Receiver) {
     let printable_time = match UtcOffset::current_local_offset() {
         Ok(offset) => device_auth_resp.expires_at.to_offset(offset),
         Err(_) => device_auth_resp.expires_at, // Fallback to printing in UTC
@@ -46,29 +44,33 @@ pub async fn present_user_code(device_auth_resp: &DeviceAuthResponse, channel_id
         Err(_) => Ok(printable_time.to_string()),
     };
 
-    discord::send_text(
-        channel_id,
-        &format!(
+    match recv.message(
+        CreateMessage::new().content(&format!(
             "請在 {} 輸入 {} 以授予本應用程式權限。\n除非您已完成驗證或拒絕授權本應用程式，否則請勿關閉驗證視窗。\n驗證碼將在 {} 後失效。",
             device_auth_resp.verification_uri, device_auth_resp.user_code, formatted_time.unwrap()
-        ),
-    )
-    .await
-    .unwrap();
+        ))
+    ).await {
+        Err(err) => log::error!("{}", err),
+        _ => ()
+    }
 }
 
 pub async fn run() -> Result<(), ServerError> {
     let channel_id: &str = CONFIG.youtube_channel_id.as_str(); // oreki channel id
 
-    if OpenOptions::new().read(true).open("data/youtube_chat_viewer.conf").is_err() {
-        discord::send_text(CONFIG.discord_channel_id.admin.into(), &format!("您正在執行的操作是授權我們存取您的 Google 帳號以讀取您帳號旗下的 YouTube 頻道，用於讀取惡靈直播聊天室的訊息。")).await?;
+    if OpenOptions::new()
+        .read(true)
+        .open("data/youtube.secret")
+        .is_err()
+    {
+        discord::Receiver::UserId(CONFIG.discord.admin[0]).message(CreateMessage::new().content(&format!("您正在執行的操作是授權我們存取您的 Google 帳號以讀取您帳號旗下的 YouTube 頻道，用於讀取惡靈直播聊天室的訊息。"))).await?;
     }
-    
+
     let auth = yup_oauth2::DeviceFlowAuthenticator::builder(CONFIG.yt_chat_viewer.clone())
-        .persist_tokens_to_disk("data/youtube_chat_viewer.conf")
-        .flow_delegate(Box::new(FlowDelegateForDiscord(
-            CONFIG.discord_channel_id.admin.into(),
-        )))
+        .persist_tokens_to_disk("data/youtube.secret")
+        .flow_delegate(Box::new(FlowDelegateForDiscord(discord::Receiver::UserId(
+            CONFIG.discord.admin[0],
+        ))))
         .build()
         .await?;
 
