@@ -1,5 +1,6 @@
 use std::iter::once;
 use itertools::Itertools;
+use serenity::all::CreateMessage;
 
 use crate::{
     database::{self, wheel::Wheel},
@@ -42,7 +43,7 @@ pub async fn handler(request: web::Json<Request>) -> Result<impl Responder, Serv
 
     let message = once(format!("<t:{}:D>", time)).chain(content).join("\n");
 
-    discord::send_message(PENALTY_CHANNEL_ID.into(), vec![], &serde_json::json!({"content": message})).await?;
+    discord::Receiver::ChannelId(PENALTY_CHANNEL_ID).message(CreateMessage::new().content(message)).await?;
 
     Ok(HttpResponse::Ok().finish())
 }

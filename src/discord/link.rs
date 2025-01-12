@@ -1,9 +1,5 @@
 use crate::{
-    coin::youtube::Coin,
-    config::CONFIG,
-    database::{self},
-    error::ServerError,
-    youtube::FlowDelegateForDiscord,
+    coin::youtube::Coin, config::CONFIG, database::{self}, discord, error::ServerError, youtube::FlowDelegateForDiscord
 };
 use chrono::Utc;
 use google_youtube3::{
@@ -42,10 +38,8 @@ pub async fn link(ctx: super::Context<'_>) -> Result<(), ServerError> {
     // if the author hasn't completed OAuth2 yet
     author.dm(ctx, CreateMessage::new().content("您正在執行的操作是授權我們存取您的 Google 帳號以讀取您帳號旗下的 YouTube 頻道，用於將您的 Discord 帳號與 YouTube 頻道建立內部資料庫連結。")).await?;
 
-    let private_channel = author.create_dm_channel(ctx).await?;
-
     let auth = yup_oauth2::DeviceFlowAuthenticator::builder(CONFIG.dcyt_link.clone())
-        .flow_delegate(Box::new(FlowDelegateForDiscord(private_channel.id.into())))
+        .flow_delegate(Box::new(FlowDelegateForDiscord(discord::Receiver::UserId(author.id.get()))))
         .build()
         .await?;
 

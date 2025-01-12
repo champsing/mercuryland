@@ -2,7 +2,7 @@ use super::config::CoinConfig;
 pub use crate::database::coin::Coin;
 use crate::{config::CONFIG, database::get_connection, discord, error::ServerError};
 use chrono::{DateTime, Utc};
-use serde_json::json;
+use serenity::all::CreateMessage;
 
 pub struct CoinCommandManager {
     config: CoinConfig,
@@ -20,7 +20,7 @@ impl CoinCommandManager {
         content: &String,
         now: DateTime<Utc>,
     ) -> Result<(), ServerError> {
-        let channel_id: u64 = CONFIG.discord_channel_id.public; // 水星交易所
+        let channel_id: u64 = CONFIG.discord.exchange; // 水星交易所
 
         let mut connection = get_connection()?;
         let transaction = connection.transaction()?;
@@ -35,7 +35,8 @@ impl CoinCommandManager {
                 println!("[-] {} buy a level-{} booster for {}", user, level, content);
 
                 let content = format!("惩罚加倍: {}x{} (来自{})", content, level, user);
-                discord::send_message(channel_id.into(), vec![], &json!({"content": content}))
+                discord::Receiver::ChannelId(channel_id)
+                    .message(CreateMessage::new().content(content))
                     .await?;
             }
         }
