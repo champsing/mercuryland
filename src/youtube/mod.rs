@@ -60,14 +60,14 @@ pub async fn run() -> Result<(), ServerError> {
 
     if OpenOptions::new()
         .read(true)
-        .open("data/youtube_chat_viewer.conf")
+        .open("data/youtube.secret")
         .is_err()
     {
         discord::Receiver::UserId(CONFIG.discord.admin[0]).message(CreateMessage::new().content(&format!("您正在執行的操作是授權我們存取您的 Google 帳號以讀取您帳號旗下的 YouTube 頻道，用於讀取惡靈直播聊天室的訊息。"))).await?;
     }
 
     let auth = yup_oauth2::DeviceFlowAuthenticator::builder(CONFIG.yt_chat_viewer.clone())
-        .persist_tokens_to_disk("data/youtube_chat_viewer.conf")
+        .persist_tokens_to_disk("data/youtube.secret")
         .flow_delegate(Box::new(FlowDelegateForDiscord(discord::Receiver::UserId(
             CONFIG.discord.admin[0],
         ))))
