@@ -34,7 +34,7 @@ impl CoinCommandManager {
 
                 println!("[-] {} buy a level-{} booster for {}", user, level, content);
 
-                let content = format!("惩罚加倍: {}×{}", content, level);
+                let content = format!("惩罚加倍: {}x{} (来自{})", content, level, user);
                 discord::send_message(channel_id.into(), vec![], &json!({"content": content}))
                     .await?;
             }
