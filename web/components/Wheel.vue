@@ -2,7 +2,6 @@
 import { Wheel } from "spin-wheel";
 import { ref, onMounted, reactive } from "vue";
 import {
-    VaChip,
     VaTextarea,
     VaButton,
     VaModal,
@@ -18,7 +17,7 @@ const wheelContainer = ref(null);
 const isSpinning = ref(false); //轉盤旋轉中
 const isLeftAreaLocked = ref(false); //鎖定待抽區
 const clearRightArea = ref(true); //清除右邊區域
-const re = /×[1-9][0-9]*$/;
+const re = /x[1-9][0-9]*$/;
 
 let wheelConnect = reactive({
     id: -1,
@@ -43,7 +42,7 @@ const textArea = defineModel("textArea", {
                 .filter((x) => x != "")
                 .map((x) => {
                     const weight = parseInt(
-                        (x.match(re) || ["×1"])[0].substring(1)
+                        (x.match(re) || ["x1"])[0].substring(1)
                     );
                     const label = x.replace(re, "");
                     return {
@@ -141,7 +140,7 @@ function move() {
             (_: { label: string }, i: number) => i != wheel.getCurrentIndex()
         )
         .map((x: { label: string, weight: number }) => {
-            if (x.weight != 1) return x.label + "×" + x.weight;
+            if (x.weight != 1) return x.label + "x" + x.weight;
             else return x.label;
         })
         .join("\n");
@@ -209,15 +208,6 @@ const modal3 = reactive({
 <template>
     <div class="mt-8 m-auto w-11/12">
         <div class="flex w-full justify-end">
-            <VaChip
-            size="small"
-            color="#fb923c"
-            class="mt-2 mr-8"
-            readonly
-            >
-               <div class="text-base text-right">加倍符號：×</div> 
-            </VaChip>
-            
             <div class="text-lime-400 font-bold text-4xl text-right">
                 {{
                     wheelConnect.id == -1
