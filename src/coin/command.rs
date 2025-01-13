@@ -32,6 +32,8 @@ impl CoinCommandManager {
                 record.updated_at = now;
                 record.update(&transaction)?;
 
+                let user = record.display;
+
                 println!("[-] {} buy a level-{} booster for {}", user, level, content);
 
                 let content = format!("惩罚加倍: {}x{} (来自{})", content, level, user);
