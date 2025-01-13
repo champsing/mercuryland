@@ -6,6 +6,7 @@ use std::{fs, sync::LazyLock};
 pub struct Config {
     pub username: String,
     pub password: String,
+    pub wheel_password: String,
     pub discord: DiscordConfig,
     pub youtube_channel_id: String,
     pub yt_chat_viewer: ApplicationSecret,

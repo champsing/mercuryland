@@ -12,7 +12,6 @@ import {
 import axios from "axios";
 import { BASE_URL } from "@/composables/utils";
 
-const OREKI_WHEEL_PASSWORD = ref("422613");
 const wheelContainer = ref(null);
 const isSpinning = ref(false); //轉盤旋轉中
 const isLeftAreaLocked = ref(false); //鎖定待抽區
@@ -70,27 +69,25 @@ const textArea2 = defineModel("textArea2", {
 });
 
 function submit(hide?: CallableFunction) {
-    if (modal3.password == OREKI_WHEEL_PASSWORD.value) {
         axios
-            .post(BASE_URL + "/api/wheel/submit", {
+        .post(BASE_URL + "/api/wheel/submit", {
                 id: wheelConnect.id,
                 secret: wheelConnect.secret,
+                password: modal3.password,
             })
-            .then((response) => {
-                console.log(response);
-                useToast().init({
-                    duration: 2000,
-                    message: "已廣播至Discord",
-                });
-                hide();
-            })
-            .catch((error) => {
-                console.log(error);
+        .then((response) => {
+            console.log(response);
+            useToast().init({
+                duration: 2000,
+                message: "已廣播至Discord",
             });
-    } else {
-        modal3.password = "";
+            hide();
+        })
+        .catch((error) => {
+            console.log(error);
+            modal3.password = "";
         modal3.fail = true;
-    }
+        });
 }
 
 function beforeCancel(hide: CallableFunction) {
