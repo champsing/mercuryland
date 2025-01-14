@@ -3,6 +3,7 @@ mod give;
 mod help;
 mod link;
 mod wheel;
+mod refund;
 
 use once_cell::sync::OnceCell as OnceLock;
 
@@ -140,6 +141,51 @@ pub async fn run() -> Result<(), ServerError> {
                     "顯示指令使用教學",
                 )),
                 ..help::help()
+            },
+            poise::Command {
+                name: String::from("refund"),
+                description: Some(String::from(
+                    "Refund commands",
+                )),
+                description_localizations: HashMap::from([(
+                    zh_tw.clone(),
+                    String::from("退款相關指令"),
+                )]),
+                help_text: Some(String::from(
+                    "退款相關指令",
+                )),
+                subcommands: vec![
+                    poise::Command {
+                        name: String::from("new"),
+                        description: Some(String::from(
+                            "Open a thread channel for requesting a Mercury Coin refund",
+                        )),
+                        description_localizations: HashMap::from([(
+                            zh_tw.clone(),
+                            String::from("開啟一則討論串以申請水星幣退款"),
+                        )]),
+                        help_text: Some(String::from(
+                            "開啟一則討論串以申請水星幣退款",
+                        )),
+                        ..refund::new()
+                    },
+                    // poise::Command {
+                    //     name: String::from("refund close"),
+                    //     description: Some(String::from(
+                    //         "[ADMIN] Close a Mercury Coin refund request",
+                    //     )),
+                    //     description_localizations: HashMap::from([(
+                    //         zh_tw.clone(),
+                    //         String::from("（管理）將討論串案號結單"),
+                    //     )]),
+                    //     help_text: Some(String::from(
+                    //         "（管理）將討論串案號結單",
+                    //     )),
+                    //     ..refund::close()
+                    // },
+                ],
+                subcommand_required: true,
+                ..refund::refund()
             },
         ],
         ..Default::default()
