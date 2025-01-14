@@ -19,7 +19,6 @@ const tabs = [
     { path: "/penalty", label: "直播懲罰" },
     { path: "/wheel", label: "幸運轉盤" },
     { path: "/contact", label: "聯絡我們" },
-    { path: "/privacy", label: "隱私權政策" }, // for oauth verification
 ];
 </script>
 
