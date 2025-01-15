@@ -169,20 +169,34 @@ pub async fn run() -> Result<(), ServerError> {
                         )),
                         ..refund::new()
                     },
-                    // poise::Command {
-                    //     name: String::from("refund close"),
-                    //     description: Some(String::from(
-                    //         "[ADMIN] Close a Mercury Coin refund request",
-                    //     )),
-                    //     description_localizations: HashMap::from([(
-                    //         zh_tw.clone(),
-                    //         String::from("（管理）將討論串案號結單"),
-                    //     )]),
-                    //     help_text: Some(String::from(
-                    //         "（管理）將討論串案號結單",
-                    //     )),
-                    //     ..refund::close()
-                    // },
+                    poise::Command {
+                        name: String::from("close"),
+                        description: Some(String::from(
+                            "[ADMIN] Close a Mercury Coin refund request",
+                        )),
+                        description_localizations: HashMap::from([(
+                            zh_tw.clone(),
+                            String::from("（管理）將討論串案號結單"),
+                        )]),
+                        help_text: Some(String::from(
+                            "（管理）將討論串案號結單",
+                        )),
+                        ..refund::close()
+                    },
+                    poise::Command {
+                        name: String::from("reopen"),
+                        description: Some(String::from(
+                            "[ADMIN] Reopen a Mercury Coin refund request",
+                        )),
+                        description_localizations: HashMap::from([(
+                            zh_tw.clone(),
+                            String::from("（管理）將討論串案號重新開啟"),
+                        )]),
+                        help_text: Some(String::from(
+                            "（管理）將討論串案號重新開啟",
+                        )),
+                        ..refund::reopen()
+                    },
                 ],
                 subcommand_required: true,
                 ..refund::refund()
