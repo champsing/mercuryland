@@ -19,7 +19,7 @@ pub async fn new(ctx: super::Context<'_>) -> Result<(), ServerError> {
 
     let case_number = Alphanumeric.sample_string(&mut rand::thread_rng(), 6);
 
-    let refund_thread = ChannelId::new(1248793225767026758) //CONFIG.discord.exchange
+    let refund_thread = ChannelId::new(CONFIG.discord.exchange) //CONFIG.discord.exchange 1248793225767026758
         .create_thread(
             ctx.http(),
             CreateThread::new(format!("退款討論串 {}-{}", author.name, case_number)),
