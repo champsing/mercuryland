@@ -3,7 +3,11 @@ use chrono::{DateTime, Utc};
 use rusqlite::{Row, Transaction};
 use sea_query::{enum_def, Expr, IdenStatic, Query, SqliteQueryBuilder};
 use sea_query_rusqlite::RusqliteBinder;
+use sea_query_rusqlite::RusqliteValue;
 use serde::{Deserialize, Serialize};
+use serde_json::json;
+use serde_json::Value;
+use serenity::json;
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
 #[enum_def]
@@ -108,6 +112,29 @@ impl Coin {
 
         Ok(value.transpose()?)
     }
+
+    pub fn export_all() -> Result<Vec<Value>, ServerError> {
+        let (_, values) = Query::select()
+            .columns([
+                CoinIden::Id,
+                CoinIden::Coin,
+                CoinIden::Display,
+            ])
+            .from(CoinIden::Table)
+            .build_rusqlite(SqliteQueryBuilder);
+        
+            let json_values: Vec<Value> = values.0.iter().map(|value| {
+                match value {
+                    RusqliteValue(sea_query::Value::String(str)) => json!(str),
+                    RusqliteValue(sea_query::Value::Int(int)) => json!(int),
+                    _ => todo!()
+
+                }
+            }).collect();
+        
+           Ok(json_values)
+    }
+
 
     pub fn get_or_create(
         id: impl Into<String>,

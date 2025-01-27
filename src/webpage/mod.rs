@@ -1,6 +1,7 @@
 pub mod auth;
 pub mod ping;
 pub mod wheel;
+pub mod leaderboard;
 
 use crate::error::ServerError;
 use actix_cors::Cors;
@@ -23,6 +24,7 @@ pub async fn run() -> Result<(), ServerError> {
             .service(wheel::create::handler)
             .service(wheel::update::handler)
             .service(wheel::submit::handler)
+            .service(leaderboard::ldb::handler)
     })
     .bind(("0.0.0.0", 8080))?
     .run()

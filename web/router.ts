@@ -9,6 +9,7 @@ import Contact from "@components/contact/Contact.vue";
 import ToS from "./components/law/ToS.vue";
 import Wheel from "./components/Wheel.vue";
 import Privacy from "./components/law/Privacy.vue";
+import LeaderBoard from "./components/LeaderBoard.vue";
 
 const routes = [
     { path: "/", component: Welcome },
@@ -20,7 +21,8 @@ const routes = [
     { path: "/contact", component: Contact },
     { path: "/wheel", component: Wheel },
     { path: "/tos", component: ToS},
-    { path: "/privacy", component: Privacy}
+    { path: "/privacy", component: Privacy},
+    { path: "/leaderboard", component: LeaderBoard}
 ];
 
 const router = createRouter({
