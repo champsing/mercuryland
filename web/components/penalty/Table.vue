@@ -33,7 +33,8 @@ class PenaltyDataEntry {
     description?: {
         type: string;
         text?: string;
-        uri_str?: string;
+        uri_link?: string;
+        uri_imgs?: string[];
         uri_num?: number;
     }[];
     reapply?: { entries: { date: string; status: string }[] };
@@ -209,7 +210,7 @@ function filterPenaltyData(
 
                     <VaButton
                         v-if="block.type == 'link'"
-                        :href="block.uri_str"
+                        :href="block.uri_link"
                         rel="noopener noreferrer"
                         preset="plain"
                         color="textPrimary"
@@ -278,10 +279,18 @@ function filterPenaltyData(
                         ok-text="完成"
                     >
                         <!-- left need to be calc() -->
-                        <img
-                            :src="`penalty/${block.uri_str}`"
-                            :alt="block.text"
-                        />
+                        <div class="text-center text-bold">
+                            <VaIcon name="help_outline" />
+                            點擊右鍵→[在新分頁開啟]可查看大圖
+                        </div>
+                        <div class="flex flex-row gap-4">
+                            <img
+                                v-for="img in block.uri_imgs"
+                                :src="`penalty/${img}`"
+                                class="h-fit"
+                                :alt="block.text"
+                            />
+                        </div>
                     </VaModal>
 
                     <br v-if="block.type == 'br'" />

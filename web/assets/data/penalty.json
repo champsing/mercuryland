@@ -60,7 +60,12 @@
         "date": "2023-02-05",
         "name": "玩 RL Craft",
         "status": "未開始",
-        "description": [{ "type": "text", "text": "🆙 增加" }]
+        "description": [
+            {
+                "type": "text",
+                "text": "🆙 增加"
+            }
+        ]
     },
     {
         "id": 23305.1,
@@ -91,7 +96,10 @@
         "date": "2023-03-12",
         "name": "玩一張恐怖地圖 👻",
         "description": [
-            {"type": "text", "text": "➕ EXTRA 加碼"}
+            {
+                "type": "text",
+                "text": "➕ EXTRA 加碼"
+            }
         ],
         "status": "已完成"
     },
@@ -185,7 +193,10 @@
         "name": "玩 Metro: Last Night",
         "status": "未開始",
         "description": [
-            { "type": "text", "text": "2️⃣ 備案: 玩 Super Animal Royale" }
+            {
+                "type": "text",
+                "text": "2️⃣ 備案: 玩 Super Animal Royale"
+            }
         ],
         "steamID": 287390
     },
@@ -198,7 +209,7 @@
             {
                 "type": "link",
                 "text": "觀看懲罰成果",
-                "uri_str": "https://youtube.com/clip/UgkxrMznUtBi4zOBP4D20WPqbkatV5-cMLS9"
+                "uri_link": "https://youtube.com/clip/UgkxrMznUtBi4zOBP4D20WPqbkatV5-cMLS9"
             }
         ]
     },
@@ -217,9 +228,13 @@
             {
                 "type": "link",
                 "text": "🏁投票給過",
-                "uri_str": "https://discord.com/channels/506120681495199756/566611073977942017/1188877921608286260"
+                "uri_link": "https://discord.com/channels/506120681495199756/566611073977942017/1188877921608286260"
             },
-            { "type": "image", "text": "投票的截图", "uri_str": "23625-2.png" }
+            {
+                "type": "image",
+                "text": "投票的截图",
+                "uri_imgs": ["23625-2.png"]
+            }
         ]
     },
     {
@@ -248,7 +263,7 @@
             {
                 "type": "link",
                 "text": "觀看懲罰成果",
-                "uri_str": "https://youtube.com/clip/Ugkx8GkjUNA3Hxn9jyJcbuvJSme8jY9CFRzC"
+                "uri_link": "https://youtube.com/clip/Ugkx8GkjUNA3Hxn9jyJcbuvJSme8jY9CFRzC"
             }
         ]
     },
@@ -268,7 +283,7 @@
             {
                 "type": "link",
                 "text": "觀看懲罰成果",
-                "uri_str": "https://discord.com/channels/506120681495199756/529184173680885780/1132606696892674099"
+                "uri_link": "https://discord.com/channels/506120681495199756/529184173680885780/1132606696892674099"
             }
         ]
     },
@@ -287,7 +302,7 @@
             {
                 "type": "link",
                 "text": "觀看懲罰成果",
-                "uri_str": "https://youtube.com/clip/UgkxvS7iudvzdTxYpVYb2yGZN21AqydW6zsm"
+                "uri_link": "https://youtube.com/clip/UgkxvS7iudvzdTxYpVYb2yGZN21AqydW6zsm"
             }
         ]
     },
@@ -309,14 +324,24 @@
         "date": "2023-07-30",
         "name": "打完星鐵主線",
         "status": "進行中",
-        "description": [{ "type": "text", "text": "🆙 增加" }]
+        "description": [
+            {
+                "type": "text",
+                "text": "🆙 增加"
+            }
+        ]
     },
     {
         "id": 23730.2,
         "date": "2023-07-30",
         "name": "深夜台玩恐怖遊戲 👻",
         "status": "已完成",
-        "description": [{ "type": "text", "text": "🆙 增加" }]
+        "description": [
+            {
+                "type": "text",
+                "text": "🆙 增加"
+            }
+        ]
     },
     {
         "id": 23806,
@@ -324,8 +349,15 @@
         "name": "通關《壺男》",
         "status": "勉強過",
         "description": [
-            { "type": "text", "text": "🏁 懲罰主人給過" },
-            { "type": "image", "text": "給過的截圖", "uri_str": "23806.png" }
+            {
+                "type": "text",
+                "text": "🏁 懲罰主人給過"
+            },
+            {
+                "type": "image",
+                "text": "給過的截圖",
+                "uri_imgs": ["23806.png"]
+            }
         ],
         "steamID": 240720
     },
@@ -341,8 +373,15 @@
         "name": "破 Garten of Banban 2 👻",
         "status": "勉強過",
         "description": [
-            { "type": "text", "text": "🏁 原主人給過" },
-            { "type": "image", "text": "給過的截图", "uri_str": "23820-1.png" }
+            {
+                "type": "text",
+                "text": "🏁 原主人給過"
+            },
+            {
+                "type": "image",
+                "text": "給過的截图",
+                "uri_imgs": ["23820-1.png"]
+            }
         ],
         "steamID": 2262770
     },
@@ -357,8 +396,20 @@
         "date": "2023-08-20",
         "name": "Hypixel 與觀眾同樂時一場內弄死所有觀眾",
         "status": "已完成",
-        "description": [{ "type": "text", "text": "🔄 重抽" }],
-        "reapply": { "entries": [{ "date": "2024-09-22", "status": "已完成" }] }
+        "description": [
+            {
+                "type": "text",
+                "text": "🔄 重抽"
+            }
+        ],
+        "reapply": {
+            "entries": [
+                {
+                    "date": "2024-09-22",
+                    "status": "已完成"
+                }
+            ]
+        }
     },
     {
         "id": 23820.4,
@@ -397,21 +448,36 @@
         "date": "2023-09-10",
         "name": "nitro",
         "status": "已完成",
-        "description": [{ "type": "text", "text": "🆙 增加" }]
+        "description": [
+            {
+                "type": "text",
+                "text": "🆙 增加"
+            }
+        ]
     },
     {
         "id": 23910.6,
         "date": "2023-09-10",
         "name": "開加班台",
         "status": "已完成",
-        "description": [{ "type": "text", "text": "🆙 增加" }]
+        "description": [
+            {
+                "type": "text",
+                "text": "🆙 增加"
+            }
+        ]
     },
     {
         "id": 23910.7,
         "date": "2023-09-10",
         "name": "玩1個小時 only up",
         "status": "勉強過",
-        "description": [{ "type": "text", "text": "🏁 玩盜版" }],
+        "description": [
+            {
+                "type": "text",
+                "text": "🏁 玩盜版"
+            }
+        ],
         "steamID": 2562240
     },
     {
@@ -449,31 +515,57 @@
         "date": "2023-09-24",
         "name": "直播不能講到d開頭的字 五次懲罰加一 加到懲罰就解禁",
         "status": "已完成",
-        "description": [{ "type": "text", "text": "🆙 增加" }]
+        "description": [
+            {
+                "type": "text",
+                "text": "🆙 增加"
+            }
+        ]
     },
     {
         "id": 23924.4,
         "date": "2023-09-24",
         "name": "讓 ChatGPT 同時給小學數學、科學、文學、歷史、地理 各一題選擇題 2分鐘內沒解出來懲罰+1",
         "status": "已完成",
-        "description": [{ "type": "text", "text": "🆙 增加" }]
+        "description": [
+            {
+                "type": "text",
+                "text": "🆙 增加"
+            }
+        ]
     },
     {
         "id": 23924.5,
         "date": "2023-09-24",
         "name": "直播遊玩鬥陣特攻2直到上升通行證等級20級（超過十級可累積）",
         "status": "已完成",
-        "description": [{ "type": "text", "text": "📝 原主人修改1次" }]
+        "description": [
+            {
+                "type": "text",
+                "text": "📝 原主人修改1次"
+            }
+        ]
     },
     {
         "id": 23924.6,
         "date": "2023-09-24",
         "name": "直播玩螃蟹遊戲",
         "status": "已完成",
-        "description": [{ "type": "text", "text": "📝 原主人修改1次" }],
+        "description": [
+            {
+                "type": "text",
+                "text": "📝 原主人修改1次"
+            }
+        ],
         "steamID": 1782210,
-        "progress": 100,
-        "reapply": { "entries": [{ "date": "2024-01-07", "status": "勉強過" }] }
+        "reapply": {
+            "entries": [
+                {
+                    "date": "2024-01-07",
+                    "status": "勉強過"
+                }
+            ]
+        }
     },
     {
         "id": 231001.1,
@@ -514,8 +606,14 @@
         "status": "進行中",
         "progress": 20,
         "description": [
-            { "type": "text", "text": "⚔️ 已完成 4 /20個" },
-            { "type": "vod", "uri_num": 99 }
+            {
+                "type": "text",
+                "text": "⚔️ 已完成 4 /20個"
+            },
+            {
+                "type": "vod",
+                "uri_num": 99
+            }
         ],
         "steamID": 381210
     },
@@ -543,7 +641,12 @@
         "date": "2023-10-08",
         "name": "直播玩 project playtime",
         "status": "已完成",
-        "description": [{ "type": "text", "text": "📝 原主人修改1次" }],
+        "description": [
+            {
+                "type": "text",
+                "text": "📝 原主人修改1次"
+            }
+        ],
         "steamID": 1961460
     },
     {
@@ -574,7 +677,7 @@
             {
                 "type": "link",
                 "text": "觀看懲罰成果",
-                "uri_str": "https://discord.com/channels/506120681495199756/566611073977942017/1189169405679112222"
+                "uri_link": "https://discord.com/channels/506120681495199756/566611073977942017/1189169405679112222"
             }
         ]
     },
@@ -599,7 +702,7 @@
             {
                 "type": "link",
                 "text": "觀看懲罰成果",
-                "uri_str": "https://discord.com/channels/506120681495199756/566611073977942017/1188882035645890691"
+                "uri_link": "https://discord.com/channels/506120681495199756/566611073977942017/1188882035645890691"
             }
         ]
     },
@@ -632,7 +735,7 @@
         "date": "2023-11-05",
         "name": "跟觀眾打桌遊兩小時",
         "status": "已完成"
-    },    
+    },
     {
         "id": 231105.1,
         "date": "2023-11-05",
@@ -798,13 +901,25 @@
         "name": "通關 At Dead of Night",
         "status": "進行中",
         "steamID": 1450830,
-        "progress": 41
+        "progress": 100,
+        "description": [
+            {
+                "type": "text",
+                "text": "🚩 已完成全部劇情，準備進入最後單命模式"
+            }
+        ]
     },
     {
         "id": 24527.1,
         "date": "2024-05-26",
         "name": "yt与dc各至少5個貼圖（若空位不足则新增至上限）",
-        "status": "未開始"
+        "status": "已完成",
+        "description": [
+            {
+                "type": "image",
+                "uri_imgs": ["24527-1-yt.png", "24527-1-dc.png"]
+            }
+        ]
     },
     {
         "id": 24527.2,
@@ -980,7 +1095,12 @@
         "date": "2024-10-20",
         "name": "唸一遍所有馬來西亞官方郵局的地址",
         "status": "勉強過",
-        "description": [{ "type": "text", "text": "🏁 原主人說念名字就好" }]
+        "description": [
+            {
+                "type": "text",
+                "text": "🏁 原主人說念名字就好"
+            }
+        ]
     },
     {
         "id": 241103,
@@ -1039,14 +1159,24 @@
         "date": "2025-01-05",
         "name": "玩Begone Beast",
         "status": "未開始",
-        "description": [{ "type": "text", "text": "🆙 增加" }]
+        "description": [
+            {
+                "type": "text",
+                "text": "🆙 增加"
+            }
+        ]
     },
     {
         "id": 250105.3,
         "date": "2025-01-05",
         "name": "今年4月1日之前补完所有直播时数，否则惩罚+2",
         "status": "未開始",
-        "description": [{ "type": "text", "text": "🆙 增加" }]
+        "description": [
+            {
+                "type": "text",
+                "text": "🆙 增加"
+            }
+        ]
     },
     {
         "id": 250112.1,
@@ -1089,5 +1219,36 @@
         "date": "2025-01-12",
         "name": "唱 Time to say goodbye 安德烈波伽利和沙菈布萊曼版本",
         "status": "未開始"
+    },
+    {
+        "id": 250202.1,
+        "date": "2025-02-02",
+        "name": "直播唱夜鹿 - Aporia",
+        "status": "未開始"
+    },
+    {
+        "id": 250202.2,
+        "date": "2025-02-02",
+        "name": "盲講所有1939年歐洲國家分成軸心國，中立與同盟國 每漏/分錯一個懲罰加一",
+        "status": "未開始"
+    },
+    {
+        "id": 250202.3,
+        "date": "2025-02-02",
+        "name": "玩Poppy Playtime第四章",
+        "status": "未開始"
+    },
+    {
+        "id": 250202.4,
+        "date": "2025-02-02",
+        "name": "開每日迷因頻道 日更連續至少1星期",
+        "status": "進行中",
+        "progress": 42,
+        "description": [
+            {
+                "type": "text",
+                "text": "⚔️ 已完成 3 /7日"
+            }
+        ]
     }
 ]
