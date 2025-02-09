@@ -91,6 +91,8 @@ pub async fn run() -> Result<(), ServerError> {
         .doit()
         .await?;
 
+    println!("YouTube authentication complete");
+
     loop {
         if let Some(id) = get_broadcast_id(&api, channel_id).await? {
             if let Some(video) = video_from_id(&api, &id).await? {
