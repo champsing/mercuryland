@@ -7,10 +7,13 @@ import {
     VaModal,
     VaSwitch,
     VaInput,
+    VaIcon,
+    VaDivider,
     useToast,
 } from "vuestic-ui";
 import axios from "axios";
 import { BASE_URL } from "@/composables/utils";
+import { AlertCircleOutline } from "@vicons/ionicons5";
 
 const wheelContainer = ref(null);
 const isSpinning = ref(false); //轉盤旋轉中
@@ -69,12 +72,12 @@ const textArea2 = defineModel("textArea2", {
 });
 
 function submit(hide?: CallableFunction) {
-        axios
+    axios
         .post(BASE_URL + "/api/wheel/submit", {
-                id: wheelConnect.id,
-                secret: wheelConnect.secret,
-                password: modal3.password,
-            })
+            id: wheelConnect.id,
+            secret: wheelConnect.secret,
+            password: modal3.password,
+        })
         .then((response) => {
             console.log(response);
             useToast().init({
@@ -86,7 +89,7 @@ function submit(hide?: CallableFunction) {
         .catch((error) => {
             console.log(error);
             modal3.password = "";
-        modal3.fail = true;
+            modal3.fail = true;
         });
 }
 
@@ -136,7 +139,7 @@ function move() {
         .filter(
             (_: { label: string }, i: number) => i != wheel.getCurrentIndex()
         )
-        .map((x: { label: string, weight: number }) => {
+        .map((x: { label: string; weight: number }) => {
             if (x.weight != 1) return x.label + "x" + x.weight;
             else return x.label;
         })
@@ -205,15 +208,23 @@ const modal3 = reactive({
 <template>
     <div class="mt-8 m-auto w-11/12">
         <div class="flex w-full justify-end">
-            <div class="text-lime-400 font-bold text-4xl text-right">
-                {{
-                    wheelConnect.id == -1
-                        ? "----"
-                        : wheelConnect.id
-                              .toString(16)
-                              .padStart(4, "0")
-                              .toUpperCase()
-                }}
+            <div class="flex-col">
+                <div class="text-lime-400 font-bold text-4xl text-right">
+                    {{
+                        wheelConnect.id == -1
+                            ? "----"
+                            : wheelConnect.id
+                                  .toString(16)
+                                  .padStart(4, "0")
+                                  .toUpperCase()
+                    }}
+                </div>
+                <div class="flex flex-row gap-2 text-sm text-red-600 !text-right" v-if="wheelConnect.id == -1">
+                    <VaIcon size="large">
+                        <AlertCircleOutline />
+                    </VaIcon>
+                    無法連接到伺服器
+                </div>
             </div>
         </div>
 
@@ -239,10 +250,22 @@ const modal3 = reactive({
                 <VaButton
                     class="w-full mt-8"
                     @click="modal3.show = true"
-                    :disabled="isSpinning || count(textArea2) == 0"
+                    :disabled="
+                        isSpinning ||
+                        count(textArea2) == 0 ||
+                        wheelConnect.id == -1
+                    "
                 >
                     完成抽選
                 </VaButton>
+                <div
+                    class="text-red-500 text-right"
+                    v-if="wheelConnect.id == -1"
+                >
+                    <VaDivider color="danger" orientation="right">
+                        停用
+                    </VaDivider>
+                </div>
                 <div class="h-44"></div>
             </div>
             <div class="w-1/5">
