@@ -14,6 +14,7 @@ import {
 import axios from "axios";
 import { BASE_URL } from "@/composables/utils";
 import { AlertCircleOutline } from "@vicons/ionicons5";
+import { ArrowClockwise24Filled } from "@vicons/fluent";
 
 const wheelContainer = ref(null);
 const isSpinning = ref(false); //轉盤旋轉中
@@ -22,15 +23,20 @@ const clearRightArea = ref(true); //清除右邊區域
 const re = /x[1-9][0-9]*$/;
 
 let wheelConnect = reactive({
-    id: -1,
+    id: 0,
     secret: "",
 });
-axios.get(BASE_URL + "/api/wheel/create").then((response) => {
-    wheelConnect.id = response.data.id;
-    wheelConnect.secret = response.data.secret;
-
-    console.log(wheelConnect);
-});
+axios.get(BASE_URL + "/api/wheel/create").then(
+    (response) => {
+        wheelConnect.id = response.data.id;
+        wheelConnect.secret = response.data.secret;
+        console.log(wheelConnect);
+    },
+    (error) => {
+        wheelConnect.id = -1;
+        console.log(error);
+    }
+);
 
 let wheel: Wheel = null;
 
@@ -211,7 +217,7 @@ const modal3 = reactive({
             <div class="flex-col">
                 <div class="text-lime-400 font-bold text-4xl text-right">
                     {{
-                        wheelConnect.id == -1
+                        wheelConnect.id <= 0
                             ? "----"
                             : wheelConnect.id
                                   .toString(16)
@@ -219,7 +225,19 @@ const modal3 = reactive({
                                   .toUpperCase()
                     }}
                 </div>
-                <div class="flex flex-row gap-2 text-sm text-red-600 !text-right" v-if="wheelConnect.id == -1">
+                <div
+                    class="flex flex-row gap-2 text-sm text-gray-400 !text-right"
+                    v-if="wheelConnect.id == 0"
+                >
+                    <VaIcon size="large">
+                        <ArrowClockwise24Filled />
+                    </VaIcon>
+                    正在連接伺服器...
+                </div>
+                <div
+                    class="flex flex-row gap-2 text-sm text-red-600 !text-right"
+                    v-if="wheelConnect.id == -1"
+                >
                     <VaIcon size="large">
                         <AlertCircleOutline />
                     </VaIcon>
@@ -253,14 +271,14 @@ const modal3 = reactive({
                     :disabled="
                         isSpinning ||
                         count(textArea2) == 0 ||
-                        wheelConnect.id == -1
+                        wheelConnect.id <= 0
                     "
                 >
                     完成抽選
                 </VaButton>
                 <div
                     class="text-red-500 text-right"
-                    v-if="wheelConnect.id == -1"
+                    v-if="wheelConnect.id <= 0"
                 >
                     <VaDivider color="danger" orientation="right">
                         停用
