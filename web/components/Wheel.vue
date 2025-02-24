@@ -78,6 +78,7 @@ const textArea2 = defineModel("textArea2", {
 });
 
 function submit(hide?: CallableFunction) {
+    textArea2.value = textArea2.value; //觸發set 強制refresh textArea2 讓資料庫更新
     axios
         .post(BASE_URL + "/api/wheel/submit", {
             id: wheelConnect.id,
