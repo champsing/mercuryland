@@ -37,7 +37,7 @@ class PenaltyDataEntry {
         uri_imgs?: string[];
         uri_num?: number;
     }[];
-    reapply?: { entries: { date: string; status: string }[] };
+    reapply?: { date: string; status: string }[];
     steamID?: number;
     progress?: number;
 }
@@ -315,7 +315,7 @@ function filterPenaltyData(
                     😇&nbsp;復活&ensp;
                     <div class="inline text-2xl text-orange-300">
                         <!-- prettier-ignore -->
-                        {{ PEMContent.reapply?.entries.length }}
+                        {{ PEMContent.reapply?.length }}
                     </div>
                     &ensp;次
                 </span>
@@ -324,7 +324,7 @@ function filterPenaltyData(
         </template>
 
         <!-- 復活次數 -->
-        <template v-for="entry in PEMContent.reapply?.entries">
+        <template v-for="entry in PEMContent.reapply">
             <div class="mt-1">
                 <VaButton
                     @click="openLinks(vodLinkOfDate(entry.date))"
