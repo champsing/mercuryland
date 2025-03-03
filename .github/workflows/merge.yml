@@ -2,7 +2,7 @@ name: Merge to prod
 on:
   pull_request: 
     types: [labeled]
-    branches: [prod-web, prod-back]
+    branches: [prod-back]
 
 jobs:
   merge:
