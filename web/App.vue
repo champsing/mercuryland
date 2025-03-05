@@ -6,9 +6,11 @@ import {
     useColors,
     VaNavbar,
     VaNavbarItem,
+    VaIcon,
 } from "vuestic-ui";
 import { RouterLink } from "vue-router";
 import Login from "@components/Login.vue";
+import { Github } from "@vicons/fa";
 
 useColors().applyPreset("dark");
 
@@ -45,8 +47,22 @@ const tabs = [
         </template>
         <template #right>
             <VaNavbarItem class="navbar-item-slot">
-                <div class="mr-4">
-                    <Login />
+                <div class="flex flex-row">
+                    <div class="mr-2">
+                        <Login />
+                    </div>
+                    <VaButton
+                        class="-mt-1/2"
+                        preset="secondary"
+                        color="textPrimary"
+                        href="https://github.com/champsing/mercuryland"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                    >
+                        <VaIcon size="large">
+                            <Github />
+                        </VaIcon>
+                    </VaButton>
                 </div>
             </VaNavbarItem>
         </template>
