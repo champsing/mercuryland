@@ -7,7 +7,6 @@ use sea_query_rusqlite::RusqliteValue;
 use serde::{Deserialize, Serialize};
 use serde_json::json;
 use serde_json::Value;
-use serenity::json;
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
 #[enum_def]
