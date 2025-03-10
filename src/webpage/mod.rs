@@ -12,6 +12,7 @@ pub async fn run() -> Result<(), ServerError> {
         let cors = Cors::default()
             .allowed_origin("http://localhost:5173")
             .allowed_origin("https://mercuryland.online")
+            .allowed_origin("https://www.mercuryland.online")
             .allow_any_header()
             .allowed_methods(vec!["GET", "POST"]);
 
