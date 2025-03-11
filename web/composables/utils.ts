@@ -24,6 +24,7 @@ export function parseHMS(hms: string): number {
 }
 
 export function formatHMS(seconds: number) {
+    seconds = Math.abs(seconds);
     let s = seconds % 60;
     let m = Math.floor(seconds / 60) % 60;
     let h = Math.floor(seconds / 3600);
