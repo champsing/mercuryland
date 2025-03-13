@@ -75,7 +75,7 @@ const tabs = [
     <div class="text-center text-base text-zinc-200 pt-4 pb-4 bg-zinc-900">
         <div class="flex justify-center">
             <div style="font-family: playfair display">
-                Copyright © 2024 The Mercury Land
+                Copyright © 2025 The Mercury Land
             </div>
             <!-- 
                     【&nbsp;】：半角スペースと同じサイズの空白
