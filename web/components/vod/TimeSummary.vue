@@ -5,7 +5,7 @@ import { VaCard, VaCardTitle, VaCardContent } from "vuestic-ui";
 import { formatHMS } from "@composables/utils.ts";
 
 const props = defineProps<{ t: number }>();
-const text = computed(() => (props.t > 0 ? formatHMS(props.t) : "-" + formatHMS(props.t)));
+const text = computed(() => (props.t >= 0 ? formatHMS(props.t) : "-" + formatHMS(props.t)));
 
 function calcStyle(width: number) {
     let p = 24;
