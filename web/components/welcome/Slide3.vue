@@ -16,9 +16,7 @@ import NextPageButton from "./NextPageButton.vue";
                     alt="Welcome"
                 />
             </div>
-            <div class="relative"></div>
             <div class="relative col-start-3 row-start-2 -mt-4">
-                <div class="row-start-2 row-end-2">
                     <div class="text-yellow-400 font-bold text-6xl">
                         發揮您的創意，建造您夢想中的建築。
                     </div>
@@ -26,7 +24,6 @@ import NextPageButton from "./NextPageButton.vue";
                     <div class="text-yellow-600 font-bold text-3xl">
                         絕無思想審查制度。您可以在我們的伺服器復刻世界上的有名建築，或單單只是在這個世界蓋出專屬於您的根據地。
                     </div>
-                </div>
             </div>
         </div>
     </div>
