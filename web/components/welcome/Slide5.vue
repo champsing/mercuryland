@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { VaButton, VaDivider } from "vuestic-ui";
 import ReturnTopButton from "./ReturnTopButton.vue";
-import { backToTop } from "./ReturnTopButton.vue";
+import { backToTop } from "@/composables/utils";
 </script>
 
 <template>

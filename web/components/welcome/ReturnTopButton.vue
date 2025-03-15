@@ -1,9 +1,7 @@
 <script setup lang="ts">
 import { VaButton, VaIcon } from "vuestic-ui";
 import { AngleUp } from "@vicons/fa";
-export function backToTop() {
-    window.scrollTo({ top: 0, behavior: "smooth" });
-}
+import { backToTop } from "@/composables/utils";
 </script>
 
 <template>

@@ -1,3 +1,1 @@
-1. 把Naive-UI替換 剩下Welcome的NGrid了嗚嗚
-2. 支持網頁編輯Vod
-3. 轉盤結果支持Traceback ID 做好隨機四位數了但還沒接後端
+1. 支持網頁編輯Vod 需要建立ajax 傳JSON Response

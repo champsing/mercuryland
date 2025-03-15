@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { NConfigProvider, darkTheme } from "naive-ui";
 import {
     VaButton,
     VaDivider,
@@ -11,7 +10,7 @@ import {
 import { RouterLink } from "vue-router";
 import Login from "@components/Login.vue";
 import { Github } from "@vicons/fa";
-import { backToTop } from "./components/welcome/ReturnTopButton.vue";
+import { backToTop } from "./composables/utils";
 
 useColors().applyPreset("dark");
 
@@ -69,9 +68,7 @@ const tabs = [
         </template>
     </VaNavbar>
     <div class="min-h-screen">
-        <n-config-provider :theme="darkTheme">
-            <router-view />
-        </n-config-provider>
+        <router-view />
     </div>
     <div class="text-center text-base text-zinc-200 pt-4 pb-4 bg-zinc-900">
         <div class="flex justify-center">
@@ -88,11 +85,21 @@ const tabs = [
         </div>
         <!-- <div class="mt-2">使用條款&ensp;|&ensp;隱私權政策&ensp;|&ensp;法律聲明</div> -->
         <div class="flex justify-center mt-2">
-            <VaButton preset="secondary" border-color="#363636" to="tos" @click="backToTop()">
+            <VaButton
+                preset="secondary"
+                border-color="#363636"
+                to="tos"
+                @click="backToTop()"
+            >
                 <div class="text-zinc-200">使用條款</div>
             </VaButton>
             <VaDivider vertical />
-            <VaButton preset="secondary" border-color="#363636" to="privacy">
+            <VaButton
+                preset="secondary"
+                border-color="#363636"
+                to="privacy"
+                @click="backToTop()"
+            >
                 <div class="text-zinc-200">隱私權政策</div>
             </VaButton>
             <VaDivider vertical />
