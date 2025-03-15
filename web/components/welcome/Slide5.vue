@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { VaButton, VaDivider } from "vuestic-ui";
 import ReturnTopButton from "./ReturnTopButton.vue";
-import { backToTop } from "@/composables/utils";
 </script>
 
 <template>
@@ -20,7 +19,6 @@ import { backToTop } from "@/composables/utils";
                     size="large"
                     border-color="#0891b2"
                     color="#0891b2"
-                    @click="backToTop()"
                 >
                     <div class="text-cyan-200">點擊加入</div>
                 </VaButton>

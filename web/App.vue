@@ -40,7 +40,7 @@ const tabs = [
                 </router-link>
             </VaNavbarItem>
             <VaNavbarItem class="navbar-item-slot" v-for="t in tabs">
-                <router-link :to="t.path" class="ml-4 text-base text-white">
+                <router-link :to="t.path" class="ml-4 text-base text-white" @click="backToTop()">
                     {{ t.label }}
                 </router-link>
             </VaNavbarItem>

@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { VaButton, VaDivider, VaInput } from "vuestic-ui";
+import { backToTop } from "@/composables/utils";
 
+backToTop();
 const email = "0.flunky-sojourn@icloud.com";
 </script>
 
