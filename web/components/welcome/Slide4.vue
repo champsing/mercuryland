@@ -1,15 +1,26 @@
 <script setup lang="ts">
-import { VaDivider } from "vuestic-ui";
+import { ref } from "vue";
+import { VaCarousel, VaDivider } from "vuestic-ui";
 import NextPageButton from "./NextPageButton.vue";
+import img1 from "@assets/images/welcome/s2_firework_1.png";
+import img2 from "@assets/images/welcome/s2_firework_2.png";
+import img3 from "@assets/images/welcome/s1_close_1.png";
+import img4 from "@assets/images/welcome/s1_close_2.png";
+
+const currentImg = ref(0);
+const imgs = [
+    { src: img1, alt: "煙火大會1" },
+    { src: img2, alt: "煙火大會2" },
+    { src: img3, alt: "第一季關服1" },
+    { src: img4, alt: "第一季關服2" },
+];
 </script>
 
 <template>
     <div class="h-screen overflow-hidden bg-black relative">
         <NextPageButton :page="4" />
-        <div
-            class="grid grid-cols-3 grid-rows-4 gap-4 absolute x-center w-5/6 h-full"
-        >
-            <div class="relative row-start-2 mt-16">
+        <div class="grid grid-cols-2 gap-20 absolute x-center w-5/6 h-full">
+            <div class="relative mt-80">
                 <div class="text-green-400 font-bold text-6xl">
                     來這裡遇到同好。
                 </div>
@@ -18,18 +29,15 @@ import NextPageButton from "./NextPageButton.vue";
                     擁有豐富的擴充遊玩內容、玩家自辦活動、以及關服舉行的煙火大會。
                 </div>
             </div>
-            <div class="relative col-start-3 row-start-2">
-                <img
-                    src="@assets/images/welcome/s2_firework_1.png"
-                    class="absolute"
-                    alt="Welcome"
-                />
-            </div>
-            <div class="relative col-start-3 row-start-3 mt-4">
-                <img
-                    src="@assets/images/welcome/s2_firework_2.png"
-                    class="absolute"
-                    alt="Welcome"
+            <div class="relative mt-56">
+                <VaCarousel
+                    v-model="currentImg"
+                    :items="imgs"
+                    :indicators="false"
+                    :ratio="16 / 12"
+                    autoscroll
+                    stateful
+                    infinite
                 />
             </div>
         </div>
