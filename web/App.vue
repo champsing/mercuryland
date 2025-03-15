@@ -11,6 +11,7 @@ import {
 import { RouterLink } from "vue-router";
 import Login from "@components/Login.vue";
 import { Github } from "@vicons/fa";
+import { backToTop } from "./components/welcome/ReturnTopButton.vue";
 
 useColors().applyPreset("dark");
 
@@ -87,7 +88,7 @@ const tabs = [
         </div>
         <!-- <div class="mt-2">使用條款&ensp;|&ensp;隱私權政策&ensp;|&ensp;法律聲明</div> -->
         <div class="flex justify-center mt-2">
-            <VaButton preset="secondary" border-color="#363636" to="tos">
+            <VaButton preset="secondary" border-color="#363636" to="tos" @click="backToTop()">
                 <div class="text-zinc-200">使用條款</div>
             </VaButton>
             <VaDivider vertical />

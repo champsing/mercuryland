@@ -6,7 +6,7 @@ import { AngleDown } from "@vicons/fa";
 const props = defineProps<{ page: number }>();
 
 const vh = useWindowSize().height;
-function action() {
+function nextPage() {
     window.scrollTo({ top: props.page * vh.value, behavior: "smooth" });
 }
 </script>
@@ -21,7 +21,7 @@ function action() {
             :hover-opacity="0"
             :pressed-opacity="0"
             size="small"
-            @click="action()"
+            @click="nextPage()"
         >
             <VaIcon size="128px">
                 <angle-down />

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { VaButton, VaIcon } from "vuestic-ui";
 import { AngleUp } from "@vicons/fa";
-function action() {
+export function backToTop() {
     window.scrollTo({ top: 0, behavior: "smooth" });
 }
 </script>
@@ -16,7 +16,7 @@ function action() {
             :hover-opacity="0"
             :pressed-opacity="0"
             size="small"
-            @click="action()"
+            @click="backToTop()"
         >
             <VaIcon size="128px">
                 <angle-up />
