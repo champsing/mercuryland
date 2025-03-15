@@ -29,7 +29,7 @@ const imgs = [
                     擁有豐富的擴充遊玩內容、玩家自辦活動、以及關服舉行的煙火大會。
                 </div>
             </div>
-            <div class="relative mt-56">
+            <div class="relative mt-48">
                 <VaCarousel
                     v-model="currentImg"
                     :items="imgs"
