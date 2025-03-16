@@ -16,7 +16,7 @@ import NextPageButton from "./NextPageButton.vue";
                     alt="Welcome"
                 />
             </div>
-            <div class="relative col-start-3 row-start-2 -mt-4">
+            <div class="relative col-start-3 row-start-2 -mt-8">
                     <div class="text-yellow-400 font-bold text-6xl">
                         發揮您的創意，建造您夢想中的建築。
                     </div>
