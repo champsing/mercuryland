@@ -1283,7 +1283,13 @@
         "id": 250302.1,
         "date": "2025-03-02",
         "name": "minecraft speed run取得一把附魔三叉戟",
-        "status": "未開始"
+        "status": "已完成",
+        "description": [
+            {
+                "type": "vod",
+                "uri_num": 158
+            }
+        ]
     },
     {
         "id": 250302.2,
