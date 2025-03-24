@@ -33,7 +33,6 @@ let barelyPassedPenalties = queryStatusPenaties("勉強過");
 let proceedingPenalties = queryStatusPenaties("進行中");
 
 const notEffectivePenalties = [
-    "直播遊玩Call of Duty®: Modern Warfare® III",
     "玩狂亂之境4 打敗BOSS百變獸"
 ]
     .join("\n")
