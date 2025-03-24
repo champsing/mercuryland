@@ -145,7 +145,7 @@ let proceedingPenalties = queryStatusPenaties("進行中");
             </div>
         </div>
         <div class="flex justify-start mt-4 text-sm">
-            <kbd>Ctrl</kbd>&nbsp;<kbd>A</kbd>&ensp;可快速選擇全部項目
+            <kbd>Ctrl</kbd>&nbsp;<kbd>A</kbd>&ensp;可快速選取全部項目
         </div>
     </VaModal>
 
