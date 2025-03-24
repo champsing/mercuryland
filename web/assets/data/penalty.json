@@ -1001,7 +1001,13 @@
         "id": 24901.1,
         "date": "2024-09-01",
         "name": "直播唱natori - 絶対零度",
-        "status": "未開始"
+        "status": "已完成",
+        "description": [
+            {
+                "type": "image",
+                "uri_img": "24901-1.png"
+            }
+        ]
     },
     {
         "id": 24901.2,
