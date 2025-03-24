@@ -1,17 +1,15 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import {
-    VaAlert,
     VaButton,
     VaButtonGroup,
     VaDivider,
-    VaIcon,
     VaModal,
     VaTextarea,
 } from "vuestic-ui";
 import penaltyData from "@assets/data/penalty.json";
 import { copyToClipboard } from "@/composables/utils";
-import { InfoCircle } from "@vicons/tabler";
+
 
 const showExistModal = ref(false);
 const showCompleteModal = ref(false);
@@ -31,28 +29,11 @@ let completedPenalties = queryStatusPenaties("已完成");
 let barelyPassedPenalties = queryStatusPenaties("勉強過");
 
 let proceedingPenalties = queryStatusPenaties("進行中");
-
-const notEffectivePenalties = [
-    "玩狂亂之境4 打敗BOSS百變獸"
-]
-    .join("\n")
-    .toString();
 </script>
 
 <template>
     <div class="flex flex-col m-auto mt-0">
-        <VaAlert class="mt-2" color="#3d807c" closeable>
-            <div class="flex flex-row items-center w-72">
-                <VaIcon size="large" class="mr-2">
-                    <InfoCircle />
-                </VaIcon>
-                <div class="text-center text-amber-200">
-                    <div class="text-lg">圖表維護中，敬請期待開放</div>
-                </div>
-            </div>
-        </VaAlert>
-
-        <div class="flex m-auto" item-responsive>
+        
             <!-- <VaChip class="vachip2" color="#3d807c" readonly>
             <VaIcon size="large" class="mt-1 mr-2">
                 <InfoCircle />
@@ -62,6 +43,7 @@ const notEffectivePenalties = [
             </div>
         </VaChip> -->
             <div>
+                <div class="text-center text-xl bg-stone-600">懲罰數量統計</div>
                 <!--This div is for its own size, don't delete.-->
                 <VaButtonGroup round class="overall-button">
                     <VaButton
@@ -78,34 +60,29 @@ const notEffectivePenalties = [
                     </VaButton>
                 </VaButtonGroup>
             </div>
-
-        </div>
-
-        <div class="flex flex-col text-center">
-            <div class="text-sm mt-4 text-zinc-200">尚未生效的懲罰</div>
-            <div class="text-sm mt-1 text-zinc-200">
-                <VaTextarea
-                    v-model="notEffectivePenalties"
-                    :maxRows="7"
-                    :resize="false"
-                    readonly
-                />
+        
+        <!-- <VaAlert class="mt-4" color="#3d807c" closeable>
+            <div class="flex flex-row items-center w-72">
+                <VaIcon size="large" class="mr-2">
+                    <InfoCircle />
+                </VaIcon>
+                <div class="text-center text-amber-200">
+                    <div class="text-lg">圖表維護中，敬請期待開放</div>
+                </div>
             </div>
-        </div>
+        </VaAlert> -->
     </div>
-
-    
 
     <!-- 現存 和 完成 -->
     <VaModal
         v-model="showExistModal"
-        title="懲罰一覽表"
+        title="懲罰數量統計"
         size="small"
         close-button
         hide-default-actions
     >
         <div class="flex flex-row mb-8">
-            <div class="text-xl flex-grow">懲罰一覽表：現存</div>
+            <div class="text-xl flex-grow">懲罰數量統計：現存</div>
             <VaButton
                 color="warning"
                 gradient
@@ -121,7 +98,7 @@ const notEffectivePenalties = [
         </div>
 
         <!-- Colors below are specially picked, don't use statusColorSet constant. -->
-         
+
         <div class="flex justify-center text-center gap-32 ml-4">
             <div class="flex flex-col">
                 <div class="text-sm mt-1 text-[#ef3b3b]">未開始</div>
@@ -174,13 +151,13 @@ const notEffectivePenalties = [
 
     <VaModal
         v-model="showCompleteModal"
-        title="懲罰一覽表"
+        title="懲罰數量統計"
         size="small"
         hide-default-actions
         close-button
     >
         <div class="flex flex-row mb-8">
-            <div class="text-xl flex-grow">懲罰一覽表：完成</div>
+            <div class="text-xl flex-grow">懲罰數量統計：完成</div>
             <VaButton
                 color="success"
                 gradient
