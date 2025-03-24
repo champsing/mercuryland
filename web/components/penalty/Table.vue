@@ -113,7 +113,7 @@ function filterPenaltyData(
 </script>
 
 <template>
-    <!-- !bg-[#b91c1c] !bg-[#4d7c0f] !bg-[#047857] !bg-[#b45309] -->
+    <!-- !bg-[#6d8581] !bg-[#b91c1c] !bg-[#4d7c0f] !bg-[#047857] !bg-[#b45309] -->
     <!-- TAILWIND CSS: DO NOT REMOVE ABOVE COMMENT -->
     <VaDataTable
         :items="items"
@@ -150,16 +150,21 @@ function filterPenaltyData(
         </template>
 
         <!-- check day of week:  {{ new Date(value).getDay() }} -->
-        <template #cell(date)="{ value }">
+        <template #cell(date)="{ value, row }">
             <div class="text-center">
-                <VaButton
-                    color="textPrimary"
-                    preset="plain"
-                    class=""
-                    @click="openLinks(vodLinkOfDate(value))"
-                >
-                    {{ value }}
-                </VaButton>
+                <div v-if="row.rowData.status == '未生效'">
+                    ----
+                </div>
+                <div v-else>
+                    <VaButton
+                        color="textPrimary"
+                        preset="plain"
+                        class=""
+                        @click="openLinks(vodLinkOfDate(value))"
+                    >
+                        {{ value }}
+                    </VaButton>
+                </div>
             </div>
         </template>
 
