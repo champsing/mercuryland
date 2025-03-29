@@ -284,7 +284,7 @@ function filterPenaltyData(
                         ok-text="完成"
                     >
                         <!-- left need to be calc() -->
-                        <div class="text-center text-bold">
+                        <div class="text-center font-bold">
                             <VaIcon name="help_outline" />
                             點擊右鍵→[在新分頁開啟]可查看大圖
                         </div>
