@@ -32,17 +32,7 @@ let proceedingPenalties = queryStatusPenaties("進行中");
 </script>
 
 <template>
-    <div class="flex flex-col m-auto mt-0">
-        
-            <!-- <VaChip class="vachip2" color="#3d807c" readonly>
-            <VaIcon size="large" class="mt-1 mr-2">
-                <InfoCircle />
-            </VaIcon>
-            <div class="text-center text-amber-200">
-                <div class="text-lg mt-1">將滑鼠移至圖表上可查看數量</div>
-            </div>
-        </VaChip> -->
-            <div>
+    <div>
                 <div class="text-center text-xl bg-stone-600">懲罰數量統計</div>
                 <!--This div is for its own size, don't delete.-->
                 <VaButtonGroup round class="overall-button">
@@ -60,20 +50,8 @@ let proceedingPenalties = queryStatusPenaties("進行中");
                     </VaButton>
                 </VaButtonGroup>
             </div>
-        
-        <!-- <VaAlert class="mt-4" color="#3d807c" closeable>
-            <div class="flex flex-row items-center w-72">
-                <VaIcon size="large" class="mr-2">
-                    <InfoCircle />
-                </VaIcon>
-                <div class="text-center text-amber-200">
-                    <div class="text-lg">圖表維護中，敬請期待開放</div>
-                </div>
-            </div>
-        </VaAlert> -->
-    </div>
 
-    <!-- 現存 和 完成 -->
+            <!-- 現存 和 完成 -->
     <VaModal
         v-model="showExistModal"
         title="懲罰數量統計"
