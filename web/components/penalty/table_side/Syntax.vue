@@ -306,7 +306,7 @@ const currentTab = (
                 </VaChip>
                 已經完成該懲罰主文要求的全部條件
                 <br />
-                <VaChip outline readonly :color="`${statusColorSet[2]}`">
+                <VaChip outline readonly :color="`${statusColorSet[2]}`" class="mr-2">
                     <div :class="`inline !text-[${statusColorSet[2]}] font-bold`">
                         ▲勉強過
                     </div>
