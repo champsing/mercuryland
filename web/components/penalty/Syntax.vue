@@ -20,6 +20,7 @@ const statusColorSet = [
     colorOfStatus("已完成"),
     colorOfStatus("勉強過"),
     colorOfStatus("進行中"),
+    colorOfStatus("未生效"),
 ];
 
 const additionalMetaData = ref(false);
@@ -28,7 +29,7 @@ const showExtraConditionDesc = ref(false);
 </script>
 
 <template>
-    <!-- !text-[#b91c1c] !text-[#4d7c0f] !text-[#047857] !text-[#b45309] -->
+    <!-- !text-[#6d8581] !text-[#b91c1c] !text-[#4d7c0f] !text-[#047857] !text-[#b45309] -->
     <!-- TAILWIND CSS: DO NOT REMOVE ABOVE COMMENT -->
     <div class="text-4xl text-neutral-100 text-left mt-4">圖例</div>
     <VaDivider class="!mt-3" />
@@ -57,12 +58,17 @@ const showExtraConditionDesc = ref(false);
             <VaCardContent>
                 <div class="text-base">
                     <div
-                        v-for="color in statusColorSet"
+                        v-for="color in statusColorSet.slice(0, 4)"
                         :class="`inline bg-black !text-[${color}]`"
                     >
                         ▲
+                    </div>四大完成狀態、
+                    <div
+                        :class="`inline bg-black !text-[${statusColorSet[4]}]`"
+                    >
+                        ▲
                     </div>
-                    四大完成狀態、✅已抽、🏁給過、⏲️⚔️目前進度
+                    未生效、✅已抽、🏁給過、⏲️⚔️目前進度
                 </div>
             </VaCardContent>
         </VaCard>
@@ -150,12 +156,15 @@ const showExtraConditionDesc = ref(false);
             ：已經完成該懲罰主文要求的全部條件
             <br />
             <div :class="`inline !text-[${statusColorSet[2]}]`">▲勉強過</div>
-            ：該懲罰的原主人決定讓惡靈在沒有完成全部條件情況下，直接完成該懲罰
+            ：該懲罰的原主人決定讓惡靈在沒有完成全部條件情況下，以最低及格線通過該懲罰。
             <br />
-            （不清楚原主人時則由群組投票）
+            （不清楚原主人時則由群組投票，若之後能夠完成全部的條件，則一樣能夠獲得「已完成」。）
             <br />
             <div :class="`inline !text-[${statusColorSet[3]}]`">▲進行中</div>
             ：正在嘗試完成，已經有進度的懲罰
+            <br />
+            <div :class="`inline !text-[${statusColorSet[4]}]`">▲未生效</div>
+            ：多抽出預備的懲罰，在沒被加新懲罰之前不會生效；加懲罰時依時間順序優先成為懲罰。
             <br />
             <br />
             ✅已抽：該懲罰中所產生的內容已經抽出
