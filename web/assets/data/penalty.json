@@ -1006,7 +1006,10 @@
         "description": [
             {
                 "type": "image",
-                "uri_img": "24901-1.png"
+                "text": "唱完歌的截圖",
+                "uri_imgs": [
+                    "24901-1.png"
+                ]
             }
         ]
     },
