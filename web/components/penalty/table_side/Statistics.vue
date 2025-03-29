@@ -2,14 +2,12 @@
 import { ref } from "vue";
 import {
     VaButton,
-    VaButtonGroup,
     VaDivider,
     VaModal,
     VaTextarea,
 } from "vuestic-ui";
 import penaltyData from "@assets/data/penalty.json";
 import { copyToClipboard } from "@/composables/utils";
-
 
 const showExistModal = ref(false);
 const showCompleteModal = ref(false);
@@ -33,25 +31,29 @@ let proceedingPenalties = queryStatusPenaties("進行中");
 
 <template>
     <div>
-                <div class="text-center text-xl bg-stone-600">懲罰數量統計</div>
-                <!--This div is for its own size, don't delete.-->
-                <VaButtonGroup round class="overall-button">
-                    <VaButton
-                        color="danger"
-                        @click="showExistModal = !showExistModal"
-                    >
-                        現存
-                    </VaButton>
-                    <VaButton
-                        color="#3D9209"
-                        @click="showCompleteModal = !showCompleteModal"
-                    >
-                        完成
-                    </VaButton>
-                </VaButtonGroup>
-            </div>
+        <div class="text-center text-xl bg-stone-600 mb-3">懲罰數量統計</div>
 
-            <!-- 現存 和 完成 -->
+        <div class="flex flex-col justify-center gap-3 m-4 mb-0" item-responsive>
+            
+            <!--This div is for its own size, don't delete.-->
+            
+                <VaButton
+                    color="danger"
+                    @click="showExistModal = !showExistModal"
+                >
+                    <div class="text-xl">現存</div>
+                </VaButton>
+                <VaButton
+                    color="success"
+                    @click="showCompleteModal = !showCompleteModal"
+                >
+                    <div class="text-xl">完成</div>
+                </VaButton>
+            
+        </div>
+    </div>
+
+    <!-- 現存 和 完成 -->
     <VaModal
         v-model="showExistModal"
         title="懲罰數量統計"

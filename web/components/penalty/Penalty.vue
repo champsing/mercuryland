@@ -9,9 +9,8 @@ import {
     VaSelect,
 } from "vuestic-ui";
 import penaltyStatus from "@assets/data/penalty_status.json";
-import TableSide from "./TableSide.vue";
+import TableSide from "./table_side/TableSide.vue";
 import Table from "./Table.vue";
-import Syntax from "./Syntax.vue";
 import { formatDate, parseDate } from "@/composables/utils";
 import { Info24Regular } from "@vicons/fluent";
 import { ref } from "vue";
@@ -87,8 +86,8 @@ let finishOptions = penaltyStatus.map((x) => x.name).sort();
 
         <VaDivider class="!m-2" />
 
-        <div class="flex flex-row">
-            <div class="h-80vh w-4/5 p-0 pr-4 m-0">
+        <div class="flex flex-row gap-4">
+            <div class="h-80vh w-5/6">
                 <Table
                     :dateRange="filterDate"
                     :status="filterStatus"
@@ -102,11 +101,7 @@ let finishOptions = penaltyStatus.map((x) => x.name).sort();
                     "
                 />
             </div>
-            <TableSide />
-        </div>
-
-        <div class="mt-8 mb-6">
-            <Syntax />
+            <TableSide class="w-1/6"/>
         </div>
     </div>
 

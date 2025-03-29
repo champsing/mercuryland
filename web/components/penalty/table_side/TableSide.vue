@@ -1,10 +1,14 @@
 <script setup lang="ts">
-import Statistics from "./table_side/Statistics.vue";
+import { VaDivider } from "vuestic-ui";
+import Statistics from "./Statistics.vue";
+import Syntax from "./Syntax.vue";
 </script>
 
 <template>
     <div class="flex flex-col m-auto mt-0">
         <Statistics />
+        <VaDivider class="m-3" />
+        <Syntax />
     </div>
 
     <!-- <VaChip class="vachip2" color="#3d807c" readonly>

@@ -1,14 +1,6 @@
 <script setup lang="ts">
 import { ref } from "vue";
-import {
-    VaButton,
-    VaCard,
-    VaCardContent,
-    VaCardTitle,
-    VaDivider,
-    VaIcon,
-    VaModal,
-} from "vuestic-ui";
+import { VaButton, VaIcon, VaModal } from "vuestic-ui";
 import { statusOf } from "@/composables/penalty";
 
 function colorOfStatus(status: string): string {
@@ -31,47 +23,25 @@ const showExtraConditionDesc = ref(false);
 <template>
     <!-- !text-[#6d8581] !text-[#b91c1c] !text-[#4d7c0f] !text-[#047857] !text-[#b45309] -->
     <!-- TAILWIND CSS: DO NOT REMOVE ABOVE COMMENT -->
-    <div class="text-4xl text-neutral-100 text-left mt-4">圖例</div>
-    <VaDivider class="!mt-3" />
-    <div class="text-sm text-neutral-100 ml-6 mb-3 text-center">
-        點擊卡片以查看更多資訊
-    </div>
-    <div class="flex flex-row justify-center gap-3" item-responsive>
-        <VaCard
-            gradient
-            color="#28c9c7"
-            @click="additionalMetaData = !additionalMetaData"
-        >
-            <VaCardTitle style="font-size: 16px">詳細資料</VaCardTitle>
-            <VaCardContent>
-                <div class="text-base">
-                    🆙增加、🔁重抽、2️⃣備案、😇復活、📝原主人修改、➕其他
-                </div>
-            </VaCardContent>
-        </VaCard>
-        <VaCard
-            gradient
-            color="#005c99"
-            @click="statusMetaData = !statusMetaData"
-        >
-            <VaCardTitle style="font-size: 16px">完成狀態</VaCardTitle>
-            <VaCardContent>
-                <div class="text-base">
-                    <div
-                        v-for="color in statusColorSet.slice(0, 4)"
-                        :class="`inline bg-black !text-[${color}]`"
-                    >
-                        ▲
-                    </div>四大完成狀態、
-                    <div
-                        :class="`inline bg-black !text-[${statusColorSet[4]}]`"
-                    >
-                        ▲
-                    </div>
-                    未生效、✅已抽、🏁給過、⏲️⚔️目前進度
-                </div>
-            </VaCardContent>
-        </VaCard>
+    <div>
+        <div class="text-center text-xl bg-stone-600 mb-3">圖例</div>
+
+        <div class="flex flex-col justify-center gap-3 m-4" item-responsive>
+            <VaButton
+                gradient
+                color="#28c9c7"
+                @click="additionalMetaData = !additionalMetaData"
+            >
+                <div class="text-xl">詳細資料</div>
+            </VaButton>
+            <VaButton
+                gradient
+                color="#005c99"
+                @click="statusMetaData = !statusMetaData"
+            >
+                <div class="text-xl">完成狀態</div>
+            </VaButton>
+        </div>
     </div>
 
     <VaModal v-model="additionalMetaData" hide-default-actions close-button>
