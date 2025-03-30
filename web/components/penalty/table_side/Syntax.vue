@@ -300,18 +300,31 @@ const currentTab = (
                     :color="`${statusColorSet[1]}`"
                     class="mr-2"
                 >
-                    <div :class="`inline !text-[${statusColorSet[1]}] font-bold`">
+                    <div
+                        :class="`inline !text-[${statusColorSet[1]}] font-bold`"
+                    >
                         ▲已完成
                     </div>
                 </VaChip>
                 已經完成該懲罰主文要求的全部條件
                 <br />
-                <VaChip outline readonly :color="`${statusColorSet[2]}`" class="mr-2">
-                    <div :class="`inline !text-[${statusColorSet[2]}] font-bold`">
+                <VaChip
+                    outline
+                    readonly
+                    :color="`${statusColorSet[2]}`"
+                    class="mr-2"
+                >
+                    <div
+                        :class="`inline !text-[${statusColorSet[2]}] font-bold`"
+                    >
                         ▲勉強過
                     </div>
                 </VaChip>
-                該懲罰的原主人決定讓惡靈在沒有完成全部條件情況下，<br>以最低及格線通過該懲罰。詳情見<a class="underline text-orange-400" @click="statusTabValue = '🏁給過'">「🏁給過」</a>
+                該懲罰的原主人決定讓惡靈在沒有完成全部條件情況下，<br />以最低及格線通過該懲罰。詳情見<a
+                    class="underline text-orange-400"
+                    @click="statusTabValue = '🏁給過'"
+                    >「🏁給過」</a
+                >
                 <br />
                 <VaChip
                     outline
@@ -319,7 +332,9 @@ const currentTab = (
                     :color="`${statusColorSet[3]}`"
                     class="mr-2"
                 >
-                    <div :class="`inline !text-[${statusColorSet[3]}] font-bold`">
+                    <div
+                        :class="`inline !text-[${statusColorSet[3]}] font-bold`"
+                    >
                         ▲進行中
                     </div>
                 </VaChip>
