@@ -67,7 +67,7 @@ const tabs = [
             </VaNavbarItem>
         </template>
     </VaNavbar>
-    <div class="min-h-screen">
+    <div class="h-screen">
         <router-view />
     </div>
     <div class="text-center text-base text-zinc-200 pt-4 pb-4 bg-zinc-900">

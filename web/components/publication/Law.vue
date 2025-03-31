@@ -77,7 +77,7 @@ function findCurrentDoc(doc: string) {
             <!-- need calciFrameHeight() -->
             <iframe
                 class="ml-2"
-                width="800"
+                width="100%"
                 height="600"
                 frameborder="0"
                 :src="currentDocument.url"
