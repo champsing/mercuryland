@@ -41,7 +41,7 @@ const steps = [
 </script>
 
 <template>
-    <div class="h-40" v-if="!serverOnline"></div>
+    <div class="h-20" v-if="!serverOnline"></div>
     <div class="flex flex-row justify-between" v-if="!serverOnline">
         <div class="mt-20 w-1/2">
             <div class="text-center mb-4">
@@ -66,10 +66,10 @@ const steps = [
             </div>
         </div>
         <iframe
-            class="m-auto ml-0"
+            class="m-auto"
             src="https://discord.com/widget?id=506120681495199756&theme=dark"
             height="600"
-            width="850"
+            width="500"
         />
     </div>
 
