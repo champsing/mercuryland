@@ -141,9 +141,18 @@ const email = "0.flunky-sojourn@icloud.com";
         </div>
         <div class="ml-60 mt-4">
             電子郵件信箱：
-            <VaInput v-model="email" readonly @click="copyToClipboard(email)"/>
+            <VaInput v-model="email" readonly @click="copyToClipboard(email)" />
             <VaButton
-                class="ml-10"
+                href="mailto:0.flunky-sojourn@icloud.com"
+                preset="secondary"
+                color="info"
+                border-color="info"
+                class="ml-3 -mt-1"
+            >
+                送信
+            </VaButton>
+            <VaButton
+                class="ml-2 -mt-1"
                 preset="secondary"
                 color="textPrimary"
                 border-color="textPrimary"
