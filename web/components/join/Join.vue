@@ -25,6 +25,7 @@ function prev() {
     else currentStep.value--;
 }
 
+const serverOnline = false; // Set to false if the server is offline
 const serverIP = "play.mercuryland.online:25565";
 const seed = -9100272987300380909;
 const version = 1.21;
@@ -40,7 +41,30 @@ const steps = [
 </script>
 
 <template>
-    <div class="mt-8 m-auto w-11/12">
+    <div class="mt-8 m-auto w-11/12" v-if="!serverOnline">
+        <div class="text-center mb-4">
+            <div class="text-6xl perspective-x-30 text-red-400">
+                伺服器目前關閉中
+            </div>
+        </div>
+        <div class="text-center text-2xl">
+            重新開放日期將於 Discord 群組另行公告。
+        </div>
+        <div class="text-center text-2xl mt-4">
+            敬請耐心等候並留意「伺服公告」頻道，謝謝！
+        </div>
+        <div class="text-center text-2xl mt-4">
+            伺服器開放遊玩時，請務必遵守伺服器規則，<br>以免造成不必要的損失。
+            <div class="mt-4 ml-4">
+                伺服器遊玩規則在關服期間仍可於<a
+                    href="/#/publication"
+                    class="underline text-teal-500"
+                    >資料公開</a
+                >查詢。
+            </div>
+        </div>
+    </div>
+    <div class="mt-8 m-auto w-11/12" v-if="serverOnline">
         <div class="text-center mb-4">
             <div class="text-6xl perspective-x-30 text-cyan-400">
                 現在就立刻加入我們
@@ -109,7 +133,12 @@ const steps = [
                 </VaButton>
                 <br />
                 或使用連結：
-                <VaInput v-model="discordInvitation" readonly style="width: 260px" @click="copyToClipboard(discordInvitation)"/>
+                <VaInput
+                    v-model="discordInvitation"
+                    readonly
+                    style="width: 260px"
+                    @click="copyToClipboard(discordInvitation)"
+                />
             </template>
             <template #step-content-1>
                 <div class="text-2xl">
@@ -152,7 +181,11 @@ const steps = [
                 </div>
             </template>
             <template #controls>
-                <VaButton @click="prev()" :disabled="currentStep == 0" preset="primary">
+                <VaButton
+                    @click="prev()"
+                    :disabled="currentStep == 0"
+                    preset="primary"
+                >
                     上一步
                 </VaButton>
                 <VaButton @click="next()" v-if="currentStep < 3">
