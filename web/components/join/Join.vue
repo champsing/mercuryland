@@ -13,17 +13,17 @@ import {
 let currentStep = ref<number | null>(0); //current step
 
 // For handwriting Chinese prev/next button set
-// function next() {
-//     if (currentStep.value === null) currentStep.value = 0;
-//     else if (currentStep.value >= 3) currentStep.value = null;
-//     else currentStep.value++;
-// }
+function next() {
+    if (currentStep.value === null) currentStep.value = 0;
+    else if (currentStep.value >= 3) currentStep.value = null;
+    else currentStep.value++;
+}
 
-// function prev() {
-//     if (currentStep.value === null) currentStep.value = 0;
-//     else if (currentStep.value <= 0) currentStep.value = 3;
-//     else currentStep.value--;
-// }
+function prev() {
+    if (currentStep.value === null) currentStep.value = 0;
+    else if (currentStep.value <= 0) currentStep.value = 3;
+    else currentStep.value--;
+}
 
 const serverIP = "play.mercuryland.online:25565";
 const seed = -9100272987300380909;
@@ -151,27 +151,15 @@ const steps = [
                     等待白名單申請通過期間，您可自行嘗試連接伺服器；<br />若成功進入遊玩，即代表申請成功。
                 </div>
             </template>
+            <template #controls>
+                <VaButton @click="prev()" :disabled="currentStep == 0" preset="primary">
+                    上一步
+                </VaButton>
+                <VaButton @click="next()" v-if="currentStep < 3">
+                    下一步
+                </VaButton>
+            </template>
         </VaStepper>
-
-        <!-- TODO: I still want to handwrite a Chinese prev/next button set; 
-        but currently the previous/next button provided by Vuestic is quite enough.-->
-        <!-- <VaButtonGroup
-            color="secondary"
-            border-color="warning"
-            gradient
-            class="mt-4 mb-6"
-        >
-            <VaButton preset="secondary" @click="prev">
-                <VaIcon>
-                    <md-arrow-round-back />
-                </VaIcon>
-            </VaButton>
-            <VaButton preset="secondary" @click="next">
-                <VaIcon>
-                    <md-arrow-round-forward />
-                </VaIcon>
-            </VaButton>
-        </VaButtonGroup> -->
     </div>
 </template>
 
