@@ -41,29 +41,38 @@ const steps = [
 </script>
 
 <template>
-    <div class="mt-8 m-auto w-11/12" v-if="!serverOnline">
-        <div class="text-center mb-4">
-            <div class="text-6xl perspective-x-30 text-red-400">
-                伺服器目前關閉中
+    <div class="h-40" v-if="!serverOnline"></div>
+    <div class="flex flex-row justify-between" v-if="!serverOnline">
+        <div class="mt-20 w-1/2">
+            <div class="text-center mb-4">
+                <div class="text-6xl perspective-x-30 text-red-400">
+                    伺服器目前關閉中
+                </div>
+            </div>
+            <div class="text-center text-2xl">
+                重新開放日期將於 Discord 群組另行公告。
+            </div>
+            <div class="text-center text-2xl mt-4">
+                敬請耐心等候並留意「伺服公告」頻道，謝謝！
+            </div>
+            <div class="text-center text-2xl mt-4">
+                伺服器開放遊玩時，請務必遵守伺服器規則，<br />以免造成不必要的損失。
+                <div class="mt-4 ml-4">
+                    伺服器遊玩規則在關服期間仍可於
+                    <!-- prettier-ignore -->
+                    <a href="/#/publication" class="underline text-teal-500">資料公開</a>
+                    查詢。
+                </div>
             </div>
         </div>
-        <div class="text-center text-2xl">
-            重新開放日期將於 Discord 群組另行公告。
-        </div>
-        <div class="text-center text-2xl mt-4">
-            敬請耐心等候並留意「伺服公告」頻道，謝謝！
-        </div>
-        <div class="text-center text-2xl mt-4">
-            伺服器開放遊玩時，請務必遵守伺服器規則，<br>以免造成不必要的損失。
-            <div class="mt-4 ml-4">
-                伺服器遊玩規則在關服期間仍可於<a
-                    href="/#/publication"
-                    class="underline text-teal-500"
-                    >資料公開</a
-                >查詢。
-            </div>
-        </div>
+        <iframe
+            class="m-auto ml-0"
+            src="https://discord.com/widget?id=506120681495199756&theme=dark"
+            height="600"
+            width="850"
+        />
     </div>
+
     <div class="mt-8 m-auto w-11/12" v-if="serverOnline">
         <div class="text-center mb-4">
             <div class="text-6xl perspective-x-30 text-cyan-400">
