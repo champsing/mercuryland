@@ -123,7 +123,7 @@ const currentTab = (
             <div class="text-xl mb-4 font-bold">懲罰圖例：詳細資料類</div>
         </template>
 
-        <VaTabs v-model="addtionalTabValue" color="warning" vertical grow>
+        <VaTabs v-model="addtionalTabValue" color="info" vertical grow>
             <template #tabs>
                 <VaTab
                     v-for="tab in additionalSyntaxTabs"
@@ -163,7 +163,7 @@ const currentTab = (
                     color="warning"
                     @click="showExtraConditionDesc = !showExtraConditionDesc"
                 >
-                    <div class="mt-2 mb-4 text-sm text-left">
+                    <div class="mt-2 text-sm text-left">
                         <VaIcon name="help_outline" />
                         無法完成的懲罰與轉換條件
                     </div>
@@ -214,7 +214,7 @@ const currentTab = (
             <div class="text-xl mb-4 font-bold">懲罰圖例：完成狀態類</div>
         </template>
 
-        <VaTabs v-model="statusTabValue" color="warning" vertical grow>
+        <VaTabs v-model="statusTabValue" color="info" vertical grow>
             <template #tabs>
                 <VaTab
                     v-for="tab in statusSyntaxTabs"
@@ -247,7 +247,8 @@ const currentTab = (
                 </VaTab>
             </template>
 
-            <div class="text-xl font-bold">
+            <div class="text-xl font-bold mt-2">
+                <!-- 四大完成狀態的獨立顯示 -->
                 <div v-if="statusTabValue === '四大完成狀態'">
                     <div
                         v-for="color in statusColorSet.slice(0, 4)"
@@ -257,6 +258,7 @@ const currentTab = (
                     </div>
                     四大完成狀態
                 </div>
+                <!-- 未生效的獨立顯示 -->
                 <div v-if="statusTabValue === '未生效'">
                     <div :class="`inline !text-[${statusColorSet[4]}]`">▲</div>
                     未生效
@@ -279,6 +281,7 @@ const currentTab = (
                 "
                 class="text-xl mt-2"
             />
+            <!-- 四大完成狀態的獨立顯示 -->
             <div class="text-base" v-if="statusTabValue === '四大完成狀態'">
                 <VaChip
                     outline
@@ -289,11 +292,11 @@ const currentTab = (
                     <div
                         :class="`inline !text-[${statusColorSet[0]}] font-bold`"
                     >
-                        ▲未開始
+                        ● 未開始
                     </div>
                 </VaChip>
                 尚未開始嘗試完成該懲罰，沒有進度
-                <br />
+                <div class="mt-2" />
                 <VaChip
                     outline
                     readonly
@@ -303,11 +306,11 @@ const currentTab = (
                     <div
                         :class="`inline !text-[${statusColorSet[1]}] font-bold`"
                     >
-                        ▲已完成
+                        ● 已完成
                     </div>
                 </VaChip>
                 已經完成該懲罰主文要求的全部條件
-                <br />
+                <div class="mt-2" />
                 <VaChip
                     outline
                     readonly
@@ -317,7 +320,7 @@ const currentTab = (
                     <div
                         :class="`inline !text-[${statusColorSet[2]}] font-bold`"
                     >
-                        ▲勉強過
+                        ● 勉強過
                     </div>
                 </VaChip>
                 該懲罰的原主人決定讓惡靈在沒有完成全部條件情況下，<br />以最低及格線通過該懲罰。詳情見<a
@@ -325,7 +328,7 @@ const currentTab = (
                     @click="statusTabValue = '🏁給過'"
                     >「🏁給過」</a
                 >
-                <br />
+                <div class="mt-2" />
                 <VaChip
                     outline
                     readonly
@@ -335,11 +338,12 @@ const currentTab = (
                     <div
                         :class="`inline !text-[${statusColorSet[3]}] font-bold`"
                     >
-                        ▲進行中
+                        ● 進行中
                     </div>
                 </VaChip>
                 正在嘗試完成，已經有進度的懲罰
             </div>
+            <!-- 四大完成狀態的獨立顯示 -->
         </VaTabs>
     </VaModal>
 </template>
