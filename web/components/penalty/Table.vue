@@ -207,6 +207,20 @@ function filterPenaltyData(
             </VaChip>
         </div>
 
+        <!-- 如果尚未生效 -->
+        <div v-if="PEMContent.status == '未生效'" class="mt-2">
+            <span class="text-sm text-gray-400 font-bold">
+                這個懲罰目前尚未生效，請耐心等候惡靈獲得新懲罰
+            </span>
+
+            <div class="text-xl text-gray-400 font-bold">
+                抽出日期：
+                <span class="text-xl text-orange-300">
+                    {{ PEMContent.date }}
+                </span>
+            </div>
+        </div>
+
         <!-- 補充說明 -->
         <div v-if="PEMContent.description !== undefined" class="mt-4">
             <template v-for="block in PEMContent.description">
