@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { VaButton, VaDivider, VaInput } from "vuestic-ui";
-import { backToTop } from "@/composables/utils";
+import { backToTop, copyToClipboard } from "@/composables/utils";
 
 backToTop();
 const email = "0.flunky-sojourn@icloud.com";
@@ -141,7 +141,7 @@ const email = "0.flunky-sojourn@icloud.com";
         </div>
         <div class="ml-60 mt-4">
             電子郵件信箱：
-            <VaInput v-model="email" readonly />
+            <VaInput v-model="email" readonly @click="copyToClipboard(email)"/>
             <VaButton
                 class="ml-10"
                 preset="secondary"
