@@ -117,7 +117,7 @@ const currentTab = (
         v-model="showAdditionalSyntax"
         hide-default-actions
         close-button
-        size="large"
+        size="medium"
     >
         <template #header>
             <div class="text-xl mb-4 font-bold">懲罰圖例：詳細資料類</div>
@@ -208,7 +208,7 @@ const currentTab = (
         v-model="showStatusSyntax"
         hide-default-actions
         close-button
-        size="large"
+        size="medium"
     >
         <template #header>
             <div class="text-xl mb-4 font-bold">懲罰圖例：完成狀態類</div>
