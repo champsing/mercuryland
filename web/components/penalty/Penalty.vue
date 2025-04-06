@@ -42,7 +42,7 @@ let finishOptions = penaltyStatus.map((x) => x.name).sort();
 </script>
 
 <template>
-    <div class="mt-4 m-auto w-11/12">
+    <div class="mt-4 m-auto w-[95%]">
         <div class="flex-row justify-evenly hidden xl:flex">
             <div class="w-3/8">
                 <VaDateInput
