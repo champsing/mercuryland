@@ -2,6 +2,7 @@
 import { VaDivider } from "vuestic-ui";
 import Statistics from "./Statistics.vue";
 import Syntax from "./Syntax.vue";
+import NewestPenalty from "./LatestPenalty.vue";
 </script>
 
 <template>
@@ -9,6 +10,7 @@ import Syntax from "./Syntax.vue";
         <Statistics />
         <VaDivider class="m-3" />
         <Syntax />
+        <NewestPenalty class="mt-10" />
     </div>
 
     <!-- <VaChip class="vachip2" color="#3d807c" readonly>
