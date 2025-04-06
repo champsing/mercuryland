@@ -4,7 +4,7 @@ import penaltyData from "@assets/data/penalty.json";
 import { ref } from "vue";
 import { statusOf } from "@/composables/penalty";
 
-const latestPenalty = ref(penaltyData.reverse()[0]);
+const latestPenalty = ref(penaltyData.slice().reverse()[0]);
 </script>
 
 <template>
