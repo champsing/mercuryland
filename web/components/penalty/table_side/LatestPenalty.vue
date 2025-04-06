@@ -18,7 +18,11 @@ const latestPenalty = ref(penaltyData.reverse()[0]);
 
         <div class="flex flex-col justify-center gap-3 mb-0" item-responsive>
             <div class="text-center text-base">
-                {{ latestPenalty.date }} 抽出
+                {{ latestPenalty.date }}
+                <span v-if="latestPenalty.status == '未生效'">抽出</span> 
+                <span v-else>
+                    生效
+                </span>
             </div>
 
             <div
