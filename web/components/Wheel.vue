@@ -101,6 +101,11 @@ function submit(hide?: CallableFunction) {
         })
         .catch((error) => {
             console.log(error);
+            useToast().init({
+                duration: 2000,
+                message: "廣播失敗",
+                color: "danger",
+            });
             modal3.password = "";
             modal3.fail = true;
         });
