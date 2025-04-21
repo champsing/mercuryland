@@ -39,14 +39,22 @@ const tabs = [
                     />
                 </router-link>
             </VaNavbarItem>
-            <VaNavbarItem class="navbar-item-slot" v-for="t in tabs">
+            <VaNavbarItem class="navbar-item-slot">
                 <router-link
+                    v-for="t in tabs"
                     :to="t.path"
                     class="ml-4 text-base text-white"
                     @click="backToTop()"
                 >
                     {{ t.label }}
                 </router-link>
+                <a
+                    href="https://tsl.mercuryland.online/"
+                    rel="noopener noreferrer"
+                    target="_blank"
+                >
+                    <div class="ml-4 text-base text-orange-300">🎵音樂欣賞</div>
+                </a>
             </VaNavbarItem>
         </template>
         <template #right>
