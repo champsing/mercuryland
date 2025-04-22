@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { VaDivider } from "vuestic-ui";
+import { VaButton, VaDivider } from "vuestic-ui";
 import ContactCard from "./ContactCard.vue";
 </script>
 
@@ -12,10 +12,13 @@ import ContactCard from "./ContactCard.vue";
                 :tags="['水星神', '伺服器總管', '爭議協調與排解委員']"
                 discord="oreki20"
             >
-                <img
-                    src="@assets/images/admin_avatars/oreki20.png"
-                    class="w-full h-full object-contain"
-                />
+                <template #avatar>
+                    <img
+                        src="@assets/images/admin_avatars/oreki20.png"
+                        class="w-full h-full object-contain"
+                        slot="avatar"
+                    />
+                </template>
             </ContactCard>
             <ContactCard
                 name1="香榭"
@@ -23,11 +26,28 @@ import ContactCard from "./ContactCard.vue";
                 :tags="['伺服器維護', '網站設計', '爭議協調與排解委員']"
                 discord="champsing"
             >
-                <img
-                    src="@assets/images/admin_avatars/champsing.png"
-                    class="w-full h-full object-contain"
-                />
+                <template #avatar>
+                    <img
+                        src="@assets/images/admin_avatars/champsing.png"
+                        class="w-full h-full object-contain"
+                        slot="avatar"
+                    />
+                </template>
+                <template #rcm-link>
+                    <VaButton
+                        preset="primary"
+                        color="warning"
+                        href="https://tsl.mercuryland.online/"
+                        rel="noopener noreferrer"
+                        target="_blank"
+                    >
+                        <div class="text-base text-orange-300">
+                            🎵音樂欣賞
+                        </div>
+                    </VaButton>
+                </template>
             </ContactCard>
+
             <ContactCard
                 name1="邏輯"
                 name2="Logic"
@@ -37,6 +57,7 @@ import ContactCard from "./ContactCard.vue";
                 <img
                     src="@assets/images/admin_avatars/logic.png"
                     class="w-full h-full object-contain"
+                    slot="avatar"
                 />
             </ContactCard>
         </div>

@@ -6,7 +6,7 @@ import {
     VaCardTitle,
     VaCardContent,
     VaChip,
-    VaDivider
+    VaDivider,
 } from "vuestic-ui";
 
 const props = defineProps<{
@@ -33,7 +33,7 @@ const props = defineProps<{
 
             <VaCardContent class="flex flex-col flex-grow">
                 <div class="w-full aspect-square">
-                    <slot></slot>
+                    <slot name="avatar"></slot>
                 </div>
                 <VaDivider />
                 <div class="flex-grow">
@@ -59,6 +59,11 @@ const props = defineProps<{
                     >
                         <div class="font-bold">@{{ props.discord }}</div>
                     </VaButton>
+                </div>
+                <VaDivider />
+                <div class="text-center font-bold mt-2">推薦連結</div>
+                <div class="mt-2">
+                    <slot name="rcm-link"></slot>
                 </div>
             </VaCardContent>
         </VaCard>
