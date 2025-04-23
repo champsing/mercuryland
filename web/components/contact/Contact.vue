@@ -41,9 +41,7 @@ import ContactCard from "./ContactCard.vue";
                         rel="noopener noreferrer"
                         target="_blank"
                     >
-                        <div class="text-base text-orange-300">
-                            🎵音樂欣賞
-                        </div>
+                        <div class="text-base text-orange-300">🎵音樂欣賞</div>
                     </VaButton>
                 </template>
             </ContactCard>
@@ -54,11 +52,12 @@ import ContactCard from "./ContactCard.vue";
                 :tags="['摸鱼专家']"
                 discord="logic_f"
             >
-                <img
-                    src="@assets/images/admin_avatars/logic.png"
-                    class="w-full h-full object-contain"
-                    slot="avatar"
-                />
+                <template #avatar>
+                    <img
+                        src="@assets/images/admin_avatars/logic.png"
+                        class="w-full h-full object-contain"
+                    />
+                </template>
             </ContactCard>
         </div>
         <VaDivider class="!mb-2" />
