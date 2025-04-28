@@ -1399,15 +1399,27 @@
         "date": "2025-04-13",
         "name": "加班台2小時",
         "status": "進行中",
-        "progress": 8.3,
+        "progress": 8.83,
         "description": [
             {
                 "type": "text",
-                "text": "0.17 / 2 小時"
+                "text": "0.18 / 2 小時（10分36秒）"
+            },
+            {
+                "type": "text",
+                "text": "10分15秒"
             },
             {
                 "type": "vod",
                 "uri_num": 160
+            },
+            {
+                "type": "text",
+                "text": "21秒"
+            },
+            {
+                "type": "vod",
+                "uri_num": 162
             }
         ]
     },
