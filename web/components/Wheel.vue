@@ -16,6 +16,8 @@ import { BASE_URL } from "@/composables/utils";
 import { AlertCircleOutline } from "@vicons/ionicons5";
 import { ArrowClockwise24Filled } from "@vicons/fluent";
 
+document.title = '幸運轉盤 - 水星人的夢幻樂園'
+
 const wheelContainer = ref(null);
 const isSpinning = ref(false); //轉盤旋轉中
 const isLeftAreaLocked = ref(false); //鎖定待抽區

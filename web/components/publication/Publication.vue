@@ -1,4 +1,7 @@
 <script setup lang="ts">
+
+document.title = '資料公開 - 水星人的夢幻樂園'
+
 import { VaDivider, VaIcon } from "vuestic-ui";
 import Law from "./Law.vue";
 // import NewLaw from "./NewLaw.vue"; //如果沒有新版本水星法可以註解起來

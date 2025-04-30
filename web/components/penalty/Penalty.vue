@@ -15,6 +15,8 @@ import { formatDate, parseDate } from "@/composables/utils";
 import { Info24Regular } from "@vicons/fluent";
 import { ref } from "vue";
 
+document.title = '直播懲罰 - 水星人的夢幻樂園'
+
 const showRuleDescModal = ref(false);
 
 let filterDate = defineModel("filterDate", {

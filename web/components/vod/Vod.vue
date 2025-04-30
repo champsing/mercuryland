@@ -17,6 +17,8 @@ import TimeDetail from "./TimeDetail.vue";
 import { formatDate, parseDate } from "@/composables/utils";
 import { Info24Regular } from "@vicons/fluent";
 
+document.title = '直播隨選 - 水星人的夢幻樂園'
+
 const dateRange = defineModel("dateRange", {
     //1582992000 = 2020 03 01 12:00 AM Taipei ST; 8 hours = 28800 seconds
     default: {

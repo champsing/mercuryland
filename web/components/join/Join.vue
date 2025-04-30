@@ -12,6 +12,8 @@ import {
 
 let currentStep = ref<number | null>(0); //current step
 
+document.title = '加入伺服 - 水星人的夢幻樂園'
+
 // For handwriting Chinese prev/next button set
 function next() {
     if (currentStep.value === null) currentStep.value = 0;

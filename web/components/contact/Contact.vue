@@ -1,4 +1,7 @@
 <script setup lang="ts">
+
+document.title = '聯絡我們 - 水星人的夢幻樂園'
+
 import { VaButton, VaDivider } from "vuestic-ui";
 import ContactCard from "./ContactCard.vue";
 </script>
