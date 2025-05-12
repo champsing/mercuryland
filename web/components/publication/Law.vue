@@ -88,6 +88,10 @@ function findCurrentDoc(doc: string) {
 </template>
 
 <style lang="scss">
+.va-menu-item__content {
+    @apply w-max block;
+}
+
 .doc-menu-hover {
     --va-menu-item-hover-color: #e13535;
     --va-menu-item-hover-opacity: 0.6;
