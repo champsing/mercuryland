@@ -44,7 +44,7 @@ pub mod chat {
                 // get arguments for next request
                 next_page = res.next_page_token;
                 // minimum 5 seconds to ensure no overflow
-                let polling_ms = res.polling_interval_millis.unwrap_or(0).max(5000) as u64;
+                let polling_ms = res.polling_interval_millis.unwrap_or(0).max(10000) as u64;
 
                 // process messages
                 if let Some(chats) = res.items {
