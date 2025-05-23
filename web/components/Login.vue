@@ -26,8 +26,8 @@ let sessionUsername = reactive(null);
 async function GoogleLogin() {
     account.createOAuth2Session(
         OAuthProvider.Google,
-        "https://mercuryland.online/",
-        "https://mercuryland.online/"
+        "https://mercuryland.pp.ua/",
+        "https://mercuryland.pp.ua/"
     );
     sessionUsername = (await account.get()).name;
     axios

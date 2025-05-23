@@ -1,6 +1,6 @@
 import { useToast } from "vuestic-ui";
 
-export const BASE_URL = import.meta.env.PROD ? 'https://api.mercuryland.online' : 'http://127.0.0.1:8080' 
+export const BASE_URL = import.meta.env.PROD ? 'https://api.mercuryland.pp.ua' : 'http://127.0.0.1:8080' 
 
 export function openLinks(links: Array<string>) {
     for (let i = 0; i < links.length; i++) {
