@@ -15,6 +15,10 @@ jobs:
         run: |
           echo the merge condition is not met
           exit 1
+      - name: Configure Git User
+        run: |
+          git config --global user.name "Mercury Land"
+          git config --global user.email "champsingxiang@gmail.com"
       - name: Check out Source Code
         uses: actions/checkout@v4
         with:
