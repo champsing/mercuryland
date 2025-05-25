@@ -3,10 +3,7 @@ use chrono::{DateTime, Utc};
 use rusqlite::{Row, Transaction};
 use sea_query::{enum_def, Expr, IdenStatic, Query, SqliteQueryBuilder};
 use sea_query_rusqlite::RusqliteBinder;
-use sea_query_rusqlite::RusqliteValue;
 use serde::{Deserialize, Serialize};
-use serde_json::json;
-use serde_json::Value;
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
 #[enum_def]
@@ -112,28 +109,42 @@ impl Coin {
         Ok(value.transpose()?)
     }
 
-    pub fn export_all() -> Result<Vec<Value>, ServerError> {
-        let (_, values) = Query::select()
+    pub fn all(
+        transaction: &Transaction,
+    ) -> Result<Vec<Self>, ServerError> {
+        let (query, values) = Query::select()
             .columns([
                 CoinIden::Id,
+                CoinIden::DiscordId,
                 CoinIden::Coin,
                 CoinIden::Display,
+                CoinIden::UpdatedAt,
             ])
             .from(CoinIden::Table)
             .build_rusqlite(SqliteQueryBuilder);
-        
-            let json_values: Vec<Value> = values.0.iter().map(|value| {
-                match value {
-                    RusqliteValue(sea_query::Value::String(str)) => json!(str),
-                    RusqliteValue(sea_query::Value::Int(int)) => json!(int),
-                    _ => todo!()
 
-                }
-            }).collect();
-        
-           Ok(json_values)
+        let mut statement = transaction.prepare(&query)?;
+        let value = statement
+            .query_and_then(&*values.as_params(), |row| Coin::try_from(row))?
+            .collect::<Result<Vec<_>, _>>()?;
+
+        Ok(value)
     }
+    pub fn update_display(
+        id: impl Into<String>,
+        display: impl Into<String>,
+        transaction: &Transaction,
+    ) -> Result<(), ServerError> {
+        let id = id.into();
+        let (query, values) = Query::update()
+            .table(CoinIden::Table)
+            .values([(CoinIden::Display, display.into().into())])
+            .and_where(Expr::col(CoinIden::Id).eq(id.clone()).or(Expr::col(CoinIden::DiscordId).eq(id.clone())))
+            .build_rusqlite(SqliteQueryBuilder);
+        transaction.execute(&query, &*values.as_params())?;
 
+        Ok(())
+    }
 
     pub fn get_or_create(
         id: impl Into<String>,
@@ -141,6 +152,8 @@ impl Coin {
         transaction: &Transaction,
     ) -> Result<Self, ServerError> {
         let id = id.into();
+        let display = display.into();
+        Self::update_display(id.clone(), display.clone(), transaction)?;
         if let Some(user) = Self::by_youtube(id.clone(), transaction)? {
             Ok(user)
         } else if let Some(user) = Self::by_discord(id.clone(), transaction)? {
