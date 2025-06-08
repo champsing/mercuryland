@@ -88,7 +88,7 @@ function updateTag(tag: string) {
                     :options="tagList"
                     multiple
                     clearable
-                    placeholder="请选择直播的TAG"
+                    placeholder="請選擇直播的TAG"
                     dropdownIcon="va-plus"
                     @update:model-value="
                         if (selectedTags.toString() == new Array().toString())

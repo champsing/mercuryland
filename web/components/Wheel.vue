@@ -264,7 +264,7 @@ const modal3 = reactive({
             <div class="wheel-wrapper w-2/5 -mt-20" ref="wheelContainer"></div>
 
             <div class="w-1/5">
-                <div class="va-h4">待抽区 ({{ count(textArea) }}个)</div>
+                <div class="va-h4">待抽區 ({{ count(textArea) }}個)</div>
                 <VaTextarea
                     v-model="textArea"
                     color="#ffffff"
@@ -277,7 +277,7 @@ const modal3 = reactive({
                     @click="spin"
                     :disabled="isSpinning || count(textArea) == 0"
                 >
-                    旋转
+                    旋轉
                 </VaButton>
                 <VaButton
                     class="w-full mt-8"
@@ -301,7 +301,7 @@ const modal3 = reactive({
                 <div class="h-44"></div>
             </div>
             <div class="w-1/5">
-                <div class="va-h4">抽中区 ({{ count(textArea2) }}个)</div>
+                <div class="va-h4">抽中區 ({{ count(textArea2) }}個)</div>
                 <VaTextarea
                     v-model="textArea2"
                     color="#ffffff"
@@ -348,10 +348,10 @@ const modal3 = reactive({
                 }
             "
         >
-            您确定要清空
+            您確定要清空
             <div v-if="clearRightArea" class="inline text-2xl">抽中區</div>
             <div v-else class="inline text-2xl">待抽區</div>
-            吗?
+            嗎？
             <!-- prettier-ignore -->
             <div v-if="clearRightArea" class="text-4xl text-right text-[#1aedab]">清→</div>
             <div v-else class="text-4xl text-right text-[#bae64c]">←清</div>

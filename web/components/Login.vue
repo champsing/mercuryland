@@ -162,7 +162,7 @@ let clientIP = await fetch("https://api.ipify.org?format=json")
         </VaModal>
     </template>
     <template v-else>
-        <VaButton @click="modal.show = true">登录</VaButton>
+        <VaButton @click="modal.show = true">登入</VaButton>
         <VaModal
             v-model="modal.show"
             ok-text="登录"

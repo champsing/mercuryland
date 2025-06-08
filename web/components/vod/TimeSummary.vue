@@ -21,7 +21,7 @@ function calcStyle(width: number) {
     <use-element-bounding v-slot="{ width }">
         <VaCard :style="calcStyle(width)" class="vod-card">
             <VaCardTitle style="font-size: 20px; justify-content: center;">
-                剩余时间
+                剩餘時間
             </VaCardTitle>
             <VaCardContent class="font-bold text-center mb-2">
                 {{ text }}
