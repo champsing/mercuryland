@@ -78,7 +78,7 @@ function calcRawData(): DataType[] {
             date: date.toISOString().slice(0, 10),
             offset: parseHMS(sch[s].duration),
             previous: previous,
-            reason: "计划",
+            reason: "計劃",
             divider: true,
         });
         previous = previous + re[re.length - 1].offset;
@@ -135,7 +135,7 @@ function calcStyle(top: number, vh: number) {
         <VaCardContent>
             <VaList style="--va-list-label-padding: 1rem">
                 <VaListLabel class="text-xl" color="textPrimary">
-                    计算明细
+                    計算明細
                 </VaListLabel>
                 <use-window-size v-slot="{ height }">
                     <use-element-bounding v-slot="{ top }">
