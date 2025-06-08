@@ -1578,5 +1578,23 @@
         "name": "玩兩小時dota2",
         "status": "未開始",
         "steamID": 570
+    },
+    {
+        "id": 178,
+        "date": "2025-06-08",
+        "name": "通關Replicube demo",
+        "status": "未開始"
+    },
+    {
+        "id": 179,
+        "date": "2025-06-08",
+        "name": "九日打完三個太陽",
+        "status": "未開始"
+    },
+    {
+        "id": 180,
+        "date": "2025-06-08",
+        "name": "Limbus company 通關前七大章",
+        "status": "未生效"
     }
 ]
