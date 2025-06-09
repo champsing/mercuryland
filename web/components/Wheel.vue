@@ -16,7 +16,7 @@ import { BASE_URL } from "@/composables/utils";
 import { AlertCircleOutline } from "@vicons/ionicons5";
 import { ArrowClockwise24Filled } from "@vicons/fluent";
 
-document.title = '幸運轉盤 - 水星人的夢幻樂園'
+document.title = "幸運轉盤 - 水星人的夢幻樂園";
 
 const wheelContainer = ref(null);
 const isSpinning = ref(false); //轉盤旋轉中
@@ -28,23 +28,32 @@ let wheelConnect = reactive({
     id: 0,
     secret: "",
 });
-axios.get(BASE_URL + "/api/wheel/create").then(
-    (response) => {
-        wheelConnect.id = response.data.id;
-        wheelConnect.secret = response.data.secret;
-        console.log(wheelConnect);
-    },
-    (error) => {
-        wheelConnect.id = -1;
-        console.log(error);
-    }
-);
+
+if (sessionStorage.getItem("wheelConnect")) {
+    wheelConnect = JSON.parse(sessionStorage.getItem("wheelConnect"));
+} else {
+    axios.get(BASE_URL + "/api/wheel/create").then(
+        (response) => {
+            wheelConnect.id = response.data.id;
+            wheelConnect.secret = response.data.secret;
+            console.log(wheelConnect);
+            sessionStorage.setItem(
+                "wheelConnect",
+                JSON.stringify(wheelConnect)
+            );
+        },
+        (error) => {
+            wheelConnect.id = -1;
+            console.log(error);
+        }
+    );
+}
 
 let wheel: Wheel = null;
 
 const textArea = defineModel("textArea", {
     type: String,
-    default: "",
+    default: sessionStorage.getItem("textArea") || "",
     set(value: string) {
         if (wheel != null) {
             wheel.items = value
@@ -61,6 +70,7 @@ const textArea = defineModel("textArea", {
                     };
                 });
         }
+        sessionStorage.setItem("textArea", value);
         return value;
     },
 });
