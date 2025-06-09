@@ -77,7 +77,7 @@ const textArea = defineModel("textArea", {
 
 const textArea2 = defineModel("textArea2", {
     type: String,
-    default: "",
+    default: sessionStorage.getItem("textArea2") || "",
     set(value: string) {
         let content = value.split("\n").filter((x) => x != "");
         axios.post(BASE_URL + "/api/wheel/update", {
@@ -85,6 +85,7 @@ const textArea2 = defineModel("textArea2", {
             secret: wheelConnect.secret,
             content: content,
         });
+        sessionStorage.setItem("textArea2", value);
         return value;
     },
 });
