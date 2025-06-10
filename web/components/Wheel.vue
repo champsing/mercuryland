@@ -193,7 +193,20 @@ onMounted(() => {
     overlay.src = "/pointer.svg";
 
     const props = {
-        items: [],
+        items:
+            textArea.value
+                .split("\n")
+                .filter((x) => x != "")
+                .map((x) => {
+                    const weight = parseInt(
+                        (x.match(re) || ["x1"])[0].substring(1)
+                    );
+                    const label = x.replace(re, "");
+                    return {
+                        label: label,
+                        weight: weight,
+                    };
+                }) || [],
         itemLabelRadiusMax: 0.4,
         itemBackgroundColors: [
             "#dc2626",
