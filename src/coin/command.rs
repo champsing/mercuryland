@@ -36,7 +36,7 @@ impl CoinCommandManager {
 
                 println!("[-] {} buy a level-{} booster for {}", user, level, content);
 
-                let content = format!("惩罚加倍: {}x{} (来自{})", content, level, user);
+                let content = format!("懲罰加倍: {}x{} (来自{})", content, level, user);
                 discord::Receiver::ChannelId(channel_id)
                     .message(CreateMessage::new().content(content))
                     .await?;
