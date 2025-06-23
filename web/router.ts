@@ -9,7 +9,7 @@ import Contact from "@components/contact/Contact.vue";
 import ToS from "./components/law/ToS.vue";
 import Wheel from "./components/Wheel.vue";
 import Privacy from "./components/law/Privacy.vue";
-import LeaderBoard from "./components/Leaderboard.vue";
+import Leaderboard from "./components/Leaderboard.vue";
 
 const routes = [
     { path: "/", component: Welcome },
