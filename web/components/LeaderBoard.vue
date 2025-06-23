@@ -121,6 +121,10 @@ const columns = [
         width: 140,
     },
 ];
+
+setInterval(() => {
+    refreshLeaderboard();
+}, 1000 * 60 * 5); // 每 5 分鐘自動更新排行榜
 </script>
 
 <template>
@@ -137,12 +141,16 @@ const columns = [
                         color="info"
                         preset="plain"
                         @click="refreshLeaderboard()"
+                        :disabled="updateCooldown > 0"
                     >
                         <div class="flex flex-row gap-2">
                             <VaIcon size="medium">
                                 <ArrowClockwise24Filled />
                             </VaIcon>
                             立即更新排行榜
+                            <span v-if="updateCooldown > 0"
+                                >({{ updateCooldown }})</span
+                            >
                         </div>
                     </VaButton>
                 </div>
