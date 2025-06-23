@@ -150,17 +150,17 @@ const columns = [
                 <div class="text-center">
                     <div v-if="row.rowData.rank == 1">
                         <div class="text-yellow-400 font-bold text-2xl">
-                            第 {{ value }} 名
+                            🥇第 {{ value }} 名
                         </div>
                     </div>
                     <div v-else-if="row.rowData.rank == 2">
                         <div class="text-zinc-400 font-bold text-xl">
-                            第 {{ value }} 名
+                            🥈第 {{ value }} 名
                         </div>
                     </div>
                     <div v-else-if="row.rowData.rank == 3">
                         <div class="text-amber-600 font-bold text-lg">
-                            第 {{ value }} 名
+                            🥉第 {{ value }} 名
                         </div>
                     </div>
                     <div v-else>第 {{ value }} 名</div>
