@@ -85,6 +85,8 @@ const columns = [
         tdAlign: CENTER,
         thAlign: CENTER,
         width: 140,
+        sortable: true,
+        sortingOptions: ["desc" as const, "asc" as const, null],
     },
 ];
 </script>
@@ -141,6 +143,14 @@ const columns = [
                         icon="info"
                         message="點擊用戶名稱可以開啟該用戶的 YouTube 頻道頁面"
                     >
+                        {{ label }}
+                        <VaIcon name="help_outline" />
+                    </VaPopover>
+                </div>
+            </template>
+            <template #header(udpate_at)="{ label }">
+                <div class="text-sm">
+                    <VaPopover icon="info" message="點擊可排序">
                         {{ label }}
                         <VaIcon name="help_outline" />
                     </VaPopover>
