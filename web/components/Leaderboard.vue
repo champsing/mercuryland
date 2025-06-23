@@ -105,10 +105,10 @@ const columns = [
 </script>
 
 <template>
-    <div>
-        <div class="text-center text-3xl font-bold mt-10 mb-5">水星排行</div>
-        <div class="flex flex-col text-center">
-            <div class="text-base text-zinc-400 mb-5">
+    <div class="flex flex-row text-center justify-center gap-10">
+        <div class="text-center text-3xl font-bold justify-center mt-5 mb-5">水星排行</div>
+        <div class="flex flex-col text-center justify-center gap-4">
+            <div class="text-base text-zinc-400">
                 這裡顯示的是水星幣的排行榜，每次直播獲得的水星幣都會在這裡顯示。
             </div>
             <div>
@@ -134,11 +134,11 @@ const columns = [
             </div>
         </div>
     </div>
-    <div class="min-h-screen mx-10">
+    <div class="h-80vh mx-10">
         <VaDataTable
             :items="leaderboard"
             :columns="columns"
-            class="h-full mt-5 mb-3"
+            class="mt-5 mb-3"
             style="--va-data-table-hover-color: #357286"
             virtual-scroller
             sticky-header
