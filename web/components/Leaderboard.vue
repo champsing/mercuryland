@@ -8,7 +8,7 @@ import { ArrowClockwise24Filled } from "@vicons/fluent";
 document.title = "水星排行 - 水星人的夢幻樂園";
 
 const leaderboard: Ref<Coin[]> = ref([]);
-const lastUpdated: Ref<string> = ref("");
+const lastUpdated: Ref<string> = ref("載入中...");
 
 function refreshLeaderboard() {
     axios
@@ -169,46 +169,51 @@ const columns = [
             <template #cell(display)="{ value, row }">
                 <div class="text-center">
                     <div v-if="row.rowData.rank == 1">
-                        <div class="text-yellow-400 font-bold text-xl">
-                            <a
-                                :href="`https://www.youtube.com/channel/${row.rowData.id}`"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                            >
-                                {{ value }}
-                            </a>
-                        </div>
-                    </div>
-                    <div v-else-if="row.rowData.rank == 2">
-                        <div class="text-zinc-400 font-bold text-xl">
-                            <a
-                                :href="`https://www.youtube.com/channel/${row.rowData.id}`"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                            >
-                                {{ value }}
-                            </a>
-                        </div>
-                    </div>
-                    <div v-else-if="row.rowData.rank == 3">
-                        <div class="text-amber-600 font-bold text-xl">
-                            <a
-                                :href="`https://www.youtube.com/channel/${row.rowData.id}`"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                            >
-                                {{ value }}
-                            </a>
-                        </div>
-                    </div>
-                    <div v-else>
-                        <a
+                        <VaButton
                             :href="`https://www.youtube.com/channel/${row.rowData.id}`"
                             target="_blank"
+                            preset="plain"
+                            rel="noopener noreferrer"
+                        >
+                            <div class="text-yellow-400 font-bold text-xl">
+                                {{ value }}
+                            </div>
+                        </VaButton>
+                    </div>
+                    <div v-else-if="row.rowData.rank == 2">
+                        <VaButton
+                            :href="`https://www.youtube.com/channel/${row.rowData.id}`"
+                            target="_blank"
+                            preset="plain"
+                            rel="noopener noreferrer"
+                        >
+                            <div class="text-zinc-400 font-bold text-xl">
+                                {{ value }}
+                            </div>
+                        </VaButton>
+                    </div>
+                    <div v-else-if="row.rowData.rank == 3">
+                        <VaButton
+                            :href="`https://www.youtube.com/channel/${row.rowData.id}`"
+                            target="_blank"
+                            preset="plain"
+                            rel="noopener noreferrer"
+                        >
+                            <div class="text-amber-600 font-bold text-xl">
+                                {{ value }}
+                            </div>
+                        </VaButton>
+                    </div>
+                    <div v-else>
+                        <VaButton
+                            :href="`https://www.youtube.com/channel/${row.rowData.id}`"
+                            target="_blank"
+                            preset="plain"
+                            color="textPrimary"
                             rel="noopener noreferrer"
                         >
                             {{ value }}
-                        </a>
+                        </VaButton>
                     </div>
                 </div>
             </template>
