@@ -9,13 +9,8 @@ document.title = "水星排行 - 水星人的夢幻樂園";
 
 const leaderboard: Ref<Coin[]> = ref([]);
 const lastUpdated: Ref<string> = ref("");
-const updateCooldown: Ref<number> = ref(0);
 
 function refreshLeaderboard() {
-    if (updateCooldown.value > 0) {
-        console.log("更新冷卻中，請稍後再試。");
-        return;
-    }
     axios
         .get(BASE_URL + "/api/leaderboard")
         .then((response) => {
@@ -43,16 +38,6 @@ function refreshLeaderboard() {
         })
         .catch((error) => {
             console.error("更新排行榜失敗:", error);
-        })
-        .finally(() => {
-            updateCooldown.value = 20; // Set cooldown to 20 seconds
-            const cooldownInterval = setInterval(() => {
-                if (updateCooldown.value > 0) {
-                    updateCooldown.value--;
-                } else {
-                    clearInterval(cooldownInterval);
-                }
-            }, 1000); // Decrease cooldown every second
         });
 }
 
@@ -105,7 +90,7 @@ const columns = [
 </script>
 
 <template>
-    <div class="flex flex-row text-center justify-center gap-10">
+    <div class="flex flex-row text-center justify-center gap-10 mt-4">
         <div class="text-center text-3xl font-bold justify-center mt-5 mb-5">
             水星排行
         </div>
@@ -120,16 +105,12 @@ const columns = [
                         color="info"
                         preset="plain"
                         @click="refreshLeaderboard()"
-                        :disabled="updateCooldown > 0"
                     >
                         <div class="flex flex-row gap-2">
                             <VaIcon size="medium">
                                 <ArrowClockwise24Filled />
                             </VaIcon>
                             立即更新排行榜
-                            <span v-if="updateCooldown > 0"
-                                >({{ updateCooldown }})</span
-                            >
                         </div>
                     </VaButton>
                 </div>
