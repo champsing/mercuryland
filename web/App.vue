@@ -21,6 +21,7 @@ const tabs = [
     { path: "/penalty", label: "直播懲罰" },
     { path: "/wheel", label: "幸運轉盤" },
     { path: "/contact", label: "聯絡我們" },
+    { path: "/leaderboard", label: "水星排行" },
 ];
 </script>
 
