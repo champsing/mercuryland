@@ -31,7 +31,8 @@ function refreshLeaderboard() {
                 .map((x, index) => {
                     x.rank = index + 1; // Assign rank based on the sorted order
                     return x;
-                });
+                })
+                .slice(0, 50);
             console.log(leaderboard.value);
             lastUpdated.value = new Date().toLocaleString();
             console.log("已更新排行榜", lastUpdated.value);
