@@ -5,6 +5,8 @@ import { ref, Ref } from "vue";
 import { VaDataTable, VaButton, VaIcon, VaPopover } from "vuestic-ui";
 import { ArrowClockwise24Filled } from "@vicons/fluent";
 
+document.title = "水星排行 - 水星人的夢幻樂園";
+
 const leaderboard: Ref<Coin[]> = ref(null);
 const lastUpdated: Ref<string> = ref("");
 const updateCooldown: Ref<number> = ref(0);
