@@ -16,15 +16,14 @@ function refreshLeaderboard() {
         console.log("更新冷卻中，請稍後再試。");
         return;
     }
-    sessionStorage.removeItem("leaderboard");
-    sessionStorage.removeItem("lastUpdated");
     axios
         .get(BASE_URL + "/api/leaderboard")
         .then((response) => {
             leaderboard.value = response.data
                 .map((x) => {
                     const coin: Coin = {
-                        rank: 0, // Placeholder for rank, will be assigned later
+                        rank: 0, // Placeholder for rank, will be assigned later,
+                        id: x.id,
                         coin: x.coin,
                         display: x.display,
                         updated_at: new Date(x.updated_at).toLocaleString(),
@@ -39,12 +38,7 @@ function refreshLeaderboard() {
                     return x;
                 });
             console.log(leaderboard.value);
-            sessionStorage.setItem(
-                "leaderboard",
-                JSON.stringify(leaderboard.value)
-            );
             lastUpdated.value = new Date().toLocaleString();
-            sessionStorage.setItem("lastUpdated", lastUpdated.value);
             console.log("已更新排行榜", lastUpdated.value);
         })
         .catch((error) => {
@@ -62,26 +56,11 @@ function refreshLeaderboard() {
         });
 }
 
-function within5mins(record: string): boolean {
-    const lastUpdatedTime = new Date(record);
-    const currentTime = new Date();
-    return currentTime.getTime() - lastUpdatedTime.getTime() <= 5 * 60 * 1000; // 5 minutes in milliseconds
-}
-
-if (sessionStorage.getItem("leaderboard")) {
-    const lastUpdatedRecord = sessionStorage.getItem("lastUpdated");
-    if (lastUpdatedRecord && within5mins(lastUpdatedRecord)) {
-        // 5分鐘內
-        lastUpdated.value = lastUpdatedRecord;
-    } else {
-        lastUpdated.value = new Date().toLocaleString();
-        sessionStorage.setItem("lastUpdated", lastUpdated.value);
-    }
-    leaderboard.value = JSON.parse(sessionStorage.getItem("leaderboard"));
-} else refreshLeaderboard();
+refreshLeaderboard();
 
 class Coin {
     rank: number;
+    id: string;
     coin: number;
     display: string;
     updated_at: string;
@@ -123,10 +102,6 @@ const columns = [
         width: 140,
     },
 ];
-
-setInterval(() => {
-    refreshLeaderboard();
-}, 1000 * 60 * 5); // 每 5 分鐘自動更新排行榜
 </script>
 
 <template>
@@ -134,7 +109,7 @@ setInterval(() => {
         <div class="text-center text-3xl font-bold mt-10 mb-5">水星排行</div>
         <div class="flex flex-col text-center">
             <div class="text-base text-zinc-400 mb-5">
-                這裡顯示的是水星幣的排行榜，數據每 5 分鐘會定期更新。
+                這裡顯示的是水星幣的排行榜，每次直播獲得的水星幣都會在這裡顯示。
             </div>
             <div>
                 上次更新時間： {{ lastUpdated }}
@@ -159,11 +134,11 @@ setInterval(() => {
             </div>
         </div>
     </div>
-    <div class="h-80vh mx-10">
+    <div class="min-h-screen mx-10">
         <VaDataTable
             :items="leaderboard"
             :columns="columns"
-            class="mt-5 mb-3"
+            class="h-full mt-5 mb-3"
             style="--va-data-table-hover-color: #357286"
             virtual-scroller
             sticky-header
@@ -179,7 +154,10 @@ setInterval(() => {
             </template>
             <template #header(display)="{ label }">
                 <div class="text-sm">
-                    <VaPopover icon="info" message="點擊可排序">
+                    <VaPopover
+                        icon="info"
+                        message="點擊用戶名稱可以開啟該用戶的 YouTube 頻道頁面"
+                    >
                         {{ label }}
                         <VaIcon name="help_outline" />
                     </VaPopover>
@@ -209,20 +187,46 @@ setInterval(() => {
                 <div class="text-center">
                     <div v-if="row.rowData.rank == 1">
                         <div class="text-yellow-400 font-bold text-xl">
-                            {{ value }}
+                            <a
+                                :href="`https://www.youtube.com/channel/${row.rowData.id}`"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                            >
+                                {{ value }}
+                            </a>
                         </div>
                     </div>
                     <div v-else-if="row.rowData.rank == 2">
                         <div class="text-zinc-400 font-bold text-xl">
-                            {{ value }}
+                            <a
+                                :href="`https://www.youtube.com/channel/${row.rowData.id}`"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                            >
+                                {{ value }}
+                            </a>
                         </div>
                     </div>
                     <div v-else-if="row.rowData.rank == 3">
                         <div class="text-amber-600 font-bold text-xl">
-                            {{ value }}
+                            <a
+                                :href="`https://www.youtube.com/channel/${row.rowData.id}`"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                            >
+                                {{ value }}
+                            </a>
                         </div>
                     </div>
-                    <div v-else>{{ value }}</div>
+                    <div v-else>
+                        <a
+                            :href="`https://www.youtube.com/channel/${row.rowData.id}`"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                        >
+                            {{ value }}
+                        </a>
+                    </div>
                 </div>
             </template>
             <template #cell(coin)="{ value, row }">
