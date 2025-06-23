@@ -7,7 +7,7 @@ import { ArrowClockwise24Filled } from "@vicons/fluent";
 
 document.title = "水星排行 - 水星人的夢幻樂園";
 
-const leaderboard: Ref<Coin[]> = ref(null);
+const leaderboard: Ref<Coin[]> = ref([]);
 const lastUpdated: Ref<string> = ref("");
 const updateCooldown: Ref<number> = ref(0);
 
@@ -106,7 +106,9 @@ const columns = [
 
 <template>
     <div class="flex flex-row text-center justify-center gap-10">
-        <div class="text-center text-3xl font-bold justify-center mt-5 mb-5">水星排行</div>
+        <div class="text-center text-3xl font-bold justify-center mt-5 mb-5">
+            水星排行
+        </div>
         <div class="flex flex-col text-center justify-center gap-4">
             <div class="text-base text-zinc-400">
                 這裡顯示的是水星幣的排行榜，每次直播獲得的水星幣都會在這裡顯示。
