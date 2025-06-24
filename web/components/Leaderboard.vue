@@ -10,6 +10,24 @@ document.title = "水星排行 - 水星人的夢幻樂園";
 const leaderboard: Ref<Coin[]> = ref([]);
 const lastUpdated: Ref<string> = ref("載入中...");
 
+// Users affected by the UNKNWON display bug
+// const display_UNKNOWN_users = {
+//     UCrcK7n05C9shMRkeaxLeX4w: "DawnKeeperCal 【腾】",
+//     UCq93rIkAYfvEQvUOzzcFYOQ: "酸檸檬星",
+//     UCalt_7k09pL6OxW36grt6Ug: "香榭champsing",
+//     UCCxmOeL9J6T5vTHZ1E0cwIg: "Alex Cai",
+//     "UCdAiYR--6YCce893N_5xUxw": "あんな杏奈",
+//     UCVmnhE9KYallsNXx28VOeKw: "我是橘貓王子",
+//     "UCFxhJKbVVngEri-O_Ud2L4w": "鄭鄭",
+//     UCSt4Pa1UfdJOBP28X_ov36Q: "Rose _OuO",
+//     UC1L4eiVSbPqmrHkNsbxHkEA: "LIM JYA MI",
+//     UC69isoujls3cQVf2TAkS6Iw: "不知道要取什麼名字",
+//     "UCmbmPtylogcwNr4rbqlH8-Q": "周明輝",
+//     "UCC-wr9BFfPSPm6Vr6A_o6Mg": "蔡毅龍",
+//     UCskhok_1vnbxqRATPu41E6Q: "Logic",
+//     UCCzKiIOI7n_jicS06Kiwbdw: "372ms"
+// };
+
 function refreshLeaderboard() {
     axios
         .get(BASE_URL + "/api/leaderboard")
@@ -21,12 +39,15 @@ function refreshLeaderboard() {
                         id: x.id,
                         coin: x.coin,
                         display: x.display,
-                        updated_at: new Date(x.updated_at).toLocaleString(),
+                        updated_at: new Date(x.updated_at).getTime(),
                     };
                     return coin;
                 })
                 .sort((a, b) => {
                     return a.coin < b.coin ? 1 : -1; // Sort by coin in descending order
+                })
+                .sort((a, b) => {
+                    return a.id.localeCompare(b.id, "en") ? 1 : -1; // Sort by updated_at in descending order
                 })
                 .map((x, index) => {
                     x.rank = index + 1; // Assign rank based on the sorted order
@@ -49,7 +70,7 @@ class Coin {
     id: string;
     coin: number;
     display: string;
-    updated_at: string;
+    updated_at: number;
 }
 
 const CENTER = "center" as const;
@@ -246,6 +267,11 @@ const columns = [
                         </div>
                     </div>
                     <div v-else>{{ value }}</div>
+                </div>
+            </template>
+            <template #cell(updated_at)="{ value }">
+                <div class="text-center">
+                    {{ new Date(parseInt(value)).toLocaleString() }}
                 </div>
             </template>
         </VaDataTable>
