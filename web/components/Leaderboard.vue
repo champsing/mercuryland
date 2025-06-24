@@ -152,7 +152,7 @@ const columns = [
                     </VaPopover>
                 </div>
             </template>
-            <template #header(udpate_at)="{ label }">
+            <template #header(updated_at)="{ label }">
                 <div class="text-sm">
                     <VaPopover icon="info" message="點擊可排序">
                         {{ label }}
