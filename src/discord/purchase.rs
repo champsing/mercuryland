@@ -56,7 +56,8 @@ pub async fn booster(
                 String::from("No user found")
             }
         };
-        if user_id == "No user found" {
+        
+        if user_id == "No user found".to_string() {
             return Ok(());
         } else {
             user_id
