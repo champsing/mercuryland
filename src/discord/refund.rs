@@ -9,7 +9,7 @@ use serenity::all::EditThread;
 
 #[poise::command(slash_command)]
 pub async fn refund(ctx: super::Context<'_>) -> Result<(), ServerError> {
-    ctx.say(ctx.id().to_string()).await?;
+    ctx.say("Refund Entrypoint.").await?;
     Ok(())
 }
 
