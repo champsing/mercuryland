@@ -137,7 +137,7 @@ pub mod command {
             return Ok(());
         }
 
-        if message.starts_with("/booster ") {
+        if message.starts_with("/purchase booster ") {
             let mut split = message.split_ascii_whitespace();
             let _ = split.next(); // the first one is command, ignore.
 
