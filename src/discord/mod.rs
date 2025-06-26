@@ -155,20 +155,6 @@ pub async fn run() -> Result<(), ServerError> {
                 )),
                 subcommands: vec![
                     poise::Command {
-                        name: String::from("new"),
-                        description: Some(String::from(
-                            "Open a thread channel for requesting a Mercury Coin refund",
-                        )),
-                        description_localizations: HashMap::from([(
-                            zh_tw.clone(),
-                            String::from("開啟一則討論串以申請水星幣退款"),
-                        )]),
-                        help_text: Some(String::from(
-                            "開啟一則討論串以申請水星幣退款",
-                        )),
-                        ..refund::new()
-                    },
-                    poise::Command {
                         name: String::from("close"),
                         description: Some(String::from(
                             "[ADMIN] Close a Mercury Coin refund request",
