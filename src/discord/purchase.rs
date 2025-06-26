@@ -7,7 +7,7 @@ use crate::discord;
 use crate::error::ServerError;
 
 use poise::{self, CreateReply};
-use serenity::all::CreateMessage;
+use serenity::all::{CreateButton, CreateMessage};
 use serenity::futures::lock::Mutex;
 use std::sync::LazyLock;
 
@@ -173,7 +173,7 @@ pub async fn overtime(
     // 此处已经不再持有 rusqlite::Transaction，可以安全 .await
     if let Some(message) = message {
         discord::Receiver::ChannelId(channel_id)
-            .message(CreateMessage::new().content(message))
+            .message(CreateMessage::new().content(message).button(CreateButton::new("refund").label("Refund")))
             .await?;
     }
 
