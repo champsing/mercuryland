@@ -4,9 +4,9 @@ use crate::config::CONFIG;
 use crate::database::{coin::Coin as CoinUser, get_connection};
 use crate::error::ServerError;
 use poise::{self, CreateReply};
+use rand::distributions::{Alphanumeric, DistString};
 use serenity::all::{
-    ChannelId, CreateButton, CreateInteractionResponse, CreateInteractionResponseMessage,
-    CreateMessage, EditMessage,
+    ChannelId, CreateButton, CreateInteractionResponse, CreateInteractionResponseMessage, CreateMessage, CreateThread, EditMessage
 };
 use serenity::futures::lock::Mutex;
 use std::sync::LazyLock;
@@ -239,7 +239,29 @@ pub async fn overtime(
                 .await
                 .unwrap();
 
-            println!("Received interaction: {:?}", interaction);
+            let author = ctx.author().clone();
+            let case_number = Alphanumeric.sample_string(&mut rand::thread_rng(), 6);
+
+            let refund = ChannelId::new(CONFIG.discord.exchange) //CONFIG.discord.exchange 1248793225767026758
+                .create_thread_from_message(
+                    ctx.http(),
+                    message.id,
+                    CreateThread::new(format!("退款討論串 {}-{}", author.name, case_number)),
+                )
+                .await?;
+
+            let content = format!(
+"\
+申請人 <@{}>
+案號 {}
+YouTube 頻道 ID：{}
+請說明您希望退款的理由。
+=============在這則訊息以下開始處理退款=============
+",
+                author.id.get(), case_number, "1234"
+            );
+    
+            refund.send_message(&ctx.serenity_context().http, CreateMessage::new().content(content)).await?;
         }
 
         message
