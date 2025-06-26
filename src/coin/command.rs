@@ -20,7 +20,7 @@ impl CoinCommandManager {
         content: &String,
         now: DateTime<Utc>,
     ) -> Result<(), ServerError> {
-        let channel_id: u64 = 1165591547459416074; // 水星交易所
+        let channel_id: u64 = CONFIG.discord.exchange; // 水星交易所
 
         // 在一个同步块里处理所有 DB 逻辑，生成好要发送的 message
         let maybe_message = {
