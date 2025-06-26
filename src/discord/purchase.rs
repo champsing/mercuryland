@@ -143,7 +143,11 @@ pub async fn overtime(
 給惡靈的加班台留言：{}
 如有疑義請在指令區使用 {} 執行退款流程。
 ",
-                    hours, record.display, record.id, content, CONFIG.slash_command_strings.refund_new
+                    hours,
+                    record.display,
+                    record.id,
+                    content,
+                    CONFIG.slash_command_strings.refund_new
                 ))
             } else {
                 // coin 不足或其他情况
@@ -166,6 +170,13 @@ pub async fn overtime(
             .message(CreateMessage::new().content(content))
             .await?;
     }
+    
+    ctx.send(
+        CreateReply::default()
+            .content(format!("已發送購買請求，請等待處理。"))
+            .ephemeral(true),
+    )
+    .await?;
 
     Ok(())
 }
