@@ -11,6 +11,13 @@ use serenity::all::{
 };
 use std::time::Duration;
 
+pub enum CommandReply {
+    Success,
+    InvalidInput,
+    InsufficientFunds,
+    NoUserFound,
+}
+
 fn find_coin_user(msg_author_id: String) -> Result<Option<String>, ServerError> {
     let mut connection = get_connection()?;
     let transaction = connection.transaction()?;
@@ -114,7 +121,7 @@ pub async fn booster(
             ctx.send(
                 CreateReply::default()
                     .content(format!(
-                        "**購買失敗。**\n您的水星幣不足以購買 x{} 的加倍倍率。您可以使用 {} 指令查詢。",
+                        "**購買失敗。**\n您的水星幣不足以購買 x{} 的加倍倍率。您可以使用 {} 指令查詢餘額。",
                         amp, CONFIG.slash_command_strings.coin
                     ))
                     .ephemeral(true),
@@ -125,7 +132,7 @@ pub async fn booster(
             ctx.send(
                 CreateReply::default()
                     .content(format!(
-                        "查無資料，請先使用 {} 將 Discord 帳號關聯到您的 YouTube 頻道。",
+                        "找不到您的 Discord 用戶記錄。請先使用 {} 將 Discord 帳號關聯到您的 YouTube 頻道，才能在 Discord 使用水星幣。",
                         CONFIG.slash_command_strings.link
                     ))
                     .ephemeral(true),
@@ -204,13 +211,6 @@ pub async fn booster(
     }
 
     Ok(())
-}
-
-pub enum CommandReply {
-    Success,
-    InvalidInput,
-    InsufficientFunds,
-    NoUserFound,
 }
 
 #[poise::command(slash_command)]
@@ -297,7 +297,7 @@ pub async fn overtime(
             ctx.send(
                 CreateReply::default()
                     .content(format!(
-                        "**購買失敗。**\n您的水星幣不足以購買 {} 小時的加班台時數卡。您可以使用 {} 指令查詢。",
+                        "**購買失敗。**\n您的水星幣不足以購買 {} 小時的加班台時數卡。您可以使用 {} 指令查詢餘額。",
                         hours, CONFIG.slash_command_strings.coin
                     ))
                     .ephemeral(true),
@@ -308,7 +308,7 @@ pub async fn overtime(
             ctx.send(
                 CreateReply::default()
                     .content(format!(
-                        "查無資料，請先使用 {} 將 Discord 帳號關聯到您的 YouTube 頻道。",
+                        "找不到您的 Discord 用戶記錄。請先使用 {} 將 Discord 帳號關聯到您的 YouTube 頻道，才能在 Discord 使用水星幣。",
                         CONFIG.slash_command_strings.link
                     ))
                     .ephemeral(true),
