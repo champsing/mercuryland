@@ -241,7 +241,7 @@ pub async fn run() -> Result<(), ServerError> {
                         help_text: Some(String::from(
                             "購買加班台時數卡，可以增加惡靈剩餘的加班台時數。",
                         )),
-                        ..purchase::booster()
+                        ..purchase::overtime()
                     },
                 ],
                 subcommand_required: true,
