@@ -132,7 +132,7 @@ pub async fn booster(
             ctx.send(
                 CreateReply::default()
                     .content(format!(
-                        "找不到您的 Discord 用戶記錄。請先使用 {} 將 Discord 帳號關聯到您的 YouTube 頻道，才能在 Discord 使用水星幣。",
+                        "**找不到您的 Discord 用戶記錄。**\n請先使用 {} 將 Discord 帳號關聯到您的 YouTube 頻道，才能在 Discord 使用水星幣購買。",
                         CONFIG.slash_command_strings.link
                     ))
                     .ephemeral(true),
@@ -288,7 +288,7 @@ pub async fn overtime(
         CommandReply::InvalidInput => {
             ctx.send(
                 CreateReply::default()
-                    .content("您輸入了無效的加班時數。請輸入大於 0 的正數（可以有小數）。")
+                    .content("您輸入了無效的時數。請輸入大於 0 的正數（可以有小數）。")
                     .ephemeral(true),
             )
             .await?;
@@ -308,7 +308,7 @@ pub async fn overtime(
             ctx.send(
                 CreateReply::default()
                     .content(format!(
-                        "找不到您的 Discord 用戶記錄。請先使用 {} 將 Discord 帳號關聯到您的 YouTube 頻道，才能在 Discord 使用水星幣。",
+                        "**找不到您的 Discord 用戶記錄。**\n請先使用 {} 將 Discord 帳號關聯到您的 YouTube 頻道，才能在 Discord 使用水星幣購買。",
                         CONFIG.slash_command_strings.link
                     ))
                     .ephemeral(true),
