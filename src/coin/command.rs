@@ -22,54 +22,29 @@ impl CoinCommandManager {
     ) -> Result<(), ServerError> {
         let channel_id: u64 = CONFIG.discord.exchange; // 水星交易所
 
-        // 在一个同步块里处理所有 DB 逻辑，生成好要发送的 message
-        let maybe_message = {
-            let mut connection = get_connection()?;
-            let transaction = connection.transaction()?;
+        let mut connection = get_connection()?;
+        let transaction = connection.transaction()?;
 
-            // 如果用户存在且有足够的 coin，就更新并准备 message
-            let msg = if let Some(mut record) = Coin::by_youtube(user, &transaction)? {
-                let cost = self.config.booster_cost(level);
-                if record.coin >= cost {
-                    record.coin -= cost;
-                    record.updated_at = now;
-                    record.update(&transaction)?;
+        if let Some(mut record) = Coin::by_youtube(user, &transaction)? {
+            let cost = self.config.booster_cost(level);
+            if record.coin >= cost {
+                record.coin -= cost;
+                record.updated_at = now;
+                record.update(&transaction)?;
 
-                    println!(
-                        "[-] {} buy a level-{} booster for {}",
-                        record.display, level, content
-                    );
+                let user = record.display;
 
-                    Some(format!(
-                        "\
-# 懲罰加倍 #
-懲罰內容： 「{}」 x **{}** 倍
-來自： {} (`{}`)
-如有疑義，或未抽中想領取半價退款，請在指令區使用 {} 執行退款流程。
-",
-                        content, level, record.display, record.id, CONFIG.slash_command_strings.refund_new
-                    ))
-                } else {
-                    // coin 不足或其他情况
-                    Some(format!(
-                        "**購買失敗。**\n您的水星幣不足以購買 x{} 的加倍倍率。您可以使用 {} 指令查詢。",
-                        level, CONFIG.slash_command_strings.coin
-                    ))
-                }
-            } else {
-                None
-            };
+                println!("[-] {} buy a level-{} booster for {}", user, level, content);
 
-            transaction.commit()?;
-            msg
-        };
-
-        // 此处已经不再持有 rusqlite::Transaction，可以安全 .await
-        if let Some(content) = maybe_message {
-            discord::Receiver::ChannelId(channel_id)
-                .message(CreateMessage::new().content(content))
-                .await?;
+                let content = format!("懲罰加倍: {}x{} (来自{})", content, level, user);
+                discord::Receiver::ChannelId(channel_id)
+                    .message(CreateMessage::new().content(content))
+                    .await?;
+            }
         }
+
+        transaction.commit()?;
+
         Ok(())
     }
 }
