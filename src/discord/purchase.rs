@@ -2,17 +2,13 @@ use crate::coin::command::CoinCommandManager;
 use crate::coin::youtube::Coin;
 use crate::config::CONFIG;
 use crate::database::{coin::Coin as CoinUser, get_connection};
-
-use crate::discord;
 use crate::error::ServerError;
-
 use poise::{self, CreateReply};
 use serenity::all::{
     ChannelId, CreateButton, CreateInteractionResponse, CreateInteractionResponseMessage,
     CreateMessage, EditMessage,
 };
 use serenity::futures::lock::Mutex;
-use serenity::futures::StreamExt;
 use std::sync::LazyLock;
 use std::time::Duration;
 
@@ -249,7 +245,7 @@ pub async fn overtime(
         message
             .edit(
                 &ctx.serenity_context().http,
-                EditMessage::new().content(&content),
+                EditMessage::new().components(vec![]),
             )
             .await?;
     }
