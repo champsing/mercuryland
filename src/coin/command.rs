@@ -41,13 +41,18 @@ impl CoinCommandManager {
                     );
 
                     Some(format!(
-                        "懲罰加倍: {}x{} (来自 {})，要求退款請在指令區使用 {}。",
-                        content, level, record.display, CONFIG.slash_command_strings.refund_new
+                        "\
+# 懲罰加倍 #
+懲罰內容： 「{}」 x **{}** 倍
+來自： {} (`{}`)
+如有疑義，或未抽中想領取半價退款，請在指令區使用 {} 執行退款流程。
+",
+                        content, level, record.display, record.id, CONFIG.slash_command_strings.refund_new
                     ))
                 } else {
                     // coin 不足或其他情况
                     Some(format!(
-                        "您的水星幣不足以購買 x{} 的加倍倍率。您可以使用 {} 指令查詢。",
+                        "**購買失敗。**\n您的水星幣不足以購買 x{} 的加倍倍率。您可以使用 {} 指令查詢。",
                         level, CONFIG.slash_command_strings.coin
                     ))
                 }

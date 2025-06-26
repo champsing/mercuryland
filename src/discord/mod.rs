@@ -229,6 +229,20 @@ pub async fn run() -> Result<(), ServerError> {
                         )),
                         ..purchase::booster()
                     },
+                    poise::Command {
+                        name: String::from("overtime"),
+                        description: Some(String::from(
+                            "Purchase an overtime to force 20 stream overtime.",
+                        )),
+                        description_localizations: HashMap::from([(
+                            zh_tw.clone(),
+                            String::from("購買加班台時數"),
+                        )]),
+                        help_text: Some(String::from(
+                            "購買加班台時數卡，可以增加惡靈剩餘的加班台時數。",
+                        )),
+                        ..purchase::booster()
+                    },
                 ],
                 subcommand_required: true,
                 ..purchase::purchase()
