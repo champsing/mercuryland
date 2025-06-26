@@ -11,7 +11,7 @@ use once_cell::sync::OnceCell as OnceLock;
 use crate::{config::CONFIG, error::ServerError};
 use poise::serenity_prelude::{ClientBuilder, GatewayIntents};
 use poise::{self};
-use serenity::all::{CreateMessage, Http};
+use serenity::all::{CreateMessage, Http, Message};
 use std::collections::HashMap;
 use std::sync::{Arc, RwLock};
 use std::time::Duration;
@@ -28,19 +28,17 @@ pub enum Receiver {
 }
 
 impl Receiver {
-    pub async fn message(&self, message: CreateMessage) -> Result<(), ServerError> {
-        match self {
+    pub async fn message(&self, message: CreateMessage) -> Result<Message, ServerError> {
+        Ok(match self {
             Receiver::ChannelId(id) => {
                 let channel_id = serenity::model::id::ChannelId::from(*id);
-                channel_id.send_message(HTTP.wait(), message).await?;
+                channel_id.send_message(HTTP.wait(), message).await?
             }
             Receiver::UserId(id) => {
                 let user_id = serenity::model::id::UserId::from(*id);
-                user_id.direct_message(HTTP.wait(), message).await?;
+                user_id.direct_message(HTTP.wait(), message).await?
             }
-        }
-
-        Ok(())
+        })
     }
 }
 

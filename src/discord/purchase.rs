@@ -9,7 +9,9 @@ use crate::error::ServerError;
 use poise::{self, CreateReply};
 use serenity::all::{CreateButton, CreateMessage};
 use serenity::futures::lock::Mutex;
+use serenity::futures::StreamExt;
 use std::sync::LazyLock;
+use std::time::Duration;
 
 fn find_coin_user(msg_author_id: String) -> Result<Option<String>, ServerError> {
     let mut connection = get_connection()?;
@@ -170,13 +172,6 @@ pub async fn overtime(
         )
     };
 
-    // 此处已经不再持有 rusqlite::Transaction，可以安全 .await
-    if let Some(message) = message {
-        discord::Receiver::ChannelId(channel_id)
-            .message(CreateMessage::new().content(message).button(CreateButton::new("refund").label("Refund")))
-            .await?;
-    }
-
     match reply {
         CommandReply::Success => {
             ctx.send(CreateReply::default().content("交易成功！").ephemeral(true))
@@ -211,6 +206,22 @@ pub async fn overtime(
                     .ephemeral(true),
             )
             .await?;
+        }
+    }
+
+    // 此处已经不再持有 rusqlite::Transaction，可以安全 .await
+    if let Some(message) = message {
+        let message = discord::Receiver::ChannelId(channel_id)
+            .message(CreateMessage::new().content(message).button(CreateButton::new("refund").label("Refund")))
+            .await?;
+        
+        let mut interaction = message
+            .await_component_interaction(&ctx.serenity_context().shard)
+            .timeout(Duration::from_secs(72 * 60 * 60)) // 72 hours
+            .stream();
+
+        while let Some(interaction) = interaction.next().await {
+            println!("Received interaction: {:?}", interaction);
         }
     }
 
