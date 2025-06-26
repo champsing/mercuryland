@@ -95,88 +95,124 @@ pub async fn booster(
     Ok(())
 }
 
+pub enum CommandReply {
+    Success,
+    InvalidInput,
+    InsufficientFunds,
+    NoUserFound,
+}
+
 #[poise::command(slash_command)]
 pub async fn overtime(
     ctx: super::Context<'_>,
-    hours: u32,
+    hours: f32,
     content: String,
 ) -> Result<(), ServerError> {
-    if hours == 0 || hours > 24 {
-        log::warn!("{}: incorrect hours", ctx.invocation_string());
-        ctx.send(
-            CreateReply::default()
-                .content("您輸入了無效的加班時數。請輸入 1 到 24 之間的整數。")
-                .ephemeral(true),
-        )
-        .await?;
-        return Ok(());
-    }
-
     let author_id = ctx.author().id.get();
-
-    let channel_id: u64 = CONFIG.discord.exchange; // 水星交易所
+    let channel_id = CONFIG.discord.exchange; // 水星交易所
 
     // 在一个同步块里处理所有 DB 逻辑，生成好要发送的 message
-    let maybe_message = {
+    let (reply, message) = 'ret: {
+        if hours <= 0.0 {
+            log::warn!("{}: incorrect hours", ctx.invocation_string());
+            ctx.send(
+                CreateReply::default()
+                    .content("您輸入了無效的加班時數。請輸入大於 0 的正數（可以有小數）。")
+                    .ephemeral(true),
+            )
+            .await?;
+            break 'ret (CommandReply::InvalidInput, None);
+        }
+
         let mut connection = get_connection()?;
         let transaction = connection.transaction()?;
 
-        // 如果用户存在且有足够的 coin，就更新并准备 message
-        let msg = if let Some(mut record) = Coin::by_discord(author_id.to_string(), &transaction)? {
-            let cost = (hours * 1000).into(); // 1000 水星幣每小時
-            let now = chrono::Utc::now();
-            if record.coin >= cost {
-                record.coin -= cost;
-                record.updated_at = now;
-                record.update(&transaction)?;
+        let record = Coin::by_discord(author_id.to_string(), &transaction)?;
 
-                println!(
-                    "[-] {} buy a(n) {}-hour overtime for {}",
-                    record.display, hours, content
-                );
+        if record.is_none() {
+            break 'ret (CommandReply::NoUserFound, None);
+        }
 
-                Some(format!(
-                    "\
+        let mut record = record.unwrap();
+        if record.discord_id == 0 {
+            break 'ret (CommandReply::NoUserFound, None);
+        }
+
+        let cost = (hours * 1000.0).ceil() as i64; // 1000 水星幣每小時
+        if record.coin < cost {
+            break 'ret (CommandReply::InsufficientFunds, None);
+        }
+
+        let now = chrono::Utc::now();
+        record.coin -= cost;
+        record.updated_at = now;
+        record.update(&transaction)?;
+
+        println!(
+            "[-] {} buy a(n) {}-hour overtime for {}",
+            record.display, hours, content
+        );
+
+        transaction.commit()?;
+
+        (
+            CommandReply::Success,
+            Some(format!(
+                "\
 # 加班台時數卡 #
-## {} 小時 ##
+## + {} 小時 ##
 來自：{} (`{}`)
 給惡靈的加班台留言：{}
 如有疑義請在指令區使用 {} 執行退款流程。
 ",
-                    hours,
-                    record.display,
-                    record.id,
-                    content,
-                    CONFIG.slash_command_strings.refund_new
-                ))
-            } else {
-                // coin 不足或其他情况
-                Some(format!(
-                    "您的水星幣不足以購買 {} 小時的加班台時數卡。您可以使用 {} 指令查詢。",
-                    hours, CONFIG.slash_command_strings.coin
-                ))
-            }
-        } else {
-            None
-        };
-
-        transaction.commit()?;
-        msg
+                hours, record.display, record.id, content, CONFIG.slash_command_strings.refund_new
+            )),
+        )
     };
 
     // 此处已经不再持有 rusqlite::Transaction，可以安全 .await
-    if let Some(content) = maybe_message {
+    if let Some(message) = message {
         discord::Receiver::ChannelId(channel_id)
-            .message(CreateMessage::new().content(content))
+            .message(CreateMessage::new().content(message))
             .await?;
     }
-    
-    ctx.send(
-        CreateReply::default()
-            .content(format!("已發送購買請求，請等待處理。"))
-            .ephemeral(true),
-    )
-    .await?;
+
+    match reply {
+        CommandReply::Success => {
+            ctx.send(CreateReply::default().content("交易成功！").ephemeral(true))
+                .await?;
+        }
+        CommandReply::InvalidInput => {
+            ctx.send(
+                CreateReply::default()
+                    .content("您輸入了無效的加班時數。請輸入大於 0 的正數（可以有小數）。")
+                    .ephemeral(true),
+            )
+            .await?;
+        }
+        CommandReply::InsufficientFunds => {
+            ctx.send(
+                CreateReply::default()
+                    .content(format!(
+                        "**購買失敗。**\n您的水星幣不足以購買 {} 小時的加班台時數卡。您可以使用 {} 指令查詢。",
+                        hours, CONFIG.slash_command_strings.coin
+                    ))
+                    .ephemeral(true),
+            )
+            .await?;
+        }
+        CommandReply::NoUserFound => {
+            ctx.send(
+                CreateReply::default()
+                    .content(format!(
+                        "查無資料，請先使用 {} 將 Discord 帳號關聯到您的 YouTube 頻道。",
+                        CONFIG.slash_command_strings.link
+                    ))
+                    .ephemeral(true),
+            )
+            .await?;
+        }
+    }
 
     Ok(())
 }
