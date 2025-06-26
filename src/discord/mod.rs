@@ -85,10 +85,10 @@ pub async fn run() -> Result<(), ServerError> {
                 description: Some(String::from("[Admin] give user coins")),
                 description_localizations: HashMap::from([(
                     zh_tw.clone(),
-                    String::from("???"),
+                    String::from("（管理）給予使用者水星幣。可支援正或負數。"),
                 )]),
                 help_text: Some(String::from(
-                    "????",
+                    "（管理）給予使用者水星幣。可支援正或負數。",
                 )),
                 ..give::give()
             },
@@ -102,7 +102,7 @@ pub async fn run() -> Result<(), ServerError> {
                     String::from("連結 Discord 帳號至 YouTube 頻道，24小時內限用一次"),
                 )]),
                 help_text: Some(String::from(
-                    "連結您的 Discord 帳號至 YouTube 頻道後，即可直接使用 </coin: 1322897222991351848> 指令查詢餘額。目前同一 Discord 帳號僅可連結1個 YouTube 頻道。",
+                    format!("連結您的 Discord 帳號至 YouTube 頻道後，即可直接使用 {} 指令查詢餘額。目前同一 Discord 帳號僅可連結1個 YouTube 頻道。", CONFIG.slash_command_strings.coin),
                 )),
                 cooldown_config: RwLock::new(
                     poise::CooldownConfig {
@@ -125,7 +125,7 @@ pub async fn run() -> Result<(), ServerError> {
                     String::from("斷開 YouTube 頻道與 Discord 帳號的連結"),
                 )]),
                 help_text: Some(String::from(
-                    "將連結斷開後，使用 </coin:1322897222991351848> 查詢餘額重新需要輸入 YouTube Channel ID，直至連結新 Discord 帳號。",
+                    format!("將連結斷開後，使用 {} 查詢餘額重新需要輸入 YouTube Channel ID，直至連結新 Discord 帳號。", CONFIG.slash_command_strings.coin),
                 )),
                 ..link::unlink()
             },

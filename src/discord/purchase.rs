@@ -1,4 +1,5 @@
 use crate::coin::command::CoinCommandManager;
+use crate::config::CONFIG;
 use crate::database::{coin::Coin as CoinUser, get_connection};
 
 use crate::error::ServerError;
@@ -6,6 +7,16 @@ use crate::error::ServerError;
 use poise::{self, CreateReply};
 use serenity::futures::lock::Mutex;
 use std::sync::LazyLock;
+
+fn find_coin_user(msg_author_id: String) -> Result<Option<String>, ServerError> {
+    let mut connection = get_connection()?;
+    let transaction = connection.transaction()?;
+    let user_id = match CoinUser::by_discord(msg_author_id, &transaction)? {
+        Some(u) => Some(u.id),
+        None => None,
+    };
+    Ok(user_id)
+}
 
 #[poise::command(slash_command)]
 pub async fn purchase(ctx: super::Context<'_>) -> Result<(), ServerError> {
@@ -33,30 +44,24 @@ pub async fn booster(
 
     let author = ctx.author();
 
-    let find_coin_user: Result<Option<String>, ServerError> = {
-        let mut connection = get_connection()?;
-        let transaction = connection.transaction()?;
-        let user_id = match CoinUser::by_discord(author.id.get().to_string(), &transaction)? {
-            Some(u) => Some(u.id),
-            None => None,
-        };
-        Ok(user_id)
-    };
-
     //get Coin user by discord id
     let author_youtube_channel_id = {
-        let user_id = match find_coin_user? {
+        let user_id = match find_coin_user(author.id.get().to_string())? {
             Some(id) => id,
             None => {
                 ctx.send(
-                CreateReply::default()
-                    .content("查無資料，請先使用 </link:1327669445283414117> 將 Discord 帳號關聯到您的 YouTube 頻道。")
-                    .ephemeral(true),
-                ).await?;
+                    CreateReply::default()
+                        .content(format!(
+                            "查無資料，請先使用 {} 將 Discord 帳號關聯到您的 YouTube 頻道。",
+                            CONFIG.slash_command_strings.link
+                        ))
+                        .ephemeral(true),
+                )
+                .await?;
                 String::from("No user found")
             }
         };
-        
+
         if user_id == "No user found".to_string() {
             return Ok(());
         } else {
@@ -78,6 +83,12 @@ pub async fn booster(
             now,
         )
         .await?;
+    ctx.send(
+        CreateReply::default()
+            .content(format!("已發送購買請求，請等待處理。"))
+            .ephemeral(true),
+    )
+    .await?;
     Ok(())
 }
 
