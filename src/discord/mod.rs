@@ -42,11 +42,6 @@ impl Receiver {
     }
 }
 
-// pub async fn send_text(channel_id: ChannelId, text: &String) -> Result<(), ServerError> {
-//     send_message(channel_id, vec![], &json!({"content": text})).await?;
-//     Ok(())
-// }
-
 pub async fn run() -> Result<(), ServerError> {
     let zh_tw = "zh-TW".to_string();
 
@@ -97,14 +92,14 @@ pub async fn run() -> Result<(), ServerError> {
                 )),
                 description_localizations: HashMap::from([(
                     zh_tw.clone(),
-                    String::from("連結 Discord 帳號至 YouTube 頻道，24小時內限用一次"),
+                    String::from("連結 Discord 帳號至 YouTube 頻道， 2 小時內限用一次"),
                 )]),
                 help_text: Some(String::from(
                     format!("連結您的 Discord 帳號至 YouTube 頻道後，即可直接使用 {} 指令查詢餘額。目前同一 Discord 帳號僅可連結1個 YouTube 頻道。", CONFIG.slash_command_strings.coin),
                 )),
                 cooldown_config: RwLock::new(
                     poise::CooldownConfig {
-                        user: Some(Duration::from_secs(86400)),
+                        user: Some(Duration::from_secs(60 * 60 * 2)),
                         global: None,
                         guild: None,
                         channel: None,
