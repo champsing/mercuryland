@@ -7,7 +7,10 @@ use crate::discord;
 use crate::error::ServerError;
 
 use poise::{self, CreateReply};
-use serenity::all::{CreateButton, CreateMessage};
+use serenity::all::{
+    ChannelId, CreateButton, CreateInteractionResponse, CreateInteractionResponseMessage,
+    CreateMessage, EditMessage,
+};
 use serenity::futures::lock::Mutex;
 use serenity::futures::StreamExt;
 use std::sync::LazyLock;
@@ -114,7 +117,7 @@ pub async fn overtime(
     let channel_id = CONFIG.discord.exchange; // 水星交易所
 
     // 在一个同步块里处理所有 DB 逻辑，生成好要发送的 message
-    let (reply, message) = 'ret: {
+    let (reply, content) = 'ret: {
         if hours <= 0.0 {
             log::warn!("{}: incorrect hours", ctx.invocation_string());
             ctx.send(
@@ -210,19 +213,45 @@ pub async fn overtime(
     }
 
     // 此处已经不再持有 rusqlite::Transaction，可以安全 .await
-    if let Some(message) = message {
-        let message = discord::Receiver::ChannelId(channel_id)
-            .message(CreateMessage::new().content(message).button(CreateButton::new("refund").label("Refund")))
+    if let Some(content) = content {
+        let mut message = ChannelId::from(channel_id)
+            .send_message(
+                &ctx.serenity_context().http,
+                CreateMessage::new()
+                    .content(&content)
+                    .button(CreateButton::new("refund").label("退款申请")),
+            )
             .await?;
-        
-        let mut interaction = message
+
+        let interaction = message
             .await_component_interaction(&ctx.serenity_context().shard)
             .timeout(Duration::from_secs(72 * 60 * 60)) // 72 hours
-            .stream();
+            .await;
 
-        while let Some(interaction) = interaction.next().await {
+        if let Some(interaction) = interaction {
+            interaction
+                .create_response(
+                    &ctx,
+                    // This time we dont edit the message but reply to it
+                    CreateInteractionResponse::Message(
+                        CreateInteractionResponseMessage::default()
+                            // Make the message hidden for other users by setting `ephemeral(true)`.
+                            .ephemeral(true)
+                            .content(format!("开始处理退款")),
+                    ),
+                )
+                .await
+                .unwrap();
+
             println!("Received interaction: {:?}", interaction);
         }
+
+        message
+            .edit(
+                &ctx.serenity_context().http,
+                EditMessage::new().content(&content),
+            )
+            .await?;
     }
 
     Ok(())
