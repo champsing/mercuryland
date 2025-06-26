@@ -28,12 +28,6 @@ pub struct SlashCommandStrings {
     // pub purchase_booster: String,
     pub link: String,
     pub unlink: String,
-    pub give: String,
-    pub help: String,
-    pub fetch_wheel: String,
-    pub refund_new: String,
-    pub refund_close: String,
-    pub refund_reopen: String,
 }
 
 pub static CONFIG: LazyLock<Config> = LazyLock::new(|| {
