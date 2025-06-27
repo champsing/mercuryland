@@ -59,13 +59,11 @@ pub async fn booster(
             None => String::from("User not found"),
         };
 
-        let record = Coin::by_youtube(user_id, &transaction)?;
+        let mut record = match Coin::by_youtube(user_id, &transaction)? {
+            Some(r) => r,
+            None => break 'ret (CommandReply::NoUserFound, None),
+        };
 
-        if record.is_none() {
-            break 'ret (CommandReply::NoUserFound, None);
-        }
-
-        let mut record = record.unwrap();
         if record.discord_id == 0 {
             break 'ret (CommandReply::NoUserFound, None);
         }
@@ -94,7 +92,6 @@ pub async fn booster(
             Some(format!(
                 "\
 # 懲罰加倍 #
-- 懲罰內容： 
 > ## 「{}」 x **{}** 倍 ##
 - 來自： {} (`{}`)，結餘 **{}** 水星幣。
 -# 如有疑義，或未抽中想領取半價退款，請在 72 小時內（<t:{}:f> 之前）執行退款流程。
@@ -245,13 +242,11 @@ pub async fn overtime(
         let mut connection = get_connection()?;
         let transaction = connection.transaction()?;
 
-        let record = Coin::by_discord(author_id.to_string(), &transaction)?;
+        let mut record = match Coin::by_discord(author_id.to_string(), &transaction)? {
+            Some(r) => r,
+            None => break 'ret (CommandReply::NoUserFound, None),
+        };
 
-        if record.is_none() {
-            break 'ret (CommandReply::NoUserFound, None);
-        }
-
-        let mut record = record.unwrap();
         if record.discord_id == 0 {
             break 'ret (CommandReply::NoUserFound, None);
         }
