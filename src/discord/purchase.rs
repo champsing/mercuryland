@@ -7,8 +7,8 @@ use chrono::Days;
 use poise::{self, CreateReply};
 use rand::distributions::{Alphanumeric, DistString};
 use serenity::all::{
-    ChannelId, CreateButton, CreateInteractionResponse, CreateInteractionResponseMessage,
-    CreateMessage, CreateThread, EditMessage,
+    ChannelId, CreateActionRow, CreateButton, CreateInteractionResponse,
+    CreateInteractionResponseMessage, CreateMessage, CreateThread, EditMessage,
 };
 use std::time::Duration;
 
@@ -94,14 +94,16 @@ pub async fn booster(
             Some(format!(
                 "\
 # 懲罰加倍 #
-- 懲罰內容： 「{}」 x **{}** 倍
-- 來自： {} (`{}`)
+- 懲罰內容： 
+> ## 「{}」 x **{}** 倍 ##
+- 來自： {} (`{}`)，結餘 **{}** 水星幣。
 -# 如有疑義，或未抽中想領取半價退款，請在 72 小時內（<t:{}:f> 之前）執行退款流程。
 ",
                 penalty_content,
                 amp,
                 record.display,
                 record.id,
+                record.coin,
                 now.checked_add_days(Days::new(3)).unwrap().timestamp()
             )),
         )
@@ -123,24 +125,27 @@ pub async fn booster(
         CommandReply::InsufficientFunds => {
             ctx.send(
                 CreateReply::default()
-                    .content(format!(
-                        "**購買失敗。**\n您的水星幣不足以購買 x{} 的加倍倍率。您可以使用 {} 指令查詢餘額。",
-                        amp, CONFIG.slash_command_strings.coin
-                    ))
-                    .ephemeral(true),
-            )
-            .await?;
+                    .content(
+                        format!(
+                            "**購買失敗。**\n您的水星幣不足以購買 x{} 的加倍倍率。您可以使用 {} 指令查詢餘額。",
+                            amp,
+                            CONFIG.slash_command_strings.coin
+                        )
+                    )
+                    .ephemeral(true)
+            ).await?;
         }
         CommandReply::NoUserFound => {
             ctx.send(
                 CreateReply::default()
-                    .content(format!(
-                        "**找不到您的 Discord 用戶記錄。**\n請先使用 {} 將 Discord 帳號關聯到您的 YouTube 頻道，才能在 Discord 使用水星幣購買。",
-                        CONFIG.slash_command_strings.link
-                    ))
-                    .ephemeral(true),
-            )
-            .await?;
+                    .content(
+                        format!(
+                            "**找不到您的 Discord 用戶記錄。**\n請先使用 {} 將 Discord 帳號關聯到您的 YouTube 頻道，才能在 Discord 使用水星幣購買。",
+                            CONFIG.slash_command_strings.link
+                        )
+                    )
+                    .ephemeral(true)
+            ).await?;
         }
     }
 
@@ -157,10 +162,21 @@ pub async fn booster(
 
         let interaction = message
             .await_component_interaction(&ctx.serenity_context().shard)
-            .timeout(Duration::from_secs(72 * 60 * 60)) // 72 level
-            .await;
+            .timeout(Duration::from_secs(72 * 60 * 60))
+            .await; // 72 level
 
         if let Some(interaction) = interaction {
+            message
+                .edit(
+                    &ctx.serenity_context().http,
+                    EditMessage::new().components(vec![CreateActionRow::Buttons(vec![
+                        CreateButton::new("refund")
+                            .label("已申請退款")
+                            .disabled(true),
+                    ])]),
+                )
+                .await?;
+
             interaction
                 .create_response(
                     &ctx,
@@ -188,6 +204,7 @@ pub async fn booster(
 
             let content = format!(
                 "\
+退款商品類型：懲罰加倍卡
 申請人 <@{}>
 案號 {}
 請說明您希望退款的理由。
@@ -204,13 +221,6 @@ pub async fn booster(
                 )
                 .await?;
         }
-
-        message
-            .edit(
-                &ctx.serenity_context().http,
-                EditMessage::new().components(vec![]),
-            )
-            .await?;
     }
 
     Ok(())
@@ -269,7 +279,7 @@ pub async fn overtime(
                 "\
 # 加班台時數卡 #
 ## + {} 小時 ##
-- 來自：{} (`{}`)
+- 來自：{} (`{}`)，結餘 **{}** 水星幣。
 - 給惡靈的加班台留言：
 > {}
 -# 如有疑義請在 72 小時內（<t:{}:f> 之前）執行退款流程。
@@ -277,6 +287,7 @@ pub async fn overtime(
                 hours,
                 record.display,
                 record.id,
+                record.coin,
                 content,
                 now.checked_add_days(Days::new(3)).unwrap().timestamp()
             )),
@@ -299,24 +310,27 @@ pub async fn overtime(
         CommandReply::InsufficientFunds => {
             ctx.send(
                 CreateReply::default()
-                    .content(format!(
-                        "**購買失敗。**\n您的水星幣不足以購買 {} 小時的加班台時數卡。您可以使用 {} 指令查詢餘額。",
-                        hours, CONFIG.slash_command_strings.coin
-                    ))
-                    .ephemeral(true),
-            )
-            .await?;
+                    .content(
+                        format!(
+                            "**購買失敗。**\n您的水星幣不足以購買 {} 小時的加班台時數卡。您可以使用 {} 指令查詢餘額。",
+                            hours,
+                            CONFIG.slash_command_strings.coin
+                        )
+                    )
+                    .ephemeral(true)
+            ).await?;
         }
         CommandReply::NoUserFound => {
             ctx.send(
                 CreateReply::default()
-                    .content(format!(
-                        "**找不到您的 Discord 用戶記錄。**\n請先使用 {} 將 Discord 帳號關聯到您的 YouTube 頻道，才能在 Discord 使用水星幣購買。",
-                        CONFIG.slash_command_strings.link
-                    ))
-                    .ephemeral(true),
-            )
-            .await?;
+                    .content(
+                        format!(
+                            "**找不到您的 Discord 用戶記錄。**\n請先使用 {} 將 Discord 帳號關聯到您的 YouTube 頻道，才能在 Discord 使用水星幣購買。",
+                            CONFIG.slash_command_strings.link
+                        )
+                    )
+                    .ephemeral(true)
+            ).await?;
         }
     }
 
@@ -333,10 +347,21 @@ pub async fn overtime(
 
         let interaction = message
             .await_component_interaction(&ctx.serenity_context().shard)
-            .timeout(Duration::from_secs(72 * 60 * 60)) // 72 hours
-            .await;
+            .timeout(Duration::from_secs(72 * 60 * 60))
+            .await; // 72 hours
 
         if let Some(interaction) = interaction {
+            message
+                .edit(
+                    &ctx.serenity_context().http,
+                    EditMessage::new().components(vec![CreateActionRow::Buttons(vec![
+                        CreateButton::new("refund")
+                            .label("已申請退款")
+                            .disabled(true),
+                    ])]),
+                )
+                .await?;
+
             interaction
                 .create_response(
                     &ctx,
@@ -364,6 +389,7 @@ pub async fn overtime(
 
             let content = format!(
                 "\
+退款商品類型：加班台時數卡
 申請人 <@{}>
 案號 {}
 請說明您希望退款的理由。
@@ -380,13 +406,6 @@ pub async fn overtime(
                 )
                 .await?;
         }
-
-        message
-            .edit(
-                &ctx.serenity_context().http,
-                EditMessage::new().components(vec![]),
-            )
-            .await?;
     }
 
     Ok(())
