@@ -75,6 +75,7 @@ pub async fn booster(
             break 'ret (CommandReply::InsufficientFunds, None);
         }
         let now = chrono::Utc::now();
+        let due = now.checked_add_days(Days::new(3)).unwrap();
 
         record.coin -= cost;
         record.updated_at = now;
@@ -101,7 +102,7 @@ pub async fn booster(
                 record.display,
                 record.id,
                 record.coin,
-                now.checked_add_days(Days::new(3)).unwrap().timestamp()
+                due.timestamp()
             )),
         )
     };
@@ -174,7 +175,7 @@ pub async fn booster(
                 )
                 .await?;
 
-            interaction
+            let _ = match interaction
                 .create_response(
                     &ctx,
                     // This time we dont edit the message but reply to it
@@ -186,7 +187,21 @@ pub async fn booster(
                     ),
                 )
                 .await
-                .unwrap();
+            {
+                Ok(_) => (),
+                Err(err) => {
+                    ctx.send(
+                        CreateReply::default()
+                            .content(format!(
+                                "**退款流程啟動失敗。**請稍後再試一次。\n-# Error：{}",
+                                err
+                            ))
+                            .ephemeral(true),
+                    )
+                    .await?;
+                    return Ok(());
+                }
+            };
 
             let author = ctx.author().clone();
             let case_number = Alphanumeric.sample_string(&mut rand::thread_rng(), 6);
@@ -257,6 +272,8 @@ pub async fn overtime(
         }
 
         let now = chrono::Utc::now();
+        let due = now.checked_add_days(Days::new(3)).unwrap();
+
         record.coin -= cost;
         record.updated_at = now;
         record.update(&transaction)?;
@@ -284,7 +301,7 @@ pub async fn overtime(
                 record.id,
                 record.coin,
                 content,
-                now.checked_add_days(Days::new(3)).unwrap().timestamp()
+                due.timestamp()
             )),
         )
     };
@@ -357,7 +374,7 @@ pub async fn overtime(
                 )
                 .await?;
 
-            interaction
+            let _ = match interaction
                 .create_response(
                     &ctx,
                     // This time we dont edit the message but reply to it
@@ -369,7 +386,21 @@ pub async fn overtime(
                     ),
                 )
                 .await
-                .unwrap();
+            {
+                Ok(_) => (),
+                Err(err) => {
+                    ctx.send(
+                        CreateReply::default()
+                            .content(format!(
+                                "**退款流程啟動失敗。**請稍後再試一次。\n-# Error：{}",
+                                err
+                            ))
+                            .ephemeral(true),
+                    )
+                    .await?;
+                    return Ok(());
+                }
+            };
 
             let author = ctx.author().clone();
             let case_number = Alphanumeric.sample_string(&mut rand::thread_rng(), 6);
