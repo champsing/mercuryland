@@ -5,7 +5,7 @@ use chrono::{DateTime, Utc};
 use serenity::all::CreateMessage;
 
 pub struct CoinCommandManager {
-    config: CoinConfig,
+    pub(crate) config: CoinConfig,
 }
 
 impl CoinCommandManager {

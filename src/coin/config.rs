@@ -39,7 +39,7 @@ impl CoinConfig {
         }
     }
 
-    pub(super) fn booster_cost(&self, level: i64) -> i64 {
+    pub(crate) fn booster_cost(&self, level: i64) -> i64 {
         match level {
             2 => 50,
             3 => 100,
