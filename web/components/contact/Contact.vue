@@ -40,7 +40,7 @@ import ContactCard from "./ContactCard.vue";
                     <VaButton
                         preset="primary"
                         color="warning"
-                        href="https://tsl.mercuryland.pp.ua/"
+                        href="https://timesl.online/"
                         rel="noopener noreferrer"
                         target="_blank"
                     >

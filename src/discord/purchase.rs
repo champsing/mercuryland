@@ -1,0 +1,390 @@
+use crate::coin::youtube::Coin;
+use crate::config::CONFIG;
+use crate::database::{coin::Coin as CoinUser, get_connection};
+use crate::error::ServerError;
+use chrono::Days;
+use poise::{self, CreateReply};
+use rand::distributions::{Alphanumeric, DistString};
+use serenity::all::{
+    ChannelId, CreateButton, CreateInteractionResponse, CreateInteractionResponseMessage,
+    CreateMessage, CreateThread, EditMessage,
+};
+use std::time::Duration;
+
+pub enum CommandReply {
+    Success,
+    InvalidInput,
+    InsufficientFunds,
+    NoUserFound,
+}
+
+fn find_coin_user(msg_author_id: String) -> Result<Option<String>, ServerError> {
+    let mut connection = get_connection()?;
+    let transaction = connection.transaction()?;
+    let user_id = match CoinUser::by_discord(msg_author_id, &transaction)? {
+        Some(u) => Some(u.id),
+        None => None,
+    };
+    Ok(user_id)
+}
+
+#[poise::command(slash_command)]
+pub async fn purchase(ctx: super::Context<'_>) -> Result<(), ServerError> {
+    ctx.say("Purchase Entrypoint.").await?;
+    Ok(())
+}
+
+#[poise::command(slash_command)]
+pub async fn booster(
+    ctx: super::Context<'_>,
+    amp: u32,
+    penalty_content: String,
+) -> Result<(), ServerError> {
+    let author = ctx.author();
+    let channel_id = CONFIG.discord.exchange;
+
+    // 在一个同步块里处理所有 DB 逻辑，生成好要发送的 message
+    let (reply, content) = 'ret: {
+        if amp <= 0 || amp > 9 {
+            log::warn!("{}: incorrect level", ctx.invocation_string());
+            break 'ret (CommandReply::InvalidInput, None);
+        }
+
+        let mut connection = get_connection()?;
+        let transaction = connection.transaction()?;
+
+        let user_id = match find_coin_user(author.id.get().to_string())? {
+            Some(uid) => uid,
+            None => String::from("User not found"),
+        };
+
+        let record = Coin::by_youtube(user_id, &transaction)?;
+
+        if record.is_none() {
+            break 'ret (CommandReply::NoUserFound, None);
+        }
+
+        let mut record = record.unwrap();
+        if record.discord_id == 0 {
+            break 'ret (CommandReply::NoUserFound, None);
+        }
+
+        let cost = (amp * 1000).into(); // 1000 水星幣每小時
+        if record.coin < cost {
+            break 'ret (CommandReply::InsufficientFunds, None);
+        }
+        let now = chrono::Utc::now();
+
+        record.coin -= cost;
+        record.updated_at = now;
+        record.update(&transaction)?;
+
+        println!(
+            "[-] {} buy a level-{} booster for {}",
+            record.display, amp, penalty_content
+        );
+
+        transaction.commit()?;
+
+        (
+            CommandReply::Success,
+            Some(format!(
+                "\
+# 懲罰加倍 #
+- 懲罰內容： 「{}」 x **{}** 倍
+- 來自： {} (`{}`)
+-# 如有疑義，或未抽中想領取半價退款，請在 72 小時內（<t:{}:f> 之前）執行退款流程。
+",
+                penalty_content,
+                amp,
+                record.display,
+                record.id,
+                now.checked_add_days(Days::new(3)).unwrap().timestamp()
+            )),
+        )
+    };
+
+    match reply {
+        CommandReply::Success => {
+            ctx.send(CreateReply::default().content("交易成功！").ephemeral(true))
+                .await?;
+        }
+        CommandReply::InvalidInput => {
+            ctx.send(
+                CreateReply::default()
+                    .content("您輸入了無效的倍率。請輸入 1 ~ 9 的整數。")
+                    .ephemeral(true),
+            )
+            .await?;
+        }
+        CommandReply::InsufficientFunds => {
+            ctx.send(
+                CreateReply::default()
+                    .content(format!(
+                        "**購買失敗。**\n您的水星幣不足以購買 x{} 的加倍倍率。您可以使用 {} 指令查詢餘額。",
+                        amp, CONFIG.slash_command_strings.coin
+                    ))
+                    .ephemeral(true),
+            )
+            .await?;
+        }
+        CommandReply::NoUserFound => {
+            ctx.send(
+                CreateReply::default()
+                    .content(format!(
+                        "**找不到您的 Discord 用戶記錄。**\n請先使用 {} 將 Discord 帳號關聯到您的 YouTube 頻道，才能在 Discord 使用水星幣購買。",
+                        CONFIG.slash_command_strings.link
+                    ))
+                    .ephemeral(true),
+            )
+            .await?;
+        }
+    }
+
+    // 此处已经不再持有 rusqlite::Transaction，可以安全 .await
+    if let Some(content) = content {
+        let mut message = ChannelId::from(channel_id)
+            .send_message(
+                &ctx.serenity_context().http,
+                CreateMessage::new()
+                    .content(&content)
+                    .button(CreateButton::new("refund").label("退款申请")),
+            )
+            .await?;
+
+        let interaction = message
+            .await_component_interaction(&ctx.serenity_context().shard)
+            .timeout(Duration::from_secs(72 * 60 * 60)) // 72 level
+            .await;
+
+        if let Some(interaction) = interaction {
+            interaction
+                .create_response(
+                    &ctx,
+                    // This time we dont edit the message but reply to it
+                    CreateInteractionResponse::Message(
+                        CreateInteractionResponseMessage::default()
+                            // Make the message hidden for other users by setting `ephemeral(true)`.
+                            .ephemeral(true)
+                            .content(format!("开始处理退款")),
+                    ),
+                )
+                .await
+                .unwrap();
+
+            let author = ctx.author().clone();
+            let case_number = Alphanumeric.sample_string(&mut rand::thread_rng(), 6);
+
+            let refund = ChannelId::new(CONFIG.discord.exchange) //CONFIG.discord.exchange 1248793225767026758
+                .create_thread_from_message(
+                    ctx.http(),
+                    message.id,
+                    CreateThread::new(format!("退款討論串 {}-{}", author.name, case_number)),
+                )
+                .await?;
+
+            let content = format!(
+                "\
+申請人 <@{}>
+案號 {}
+請說明您希望退款的理由。
+=============在這則訊息以下開始處理退款=============
+",
+                author.id.get(),
+                case_number
+            );
+
+            refund
+                .send_message(
+                    &ctx.serenity_context().http,
+                    CreateMessage::new().content(content),
+                )
+                .await?;
+        }
+
+        message
+            .edit(
+                &ctx.serenity_context().http,
+                EditMessage::new().components(vec![]),
+            )
+            .await?;
+    }
+
+    Ok(())
+}
+
+#[poise::command(slash_command)]
+pub async fn overtime(
+    ctx: super::Context<'_>,
+    hours: f32,
+    content: String,
+) -> Result<(), ServerError> {
+    let author_id = ctx.author().id.get();
+    let channel_id = CONFIG.discord.exchange; // 水星交易所
+
+    // 在一个同步块里处理所有 DB 逻辑，生成好要发送的 message
+    let (reply, content) = 'ret: {
+        if hours <= 0.0 {
+            log::warn!("{}: incorrect hours", ctx.invocation_string());
+            break 'ret (CommandReply::InvalidInput, None);
+        }
+
+        let mut connection = get_connection()?;
+        let transaction = connection.transaction()?;
+
+        let record = Coin::by_discord(author_id.to_string(), &transaction)?;
+
+        if record.is_none() {
+            break 'ret (CommandReply::NoUserFound, None);
+        }
+
+        let mut record = record.unwrap();
+        if record.discord_id == 0 {
+            break 'ret (CommandReply::NoUserFound, None);
+        }
+
+        let cost = (hours * 1000.0).ceil() as i64; // 1000 水星幣每小時
+        if record.coin < cost {
+            break 'ret (CommandReply::InsufficientFunds, None);
+        }
+
+        let now = chrono::Utc::now();
+        record.coin -= cost;
+        record.updated_at = now;
+        record.update(&transaction)?;
+
+        println!(
+            "[-] {} buy a(n) {}-hour overtime for {}",
+            record.display, hours, content
+        );
+
+        transaction.commit()?;
+
+        (
+            CommandReply::Success,
+            Some(format!(
+                "\
+# 加班台時數卡 #
+## + {} 小時 ##
+- 來自：{} (`{}`)
+- 給惡靈的加班台留言：
+> {}
+-# 如有疑義請在 72 小時內（<t:{}:f> 之前）執行退款流程。
+",
+                hours,
+                record.display,
+                record.id,
+                content,
+                now.checked_add_days(Days::new(3)).unwrap().timestamp()
+            )),
+        )
+    };
+
+    match reply {
+        CommandReply::Success => {
+            ctx.send(CreateReply::default().content("交易成功！").ephemeral(true))
+                .await?;
+        }
+        CommandReply::InvalidInput => {
+            ctx.send(
+                CreateReply::default()
+                    .content("您輸入了無效的時數。請輸入大於 0 的正數（可以有小數）。")
+                    .ephemeral(true),
+            )
+            .await?;
+        }
+        CommandReply::InsufficientFunds => {
+            ctx.send(
+                CreateReply::default()
+                    .content(format!(
+                        "**購買失敗。**\n您的水星幣不足以購買 {} 小時的加班台時數卡。您可以使用 {} 指令查詢餘額。",
+                        hours, CONFIG.slash_command_strings.coin
+                    ))
+                    .ephemeral(true),
+            )
+            .await?;
+        }
+        CommandReply::NoUserFound => {
+            ctx.send(
+                CreateReply::default()
+                    .content(format!(
+                        "**找不到您的 Discord 用戶記錄。**\n請先使用 {} 將 Discord 帳號關聯到您的 YouTube 頻道，才能在 Discord 使用水星幣購買。",
+                        CONFIG.slash_command_strings.link
+                    ))
+                    .ephemeral(true),
+            )
+            .await?;
+        }
+    }
+
+    // 此处已经不再持有 rusqlite::Transaction，可以安全 .await
+    if let Some(content) = content {
+        let mut message = ChannelId::from(channel_id)
+            .send_message(
+                &ctx.serenity_context().http,
+                CreateMessage::new()
+                    .content(&content)
+                    .button(CreateButton::new("refund").label("退款申请")),
+            )
+            .await?;
+
+        let interaction = message
+            .await_component_interaction(&ctx.serenity_context().shard)
+            .timeout(Duration::from_secs(72 * 60 * 60)) // 72 hours
+            .await;
+
+        if let Some(interaction) = interaction {
+            interaction
+                .create_response(
+                    &ctx,
+                    // This time we dont edit the message but reply to it
+                    CreateInteractionResponse::Message(
+                        CreateInteractionResponseMessage::default()
+                            // Make the message hidden for other users by setting `ephemeral(true)`.
+                            .ephemeral(true)
+                            .content(format!("开始处理退款")),
+                    ),
+                )
+                .await
+                .unwrap();
+
+            let author = ctx.author().clone();
+            let case_number = Alphanumeric.sample_string(&mut rand::thread_rng(), 6);
+
+            let refund = ChannelId::new(CONFIG.discord.exchange) //CONFIG.discord.exchange 1248793225767026758
+                .create_thread_from_message(
+                    ctx.http(),
+                    message.id,
+                    CreateThread::new(format!("退款討論串 {}-{}", author.name, case_number)),
+                )
+                .await?;
+
+            let content = format!(
+                "\
+申請人 <@{}>
+案號 {}
+請說明您希望退款的理由。
+=============在這則訊息以下開始處理退款=============
+",
+                author.id.get(),
+                case_number
+            );
+
+            refund
+                .send_message(
+                    &ctx.serenity_context().http,
+                    CreateMessage::new().content(content),
+                )
+                .await?;
+        }
+
+        message
+            .edit(
+                &ctx.serenity_context().http,
+                EditMessage::new().components(vec![]),
+            )
+            .await?;
+    }
+
+    Ok(())
+}

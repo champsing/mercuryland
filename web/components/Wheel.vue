@@ -16,7 +16,7 @@ import { BASE_URL } from "@/composables/utils";
 import { AlertCircleOutline } from "@vicons/ionicons5";
 import { ArrowClockwise24Filled } from "@vicons/fluent";
 
-document.title = '幸運轉盤 - 水星人的夢幻樂園'
+document.title = "幸運轉盤 - 水星人的夢幻樂園";
 
 const wheelContainer = ref(null);
 const isSpinning = ref(false); //轉盤旋轉中
@@ -28,23 +28,32 @@ let wheelConnect = reactive({
     id: 0,
     secret: "",
 });
-axios.get(BASE_URL + "/api/wheel/create").then(
-    (response) => {
-        wheelConnect.id = response.data.id;
-        wheelConnect.secret = response.data.secret;
-        console.log(wheelConnect);
-    },
-    (error) => {
-        wheelConnect.id = -1;
-        console.log(error);
-    }
-);
+
+if (sessionStorage.getItem("wheelConnect")) {
+    wheelConnect = JSON.parse(sessionStorage.getItem("wheelConnect"));
+} else {
+    axios.get(BASE_URL + "/api/wheel/create").then(
+        (response) => {
+            wheelConnect.id = response.data.id;
+            wheelConnect.secret = response.data.secret;
+            console.log(wheelConnect);
+            sessionStorage.setItem(
+                "wheelConnect",
+                JSON.stringify(wheelConnect)
+            );
+        },
+        (error) => {
+            wheelConnect.id = -1;
+            console.log(error);
+        }
+    );
+}
 
 let wheel: Wheel = null;
 
 const textArea = defineModel("textArea", {
     type: String,
-    default: "",
+    default: sessionStorage.getItem("textArea") || "",
     set(value: string) {
         if (wheel != null) {
             wheel.items = value
@@ -61,13 +70,14 @@ const textArea = defineModel("textArea", {
                     };
                 });
         }
+        sessionStorage.setItem("textArea", value);
         return value;
     },
 });
 
 const textArea2 = defineModel("textArea2", {
     type: String,
-    default: "",
+    default: sessionStorage.getItem("textArea2") || "",
     set(value: string) {
         let content = value.split("\n").filter((x) => x != "");
         axios.post(BASE_URL + "/api/wheel/update", {
@@ -75,6 +85,7 @@ const textArea2 = defineModel("textArea2", {
             secret: wheelConnect.secret,
             content: content,
         });
+        sessionStorage.setItem("textArea2", value);
         return value;
     },
 });
@@ -182,7 +193,20 @@ onMounted(() => {
     overlay.src = "/pointer.svg";
 
     const props = {
-        items: [],
+        items:
+            textArea.value
+                .split("\n")
+                .filter((x) => x != "")
+                .map((x) => {
+                    const weight = parseInt(
+                        (x.match(re) || ["x1"])[0].substring(1)
+                    );
+                    const label = x.replace(re, "");
+                    return {
+                        label: label,
+                        weight: weight,
+                    };
+                }) || [],
         itemLabelRadiusMax: 0.4,
         itemBackgroundColors: [
             "#dc2626",
@@ -264,7 +288,7 @@ const modal3 = reactive({
             <div class="wheel-wrapper w-2/5 -mt-20" ref="wheelContainer"></div>
 
             <div class="w-1/5">
-                <div class="va-h4">待抽区 ({{ count(textArea) }}个)</div>
+                <div class="va-h4">待抽區 ({{ count(textArea) }}個)</div>
                 <VaTextarea
                     v-model="textArea"
                     color="#ffffff"
@@ -277,7 +301,7 @@ const modal3 = reactive({
                     @click="spin"
                     :disabled="isSpinning || count(textArea) == 0"
                 >
-                    旋转
+                    旋轉
                 </VaButton>
                 <VaButton
                     class="w-full mt-8"
@@ -301,7 +325,7 @@ const modal3 = reactive({
                 <div class="h-44"></div>
             </div>
             <div class="w-1/5">
-                <div class="va-h4">抽中区 ({{ count(textArea2) }}个)</div>
+                <div class="va-h4">抽中區 ({{ count(textArea2) }}個)</div>
                 <VaTextarea
                     v-model="textArea2"
                     color="#ffffff"
@@ -348,10 +372,10 @@ const modal3 = reactive({
                 }
             "
         >
-            您确定要清空
+            您確定要清空
             <div v-if="clearRightArea" class="inline text-2xl">抽中區</div>
             <div v-else class="inline text-2xl">待抽區</div>
-            吗?
+            嗎？
             <!-- prettier-ignore -->
             <div v-if="clearRightArea" class="text-4xl text-right text-[#1aedab]">清→</div>
             <div v-else class="text-4xl text-right text-[#bae64c]">←清</div>
