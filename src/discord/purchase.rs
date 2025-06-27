@@ -1,3 +1,4 @@
+use crate::coin::command::CoinCommandManager;
 use crate::coin::youtube::Coin;
 use crate::config::CONFIG;
 use crate::database::{coin::Coin as CoinUser, get_connection};
@@ -69,7 +70,9 @@ pub async fn booster(
             break 'ret (CommandReply::NoUserFound, None);
         }
 
-        let cost = (amp * 1000).into(); // 1000 水星幣每小時
+        let coin_config = CoinCommandManager::new().config;
+        let cost = coin_config.booster_cost(amp.into());
+
         if record.coin < cost {
             break 'ret (CommandReply::InsufficientFunds, None);
         }
