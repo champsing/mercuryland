@@ -2,7 +2,7 @@ use super::config::CoinConfig;
 pub use crate::database::coin::Coin;
 use crate::{config::CONFIG, database::get_connection, discord, error::ServerError};
 use chrono::{DateTime, Utc};
-use serenity::all::{CreateButton, CreateMessage};
+use serenity::all::{CreateMessage};
 
 pub struct CoinCommandManager {
     pub(crate) config: CoinConfig,
