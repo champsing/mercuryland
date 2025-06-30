@@ -61,7 +61,9 @@ pub async fn booster(
 
         let mut record = match Coin::by_youtube(user_id, &transaction)? {
             Some(r) => r,
-            None => break 'ret (CommandReply::NoUserFound, None),
+            None => {
+                break 'ret (CommandReply::NoUserFound, None);
+            }
         };
 
         if record.discord_id == 0 {
@@ -259,7 +261,9 @@ pub async fn overtime(
 
         let mut record = match Coin::by_discord(author_id.to_string(), &transaction)? {
             Some(r) => r,
-            None => break 'ret (CommandReply::NoUserFound, None),
+            None => {
+                break 'ret (CommandReply::NoUserFound, None);
+            }
         };
 
         if record.discord_id == 0 {
