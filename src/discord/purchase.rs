@@ -166,6 +166,19 @@ pub async fn booster(
             .await; // 72 level
 
         if let Some(interaction) = interaction {
+            // if not the buyer clicking button
+            if interaction.user.id.get() != author.id.get().clone() {
+                ctx.send(
+                    CreateReply::default()
+                        .content(format!(
+                            "**您並非這筆訂單的購買者。**您僅有權限退款自己的訂單。"
+                        ))
+                        .ephemeral(true),
+                )
+                .await?;
+                return Ok(());
+            }
+
             message
                 .edit(
                     &ctx.serenity_context().http,
@@ -367,6 +380,19 @@ pub async fn overtime(
             .await; // 72 hours
 
         if let Some(interaction) = interaction {
+            // if not the buyer clicking button
+            if interaction.user.id.get() != author_id.clone() {
+                ctx.send(
+                    CreateReply::default()
+                        .content(format!(
+                            "**您並非這筆訂單的購買者。**您僅有權限退款自己的訂單。"
+                        ))
+                        .ephemeral(true),
+                )
+                .await?;
+                return Ok(());
+            }
+
             message
                 .edit(
                     &ctx.serenity_context().http,
