@@ -1656,7 +1656,7 @@
         "id": 181,
         "date": "2025-07-06",
         "name": "玩PUMPKIN PANIC",
-        "status": "未開始",
+        "status": "已完成",
         "steamID": 3177920
     },
     {
@@ -1681,6 +1681,12 @@
         "id": 185,
         "date": "2025-07-06",
         "name": "抽一位資料庫有記錄的觀眾免費送100水星幣",
-        "status": "未開始"
+        "status": "已完成",
+        "description": [
+            {
+                "type": "vod",
+                "uri_num": 173
+            }
+        ]
     }
 ]
