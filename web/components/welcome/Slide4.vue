@@ -2,10 +2,10 @@
 import { ref } from "vue";
 import { VaCarousel, VaDivider } from "vuestic-ui";
 import NextPageButton from "./NextPageButton.vue";
-import img1 from "@assets/images/welcome/s2_firework_1.png";
-import img2 from "@assets/images/welcome/s2_firework_2.png";
-import img3 from "@assets/images/welcome/s1_close_1.png";
-import img4 from "@assets/images/welcome/s1_close_2.png";
+import img1 from "/images/welcome/s2_firework_1.webp";
+import img2 from "/images/welcome/s2_firework_2.webp";
+import img3 from "/images/welcome/s1_close_1.webp";
+import img4 from "/images/welcome/s1_close_2.webp";
 
 const currentImg = ref(0);
 const imgs = [

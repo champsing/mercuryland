@@ -12,7 +12,7 @@ import { VaDivider } from "vuestic-ui";
             <div class="text-white italic text-3xl">The Mercury Land</div>
         </div>
         <img
-            src="@assets/images/welcome/welcome.png"
+            src="/images/welcome/welcome.webp"
             alt="Welcome"
             class="-z-10 w-full h-full object-cover absolute top-0 left-0"
         />

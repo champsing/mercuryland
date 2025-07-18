@@ -17,7 +17,7 @@ import ContactCard from "./ContactCard.vue";
             >
                 <template #avatar>
                     <img
-                        src="@assets/images/admin_avatars/oreki20.png"
+                        src="/images/admin_avatars/oreki20.webp"
                         class="w-full h-full object-contain"
                         slot="avatar"
                     />
@@ -31,7 +31,7 @@ import ContactCard from "./ContactCard.vue";
             >
                 <template #avatar>
                     <img
-                        src="@assets/images/admin_avatars/champsing.png"
+                        src="/images/admin_avatars/champsing.webp"
                         class="w-full h-full object-contain"
                         slot="avatar"
                     />
@@ -57,7 +57,7 @@ import ContactCard from "./ContactCard.vue";
             >
                 <template #avatar>
                     <img
-                        src="@assets/images/admin_avatars/logic.png"
+                        src="/images/admin_avatars/logic.webp"
                         class="w-full h-full object-contain"
                     />
                 </template>

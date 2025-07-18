@@ -11,7 +11,7 @@ import NextPageButton from "./NextPageButton.vue";
         >
             <div class="relative row-start-1 row-end-4">
                 <img
-                    src="@assets/images/welcome/statue_of_liberty.png"
+                    src="/images/welcome/statue_of_liberty.webp"
                     class="absolute y-center x-center h-5/6 object-contain"
                     alt="Welcome"
                 />

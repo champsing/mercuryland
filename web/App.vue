@@ -34,7 +34,7 @@ const tabs = [
             <VaNavbarItem class="navbar-item-slot">
                 <router-link to="/" class="ml-4">
                     <img
-                        src="@assets/images/hexagon.svg"
+                        src="/images/hexagon.svg"
                         class="invert h-8 w-8 inline"
                         alt="hexagon"
                     />
