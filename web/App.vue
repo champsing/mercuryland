@@ -53,8 +53,8 @@ const tabs = [
         </template>
         <template #right>
             <VaNavbarItem class="navbar-item-slot">
-                <div class="flex flex-row">
-                    <div class="mr-2">
+                <div class="flex flex-row justify-center">
+                    <div class="mx-2 mt-1">
                         <Login />
                     </div>
                     <VaButton
@@ -65,7 +65,7 @@ const tabs = [
                         target="_blank"
                         rel="noopener noreferrer"
                     >
-                        <VaIcon size="large">
+                        <VaIcon :size="28">
                             <Github />
                         </VaIcon>
                     </VaButton>
