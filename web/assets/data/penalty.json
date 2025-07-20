@@ -1663,13 +1663,30 @@
         "id": 182,
         "date": "2025-07-06",
         "name": "和各位觀眾玩一把亡國之戰",
-        "status": "未開始"
+        "status": "已完成",
+        "description": [
+            {
+                "type": "vod",
+                "uri_num": 174
+            }
+        ]
     },
     {
         "id": 183,
         "date": "2025-07-06",
         "name": "嬌喘asmr影片(30秒)(至少15次不同的嬌喘)",
-        "status": "未開始"
+        "status": "已完成",
+        "description": [
+            {
+                "type": "vod",
+                "uri_num": 174
+            },
+            {
+                "type": "link",
+                "text": "觀看懲罰成果",
+                "uri_link": "https://youtube.com/clip/UgkxaP2XE8KlNQ28qQDp0OKTsPmPZMmdyULU?feature=shared"
+            }
+        ]
     },
     {
         "id": 184,
