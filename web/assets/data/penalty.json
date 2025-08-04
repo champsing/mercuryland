@@ -1612,11 +1612,11 @@
         "id": 176,
         "date": "2025-06-01",
         "name": "加班台2小時",
-        "status": "進行中",
+        "status": "已完成",
         "description": [
             {
                 "type": "text",
-                "text": "59分27秒 /2小時"
+                "text": "2小時4分鐘37秒 /2小時"
             },
             {
                 "type": "text",
@@ -1625,6 +1625,22 @@
             {
                 "type": "vod",
                 "uri_num": 169
+            },
+            {
+                "type": "text",
+                "text": "41分36秒"
+            },
+            {
+                "type": "vod",
+                "uri_num": 170
+            },
+            {
+                "type": "text",
+                "text": "23分34秒"
+            },
+            {
+                "type": "vod",
+                "uri_num": 171
             },
             {
                 "type": "text",
