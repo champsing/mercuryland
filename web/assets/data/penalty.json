@@ -1692,7 +1692,18 @@
         "id": 184,
         "date": "2025-07-06",
         "name": "直播時去AI生成一段 <史蒂夫你不是牛>的歌詞 再把歌詞拿去音樂生成網站生成一段1分鐘以上的歌曲 並且跟著唱一次",
-        "status": "未開始"
+        "status": "已完成",
+        "description": [
+            {
+                "type": "vod",
+                "uri_num": 175
+            },
+            {
+                "type": "link",
+                "text": "觀看懲罰成果",
+                "uri_link": "https://youtube.com/clip/Ugkx18BRYCSHooz83_ZSLdY0fAWD3haFlTco?si=otmjc-6rYi_Sk5kM"
+            }
+        ]
     },
     {
         "id": 185,
@@ -1705,5 +1716,29 @@
                 "uri_num": 173
             }
         ]
+    },
+    {
+        "id": 186,
+        "date": "2025-08-04",
+        "name": "man hunt 觀眾場",
+        "status": "未開始"
+    },
+    {
+        "id": 187,
+        "date": "2025-08-04",
+        "name": "在itchio上面玩免费的恐怖游戏",
+        "status": "未開始"
+    },
+    {
+        "id": 189,
+        "date": "2025-08-04",
+        "name": "出一張恐怖地圖",
+        "status": "未生效"
+    },
+    {
+        "id": 190,
+        "date": "2025-08-04",
+        "name": "港鬼實錄",
+        "status": "未生效"
     }
 ]
