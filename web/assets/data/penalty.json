@@ -1663,8 +1663,15 @@
         "id": 178,
         "date": "2025-06-08",
         "name": "通關Replicube demo",
-        "status": "未開始",
-        "steamID": 3401490
+        "status": "已完成",
+        "steamID": 3401490,
+        "description": [
+            {
+                "type": "link",
+                "text": "觀看懲罰成果",
+                "uri_link": "https://discord.com/channels/506120681495199756/967078051714326558/1404064444769767648"
+            }
+        ]
     },
     {
         "id": 179,
@@ -1761,13 +1768,13 @@
         "id": 189,
         "date": "2025-08-04",
         "name": "出一張恐怖地圖",
-        "status": "未生效"
+        "status": "未開始"
     },
     {
         "id": 190,
         "date": "2025-08-04",
         "name": "港鬼實錄",
-        "status": "未生效",
+        "status": "未開始",
         "steamID": 1178490
     }
 ]
