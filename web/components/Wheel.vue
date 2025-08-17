@@ -322,6 +322,7 @@ const modal3 = reactive({
                         停用
                     </VaDivider>
                 </div>
+                
                 <div class="h-44"></div>
             </div>
             <div class="w-1/5">
@@ -346,6 +347,10 @@ const modal3 = reactive({
                         true-inner-label="抽中區"
                         :disabled="isSpinning"
                     />
+                </div>
+                <div class="text-bg text-teal-400 mt-10">
+                    <VaIcon name="info" />
+                    轉盤動畫不影響轉盤隨機抽選結果，敬請安心使用。
                 </div>
                 <div class="h-44"></div>
             </div>
