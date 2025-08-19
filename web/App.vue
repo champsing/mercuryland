@@ -31,7 +31,7 @@ const tabs = [
         :color="$route.fullPath == '/' ? `rgba(0, 0, 0, 0)` : `rgb(24, 24, 27)`"
     >
         <template #left>
-            <VaNavbarItem class="navbar-item-slot">
+            <VaNavbarItem>
                 <router-link to="/" class="ml-4">
                     <img
                         src="/images/hexagon.svg"
@@ -40,7 +40,9 @@ const tabs = [
                     />
                 </router-link>
             </VaNavbarItem>
-            <VaNavbarItem class="navbar-item-slot">
+        </template>
+        <template #center>
+            <VaNavbarItem>
                 <router-link
                     v-for="t in tabs"
                     :to="t.path"
@@ -52,7 +54,7 @@ const tabs = [
             </VaNavbarItem>
         </template>
         <template #right>
-            <VaNavbarItem class="navbar-item-slot">
+            <VaNavbarItem>
                 <div class="flex flex-row justify-center">
                     <div class="mx-2 mt-1">
                         <Login />
