@@ -161,7 +161,7 @@ let clientIP = await fetch("https://api.ipify.org?format=json")
                 <div
                     id="g_id_onload"
                     data-client_id="557016419724-4gvamcsq0hp8j8e0o1sjum2epq5ls446.apps.googleusercontent.com"
-                    data-login_uri="https://api.mercuryland.online/api/auth/google"
+                    data-login_uri="https://api.mercuryland.pp.ua/api/auth/google"
                 ></div>
                 <div
                     class="g_id_signin"
