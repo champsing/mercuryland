@@ -4,6 +4,19 @@ import { VaInput, VaButton, VaModal } from "vuestic-ui";
 import axios from "axios";
 import { BASE_URL } from "@/composables/utils";
 
+//@ts-ignore
+window.google.accounts.id.renderButton(
+    document.getElementById("sign-in-with-google"),
+    {
+        type: "standard",
+        size: "large",
+        theme: "outline",
+        text: "sign_in_with",
+        shape: "rectangular",
+        logo_alignment: "left",
+    }
+);
+
 const modal = reactive({
     show: false, // should we show the modal
     auth: false, // is currently authenticated
@@ -153,24 +166,11 @@ let clientIP = await fetch("https://api.ipify.org?format=json")
                     @input="modal.fail = false"
                 />
             </div>
-            <div
-                id="sign-in-with-google"
-                class="text-center mt-6 mr-2"
-                v-if="!modal.auth"
-            >
+            <div class="google-btn-container">
                 <div
-                    id="g_id_onload"
-                    data-client_id="557016419724-4gvamcsq0hp8j8e0o1sjum2epq5ls446.apps.googleusercontent.com"
-                    data-login_uri="https://api.mercuryland.pp.ua/api/auth/google"
-                ></div>
-                <div
-                    class="g_id_signin"
-                    data-type="standard"
-                    data-size="large"
-                    data-theme="outline"
-                    data-text="sign_in_with"
-                    data-shape="rectangular"
-                    data-logo_alignment="left"
+                    id="sign-in-with-google"
+                    class="text-center mt-6 mr-2"
+                    v-if="!modal.auth"
                 ></div>
             </div>
         </VaModal>

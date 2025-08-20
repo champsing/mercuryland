@@ -92,7 +92,6 @@ const tabs = [
                 -->
             &ensp;保留一切權利。
         </div>
-        <!-- <div class="mt-2">使用條款&ensp;|&ensp;隱私權政策&ensp;|&ensp;法律聲明</div> -->
         <div class="flex justify-center mt-2">
             <VaButton
                 preset="secondary"
