@@ -8,7 +8,7 @@ import {
     VaIcon,
 } from "vuestic-ui";
 import { RouterLink } from "vue-router";
-import Login from "@components/Login.vue";
+import Login from "@/components/login/Login.vue";
 import { Github } from "@vicons/fa";
 import { backToTop } from "./composables/utils";
 
@@ -21,6 +21,7 @@ const tabs = [
     { path: "/penalty", label: "直播懲罰" },
     { path: "/wheel", label: "幸運轉盤" },
     { path: "/leaderboard", label: "水星排行" },
+    // { path: "/propose", label: "直播提案" },
     { path: "/contact", label: "聯絡我們" },
 ];
 </script>

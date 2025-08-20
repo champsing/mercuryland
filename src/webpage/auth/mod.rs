@@ -1,5 +1,6 @@
 pub mod login;
 pub mod tick;
+pub mod google;
 
 use hmac::{Hmac, Mac};
 use jwt::{Header, Token, VerifyWithKey};
