@@ -41,20 +41,6 @@
             async
             defer
         ></script>
-        <script>
-            function handleCredentialResponse(response) {
-                console.log("Encoded JWT ID token: " + response.credential);
-            }
-
-            window.onload = function () {
-                google.accounts.id.initialize({
-                    client_id:
-                        "557016419724-4gvamcsq0hp8j8e0o1sjum2epq5ls446.apps.googleusercontent.com",
-                    callback: handleCredentialResponse,
-                });
-                google.accounts.id.prompt(); // also display the One Tap dialog
-            }
-        </script>
     </head>
     <body class="bg-zinc-800">
         <div id="app" class="w-full"></div>

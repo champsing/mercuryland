@@ -4,19 +4,6 @@ import { VaInput, VaButton, VaModal } from "vuestic-ui";
 import axios from "axios";
 import { BASE_URL } from "@/composables/utils";
 
-//@ts-ignore
-window.google.accounts.id.renderButton(
-    document.getElementById("sign-in-with-google"),
-    {
-        type: "standard",
-        size: "large",
-        theme: "outline",
-        text: "sign_in_with",
-        shape: "rectangular",
-        logo_alignment: "left",
-    }
-);
-
 const modal = reactive({
     show: false, // should we show the modal
     auth: false, // is currently authenticated
@@ -124,6 +111,33 @@ let clientIP = await fetch("https://api.ipify.org?format=json")
     .then((response) => response.json())
     .then((data) => data.ip)
     .catch((error) => console.error("Error fetching IP address:", error));
+
+function handleCredentialResponse(response) {
+    console.log("Encoded JWT ID token: " + response.credential);
+}
+
+window.onload = function () {
+    //@ts-ignore
+    google.accounts.id.initialize({
+        client_id:
+            "557016419724-4gvamcsq0hp8j8e0o1sjum2epq5ls446.apps.googleusercontent.com",
+        callback: handleCredentialResponse,
+    });
+    //@ts-ignore
+    google.accounts.id.prompt(); // also display the One Tap dialog
+    //@ts-ignore
+    google.accounts.id.renderButton(
+        document.getElementById("sign-in-with-google"),
+        {
+            type: "standard",
+            size: "large",
+            theme: "outline",
+            text: "sign_in_with",
+            shape: "rectangular",
+            logo_alignment: "left",
+        }
+    );
+};
 </script>
 
 <template>
