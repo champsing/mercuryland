@@ -111,33 +111,6 @@ let clientIP = await fetch("https://api.ipify.org?format=json")
     .then((response) => response.json())
     .then((data) => data.ip)
     .catch((error) => console.error("Error fetching IP address:", error));
-
-function handleCredentialResponse(response) {
-    console.log("Encoded JWT ID token: " + response.credential);
-}
-
-window.onload = function () {
-    //@ts-ignore
-    google.accounts.id.initialize({
-        client_id:
-            "557016419724-4gvamcsq0hp8j8e0o1sjum2epq5ls446.apps.googleusercontent.com",
-        callback: handleCredentialResponse,
-    });
-    //@ts-ignore
-    google.accounts.id.prompt(); // also display the One Tap dialog
-    //@ts-ignore
-    google.accounts.id.renderButton(
-        document.getElementById("sign-in-with-google"),
-        {
-            type: "standard",
-            size: "large",
-            theme: "outline",
-            text: "sign_in_with",
-            shape: "rectangular",
-            logo_alignment: "left",
-        }
-    );
-};
 </script>
 
 <template>
@@ -153,39 +126,14 @@ window.onload = function () {
     </template>
     <template v-else>
         <VaButton @click="modal.show = true">登入</VaButton>
-        <VaModal
-            v-model="modal.show"
-            ok-text="登录"
-            cancel-text="取消"
-            :before-ok="beforeOk"
-            :before-cancel="beforeCancel"
-        >
-            <div
-                id="username-sign-in"
-                class="flex items-baseline justify-evenly h-14"
-            >
-                <VaInput
-                    v-model="form.username"
-                    label="Username"
-                    name="Username"
-                />
-                <VaInput
-                    v-model="form.password"
-                    label="Password"
-                    type="password"
-                    name="Password"
-                    immediate-validation
-                    error-messages="Login failed"
-                    :error="modal.fail"
-                    @input="modal.fail = false"
-                />
-            </div>
-            <div class="google-btn-container">
-                <div
-                    id="sign-in-with-google"
-                    class="text-center mt-6 mr-2"
+        <VaModal v-model="modal.show" hide-default-actions close-button max-width="400px">
+            <div class="h-full flex items-center justify-center ">
+                <iframe
+                    src="sso.html"
+                    frameborder="0"
+                    class="h-10"
                     v-if="!modal.auth"
-                ></div>
+                ></iframe>
             </div>
         </VaModal>
     </template>
