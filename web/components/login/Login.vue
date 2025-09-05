@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { reactive } from "vue";
-import { VaInput, VaButton, VaModal } from "vuestic-ui";
+import { VaButton, VaModal } from "vuestic-ui";
 import axios from "axios";
 import { BASE_URL } from "@/composables/utils";
 
@@ -20,45 +20,6 @@ const form = reactive({
 });
 
 let sessionUsername = reactive(null);
-
-function beforeOk(hide?: CallableFunction) {
-    axios
-        .post(BASE_URL + "/api/auth/login", {
-            username: form.username,
-            password: form.password,
-            ip: clientIP,
-        })
-        .then((response) => {
-            localStorage.setItem("token", response.data);
-            sessionUsername = form.username;
-            form.username = "";
-            form.password = "";
-            modal.auth = true;
-
-            let log =
-                "[LOGIN] User " +
-                sessionUsername +
-                " logged in on " +
-                new Date(Date.now()) +
-                " at " +
-                clientIP +
-                ".";
-            console.log(log);
-
-            hide();
-        })
-        .catch((_) => {
-            form.password = "";
-            modal.fail = true;
-            modal.auth = false;
-        });
-}
-
-function beforeCancel(hide: CallableFunction) {
-    form.username = "";
-    form.password = "";
-    hide();
-}
 
 function logout() {
     localStorage.removeItem("token");

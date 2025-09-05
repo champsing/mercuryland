@@ -1,3 +1,4 @@
+import { resolve } from "path";
 import { defineConfig } from "vite";
 import { fileURLToPath, URL } from "url";
 import vue from "@vitejs/plugin-vue";
@@ -14,6 +15,10 @@ export default defineConfig({
     },
     build: {
         rollupOptions: {
+            input: {
+                index: resolve(__dirname, "index.html"),
+                sso: resolve(__dirname, "sso.html"),
+            },
             output: {
                 manualChunks(id) {
                     if (id.indexOf("node_modules") != -1) {
