@@ -1,4 +1,4 @@
-import { createWebHashHistory, createRouter } from "vue-router";
+import { createWebHistory, createRouter } from "vue-router";
 import Vod from "@components/vod/Vod.vue";
 import Penalty from "@components/penalty/Penalty.vue";
 import Welcome from "@components/welcome/Welcome.vue";
@@ -28,7 +28,7 @@ const routes = [
 ];
 
 const router = createRouter({
-    history: createWebHashHistory(),
+    history: createWebHistory(),
     routes,
 });
 
