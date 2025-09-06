@@ -16,15 +16,12 @@
                 console.log("Encoded JWT ID token: " + response.credential);
             }
 
-            console.log("google button");
-
             window.onload = function () {
                 google.accounts.id.initialize({
                     client_id:
                         "557016419724-4gvamcsq0hp8j8e0o1sjum2epq5ls446.apps.googleusercontent.com",
                     callback: handleCredentialResponse,
                 });
-                google.accounts.id.prompt(); // also display the One Tap dialog
                 google.accounts.id.renderButton(
                     document.getElementById("sign-in-with-google"),
                     {
