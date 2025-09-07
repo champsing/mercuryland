@@ -71,7 +71,7 @@ pub async fn revoke(ctx: super::Context<'_>, id: String) -> Result<(), ServerErr
 }
 
 #[poise::command(slash_command)]
-pub async fn count(ctx: super::Context<'_>, id: String) -> Result<(), ServerError> {
+pub async fn count(ctx: super::Context<'_>) -> Result<(), ServerError> {
     let vote = Vote::new(ctx).await?;
     vote.count(ctx).await?;
     Ok(())
