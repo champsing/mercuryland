@@ -206,7 +206,7 @@ function updateTag(tag: string) {
             close-button
             z-index="5"
         >
-            <img src="@assets/images/vod_time.png" alt="直播時數規則說明" />
+            <img src="/images/vod_time.webp" alt="直播時數規則說明" />
         </VaModal>
 
         <VaDivider class="!mt-2 !mb-2" />

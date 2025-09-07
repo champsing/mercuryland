@@ -1,6 +1,8 @@
 import { useToast } from "vuestic-ui";
 
-export const BASE_URL = import.meta.env.PROD ? 'https://api.mercuryland.pp.ua' : 'http://127.0.0.1:8080' 
+export const BASE_URL = import.meta.env.PROD
+    ? "https://api.mercuryland.pp.ua"
+    : "http://127.0.0.1:8080";
 
 export function openLinks(links: Array<string>) {
     for (let i = 0; i < links.length; i++) {
@@ -85,7 +87,7 @@ export async function copyToClipboard(text: string) {
         await navigator.clipboard.writeText(text);
         useToast().init({
             duration: 2000,
-            message: '已複製',
+            message: "已複製",
         });
     } catch (err) {
         console.error("Failed to copy: ", err);
@@ -104,8 +106,8 @@ export async function copyToClipboard(text: string) {
 
 export function truncateString(str, num) {
     if (str.length > num) {
-      return str.slice(0, num) + "...";
+        return str.slice(0, num) + "...";
     } else {
-      return str;
+        return str;
     }
 }

@@ -8,7 +8,7 @@ import {
     VaIcon,
 } from "vuestic-ui";
 import { RouterLink } from "vue-router";
-import Login from "@components/Login.vue";
+import Login from "@/components/login/Login.vue";
 import { Github } from "@vicons/fa";
 import { backToTop } from "./composables/utils";
 
@@ -21,6 +21,7 @@ const tabs = [
     { path: "/penalty", label: "直播懲罰" },
     { path: "/wheel", label: "幸運轉盤" },
     { path: "/leaderboard", label: "水星排行" },
+    // { path: "/propose", label: "直播提案" },
     { path: "/contact", label: "聯絡我們" },
 ];
 </script>
@@ -31,16 +32,18 @@ const tabs = [
         :color="$route.fullPath == '/' ? `rgba(0, 0, 0, 0)` : `rgb(24, 24, 27)`"
     >
         <template #left>
-            <VaNavbarItem class="navbar-item-slot">
+            <VaNavbarItem>
                 <router-link to="/" class="ml-4">
                     <img
-                        src="@assets/images/hexagon.svg"
+                        src="/images/hexagon.svg"
                         class="invert h-8 w-8 inline"
                         alt="hexagon"
                     />
                 </router-link>
             </VaNavbarItem>
-            <VaNavbarItem class="navbar-item-slot">
+        </template>
+        <template #center>
+            <VaNavbarItem>
                 <router-link
                     v-for="t in tabs"
                     :to="t.path"
@@ -52,9 +55,9 @@ const tabs = [
             </VaNavbarItem>
         </template>
         <template #right>
-            <VaNavbarItem class="navbar-item-slot">
-                <div class="flex flex-row">
-                    <div class="mr-2">
+            <VaNavbarItem>
+                <div class="flex flex-row justify-center">
+                    <div class="mx-2 mt-1">
                         <Login />
                     </div>
                     <VaButton
@@ -65,7 +68,7 @@ const tabs = [
                         target="_blank"
                         rel="noopener noreferrer"
                     >
-                        <VaIcon size="large">
+                        <VaIcon :size="28">
                             <Github />
                         </VaIcon>
                     </VaButton>
@@ -89,7 +92,6 @@ const tabs = [
                 -->
             &ensp;保留一切權利。
         </div>
-        <!-- <div class="mt-2">使用條款&ensp;|&ensp;隱私權政策&ensp;|&ensp;法律聲明</div> -->
         <div class="flex justify-center mt-2">
             <VaButton
                 preset="secondary"

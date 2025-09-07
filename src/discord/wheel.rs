@@ -1,6 +1,6 @@
 use std::iter::once;
 
-use poise;
+use poise::{self};
 
 use crate::{
     database::{self, wheel::Wheel},
@@ -9,12 +9,11 @@ use crate::{
 use itertools::Itertools;
 
 #[poise::command(slash_command)]
-pub async fn fetch_wheel(
-    ctx: super::Context<'_>,
-    #[description = "The id of wheel session"] wheel_id: String,
-) -> Result<(), ServerError> {
+pub async fn fetch_wheel(ctx: super::Context<'_>, wheel_id: String) -> Result<(), ServerError> {
     let id = match u16::from_str_radix(&wheel_id, 16) {
-        Err(_) => return Err(String::from("Invalid wheel id").into()),
+        Err(_) => {
+            return Err(String::from("Invalid wheel id").into());
+        }
         Ok(i) => i,
     };
 
@@ -22,7 +21,9 @@ pub async fn fetch_wheel(
         let mut connection = database::get_connection()?;
         let transaction = connection.transaction()?;
         let w = match Wheel::by_id(id, &transaction)? {
-            None => return Err(String::from("Wheel id does not exist").into()),
+            None => {
+                return Err(String::from("Wheel id does not exist").into());
+            }
             Some(w) => w,
         };
         (

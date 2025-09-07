@@ -305,7 +305,7 @@ function filterPenaltyData(
                         <div class="flex flex-row gap-4">
                             <img
                                 v-for="img in block.uri_imgs"
-                                :src="`penalty/${img}`"
+                                :src="`images/penalty/${img}`"
                                 class="h-fit"
                                 :alt="block.text"
                             />

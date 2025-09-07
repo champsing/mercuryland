@@ -1356,7 +1356,7 @@
         "date": "2025-05-25",
         "link": "-ZDVhYXyTGI",
         "title": "【惡靈】我遲到我就爛",
-        "tags": ["MC解謎","FNAF：安全漏洞"],
+        "tags": ["MC解謎", "FNAF：安全漏洞"],
         "duration": "02:27:09"
     },
     {
@@ -1390,5 +1390,69 @@
         "title": "【惡靈】母親節快樂",
         "tags": ["MC解謎"],
         "duration": "02:23:34"
+    },
+    {
+        "id": 172,
+        "date": "2025-07-06",
+        "link": "nIVm2hF935A",
+        "title": "【惡靈】大家有想我嗎",
+        "tags": ["MC跑酷"],
+        "duration": "00:46:32"
+    },
+    {
+        "id": 173,
+        "date": "2025-07-13",
+        "link": "bjrYt3r25q8",
+        "title": "【惡靈】提早開播，懲罰-1",
+        "tags": ["MC跑酷", "PUMPKIN PANIC", "迷你空管"],
+        "duration": "02:25:39"
+    },
+    {
+        "id": 174,
+        "date": "2025-07-20",
+        "link": "eS5Qw-s_lYw",
+        "title": "【惡靈】直啵啵啵",
+        "tags": ["MC觀眾場"],
+        "duration": "02:15:01"
+    },
+    {
+        "id": 175,
+        "date": "2025-08-03",
+        "link": "U8cC8BoybI4",
+        "title": "【惡靈】又遲到了 嘻嘻",
+        "tags": ["MC觀眾場"],
+        "duration": "02:33:42"
+    },
+    {
+        "id": 176,
+        "date": "2025-08-10",
+        "link": "Mi_6cLD3jc4",
+        "title": "【惡靈】提早開台能不能懲罰-1🥺",
+        "tags": ["MC觀眾場"],
+        "duration": "02:15:34"
+    },
+    {
+        "id": 177,
+        "date": "2025-08-17",
+        "link": "I-fYQG4IhYc",
+        "title": "【惡靈】週日耍廢直播time",
+        "tags": ["MC觀眾場"],
+        "duration": "03:09:13"
+    },
+    {
+        "id": 178,
+        "date": "2025-08-24",
+        "link": "u6HIGjzZ83I",
+        "title": "【惡靈】快樂加懲罰時間",
+        "tags": ["MC觀眾場"],
+        "duration": "2:01:57"
+    },
+    {
+        "id": 179,
+        "date": "2025-08-31",
+        "link": "JhMs_jCBA_k",
+        "title": "【惡靈】明天開學了，笑你們😜",
+        "tags": ["MC觀眾場"],
+        "duration": "2:15:08"
     }
 ]

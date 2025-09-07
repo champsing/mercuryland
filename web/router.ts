@@ -1,4 +1,4 @@
-import { createWebHashHistory, createRouter } from "vue-router";
+import { createWebHistory, createRouter } from "vue-router";
 import Vod from "@components/vod/Vod.vue";
 import Penalty from "@components/penalty/Penalty.vue";
 import Welcome from "@components/welcome/Welcome.vue";
@@ -10,6 +10,7 @@ import ToS from "./components/law/ToS.vue";
 import Wheel from "./components/Wheel.vue";
 import Privacy from "./components/law/Privacy.vue";
 import Leaderboard from "./components/Leaderboard.vue";
+import Propose from "./components/Propose.vue";
 
 const routes = [
     { path: "/", component: Welcome },
@@ -23,10 +24,11 @@ const routes = [
     { path: "/tos", component: ToS },
     { path: "/privacy", component: Privacy },
     { path: "/leaderboard", component: Leaderboard },
+    { path: "/propose", component: Propose },
 ];
 
 const router = createRouter({
-    history: createWebHashHistory(),
+    history: createWebHistory(),
     routes,
 });
 

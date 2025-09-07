@@ -240,7 +240,7 @@
                 "type": "image",
                 "text": "投票的截图",
                 "uri_imgs": [
-                    "25.png"
+                    "25.webp"
                 ]
             }
         ]
@@ -365,7 +365,7 @@
                 "type": "image",
                 "text": "給過的截圖",
                 "uri_imgs": [
-                    "36.png"
+                    "36.webp"
                 ]
             }
         ],
@@ -401,7 +401,7 @@
                 "type": "image",
                 "text": "給過的截图",
                 "uri_imgs": [
-                    "38.png"
+                    "38.webp"
                 ]
             }
         ],
@@ -623,7 +623,7 @@
         "steamID": 1943950
     },
     {
-        "id":63,
+        "id": 63,
         "date": "2023-10-08",
         "name": "直播遊玩黎明死線倖存者或殺手，直到熒虹徽章20個",
         "status": "進行中",
@@ -776,7 +776,7 @@
         "id": 82,
         "date": "2023-11-19",
         "name": "直播同樂 MC Bingo 2小時",
-        "status": "未開始"
+        "status": "已完成"
     },
     {
         "id": 83,
@@ -940,8 +940,8 @@
             {
                 "type": "image",
                 "uri_imgs": [
-                    "105-yt.png",
-                    "105-dc.png"
+                    "105-yt.webp",
+                    "105-dc.webp"
                 ]
             }
         ]
@@ -1022,7 +1022,7 @@
                 "type": "image",
                 "text": "唱完歌的截圖",
                 "uri_imgs": [
-                    "124.png"
+                    "124.webp"
                 ]
             }
         ]
@@ -1592,19 +1592,31 @@
     {
         "id": 175,
         "date": "2025-05-25",
-        "name": "玩迷你空管成功引導200架次飛機",
-        "status": "未開始",
-        "steamID": 2289650
+        "name": "玩迷你空管成功引導150架次飛機",
+        "status": "已完成",
+        "steamID": 2289650,
+        "description": [
+            {
+                "type": "text",
+                "text": "📝 原主人修改1次"
+            },
+            {
+                "type": "image",
+                "uri_imgs": [
+                    "175.webp"
+                ]
+            }
+        ]
     },
     {
         "id": 176,
         "date": "2025-06-01",
         "name": "加班台2小時",
-        "status": "進行中",
+        "status": "已完成",
         "description": [
             {
                 "type": "text",
-                "text": "59分27秒 /2小時"
+                "text": "2小時4分鐘37秒 /2小時"
             },
             {
                 "type": "text",
@@ -1613,6 +1625,22 @@
             {
                 "type": "vod",
                 "uri_num": 169
+            },
+            {
+                "type": "text",
+                "text": "41分36秒"
+            },
+            {
+                "type": "vod",
+                "uri_num": 170
+            },
+            {
+                "type": "text",
+                "text": "23分34秒"
+            },
+            {
+                "type": "vod",
+                "uri_num": 171
             },
             {
                 "type": "text",
@@ -1635,18 +1663,155 @@
         "id": 178,
         "date": "2025-06-08",
         "name": "通關Replicube demo",
-        "status": "未開始"
+        "status": "已完成",
+        "steamID": 3401490,
+        "description": [
+            {
+                "type": "link",
+                "text": "觀看懲罰成果",
+                "uri_link": "https://discord.com/channels/506120681495199756/967078051714326558/1404064444769767648"
+            }
+        ]
     },
     {
         "id": 179,
         "date": "2025-06-08",
         "name": "九日打完三個太陽",
-        "status": "未開始"
+        "status": "未開始",
+        "steamID": 1809540
     },
     {
         "id": 180,
         "date": "2025-06-15",
         "name": "Limbus company 通關前七大章",
+        "status": "未開始",
+        "steamID": 1973530
+    },
+    {
+        "id": 181,
+        "date": "2025-07-06",
+        "name": "玩PUMPKIN PANIC",
+        "status": "已完成",
+        "steamID": 3177920
+    },
+    {
+        "id": 182,
+        "date": "2025-07-06",
+        "name": "和各位觀眾玩一把亡國之戰",
+        "status": "已完成",
+        "description": [
+            {
+                "type": "vod",
+                "uri_num": 174
+            }
+        ]
+    },
+    {
+        "id": 183,
+        "date": "2025-07-06",
+        "name": "嬌喘asmr影片(30秒)(至少15次不同的嬌喘)",
+        "status": "已完成",
+        "description": [
+            {
+                "type": "vod",
+                "uri_num": 174
+            },
+            {
+                "type": "link",
+                "text": "觀看懲罰成果",
+                "uri_link": "https://youtube.com/clip/UgkxaP2XE8KlNQ28qQDp0OKTsPmPZMmdyULU?feature=shared"
+            }
+        ]
+    },
+    {
+        "id": 184,
+        "date": "2025-07-06",
+        "name": "直播時去AI生成一段 <史蒂夫你不是牛>的歌詞 再把歌詞拿去音樂生成網站生成一段1分鐘以上的歌曲 並且跟著唱一次",
+        "status": "已完成",
+        "description": [
+            {
+                "type": "vod",
+                "uri_num": 175
+            },
+            {
+                "type": "link",
+                "text": "觀看懲罰成果",
+                "uri_link": "https://youtube.com/clip/Ugkx18BRYCSHooz83_ZSLdY0fAWD3haFlTco?si=otmjc-6rYi_Sk5kM"
+            }
+        ]
+    },
+    {
+        "id": 185,
+        "date": "2025-07-06",
+        "name": "抽一位資料庫有記錄的觀眾免費送100水星幣",
+        "status": "已完成",
+        "description": [
+            {
+                "type": "vod",
+                "uri_num": 173
+            }
+        ]
+    },
+    {
+        "id": 186,
+        "date": "2025-08-04",
+        "name": "man hunt 觀眾場",
+        "status": "已完成"
+    },
+    {
+        "id": 187,
+        "date": "2025-08-04",
+        "name": "在itchio上面玩免费的恐怖游戏",
+        "status": "未開始"
+    },
+    {
+        "id": 189,
+        "date": "2025-08-10",
+        "name": "出一張恐怖地圖",
+        "status": "未開始"
+    },
+    {
+        "id": 190,
+        "date": "2025-08-10",
+        "name": "港鬼實錄",
+        "status": "未開始",
+        "steamID": 1178490
+    },
+    {
+        "id": 190,
+        "date": "2025-08-17",
+        "name": "hypixel殺手殺到五個人就行，擔任職業不限",
+        "status": "已完成"
+    },
+    {
+        "id": 191,
+        "date": "2025-08-17",
+        "name": "亡國之戰2 oreki20單人 vs 3個或以上的觀眾",
+        "status": "已完成"
+    },
+    {
+        "id": 192,
+        "date": "2025-08-17",
+        "name": "玩The Game of Sisyphus",
+        "status": "未開始",
+        "steamID": 2904890
+    },
+    {
+        "id": 193,
+        "date": "2025-08-31",
+        "name": "直播吃llaollao",
+        "status": "未開始"
+    },
+    {
+        "id": 194,
+        "date": "2025-08-31",
+        "name": "直播玩 瘟疫公司 最高難度通關",
+        "status": "未開始"
+    },
+    {
+        "id": 195,
+        "date": "2025-08-31",
+        "name": "地獄廚房 3顆檸檬+50cc酸梅湯+愛玉+10cc蜂蜜",
         "status": "未開始"
     }
 ]

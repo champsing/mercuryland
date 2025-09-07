@@ -61,7 +61,9 @@ pub async fn booster(
 
         let mut record = match Coin::by_youtube(user_id, &transaction)? {
             Some(r) => r,
-            None => break 'ret (CommandReply::NoUserFound, None),
+            None => {
+                break 'ret (CommandReply::NoUserFound, None);
+            }
         };
 
         if record.discord_id == 0 {
@@ -164,6 +166,19 @@ pub async fn booster(
             .await; // 72 level
 
         if let Some(interaction) = interaction {
+            // if not the buyer clicking button
+            if interaction.user.id.get() != author.id.get().clone() {
+                ctx.send(
+                    CreateReply::default()
+                        .content(format!(
+                            "**您並非這筆訂單的購買者。**您僅有權限退款自己的訂單。"
+                        ))
+                        .ephemeral(true),
+                )
+                .await?;
+                return Ok(());
+            }
+
             message
                 .edit(
                     &ctx.serenity_context().http,
@@ -259,7 +274,9 @@ pub async fn overtime(
 
         let mut record = match Coin::by_discord(author_id.to_string(), &transaction)? {
             Some(r) => r,
-            None => break 'ret (CommandReply::NoUserFound, None),
+            None => {
+                break 'ret (CommandReply::NoUserFound, None);
+            }
         };
 
         if record.discord_id == 0 {
@@ -363,6 +380,19 @@ pub async fn overtime(
             .await; // 72 hours
 
         if let Some(interaction) = interaction {
+            // if not the buyer clicking button
+            if interaction.user.id.get() != author_id.clone() {
+                ctx.send(
+                    CreateReply::default()
+                        .content(format!(
+                            "**您並非這筆訂單的購買者。**您僅有權限退款自己的訂單。"
+                        ))
+                        .ephemeral(true),
+                )
+                .await?;
+                return Ok(());
+            }
+
             message
                 .edit(
                     &ctx.serenity_context().http,
