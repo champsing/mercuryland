@@ -1,10 +1,10 @@
-use std::collections::{HashMap, HashSet};
+use std::collections::HashMap;
 
 use crate::{config::CONFIG, error::ServerError};
 use itertools::Itertools;
 use phf::phf_map;
 use poise;
-use serenity::all::{ChannelId, CreateMessage, EditMessage, MessageId, ReactionType, UserId};
+use serenity::all::{ChannelId, EditMessage, ReactionType, UserId};
 
 const MESSAGE_ID: u64 = 1414189052483207229;
 const CHANNEL_ID: u64 = 1414180925591392316;
