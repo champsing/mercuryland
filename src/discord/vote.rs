@@ -19,9 +19,6 @@ pub async fn vote(ctx: super::Context<'_>) -> Result<(), ServerError> {
 pub async fn nominate(ctx: super::Context<'_>, content: String) -> Result<(), ServerError> {
     let mut vote = Vote::new(ctx).await?;
 
-    vote.description =
-        "这里是水星议会的投票大厅！水星公民可以民主的决定水星神的下一场直播内容！".to_string();
-
     match vote.nominate(content, ctx.author().id) {
         Ok(id) => {
             ctx.say(format!("提名成功，您的选项编号是 {}", ICON[&id]))
@@ -94,7 +91,7 @@ impl Vote {
             .await?;
         let mut lines = message.content.lines();
 
-        let description = lines.next().unwrap_or_default().to_string();
+        let _ = lines.next().unwrap_or_default().to_string();
         lines.next(); // skip empty line
 
         let mut options = HashMap::new();
@@ -103,6 +100,9 @@ impl Vote {
                 options.insert(option.id, option);
             }
         }
+
+        let description =
+            "这里是水星议会的投票大厅！水星公民可以民主的决定水星神的下一场直播内容！".to_string();
 
         Ok(Vote {
             description,
