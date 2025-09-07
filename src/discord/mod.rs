@@ -1,6 +1,6 @@
 mod coin;
 mod give;
-// mod vote;
+mod vote;
 mod help;
 mod link;
 mod purchase;
@@ -221,6 +221,48 @@ pub async fn run() -> Result<(), ServerError> {
                 ],
                 subcommand_required: true,
                 ..purchase::purchase()
+            },
+            poise::Command {
+                name: String::from("vote"),
+                description: Some(String::from("Vote a game to be played in the next stream")),
+                description_localizations: HashMap::from([
+                    (zh_tw.clone(), String::from("投票下次直播要玩的遊戲")),
+                ]),
+                help_text: Some(String::from("投票相關指令")),
+                subcommands: vec![
+                    poise::Command {
+                        name: String::from("nominate"),
+                        description: Some(
+                            String::from(
+                                "Nominate a option."
+                            )
+                        ),
+                        description_localizations: HashMap::from([
+                            (zh_tw.clone(), String::from("提名一個選項")),
+                        ]),
+                        help_text: Some(
+                            String::from("提名一個選項，讓其他人投票。")
+                        ),
+                        ..vote::nominate()
+                    },
+                    poise::Command {
+                        name: String::from("revoke"),
+                        description: Some(
+                            String::from(
+                                "Revoke a nomination."
+                            )
+                        ),
+                        description_localizations: HashMap::from([
+                            (zh_tw.clone(), String::from("撤回一個提名")),
+                        ]),
+                        help_text: Some(
+                            String::from("撤回一個提名。")
+                        ),
+                        ..vote::revoke()
+                    },
+                ],
+                subcommand_required: true,
+                ..vote::vote()
             }
         ],
         ..Default::default()

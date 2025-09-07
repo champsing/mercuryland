@@ -49,3 +49,4 @@ derive_more = { version = "1.0", features = ["display", "from"] }
 uuid = { version = "1.10", features = ["v4", "v5", "v7", "serde"] }
 chrono = { version = "0.4", features = ["serde"] }
 itertools = "0.13"
+phf = { version = "0.13", features = ["macros"] }
