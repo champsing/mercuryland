@@ -179,8 +179,8 @@ impl Vote {
     }
 
     pub fn revoke(&mut self, id: u32, user: UserId) -> Result<u32, String> {
-        fn is_authorized(nominee: UserId, initiator: UserId) -> bool {
-            CONFIG.discord.admin.contains(&nominee.get()) || initiator == nominee
+        fn is_authorized(nominee: UserId, user: UserId) -> bool {
+            CONFIG.discord.admin.contains(&user.get()) || user == nominee
         }
 
         if let Some(option) = self.options.get(&id) {
