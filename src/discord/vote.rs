@@ -156,10 +156,9 @@ impl Vote {
     pub fn nominate(&mut self, description: String, nominee: UserId) -> Result<u32, String> {
         // a person can only nominate once
         // a nomination can only happen if there is space
-        // if self.options.values().any(|o| o.nominee == nominee) {
-        //     Err("您已提名".to_string())
-        // } else
-        if let Some(id) = (0..ICON.len() as u32).find(|i| !self.options.contains_key(i)) {
+        if self.options.values().any(|o| o.nominee == nominee) && !CONFIG.discord.admin.contains(&nominee.get()) {
+            Err("您已提名".to_string())
+        } else if let Some(id) = (0..ICON.len() as u32).find(|i| !self.options.contains_key(i)) {
             self.options.insert(
                 id,
                 VoteOption {
