@@ -18,6 +18,10 @@ pub async fn vote(ctx: super::Context<'_>) -> Result<(), ServerError> {
 #[poise::command(slash_command)]
 pub async fn nominate(ctx: super::Context<'_>, content: String) -> Result<(), ServerError> {
     let mut vote = Vote::new(ctx).await?;
+
+    vote.description =
+        "这里是水星议会的投票大厅！水星公民可以民主的决定水星神的下一场直播内容！".to_string();
+
     match vote.nominate(content, ctx.author().id) {
         Ok(id) => {
             ctx.say(format!("提名成功，您的选项编号是 {}", ICON[&id]))
