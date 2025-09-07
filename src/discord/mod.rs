@@ -1,5 +1,6 @@
 mod coin;
 mod give;
+// mod vote;
 mod help;
 mod link;
 mod purchase;
@@ -59,7 +60,7 @@ pub async fn run() -> Result<(), ServerError> {
                 help_text: Some(String::from("獲取輪盤抽中區")),
                 parameters: vec![poise::CommandParameter {
                     name: String::from("wheel_id"),
-                    name_localizations: HashMap::from([(zh_tw.clone(), String::from("輪盤 ID"))]),
+                    name_localizations: HashMap::new(),
                     description: Some(String::from("The id of wheel session")),
                     description_localizations: HashMap::from([
                         (zh_tw.clone(), String::from("輪盤連線階段的 ID")),
