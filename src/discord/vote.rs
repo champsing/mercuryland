@@ -1,17 +1,14 @@
 use std::{
     collections::{HashMap, HashSet},
-    f64::consts::E,
 };
 
 use crate::{
     config::CONFIG,
-    database::{self, coin::Coin as CoinUser},
     error::ServerError,
 };
 use itertools::Itertools;
 use phf::phf_map;
 use poise;
-use rsa::rand_core::le;
 use serenity::all::{ChannelId, CreateMessage, EditMessage, MessageId, ReactionType, UserId};
 
 const MESSAGE_ID: u64 = 1414189052483207229;
@@ -162,7 +159,7 @@ impl Vote {
         // if self.options.values().any(|o| o.nominee == nominee) {
         //     Err("您已提名".to_string())
         // } else
-        if let Some(id) = (0..=35).find(|i| !self.options.contains_key(i)) {
+        if let Some(id) = (0..ICON.len() as u32).find(|i| !self.options.contains_key(i)) {
             self.options.insert(
                 id,
                 VoteOption {
