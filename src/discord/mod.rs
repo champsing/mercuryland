@@ -260,6 +260,21 @@ pub async fn run() -> Result<(), ServerError> {
                         ),
                         ..vote::revoke()
                     },
+                    poise::Command {
+                        name: String::from("count"),
+                        description: Some(
+                            String::from(
+                                "Count the votes."
+                            )
+                        ),
+                        description_localizations: HashMap::from([
+                            (zh_tw.clone(), String::from("計算票數")),
+                        ]),
+                        help_text: Some(
+                            String::from("計算票數。")
+                        ),
+                        ..vote::count()
+                    },
                 ],
                 subcommand_required: true,
                 ..vote::vote()

@@ -1,11 +1,6 @@
-use std::{
-    collections::{HashMap, HashSet},
-};
+use std::collections::{HashMap, HashSet};
 
-use crate::{
-    config::CONFIG,
-    error::ServerError,
-};
+use crate::{config::CONFIG, error::ServerError};
 use itertools::Itertools;
 use phf::phf_map;
 use poise;
@@ -73,6 +68,13 @@ pub async fn revoke(ctx: super::Context<'_>, id: String) -> Result<(), ServerErr
         ctx.say("无效的选项编号").await?;
         Ok(())
     }
+}
+
+#[poise::command(slash_command)]
+pub async fn count(ctx: super::Context<'_>, id: String) -> Result<(), ServerError> {
+    let vote = Vote::new(ctx).await?;
+    vote.count(ctx).await?;
+    Ok(())
 }
 
 #[derive(Debug, Clone)]
@@ -156,7 +158,9 @@ impl Vote {
     pub fn nominate(&mut self, description: String, nominee: UserId) -> Result<u32, String> {
         // a person can only nominate once
         // a nomination can only happen if there is space
-        if self.options.values().any(|o| o.nominee == nominee) && !CONFIG.discord.admin.contains(&nominee.get()) {
+        if self.options.values().any(|o| o.nominee == nominee)
+            && !CONFIG.discord.admin.contains(&nominee.get())
+        {
             Err("您已提名".to_string())
         } else if let Some(id) = (0..ICON.len() as u32).find(|i| !self.options.contains_key(i)) {
             self.options.insert(
@@ -189,6 +193,24 @@ impl Vote {
         } else {
             Err("未找到该提名".to_string())
         }
+    }
+
+    pub async fn count(&self, ctx: super::Context<'_>) -> Result<(), ServerError> {
+        let mut reactions = ChannelId::from(CHANNEL_ID)
+            .message(&ctx.http(), MESSAGE_ID)
+            .await?
+            .reactions;
+        reactions.sort_by_key(|r| -(r.count as i64));
+        if let Some(reaction) = reactions.first() {
+            ctx.say(format!(
+                "{} 是最高票，有{}票",
+                reaction.reaction_type, reaction.count
+            ))
+            .await?;
+        } else {
+            ctx.say("当前没有投票").await?;
+        }
+        Ok(())
     }
 }
 
