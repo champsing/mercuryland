@@ -160,23 +160,17 @@ impl Vote {
     }
 
     pub fn nominate(&mut self, description: String, nominee: UserId) -> Result<u32, String> {
-        // a person can only nominate once
-        // a nomination can only happen if there is space
-        if self.options.values().any(|o| o.nominee == nominee)
-            && !CONFIG.discord.admin.contains(&nominee.get())
-        {
-            Err("您已提名".to_string())
-        } else if let Some(id) = (0..ICON.len() as u32).find(|i| !self.options.contains_key(i)) {
+        if let Some(next_id) = (0..ICON.len() as u32).find(|i| !self.options.contains_key(i)) {
             self.options.insert(
-                id,
+                next_id,
                 VoteOption {
-                    id,
+                    id: next_id,
                     description,
                     nominee,
                 },
             );
 
-            Ok(id)
+            Ok(next_id)
         } else {
             Err("选项已满".to_string())
         }
@@ -235,15 +229,10 @@ impl VoteOption {
 
     fn parse(text: &str) -> Option<Self> {
         if let Some((icon, rest)) = text.split_once(": ") {
-            // println!("Parsing option: icon='{}', rest='{}'", icon, rest);
             if let Some((desc, nominee)) = rest.rsplit_once(" (<@") {
-                // println!("  desc='{}', nominee='{}'", desc, nominee);
                 if let Some(nominee) = nominee.strip_suffix(">)") {
-                    // println!("  nominee stripped='{}'", nominee);
                     if let Some(&id) = INDEX.get(icon.trim()) {
-                        // println!("  icon id={}", id);
                         if let Ok(nominee) = nominee.parse::<u64>() {
-                            // println!("  nominee id={}", nominee);
                             return Some(VoteOption {
                                 id,
                                 description: desc.trim().to_string(),
