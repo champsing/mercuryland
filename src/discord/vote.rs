@@ -3,7 +3,6 @@ use std::collections::{HashMap, HashSet};
 
 use crate::{config::CONFIG, error::ServerError};
 use itertools::Itertools;
-use phf::phf_map;
 use poise;
 use serenity::all::{ChannelId, EditMessage, ReactionType, UserId};
 use std::sync::Arc;
@@ -125,10 +124,10 @@ impl Ballot {
         for reaction in reactions {
             if let Ok(flag) = Flag::try_from(reaction.reaction_type.clone()) {
                 if hashmap.contains_key(&flag) {
-                    // keep the reaction if it's still in options
-                    hashmap.remove(&flag);
                     // sort options based on existing reactions
                     content.push(hashmap[&flag].to_string());
+                    // keep the reaction if it's still in options
+                    hashmap.remove(&flag);
                     continue;
                 }
             }
