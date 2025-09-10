@@ -261,20 +261,50 @@ pub async fn run() -> Result<(), ServerError> {
                         ..vote::revoke()
                     },
                     poise::Command {
-                        name: String::from("count"),
+                        name: String::from("deadline"),
                         description: Some(
                             String::from(
-                                "Count the votes."
+                                "Set the deadline for the voting."
                             )
                         ),
                         description_localizations: HashMap::from([
-                            (zh_tw.clone(), String::from("計算票數")),
+                            (zh_tw.clone(), String::from("設置投票截止時間")),
                         ]),
                         help_text: Some(
-                            String::from("計算票數。")
+                            String::from("設置投票截止時間。")
                         ),
-                        ..vote::count()
+                        ..vote::deadline()
                     },
+                    poise::Command {
+                        name: String::from("conclude"),
+                        description: Some(
+                            String::from(
+                                "Count the votes and show the result."
+                            )
+                        ),
+                        description_localizations: HashMap::from([
+                            (zh_tw.clone(), String::from("計算投票結果")),
+                        ]),
+                        help_text: Some(
+                            String::from("計算投票結果並顯示。")
+                        ),
+                        ..vote::conclude()
+                    },
+                    poise::Command {
+                        name: String::from("clear"),
+                        description: Some(
+                            String::from(
+                                "Clear the voting options."
+                            )
+                        ),
+                        description_localizations: HashMap::from([
+                            (zh_tw.clone(), String::from("清空投票選項")),
+                        ]),
+                        help_text: Some(
+                            String::from("清空投票選項。")
+                        ),
+                        ..vote::clear()
+                    }
                 ],
                 subcommand_required: true,
                 ..vote::vote()

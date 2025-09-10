@@ -1,4 +1,5 @@
 use crate::{config::CONFIG, error::ServerError};
+use chrono::DateTime;
 use core::panic;
 use itertools::Itertools;
 use poise;
@@ -16,6 +17,7 @@ async fn init_ballot(ctx: super::Context<'_>) -> Result<Arc<Mutex<Ballot>>, Serv
     BALLOT
         .get_or_try_init(|| async {
             let mut new_ballot = Ballot {
+                deadline: None,
                 options: HashMap::new(),
             };
             new_ballot.fetch(ctx).await?;
@@ -76,15 +78,40 @@ pub async fn revoke(ctx: super::Context<'_>, id: String) -> Result<(), ServerErr
 }
 
 #[poise::command(slash_command)]
-pub async fn count(ctx: super::Context<'_>) -> Result<(), ServerError> {
+pub async fn deadline(ctx: super::Context<'_>, deadline: u64) -> Result<(), ServerError> {
     let binding = init_ballot(ctx).await?;
-    let ballot = binding.lock().await;
-    ballot.count(ctx).await?;
+    let mut ballot = binding.lock().await;
+    ballot.deadline = Some(deadline);
+    ctx.say(format!("截止时间设置为: <t:{}:f>", deadline))
+        .await?;
+    ballot.commit(ctx).await?;
+    Ok(())
+}
+
+#[poise::command(slash_command)]
+pub async fn conclude(ctx: super::Context<'_>) -> Result<(), ServerError> {
+    let binding = init_ballot(ctx).await?;
+    let mut ballot = binding.lock().await;
+    ballot.deadline = None;
+    ctx.say("投票已结束").await?;
+    ballot.commit(ctx).await?;
+    Ok(())
+}
+
+#[poise::command(slash_command)]
+pub async fn clear(ctx: super::Context<'_>) -> Result<(), ServerError> {
+    let binding = init_ballot(ctx).await?;
+    let mut ballot = binding.lock().await;
+    ballot.deadline = None;
+    ballot.options.clear();
+    ctx.say("投票已清空").await?;
+    ballot.commit(ctx).await?;
     Ok(())
 }
 
 #[derive(Debug, Clone)]
 struct Ballot {
+    deadline: Option<u64>,
     options: HashMap<Flag, VoteOption>,
 }
 
@@ -190,22 +217,26 @@ impl Ballot {
         }
     }
 
-    pub async fn count(&self, ctx: super::Context<'_>) -> Result<(), ServerError> {
-        let mut reactions = ChannelId::from(CHANNEL_ID)
-            .message(&ctx.http(), MESSAGE_ID)
-            .await?
-            .reactions;
-        reactions.sort_by_key(|r| -(r.count as i64));
-        if let Some(reaction) = reactions.first() {
-            ctx.say(format!(
-                "{} 是最高票，有{}票",
-                reaction.reaction_type, reaction.count
-            ))
-            .await?;
+    pub async fn heading(&self, ctx: super::Context<'_>) -> Result<String, ServerError> {
+        if let Some(deadline) = self.deadline {
+            Ok(format!("__**当前投票截止时间: <t:{}:f>**__", deadline))
         } else {
-            ctx.say("当前没有投票").await?;
+            let mut reactions = ChannelId::from(CHANNEL_ID)
+                .message(&ctx.http(), MESSAGE_ID)
+                .await?
+                .reactions;
+            reactions.sort_by_key(|r| u64::MAX - r.count);
+
+            if let Some(reaction) = reactions.first() && let Ok(flag) = Flag::try_from(reaction.reaction_type.clone()){
+                Ok(format!(
+                            "__**当前最高票: {}，有 {} 票**__",
+                            flag.str(), reaction.count
+                        ))
+
+            } else {
+                Ok("__**当前没有投票**__".to_string())
+            }
         }
-        Ok(())
     }
 }
 
