@@ -1,28 +1,28 @@
-use core::panic;
-use std::collections::{HashMap, HashSet};
-
 use crate::{config::CONFIG, error::ServerError};
+use core::panic;
 use itertools::Itertools;
 use poise;
 use serenity::all::{ChannelId, EditMessage, ReactionType, UserId};
+use std::collections::{HashMap, HashSet};
 use std::sync::Arc;
-use std::sync::LazyLock;
-use tokio::sync::Mutex;
+use tokio::sync::{Mutex, OnceCell};
 
 const MESSAGE_ID: u64 = 1415245626983059456;
 const CHANNEL_ID: u64 = 1414180925591392316;
 
-static BALLOT: LazyLock<Arc<Mutex<Option<Ballot>>>> = LazyLock::new(|| Arc::new(Mutex::new(None)));
+static BALLOT: OnceCell<Arc<Mutex<Ballot>>> = OnceCell::const_new();
 
-async fn init_ballot(ctx: super::Context<'_>) -> Result<Ballot, ServerError> {
-    let mut ballot = BALLOT.lock().await;
-    if ballot.is_none() {
-        *ballot = Some(Ballot {
-            options: HashMap::new(),
-        });
-        ballot.as_mut().unwrap().fetch(ctx).await?;
-    }
-    Ok(ballot.clone().unwrap())
+async fn init_ballot(ctx: super::Context<'_>) -> Result<Arc<Mutex<Ballot>>, ServerError> {
+    BALLOT
+        .get_or_try_init(|| async {
+            let mut new_ballot = Ballot {
+                options: HashMap::new(),
+            };
+            new_ballot.fetch(ctx).await?;
+            Ok::<_, ServerError>(Arc::new(Mutex::new(new_ballot)))
+        })
+        .await
+        .map(Arc::clone)
 }
 
 #[poise::command(slash_command)]
@@ -33,23 +33,19 @@ pub async fn vote(ctx: super::Context<'_>) -> Result<(), ServerError> {
 
 #[poise::command(slash_command)]
 pub async fn nominate(ctx: super::Context<'_>, content: String) -> Result<(), ServerError> {
-    {
-        let mut ballot = init_ballot(ctx).await?;
-        match ballot.nominate(content, ctx.author().id) {
-            Ok(()) => {
-                ctx.say("提名成功").await?;
-            }
-            Err(e) => {
-                ctx.say(format!("提名失败: {}", e)).await?;
-                return Ok(());
-            }
+    let binding = init_ballot(ctx).await?;
+    let mut ballot = binding.lock().await;
+    match ballot.nominate(content, ctx.author().id) {
+        Ok(()) => {
+            ctx.say("提名成功").await?;
+        }
+        Err(e) => {
+            ctx.say(format!("提名失败: {}", e)).await?;
+            return Ok(());
         }
     }
-    {
-        let ballot = init_ballot(ctx).await?;
+    ballot.commit(ctx).await?;
 
-        ballot.commit(ctx).await?;
-    }
     Ok(())
 }
 
@@ -63,29 +59,27 @@ pub async fn revoke(ctx: super::Context<'_>, id: String) -> Result<(), ServerErr
         }
     };
 
-    {
-        let mut ballot = init_ballot(ctx).await?;
-        match ballot.revoke(flag, ctx.author().id) {
-            Ok(()) => {
-                ctx.say("撤回成功").await?;
-            }
-            Err(e) => {
-                ctx.say(format!("撤回失败: {}", e)).await?;
-                return Ok(());
-            }
+    let binding = init_ballot(ctx).await?;
+    let mut ballot = binding.lock().await;
+    match ballot.revoke(flag, ctx.author().id) {
+        Ok(()) => {
+            ctx.say("撤回成功").await?;
         }
-    }
-    {
-        let ballot = init_ballot(ctx).await?;
-        ballot.commit(ctx).await?;
-    }
+        Err(e) => {
+            ctx.say(format!("撤回失败: {}", e)).await?;
+            return Ok(());
+        }
+    };
+    ballot.commit(ctx).await?;
+
     Ok(())
 }
 
 #[poise::command(slash_command)]
 pub async fn count(ctx: super::Context<'_>) -> Result<(), ServerError> {
-    let vote = init_ballot(ctx).await?;
-    vote.count(ctx).await?;
+    let binding = init_ballot(ctx).await?;
+    let ballot = binding.lock().await;
+    ballot.count(ctx).await?;
     Ok(())
 }
 
@@ -147,6 +141,8 @@ impl Ballot {
 
         // convert content to a single string
         let content = content.iter().map(|o| o.to_string()).join("\n");
+
+        println!("Committing ballot:\n{}", content);
 
         message
             .edit(&ctx.http(), EditMessage::new().content(content))
