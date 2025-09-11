@@ -252,6 +252,7 @@ impl Ballot {
 
             if let Some(reaction) = reactions.first()
                 && let Ok(flag) = Flag::try_from(reaction.reaction_type.clone())
+                && self.options.len() > 0
             {
                 Ok(format!(
                     "__**当前最高票: {}，有 {} 票**__",
