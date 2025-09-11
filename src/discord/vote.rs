@@ -79,6 +79,11 @@ pub async fn revoke(ctx: super::Context<'_>, id: String) -> Result<(), ServerErr
 
 #[poise::command(slash_command)]
 pub async fn deadline(ctx: super::Context<'_>, deadline: u64) -> Result<(), ServerError> {
+    if !CONFIG.discord.admin.contains(&ctx.author().id.get()) {
+        ctx.say("权限不足").await?;
+        return Ok(());
+    }
+
     let binding = init_ballot(ctx).await?;
     let mut ballot = binding.lock().await;
     ballot.deadline = Some(deadline);
@@ -90,6 +95,11 @@ pub async fn deadline(ctx: super::Context<'_>, deadline: u64) -> Result<(), Serv
 
 #[poise::command(slash_command)]
 pub async fn conclude(ctx: super::Context<'_>) -> Result<(), ServerError> {
+    if !CONFIG.discord.admin.contains(&ctx.author().id.get()) {
+        ctx.say("权限不足").await?;
+        return Ok(());
+    }
+
     let binding = init_ballot(ctx).await?;
     let mut ballot = binding.lock().await;
     ballot.deadline = None;
@@ -100,6 +110,11 @@ pub async fn conclude(ctx: super::Context<'_>) -> Result<(), ServerError> {
 
 #[poise::command(slash_command)]
 pub async fn clear(ctx: super::Context<'_>) -> Result<(), ServerError> {
+    if !CONFIG.discord.admin.contains(&ctx.author().id.get()) {
+        ctx.say("权限不足").await?;
+        return Ok(());
+    }
+
     let binding = init_ballot(ctx).await?;
     let mut ballot = binding.lock().await;
     ballot.deadline = None;
@@ -121,7 +136,12 @@ impl Ballot {
             .message(&ctx.http(), MESSAGE_ID)
             .await?;
 
-        for options in message.content.lines().filter_map(|l| VoteOption::parse(l)) {
+        for options in message
+            .content
+            .lines()
+            .skip(1)
+            .filter_map(|l| VoteOption::parse(l))
+        {
             self.options.insert(options.flag, options);
         }
         Ok(())
@@ -140,6 +160,9 @@ impl Ballot {
         let mut content = Vec::new();
         let mut hashmap = self.options.clone();
         let reactions = &message.reactions;
+
+        // add title
+        content.push(self.title(ctx).await?);
 
         // remove reactions that are no longer in options
         for reaction in reactions {
@@ -217,7 +240,7 @@ impl Ballot {
         }
     }
 
-    pub async fn heading(&self, ctx: super::Context<'_>) -> Result<String, ServerError> {
+    pub async fn title(&self, ctx: super::Context<'_>) -> Result<String, ServerError> {
         if let Some(deadline) = self.deadline {
             Ok(format!("__**当前投票截止时间: <t:{}:f>**__", deadline))
         } else {
@@ -227,12 +250,14 @@ impl Ballot {
                 .reactions;
             reactions.sort_by_key(|r| u64::MAX - r.count);
 
-            if let Some(reaction) = reactions.first() && let Ok(flag) = Flag::try_from(reaction.reaction_type.clone()){
+            if let Some(reaction) = reactions.first()
+                && let Ok(flag) = Flag::try_from(reaction.reaction_type.clone())
+            {
                 Ok(format!(
-                            "__**当前最高票: {}，有 {} 票**__",
-                            flag.str(), reaction.count
-                        ))
-
+                    "__**当前最高票: {}，有 {} 票**__",
+                    flag.str(),
+                    reaction.count
+                ))
             } else {
                 Ok("__**当前没有投票**__".to_string())
             }
