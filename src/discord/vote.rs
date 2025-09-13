@@ -251,28 +251,46 @@ impl Ballot {
         if let Some(deadline) = self.deadline {
             Ok(format!("__**当前投票截止时间: <t:{}:f>**__", deadline))
         } else {
-            let mut reactions = ChannelId::from(CHANNEL_ID)
+            let reactions = ChannelId::from(CHANNEL_ID)
                 .message(&ctx.http(), MESSAGE_ID)
                 .await?
                 .reactions;
 
-            if let Some(max_count) = reactions.iter().map(|r| r.count).max() {
-                reactions.retain(|r| r.count == max_count);
+            let reactions = reactions
+                .iter()
+                .filter_map(|r| {
+                    Flag::try_from(r.reaction_type.clone())
+                        .map(|f| (f, r.count))
+                        .ok()
+                })
+                .filter(|(f, _)| self.options.contains_key(f));
+
+            if let Some(max_count) = reactions.clone().map(|(_, c)| c).max() {
+                Ok(format!(
+                    "__**当前最高票有{}票, 分别是{}**__",
+                    max_count,
+                    reactions
+                        .filter(|(_, c)| *c == max_count)
+                        .map(|(f, _)| f.str())
+                        .join(", "),
+                ))
+            } else {
+                Ok("__**当前没有投票**__".to_string())
             }
 
-            match reactions.len() {
-                0 => Ok("__**当前没有投票**__".to_string()),
-                _ => Ok(format!(
-                    "__**当前最高票: {}，有 {} 票**__",
-                    reactions
-                        .iter()
-                        .map(|r| Flag::try_from(r.reaction_type.clone()))
-                        .filter_map(Result::ok)
-                        .map(|f| f.str())
-                        .join(", "),
-                    reactions[0].count
-                )),
-            }
+            // match reactions.len() {
+            //     0 => Ok("__**当前没有投票**__".to_string()),
+            //     _ => Ok(format!(
+            //         "__**当前最高票: {}，有 {} 票**__",
+            //         reactions
+            //             .iter()
+            //             .map(|r| Flag::try_from(r.reaction_type.clone()))
+            //             .filter_map(Result::ok)
+            //             .map(|f| f.str())
+            //             .join(", "),
+            //         reactions[0].count
+            //     )),
+            // }
         }
     }
 }
