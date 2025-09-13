@@ -1,5 +1,4 @@
 use crate::{config::CONFIG, error::ServerError};
-use chrono::DateTime;
 use core::panic;
 use itertools::Itertools;
 use poise;
@@ -202,6 +201,10 @@ impl Ballot {
     }
 
     pub fn nominate(&mut self, description: String, nominee: UserId) -> Result<(), String> {
+        if self.deadline.is_none() {
+            return Err("当前投票尚未开始".to_string());
+        }
+
         let mut flags = Flag::all();
         self.options.iter().for_each(|o| {
             // remove used flags
@@ -224,6 +227,10 @@ impl Ballot {
     }
 
     pub fn revoke(&mut self, flag: Flag, user: UserId) -> Result<(), String> {
+        if self.deadline.is_none() {
+            return Err("当前投票尚未开始".to_string());
+        }
+
         fn is_authorized(nominee: UserId, user: UserId) -> bool {
             CONFIG.discord.admin.contains(&user.get()) || user == nominee
         }
@@ -248,19 +255,23 @@ impl Ballot {
                 .message(&ctx.http(), MESSAGE_ID)
                 .await?
                 .reactions;
-            reactions.sort_by_key(|r| u64::MAX - r.count);
 
-            if let Some(reaction) = reactions.first()
-                && let Ok(flag) = Flag::try_from(reaction.reaction_type.clone())
-                && self.options.len() > 0
-            {
-                Ok(format!(
+            if let Some(max_count) = reactions.iter().map(|r| r.count).max() {
+                reactions.retain(|r| r.count == max_count);
+            }
+
+            match reactions.len() {
+                0 => Ok("__**当前没有投票**__".to_string()),
+                _ => Ok(format!(
                     "__**当前最高票: {}，有 {} 票**__",
-                    flag.str(),
-                    reaction.count
-                ))
-            } else {
-                Ok("__**当前没有投票**__".to_string())
+                    reactions
+                        .iter()
+                        .map(|r| Flag::try_from(r.reaction_type.clone()))
+                        .filter_map(Result::ok)
+                        .map(|f| f.str())
+                        .join(", "),
+                    reactions[0].count
+                )),
             }
         }
     }
