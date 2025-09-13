@@ -267,7 +267,7 @@ impl Ballot {
 
             if let Some(max_count) = reactions.clone().map(|(_, c)| c).max() {
                 Ok(format!(
-                    "__**当前最高票有{}票, 分别是{}**__",
+                    "__**当前最高票{}票, 是{}**__",
                     max_count,
                     reactions
                         .filter(|(_, c)| *c == max_count)
