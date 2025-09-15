@@ -7,8 +7,8 @@ use std::collections::{HashMap, HashSet};
 use std::sync::Arc;
 use tokio::sync::{Mutex, OnceCell};
 
-const MESSAGE_ID: u64 = 1417022244844081283; //1415245626983059456;
-const CHANNEL_ID: u64 = 1248793225767026758; //1414180925591392316;
+const MESSAGE_ID: u64 = 1415245626983059456;
+const CHANNEL_ID: u64 = 1414180925591392316;
 
 static BALLOT: OnceCell<Arc<Mutex<Ballot>>> = OnceCell::const_new();
 
