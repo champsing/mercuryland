@@ -9,6 +9,7 @@ use tokio::sync::{Mutex, OnceCell};
 
 const MESSAGE_ID: u64 = 1415245626983059456;
 const CHANNEL_ID: u64 = 1414180925591392316;
+const SECOND_PER_WEEK: u64 = 604800;
 
 static BALLOT: OnceCell<Arc<Mutex<Ballot>>> = OnceCell::const_new();
 
@@ -85,7 +86,7 @@ pub async fn deadline(ctx: super::Context<'_>, deadline: u64) -> Result<(), Serv
     }
     let binding = init_ballot(ctx).await?;
     let mut ballot = binding.lock().await;
-    ballot.period = Some(((deadline - 1757174340) / 604800) as u32); // 1757174340 2025-09-06 23:59
+    ballot.period = Some(((deadline - 1757174340) / SECOND_PER_WEEK) as u32); // 1757174340 2025-09-06 23:59
     ballot.deadline = Some(deadline);
     ctx.say(format!("截止时间设置为: <t:{}:f>", deadline))
         .await?;
