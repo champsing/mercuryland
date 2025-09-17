@@ -1824,7 +1824,17 @@
         "id": 196,
         "date": "2025-09-07",
         "name": "加班台2小時",
-        "status": "未開始"
+        "status": "進行中",
+        "description": [
+            {
+                "type": "text",
+                "text": "40分56秒"
+            },
+            {
+                "type": "vod",
+                "uri_num": 181
+            }
+        ]
     },
     {
         "id": 197,
