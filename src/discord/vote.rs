@@ -9,7 +9,6 @@ use tokio::sync::{Mutex, OnceCell};
 
 const MESSAGE_ID: u64 = 1415245626983059456;
 const CHANNEL_ID: u64 = 1414180925591392316;
-const SECOND_PER_WEEK: u64 = 604800;
 
 static BALLOT: OnceCell<Arc<Mutex<Ballot>>> = OnceCell::const_new();
 
@@ -17,7 +16,6 @@ async fn init_ballot(ctx: super::Context<'_>) -> Result<Arc<Mutex<Ballot>>, Serv
     BALLOT
         .get_or_try_init(|| async {
             let mut new_ballot = Ballot {
-                period: None,
                 deadline: None,
                 options: HashMap::new(),
             };
@@ -86,7 +84,6 @@ pub async fn deadline(ctx: super::Context<'_>, deadline: u64) -> Result<(), Serv
     }
     let binding = init_ballot(ctx).await?;
     let mut ballot = binding.lock().await;
-    ballot.period = Some(((deadline - 1757174340) / SECOND_PER_WEEK) as u32); // 1757174340 2025-09-06 23:59
     ballot.deadline = Some(deadline);
     ctx.say(format!("截止时间设置为: <t:{}:f>", deadline))
         .await?;
@@ -103,12 +100,11 @@ pub async fn conclude(ctx: super::Context<'_>) -> Result<(), ServerError> {
     let binding = init_ballot(ctx).await?;
     let mut ballot = binding.lock().await;
     ballot.deadline = None;
-    if let Some(period) = ballot.period {
-        let outcome = ballot.title(ctx).await?;
-        ctx.say(format!("第 **{}** 期投票已结束\n投票結果：\n{}", period, outcome)).await?;
-    } else {
-        ctx.say("投票已结束").await?;
-    }
+    ctx.say("投票已结束").await?;
+    let outcome = ballot.title(ctx).await?;
+    {
+        ctx.say(format!("投票結果：{}", outcome)).await?;
+    };
     ballot.commit(ctx).await?;
     Ok(())
 }
@@ -122,7 +118,6 @@ pub async fn clear(ctx: super::Context<'_>) -> Result<(), ServerError> {
 
     let binding = init_ballot(ctx).await?;
     let mut ballot = binding.lock().await;
-    ballot.period = None;
     ballot.deadline = None;
     ballot.options.clear();
     ctx.say("投票已清空").await?;
@@ -132,7 +127,6 @@ pub async fn clear(ctx: super::Context<'_>) -> Result<(), ServerError> {
 
 #[derive(Debug, Clone)]
 struct Ballot {
-    period: Option<u32>,
     deadline: Option<u64>,
     options: HashMap<Flag, VoteOption>,
 }
@@ -256,13 +250,8 @@ impl Ballot {
     }
 
     pub async fn title(&self, ctx: super::Context<'_>) -> Result<String, ServerError> {
-        if let (Some(period), Some(deadline)) = (self.period, self.deadline) {
-            Ok(format!(
-                "# 水星議會 第 {} 期投票\n当前投票截止时间: __**<t:{}:f>**__",
-                period, deadline
-            ))
-        } else if let Some(deadline) = self.deadline {
-            Ok(format!("当前投票截止时间: __**<t:{}:f>**__\n", deadline))
+        if let Some(deadline) = self.deadline {
+            Ok(format!("当前投票截止时间: __**<t:{}:f>**__", deadline))
         } else {
             let reactions = ChannelId::from(CHANNEL_ID)
                 .message(&ctx.http(), MESSAGE_ID)
