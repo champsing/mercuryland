@@ -82,7 +82,6 @@ pub async fn deadline(ctx: super::Context<'_>, deadline: u64) -> Result<(), Serv
         ctx.say("权限不足").await?;
         return Ok(());
     }
-
     let binding = init_ballot(ctx).await?;
     let mut ballot = binding.lock().await;
     ballot.deadline = Some(deadline);
@@ -98,11 +97,14 @@ pub async fn conclude(ctx: super::Context<'_>) -> Result<(), ServerError> {
         ctx.say("权限不足").await?;
         return Ok(());
     }
-
     let binding = init_ballot(ctx).await?;
     let mut ballot = binding.lock().await;
     ballot.deadline = None;
     ctx.say("投票已结束").await?;
+    let outcome = ballot.title(ctx).await?;
+    {
+        ctx.say(format!("投票結果：{}", outcome)).await?;
+    };
     ballot.commit(ctx).await?;
     Ok(())
 }
@@ -249,7 +251,7 @@ impl Ballot {
 
     pub async fn title(&self, ctx: super::Context<'_>) -> Result<String, ServerError> {
         if let Some(deadline) = self.deadline {
-            Ok(format!("__**当前投票截止时间: <t:{}:f>**__", deadline))
+            Ok(format!("当前投票截止时间: __**<t:{}:f>**__", deadline))
         } else {
             let reactions = ChannelId::from(CHANNEL_ID)
                 .message(&ctx.http(), MESSAGE_ID)
@@ -275,7 +277,7 @@ impl Ballot {
                         .join(", "),
                 ))
             } else {
-                Ok("__**当前没有投票**__".to_string())
+                Ok("# __**当前没有投票**__".to_string())
             }
 
             // match reactions.len() {
