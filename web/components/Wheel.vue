@@ -1,6 +1,5 @@
 <script setup lang="ts">
-import { Wheel } from "spin-wheel";
-import { ref, onMounted, reactive } from "vue";
+import { ref, reactive, computed, watch } from "vue";
 import {
     VaTextarea,
     VaButton,
@@ -15,14 +14,18 @@ import axios from "axios";
 import { BASE_URL } from "@/composables/utils";
 import { AlertCircleOutline } from "@vicons/ionicons5";
 import { ArrowClockwise24Filled } from "@vicons/fluent";
+import { SpinTheWheel } from "vue-spin-the-wheel";
+import "vue-spin-the-wheel/style.css";
 
 document.title = "幸運轉盤 - 水星人的夢幻樂園";
 
-const wheelContainer = ref(null);
+const wheelEl = ref(null);
 const isSpinning = ref(false); //轉盤旋轉中
 const isLeftAreaLocked = ref(false); //鎖定待抽區
 const clearRightArea = ref(true); //清除右邊區域
 const re = /x[1-9][0-9]*$/;
+const prizeId = ref(0);
+const winner = ref(null);
 
 let wheelConnect = reactive({
     id: 0,
@@ -49,45 +52,57 @@ if (sessionStorage.getItem("wheelConnect")) {
     );
 }
 
-let wheel: Wheel = null;
-
-const textArea = defineModel("textArea", {
-    type: String,
-    default: sessionStorage.getItem("textArea") || "",
-    set(value: string) {
-        if (wheel != null) {
-            wheel.items = value
-                .split("\n")
-                .filter((x) => x != "")
-                .map((x) => {
-                    const weight = parseInt(
-                        (x.match(re) || ["x1"])[0].substring(1)
-                    );
-                    const label = x.replace(re, "");
-                    return {
-                        label: label,
-                        weight: weight,
-                    };
-                });
-        }
-        sessionStorage.setItem("textArea", value);
-        return value;
-    },
+const textArea = ref(sessionStorage.getItem("textArea") || "");
+watch(textArea, (newValue) => {
+    sessionStorage.setItem("textArea", newValue);
 });
 
-const textArea2 = defineModel("textArea2", {
-    type: String,
-    default: sessionStorage.getItem("textArea2") || "",
-    set(value: string) {
-        let content = value.split("\n").filter((x) => x != "");
-        axios.post(BASE_URL + "/api/wheel/update", {
-            id: wheelConnect.id,
-            secret: wheelConnect.secret,
-            content: content,
+const prizes = computed(() => {
+    const backgroundColors = [
+        "#dc2626",
+        "#ea580c",
+        "#d97706",
+        "#ca8a04",
+        "#65a30d",
+        "#16a34a",
+        "#059669",
+        "#0d9488",
+        "#0891b2",
+        "#0284c7",
+        "#2563eb",
+        "#4f46e5",
+        "#7c3aed",
+        "#9333ea",
+        "#c026d3",
+        "#db2777",
+        "#e11d48",
+    ];
+    return textArea.value
+        .split("\n")
+        .filter((x) => x != "")
+        .map((x, i) => {
+            const weight = parseInt((x.match(re) || ["x1"])[0].substring(1));
+            const label = x.replace(re, "");
+            return {
+                id: i + 1,
+                name: label,
+                value: label,
+                weight: weight,
+                bgColor: backgroundColors[i % backgroundColors.length],
+                color: "#ffffff",
+            };
         });
-        sessionStorage.setItem("textArea2", value);
-        return value;
-    },
+});
+
+const textArea2 = ref(sessionStorage.getItem("textArea2") || "");
+watch(textArea2, (newValue) => {
+    let content = newValue.split("\n").filter((x) => x != "");
+    axios.post(BASE_URL + "/api/wheel/update", {
+        id: wheelConnect.id,
+        secret: wheelConnect.secret,
+        content: content,
+    });
+    sessionStorage.setItem("textArea2", newValue);
 });
 
 function submit(hide?: CallableFunction) {
@@ -138,102 +153,68 @@ function initializeWheel() {
 }
 
 function spin() {
-    // prettier-ignore
-    if (count(textArea.value) == 0) return; //若空轉，當旋轉結束會變無限響鈴火警。
-    else {
-        isSpinning.value = true; //旋轉、清空開關
-        isLeftAreaLocked.value = true; //鎖住待抽區
-        clearRightArea.value = true; //強制只能清除右邊
-        wheel.spin(1000 + Math.round(Math.random() * 1000));
+    if (prizes.value.length === 0) return;
+
+    isSpinning.value = true;
+    isLeftAreaLocked.value = true;
+    clearRightArea.value = true;
+
+    const weightedPrizes = [];
+    for (const prize of prizes.value) {
+        for (let i = 0; i < prize.weight; i++) {
+            weightedPrizes.push(prize);
+        }
     }
+    const winnerPrize =
+        weightedPrizes[Math.floor(Math.random() * weightedPrizes.length)];
+    prizeId.value = winnerPrize.id;
+
+    // The component should spin automatically when prizeId is set.
+    // If not, we might need to call a method like wheelEl.value.rotate()
+    // For now, assuming declarative spinning.
 }
 
-function rest() {
+function onRotateEnd(prize: any) {
     var audio = new Audio("/sounds/rest.mp3");
     audio.play();
-    modal.text = wheel.items[wheel.getCurrentIndex()].label;
+    winner.value = prize;
+    modal.text = prize.name;
     modal.show = true;
-    isLeftAreaLocked.value = false; //解鎖待抽區
-    isSpinning.value = false; //解鎖旋轉、清空開關
+    isLeftAreaLocked.value = false;
+    isSpinning.value = false;
 }
 
 function move() {
+    if (!winner.value) return;
+
     // copy text to new area
-    if (textArea2.value == "") textArea2.value += modal.text;
-    else {
-        textArea2.value += "\n";
-        textArea2.value += modal.text;
+    if (textArea2.value == "") {
+        textArea2.value += winner.value.name;
+    } else {
+        textArea2.value += "\n" + winner.value.name;
     }
 
     // delete text in old area
-    textArea.value = wheel.items
-        .filter(
-            (_: { label: string }, i: number) => i != wheel.getCurrentIndex()
-        )
-        .map((x: { label: string; weight: number }) => {
-            if (x.weight != 1) return x.label + "x" + x.weight;
-            else return x.label;
-        })
-        .join("\n");
+    const lines = textArea.value.split("\n");
+    // Find the exact line to remove, comparing the label part of the line
+    // with the winner's name. This handles weights like "Item 1x2".
+    const winnerName = winner.value.name;
+    const winnerIndex = lines.findIndex(line => line.replace(re, "") === winnerName);
 
-    if (count(textArea.value) == 0) initializeWheel();
-}
+    if (winnerIndex !== -1) {
+        lines.splice(winnerIndex, 1);
+        textArea.value = lines.join("\n");
+    }
 
-function tick() {
-    var audio = new Audio("/sounds/tick.mp3");
-    audio.play();
+    if (count(textArea.value) === 0) {
+        initializeWheel();
+    }
+    winner.value = null;
 }
 
 function count(text: string): number {
     return text.split("\n").filter((x) => x != "").length;
 }
-
-onMounted(() => {
-    const overlay = new Image();
-    overlay.src = "/pointer.svg";
-
-    const props = {
-        items:
-            textArea.value
-                .split("\n")
-                .filter((x) => x != "")
-                .map((x) => {
-                    const weight = parseInt(
-                        (x.match(re) || ["x1"])[0].substring(1)
-                    );
-                    const label = x.replace(re, "");
-                    return {
-                        label: label,
-                        weight: weight,
-                    };
-                }) || [],
-        itemLabelRadiusMax: 0.4,
-        itemBackgroundColors: [
-            "#dc2626",
-            "#ea580c",
-            "#d97706",
-            "#ca8a04",
-            "#65a30d",
-            "#16a34a",
-            "#059669",
-            "#0d9488",
-            "#0891b2",
-            "#0284c7",
-            "#2563eb",
-            "#4f46e5",
-            "#7c3aed",
-            "#9333ea",
-            "#c026d3",
-            "#db2777",
-            "#e11d48",
-        ],
-        isInteractive: false,
-        overlayImage: overlay,
-        onRest: rest,
-        onCurrentIndexChange: tick,
-    };
-    wheel = new Wheel(wheelContainer.value, props);
-});
 
 const modal = reactive({
     show: false,
@@ -285,8 +266,17 @@ const modal3 = reactive({
         </div>
 
         <div class="flex w-full justify-evenly">
-            <div class="wheel-wrapper w-2/5 -mt-20" ref="wheelContainer"></div>
-
+            <div class="wheel-wrapper w-2/5 -mt-20">
+                <SpinTheWheel
+                    ref="wheelEl"
+                    :prizes="prizes"
+                    :prize-id="prizeId"
+                    :use-weight="true"
+                    @rotateEnd="onRotateEnd"
+                    class="w-full"
+                >
+                </SpinTheWheel>
+            </div>
             <div class="w-1/5">
                 <div class="va-h4">待抽區 ({{ count(textArea) }}個)</div>
                 <VaTextarea

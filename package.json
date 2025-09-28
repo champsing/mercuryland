@@ -22,11 +22,11 @@
         "google-auth-library": "^9.15.1",
         "mercury_land": "file:",
         "naive-ui": "^2.38.2",
-        "spin-wheel": "^5.0.2",
         "vfonts": "^0.0.3",
         "vue": "^3.4.15",
         "vue-chartjs": "^5.3.0",
         "vue-router": "^4.4.0",
+        "vue-spin-the-wheel": "^2.2.5",
         "vue-tsc": "^2.1.10",
         "vuestic-ui": "^1.10.0"
     },
