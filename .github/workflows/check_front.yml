@@ -1,8 +1,8 @@
-name: Pull Request Check VueJS
+name: Pull Request Check (Frontend)
 on:
   pull_request: 
     types: [opened, synchronize]
-    branches: prod-web
+    branches: main
 jobs:
   vue_js:
     name: Test Vue.js
