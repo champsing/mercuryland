@@ -15,10 +15,10 @@ const modal = reactive({
 //     show: false, // should we show the modal
 // });
 
-const form = reactive({
-    username: "",
-    password: "",
-});
+// const form = reactive({
+//     username: "",
+//     password: "",
+// });
 
 let sessionUsername = reactive(null);
 
