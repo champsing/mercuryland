@@ -1,6 +1,5 @@
 use std::i64;
 
-
 pub struct CoinConfig;
 
 impl CoinConfig {
@@ -9,11 +8,7 @@ impl CoinConfig {
      * specified. Guarded by `daily_quota`.
      */
     pub(super) fn coin_per_message(&self, is_sponsor: bool) -> i64 {
-        if is_sponsor {
-            2
-        } else {
-            1
-        }
+        if is_sponsor { 2 } else { 1 }
     }
 
     /**
@@ -21,22 +16,14 @@ impl CoinConfig {
      * Guarded by `daily_quota`.
      */
     pub(super) fn first_message_coin(&self, is_sponsor: bool) -> i64 {
-        if is_sponsor {
-            20
-        } else {
-            10
-        }
+        if is_sponsor { 20 } else { 10 }
     }
 
     /**
      * the maximum coin earned for a day.
      */
     pub(super) fn daily_quota(&self, is_sponsor: bool) -> i64 {
-        if is_sponsor {
-            100
-        } else {
-            50
-        }
+        if is_sponsor { 100 } else { 50 }
     }
 
     pub(crate) fn booster_cost(&self, level: i64) -> i64 {
@@ -49,7 +36,7 @@ impl CoinConfig {
             7 => 1600,
             8 => 3200,
             9 => 6400,
-            _ => i64::MAX // invalid parameter
+            _ => i64::MAX, // invalid parameter
         }
     }
 }

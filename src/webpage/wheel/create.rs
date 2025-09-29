@@ -2,7 +2,7 @@ use crate::{
     database::{self, wheel::Wheel},
     error::ServerError,
 };
-use actix_web::{get, HttpResponse, Responder};
+use actix_web::{HttpResponse, Responder, get};
 use chrono::{TimeDelta, Utc};
 use serde::Serialize;
 
