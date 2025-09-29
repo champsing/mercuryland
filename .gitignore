@@ -8,6 +8,7 @@ target
 # App
 /data
 resequencing_id
+.env
 
 # Docker
 mercury.tar
