@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
 
+// TODO: move to an env-backed configuration instead of hardcoding (copilot review).
 const CLIENT_ID =
     "557016419724-4gvamcsq0hp8j8e0o1sjum2epq5ls446.apps.googleusercontent.com";
 const SCRIPT_ID = "google-identity-services";
@@ -88,6 +89,7 @@ function loadGoogleIdentityServices(): Promise<void> {
 }
 
 function handleCredentialResponse(response: CredentialResponse) {
+    // TODO: avoid logging the credential; wire into secure handling when ready (copilot review).
     console.log(`Encoded JWT ID token: ${response.credential}`);
 }
 
