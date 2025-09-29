@@ -25,9 +25,8 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Type-check (optional)
+      - name: Type-check
         run: npx vue-tsc --noEmit
-        continue-on-error: true
 
       - name: Build
         run: npm run build
