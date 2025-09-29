@@ -101,7 +101,7 @@ function renderGoogleButton() {
         return;
     }
 
-    buttonContainer.value.innerHTML = "";
+    buttonContainer.value.replaceChildren();
     window.google.accounts.id.initialize({
         client_id: CLIENT_ID,
         callback: handleCredentialResponse,
