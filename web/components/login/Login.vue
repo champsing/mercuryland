@@ -3,6 +3,7 @@ import { reactive } from "vue";
 import { VaButton, VaModal } from "vuestic-ui";
 import axios from "axios";
 import { BASE_URL } from "@/composables/utils";
+import GoogleSso from "@/components/login/GoogleSso.vue";
 
 const modal = reactive({
     show: false, // should we show the modal
@@ -89,12 +90,7 @@ let clientIP = await fetch("https://api.ipify.org?format=json")
         <VaButton @click="modal.show = true">登入</VaButton>
         <VaModal v-model="modal.show" hide-default-actions close-button max-width="400px">
             <div class="h-full flex items-center justify-center ">
-                <iframe
-                    src="sso.html"
-                    frameborder="0"
-                    class="h-10"
-                    v-if="!modal.auth"
-                ></iframe>
+                <GoogleSso v-if="!modal.auth" />
             </div>
         </VaModal>
     </template>
