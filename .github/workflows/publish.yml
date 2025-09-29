@@ -12,6 +12,8 @@ jobs:
     permissions:
       contents: read
       deployments: write
+    env:
+      VITE_GOOGLE_SSO_CLIENT_ID: ${{ secrets.GOOGLE_SSO_CLIENT_ID }}
     steps:
       - name: Check out source
         uses: actions/checkout@v4
