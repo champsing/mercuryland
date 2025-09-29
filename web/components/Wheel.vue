@@ -214,7 +214,7 @@ function initializeWheel() {
 }
 
 function spin() {
-    if (count(textArea.value) === 0 || wheelRef.value == null) return; //若空轉
+    if (count(textArea.value) === 0 || wheelRef.value === null) return; //若空轉
 
     const winnerSlice = pickWinnerSlice();
     if (!winnerSlice) return;
