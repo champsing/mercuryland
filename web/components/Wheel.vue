@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { Wheel } from "spin-wheel";
-import { ref, onMounted, reactive } from "vue";
+import VueWheelSpinner from "vue-wheel-spinner";
+import { ref, onMounted, reactive, computed, onBeforeUnmount } from "vue";
 import {
     VaTextarea,
     VaButton,
@@ -18,11 +18,79 @@ import { ArrowClockwise24Filled } from "@vicons/fluent";
 
 document.title = "幸運轉盤 - 水星人的夢幻樂園";
 
-const wheelContainer = ref(null);
+interface WheelItem {
+    label: string;
+    weight: number;
+}
+
+interface WheelSpinnerExpose {
+    spinWheel: (winnerIndex: number) => void;
+    drawWheel: () => void;
+}
+
+interface SpinnerSlice {
+    color: string;
+    text: string;
+    baseIndex: number;
+}
+
+const colorPalette = [
+    "#dc2626",
+    "#ea580c",
+    "#d97706",
+    "#ca8a04",
+    "#65a30d",
+    "#16a34a",
+    "#059669",
+    "#0d9488",
+    "#0891b2",
+    "#0284c7",
+    "#2563eb",
+    "#4f46e5",
+    "#7c3aed",
+    "#9333ea",
+    "#c026d3",
+    "#db2777",
+    "#e11d48",
+];
+
+const re = /x[1-9][0-9]*$/;
+const wheelRef = ref<WheelSpinnerExpose | null>(null);
+const items = ref<WheelItem[]>([]);
+const spinnerSlices = computed<SpinnerSlice[]>(() => {
+    const result: SpinnerSlice[] = [];
+    items.value.forEach((item, itemIndex) => {
+        const repeats = Math.max(1, item.weight);
+        for (let i = 0; i < repeats; i++) {
+            result.push({
+                color: colorPalette[itemIndex % colorPalette.length],
+                text: item.label,
+                baseIndex: itemIndex,
+            });
+        }
+    });
+    return result;
+});
+const sliceIndexBuckets = computed<number[][]>(() => {
+    const buckets: number[][] = items.value.map(() => []);
+    spinnerSlices.value.forEach((slice, index) => {
+        if (!buckets[slice.baseIndex]) buckets[slice.baseIndex] = [];
+        buckets[slice.baseIndex].push(index);
+    });
+    return buckets;
+});
 const isSpinning = ref(false); //轉盤旋轉中
 const isLeftAreaLocked = ref(false); //鎖定待抽區
 const clearRightArea = ref(true); //清除右邊區域
-const re = /x[1-9][0-9]*$/;
+const cursorAngle = 270;
+const cursorPosition = "edge";
+const cursorDistance = 12;
+const sliceFontStyle = "bold 20px 'Noto Sans TC', sans-serif";
+const extraSpins = 6;
+const spinDuration = ref(1500);
+const currentWinnerIndex = ref<number | null>(null);
+const pendingWinnerIndex = ref<number | null>(null);
+let tickTimer: ReturnType<typeof setInterval> | null = null;
 
 let wheelConnect = reactive({
     id: 0,
@@ -49,31 +117,37 @@ if (sessionStorage.getItem("wheelConnect")) {
     );
 }
 
-let wheel: Wheel = null;
+function parseWheelItems(value: string): WheelItem[] {
+    return value
+        .split("\n")
+        .filter((x) => x.trim() !== "")
+        .map((line) => {
+            const weight = parseInt((line.match(re) || ["x1"])[0].substring(1));
+            const label = line.replace(re, "").trim();
+            return {
+                label: label,
+                weight: isNaN(weight) || weight <= 0 ? 1 : weight,
+            };
+        });
+}
+
+function updateWheelItemsFromText(value: string) {
+    items.value = parseWheelItems(value);
+    currentWinnerIndex.value = null;
+    pendingWinnerIndex.value = null;
+}
 
 const textArea = defineModel("textArea", {
     type: String,
     default: sessionStorage.getItem("textArea") || "",
     set(value: string) {
-        if (wheel != null) {
-            wheel.items = value
-                .split("\n")
-                .filter((x) => x != "")
-                .map((x) => {
-                    const weight = parseInt(
-                        (x.match(re) || ["x1"])[0].substring(1)
-                    );
-                    const label = x.replace(re, "");
-                    return {
-                        label: label,
-                        weight: weight,
-                    };
-                });
-        }
+        updateWheelItemsFromText(value);
         sessionStorage.setItem("textArea", value);
         return value;
     },
 });
+
+updateWheelItemsFromText(textArea.value);
 
 const textArea2 = defineModel("textArea2", {
     type: String,
@@ -132,32 +206,48 @@ function beforeCancel(hide: CallableFunction) {
 }
 
 function initializeWheel() {
+    stopTickLoop();
     isSpinning.value = false;
     clearRightArea.value = true; //此時左邊一定為空，強制只能清除右邊。
     isLeftAreaLocked.value = false; //此時左邊一定為空，可以輸入。
+    pendingWinnerIndex.value = null;
 }
 
 function spin() {
-    // prettier-ignore
-    if (count(textArea.value) == 0) return; //若空轉，當旋轉結束會變無限響鈴火警。
-    else {
-        isSpinning.value = true; //旋轉、清空開關
-        isLeftAreaLocked.value = true; //鎖住待抽區
-        clearRightArea.value = true; //強制只能清除右邊
-        wheel.spin(1000 + Math.round(Math.random() * 1000));
-    }
+    if (count(textArea.value) === 0 || wheelRef.value === null) return; //若空轉
+
+    const winnerSlice = pickWinnerSlice();
+    if (!winnerSlice) return;
+
+    isSpinning.value = true; //旋轉、清空開關
+    isLeftAreaLocked.value = true; //鎖住待抽區
+    clearRightArea.value = true; //強制只能清除右邊
+    spinDuration.value = 1000 + Math.round(Math.random() * 1000);
+    pendingWinnerIndex.value = winnerSlice.baseIndex;
+    wheelRef.value.spinWheel(winnerSlice.displayIndex);
 }
 
-function rest() {
+function handleSpinStart() {
+    startTickLoop();
+}
+
+function handleSpinEnd(winnerIndex: number) {
+    stopTickLoop();
     var audio = new Audio("/sounds/rest.mp3");
     audio.play();
-    modal.text = wheel.items[wheel.getCurrentIndex()].label;
+    const slice = spinnerSlices.value[winnerIndex] || null;
+    const baseIndex = slice ? slice.baseIndex : pendingWinnerIndex.value;
+    const winner = baseIndex != null ? items.value[baseIndex] || null : null;
+    modal.text = winner ? winner.label : "";
     modal.show = true;
     isLeftAreaLocked.value = false; //解鎖待抽區
     isSpinning.value = false; //解鎖旋轉、清空開關
+    currentWinnerIndex.value = baseIndex ?? null;
+    pendingWinnerIndex.value = null;
 }
 
 function move() {
+    if (currentWinnerIndex.value === null) return;
     // copy text to new area
     if (textArea2.value == "") textArea2.value += modal.text;
     else {
@@ -166,17 +256,15 @@ function move() {
     }
 
     // delete text in old area
-    textArea.value = wheel.items
-        .filter(
-            (_: { label: string }, i: number) => i != wheel.getCurrentIndex()
+    textArea.value = items.value
+        .filter((_, index) => index !== currentWinnerIndex.value)
+        .map((x: { label: string; weight: number }) =>
+            x.weight !== 1 ? `${x.label}x${x.weight}` : x.label
         )
-        .map((x: { label: string; weight: number }) => {
-            if (x.weight != 1) return x.label + "x" + x.weight;
-            else return x.label;
-        })
         .join("\n");
 
     if (count(textArea.value) == 0) initializeWheel();
+    currentWinnerIndex.value = null;
 }
 
 function tick() {
@@ -185,54 +273,55 @@ function tick() {
 }
 
 function count(text: string): number {
-    return text.split("\n").filter((x) => x != "").length;
+    return text.split("\n").filter((x) => x !== "").length;
+}
+
+function pickWinnerSlice(): { displayIndex: number; baseIndex: number } | null {
+    if (items.value.length === 0 || spinnerSlices.value.length === 0) return null;
+    const totalWeight = items.value.reduce(
+        (sum, item) => sum + Math.max(1, item.weight),
+        0
+    );
+    if (totalWeight <= 0) return null;
+    let threshold = Math.random() * totalWeight;
+    for (let i = 0; i < items.value.length; i++) {
+        const weight = Math.max(1, items.value[i].weight);
+        threshold -= weight;
+        if (threshold < 0) {
+            const bucket = sliceIndexBuckets.value[i];
+            if (bucket && bucket.length > 0) {
+                const displayIndex = bucket[Math.floor(Math.random() * bucket.length)];
+                return { displayIndex, baseIndex: i };
+            }
+            return { displayIndex: i, baseIndex: i };
+        }
+    }
+    const lastIndex = items.value.length - 1;
+    const fallbackBucket = sliceIndexBuckets.value[lastIndex];
+    const displayIndex = fallbackBucket?.[0] ?? lastIndex;
+    return { displayIndex, baseIndex: lastIndex };
+}
+
+function startTickLoop() {
+    stopTickLoop();
+    tickTimer = window.setInterval(tick, 160);
+}
+
+function stopTickLoop() {
+    if (tickTimer !== null) {
+        window.clearInterval(tickTimer);
+        tickTimer = null;
+    }
 }
 
 onMounted(() => {
-    const overlay = new Image();
-    overlay.src = "/pointer.svg";
+    if (wheelRef.value) {
+        wheelRef.value.drawWheel();
+    }
+});
 
-    const props = {
-        items:
-            textArea.value
-                .split("\n")
-                .filter((x) => x != "")
-                .map((x) => {
-                    const weight = parseInt(
-                        (x.match(re) || ["x1"])[0].substring(1)
-                    );
-                    const label = x.replace(re, "");
-                    return {
-                        label: label,
-                        weight: weight,
-                    };
-                }) || [],
-        itemLabelRadiusMax: 0.4,
-        itemBackgroundColors: [
-            "#dc2626",
-            "#ea580c",
-            "#d97706",
-            "#ca8a04",
-            "#65a30d",
-            "#16a34a",
-            "#059669",
-            "#0d9488",
-            "#0891b2",
-            "#0284c7",
-            "#2563eb",
-            "#4f46e5",
-            "#7c3aed",
-            "#9333ea",
-            "#c026d3",
-            "#db2777",
-            "#e11d48",
-        ],
-        isInteractive: false,
-        overlayImage: overlay,
-        onRest: rest,
-        onCurrentIndexChange: tick,
-    };
-    wheel = new Wheel(wheelContainer.value, props);
+onBeforeUnmount(() => {
+    stopTickLoop();
 });
 
 const modal = reactive({
@@ -285,7 +374,29 @@ const modal3 = reactive({
         </div>
 
         <div class="flex w-full justify-evenly">
-            <div class="wheel-wrapper w-2/5 -mt-20" ref="wheelContainer"></div>
+            <div class="wheel-wrapper w-2/5 -mt-20">
+                <VueWheelSpinner
+                    ref="wheelRef"
+                    class="mx-auto w-full"
+                    :slices="spinnerSlices"
+                    :slice-font-style="sliceFontStyle"
+                    :spin-duration="spinDuration"
+                    :extra-spins="extraSpins"
+                    :cursor-angle="cursorAngle"
+                    :cursor-position="cursorPosition"
+                    :cursor-distance="cursorDistance"
+                    @spin-start="handleSpinStart"
+                    @spin-end="handleSpinEnd"
+                >
+                    <template #cursor>
+                        <img
+                            src="/images/pointer.svg"
+                            alt="指針"
+                            class="pointer-img pointer-events-none select-none"
+                        />
+                    </template>
+                </VueWheelSpinner>
+            </div>
 
             <div class="w-1/5">
                 <div class="va-h4">待抽區 ({{ count(textArea) }}個)</div>
@@ -413,3 +524,11 @@ const modal3 = reactive({
         </VaModal>
     </div>
 </template>
+
+<style scoped>
+.pointer-img {
+    width: clamp(8rem, 18vw, 10rem);
+    height: auto;
+    margin-top: clamp(12px, 2vw, 28px);
+}
+</style>
