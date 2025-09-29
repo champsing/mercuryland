@@ -1,0 +1,33 @@
+name: Pull Request Check (Frontend)
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    branches: [main]
+    paths:
+      - web/**
+      - public/**
+      - package.json
+      - package-lock.json
+      - tsconfig.json
+      - tsconfig.node.json
+      - vite.config.ts
+      - tailwind.config.js
+      - postcss.config.js
+      - index.html
+      - sso.html
+jobs:
+  vue_js:
+    name: Test Vue.js
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out Source Code
+        uses: actions/checkout@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - name: Install Dependencies
+        run: npm ci
+      - name: Build
+        run: npm run build
