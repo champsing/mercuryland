@@ -308,7 +308,7 @@ function startTickLoop() {
 }
 
 function stopTickLoop() {
-    if (tickTimer != null) {
+    if (tickTimer !== null) {
         window.clearInterval(tickTimer);
         tickTimer = null;
     }
