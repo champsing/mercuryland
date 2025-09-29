@@ -158,3 +158,79 @@ pub mod command {
         Ok(())
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use chrono::TimeZone;
+    use google_youtube3::api::{
+        LiveChatMessage, LiveChatMessageAuthorDetails, LiveChatMessageSnippet,
+    };
+
+    fn sample_message() -> LiveChatMessage {
+        LiveChatMessage {
+            snippet: Some(LiveChatMessageSnippet {
+                type_: Some("textMessageEvent".to_string()),
+                published_at: Some(
+                    Utc.timestamp_opt(1_704_164_245, 0)
+                        .single()
+                        .expect("valid timestamp"),
+                ),
+                display_message: Some("/purchase booster 3 Hello".to_string()),
+                ..Default::default()
+            }),
+            author_details: Some(LiveChatMessageAuthorDetails {
+                channel_id: Some("channel-id".to_string()),
+                display_name: Some("Display".to_string()),
+                is_chat_sponsor: Some(true),
+                ..Default::default()
+            }),
+            ..Default::default()
+        }
+    }
+
+    #[test]
+    fn extracts_event_type() {
+        let msg = sample_message();
+        assert_eq!(event_type(&msg).map(|s| s.as_str()), Some("textMessageEvent"));
+    }
+
+    #[test]
+    fn extracts_published_timestamp() {
+        let msg = sample_message();
+        let expected = Utc.timestamp_opt(1_704_164_245, 0)
+            .single()
+            .expect("valid timestamp");
+        assert_eq!(published_at(&msg), Some(expected));
+    }
+
+    #[test]
+    fn extracts_message_text() {
+        let msg = sample_message();
+        assert_eq!(message(&msg).map(|s| s.as_str()), Some("/purchase booster 3 Hello"));
+    }
+
+    #[test]
+    fn extracts_author_fields() {
+        let msg = sample_message();
+        assert_eq!(author_id(&msg).map(|s| s.as_str()), Some("channel-id"));
+        assert_eq!(author_name(&msg).map(|s| s.as_str()), Some("Display"));
+    }
+
+    #[test]
+    fn extracts_membership_flag() {
+        let msg = sample_message();
+        assert_eq!(is_sponsor(&msg), Some(true));
+    }
+
+    #[test]
+    fn missing_fields_return_none() {
+        let msg = LiveChatMessage::default();
+        assert!(event_type(&msg).is_none());
+        assert!(published_at(&msg).is_none());
+        assert!(message(&msg).is_none());
+        assert!(author_id(&msg).is_none());
+        assert!(author_name(&msg).is_none());
+        assert!(is_sponsor(&msg).is_none());
+    }
+}

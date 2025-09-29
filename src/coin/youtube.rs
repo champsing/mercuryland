@@ -94,3 +94,67 @@ impl CoinChatManager {
 fn is_text_message(event_type: &String) -> bool {
     event_type == "textMessageEvent"
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use chrono::TimeDelta;
+
+    #[test]
+    fn spam_detection_blocks_frequent_messages() {
+        let mut manager = CoinChatManager::new();
+        let author = String::from("author");
+        let now = Utc::now();
+
+        assert!(!manager.is_spam(&author, now));
+        assert!(manager.is_spam(&author, now + TimeDelta::seconds(10)));
+        assert!(!manager.is_spam(&author, now + TimeDelta::seconds(31)));
+    }
+
+    #[test]
+    fn reset_quota_clears_after_day_rollover() {
+        let mut manager = CoinChatManager::new();
+        let author = String::from("author");
+
+        manager.quota.insert(author.clone(), 5);
+        manager.refresh -= TimeDelta::days(2);
+
+        let now = manager.refresh + TimeDelta::days(2);
+        manager.reset_quota(now);
+
+        assert!(manager.quota.is_empty());
+        assert!(now - manager.refresh <= TimeDelta::days(1));
+    }
+
+    #[test]
+    fn apply_quota_limits_daily_allowance() {
+        let mut manager = CoinChatManager::new();
+        let author = String::from("author");
+
+        let awarded = manager.apply_quota(40, &author, false);
+        assert_eq!(awarded, 40);
+
+        let second_award = manager.apply_quota(40, &author, false);
+        assert_eq!(second_award, 10);
+
+        let third_award = manager.apply_quota(10, &author, false);
+        assert_eq!(third_award, 0);
+    }
+
+    #[test]
+    fn sponsor_quota_is_larger() {
+        let mut manager = CoinChatManager::new();
+        let author = String::from("member");
+
+        let first = manager.apply_quota(120, &author, true);
+        assert_eq!(first, 100);
+        let second = manager.apply_quota(10, &author, true);
+        assert_eq!(second, 0);
+    }
+
+    #[test]
+    fn is_text_message_matches_expected_type() {
+        assert!(is_text_message(&"textMessageEvent".to_string()));
+        assert!(!is_text_message(&"superChatEvent".to_string()));
+    }
+}
