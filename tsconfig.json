@@ -27,6 +27,6 @@
         },
         "types": ["vite/client"]
     },
-    "include": ["web/**/*.ts", "web/**/*.tsx", "web/**/*.vue"],
+    "include": ["web/**/*.ts", "web/**/*.tsx", "web/**/*.vue", "web/**/*.d.ts"],
     "references": [{ "path": "./tsconfig.node.json" }]
 }

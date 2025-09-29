@@ -1,9 +1,7 @@
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
 
-// TODO: move to an env-backed configuration instead of hardcoding (copilot review).
-const CLIENT_ID =
-    "557016419724-4gvamcsq0hp8j8e0o1sjum2epq5ls446.apps.googleusercontent.com";
+const CLIENT_ID = import.meta.env.VITE_GOOGLE_SSO_CLIENT_ID;
 const SCRIPT_ID = "google-identity-services";
 
 const buttonContainer = ref<HTMLDivElement | null>(null);
@@ -98,6 +96,12 @@ function renderGoogleButton() {
         return;
     }
     if (!window.google?.accounts?.id) {
+        return;
+    }
+    if (!CLIENT_ID) {
+        console.warn(
+            "Missing VITE_GOOGLE_SSO_CLIENT_ID env variable; Google Sign-In is disabled."
+        );
         return;
     }
 
