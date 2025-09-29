@@ -1,4 +1,4 @@
-use super::{verify, Claims, PRIVATE_KEY};
+use super::{refresh_claims, verify, PRIVATE_KEY};
 use crate::error::ServerError;
 use actix_web::{post, web, HttpResponse, Responder};
 use jwt::SignWithKey;
@@ -14,12 +14,9 @@ struct Request {
 pub async fn handler(request: web::Json<Request>) -> Result<impl Responder, ServerError> {
     let now = SystemTime::now().duration_since(UNIX_EPOCH)?.as_secs();
 
-    if verify(&request.token, now) {
-        let claims = Claims {
-            iat: now,
-            exp: now + 3600,
-        };
-        let token = claims.sign_with_key(&*PRIVATE_KEY)?;
+    if let Some(claims) = verify(&request.token, now) {
+        let refreshed = refresh_claims(&claims);
+        let token = refreshed.sign_with_key(&*PRIVATE_KEY)?;
         Ok(HttpResponse::Ok().body(token))
     } else {
         Ok(HttpResponse::Forbidden().finish())

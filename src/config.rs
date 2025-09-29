@@ -4,10 +4,9 @@ use std::{fs, sync::LazyLock};
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Config {
-    pub username: String,
-    pub password: String,
     pub wheel_password: String,
     pub discord: DiscordConfig,
+    pub google_sso: GoogleSsoConfig,
     pub youtube_channel_id: String,
     pub yt_chat_viewer: ApplicationSecret,
     pub dcyt_link: ApplicationSecret,
@@ -28,6 +27,11 @@ pub struct SlashCommandStrings {
     // pub purchase_booster: String,
     pub link: String,
     pub unlink: String,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct GoogleSsoConfig {
+    pub client_id: String,
 }
 
 pub static CONFIG: LazyLock<Config> = LazyLock::new(|| {
