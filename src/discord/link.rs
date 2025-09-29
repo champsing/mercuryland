@@ -8,9 +8,9 @@ use crate::{
 };
 use chrono::Utc;
 use google_youtube3::{
-    hyper_rustls,
+    YouTube, hyper_rustls,
     hyper_util::{self},
-    yup_oauth2, YouTube,
+    yup_oauth2,
 };
 use poise::{self, reply::CreateReply, serenity_prelude::CreateMessage};
 

@@ -1,6 +1,6 @@
 use crate::error::ServerError;
 use chrono::{DateTime, Utc};
-use google_youtube3::{api::LiveChatMessage, common::Connector, YouTube};
+use google_youtube3::{YouTube, api::LiveChatMessage, common::Connector};
 
 macro_rules! unwrap_or_return {
     ($name:ident, $source:ident) => {
@@ -192,13 +192,17 @@ mod tests {
     #[test]
     fn extracts_event_type() {
         let msg = sample_message();
-        assert_eq!(event_type(&msg).map(|s| s.as_str()), Some("textMessageEvent"));
+        assert_eq!(
+            event_type(&msg).map(|s| s.as_str()),
+            Some("textMessageEvent")
+        );
     }
 
     #[test]
     fn extracts_published_timestamp() {
         let msg = sample_message();
-        let expected = Utc.timestamp_opt(1_704_164_245, 0)
+        let expected = Utc
+            .timestamp_opt(1_704_164_245, 0)
             .single()
             .expect("valid timestamp");
         assert_eq!(published_at(&msg), Some(expected));
@@ -207,7 +211,10 @@ mod tests {
     #[test]
     fn extracts_message_text() {
         let msg = sample_message();
-        assert_eq!(message(&msg).map(|s| s.as_str()), Some("/purchase booster 3 Hello"));
+        assert_eq!(
+            message(&msg).map(|s| s.as_str()),
+            Some("/purchase booster 3 Hello")
+        );
     }
 
     #[test]

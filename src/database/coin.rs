@@ -1,7 +1,7 @@
 use crate::error::ServerError;
 use chrono::{DateTime, Utc};
 use rusqlite::{Row, Transaction};
-use sea_query::{enum_def, Expr, IdenStatic, Query, SqliteQueryBuilder};
+use sea_query::{Expr, IdenStatic, Query, SqliteQueryBuilder, enum_def};
 use sea_query_rusqlite::RusqliteBinder;
 use serde::{Deserialize, Serialize};
 
@@ -109,9 +109,7 @@ impl Coin {
         Ok(value.transpose()?)
     }
 
-    pub fn all(
-        transaction: &Transaction,
-    ) -> Result<Vec<Self>, ServerError> {
+    pub fn all(transaction: &Transaction) -> Result<Vec<Self>, ServerError> {
         let (query, values) = Query::select()
             .columns([
                 CoinIden::Id,
@@ -139,7 +137,11 @@ impl Coin {
         let (query, values) = Query::update()
             .table(CoinIden::Table)
             .values([(CoinIden::Display, display.into().into())])
-            .and_where(Expr::col(CoinIden::Id).eq(id.clone()).or(Expr::col(CoinIden::DiscordId).eq(id.clone())))
+            .and_where(
+                Expr::col(CoinIden::Id)
+                    .eq(id.clone())
+                    .or(Expr::col(CoinIden::DiscordId).eq(id.clone())),
+            )
             .build_rusqlite(SqliteQueryBuilder);
         transaction.execute(&query, &*values.as_params())?;
 

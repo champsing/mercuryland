@@ -2,8 +2,9 @@ mod chat;
 mod video;
 
 use crate::{config::CONFIG, discord, error::ServerError};
-use actix_web::cookie::time::{format_description, UtcOffset};
+use actix_web::cookie::time::{UtcOffset, format_description};
 use google_youtube3::{
+    YouTube,
     api::Video,
     common::Connector,
     hyper_rustls, hyper_util,
@@ -11,7 +12,6 @@ use google_youtube3::{
         self,
         authenticator_delegate::{DeviceAuthResponse, DeviceFlowDelegate},
     },
-    YouTube,
 };
 use regex::Regex;
 use serenity::all::CreateMessage;

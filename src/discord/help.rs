@@ -18,7 +18,8 @@ use crate::error::ServerError;
 pub async fn help(
     ctx: super::Context<'_>,
     #[description = "The command you want to show help"]
-    #[description_localized("zh-TW", "要顯示的指令")] command: Option<String>,
+    #[description_localized("zh-TW", "要顯示的指令")]
+    command: Option<String>,
 ) -> Result<(), ServerError> {
     let config = poise::builtins::HelpConfiguration {
         extra_text_at_bottom: "請輸入您想查詢的指令（如：link、coin，不包含斜線）",

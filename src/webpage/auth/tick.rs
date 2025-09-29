@@ -1,6 +1,6 @@
-use super::{verify, Claims, PRIVATE_KEY};
+use super::{Claims, PRIVATE_KEY, verify};
 use crate::error::ServerError;
-use actix_web::{post, web, HttpResponse, Responder};
+use actix_web::{HttpResponse, Responder, post, web};
 use jwt::SignWithKey;
 use serde::Deserialize;
 use std::time::{SystemTime, UNIX_EPOCH};

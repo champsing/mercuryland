@@ -1,4 +1,5 @@
 name: Pull Request Check (Backend)
+
 on:
   pull_request:
     types: [opened, synchronize, reopened]
@@ -7,6 +8,7 @@ on:
       - "Cargo.toml"
       - "Cargo.lock"
       - "src/**"
+
 jobs:
   rust:
     name: Test Rust
@@ -14,11 +16,17 @@ jobs:
     steps:
       - name: Check out Source Code
         uses: actions/checkout@v4
+
       - name: Setup Rust Toolchain
         uses: actions-rs/toolchain@v1
         with:
           profile: minimal
           toolchain: stable
           override: true
+          components: rustfmt
+
+      - name: Format Check
+        run: cargo fmt --all -- --check
+
       - name: Test
         run: cargo test
