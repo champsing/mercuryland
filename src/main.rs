@@ -15,8 +15,10 @@ fn main() -> Result<(), ServerError> {
             .and_then(|rt| rt.block_on(async { webpage::run().await }));
 
         if let Some(err) = res.err() {
-            log::error!("restarting, webpage failed: {:?}", err)
+            log::error!("restarting, webpage failed: {:?}", err);
         }
+
+        return ();
     });
 
     let discord = thread::spawn(|| loop {
@@ -27,8 +29,10 @@ fn main() -> Result<(), ServerError> {
             .and_then(|rt| rt.block_on(async { discord::run().await }));
 
         if let Some(err) = res.err() {
-            log::error!("restarting, discord bot failed: {:?}", err)
+            log::error!("restarting, discord bot failed: {:?}", err);
         }
+
+        return ();
     });
 
     let youtube = thread::spawn(|| loop {
@@ -39,8 +43,10 @@ fn main() -> Result<(), ServerError> {
             .and_then(|rt| rt.block_on(async { youtube::run().await }));
 
         if let Some(err) = res.err() {
-            log::error!("restarting, youtube bot failed: {:?}", err)
+            log::error!("restarting, youtube bot failed: {:?}", err);
         }
+
+        return ();
     });
 
     webpage.join().unwrap();
