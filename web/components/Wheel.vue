@@ -34,6 +34,22 @@ interface SpinnerSlice {
     baseIndex: number;
 }
 
+const MAX_SLICE_TEXT_UNITS = 10;
+
+function truncateSliceLabel(label: string): string {
+    let units = 0;
+    let result = "";
+    for (const char of label.trim()) {
+        const charUnits = /[ -~]/.test(char) ? 0.6 : 1; // narrow ASCII counts as 0.6, CJK/full-width counts as 1
+        if (units + charUnits > MAX_SLICE_TEXT_UNITS) {
+            return result ? `${result}…` : "…";
+        }
+        units += charUnits;
+        result += char;
+    }
+    return result;
+}
+
 const colorPalette = [
     "#dc2626",
     "#ea580c",
@@ -64,7 +80,7 @@ const spinnerSlices = computed<SpinnerSlice[]>(() => {
         for (let i = 0; i < repeats; i++) {
             result.push({
                 color: colorPalette[itemIndex % colorPalette.length],
-                text: item.label,
+                text: truncateSliceLabel(item.label),
                 baseIndex: itemIndex,
             });
         }
@@ -374,7 +390,7 @@ const modal3 = reactive({
         </div>
 
         <div class="flex w-full justify-evenly">
-            <div class="wheel-wrapper w-2/5 -mt-20">
+            <div class="wheel-wrapper w-2/5 mt-4">
                 <VueWheelSpinner
                     ref="wheelRef"
                     class="mx-auto w-full"
