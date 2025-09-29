@@ -1,11 +1,11 @@
-name: Pull Request Check Rust And Docker
+name: Pull Request Check (Backend)
 on:
   pull_request: 
-    types: [opened, synchronize]
-    branches: prod-back
+    types: [opened, synchronize, reopened]
+    branches: main
 jobs:
   rust:
-    name: Test Rust Test
+    name: Test Rust
     runs-on: ubuntu-latest
     steps:
       - name: Setup Rust Toolchain
@@ -14,10 +14,8 @@ jobs:
         uses: actions/checkout@v4
       - name: Test
         run: cargo test
-      - name: Build
-        run: cargo build --release
   docker:
-    name: Test Docker
+    name: Test Docker Build
     runs-on: ubuntu-latest
     steps:
       - name: Check out Source Code
