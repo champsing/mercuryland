@@ -8,7 +8,7 @@ use crate::{
     discord,
     error::ServerError,
 };
-use actix_web::{post, web, HttpResponse, Responder};
+use actix_web::{HttpResponse, Responder, post, web};
 use serde::Deserialize;
 
 #[derive(Debug, Clone, Deserialize)]

@@ -35,7 +35,8 @@ pub fn run_migration(transaction: &rusqlite::Transaction) -> Result<(), ServerEr
         Err(format!(
             "fail to migrate database from version {} to version {}",
             version, VERSION
-        ).into())
+        )
+        .into())
     } else {
         // PRAGMA does not support value binding
         transaction.execute(format!("PRAGMA user_version = {};", version).as_str(), ())?;

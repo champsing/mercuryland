@@ -1,6 +1,6 @@
+pub(crate) mod coin;
 mod migration;
 pub(crate) mod wheel;
-pub(crate) mod coin;
 
 use crate::error::ServerError;
 use rusqlite::Connection;

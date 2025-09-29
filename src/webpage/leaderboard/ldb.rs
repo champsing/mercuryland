@@ -3,7 +3,7 @@ use crate::{
     database::{self},
     error::ServerError,
 };
-use actix_web::{get, HttpResponse, Responder};
+use actix_web::{HttpResponse, Responder, get};
 
 #[get("/api/leaderboard")]
 pub async fn handler() -> Result<impl Responder, ServerError> {

@@ -1,7 +1,7 @@
 pub mod auth;
+pub mod leaderboard;
 pub mod ping;
 pub mod wheel;
-pub mod leaderboard;
 
 use crate::error::ServerError;
 use actix_cors::Cors;
