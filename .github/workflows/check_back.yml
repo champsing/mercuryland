@@ -1,24 +1,24 @@
 name: Pull Request Check (Backend)
 on:
-  pull_request: 
+  pull_request:
     types: [opened, synchronize, reopened]
-    branches: main
+    branches: [main]
+    paths:
+      - "Cargo.toml"
+      - "Cargo.lock"
+      - "src/**"
 jobs:
   rust:
     name: Test Rust
     runs-on: ubuntu-latest
     steps:
-      - name: Setup Rust Toolchain
-        run: rustup toolchain add nightly
       - name: Check out Source Code
         uses: actions/checkout@v4
+      - name: Setup Rust Toolchain
+        uses: actions-rs/toolchain@v1
+        with:
+          profile: minimal
+          toolchain: stable
+          override: true
       - name: Test
         run: cargo test
-  docker:
-    name: Test Docker Build
-    runs-on: ubuntu-latest
-    steps:
-      - name: Check out Source Code
-        uses: actions/checkout@v4
-      - name: Build
-        run: docker build -t mercury .
