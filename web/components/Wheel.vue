@@ -273,7 +273,7 @@ function tick() {
 }
 
 function count(text: string): number {
-    return text.split("\n").filter((x) => x != "").length;
+    return text.split("\n").filter((x) => x !== "").length;
 }
 
 function pickWinnerSlice(): { displayIndex: number; baseIndex: number } | null {
