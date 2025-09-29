@@ -31,3 +31,24 @@ pub fn verify(token: &str, now: u64) -> bool {
         false
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use jwt::SignWithKey;
+
+    #[test]
+    fn verify_accepts_valid_window() {
+        let claims = Claims { iat: 100, exp: 200 };
+        let token = claims.clone().sign_with_key(&*PRIVATE_KEY).unwrap();
+
+        assert!(verify(&token, 150));
+        assert!(!verify(&token, 90));
+        assert!(!verify(&token, 250));
+    }
+
+    #[test]
+    fn verify_rejects_invalid_token() {
+        assert!(!verify("invalid", 100));
+    }
+}

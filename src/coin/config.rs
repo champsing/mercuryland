@@ -53,3 +53,51 @@ impl CoinConfig {
         }
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn message_coin_respects_membership() {
+        let config = CoinConfig;
+        assert_eq!(config.coin_per_message(false), 1);
+        assert_eq!(config.coin_per_message(true), 2);
+    }
+
+    #[test]
+    fn first_message_coin_respects_membership() {
+        let config = CoinConfig;
+        assert_eq!(config.first_message_coin(false), 10);
+        assert_eq!(config.first_message_coin(true), 20);
+    }
+
+    #[test]
+    fn daily_quota_respects_membership() {
+        let config = CoinConfig;
+        assert_eq!(config.daily_quota(false), 50);
+        assert_eq!(config.daily_quota(true), 100);
+    }
+
+    #[test]
+    fn booster_cost_returns_expected_prices() {
+        let config = CoinConfig;
+        let expected = [
+            (2, 50),
+            (3, 100),
+            (4, 200),
+            (5, 400),
+            (6, 800),
+            (7, 1_600),
+            (8, 3_200),
+            (9, 6_400),
+        ];
+
+        for (level, price) in expected {
+            assert_eq!(config.booster_cost(level), price);
+        }
+
+        assert_eq!(config.booster_cost(1), i64::MAX);
+        assert_eq!(config.booster_cost(10), i64::MAX);
+    }
+}

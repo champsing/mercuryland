@@ -78,3 +78,25 @@ pub mod chat {
         Ok(())
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use google_youtube3::api::VideoLiveStreamingDetails;
+
+    #[test]
+    fn chat_id_returns_value_when_present() {
+        let mut video = Video::default();
+        video.live_streaming_details = Some(VideoLiveStreamingDetails {
+            active_live_chat_id: Some("abc123".to_string()),
+            ..Default::default()
+        });
+
+        assert_eq!(chat_id(&video).map(|s| s.as_str()), Some("abc123"));
+    }
+
+    #[test]
+    fn chat_id_returns_none_when_missing() {
+        assert!(chat_id(&Video::default()).is_none());
+    }
+}
