@@ -69,9 +69,9 @@ function updateTag(tag: string) {
 </script>
 
 <template>
-    <div class="mt-4 m-auto w-[95%] z-10">
-        <div class="flex flex-row w-full justify-center gap-16">
-            <div class="w-1/8 flex flex-row">
+    <div class="m-auto w-[95%] z-10">
+        <div class="flex h-14 w-full flex-row items-center justify-center gap-16">
+            <div class="flex w-1/8 flex-row items-center">
                 <VaDateInput
                     v-model="dateRange"
                     :format-date="formatDate"
@@ -81,7 +81,7 @@ function updateTag(tag: string) {
                 />
                 <!--[DONE] need more adjusting -->
             </div>
-            <div class="w-2/5">
+            <div class="flex w-2/5 items-center">
                 <VaSelect
                     class="w-full"
                     v-model="selectedTags"
@@ -114,7 +114,7 @@ function updateTag(tag: string) {
                 </VaSelect>
             </div>
             <!-- not yet -->
-            <div class="w-1/8">
+            <div class="flex w-1/8 items-center justify-center">
                 <VaSwitch
                     v-model="strictFiltering"
                     off-color="#1ccba2"
@@ -124,11 +124,10 @@ function updateTag(tag: string) {
                     true-inner-label="符合全部"
                 />
             </div>
-            <div class="w-1/8">
+            <div class="flex w-1/8 items-center justify-center">
                 <VaButton
                     preset="plain"
                     color="#FFFFFF"
-                    class="mt-1"
                     @click="showRuleDescModal = !showRuleDescModal"
                 >
                     <VaIcon size="large" class="mr-2">
@@ -209,10 +208,10 @@ function updateTag(tag: string) {
             <img src="/images/vod_time.webp" alt="直播時數規則說明" />
         </VaModal>
 
-        <VaDivider class="!mt-2 !mb-2" />
+        <VaDivider class="!mt-0 !mb-2" />
 
         <div class="flex flex-row gap-2">
-            <div class="w-2/3">
+            <div class="w-3/4">
                 <DataTable
                     :dateRange="dateRange"
                     :selectedTags="selectedTags"
@@ -221,7 +220,7 @@ function updateTag(tag: string) {
                 />
             </div>
 
-            <div class="flex flex-col w-1/3">
+            <div class="flex flex-col w-1/4">
                 <TimeSummary :t="computedTime" />
                 <TimeDetail
                     :dateRange="dateRange"
