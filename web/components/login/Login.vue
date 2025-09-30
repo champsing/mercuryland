@@ -103,7 +103,7 @@ setInterval(() => {
             aria-label="登出"
             @click="modal.show = true"
         >
-            <VaIcon size="large">
+            <VaIcon size="32px">
                 <SignOutAlt />
             </VaIcon>
         </VaButton>
@@ -117,7 +117,7 @@ setInterval(() => {
             aria-label="登入"
             @click="openLoginModal"
         >
-            <VaIcon size="large">
+            <VaIcon size="32px">
                 <SignInAlt />
             </VaIcon>
         </VaButton>
