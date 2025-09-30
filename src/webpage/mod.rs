@@ -1,6 +1,7 @@
 pub mod auth;
 pub mod leaderboard;
 pub mod ping;
+pub mod video;
 pub mod wheel;
 
 use crate::error::ServerError;
@@ -24,6 +25,10 @@ pub async fn run() -> Result<(), ServerError> {
             .service(wheel::create::handler)
             .service(wheel::update::handler)
             .service(wheel::submit::handler)
+            .service(video::list::handler)
+            .service(video::insert::handler)
+            .service(video::delete::handler)
+            .service(video::update::handler)
             .service(leaderboard::ldb::handler)
     })
     .bind(("0.0.0.0", 8080))?

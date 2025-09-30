@@ -117,6 +117,28 @@ impl Video {
         Ok(video.transpose()?)
     }
 
+    pub fn find_by_id(id: i64, transaction: &Transaction) -> Result<Option<Self>, ServerError> {
+        let (query, values) = Query::select()
+            .columns([
+                VideoIden::Id,
+                VideoIden::Date,
+                VideoIden::Link,
+                VideoIden::Title,
+                VideoIden::Tags,
+                VideoIden::Duration,
+            ])
+            .from(VideoIden::Table)
+            .and_where(Expr::col(VideoIden::Id).eq(id))
+            .build_rusqlite(SqliteQueryBuilder);
+
+        let mut statement = transaction.prepare(&query)?;
+        let video = statement
+            .query_and_then(&*values.as_params(), |row| Video::try_from(row))?
+            .next();
+
+        Ok(video.transpose()?)
+    }
+
     pub fn delete(&self, transaction: &Transaction) -> Result<usize, ServerError> {
         let mut query = Query::delete();
         query.from_table(VideoIden::Table);
@@ -191,10 +213,16 @@ mod tests {
 
         let tran = conn.transaction()?;
         let fetched = Video::find_by_link(&video.link, &tran)?.expect("video");
+        let fetched_by_id = Video::find_by_id(id, &tran)?.expect("video");
         assert_eq!(Some(id), fetched.id);
+        assert_eq!(Some(id), fetched_by_id.id);
+        assert_eq!(video.link, fetched_by_id.link);
         assert_eq!(video.title, fetched.title);
+        assert_eq!(video.title, fetched_by_id.title);
         assert_eq!(video.tags, fetched.tags);
+        assert_eq!(video.tags, fetched_by_id.tags);
         assert_eq!(video.date, fetched.date);
+        assert_eq!(video.date, fetched_by_id.date);
         tran.finish()?;
 
         Ok(())
