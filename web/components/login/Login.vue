@@ -1,96 +1,129 @@
 <script setup lang="ts">
-import { reactive } from "vue";
-import { VaButton, VaModal } from "vuestic-ui";
+import { onMounted, reactive, ref } from "vue";
+import { VaButton, VaInput, VaModal } from "vuestic-ui";
 import axios from "axios";
 import { BASE_URL } from "@/composables/utils";
-import GoogleSso from "@/components/login/GoogleSso.vue";
+import { useAuthState } from "@/composables/authState";
 
 const modal = reactive({
-    show: false, // should we show the modal
-    auth: false, // is currently authenticated
-    fail: false, // if it's login failed
+    show: false,
+    auth: false,
+    fail: false,
 });
 
-// const modal2 = reactive({
-//     show: false, // should we show the modal
-// });
+const form = reactive({
+    code: "",
+});
 
-// const form = reactive({
-//     username: "",
-//     password: "",
-// });
+const isSubmitting = ref(false);
+const authState = useAuthState();
+const clientIP = ref("unknown");
 
-let sessionUsername = reactive(null);
+onMounted(async () => {
+    try {
+        const response = await fetch("https://api.ipify.org?format=json");
+        const data = await response.json();
+        clientIP.value = data.ip ?? "unknown";
+    } catch (error) {
+        console.error("Error fetching IP address:", error);
+    }
+});
+
+function openLoginModal() {
+    modal.show = true;
+    modal.fail = false;
+}
+
+async function authenticate() {
+    const trimmed = form.code.trim().toUpperCase();
+    if (!trimmed) {
+        modal.fail = true;
+        return;
+    }
+
+    isSubmitting.value = true;
+    try {
+        const response = await axios.post(BASE_URL + "/api/auth/login", {
+            code: trimmed,
+            ip: clientIP.value,
+        });
+        localStorage.setItem("token", response.data);
+        modal.auth = true;
+        modal.show = false;
+        modal.fail = false;
+        form.code = "";
+        authState.isAuthenticated = true;
+    } catch (_) {
+        modal.fail = true;
+    } finally {
+        isSubmitting.value = false;
+    }
+}
 
 function logout() {
     localStorage.removeItem("token");
     modal.auth = false;
-
-    let log =
-        "[LOGOUT] User " +
-        sessionUsername +
-        " logged out on " +
-        new Date(Date.now()) +
-        " at " +
-        clientIP +
-        ".";
-    console.log(log);
-
-    axios.post(BASE_URL + "/api/auth/login", {
-        username: sessionUsername,
-        ip: clientIP,
-    });
-    sessionUsername = null;
+    authState.isAuthenticated = false;
 }
 
-// auth token
 function tick() {
-    let token = localStorage.getItem("token");
-    if (token == null) modal.auth = false;
-    else {
-        axios
-            .post(BASE_URL + "/api/auth/tick", {
-                token: token,
-            })
-            .then((response) => {
-                localStorage.setItem("token", response.data);
-                modal.auth = true;
-            })
-            .catch((_) => {
-                modal.auth = false;
-            });
+    const token = localStorage.getItem("token");
+    if (token == null) {
+        modal.auth = false;
+        authState.isAuthenticated = false;
+        return;
     }
+
+    axios
+        .post(BASE_URL + "/api/auth/tick", {
+            token,
+        })
+        .then((response) => {
+            localStorage.setItem("token", response.data);
+            modal.auth = true;
+            authState.isAuthenticated = true;
+        })
+        .catch((_) => {
+            modal.auth = false;
+            authState.isAuthenticated = false;
+        });
 }
+
 tick();
 setInterval(() => {
     tick();
-}, 1000 * 60 * 10); // 10 minutes
-</script>
-
-<script get-ip lang="ts">
-// Get the client's IP address 原來要await他resolve
-let clientIP = await fetch("https://api.ipify.org?format=json")
-    .then((response) => response.json())
-    .then((data) => data.ip)
-    .catch((error) => console.error("Error fetching IP address:", error));
+}, 1000 * 60 * 10);
 </script>
 
 <template>
     <template v-if="modal.auth">
-        <div>
-            {{ sessionUsername }}
-        </div>
-        <!-- <VaButton @click="modal2.show = true">我的帳號</VaButton> -->
         <VaButton @click="modal.show = true">登出</VaButton>
-        <VaModal v-model="modal.show" @ok="logout()">
+        <VaModal v-model="modal.show" max-width="400px" close-button @ok="logout">
             <div>您确定要登出吗?</div>
         </VaModal>
     </template>
     <template v-else>
-        <VaButton @click="modal.show = true">登入</VaButton>
+        <VaButton @click="openLoginModal">登入</VaButton>
         <VaModal v-model="modal.show" hide-default-actions close-button max-width="400px">
-            <div class="h-full flex items-center justify-center ">
-                <GoogleSso v-if="!modal.auth" />
+            <div class="flex flex-col gap-4 p-2">
+                <VaInput
+                    v-model="form.code"
+                    label="Discord 驗證碼"
+                    placeholder="輸入 8 碼驗證碼"
+                    maxlength="8"
+                    @keyup.enter="authenticate"
+                />
+                <VaButton
+                    color="primary"
+                    :loading="isSubmitting"
+                    :disabled="isSubmitting"
+                    @click="authenticate"
+                >
+                    使用驗證碼登入
+                </VaButton>
+                <div v-if="modal.fail" class="text-red-500 text-sm text-center">
+                    驗證失敗，請確認驗證碼是否正確或仍在有效期限內。
+                </div>
             </div>
         </VaModal>
     </template>

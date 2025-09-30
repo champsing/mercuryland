@@ -32,7 +32,7 @@ pub async fn link(ctx: super::Context<'_>) -> Result<(), ServerError> {
     if check_exist(ctx).await? == true {
         ctx.send(
             CreateReply::default()
-            .content(format!("您已經將本帳號連結到某個 YouTube 頻道了。\n如要綁定其他 YouTube 頻道，請先使用 {} 解除連結或使用不同 Discord 帳號。", CONFIG.slash_command_strings.unlink))
+            .content(format!("您已經將本帳號連結到某個 YouTube 頻道了。\n如要綁定其他 YouTube 頻道，請先使用 {} 解除連結或使用不同 Discord 帳號。", super::command_mentions::get("unlink").unwrap_or("/unlink")))
             .ephemeral(true)
         ).await?;
         return Ok(());
@@ -134,7 +134,7 @@ pub async fn unlink(ctx: super::Context<'_>) -> Result<(), ServerError> {
             CreateReply::default()
                 .content(format!(
                     "您還沒有將本帳號連結到 YouTube 頻道。\n如要綁定 YouTube 頻道，請使用 {}。",
-                    CONFIG.slash_command_strings.link
+                    super::command_mentions::get("link").unwrap_or("/link")
                 ))
                 .ephemeral(true),
         )
@@ -165,7 +165,7 @@ pub async fn unlink(ctx: super::Context<'_>) -> Result<(), ServerError> {
             CreateReply::default()
                 .content(format!(
                     "您還沒有將本帳號連結到 YouTube 頻道。\n如要綁定 YouTube 頻道，請使用 {}。",
-                    CONFIG.slash_command_strings.link
+                    super::command_mentions::get("link").unwrap_or("/link")
                 ))
                 .ephemeral(true),
         )

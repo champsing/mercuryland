@@ -20,7 +20,6 @@ pub async fn run() -> Result<(), ServerError> {
             .wrap(cors)
             .service(ping::handler)
             .service(auth::login::login_handler)
-            .service(auth::login::logout_logging)
             .service(auth::tick::handler)
             .service(wheel::create::handler)
             .service(wheel::update::handler)

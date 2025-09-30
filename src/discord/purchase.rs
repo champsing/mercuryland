@@ -129,7 +129,7 @@ pub async fn booster(
                         format!(
                             "**購買失敗。**\n您的水星幣不足以購買 x{} 的加倍倍率。您可以使用 {} 指令查詢餘額。",
                             amp,
-                            CONFIG.slash_command_strings.coin
+                            super::command_mentions::get("coin").unwrap_or("/coin")
                         )
                     )
                     .ephemeral(true)
@@ -141,7 +141,7 @@ pub async fn booster(
                     .content(
                         format!(
                             "**找不到您的 Discord 用戶記錄。**\n請先使用 {} 將 Discord 帳號關聯到您的 YouTube 頻道，才能在 Discord 使用水星幣購買。",
-                            CONFIG.slash_command_strings.link
+                            super::command_mentions::get("link").unwrap_or("/link")
                         )
                     )
                     .ephemeral(true)
@@ -343,7 +343,7 @@ pub async fn overtime(
                         format!(
                             "**購買失敗。**\n您的水星幣不足以購買 {} 小時的加班台時數卡。您可以使用 {} 指令查詢餘額。",
                             hours,
-                            CONFIG.slash_command_strings.coin
+                            super::command_mentions::get("coin").unwrap_or("/coin")
                         )
                     )
                     .ephemeral(true)
@@ -355,7 +355,7 @@ pub async fn overtime(
                     .content(
                         format!(
                             "**找不到您的 Discord 用戶記錄。**\n請先使用 {} 將 Discord 帳號關聯到您的 YouTube 頻道，才能在 Discord 使用水星幣購買。",
-                            CONFIG.slash_command_strings.link
+                            super::command_mentions::get("link").unwrap_or("/link")
                         )
                     )
                     .ephemeral(true)
