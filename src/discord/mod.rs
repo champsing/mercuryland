@@ -1,5 +1,6 @@
 mod auth;
 mod coin;
+mod command_mentions;
 mod give;
 mod help;
 mod link;
@@ -116,10 +117,10 @@ pub async fn run() -> Result<(), ServerError> {
                     zh_tw.clone(),
                     String::from("連結 Discord 帳號至 YouTube 頻道， 2 小時內限用一次"),
                 )]),
-                help_text: Some(String::from(format!(
+                help_text: Some(format!(
                     "連結您的 Discord 帳號至 YouTube 頻道後，即可直接使用 {} 指令查詢餘額。目前同一 Discord 帳號僅可連結1個 YouTube 頻道。",
-                    CONFIG.slash_command_strings.coin
-                ))),
+                    command_mentions::get("coin").unwrap_or("/coin")
+                )),
                 cooldown_config: RwLock::new(poise::CooldownConfig {
                     user: Some(Duration::from_secs(60 * 60 * 2)),
                     global: None,
@@ -139,10 +140,10 @@ pub async fn run() -> Result<(), ServerError> {
                     zh_tw.clone(),
                     String::from("斷開 YouTube 頻道與 Discord 帳號的連結"),
                 )]),
-                help_text: Some(String::from(format!(
+                help_text: Some(format!(
                     "將連結斷開後，使用 {} 查詢餘額重新需要輸入 YouTube Channel ID，直至連結新 Discord 帳號。",
-                    CONFIG.slash_command_strings.coin
-                ))),
+                    command_mentions::get("coin").unwrap_or("/coin")
+                )),
                 ..link::unlink()
             },
             poise::Command {
@@ -305,6 +306,7 @@ pub async fn run() -> Result<(), ServerError> {
             Box::pin(async move {
                 println!("Logged in as {}", _ready.user.name);
                 poise::builtins::register_globally(ctx, &framework.options().commands).await?;
+                command_mentions::initialize(&ctx.http).await?;
                 Ok(())
             })
         })
