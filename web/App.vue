@@ -26,13 +26,9 @@ const tabs = computed(() =>
     baseTabs.filter((tab) => !tab.requiresAuth || authState.isAuthenticated)
 );
 
-const dropdownItems = computed(() => [
-    { path: "/", label: "首頁" },
-    ...tabs.value,
-]);
-
 const isMenuOpen = ref(false);
 const dropdownRef = ref<HTMLElement | null>(null);
+const loginRef = ref<InstanceType<typeof Login> | null>(null);
 
 function toggleMenu() {
     isMenuOpen.value = !isMenuOpen.value;
@@ -42,17 +38,22 @@ function closeMenu() {
     isMenuOpen.value = false;
 }
 
-function handleMenuItemClick() {
-    backToTop();
-    closeMenu();
-}
-
 function onClickOutside(event: MouseEvent) {
     if (!dropdownRef.value) return;
     const target = event.target as Node;
     if (!dropdownRef.value.contains(target)) {
         closeMenu();
     }
+}
+
+function triggerLogin() {
+    closeMenu();
+    loginRef.value?.openLoginModal();
+}
+
+function triggerLogout() {
+    closeMenu();
+    loginRef.value?.openLogoutModal();
 }
 
 onMounted(() => {
@@ -86,24 +87,43 @@ onBeforeUnmount(() => {
                 >
                     <nav class="flex flex-col">
                         <router-link
-                            v-for="item in dropdownItems"
+                            to="/"
+                            class="px-4 py-2 text-left text-base text-zinc-200 hover:bg-zinc-800"
+                            @click="backToTop(); closeMenu()"
+                        >
+                            水星樂園
+                        </router-link>
+                        <router-link
+                            v-for="item in tabs"
                             :key="item.path"
                             :to="item.path"
                             class="px-4 py-2 text-left text-base text-zinc-200 hover:bg-zinc-800"
-                            @click="handleMenuItemClick"
+                            @click="backToTop(); closeMenu()"
                         >
                             {{ item.label }}
                         </router-link>
+                        <button
+                            v-if="authState.isAuthenticated"
+                            type="button"
+                            class="px-4 py-2 text-left text-base text-zinc-200 hover:bg-zinc-800"
+                            @click="triggerLogout"
+                        >
+                            結束管理
+                        </button>
+                        <button
+                            v-else
+                            type="button"
+                            class="px-4 py-2 text-left text-base text-zinc-200 hover:bg-zinc-800"
+                            @click="triggerLogin"
+                        >
+                            開啟管理
+                        </button>
                     </nav>
-                </div>
-            </div>
-            <div class="flex flex-row justify-center">
-                <div class="mx-2 mt-1">
-                    <Login />
                 </div>
             </div>
         </div>
     </header>
+    <Login ref="loginRef" :render-trigger="false" />
     <div class="min-h-screen">
         <router-view />
     </div>

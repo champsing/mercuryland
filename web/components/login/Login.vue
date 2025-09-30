@@ -6,6 +6,13 @@ import { BASE_URL } from "@/composables/utils";
 import { useAuthState } from "@/composables/authState";
 import { SignInAlt, SignOutAlt } from "@vicons/fa";
 
+const props = defineProps({
+    renderTrigger: {
+        type: Boolean,
+        default: true,
+    },
+});
+
 const modal = reactive({
     show: false,
     auth: false,
@@ -31,6 +38,12 @@ onMounted(async () => {
 });
 
 function openLoginModal() {
+    modal.show = true;
+    modal.fail = false;
+}
+
+function openLogoutModal() {
+    if (!modal.auth) return;
     modal.show = true;
     modal.fail = false;
 }
@@ -94,14 +107,17 @@ tick();
 setInterval(() => {
     tick();
 }, 1000 * 60 * 10);
+
+defineExpose({ openLoginModal, openLogoutModal });
 </script>
 
 <template>
     <template v-if="modal.auth">
         <VaButton
+            v-if="props.renderTrigger"
             preset="plain"
             aria-label="登出"
-            @click="modal.show = true"
+            @click="openLogoutModal"
         >
             <VaIcon size="32px">
                 <SignOutAlt />
@@ -113,6 +129,7 @@ setInterval(() => {
     </template>
     <template v-else>
         <VaButton
+            v-if="props.renderTrigger"
             preset="plain"
             aria-label="登入"
             @click="openLoginModal"
