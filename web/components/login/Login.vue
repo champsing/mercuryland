@@ -100,7 +100,6 @@ setInterval(() => {
     <template v-if="modal.auth">
         <VaButton
             preset="plain"
-            color="transparent"
             aria-label="登出"
             @click="modal.show = true"
         >
@@ -115,7 +114,6 @@ setInterval(() => {
     <template v-else>
         <VaButton
             preset="plain"
-            color="transparent"
             aria-label="登入"
             @click="openLoginModal"
         >
