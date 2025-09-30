@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { reactive, ref } from "vue";
+import { onMounted, reactive, ref } from "vue";
 import { VaButton, VaInput, VaModal } from "vuestic-ui";
 import axios from "axios";
 import { BASE_URL } from "@/composables/utils";
@@ -17,6 +17,17 @@ const form = reactive({
 
 const isSubmitting = ref(false);
 const authState = useAuthState();
+const clientIP = ref("unknown");
+
+onMounted(async () => {
+    try {
+        const response = await fetch("https://api.ipify.org?format=json");
+        const data = await response.json();
+        clientIP.value = data.ip ?? "unknown";
+    } catch (error) {
+        console.error("Error fetching IP address:", error);
+    }
+});
 
 function openLoginModal() {
     modal.show = true;
@@ -34,7 +45,7 @@ async function authenticate() {
     try {
         const response = await axios.post(BASE_URL + "/api/auth/login", {
             code: trimmed,
-            ip: clientIP ?? "unknown",
+            ip: clientIP.value,
         });
         localStorage.setItem("token", response.data);
         modal.auth = true;
@@ -82,16 +93,6 @@ tick();
 setInterval(() => {
     tick();
 }, 1000 * 60 * 10);
-</script>
-
-<script get-ip lang="ts">
-let clientIP = await fetch("https://api.ipify.org?format=json")
-    .then((response) => response.json())
-    .then((data) => data.ip)
-    .catch((error) => {
-        console.error("Error fetching IP address:", error);
-        return "unknown";
-    });
 </script>
 
 <template>
