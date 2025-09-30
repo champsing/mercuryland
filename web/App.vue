@@ -76,7 +76,7 @@ onBeforeUnmount(() => {
                 >
                     <img
                         src="/images/icon.webp"
-                        class="h-8 w-8 inline md:h-10 md:w-10"
+                        class="h-8 w-8 inline"
                         alt="hexagon"
                     />
                 </button>
