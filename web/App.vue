@@ -42,8 +42,8 @@ const tabs = computed(() =>
             <VaNavbarItem>
                 <router-link to="/" class="ml-4">
                     <img
-                        src="/images/hexagon.svg"
-                        class="invert h-8 w-8 inline"
+                        src="/images/icon.webp"
+                        class="h-8 w-8 inline"
                         alt="hexagon"
                     />
                 </router-link>
