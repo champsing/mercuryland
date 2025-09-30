@@ -3,12 +3,14 @@ use crate::{
     error::ServerError,
 };
 use chrono::{Duration, Utc};
+use poise::reply::CreateReply;
 use rand::{Rng, distributions::Alphanumeric, thread_rng};
 
 #[poise::command(slash_command)]
 pub async fn auth(ctx: super::Context<'_>) -> Result<(), ServerError> {
     if !CONFIG.discord.admin.contains(&ctx.author().id.get()) {
-        ctx.say("您没有权限").await?;
+        ctx.send(CreateReply::default().content("您没有权限").ephemeral(true))
+            .await?;
         return Ok(());
     }
 
@@ -33,6 +35,11 @@ pub async fn auth(ctx: super::Context<'_>) -> Result<(), ServerError> {
         });
     }
 
-    ctx.say(format!("您的驗證碼為：{}", code)).await?;
+    ctx.send(
+        CreateReply::default()
+            .content(format!("您的驗證碼為：{}", code))
+            .ephemeral(true),
+    )
+    .await?;
     Ok(())
 }
