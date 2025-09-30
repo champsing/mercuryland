@@ -72,71 +72,75 @@ function updateTag(tag: string) {
 
 <template>
     <div class="m-auto w-full z-10">
-        <div class="flex h-14 w-full flex-row items-center justify-center gap-16">
-            <div class="flex w-1/8 flex-row items-center">
-                <VaDateInput
-                    v-model="dateRange"
-                    :format-date="formatDate"
-                    :parse-date="parseDate"
-                    manual-input
-                    mode="auto"
-                />
-                <!--[DONE] need more adjusting -->
+        <div class="flex h-14 w-full flex-row items-center justify-between gap-4 px-2">
+            <div class="flex w-3/4 flex-row items-center gap-4">
+                <div class="w-1/4 ml-12">
+                    <VaDateInput
+                        class="w-full"
+                        v-model="dateRange"
+                        :format-date="formatDate"
+                        :parse-date="parseDate"
+                        manual-input
+                        mode="auto"
+                    />
+                </div>
+                <div class="w-3/4">
+                    <VaSelect
+                        class="w-full"
+                        v-model="selectedTags"
+                        :options="tagList"
+                        multiple
+                        clearable
+                        placeholder="請選擇直播的TAG"
+                        dropdownIcon="va-plus"
+                        @update:model-value="
+                            if (selectedTags.toString() == new Array().toString())
+                                selectedTags = null;
+                        "
+                    >
+                        <!-- [SOLVED] has a problem, sometimes the first entry won't show as 
+                        a chip until the second entry is selected and removed. -->
+                        <!-- [SOLUTION] by setting selectTags to null every time it becomes an empty array. -->
+                        <template #content>
+                            <VaChip
+                                v-for="chip in selectedTags"
+                                color="#90dc52"
+                                outline
+                                size="small"
+                                class="mr-1 my-1"
+                                closeable
+                                @update:model-value="tagAlreadyExist(chip)"
+                            >
+                                {{ chip }}
+                            </VaChip>
+                        </template>
+                    </VaSelect>
+                </div>
             </div>
-            <div class="flex w-2/5 items-center">
-                <VaSelect
-                    class="w-full"
-                    v-model="selectedTags"
-                    :options="tagList"
-                    multiple
-                    clearable
-                    placeholder="請選擇直播的TAG"
-                    dropdownIcon="va-plus"
-                    @update:model-value="
-                        if (selectedTags.toString() == new Array().toString())
-                            selectedTags = null;
-                    "
-                >
-                    <!-- [SOLVED] has a problem, sometimes the first entry won't show as 
-                    a chip until the second entry is selected and removed. -->
-                    <!-- [SOLUTION] by setting selectTags to null every time it becomes an empty array. -->
-                    <template #content>
-                        <VaChip
-                            v-for="chip in selectedTags"
-                            color="#90dc52"
-                            outline
-                            size="small"
-                            class="mr-1 my-1"
-                            closeable
-                            @update:model-value="tagAlreadyExist(chip)"
-                        >
-                            {{ chip }}
-                        </VaChip>
-                    </template>
-                </VaSelect>
-            </div>
-            <!-- not yet -->
-            <div class="flex w-1/8 items-center justify-center">
-                <VaSwitch
-                    v-model="strictFiltering"
-                    off-color="#1ccba2"
-                    color="#3444a2"
-                    style="--va-switch-checker-background-color: #252723"
-                    false-inner-label="符合一項"
-                    true-inner-label="符合全部"
-                />
-            </div>
-            <div class="flex w-1/8 items-center justify-center">
-                <VaButton
-                    preset="plain"
-                    color="#FFFFFF"
-                    @click="showRuleDescModal = !showRuleDescModal"
-                >
-                    <VaIcon size="large" class="mr-2">
-                        <Info24Regular />
-                    </VaIcon>
-                    <div class="text-lg text-center">規則說明</div>
-                </VaButton>
+            <div class="flex w-1/4 flex-row items-center gap-4">
+                <div class="flex w-1/2 justify-center">
+                    <VaSwitch
+                        v-model="strictFiltering"
+                        off-color="#1ccba2"
+                        color="#3444a2"
+                        style="--va-switch-checker-background-color: #252723"
+                        false-inner-label="符合一項"
+                        true-inner-label="符合全部"
+                    />
+                </div>
+                <div class="flex w-1/2 justify-center">
+                    <VaButton
+                        preset="plain"
+                        class="w-full"
+                        color="#FFFFFF"
+                        @click="showRuleDescModal = !showRuleDescModal"
+                    >
+                        <VaIcon size="large" class="mr-2">
+                            <Info24Regular />
+                        </VaIcon>
+                        <div class="text-lg text-center">規則說明</div>
+                    </VaButton>
+                </div>
             </div>
         </div>
 
