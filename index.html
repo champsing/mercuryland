@@ -36,28 +36,9 @@
             href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap"
             rel="stylesheet"
         />
-        <script
-            src="https://accounts.google.com/gsi/client"
-            async
-            defer
-        ></script>
     </head>
     <body class="bg-zinc-800">
         <div id="app" class="w-full"></div>
         <script type="module" src="/web/main.ts"></script>
-        <script>
-            function handleCredentialResponse(response) {
-                console.log("Encoded JWT ID token: " + response.credential);
-            }
-
-            window.onload = function () {
-                google.accounts.id.initialize({
-                    client_id:
-                        "557016419724-4gvamcsq0hp8j8e0o1sjum2epq5ls446.apps.googleusercontent.com",
-                    callback: handleCredentialResponse,
-                });
-                google.accounts.id.prompt(); // also display the One Tap dialog
-            };
-        </script>
     </body>
 </html>
