@@ -2,6 +2,8 @@
 import { ref, Ref } from "vue";
 import {
     VaButton,
+    VaCard,
+    VaCardContent,
     VaChip,
     VaDateInput,
     VaDivider,
@@ -212,12 +214,16 @@ function updateTag(tag: string) {
 
         <div class="flex flex-row gap-2">
             <div class="w-3/4">
-                <DataTable
-                    :dateRange="dateRange"
-                    :selectedTags="selectedTags"
-                    :strictFiltering="strictFiltering"
-                    @updateTag="(tag) => updateTag(tag)"
-                />
+                <VaCard style="--va-card-padding: 0rem" class="h-full vod-card">
+                    <VaCardContent>
+                        <DataTable
+                            :dateRange="dateRange"
+                            :selectedTags="selectedTags"
+                            :strictFiltering="strictFiltering"
+                            @updateTag="(tag) => updateTag(tag)"
+                        />
+                    </VaCardContent>
+                </VaCard>
             </div>
 
             <div class="flex flex-col w-1/4">

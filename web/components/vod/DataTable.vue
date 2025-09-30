@@ -2,7 +2,7 @@
 import { computed } from "vue";
 import { UseElementBounding } from "@vueuse/components";
 import { useWindowSize } from "@vueuse/core";
-import { VaButton, VaDataTable, VaDivider } from "vuestic-ui";
+import { VaButton, VaDataTable, VaDivider, VaScrollContainer } from "vuestic-ui";
 import vodLinkData from "@assets/data/vod.json";
 
 const vh = useWindowSize().height;
@@ -93,20 +93,25 @@ function calcStyle(top: number) {
 
 <template>
     <use-element-bounding v-slot="{ top }" class="mb-2">
-        <VaDataTable
-            :items="data"
-            :columns="columns"
+        <VaScrollContainer
+            vertical
+            color="#e0feb4"
+            size="medium"
             :style="calcStyle(top)"
-            style="--va-data-table-hover-color: #357286;"
-            virtual-scroller
-            sticky-header
-            hoverable
         >
-            <template v-for="item in columns" #[`header(${item.key})`]="{ label }">
-                <div class="text-sm text-center">
-                    {{ label }}
-                </div>
-            </template>
+            <VaDataTable
+                :items="data"
+                :columns="columns"
+                style="--va-data-table-hover-color: #357286; height: 100%;"
+                virtual-scroller
+                sticky-header
+                hoverable
+            >
+                <template v-for="item in columns" #[`header(${item.key})`]="{ label }">
+                    <div class="text-sm text-center">
+                        {{ label }}
+                    </div>
+                </template>
 
             <!-- for checking day of week -->
             <!-- <template #cell(date)="{ value }">
@@ -154,6 +159,7 @@ function calcStyle(top: number) {
                     />
                 </template>
             </template>
-        </VaDataTable>
+            </VaDataTable>
+        </VaScrollContainer>
     </use-element-bounding>
 </template>
