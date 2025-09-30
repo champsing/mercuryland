@@ -16,7 +16,6 @@ const form = reactive({
 });
 
 const isSubmitting = ref(false);
-const sessionLabel = ref<string | null>(null);
 const authState = useAuthState();
 
 function openLoginModal() {
@@ -41,7 +40,6 @@ async function authenticate() {
         modal.auth = true;
         modal.show = false;
         modal.fail = false;
-        sessionLabel.value = "Discord Auth";
         form.code = "";
         authState.isAuthenticated = true;
     } catch (_) {
@@ -54,7 +52,6 @@ async function authenticate() {
 function logout() {
     localStorage.removeItem("token");
     modal.auth = false;
-    sessionLabel.value = null;
     authState.isAuthenticated = false;
 }
 
@@ -62,7 +59,6 @@ function tick() {
     const token = localStorage.getItem("token");
     if (token == null) {
         modal.auth = false;
-        sessionLabel.value = null;
         authState.isAuthenticated = false;
         return;
     }
@@ -74,14 +70,10 @@ function tick() {
         .then((response) => {
             localStorage.setItem("token", response.data);
             modal.auth = true;
-            if (!sessionLabel.value) {
-                sessionLabel.value = "Discord Auth";
-            }
             authState.isAuthenticated = true;
         })
         .catch((_) => {
             modal.auth = false;
-            sessionLabel.value = null;
             authState.isAuthenticated = false;
         });
 }
@@ -104,9 +96,6 @@ let clientIP = await fetch("https://api.ipify.org?format=json")
 
 <template>
     <template v-if="modal.auth">
-        <div>
-            {{ sessionLabel || "已登入" }}
-        </div>
         <VaButton @click="modal.show = true">登出</VaButton>
         <VaModal v-model="modal.show" @ok="logout">
             <div>您确定要登出吗?</div>
