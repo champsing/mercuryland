@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import { onMounted, reactive, ref } from "vue";
-import { VaButton, VaInput, VaModal } from "vuestic-ui";
+import { VaButton, VaIcon, VaInput, VaModal } from "vuestic-ui";
 import axios from "axios";
 import { BASE_URL } from "@/composables/utils";
 import { useAuthState } from "@/composables/authState";
+import { SignInAlt, SignOutAlt } from "@vicons/fa";
 
 const modal = reactive({
     show: false,
@@ -97,13 +98,31 @@ setInterval(() => {
 
 <template>
     <template v-if="modal.auth">
-        <VaButton @click="modal.show = true">登出</VaButton>
+        <VaButton
+            preset="plain"
+            color="transparent"
+            aria-label="登出"
+            @click="modal.show = true"
+        >
+            <VaIcon size="large">
+                <SignOutAlt />
+            </VaIcon>
+        </VaButton>
         <VaModal v-model="modal.show" max-width="400px" close-button @ok="logout">
             <div>您确定要登出吗?</div>
         </VaModal>
     </template>
     <template v-else>
-        <VaButton @click="openLoginModal">登入</VaButton>
+        <VaButton
+            preset="plain"
+            color="transparent"
+            aria-label="登入"
+            @click="openLoginModal"
+        >
+            <VaIcon size="large">
+                <SignInAlt />
+            </VaIcon>
+        </VaButton>
         <VaModal v-model="modal.show" hide-default-actions close-button max-width="400px">
             <div class="flex flex-col gap-4 p-2">
                 <VaInput
