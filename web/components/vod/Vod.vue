@@ -71,7 +71,7 @@ function updateTag(tag: string) {
 </script>
 
 <template>
-    <div class="m-auto w-[95%] z-10">
+    <div class="m-auto w-full z-10">
         <div class="flex h-14 w-full flex-row items-center justify-center gap-16">
             <div class="flex w-1/8 flex-row items-center">
                 <VaDateInput
