@@ -1,7 +1,6 @@
 import { createWebHistory, createRouter } from "vue-router";
 import Vod from "@components/vod/Vod.vue";
 import Penalty from "@components/penalty/Penalty.vue";
-import Welcome from "@components/welcome/Welcome.vue";
 // import Join from "@/components/join/Join.vue";
 // import Publication from "@components/publication/Publication.vue";
 // import GameMap from "@components/GameMap.vue";
@@ -12,9 +11,10 @@ import Privacy from "./components/law/Privacy.vue";
 import Leaderboard from "./components/Leaderboard.vue";
 import Propose from "./components/Propose.vue";
 import Setting from "./components/Setting.vue";
+import Welcome2 from "./components/welcome/Welcome2.vue";
 
 const routes = [
-    { path: "/", component: Welcome },
+    { path: "/", component: Welcome2 },
     // { path: "/join", component: Join },
     // { path: "/publication", component: Publication },
     // { path: "/map", component: GameMap },
