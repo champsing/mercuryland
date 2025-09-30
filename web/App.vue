@@ -1,13 +1,7 @@
 <script setup lang="ts">
-import {
-    VaButton,
-    VaDivider,
-    useColors,
-    VaNavbar,
-    VaNavbarItem,
-} from "vuestic-ui";
+import { VaButton, VaDivider, useColors } from "vuestic-ui";
 import { RouterLink } from "vue-router";
-import { computed } from "vue";
+import { computed, onBeforeUnmount, onMounted, ref } from "vue";
 import Login from "@/components/login/Login.vue";
 import { backToTop } from "./composables/utils";
 import { useAuthState } from "./composables/authState";
@@ -31,46 +25,85 @@ const baseTabs = [
 const tabs = computed(() =>
     baseTabs.filter((tab) => !tab.requiresAuth || authState.isAuthenticated)
 );
+
+const dropdownItems = computed(() => [
+    { path: "/", label: "首頁" },
+    ...tabs.value,
+]);
+
+const isMenuOpen = ref(false);
+const dropdownRef = ref<HTMLElement | null>(null);
+
+function toggleMenu() {
+    isMenuOpen.value = !isMenuOpen.value;
+}
+
+function closeMenu() {
+    isMenuOpen.value = false;
+}
+
+function handleMenuItemClick() {
+    backToTop();
+    closeMenu();
+}
+
+function onClickOutside(event: MouseEvent) {
+    if (!dropdownRef.value) return;
+    const target = event.target as Node;
+    if (!dropdownRef.value.contains(target)) {
+        closeMenu();
+    }
+}
+
+onMounted(() => {
+    document.addEventListener("click", onClickOutside);
+});
+
+onBeforeUnmount(() => {
+    document.removeEventListener("click", onClickOutside);
+});
 </script>
 
 <template>
-    <VaNavbar
-        :class="$route.fullPath == '/' ? `z-20 fixed` : `z-20 sticky`"
-        :color="$route.fullPath == '/' ? `rgba(0, 0, 0, 0)` : `rgb(24, 24, 27)`"
-    >
-        <template #left>
-            <VaNavbarItem>
-                <router-link to="/" class="ml-4">
+    <header class="fixed top-0 left-0 right-0 z-20 w-full pointer-events-none">
+        <div class="flex items-center justify-between px-4 py-3 pointer-events-auto">
+            <div ref="dropdownRef" class="relative">
+                <button
+                    type="button"
+                    class="flex items-center focus:outline-none"
+                    aria-label="切換導覽選單"
+                    @click.stop="toggleMenu"
+                >
                     <img
                         src="/images/icon.webp"
                         class="h-8 w-8 inline"
                         alt="hexagon"
                     />
-                </router-link>
-            </VaNavbarItem>
-        </template>
-        <template #center>
-            <VaNavbarItem>
-                <router-link
-                    v-for="t in tabs"
-                    :to="t.path"
-                    class="ml-4 text-base text-white"
-                    @click="backToTop()"
+                </button>
+                <div
+                    v-if="isMenuOpen"
+                    class="absolute left-0 mt-3 w-56 rounded-md border border-zinc-700 bg-zinc-900 py-2 shadow-lg"
                 >
-                    {{ t.label }}
-                </router-link>
-            </VaNavbarItem>
-        </template>
-        <template #right>
-            <VaNavbarItem>
-                <div class="flex flex-row justify-center">
-                    <div class="mx-2 mt-1">
-                        <Login />
-                    </div>
+                    <nav class="flex flex-col">
+                        <router-link
+                            v-for="item in dropdownItems"
+                            :key="item.path"
+                            :to="item.path"
+                            class="px-4 py-2 text-left text-base text-zinc-200 hover:bg-zinc-800"
+                            @click="handleMenuItemClick"
+                        >
+                            {{ item.label }}
+                        </router-link>
+                    </nav>
                 </div>
-            </VaNavbarItem>
-        </template>
-    </VaNavbar>
+            </div>
+            <div class="flex flex-row justify-center">
+                <div class="mx-2 mt-1">
+                    <Login />
+                </div>
+            </div>
+        </div>
+    </header>
     <div class="min-h-screen">
         <router-view />
     </div>
