@@ -103,7 +103,11 @@ function calcStyle(top: number) {
             <VaDataTable
                 :items="data"
                 :columns="columns"
-                style="--va-data-table-hover-color: #357286; height: 100%;"
+                style="
+                    --va-data-table-hover-color: #357286;
+                    --va-data-table-thead-background: var(--va-background-element);
+                    height: 100%;
+                "
                 virtual-scroller
                 sticky-header
                 hoverable
