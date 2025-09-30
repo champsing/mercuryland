@@ -65,8 +65,8 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-    <header class="fixed top-0 left-0 right-0 z-20 w-full">
-        <div class="flex items-center justify-between px-4 py-3">
+    <header class="fixed top-0 left-0 right-0 z-20 w-full pointer-events-none">
+        <div class="flex items-center justify-between px-4 py-3 pointer-events-auto">
             <div ref="dropdownRef" class="relative">
                 <button
                     type="button"
