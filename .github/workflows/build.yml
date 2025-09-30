@@ -1,8 +1,8 @@
 name: Build Docker Image
 on:
   push:
-    branches: 
-      prod-back
+    tags:
+      - '*'
 
 jobs:
   build:
@@ -19,5 +19,3 @@ jobs:
       - name: Upload Artifacts
         run: |
           curl -F file=@mercury.tar $( curl -H 'Content-Type: application/json' -d '{"access_code": "${{ secrets.QNAP_ACCESS }}", "composed_link_id": "${{ secrets.QNAP_LINK_ID }}", "overwrite": true, "path": "/"}' -X POST https://www.myqnapcloud.com/ajax/share_upload_link | jq -r '.result.upload_url')
-
-
