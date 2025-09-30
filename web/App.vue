@@ -5,12 +5,10 @@ import {
     useColors,
     VaNavbar,
     VaNavbarItem,
-    VaIcon,
 } from "vuestic-ui";
 import { RouterLink } from "vue-router";
 import { computed } from "vue";
 import Login from "@/components/login/Login.vue";
-import { Github } from "@vicons/fa";
 import { backToTop } from "./composables/utils";
 import { useAuthState } from "./composables/authState";
 
@@ -69,18 +67,6 @@ const tabs = computed(() =>
                     <div class="mx-2 mt-1">
                         <Login />
                     </div>
-                    <VaButton
-                        class="-mt-1/2"
-                        preset="secondary"
-                        color="textPrimary"
-                        href="https://github.com/champsing/mercuryland"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                    >
-                        <VaIcon :size="28">
-                            <Github />
-                        </VaIcon>
-                    </VaButton>
                 </div>
             </VaNavbarItem>
         </template>
@@ -88,47 +74,51 @@ const tabs = computed(() =>
     <div class="min-h-screen">
         <router-view />
     </div>
-    <div class="text-center text-base text-zinc-200 pt-4 pb-4 bg-zinc-900">
-        <div class="flex justify-center">
-            <div style="font-family: playfair display">
-                Copyright © 2025 The Mercury Land
+    <div class="text-base text-zinc-200 pt-4 pb-4 bg-zinc-900">
+        <div class="flex flex-row items-center justify-between w-[95%] mx-auto">
+            <div class="flex flex-row items-center gap-2" style="font-family: playfair display">
+                <div>Copyright © 2025 The Mercury Land</div>
+                <div>保留一切權利。</div>
             </div>
-            <!-- 
-                    【&nbsp;】：半角スペースと同じサイズの空白
-                    【&thinsp;】：&nbsp;の空白より小さい空白
-                    【&ensp;】：半角スペースより間隔がやや広い空白
-                    【&emsp;】：全角スペースとほぼ同じサイズの空白 
-                -->
-            &ensp;保留一切權利。
-        </div>
-        <div class="flex justify-center mt-2">
-            <VaButton
-                preset="secondary"
-                border-color="#363636"
-                to="tos"
-                @click="backToTop()"
-            >
-                <div class="text-zinc-200">使用條款</div>
-            </VaButton>
-            <VaDivider vertical />
-            <VaButton
-                preset="secondary"
-                border-color="#363636"
-                to="privacy"
-                @click="backToTop()"
-            >
-                <div class="text-zinc-200">隱私權政策</div>
-            </VaButton>
-            <VaDivider vertical />
-            <VaButton
-                preset="secondary"
-                border-color="#363636"
-                href="https://www.youtube.com/watch?v=Yir_XAcccmY"
-                target="_blank"
-                rel="noopener noreferrer"
-            >
-                <div class="text-zinc-200">使用教學</div>
-            </VaButton>
+            <div class="flex flex-row items-center">
+                <VaButton
+                    preset="secondary"
+                    border-color="#363636"
+                    to="tos"
+                    @click="backToTop()"
+                >
+                    <div class="text-zinc-200">使用條款</div>
+                </VaButton>
+                <VaDivider vertical class="mx-2" />
+                <VaButton
+                    preset="secondary"
+                    border-color="#363636"
+                    to="privacy"
+                    @click="backToTop()"
+                >
+                    <div class="text-zinc-200">隱私政策</div>
+                </VaButton>
+                <VaDivider vertical class="mx-2" />
+                <VaButton
+                    preset="secondary"
+                    border-color="#363636"
+                    href="https://www.youtube.com/watch?v=Yir_XAcccmY"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                >
+                    <div class="text-zinc-200">使用教學</div>
+                </VaButton>
+                <VaDivider vertical class="mx-2" />
+                <VaButton
+                    preset="secondary"
+                    border-color="#363636"
+                    href="https://github.com/champsing/mercuryland"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                >
+                    <div class="text-zinc-200">開源代碼</div>
+                </VaButton>
+            </div>
         </div>
     </div>
 </template>
