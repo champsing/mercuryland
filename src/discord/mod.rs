@@ -1,3 +1,4 @@
+mod auth;
 mod coin;
 mod give;
 mod help;
@@ -49,6 +50,16 @@ pub async fn run() -> Result<(), ServerError> {
 
     let options = poise::FrameworkOptions {
         commands: vec![
+            poise::Command {
+                name: String::from("auth"),
+                description: Some(String::from("Generate an authentication code")),
+                description_localizations: HashMap::from([(
+                    zh_tw.clone(),
+                    String::from("產生驗證碼"),
+                )]),
+                help_text: Some(String::from("產生一組 8 碼英數驗證碼。")),
+                ..auth::auth()
+            },
             poise::Command {
                 name: String::from("fetch_wheel"),
                 description: Some(String::from(
