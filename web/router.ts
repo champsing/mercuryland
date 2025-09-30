@@ -11,6 +11,7 @@ import Wheel from "./components/Wheel.vue";
 import Privacy from "./components/law/Privacy.vue";
 import Leaderboard from "./components/Leaderboard.vue";
 import Propose from "./components/Propose.vue";
+import Setting from "./components/Setting.vue";
 
 const routes = [
     { path: "/", component: Welcome },
@@ -25,6 +26,7 @@ const routes = [
     { path: "/privacy", component: Privacy },
     { path: "/leaderboard", component: Leaderboard },
     { path: "/propose", component: Propose },
+    { path: "/setting", component: Setting },
 ];
 
 const router = createRouter({

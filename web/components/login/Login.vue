@@ -3,6 +3,7 @@ import { reactive, ref } from "vue";
 import { VaButton, VaInput, VaModal } from "vuestic-ui";
 import axios from "axios";
 import { BASE_URL } from "@/composables/utils";
+import { useAuthState } from "@/composables/authState";
 
 const modal = reactive({
     show: false,
@@ -16,6 +17,7 @@ const form = reactive({
 
 const isSubmitting = ref(false);
 const sessionLabel = ref<string | null>(null);
+const authState = useAuthState();
 
 function openLoginModal() {
     modal.show = true;
@@ -41,6 +43,7 @@ async function authenticate() {
         modal.fail = false;
         sessionLabel.value = "Discord Auth";
         form.code = "";
+        authState.isAuthenticated = true;
     } catch (_) {
         modal.fail = true;
     } finally {
@@ -52,6 +55,7 @@ function logout() {
     localStorage.removeItem("token");
     modal.auth = false;
     sessionLabel.value = null;
+    authState.isAuthenticated = false;
 
     axios.post(BASE_URL + "/api/auth/logout", {
         ip: clientIP ?? "unknown",
@@ -63,6 +67,7 @@ function tick() {
     if (token == null) {
         modal.auth = false;
         sessionLabel.value = null;
+        authState.isAuthenticated = false;
         return;
     }
 
@@ -76,10 +81,12 @@ function tick() {
             if (!sessionLabel.value) {
                 sessionLabel.value = "Discord Auth";
             }
+            authState.isAuthenticated = true;
         })
         .catch((_) => {
             modal.auth = false;
             sessionLabel.value = null;
+            authState.isAuthenticated = false;
         });
 }
 

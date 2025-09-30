@@ -8,22 +8,31 @@ import {
     VaIcon,
 } from "vuestic-ui";
 import { RouterLink } from "vue-router";
+import { computed } from "vue";
 import Login from "@/components/login/Login.vue";
 import { Github } from "@vicons/fa";
 import { backToTop } from "./composables/utils";
+import { useAuthState } from "./composables/authState";
 
 useColors().applyPreset("dark");
 
-const tabs = [
+const authState = useAuthState();
+
+const baseTabs = [
     // { path: "/join", label: "加入伺服" },
     // { path: "/publication", label: "資料公開" },
     { path: "/vod", label: "直播隨選" },
     { path: "/penalty", label: "直播懲罰" },
     { path: "/wheel", label: "幸運轉盤" },
     { path: "/leaderboard", label: "水星排行" },
+    { path: "/setting", label: "系统设置", requiresAuth: true },
     // { path: "/propose", label: "直播提案" },
     { path: "/contact", label: "聯絡我們" },
 ];
+
+const tabs = computed(() =>
+    baseTabs.filter((tab) => !tab.requiresAuth || authState.isAuthenticated)
+);
 </script>
 
 <template>
