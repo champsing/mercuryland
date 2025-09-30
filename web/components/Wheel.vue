@@ -36,12 +36,24 @@ interface SpinnerSlice {
 
 const MAX_SLICE_TEXT_UNITS = 10;
 
-function truncateSliceLabel(label: string): string {
+function getSliceCharUnits(char: string): number {
+    return /[ -~]/.test(char) ? 0.6 : 1; // narrow ASCII counts as 0.6, CJK/full-width counts as 1
+}
+
+function countSliceTextUnits(text: string): number {
+    let units = 0;
+    for (const char of text) units += getSliceCharUnits(char);
+    return units;
+}
+
+function truncateSliceLabel(label: string, maxUnits = MAX_SLICE_TEXT_UNITS): string {
+    const trimmed = label.trim();
+    if (maxUnits <= 0) return trimmed === "" ? "" : "…";
     let units = 0;
     let result = "";
-    for (const char of label.trim()) {
-        const charUnits = /[ -~]/.test(char) ? 0.6 : 1; // narrow ASCII counts as 0.6, CJK/full-width counts as 1
-        if (units + charUnits > MAX_SLICE_TEXT_UNITS) {
+    for (const char of trimmed) {
+        const charUnits = getSliceCharUnits(char);
+        if (units + charUnits > maxUnits) {
             return result ? `${result}…` : "…";
         }
         units += charUnits;
@@ -77,10 +89,15 @@ const spinnerSlices = computed<SpinnerSlice[]>(() => {
     const result: SpinnerSlice[] = [];
     items.value.forEach((item, itemIndex) => {
         const repeats = Math.max(1, item.weight);
+        const suffix = item.weight > 1 ? ` x${item.weight}` : "";
+        const suffixUnits = suffix ? countSliceTextUnits(suffix) : 0;
+        const labelBudget = Math.max(0, MAX_SLICE_TEXT_UNITS - suffixUnits);
+        const baseLabel = truncateSliceLabel(item.label, labelBudget);
+        const displayText = `${baseLabel}${suffix}`.trim();
         for (let i = 0; i < repeats; i++) {
             result.push({
                 color: colorPalette[itemIndex % colorPalette.length],
-                text: truncateSliceLabel(item.label),
+                text: i === 0 ? displayText : "",
                 baseIndex: itemIndex,
             });
         }
