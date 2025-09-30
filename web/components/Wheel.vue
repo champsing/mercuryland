@@ -30,6 +30,7 @@ interface WheelSpinnerExpose {
 
 interface SpinnerSlice {
     color: string;
+    textColor: string;
     text: string;
     baseIndex: number;
 }
@@ -97,6 +98,7 @@ const spinnerSlices = computed<SpinnerSlice[]>(() => {
         for (let i = 0; i < repeats; i++) {
             result.push({
                 color: colorPalette[itemIndex % colorPalette.length],
+                textColor: "#000000",
                 text: i === 0 ? displayText : "",
                 baseIndex: itemIndex,
             });
@@ -118,7 +120,7 @@ const clearRightArea = ref(true); //清除右邊區域
 const cursorAngle = 270;
 const cursorPosition = "edge";
 const cursorDistance = 12;
-const sliceFontStyle = "bold 16px 'Noto Sans TC', sans-serif";
+const sliceFontStyle = "bold 14px 'Noto Sans TC', sans-serif";
 const extraSpins = 6;
 const spinDuration = ref(1500);
 const currentWinnerIndex = ref<number | null>(null);
