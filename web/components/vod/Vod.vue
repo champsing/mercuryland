@@ -212,7 +212,7 @@ function updateTag(tag: string) {
 
         <VaDivider class="!mt-0 !mb-2" />
 
-        <div class="flex flex-row gap-2">
+        <div class="flex flex-row gap-2 px-2">
             <div class="w-3/4">
                 <VaCard
                     style="--va-card-padding: 0rem"
