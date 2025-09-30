@@ -17,9 +17,9 @@ const baseTabs = [
     { path: "/penalty", label: "直播懲罰" },
     { path: "/wheel", label: "幸運轉盤" },
     { path: "/leaderboard", label: "水星排行" },
-    { path: "/setting", label: "系统设置", requiresAuth: true },
     // { path: "/propose", label: "直播提案" },
     { path: "/contact", label: "聯絡我們" },
+    { path: "/setting", label: "系统设置", requiresAuth: true },
 ];
 
 const tabs = computed(() =>
