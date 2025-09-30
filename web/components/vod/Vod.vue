@@ -2,6 +2,8 @@
 import { ref, Ref } from "vue";
 import {
     VaButton,
+    VaCard,
+    VaCardContent,
     VaChip,
     VaDateInput,
     VaDivider,
@@ -69,73 +71,76 @@ function updateTag(tag: string) {
 </script>
 
 <template>
-    <div class="mt-4 m-auto w-[95%] z-10">
-        <div class="flex flex-row w-full justify-center gap-16">
-            <div class="w-1/8 flex flex-row">
-                <VaDateInput
-                    v-model="dateRange"
-                    :format-date="formatDate"
-                    :parse-date="parseDate"
-                    manual-input
-                    mode="auto"
-                />
-                <!--[DONE] need more adjusting -->
+    <div class="m-auto w-full z-10">
+        <div class="flex h-14 w-full flex-row items-center justify-between gap-4 px-2">
+            <div class="flex w-3/4 flex-row items-center gap-4">
+                <div class="w-1/4 ml-12">
+                    <VaDateInput
+                        class="w-full"
+                        v-model="dateRange"
+                        :format-date="formatDate"
+                        :parse-date="parseDate"
+                        manual-input
+                        mode="auto"
+                    />
+                </div>
+                <div class="w-3/4">
+                    <VaSelect
+                        class="w-full"
+                        v-model="selectedTags"
+                        :options="tagList"
+                        multiple
+                        clearable
+                        placeholder="請選擇直播的TAG"
+                        dropdownIcon="va-plus"
+                        @update:model-value="
+                            if (selectedTags.toString() == new Array().toString())
+                                selectedTags = null;
+                        "
+                    >
+                        <!-- [SOLVED] has a problem, sometimes the first entry won't show as 
+                        a chip until the second entry is selected and removed. -->
+                        <!-- [SOLUTION] by setting selectTags to null every time it becomes an empty array. -->
+                        <template #content>
+                            <VaChip
+                                v-for="chip in selectedTags"
+                                color="#90dc52"
+                                outline
+                                size="small"
+                                class="mr-1 my-1"
+                                closeable
+                                @update:model-value="tagAlreadyExist(chip)"
+                            >
+                                {{ chip }}
+                            </VaChip>
+                        </template>
+                    </VaSelect>
+                </div>
             </div>
-            <div class="w-2/5">
-                <VaSelect
-                    class="w-full"
-                    v-model="selectedTags"
-                    :options="tagList"
-                    multiple
-                    clearable
-                    placeholder="請選擇直播的TAG"
-                    dropdownIcon="va-plus"
-                    @update:model-value="
-                        if (selectedTags.toString() == new Array().toString())
-                            selectedTags = null;
-                    "
-                >
-                    <!-- [SOLVED] has a problem, sometimes the first entry won't show as 
-                    a chip until the second entry is selected and removed. -->
-                    <!-- [SOLUTION] by setting selectTags to null every time it becomes an empty array. -->
-                    <template #content>
-                        <VaChip
-                            v-for="chip in selectedTags"
-                            color="#90dc52"
-                            outline
-                            size="small"
-                            class="mr-1 my-1"
-                            closeable
-                            @update:model-value="tagAlreadyExist(chip)"
-                        >
-                            {{ chip }}
-                        </VaChip>
-                    </template>
-                </VaSelect>
-            </div>
-            <!-- not yet -->
-            <div class="w-1/8">
-                <VaSwitch
-                    v-model="strictFiltering"
-                    off-color="#1ccba2"
-                    color="#3444a2"
-                    style="--va-switch-checker-background-color: #252723"
-                    false-inner-label="符合一項"
-                    true-inner-label="符合全部"
-                />
-            </div>
-            <div class="w-1/8">
-                <VaButton
-                    preset="plain"
-                    color="#FFFFFF"
-                    class="mt-1"
-                    @click="showRuleDescModal = !showRuleDescModal"
-                >
-                    <VaIcon size="large" class="mr-2">
-                        <Info24Regular />
-                    </VaIcon>
-                    <div class="text-lg text-center">規則說明</div>
-                </VaButton>
+            <div class="flex w-1/4 flex-row items-center gap-4">
+                <div class="flex w-1/2 justify-center">
+                    <VaSwitch
+                        v-model="strictFiltering"
+                        off-color="#1ccba2"
+                        color="#3444a2"
+                        style="--va-switch-checker-background-color: #252723"
+                        false-inner-label="符合一項"
+                        true-inner-label="符合全部"
+                    />
+                </div>
+                <div class="flex w-1/2 justify-center">
+                    <VaButton
+                        preset="plain"
+                        class="w-full"
+                        color="#FFFFFF"
+                        @click="showRuleDescModal = !showRuleDescModal"
+                    >
+                        <VaIcon size="large" class="mr-2">
+                            <Info24Regular />
+                        </VaIcon>
+                        <div class="text-lg text-center">規則說明</div>
+                    </VaButton>
+                </div>
             </div>
         </div>
 
@@ -209,19 +214,26 @@ function updateTag(tag: string) {
             <img src="/images/vod_time.webp" alt="直播時數規則說明" />
         </VaModal>
 
-        <VaDivider class="!mt-2 !mb-2" />
+        <VaDivider class="!mt-0 !mb-2" />
 
-        <div class="flex flex-row gap-2">
-            <div class="w-2/3">
-                <DataTable
-                    :dateRange="dateRange"
-                    :selectedTags="selectedTags"
-                    :strictFiltering="strictFiltering"
-                    @updateTag="(tag) => updateTag(tag)"
-                />
+        <div class="flex flex-row gap-2 px-2 pb-2">
+            <div class="w-3/4">
+                <VaCard
+                    style="--va-card-padding: 0rem"
+                    class="h-full vod-card overflow-hidden rounded-xl"
+                >
+                    <VaCardContent class="!p-0">
+                        <DataTable
+                            :dateRange="dateRange"
+                            :selectedTags="selectedTags"
+                            :strictFiltering="strictFiltering"
+                            @updateTag="(tag) => updateTag(tag)"
+                        />
+                    </VaCardContent>
+                </VaCard>
             </div>
 
-            <div class="flex flex-col w-1/3">
+            <div class="flex flex-col w-1/4">
                 <TimeSummary :t="computedTime" />
                 <TimeDetail
                     :dateRange="dateRange"
