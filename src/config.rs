@@ -13,7 +13,6 @@ pub struct Config {
     pub youtube_channel_id: String,
     pub yt_chat_viewer: ApplicationSecret,
     pub dcyt_link: ApplicationSecret,
-    pub slash_command_strings: SlashCommandStrings,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
@@ -22,14 +21,6 @@ pub struct DiscordConfig {
     pub exchange: u64,
     pub penalty: u64,
     pub admin: Vec<u64>,
-}
-
-#[derive(Debug, Serialize, Deserialize)]
-pub struct SlashCommandStrings {
-    pub coin: String,
-    // pub purchase_booster: String,
-    pub link: String,
-    pub unlink: String,
 }
 
 pub static CONFIG: LazyLock<Config> = LazyLock::new(|| {
