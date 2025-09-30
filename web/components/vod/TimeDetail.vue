@@ -122,7 +122,7 @@ function calcStyle(top: number, vh: number) {
     let parentPaddingBottom = 20;
     let parentBorderBottom = 1;
     let parentMarginBottom = 8;
-    let footnoteHeight = 68;
+    let footnoteHeight = 48;
     let parentPaddingBottom2 = 8;
 
     let delta = parentPaddingBottom + parentBorderBottom + parentMarginBottom + footnoteHeight + parentPaddingBottom2;

@@ -128,8 +128,8 @@ onBeforeUnmount(() => {
         <div class="flex-1">
             <router-view />
         </div>
-        <div class="text-base text-zinc-200 pt-4 pb-4 bg-zinc-900">
-            <div class="flex flex-row items-center justify-between w-[95%] mx-auto">
+        <div class="bg-zinc-900 text-base text-zinc-200">
+            <div class="mx-auto flex h-12 w-[95%] items-center justify-between">
                 <div class="flex flex-row items-center gap-2" style="font-family: playfair display">
                     <div>Copyright © 2025 The Mercury Land</div>
                     <div>保留一切權利。</div>
@@ -137,7 +137,7 @@ onBeforeUnmount(() => {
                 <div class="flex flex-row items-center">
                     <VaButton
                         preset="secondary"
-                        border-color="#363636"
+                        :bordered="false"
                         to="tos"
                         @click="backToTop()"
                     >
@@ -146,7 +146,7 @@ onBeforeUnmount(() => {
                     <VaDivider vertical class="mx-2" />
                     <VaButton
                         preset="secondary"
-                        border-color="#363636"
+                        :bordered="false"
                         to="privacy"
                         @click="backToTop()"
                     >
@@ -155,7 +155,7 @@ onBeforeUnmount(() => {
                     <VaDivider vertical class="mx-2" />
                     <VaButton
                         preset="secondary"
-                        border-color="#363636"
+                        :bordered="false"
                         href="https://www.youtube.com/watch?v=Yir_XAcccmY"
                         target="_blank"
                         rel="noopener noreferrer"
@@ -165,7 +165,7 @@ onBeforeUnmount(() => {
                     <VaDivider vertical class="mx-2" />
                     <VaButton
                         preset="secondary"
-                        border-color="#363636"
+                        :bordered="false"
                         href="https://github.com/champsing/mercuryland"
                         target="_blank"
                         rel="noopener noreferrer"

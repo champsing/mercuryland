@@ -82,7 +82,7 @@ const columns = [
 function calcStyle(top: number) {
     let parentMarginBottom = 8;
     let parentPaddingBottom = 8;
-    let footnoteHeight = 68;
+    let footnoteHeight = 48;
 
     let delta = parentMarginBottom + footnoteHeight + parentPaddingBottom;
     let height = Math.max(
