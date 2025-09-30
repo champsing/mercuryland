@@ -97,7 +97,7 @@ let clientIP = await fetch("https://api.ipify.org?format=json")
 <template>
     <template v-if="modal.auth">
         <VaButton @click="modal.show = true">登出</VaButton>
-        <VaModal v-model="modal.show" @ok="logout">
+        <VaModal v-model="modal.show" max-width="400px" close-button @ok="logout">
             <div>您确定要登出吗?</div>
         </VaModal>
     </template>
