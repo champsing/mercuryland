@@ -80,10 +80,14 @@ const columns = [
 ];
 
 function calcStyle(top: number) {
-    let pmb = 8; // parent margin
+    let parentMarginBottom = 8;
+    let parentPaddingBottom = 8;
+    let footnoteHeight = 68;
+
+    let delta = parentMarginBottom + footnoteHeight + parentPaddingBottom;
     let height = Math.max(
         vh.value * 0.5,
-        vh.value - window.scrollY - top - pmb
+        vh.value - window.scrollY - top - delta
     );
     return {
         height: "" + height + "px",

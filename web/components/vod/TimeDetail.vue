@@ -119,11 +119,14 @@ function format(seconds: number): string {
 }
 
 function calcStyle(top: number, vh: number) {
-    let ppb = 20; // parent padding
-    let pbb = 1; // parent border
-    let pmb = 8; // parent margin
-    let p = ppb + pbb + pmb;
-    let height = Math.max(vh * 0.2, vh - window.scrollY - top - p);
+    let parentPaddingBottom = 20;
+    let parentBorderBottom = 1;
+    let parentMarginBottom = 8;
+    let footnoteHeight = 68;
+    let parentPaddingBottom2 = 8;
+
+    let delta = parentPaddingBottom + parentBorderBottom + parentMarginBottom + footnoteHeight + parentPaddingBottom2;
+    let height = Math.max(vh * 0.2, vh - window.scrollY - top - delta);
     return {
         height: "" + height + "px",
     };
