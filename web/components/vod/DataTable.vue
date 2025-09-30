@@ -97,6 +97,7 @@ function calcStyle(top: number) {
             vertical
             color="#e0feb4"
             size="medium"
+            class="h-full"
             :style="calcStyle(top)"
         >
             <VaDataTable

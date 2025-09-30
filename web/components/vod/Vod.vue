@@ -214,8 +214,11 @@ function updateTag(tag: string) {
 
         <div class="flex flex-row gap-2">
             <div class="w-3/4">
-                <VaCard style="--va-card-padding: 0rem" class="h-full vod-card">
-                    <VaCardContent>
+                <VaCard
+                    style="--va-card-padding: 0rem"
+                    class="h-full vod-card overflow-hidden rounded-xl"
+                >
+                    <VaCardContent class="!p-0">
                         <DataTable
                             :dateRange="dateRange"
                             :selectedTags="selectedTags"
