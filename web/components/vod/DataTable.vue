@@ -106,6 +106,7 @@ function calcStyle(top: number) {
                 style="
                     --va-data-table-hover-color: #357286;
                     --va-data-table-thead-background: var(--va-background-element);
+                    --va-data-table-thead-border: 0;
                     height: 100%;
                 "
                 virtual-scroller
@@ -168,3 +169,9 @@ function calcStyle(top: number) {
         </VaScrollContainer>
     </use-element-bounding>
 </template>
+
+<style scoped>
+:deep(.va-data-table__thead) {
+    background-color: var(--va-background-element);
+}
+</style>
