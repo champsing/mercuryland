@@ -5,11 +5,7 @@ use actix_web::{HttpResponse, Responder, post, web};
 use chrono::{DateTime, Utc};
 use jwt::SignWithKey;
 use serde::Deserialize;
-use std::{
-    fs::OpenOptions,
-    io::Write,
-    time::{Duration, SystemTime, UNIX_EPOCH},
-};
+use std::time::{Duration, SystemTime, UNIX_EPOCH};
 
 #[derive(Debug, Deserialize)]
 struct Request {
@@ -69,11 +65,7 @@ pub async fn login_handler(request: web::Json<Request>) -> Result<impl Responder
         ip = request.ip,
         exp = exp_date_string,
     );
-    let log_file = OpenOptions::new()
-        .append(true)
-        .create(true)
-        .open("data/login_history.log");
-    writeln!(log_file?, "{log}")?;
+    log::info!("{}", log);
 
     Ok(HttpResponse::Ok().body(token))
 }
