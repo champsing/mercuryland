@@ -17,11 +17,6 @@ struct Request {
     ip: String,
 }
 
-#[derive(Debug, Deserialize)]
-struct Logout {
-    ip: String,
-}
-
 fn struct_claims() -> Claims {
     let now = Duration::as_secs(
         &SystemTime::now()
@@ -81,16 +76,4 @@ pub async fn login_handler(request: web::Json<Request>) -> Result<impl Responder
     writeln!(log_file?, "{log}")?;
 
     Ok(HttpResponse::Ok().body(token))
-}
-
-#[post("/api/auth/logout")]
-pub async fn logout_logging(request: web::Json<Logout>) -> String {
-    let claims = struct_claims();
-    let log = format!(
-        "[Login] Discord code logout on {} at {}.",
-        claims.clone().iat,
-        request.ip,
-    );
-    log::info!("{}", log);
-    log
 }

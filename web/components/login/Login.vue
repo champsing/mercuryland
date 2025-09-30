@@ -56,10 +56,6 @@ function logout() {
     modal.auth = false;
     sessionLabel.value = null;
     authState.isAuthenticated = false;
-
-    axios.post(BASE_URL + "/api/auth/logout", {
-        ip: clientIP ?? "unknown",
-    });
 }
 
 function tick() {
