@@ -153,7 +153,7 @@ function calcStyle(top: number, vh: number) {
 </script>
 
 <template>
-    <VaCard style="--va-card-padding: 0rem" class="h-full vod-card rounded-xl">
+    <VaCard style="--va-card-padding: 0rem" class="h-full rounded-xl">
         <VaCardContent>
             <VaList style="--va-list-label-padding: 1rem">
                 <VaListLabel class="text-xl" color="textPrimary">

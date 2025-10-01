@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { VaDivider } from "vuestic-ui";
+import { VaCard, VaCardContent, VaCardTitle, VaDivider } from "vuestic-ui";
 
 document.title = "系统设置 - 水星人的夢幻樂園";
 </script>
@@ -16,10 +16,31 @@ document.title = "系统设置 - 水星人的夢幻樂園";
     </div>
     <VaDivider class="w-full !mt-0 !mb-2" />
 
-    <div class="rounded-lg border border-zinc-700 bg-zinc-900/40 p-6">
-        <p class="text-zinc-300">
-            系統設定功能尚未開放，後續更新將於此頁面公布。
-        </p>
+    <div class="grid grid-cols-3 gap-2 px-2">
+        <VaCard class="rounded-xl border border-zinc-700">
+            <VaCardTitle class="px-6 pt-6 text-lg font-medium text-zinc-200">
+                使用者與權限
+            </VaCardTitle>
+            <VaCardContent class="px-6 pb-6 text-sm text-zinc-300">
+                功能尚未開放，後續更新將於此頁面公布。
+            </VaCardContent>
+        </VaCard>
+        <VaCard class="rounded-xl border border-zinc-700">
+            <VaCardTitle class="px-6 pt-6 text-lg font-medium text-zinc-200">
+                通知與整合
+            </VaCardTitle>
+            <VaCardContent class="px-6 pb-6 text-sm text-zinc-300">
+                功能尚未開放，請持續關注開發進度。
+            </VaCardContent>
+        </VaCard>
+        <VaCard class="rounded-xl border border-zinc-700">
+            <VaCardTitle class="px-6 pt-6 text-lg font-medium text-zinc-200">
+                系統維護
+            </VaCardTitle>
+            <VaCardContent class="px-6 pb-6 text-sm text-zinc-300">
+                功能尚未開放，仍在規畫中，敬請期待。
+            </VaCardContent>
+        </VaCard>
     </div>
 </template>
 

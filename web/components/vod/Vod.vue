@@ -233,7 +233,7 @@ function updateTag(tag: string) {
             <div class="w-3/4">
                 <VaCard
                     style="--va-card-padding: 0rem"
-                    class="h-full vod-card overflow-hidden rounded-xl"
+                    class="h-full overflow-hidden rounded-xl"
                 >
                     <VaCardContent class="!p-0">
                         <DataTable
@@ -262,10 +262,5 @@ function updateTag(tag: string) {
 <style>
 .n-base-suffix__arrow {
     --n-arrow-size: 20px;
-}
-
-.vod-card {
-    background-color: var(--va-background-element) !important;
-    --va-card-box-shadow: 0px;
 }
 </style>
