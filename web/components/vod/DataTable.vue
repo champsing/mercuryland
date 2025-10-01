@@ -29,7 +29,6 @@ const props = defineProps<{
 }>();
 const emit = defineEmits<{
     (e: "updateTag", tag: string): void;
-    (e: "addVod"): void;
     (e: "editVod", vod: VodItem): void;
 }>();
 
@@ -167,17 +166,17 @@ function calcStyle(top: number) {
                     </div>
                 </template>
                 <template v-if="showActions" #header(actions)>
-                    <VaButton
-                        preset="plain"
-                        size="small"
-                        color="info"
-                        aria-label="新增直播"
-                        @click="emit('addVod')"
-                    >
-                        <VaIcon name="add" />
-                    </VaButton>
+                    <slot name="actions">
+                        <VaButton
+                            preset="plain"
+                            size="small"
+                            color="info"
+                            aria-label="新增直播"
+                        >
+                            <VaIcon name="add" />
+                        </VaButton>
+                    </slot>
                 </template>
-
             <!-- for checking day of week -->
             <!-- <template #cell(date)="{ value }">
                 {{ value }}  {{ new Date(value).getDay() }}

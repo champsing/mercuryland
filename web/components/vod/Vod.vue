@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onMounted, reactive, ref, Ref, watch } from "vue";
+import { computed, onMounted, ref, Ref } from "vue";
 import {
     VaButton,
     VaCard,
@@ -9,15 +9,14 @@ import {
     VaDivider,
     VaIcon,
     VaModal,
-    VaInput,
     VaSelect,
     VaSwitch,
-    VaTimeInput,
 } from "vuestic-ui";
 import axios from "axios";
 import DataTable from "./DataTable.vue";
 import TimeSummary from "./TimeSummary.vue";
 import TimeDetail from "./TimeDetail.vue";
+import AddVod from "./AddVod.vue";
 import { BASE_URL, formatDate, parseDate } from "@/composables/utils";
 import { useAuthState } from "@/composables/authState";
 import { Info24Regular } from "@vicons/fluent";
@@ -53,84 +52,6 @@ const authState = useAuthState();
 
 const showRuleDescModal = ref(false);
 const showVodDescImg = ref(false);
-const showAddVodModal = ref(false);
-const isSavingVod = ref(false);
-const addVodError = ref<string | null>(null);
-const addVodSuccess = ref<string | null>(null);
-const addVodForm = reactive({
-    date: new Date(),
-    link: "",
-    title: "",
-});
-const addVodTags = ref<string[]>([]);
-const addVodCustomTags = ref<string[]>([]);
-const addVodTagOptions = computed(() => {
-    const uniqueTags = new Set(tagList.value);
-    addVodCustomTags.value.forEach((tag) => {
-        if (tag) {
-            uniqueTags.add(tag);
-        }
-    });
-    addVodTags.value.forEach((tag) => {
-        if (tag) {
-            uniqueTags.add(tag);
-        }
-    });
-    return Array.from(uniqueTags).sort();
-});
-
-const searchTagsByPrefix = (search: string, option: unknown) => {
-    if (!search) {
-        return true;
-    }
-    const normalizedSearch = search.toLowerCase();
-    const optionText = (() => {
-        if (typeof option === "string" || typeof option === "number") {
-            return option.toString();
-        }
-        if (option && typeof option === "object") {
-            const candidate =
-                ((option as Record<string, unknown>).label ??
-                    (option as Record<string, unknown>).text ??
-                    (option as Record<string, unknown>).value);
-            if (candidate == null) {
-                return "";
-            }
-            if (
-                typeof candidate === "string" ||
-                typeof candidate === "number"
-            ) {
-                return candidate.toString();
-            }
-        }
-        return "";
-    })();
-
-    return optionText.toLowerCase().startsWith(normalizedSearch);
-};
-
-const removeAddVodTag = (tag: string) => {
-    addVodTags.value = addVodTags.value.filter((value) => value !== tag);
-};
-
-const handleCreateVodTag = (tag: string) => {
-    const trimmed = tag.trim();
-    if (!trimmed) {
-        return;
-    }
-
-    if (!addVodTags.value.includes(trimmed)) {
-        addVodTags.value = [...addVodTags.value, trimmed];
-    }
-
-    if (
-        !addVodCustomTags.value.includes(trimmed) &&
-        !tagList.value.includes(trimmed)
-    ) {
-        addVodCustomTags.value = [...addVodCustomTags.value, trimmed];
-    }
-};
-const addVodDuration = ref<Date | null>(null);
 
 async function loadVodData() {
     try {
@@ -166,93 +87,6 @@ function updateTag(tag: string) {
 }
 
 const handleEditVod = (_vod: VodItem) => {};
-
-const handleAddVod = () => {
-    resetAddVodForm();
-    addVodError.value = null;
-    addVodSuccess.value = null;
-    showAddVodModal.value = true;
-};
-
-watch(showAddVodModal, (visible) => {
-    if (!visible) {
-        resetAddVodForm();
-    }
-});
-
-function resetAddVodForm() {
-    addVodForm.date = new Date();
-    addVodForm.link = "";
-    addVodForm.title = "";
-    addVodTags.value = [];
-    addVodCustomTags.value = [];
-    addVodDuration.value = null;
-    addVodError.value = null;
-    addVodSuccess.value = null;
-}
-
-async function saveVod() {
-    if (isSavingVod.value) return;
-
-    const token = localStorage.getItem("token");
-    if (!token) {
-        addVodError.value = "請先登入管理員帳號";
-        return;
-    }
-
-    if (
-        !addVodForm.date ||
-        !addVodForm.link.trim() ||
-        !addVodForm.title.trim() ||
-        !addVodDuration.value
-    ) {
-        addVodError.value = "請填寫所有必填欄位";
-        return;
-    }
-
-    const tags = Array.from(
-        new Set(
-            addVodTags.value
-                .map((tag) => tag.trim())
-                .filter((tag) => tag.length > 0)
-        )
-    );
-
-    const duration = formatDuration(addVodDuration.value);
-
-    const payload = {
-        token,
-        date: formatDate(addVodForm.date),
-        link: addVodForm.link.trim(),
-        title: addVodForm.title.trim(),
-        duration,
-        tags,
-    };
-
-    try {
-        isSavingVod.value = true;
-        addVodError.value = null;
-        await axios.post(`${BASE_URL}/api/video/insert`, payload);
-        addVodSuccess.value = "新增成功";
-        await loadVodData();
-        setTimeout(() => {
-            showAddVodModal.value = false;
-        }, 600);
-    } catch (error) {
-        console.error("Failed to insert VOD", error);
-        addVodError.value = "新增失敗，請稍後再試";
-    } finally {
-        isSavingVod.value = false;
-    }
-}
-
-function formatDuration(value: Date) {
-    const pad = (num: number) => num.toString().padStart(2, "0");
-    const hours = pad(value.getHours());
-    const minutes = pad(value.getMinutes());
-    const seconds = pad(value.getSeconds());
-    return `${hours}:${minutes}:${seconds}`;
-}
 
 </script>
 
@@ -400,92 +234,6 @@ function formatDuration(value: Date) {
             <img src="/images/vod_time.webp" alt="直播時數規則說明" />
         </VaModal>
 
-        <VaModal
-            v-model="showAddVodModal"
-            hide-default-actions
-            close-button
-            max-width="480px"
-        >
-            <div class="flex flex-col gap-4 p-4">
-                <div class="text-lg font-semibold text-zinc-200">新增直播紀錄</div>
-                <VaDateInput
-                    v-model="addVodForm.date"
-                    label="日期"
-                    color="info"
-                    :format-date="formatDate"
-                    :parse-date="parseDate"
-                    manual-input
-                    mode="auto"
-                />
-                <VaInput
-                    v-model="addVodForm.link"
-                    label="YouTube 連結代碼"
-                    placeholder="例如：mCW9..."
-                    color="info"
-                    required
-                />
-                <VaInput
-                    v-model="addVodForm.title"
-                    label="直播標題"
-                    color="info"
-                    required
-                />
-                <VaTimeInput
-                    v-model="addVodDuration"
-                    label="直播時長"
-                    color="info"
-                    :ampm="false"
-                    :hide-period-switch="true"
-                    :manual-input="false"
-                    view="seconds"
-                />
-                <VaSelect
-                    v-model="addVodTags"
-                    label="標籤"
-                    color="info"
-                    :options="addVodTagOptions"
-                    multiple
-                    clearable
-                    searchable
-                    allow-create
-                    @create-new="handleCreateVodTag"
-                    :search-fn="searchTagsByPrefix"
-                    placeholder="請選擇或輸入標籤"
-                >
-                    <template #content>
-                        <VaChip
-                            v-for="chip in addVodTags"
-                            :key="chip"
-                            color="#90dc52"
-                            outline
-                            size="small"
-                            class="mr-1 my-1"
-                            closeable
-                            @update:model-value="removeAddVodTag(chip)"
-                        >
-                            {{ chip }}
-                        </VaChip>
-                    </template>
-                </VaSelect>
-                <p v-if="addVodError" class="text-sm text-red-400">{{ addVodError }}</p>
-                <p v-if="addVodSuccess" class="text-sm text-emerald-400">
-                    {{ addVodSuccess }}
-                </p>
-                <div class="flex justify-end gap-2">
-                    <VaButton
-                        preset="secondary"
-                        :disabled="isSavingVod"
-                        @click="showAddVodModal = false"
-                    >
-                        取消
-                    </VaButton>
-                    <VaButton color="info" :loading="isSavingVod" @click="saveVod">
-                        儲存
-                    </VaButton>
-                </div>
-            </div>
-        </VaModal>
-
         <VaDivider class="!mt-0 !mb-2" />
 
         <div class="flex flex-row gap-2 px-2 pb-2">
@@ -502,9 +250,17 @@ function formatDuration(value: Date) {
                             :vodData="vodData"
                             :isAuthenticated="authState.isAuthenticated"
                             @updateTag="(tag) => updateTag(tag)"
-                            @addVod="handleAddVod"
                             @editVod="handleEditVod"
-                        />
+                        >
+                            <template #actions>
+                                <AddVod
+                                    :tag-list="tagList"
+                                    :is-authenticated="authState.isAuthenticated"
+                                    wrapper-class=""
+                                    @saved="loadVodData"
+                                />
+                            </template>
+                        </DataTable>
                     </VaCardContent>
                 </VaCard>
             </div>
