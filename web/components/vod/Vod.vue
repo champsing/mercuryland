@@ -17,6 +17,7 @@ import DataTable from "./DataTable.vue";
 import TimeSummary from "./TimeSummary.vue";
 import TimeDetail from "./TimeDetail.vue";
 import { BASE_URL, formatDate, parseDate } from "@/composables/utils";
+import { useAuthState } from "@/composables/authState";
 import { Info24Regular } from "@vicons/fluent";
 
 document.title = '直播隨選 - 水星人的夢幻樂園'
@@ -46,6 +47,7 @@ const tagList = computed(() =>
 );
 
 const computedTime = ref(0);
+const authState = useAuthState();
 
 const showRuleDescModal = ref(false);
 const showVodDescImg = ref(false);
@@ -80,6 +82,10 @@ function updateTag(tag: string) {
     } else if (selectedTags.value.includes(tag)) tagAlreadyExist(tag);
     else selectedTags.value.push(tag);
 }
+
+const handleAddVod = () => {};
+
+const handleEditVod = (_vod: VodItem) => {};
 
 </script>
 
@@ -241,7 +247,10 @@ function updateTag(tag: string) {
                             :selectedTags="selectedTags"
                             :strictFiltering="strictFiltering"
                             :vodData="vodData"
+                            :isAuthenticated="authState.isAuthenticated"
                             @updateTag="(tag) => updateTag(tag)"
+                            @addVod="handleAddVod"
+                            @editVod="handleEditVod"
                         />
                     </VaCardContent>
                 </VaCard>

@@ -2,7 +2,13 @@
 import { computed } from "vue";
 import { UseElementBounding } from "@vueuse/components";
 import { useWindowSize } from "@vueuse/core";
-import { VaButton, VaDataTable, VaDivider, VaScrollContainer } from "vuestic-ui";
+import {
+    VaButton,
+    VaDataTable,
+    VaDivider,
+    VaIcon,
+    VaScrollContainer,
+} from "vuestic-ui";
 
 interface VodItem {
     id?: number | null;
@@ -19,9 +25,12 @@ const props = defineProps<{
     selectedTags?: string[] | null;
     strictFiltering: boolean;
     vodData: VodItem[];
+    isAuthenticated?: boolean;
 }>();
 const emit = defineEmits<{
     (e: "updateTag", tag: string): void;
+    (e: "addVod"): void;
+    (e: "editVod", vod: VodItem): void;
 }>();
 
 const data = computed(() => {
@@ -56,7 +65,9 @@ const data = computed(() => {
 
 const CENTER = "center" as const;
 
-const columns = [
+const showActions = computed(() => props.isAuthenticated === true);
+
+const baseColumns = [
     {
         key: "date",
         label: "日期",
@@ -87,6 +98,26 @@ const columns = [
         sortable: true,
     },
 ];
+
+const columns = computed(() => {
+    const result = [...baseColumns];
+
+    if (showActions.value) {
+        result.push({
+            key: "actions",
+            label: "",
+            thAlign: CENTER,
+            tdAlign: CENTER,
+            width: 12,
+        });
+    }
+
+    return result;
+});
+
+const headerColumns = computed(() =>
+    columns.value.filter((column) => column.key !== "actions")
+);
 
 function calcStyle(top: number) {
     let parentMarginBottom = 8;
@@ -126,10 +157,25 @@ function calcStyle(top: number) {
                 sticky-header
                 hoverable
             >
-                <template v-for="item in columns" #[`header(${item.key})`]="{ label }">
+                <template
+                    v-for="column in headerColumns"
+                    #[`header(${column.key})`]="{ label }"
+                    :key="column.key"
+                >
                     <div class="text-sm text-center">
                         {{ label }}
                     </div>
+                </template>
+                <template v-if="showActions" #header(actions)>
+                    <VaButton
+                        preset="plain"
+                        size="small"
+                        color="info"
+                        aria-label="新增直播"
+                        @click="emit('addVod')"
+                    >
+                        <VaIcon name="add" />
+                    </VaButton>
                 </template>
 
             <!-- for checking day of week -->
@@ -177,6 +223,17 @@ function calcStyle(top: number) {
                         v-if="tag !== row.rowData.tags.slice().reverse()[0]"
                     />
                 </template>
+            </template>
+            <template v-if="showActions" #cell(actions)="{ row }">
+                <VaButton
+                    preset="plain"
+                    size="small"
+                    color="info"
+                    aria-label="編輯直播"
+                    @click="emit('editVod', row.rowData)"
+                >
+                    <VaIcon name="edit" />
+                </VaButton>
             </template>
             </VaDataTable>
         </VaScrollContainer>
