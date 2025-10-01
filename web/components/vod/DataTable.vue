@@ -2,7 +2,7 @@
 import { computed } from "vue";
 import { UseElementBounding } from "@vueuse/components";
 import { useWindowSize } from "@vueuse/core";
-import { VaButton, VaDataTable, VaDivider } from "vuestic-ui";
+import { VaButton, VaDataTable, VaDivider, VaScrollContainer } from "vuestic-ui";
 import vodLinkData from "@assets/data/vod.json";
 
 const vh = useWindowSize().height;
@@ -80,10 +80,14 @@ const columns = [
 ];
 
 function calcStyle(top: number) {
-    let pmb = 8; // parent margin
+    let parentMarginBottom = 8;
+    let parentPaddingBottom = 8;
+    let footnoteHeight = 48;
+
+    let delta = parentMarginBottom + footnoteHeight + parentPaddingBottom;
     let height = Math.max(
         vh.value * 0.5,
-        vh.value - window.scrollY - top - pmb
+        vh.value - window.scrollY - top - delta
     );
     return {
         height: "" + height + "px",
@@ -93,20 +97,31 @@ function calcStyle(top: number) {
 
 <template>
     <use-element-bounding v-slot="{ top }" class="mb-2">
-        <VaDataTable
-            :items="data"
-            :columns="columns"
+        <VaScrollContainer
+            vertical
+            color="#e0feb4"
+            size="medium"
+            class="h-full"
             :style="calcStyle(top)"
-            style="--va-data-table-hover-color: #357286;"
-            virtual-scroller
-            sticky-header
-            hoverable
         >
-            <template v-for="item in columns" #[`header(${item.key})`]="{ label }">
-                <div class="text-sm text-center">
-                    {{ label }}
-                </div>
-            </template>
+            <VaDataTable
+                :items="data"
+                :columns="columns"
+                style="
+                    --va-data-table-hover-color: #357286;
+                    --va-data-table-thead-background: var(--va-background-element);
+                    --va-data-table-thead-border: 0;
+                    height: 100%;
+                "
+                :virtual-scroller="false"
+                sticky-header
+                hoverable
+            >
+                <template v-for="item in columns" #[`header(${item.key})`]="{ label }">
+                    <div class="text-sm text-center">
+                        {{ label }}
+                    </div>
+                </template>
 
             <!-- for checking day of week -->
             <!-- <template #cell(date)="{ value }">
@@ -154,6 +169,13 @@ function calcStyle(top: number) {
                     />
                 </template>
             </template>
-        </VaDataTable>
+            </VaDataTable>
+        </VaScrollContainer>
     </use-element-bounding>
 </template>
+
+<style scoped>
+:deep(.va-data-table__thead) {
+    background-color: var(--va-background-element);
+}
+</style>

@@ -1,16 +1,8 @@
 <script setup lang="ts">
-import {
-    VaButton,
-    VaDivider,
-    useColors,
-    VaNavbar,
-    VaNavbarItem,
-    VaIcon,
-} from "vuestic-ui";
+import { VaButton, VaDivider, useColors } from "vuestic-ui";
 import { RouterLink } from "vue-router";
-import { computed } from "vue";
+import { computed, onBeforeUnmount, onMounted, ref } from "vue";
 import Login from "@/components/login/Login.vue";
-import { Github } from "@vicons/fa";
 import { backToTop } from "./composables/utils";
 import { useAuthState } from "./composables/authState";
 
@@ -25,110 +17,163 @@ const baseTabs = [
     { path: "/penalty", label: "直播懲罰" },
     { path: "/wheel", label: "幸運轉盤" },
     { path: "/leaderboard", label: "水星排行" },
-    { path: "/setting", label: "系统设置", requiresAuth: true },
     // { path: "/propose", label: "直播提案" },
     { path: "/contact", label: "聯絡我們" },
+    { path: "/setting", label: "系统设置", requiresAuth: true },
 ];
 
 const tabs = computed(() =>
     baseTabs.filter((tab) => !tab.requiresAuth || authState.isAuthenticated)
 );
+
+const isMenuOpen = ref(false);
+const dropdownRef = ref<HTMLElement | null>(null);
+const loginRef = ref<InstanceType<typeof Login> | null>(null);
+
+function toggleMenu() {
+    isMenuOpen.value = !isMenuOpen.value;
+}
+
+function closeMenu() {
+    isMenuOpen.value = false;
+}
+
+function onClickOutside(event: MouseEvent) {
+    if (!dropdownRef.value) return;
+    const target = event.target as Node;
+    if (!dropdownRef.value.contains(target)) {
+        closeMenu();
+    }
+}
+
+function triggerLogin() {
+    closeMenu();
+    loginRef.value?.openLoginModal();
+}
+
+function triggerLogout() {
+    closeMenu();
+    loginRef.value?.openLogoutModal();
+}
+
+onMounted(() => {
+    document.addEventListener("click", onClickOutside);
+});
+
+onBeforeUnmount(() => {
+    document.removeEventListener("click", onClickOutside);
+});
 </script>
 
 <template>
-    <VaNavbar
-        :class="$route.fullPath == '/' ? `z-20 fixed` : `z-20 sticky`"
-        :color="$route.fullPath == '/' ? `rgba(0, 0, 0, 0)` : `rgb(24, 24, 27)`"
-    >
-        <template #left>
-            <VaNavbarItem>
-                <router-link to="/" class="ml-4">
+    <header class="fixed top-0 left-0 right-0 z-20 w-full pointer-events-none">
+        <div class="flex items-center justify-between px-4 py-3 pointer-events-auto">
+            <div ref="dropdownRef" class="relative">
+                <button
+                    type="button"
+                    class="flex items-center focus:outline-none"
+                    aria-label="切換導覽選單"
+                    @click.stop="toggleMenu"
+                >
                     <img
-                        src="/images/hexagon.svg"
-                        class="invert h-8 w-8 inline"
+                        src="/images/icon.webp"
+                        class="h-8 w-8 inline"
                         alt="hexagon"
                     />
-                </router-link>
-            </VaNavbarItem>
-        </template>
-        <template #center>
-            <VaNavbarItem>
-                <router-link
-                    v-for="t in tabs"
-                    :to="t.path"
-                    class="ml-4 text-base text-white"
-                    @click="backToTop()"
+                </button>
+                <div
+                    v-if="isMenuOpen"
+                    class="absolute left-0 mt-3 w-56 rounded-md border border-zinc-700 bg-zinc-900 py-2 shadow-lg"
                 >
-                    {{ t.label }}
-                </router-link>
-            </VaNavbarItem>
-        </template>
-        <template #right>
-            <VaNavbarItem>
-                <div class="flex flex-row justify-center">
-                    <div class="mx-2 mt-1">
-                        <Login />
-                    </div>
+                    <nav class="flex flex-col">
+                        <router-link
+                            to="/"
+                            class="px-4 py-2 text-left text-base text-zinc-200 hover:bg-zinc-800"
+                            @click="backToTop(); closeMenu()"
+                        >
+                            水星樂園
+                        </router-link>
+                        <router-link
+                            v-for="item in tabs"
+                            :key="item.path"
+                            :to="item.path"
+                            class="px-4 py-2 text-left text-base text-zinc-200 hover:bg-zinc-800"
+                            @click="backToTop(); closeMenu()"
+                        >
+                            {{ item.label }}
+                        </router-link>
+                        <button
+                            v-if="authState.isAuthenticated"
+                            type="button"
+                            class="px-4 py-2 text-left text-base text-zinc-200 hover:bg-zinc-800"
+                            @click="triggerLogout"
+                        >
+                            結束管理
+                        </button>
+                        <button
+                            v-else
+                            type="button"
+                            class="px-4 py-2 text-left text-base text-zinc-200 hover:bg-zinc-800"
+                            @click="triggerLogin"
+                        >
+                            開啟管理
+                        </button>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </header>
+    <Login ref="loginRef" :render-trigger="false" />
+    <div class="flex min-h-screen flex-col">
+        <div class="flex-1">
+            <router-view />
+        </div>
+        <div class="bg-zinc-900 text-base text-zinc-200">
+            <div class="mx-auto flex h-12 w-[95%] items-center justify-between">
+                <div class="flex flex-row items-center gap-2" style="font-family: playfair display">
+                    <div>Copyright © 2025 The Mercury Land</div>
+                    <div>保留一切權利。</div>
+                </div>
+                <div class="flex flex-row items-center">
                     <VaButton
-                        class="-mt-1/2"
                         preset="secondary"
-                        color="textPrimary"
+                        :bordered="false"
+                        to="tos"
+                        @click="backToTop()"
+                    >
+                        <div class="text-zinc-200">使用條款</div>
+                    </VaButton>
+                    <VaDivider vertical class="mx-2" />
+                    <VaButton
+                        preset="secondary"
+                        :bordered="false"
+                        to="privacy"
+                        @click="backToTop()"
+                    >
+                        <div class="text-zinc-200">隱私政策</div>
+                    </VaButton>
+                    <VaDivider vertical class="mx-2" />
+                    <VaButton
+                        preset="secondary"
+                        :bordered="false"
+                        href="https://www.youtube.com/watch?v=Yir_XAcccmY"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                    >
+                        <div class="text-zinc-200">使用教學</div>
+                    </VaButton>
+                    <VaDivider vertical class="mx-2" />
+                    <VaButton
+                        preset="secondary"
+                        :bordered="false"
                         href="https://github.com/champsing/mercuryland"
                         target="_blank"
                         rel="noopener noreferrer"
                     >
-                        <VaIcon :size="28">
-                            <Github />
-                        </VaIcon>
+                        <div class="text-zinc-200">開源代碼</div>
                     </VaButton>
                 </div>
-            </VaNavbarItem>
-        </template>
-    </VaNavbar>
-    <div class="min-h-screen">
-        <router-view />
-    </div>
-    <div class="text-center text-base text-zinc-200 pt-4 pb-4 bg-zinc-900">
-        <div class="flex justify-center">
-            <div style="font-family: playfair display">
-                Copyright © 2025 The Mercury Land
             </div>
-            <!-- 
-                    【&nbsp;】：半角スペースと同じサイズの空白
-                    【&thinsp;】：&nbsp;の空白より小さい空白
-                    【&ensp;】：半角スペースより間隔がやや広い空白
-                    【&emsp;】：全角スペースとほぼ同じサイズの空白 
-                -->
-            &ensp;保留一切權利。
-        </div>
-        <div class="flex justify-center mt-2">
-            <VaButton
-                preset="secondary"
-                border-color="#363636"
-                to="tos"
-                @click="backToTop()"
-            >
-                <div class="text-zinc-200">使用條款</div>
-            </VaButton>
-            <VaDivider vertical />
-            <VaButton
-                preset="secondary"
-                border-color="#363636"
-                to="privacy"
-                @click="backToTop()"
-            >
-                <div class="text-zinc-200">隱私權政策</div>
-            </VaButton>
-            <VaDivider vertical />
-            <VaButton
-                preset="secondary"
-                border-color="#363636"
-                href="https://www.youtube.com/watch?v=Yir_XAcccmY"
-                target="_blank"
-                rel="noopener noreferrer"
-            >
-                <div class="text-zinc-200">使用教學</div>
-            </VaButton>
         </div>
     </div>
 </template>
