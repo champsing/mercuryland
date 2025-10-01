@@ -17,6 +17,7 @@ import DataTable from "./DataTable.vue";
 import TimeSummary from "./TimeSummary.vue";
 import TimeDetail from "./TimeDetail.vue";
 import AddVod from "./AddVod.vue";
+import SetVod from "./SetVod.vue";
 import { BASE_URL, formatDate, parseDate } from "@/composables/utils";
 import { useAuthState } from "@/composables/authState";
 import { Info24Regular } from "@vicons/fluent";
@@ -49,6 +50,7 @@ const tagList = computed(() =>
 
 const computedTime = ref(0);
 const authState = useAuthState();
+const setVodRef = ref<{ open: (vod: VodItem) => void } | null>(null);
 
 const showRuleDescModal = ref(false);
 const showVodDescImg = ref(false);
@@ -87,7 +89,9 @@ function updateTag(tag: string) {
     else selectedTags.value.push(tag);
 }
 
-const handleEditVod = (_vod: VodItem) => {};
+const handleEditVod = (vod: VodItem) => {
+    setVodRef.value?.open(vod);
+};
 
 </script>
 
@@ -277,6 +281,13 @@ const handleEditVod = (_vod: VodItem) => {};
                 />
             </div>
         </div>
+        <SetVod
+            ref="setVodRef"
+            :tag-list="tagList"
+            :is-authenticated="authState.isAuthenticated"
+            @updated="loadVodData"
+            @deleted="loadVodData"
+        />
     </div>
 </template>
 
