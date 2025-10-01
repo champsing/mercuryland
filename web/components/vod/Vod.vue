@@ -79,6 +79,7 @@ function tagAlreadyExist(tag: string) {
 }
 
 function updateTag(tag: string) {
+    // TODO: 「選擇全部」目前失效，需修復選取流程
     if (selectedTags.value == null) {
         selectedTags.value = new Array();
         selectedTags.value.push(tag);
@@ -105,6 +106,7 @@ const handleEditVod = (_vod: VodItem) => {};
                     />
                 </div>
                 <div class="w-3/4">
+                    <!-- TODO: Vod tag 選項應支援搜尋 -->
                     <VaSelect
                         class="w-full"
                         v-model="selectedTags"
@@ -164,6 +166,7 @@ const handleEditVod = (_vod: VodItem) => {};
             </div>
         </div>
 
+        <!-- TODO: 規則說明應拆分至獨立頁面 -->
         <!-- 規則說明 -->
         <VaModal
             v-model="showRuleDescModal"
