@@ -12,7 +12,7 @@ pub struct MetadataRequest {
 #[derive(Serialize)]
 pub struct MetadataResponse {
     pub title: Option<String>,
-    pub upload_date: Option<String>,
+    pub date: Option<String>,
     pub duration: Option<String>,
 }
 
@@ -39,8 +39,8 @@ pub async fn handler(req: web::Json<MetadataRequest>) -> Result<impl Responder, 
         .map(|m| m.as_str().to_string());
     
     // Extract upload date from itemprop="uploadDate"
-    let upload_date_re = Regex::new(r#"<meta\s+itemprop="uploadDate"\s+content="([^"]+)""#).unwrap();
-    let upload_date = upload_date_re.captures(&html)
+    let date_re = Regex::new(r#"<meta\s+itemprop="uploadDate"\s+content="([^"]+)""#).unwrap();
+    let date = date_re.captures(&html)
         .and_then(|caps| caps.get(1))
         .map(|m| m.as_str().to_string());
     
@@ -89,13 +89,13 @@ pub async fn handler(req: web::Json<MetadataRequest>) -> Result<impl Responder, 
             }
         });
 
-    println!("Extracted from microdata - title: {:?}, upload_date: {:?}, duration: {:?}", title, upload_date, duration);
+    println!("Extracted from microdata - title: {:?}, upload_date: {:?}, duration: {:?}", title, date, duration);
 
     // If we found metadata, return it
-    if title.is_some() || upload_date.is_some() || duration.is_some() {
+    if title.is_some() || date.is_some() || duration.is_some() {
         return Ok(HttpResponse::Ok().json(MetadataResponse {
             title,
-            upload_date,
+            date,
             duration,
         }));
     }
@@ -109,7 +109,7 @@ pub async fn handler(req: web::Json<MetadataRequest>) -> Result<impl Responder, 
         
         return Ok(HttpResponse::Ok().json(MetadataResponse {
             title: Some(clean_title.to_string()),
-            upload_date: None,
+            date: None,
             duration: None,
         }));
     }
