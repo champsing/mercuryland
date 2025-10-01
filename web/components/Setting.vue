@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { VaCard, VaCardContent, VaCardTitle, VaDivider } from "vuestic-ui";
+import { VaButton, VaCard, VaCardContent, VaCardTitle, VaDivider } from "vuestic-ui";
 
 document.title = "系统设置 - 水星人的夢幻樂園";
 </script>
@@ -17,6 +17,24 @@ document.title = "系统设置 - 水星人的夢幻樂園";
     <VaDivider class="w-full !mt-0 !mb-2" />
 
     <div class="grid grid-cols-3 gap-2 px-2">
+        <VaCard class="rounded-xl border border-zinc-700">
+            <VaCardTitle
+                class="px-6 pt-6 text-lg font-medium text-zinc-200"
+                style="font-size: 20px; justify-content: center;"
+            >
+                直播随选
+            </VaCardTitle>
+            <VaCardContent class="px-6 pb-6 text-sm text-zinc-300">
+                <div class="flex gap-2">
+                    <VaButton preset="primary" color="info" class="flex-1">
+                        上传JSON
+                    </VaButton>
+                    <VaButton preset="primary" color="info" class="flex-1">
+                        下载JSON
+                    </VaButton>
+                </div>
+            </VaCardContent>
+        </VaCard>
         <VaCard class="rounded-xl border border-zinc-700">
             <VaCardTitle
                 class="px-6 pt-6 text-lg font-medium text-zinc-200"
