@@ -12,6 +12,7 @@ import {
 } from "vuestic-ui";
 import axios from "axios";
 import { BASE_URL, formatDate, parseDate } from "@/composables/utils";
+import { Robot as FaRobot } from "@vicons/fa";
 
 const props = defineProps<{
     tagList: string[];
@@ -120,6 +121,10 @@ const handleCreateVodTag = (tag: string) => {
     }
 };
 
+const handleLinkRobotClick = () => {
+    // TODO: 透過機器人自動填入直播連結
+};
+
 const openAddVodModal = () => {
     if (!props.isAuthenticated) {
         return;
@@ -214,13 +219,26 @@ const saveVod = async () => {
         >
             <div class="flex flex-col gap-4 p-4">
                 <div class="text-lg font-semibold text-zinc-200">新增直播紀錄</div>
-                <VaInput
-                    v-model="addVodForm.link"
-                    label="YouTube 連結代碼"
-                    placeholder="例如：mCW9..."
-                    color="info"
-                    required
-                />
+                <div class="flex items-end gap-2">
+                    <VaInput
+                        v-model="addVodForm.link"
+                        label="YouTube 連結代碼"
+                        placeholder="例如：mCW9..."
+                        color="info"
+                        class="flex-1"
+                        required
+                    />
+                    <VaButton
+                        preset="secondary"
+                        color="info"
+                        aria-label="使用機器人填入連結"
+                        @click="handleLinkRobotClick"
+                    >
+                        <VaIcon>
+                            <FaRobot />
+                        </VaIcon>
+                    </VaButton>
+                </div>
                 <VaDateInput
                     v-model="addVodForm.date"
                     label="日期"
