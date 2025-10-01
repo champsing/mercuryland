@@ -61,8 +61,75 @@ const addVodForm = reactive({
     date: new Date(),
     link: "",
     title: "",
-    tags: "",
 });
+const addVodTags = ref<string[]>([]);
+const addVodCustomTags = ref<string[]>([]);
+const addVodTagOptions = computed(() => {
+    const uniqueTags = new Set(tagList.value);
+    addVodCustomTags.value.forEach((tag) => {
+        if (tag) {
+            uniqueTags.add(tag);
+        }
+    });
+    addVodTags.value.forEach((tag) => {
+        if (tag) {
+            uniqueTags.add(tag);
+        }
+    });
+    return Array.from(uniqueTags).sort();
+});
+
+const searchTagsByPrefix = (search: string, option: unknown) => {
+    if (!search) {
+        return true;
+    }
+    const normalizedSearch = search.toLowerCase();
+    const optionText = (() => {
+        if (typeof option === "string" || typeof option === "number") {
+            return option.toString();
+        }
+        if (option && typeof option === "object") {
+            const candidate =
+                ((option as Record<string, unknown>).label ??
+                    (option as Record<string, unknown>).text ??
+                    (option as Record<string, unknown>).value);
+            if (candidate == null) {
+                return "";
+            }
+            if (
+                typeof candidate === "string" ||
+                typeof candidate === "number"
+            ) {
+                return candidate.toString();
+            }
+        }
+        return "";
+    })();
+
+    return optionText.toLowerCase().startsWith(normalizedSearch);
+};
+
+const removeAddVodTag = (tag: string) => {
+    addVodTags.value = addVodTags.value.filter((value) => value !== tag);
+};
+
+const handleCreateVodTag = (tag: string) => {
+    const trimmed = tag.trim();
+    if (!trimmed) {
+        return;
+    }
+
+    if (!addVodTags.value.includes(trimmed)) {
+        addVodTags.value = [...addVodTags.value, trimmed];
+    }
+
+    if (
+        !addVodCustomTags.value.includes(trimmed) &&
+        !tagList.value.includes(trimmed)
+    ) {
+        addVodCustomTags.value = [...addVodCustomTags.value, trimmed];
+    }
+};
 const addVodDuration = ref<Date | null>(null);
 
 async function loadVodData() {
@@ -117,7 +184,8 @@ function resetAddVodForm() {
     addVodForm.date = new Date();
     addVodForm.link = "";
     addVodForm.title = "";
-    addVodForm.tags = "";
+    addVodTags.value = [];
+    addVodCustomTags.value = [];
     addVodDuration.value = null;
     addVodError.value = null;
     addVodSuccess.value = null;
@@ -142,10 +210,13 @@ async function saveVod() {
         return;
     }
 
-    const tags = addVodForm.tags
-        .split(",")
-        .map((tag) => tag.trim())
-        .filter((tag) => tag.length > 0);
+    const tags = Array.from(
+        new Set(
+            addVodTags.value
+                .map((tag) => tag.trim())
+                .filter((tag) => tag.length > 0)
+        )
+    );
 
     const duration = formatDuration(addVodDuration.value);
 
@@ -368,12 +439,34 @@ function formatDuration(value: Date) {
                     :manual-input="false"
                     view="seconds"
                 />
-                <VaInput
-                    v-model="addVodForm.tags"
-                    label="標籤 (以逗號分隔)"
-                    placeholder="tag1, tag2, ..."
+                <VaSelect
+                    v-model="addVodTags"
+                    label="標籤"
                     color="info"
-                />
+                    :options="addVodTagOptions"
+                    multiple
+                    clearable
+                    searchable
+                    allow-create
+                    @create-new="handleCreateVodTag"
+                    :search-fn="searchTagsByPrefix"
+                    placeholder="請選擇或輸入標籤"
+                >
+                    <template #content>
+                        <VaChip
+                            v-for="chip in addVodTags"
+                            :key="chip"
+                            color="#90dc52"
+                            outline
+                            size="small"
+                            class="mr-1 my-1"
+                            closeable
+                            @update:model-value="removeAddVodTag(chip)"
+                        >
+                            {{ chip }}
+                        </VaChip>
+                    </template>
+                </VaSelect>
                 <p v-if="addVodError" class="text-sm text-red-400">{{ addVodError }}</p>
                 <p v-if="addVodSuccess" class="text-sm text-emerald-400">
                     {{ addVodSuccess }}
