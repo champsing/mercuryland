@@ -26,6 +26,7 @@ pub async fn run() -> Result<(), ServerError> {
             .service(wheel::update::handler)
             .service(wheel::submit::handler)
             .service(video::list::handler)
+            .service(video::upload::handler)
             .service(video::insert::handler)
             .service(video::delete::handler)
             .service(video::update::handler)
