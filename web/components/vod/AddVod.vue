@@ -214,6 +214,13 @@ const saveVod = async () => {
         >
             <div class="flex flex-col gap-4 p-4">
                 <div class="text-lg font-semibold text-zinc-200">新增直播紀錄</div>
+                <VaInput
+                    v-model="addVodForm.link"
+                    label="YouTube 連結代碼"
+                    placeholder="例如：mCW9..."
+                    color="info"
+                    required
+                />
                 <VaDateInput
                     v-model="addVodForm.date"
                     label="日期"
@@ -222,13 +229,6 @@ const saveVod = async () => {
                     :parse-date="parseDate"
                     manual-input
                     mode="auto"
-                />
-                <VaInput
-                    v-model="addVodForm.link"
-                    label="YouTube 連結代碼"
-                    placeholder="例如：mCW9..."
-                    color="info"
-                    required
                 />
                 <VaInput
                     v-model="addVodForm.title"
@@ -242,7 +242,7 @@ const saveVod = async () => {
                     color="info"
                     :ampm="false"
                     :hide-period-switch="true"
-                    :manual-input="false"
+                    :manual-input="true"
                     view="seconds"
                 />
                 <VaSelect
