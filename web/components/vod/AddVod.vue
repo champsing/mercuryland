@@ -121,8 +121,61 @@ const handleCreateVodTag = (tag: string) => {
     }
 };
 
-const handleLinkRobotClick = () => {
-    // TODO: 透過機器人自動填入直播連結
+const handleLinkRobotClick = async () => {
+    if (!addVodForm.link.trim()) {
+        addVodError.value = "請先輸入 YouTube 連結代碼";
+        return;
+    }
+
+    try {
+        addVodError.value = null;
+        const response = await axios.post(`${BASE_URL}/api/video/metadata`, {
+            url: addVodForm.link.trim()
+        });
+
+        const metadata = response.data;
+        
+        // Auto-fill title if available
+        if (metadata.title) {
+            addVodForm.title = metadata.title;
+        }
+
+        // Auto-fill date if available
+        if (metadata.date) {
+            // Parse the ISO date string to Date object
+            const uploadDate = new Date(metadata.date);
+            if (!isNaN(uploadDate.getTime())) {
+                addVodForm.date = uploadDate;
+            }
+        }
+
+        // Auto-fill duration if available
+        if (metadata.duration) {
+            // Parse duration string (e.g., "3:34" or "1:23:45") to Date object for time input
+            const durationParts = metadata.duration.split(':').map(Number);
+            const durationDate = new Date();
+            durationDate.setHours(0, 0, 0, 0); // Reset to start of day
+            
+            if (durationParts.length === 2) {
+                // MM:SS format
+                durationDate.setMinutes(durationParts[0], durationParts[1]);
+            } else if (durationParts.length === 3) {
+                // HH:MM:SS format
+                durationDate.setHours(durationParts[0], durationParts[1], durationParts[2]);
+            }
+            
+            addVodDuration.value = durationDate;
+        }
+
+        addVodSuccess.value = "成功獲取影片資訊";
+        setTimeout(() => {
+            addVodSuccess.value = null;
+        }, 3000);
+
+    } catch (error) {
+        console.error("Failed to fetch video metadata", error);
+        addVodError.value = "無法獲取影片資訊，請檢查連結代碼是否正確";
+    }
 };
 
 const openAddVodModal = () => {
