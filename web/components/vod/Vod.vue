@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onMounted, ref, Ref } from "vue";
+import { computed, onMounted, reactive, ref, Ref, watch } from "vue";
 import {
     VaButton,
     VaCard,
@@ -9,8 +9,10 @@ import {
     VaDivider,
     VaIcon,
     VaModal,
+    VaInput,
     VaSelect,
     VaSwitch,
+    VaTimeInput,
 } from "vuestic-ui";
 import axios from "axios";
 import DataTable from "./DataTable.vue";
@@ -51,8 +53,19 @@ const authState = useAuthState();
 
 const showRuleDescModal = ref(false);
 const showVodDescImg = ref(false);
+const showAddVodModal = ref(false);
+const isSavingVod = ref(false);
+const addVodError = ref<string | null>(null);
+const addVodSuccess = ref<string | null>(null);
+const addVodForm = reactive({
+    date: new Date(),
+    link: "",
+    title: "",
+    tags: "",
+});
+const addVodDuration = ref<Date | null>(null);
 
-onMounted(async () => {
+async function loadVodData() {
     try {
         const response = await axios.get<VodItem[]>(
             `${BASE_URL}/api/video/list`
@@ -66,7 +79,9 @@ onMounted(async () => {
     } catch (error) {
         console.error("Failed to load VOD data", error);
     }
-});
+}
+
+onMounted(loadVodData);
 
 function tagAlreadyExist(tag: string) {
     if (!selectedTags.value) return;
@@ -83,9 +98,90 @@ function updateTag(tag: string) {
     else selectedTags.value.push(tag);
 }
 
-const handleAddVod = () => {};
-
 const handleEditVod = (_vod: VodItem) => {};
+
+const handleAddVod = () => {
+    resetAddVodForm();
+    addVodError.value = null;
+    addVodSuccess.value = null;
+    showAddVodModal.value = true;
+};
+
+watch(showAddVodModal, (visible) => {
+    if (!visible) {
+        resetAddVodForm();
+    }
+});
+
+function resetAddVodForm() {
+    addVodForm.date = new Date();
+    addVodForm.link = "";
+    addVodForm.title = "";
+    addVodForm.tags = "";
+    addVodDuration.value = null;
+    addVodError.value = null;
+    addVodSuccess.value = null;
+}
+
+async function saveVod() {
+    if (isSavingVod.value) return;
+
+    const token = localStorage.getItem("token");
+    if (!token) {
+        addVodError.value = "請先登入管理員帳號";
+        return;
+    }
+
+    if (
+        !addVodForm.date ||
+        !addVodForm.link.trim() ||
+        !addVodForm.title.trim() ||
+        !addVodDuration.value
+    ) {
+        addVodError.value = "請填寫所有必填欄位";
+        return;
+    }
+
+    const tags = addVodForm.tags
+        .split(",")
+        .map((tag) => tag.trim())
+        .filter((tag) => tag.length > 0);
+
+    const duration = formatDuration(addVodDuration.value);
+
+    const payload = {
+        token,
+        date: formatDate(addVodForm.date),
+        link: addVodForm.link.trim(),
+        title: addVodForm.title.trim(),
+        duration,
+        tags,
+    };
+
+    try {
+        isSavingVod.value = true;
+        addVodError.value = null;
+        await axios.post(`${BASE_URL}/api/video/insert`, payload);
+        addVodSuccess.value = "新增成功";
+        await loadVodData();
+        setTimeout(() => {
+            showAddVodModal.value = false;
+        }, 600);
+    } catch (error) {
+        console.error("Failed to insert VOD", error);
+        addVodError.value = "新增失敗，請稍後再試";
+    } finally {
+        isSavingVod.value = false;
+    }
+}
+
+function formatDuration(value: Date) {
+    const pad = (num: number) => num.toString().padStart(2, "0");
+    const hours = pad(value.getHours());
+    const minutes = pad(value.getMinutes());
+    const seconds = pad(value.getSeconds());
+    return `${hours}:${minutes}:${seconds}`;
+}
 
 </script>
 
@@ -231,6 +327,70 @@ const handleEditVod = (_vod: VodItem) => {};
             z-index="5"
         >
             <img src="/images/vod_time.webp" alt="直播時數規則說明" />
+        </VaModal>
+
+        <VaModal
+            v-model="showAddVodModal"
+            hide-default-actions
+            close-button
+            max-width="480px"
+        >
+            <div class="flex flex-col gap-4 p-4">
+                <div class="text-lg font-semibold text-zinc-200">新增直播紀錄</div>
+                <VaDateInput
+                    v-model="addVodForm.date"
+                    label="日期"
+                    color="info"
+                    :format-date="formatDate"
+                    :parse-date="parseDate"
+                    manual-input
+                    mode="auto"
+                />
+                <VaInput
+                    v-model="addVodForm.link"
+                    label="YouTube 連結代碼"
+                    placeholder="例如：mCW9..."
+                    color="info"
+                    required
+                />
+                <VaInput
+                    v-model="addVodForm.title"
+                    label="直播標題"
+                    color="info"
+                    required
+                />
+                <VaTimeInput
+                    v-model="addVodDuration"
+                    label="直播時長"
+                    color="info"
+                    :ampm="false"
+                    :hide-period-switch="true"
+                    :manual-input="false"
+                    view="seconds"
+                />
+                <VaInput
+                    v-model="addVodForm.tags"
+                    label="標籤 (以逗號分隔)"
+                    placeholder="tag1, tag2, ..."
+                    color="info"
+                />
+                <p v-if="addVodError" class="text-sm text-red-400">{{ addVodError }}</p>
+                <p v-if="addVodSuccess" class="text-sm text-emerald-400">
+                    {{ addVodSuccess }}
+                </p>
+                <div class="flex justify-end gap-2">
+                    <VaButton
+                        preset="secondary"
+                        :disabled="isSavingVod"
+                        @click="showAddVodModal = false"
+                    >
+                        取消
+                    </VaButton>
+                    <VaButton color="info" :loading="isSavingVod" @click="saveVod">
+                        儲存
+                    </VaButton>
+                </div>
+            </div>
         </VaModal>
 
         <VaDivider class="!mt-0 !mb-2" />
