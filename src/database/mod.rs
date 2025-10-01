@@ -1,5 +1,6 @@
 pub(crate) mod coin;
 mod migration;
+pub(crate) mod video;
 pub(crate) mod wheel;
 
 use crate::error::ServerError;

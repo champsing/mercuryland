@@ -19,7 +19,7 @@ const props = defineProps<{
 
 <template>
     <div class="w-2/3 max-w-72 h-full m-auto">
-        <VaCard class="flex flex-col h-full w-full contact-card">
+        <VaCard class="flex flex-col h-full w-full">
             <VaCardTitle>
                 <div class="flex w-full justify-between">
                     <div class="text-2xl">
@@ -69,9 +69,3 @@ const props = defineProps<{
         </VaCard>
     </div>
 </template>
-
-<style>
-.contact-card {
-    --va-card-box-shadow: 0px;
-}
-</style>

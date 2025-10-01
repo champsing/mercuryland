@@ -14,7 +14,7 @@ struct Request {
 pub async fn handler(request: web::Json<Request>) -> Result<impl Responder, ServerError> {
     let now = SystemTime::now().duration_since(UNIX_EPOCH)?.as_secs();
 
-    if verify(&request.token, now) {
+    if verify(&request.token) {
         let claims = Claims {
             iat: now,
             exp: now + 3600,
