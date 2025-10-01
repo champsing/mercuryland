@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed } from "vue";
+import { computed, watch } from "vue";
 import {
     VaCard,
     VaCardContent,
@@ -12,7 +12,6 @@ import {
 } from "vuestic-ui";
 import { UseElementBounding, UseWindowSize } from "@vueuse/components";
 import { parseHMS, formatHMS } from "@composables/utils.ts";
-import vodLinkData from "@assets/data/vod.json";
 import vodSchedule from "@assets/data/schedule.json";
 
 class DataType {
@@ -23,11 +22,23 @@ class DataType {
     divider: boolean;
 }
 
-const props = defineProps<{ dateRange: { start: Date; end: Date } }>();
+interface VodItem {
+    id?: number | null;
+    date: string;
+    link: string;
+    title: string;
+    tags: string[];
+    duration: string;
+}
+
+const props = defineProps<{
+    dateRange: { start: Date; end: Date };
+    vodData: VodItem[];
+}>();
 const emit = defineEmits<{ (e: "computedTime", tag: number): void }>();
-const rawData = calcRawData();
+const rawData = computed(() => calcRawData(props.vodData));
 const data = computed(() => {
-    let filtered = rawData.filter(
+    let filtered = rawData.value.filter(
         (v: DataType) =>
             v.date >= props.dateRange.start.toISOString().slice(0, 10) &&
             v.date <=
@@ -41,10 +52,17 @@ const data = computed(() => {
     else return filtered.slice(i0);
 });
 
-const lastItem = rawData[rawData.length - 1];
-emit("computedTime", lastItem.previous + lastItem.offset);
+watch(
+    rawData,
+    (value) => {
+        const lastItem = value[value.length - 1];
+        const total = lastItem ? lastItem.previous + lastItem.offset : 0;
+        emit("computedTime", total);
+    },
+    { immediate: true }
+);
 
-function calcRawData(): DataType[] {
+function calcRawData(vodItems: VodItem[]): DataType[] {
     let re: DataType[] = [];
 
     let sch = vodSchedule.schedule;
@@ -61,9 +79,10 @@ function calcRawData(): DataType[] {
             (ove.length == 0 ? now : new Date(ove[0].date)).getTime()
         )
     );
-    let vod = vodLinkData.filter(
-        (x) => x.date > date.toISOString().slice(0, 10)
-    );
+    let vod = vodItems
+        .filter((x) => x.date > date.toISOString().slice(0, 10))
+        .slice()
+        .sort((lhs, rhs) => lhs.date.localeCompare(rhs.date));
 
     let previous = parseHMS(vodSchedule.initial);
 
@@ -134,7 +153,7 @@ function calcStyle(top: number, vh: number) {
 </script>
 
 <template>
-    <VaCard style="--va-card-padding: 0rem" class="h-full vod-card rounded-xl">
+    <VaCard style="--va-card-padding: 0rem" class="h-full rounded-xl">
         <VaCardContent>
             <VaList style="--va-list-label-padding: 1rem">
                 <VaListLabel class="text-xl" color="textPrimary">

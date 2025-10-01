@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, Ref } from "vue";
+import { computed, onMounted, ref, Ref } from "vue";
 import {
     VaButton,
     VaCard,
@@ -12,14 +12,26 @@ import {
     VaSelect,
     VaSwitch,
 } from "vuestic-ui";
-import vodLinkData from "@assets/data/vod.json";
+import axios from "axios";
 import DataTable from "./DataTable.vue";
 import TimeSummary from "./TimeSummary.vue";
 import TimeDetail from "./TimeDetail.vue";
-import { formatDate, parseDate } from "@/composables/utils";
+import AddVod from "./AddVod.vue";
+import SetVod from "./SetVod.vue";
+import { BASE_URL, formatDate, parseDate } from "@/composables/utils";
+import { useAuthState } from "@/composables/authState";
 import { Info24Regular } from "@vicons/fluent";
 
 document.title = '直播隨選 - 水星人的夢幻樂園'
+
+interface VodItem {
+    id?: number | null;
+    date: string;
+    link: string;
+    title: string;
+    tags: string[];
+    duration: string;
+}
 
 const dateRange = defineModel("dateRange", {
     //1582992000 = 2020 03 01 12:00 AM Taipei ST; 8 hours = 28800 seconds
@@ -30,43 +42,56 @@ const dateRange = defineModel("dateRange", {
 });
 
 const strictFiltering = ref(false);
-
-const selectedTags: Ref<Array<string>> = ref(null);
-
-const tagList = [...new Set(vodLinkData.flatMap((x) => x.tags))].sort();
+const selectedTags: Ref<Array<string> | null> = ref(null);
+const vodData = ref<VodItem[]>([]);
+const tagList = computed(() =>
+    [...new Set(vodData.value.flatMap((x) => x.tags))].sort()
+);
 
 const computedTime = ref(0);
+const authState = useAuthState();
+const setVodRef = ref<{ open: (vod: VodItem) => void } | null>(null);
 
 const showRuleDescModal = ref(false);
 const showVodDescImg = ref(false);
-// const monthNames = [
-//     "一月",
-//     "二月",
-//     "三月",
-//     "四月",
-//     "五月",
-//     "六月",
-//     "七月",
-//     "八月",
-//     "九月",
-//     "十月",
-//     "十一月",
-//     "十二月",
-// ];
+
+async function loadVodData() {
+    try {
+        const response = await axios.get<VodItem[]>(
+            `${BASE_URL}/api/video/list`
+        );
+        vodData.value = response.data
+            .map((item) => ({
+                ...item,
+                tags: item.tags ?? [],
+            }))
+            .sort((lhs, rhs) => lhs.date.localeCompare(rhs.date));
+    } catch (error) {
+        console.error("Failed to load VOD data", error);
+    }
+}
+
+onMounted(loadVodData);
 
 function tagAlreadyExist(tag: string) {
+    if (!selectedTags.value) return;
     selectedTags.value = selectedTags.value.filter((x) => x !== tag);
     if (selectedTags.value.toString() == new Array().toString())
         selectedTags.value = null;
 }
 
 function updateTag(tag: string) {
+    // TODO: 「選擇全部」目前失效，需修復選取流程
     if (selectedTags.value == null) {
         selectedTags.value = new Array();
         selectedTags.value.push(tag);
     } else if (selectedTags.value.includes(tag)) tagAlreadyExist(tag);
     else selectedTags.value.push(tag);
 }
+
+const handleEditVod = (vod: VodItem) => {
+    setVodRef.value?.open(vod);
+};
 
 </script>
 
@@ -85,6 +110,7 @@ function updateTag(tag: string) {
                     />
                 </div>
                 <div class="w-3/4">
+                    <!-- TODO: Vod tag 選項應支援搜尋 -->
                     <VaSelect
                         class="w-full"
                         v-model="selectedTags"
@@ -144,6 +170,7 @@ function updateTag(tag: string) {
             </div>
         </div>
 
+        <!-- TODO: 規則說明應拆分至獨立頁面 -->
         <!-- 規則說明 -->
         <VaModal
             v-model="showRuleDescModal"
@@ -220,15 +247,27 @@ function updateTag(tag: string) {
             <div class="w-3/4">
                 <VaCard
                     style="--va-card-padding: 0rem"
-                    class="h-full vod-card overflow-hidden rounded-xl"
+                    class="h-full overflow-hidden rounded-xl"
                 >
                     <VaCardContent class="!p-0">
                         <DataTable
                             :dateRange="dateRange"
                             :selectedTags="selectedTags"
                             :strictFiltering="strictFiltering"
+                            :vodData="vodData"
+                            :isAuthenticated="authState.isAuthenticated"
                             @updateTag="(tag) => updateTag(tag)"
-                        />
+                            @editVod="handleEditVod"
+                        >
+                            <template #actions>
+                                <AddVod
+                                    :tag-list="tagList"
+                                    :is-authenticated="authState.isAuthenticated"
+                                    wrapper-class=""
+                                    @saved="loadVodData"
+                                />
+                            </template>
+                        </DataTable>
                     </VaCardContent>
                 </VaCard>
             </div>
@@ -237,20 +276,23 @@ function updateTag(tag: string) {
                 <TimeSummary :t="computedTime" />
                 <TimeDetail
                     :dateRange="dateRange"
+                    :vodData="vodData"
                     @computedTime="(time) => (computedTime = time)"
                 />
             </div>
         </div>
+        <SetVod
+            ref="setVodRef"
+            :tag-list="tagList"
+            :is-authenticated="authState.isAuthenticated"
+            @updated="loadVodData"
+            @deleted="loadVodData"
+        />
     </div>
 </template>
 
 <style>
 .n-base-suffix__arrow {
     --n-arrow-size: 20px;
-}
-
-.vod-card {
-    background-color: var(--va-background-element) !important;
-    --va-card-box-shadow: 0px;
 }
 </style>

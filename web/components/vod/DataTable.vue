@@ -2,21 +2,38 @@
 import { computed } from "vue";
 import { UseElementBounding } from "@vueuse/components";
 import { useWindowSize } from "@vueuse/core";
-import { VaButton, VaDataTable, VaDivider, VaScrollContainer } from "vuestic-ui";
-import vodLinkData from "@assets/data/vod.json";
+import {
+    VaButton,
+    VaDataTable,
+    VaDivider,
+    VaIcon,
+    VaScrollContainer,
+} from "vuestic-ui";
+
+interface VodItem {
+    id?: number | null;
+    date: string;
+    link: string;
+    title: string;
+    tags: string[];
+    duration: string;
+}
 
 const vh = useWindowSize().height;
 const props = defineProps<{
     dateRange: { start: Date; end: Date };
-    selectedTags?: string[];
+    selectedTags?: string[] | null;
     strictFiltering: boolean;
+    vodData: VodItem[];
+    isAuthenticated?: boolean;
 }>();
 const emit = defineEmits<{
     (e: "updateTag", tag: string): void;
+    (e: "editVod", vod: VodItem): void;
 }>();
 
 const data = computed(() => {
-    return vodLinkData
+    return props.vodData
         .filter(
             (v) =>
                 v.date >=
@@ -27,27 +44,29 @@ const data = computed(() => {
                     new Date(props.dateRange.end.getTime() + 28800000).toISOString().slice(0, 10)
         )
         .filter((v) => {
-            if (props.strictFiltering == true)
+            const selected = props.selectedTags ?? [];
+            const hasSelected = selected.length > 0;
+
+            if (!hasSelected) return true;
+
+            if (props.strictFiltering === true)
                 return (
-                    props.selectedTags == null ||
-                    props.selectedTags.toString() == new Array().toString() ||
-                    v.tags.slice().sort().toString() ==
-                        props.selectedTags.slice().sort().toString()
+                    v.tags.slice().sort().toString() ===
+                    selected.slice().sort().toString()
                 );
-            else
-                return (
-                    props.selectedTags == null ||
-                    props.selectedTags.toString() == new Array().toString() ||
-                    new Set(v.tags).intersection(new Set(props.selectedTags))
-                        .size !== 0
-                );
+
+            return (
+                new Set(v.tags).intersection(new Set(selected)).size !== 0
+            );
         })
         .sort((lhs, rhs) => rhs.date.localeCompare(lhs.date));
 });
 
 const CENTER = "center" as const;
 
-const columns = [
+const showActions = computed(() => props.isAuthenticated === true);
+
+const baseColumns = [
     {
         key: "date",
         label: "日期",
@@ -78,6 +97,26 @@ const columns = [
         sortable: true,
     },
 ];
+
+const columns = computed(() => {
+    const result = [...baseColumns];
+
+    if (showActions.value) {
+        result.push({
+            key: "actions",
+            label: "",
+            thAlign: CENTER,
+            tdAlign: CENTER,
+            width: 12,
+        });
+    }
+
+    return result;
+});
+
+const headerColumns = computed(() =>
+    columns.value.filter((column) => column.key !== "actions")
+);
 
 function calcStyle(top: number) {
     let parentMarginBottom = 8;
@@ -117,12 +156,27 @@ function calcStyle(top: number) {
                 sticky-header
                 hoverable
             >
-                <template v-for="item in columns" #[`header(${item.key})`]="{ label }">
+                <template
+                    v-for="column in headerColumns"
+                    #[`header(${column.key})`]="{ label }"
+                    :key="column.key"
+                >
                     <div class="text-sm text-center">
                         {{ label }}
                     </div>
                 </template>
-
+                <template v-if="showActions" #header(actions)>
+                    <slot name="actions">
+                        <VaButton
+                            preset="plain"
+                            size="small"
+                            color="info"
+                            aria-label="新增直播"
+                        >
+                            <VaIcon name="add" />
+                        </VaButton>
+                    </slot>
+                </template>
             <!-- for checking day of week -->
             <!-- <template #cell(date)="{ value }">
                 {{ value }}  {{ new Date(value).getDay() }}
@@ -168,6 +222,17 @@ function calcStyle(top: number) {
                         v-if="tag !== row.rowData.tags.slice().reverse()[0]"
                     />
                 </template>
+            </template>
+            <template v-if="showActions" #cell(actions)="{ row }">
+                <VaButton
+                    preset="plain"
+                    size="small"
+                    color="info"
+                    aria-label="編輯直播"
+                    @click="emit('editVod', row.rowData)"
+                >
+                    <VaIcon name="edit" />
+                </VaButton>
             </template>
             </VaDataTable>
         </VaScrollContainer>
