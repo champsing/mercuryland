@@ -18,7 +18,10 @@ document.title = "系统设置 - 水星人的夢幻樂園";
 
     <div class="grid grid-cols-3 gap-2 px-2">
         <VaCard class="rounded-xl border border-zinc-700">
-            <VaCardTitle class="px-6 pt-6 text-lg font-medium text-zinc-200">
+            <VaCardTitle
+                class="px-6 pt-6 text-lg font-medium text-zinc-200"
+                style="font-size: 20px; justify-content: center;"
+            >
                 使用者與權限
             </VaCardTitle>
             <VaCardContent class="px-6 pb-6 text-sm text-zinc-300">
@@ -26,7 +29,10 @@ document.title = "系统设置 - 水星人的夢幻樂園";
             </VaCardContent>
         </VaCard>
         <VaCard class="rounded-xl border border-zinc-700">
-            <VaCardTitle class="px-6 pt-6 text-lg font-medium text-zinc-200">
+            <VaCardTitle
+                class="px-6 pt-6 text-lg font-medium text-zinc-200"
+                style="font-size: 20px; justify-content: center;"
+            >
                 通知與整合
             </VaCardTitle>
             <VaCardContent class="px-6 pb-6 text-sm text-zinc-300">
@@ -34,7 +40,10 @@ document.title = "系统设置 - 水星人的夢幻樂園";
             </VaCardContent>
         </VaCard>
         <VaCard class="rounded-xl border border-zinc-700">
-            <VaCardTitle class="px-6 pt-6 text-lg font-medium text-zinc-200">
+            <VaCardTitle
+                class="px-6 pt-6 text-lg font-medium text-zinc-200"
+                style="font-size: 20px; justify-content: center;"
+            >
                 系統維護
             </VaCardTitle>
             <VaCardContent class="px-6 pb-6 text-sm text-zinc-300">
