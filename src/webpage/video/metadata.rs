@@ -24,9 +24,6 @@ pub async fn handler(req: web::Json<MetadataRequest>) -> Result<impl Responder, 
     let client = reqwest::Client::new();
     let html = client.get(&url).send().await?.text().await?;
 
-    // Extract metadata from HTML meta tags with itemprop (microdata approach)
-    println!("Looking for microdata meta tags...");
-
     // Extract title from itemprop="name"
     let title_re = Regex::new(r#"<meta\s+itemprop="name"\s+content="([^"]+)""#).unwrap();
     let title = title_re
@@ -86,11 +83,6 @@ pub async fn handler(req: web::Json<MetadataRequest>) -> Result<impl Responder, 
                 duration_str.to_string()
             }
         });
-
-    println!(
-        "Extracted from microdata - title: {:?}, upload_date: {:?}, duration: {:?}",
-        title, date, duration
-    );
 
     // If we found metadata, return it
     if title.is_some() || date.is_some() || duration.is_some() {
