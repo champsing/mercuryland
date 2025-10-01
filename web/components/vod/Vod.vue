@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, Ref } from "vue";
+import { computed, onMounted, ref, Ref } from "vue";
 import {
     VaButton,
     VaCard,
@@ -12,14 +12,23 @@ import {
     VaSelect,
     VaSwitch,
 } from "vuestic-ui";
-import vodLinkData from "@assets/data/vod.json";
+import axios from "axios";
 import DataTable from "./DataTable.vue";
 import TimeSummary from "./TimeSummary.vue";
 import TimeDetail from "./TimeDetail.vue";
-import { formatDate, parseDate } from "@/composables/utils";
+import { BASE_URL, formatDate, parseDate } from "@/composables/utils";
 import { Info24Regular } from "@vicons/fluent";
 
 document.title = '直播隨選 - 水星人的夢幻樂園'
+
+interface VodItem {
+    id?: number | null;
+    date: string;
+    link: string;
+    title: string;
+    tags: string[];
+    duration: string;
+}
 
 const dateRange = defineModel("dateRange", {
     //1582992000 = 2020 03 01 12:00 AM Taipei ST; 8 hours = 28800 seconds
@@ -30,17 +39,35 @@ const dateRange = defineModel("dateRange", {
 });
 
 const strictFiltering = ref(false);
-
-const selectedTags: Ref<Array<string>> = ref(null);
-
-const tagList = [...new Set(vodLinkData.flatMap((x) => x.tags))].sort();
+const selectedTags: Ref<Array<string> | null> = ref(null);
+const vodData = ref<VodItem[]>([]);
+const tagList = computed(() =>
+    [...new Set(vodData.value.flatMap((x) => x.tags))].sort()
+);
 
 const computedTime = ref(0);
 
 const showRuleDescModal = ref(false);
 const showVodDescImg = ref(false);
 
+onMounted(async () => {
+    try {
+        const response = await axios.get<VodItem[]>(
+            `${BASE_URL}/api/video/list`
+        );
+        vodData.value = response.data
+            .map((item) => ({
+                ...item,
+                tags: item.tags ?? [],
+            }))
+            .sort((lhs, rhs) => lhs.date.localeCompare(rhs.date));
+    } catch (error) {
+        console.error("Failed to load VOD data", error);
+    }
+});
+
 function tagAlreadyExist(tag: string) {
+    if (!selectedTags.value) return;
     selectedTags.value = selectedTags.value.filter((x) => x !== tag);
     if (selectedTags.value.toString() == new Array().toString())
         selectedTags.value = null;
@@ -213,6 +240,7 @@ function updateTag(tag: string) {
                             :dateRange="dateRange"
                             :selectedTags="selectedTags"
                             :strictFiltering="strictFiltering"
+                            :vodData="vodData"
                             @updateTag="(tag) => updateTag(tag)"
                         />
                     </VaCardContent>
@@ -223,6 +251,7 @@ function updateTag(tag: string) {
                 <TimeSummary :t="computedTime" />
                 <TimeDetail
                     :dateRange="dateRange"
+                    :vodData="vodData"
                     @computedTime="(time) => (computedTime = time)"
                 />
             </div>

@@ -3,20 +3,29 @@ import { computed } from "vue";
 import { UseElementBounding } from "@vueuse/components";
 import { useWindowSize } from "@vueuse/core";
 import { VaButton, VaDataTable, VaDivider, VaScrollContainer } from "vuestic-ui";
-import vodLinkData from "@assets/data/vod.json";
+
+interface VodItem {
+    id?: number | null;
+    date: string;
+    link: string;
+    title: string;
+    tags: string[];
+    duration: string;
+}
 
 const vh = useWindowSize().height;
 const props = defineProps<{
     dateRange: { start: Date; end: Date };
-    selectedTags?: string[];
+    selectedTags?: string[] | null;
     strictFiltering: boolean;
+    vodData: VodItem[];
 }>();
 const emit = defineEmits<{
     (e: "updateTag", tag: string): void;
 }>();
 
 const data = computed(() => {
-    return vodLinkData
+    return props.vodData
         .filter(
             (v) =>
                 v.date >=
@@ -27,20 +36,20 @@ const data = computed(() => {
                     new Date(props.dateRange.end.getTime() + 28800000).toISOString().slice(0, 10)
         )
         .filter((v) => {
-            if (props.strictFiltering == true)
+            const selected = props.selectedTags ?? [];
+            const hasSelected = selected.length > 0;
+
+            if (!hasSelected) return true;
+
+            if (props.strictFiltering === true)
                 return (
-                    props.selectedTags == null ||
-                    props.selectedTags.toString() == new Array().toString() ||
-                    v.tags.slice().sort().toString() ==
-                        props.selectedTags.slice().sort().toString()
+                    v.tags.slice().sort().toString() ===
+                    selected.slice().sort().toString()
                 );
-            else
-                return (
-                    props.selectedTags == null ||
-                    props.selectedTags.toString() == new Array().toString() ||
-                    new Set(v.tags).intersection(new Set(props.selectedTags))
-                        .size !== 0
-                );
+
+            return (
+                new Set(v.tags).intersection(new Set(selected)).size !== 0
+            );
         })
         .sort((lhs, rhs) => rhs.date.localeCompare(lhs.date));
 });
