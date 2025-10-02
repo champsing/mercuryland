@@ -1,8 +1,10 @@
 <script setup lang="ts">
 // TODO: Update ToS Page style
 import { VaDivider } from "vuestic-ui";
-import { backToTop } from "@/composables/utils";
+import { backToTop, copyToClipboard } from "@/composables/utils";
 backToTop();
+
+const email = "0.flunky-sojourn@icloud.com";
 </script>
 
 <template>
@@ -86,9 +88,31 @@ backToTop();
       </p>
 
       <h1 class="text-lg mt-4">五、準據法與管轄法院</h1>
-      <p class="mb-4">
+      <p>
         本使用條款之成立、解釋與適用，均以中華民國法律為準據法。如因使用本網站而產生任何爭議，雙方同意以臺灣臺北地方法院為第一審專屬管轄法院。
       </p>
+    </div>
+    <div class="mt-4 mb-4 font-semibold">
+      電子郵件信箱：
+      <VaInput v-model="email" readonly @click="copyToClipboard(email)" />
+      <VaButton
+        href="mailto:0.flunky-sojourn@icloud.com"
+        preset="secondary"
+        color="info"
+        border-color="info"
+        class="ml-2"
+      >
+        送信
+      </VaButton>
+      <VaButton
+        preset="secondary"
+        color="textPrimary"
+        border-color="textPrimary"
+        to="contact"
+        class="ml-2"
+      >
+        聯絡我們
+      </VaButton>
     </div>
   </div>
 </template>
