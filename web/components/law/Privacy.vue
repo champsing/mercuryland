@@ -114,14 +114,14 @@ const email = "0.flunky-sojourn@icloud.com";
           </ol>
         </li>
       </ol>
-      
+
       <h1 class="text-lg mt-4">六、隱私政策的更新</h1>
       <ol>
         <li>
           本網站保留隨時修改本隱私政策的權利。若有重大變更，本網站將透過電子郵件或網站公告通知您。建議您定期查閱本政策，以確保瞭解最新內容。
         </li>
       </ol>
-      
+
       <h1 class="text-lg mt-4">七、聯絡方式</h1>
       <ol>
         <li>
