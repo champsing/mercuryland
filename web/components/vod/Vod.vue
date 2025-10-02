@@ -102,13 +102,13 @@ const handleEditVod = (vod: VodItem) => {
           />
         </div>
         <div class="w-3/4">
-          <!-- TODO: Vod tag 選項應支援搜尋 -->
           <VaSelect
             class="w-full"
             v-model="selectedTags"
             :options="tagList"
             multiple
             clearable
+            searchable
             placeholder="請選擇直播的TAG"
             dropdownIcon="va-plus"
           >
