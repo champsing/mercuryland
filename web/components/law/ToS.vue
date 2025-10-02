@@ -1,5 +1,5 @@
-<!-- TODO: Update ToS Page style -->
 <script setup lang="ts">
+// TODO: Update ToS Page style
 import { VaDivider } from "vuestic-ui";
 import { backToTop } from "@/composables/utils";
 backToTop();

@@ -1,5 +1,5 @@
-// TODO: Convert Penalty Page to SQL based from JSON based Data Storage
 <script setup lang="ts">
+// TODO: Convert Penalty Page to SQL based from JSON based Data Storage
 import {
   VaButton,
   VaDateInput,

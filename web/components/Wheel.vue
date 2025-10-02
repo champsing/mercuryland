@@ -1,5 +1,5 @@
-// TODO: Update Wheel style
 <script setup lang="ts">
+// TODO: Update Wheel style
 import VueWheelSpinner from "vue-wheel-spinner";
 import { ref, onMounted, reactive, computed, onBeforeUnmount } from "vue";
 import {
