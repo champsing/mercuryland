@@ -50,10 +50,7 @@ const data = computed(() => {
 
       if (props.strictFiltering === true) {
         const vTags = v.tags.slice().sort();
-        return (
-          vTags.length === selectedTags.size &&
-          vTags.every((tag) => selectedTags.has(tag))
-        );
+        return vTags.every((tag) => selectedTags.has(tag));
       }
 
       return v.tags.some((tag) => selectedTags.has(tag));
