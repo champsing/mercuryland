@@ -42,7 +42,7 @@ const dateRange = defineModel("dateRange", {
 });
 
 const strictFiltering = ref(false);
-const selectedTags: Ref<Array<string> | null> = ref(null);
+const selectedTags: Ref<Set<string> | null> = ref(null);
 const vodData = ref<VodItem[]>([]);
 const tagList = computed(() =>
     [...new Set(vodData.value.flatMap((x) => x.tags))].sort()
@@ -73,20 +73,11 @@ async function loadVodData() {
 
 onMounted(loadVodData);
 
-function tagAlreadyExist(tag: string) {
-    if (!selectedTags.value) return;
-    selectedTags.value = selectedTags.value.filter((x) => x !== tag);
-    if (selectedTags.value.toString() == new Array().toString())
-        selectedTags.value = null;
-}
-
 function updateTag(tag: string) {
-    // TODO: 「選擇全部」目前失效，需修復選取流程
     if (selectedTags.value == null) {
-        selectedTags.value = new Array();
-        selectedTags.value.push(tag);
-    } else if (selectedTags.value.includes(tag)) tagAlreadyExist(tag);
-    else selectedTags.value.push(tag);
+        selectedTags.value = new Set<string>();
+    }
+    selectedTags.value.add(tag);
 }
 
 const handleEditVod = (vod: VodItem) => {
@@ -135,7 +126,7 @@ const handleEditVod = (vod: VodItem) => {
                                 size="small"
                                 class="mr-1 my-1"
                                 closeable
-                                @update:model-value="tagAlreadyExist(chip)"
+                                @update:model-value="updateTag(chip)"
                             >
                                 {{ chip }}
                             </VaChip>
