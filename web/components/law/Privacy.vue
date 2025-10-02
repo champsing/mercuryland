@@ -159,8 +159,8 @@ const email = "0.flunky-sojourn@icloud.com";
       <div class="text-lg mt-4 font-semibold">
         感謝您信任我們，我們將竭力保護您的個人資料及隱私。
       </div>
-      
-      <div class="ml-60 mt-4">
+    </div>
+      <div class="mt-4 mb-4 font-semibold">
         電子郵件信箱：
         <VaInput v-model="email" readonly @click="copyToClipboard(email)" />
         <VaButton
@@ -168,22 +168,20 @@ const email = "0.flunky-sojourn@icloud.com";
           preset="secondary"
           color="info"
           border-color="info"
-          class="ml-3 -mt-1"
+          class="ml-2"
         >
           送信
         </VaButton>
         <VaButton
-          class="ml-2 -mt-1"
           preset="secondary"
           color="textPrimary"
           border-color="textPrimary"
           to="contact"
+          class="ml-2"
         >
-          前往「聯絡我們」
+          聯絡我們
         </VaButton>
       </div>
-
-    </div>
   </div>
 </template>
 
