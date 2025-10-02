@@ -47,10 +47,10 @@ const data = computed(() => {
       if (props.selectedTags.length === 0) return true;
 
       if (props.strictFiltering === true) {
-        return props.selectedTags.every(tag => v.tags.includes(tag));
+        return props.selectedTags.every((tag) => v.tags.includes(tag));
       }
 
-      return v.tags.some(tag => props.selectedTags.includes(tag));
+      return v.tags.some((tag) => props.selectedTags.includes(tag));
     })
     .sort((lhs, rhs) => rhs.date.localeCompare(lhs.date));
 });
