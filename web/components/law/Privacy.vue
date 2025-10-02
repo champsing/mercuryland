@@ -100,7 +100,7 @@ const email = "0.flunky-sojourn@icloud.com";
       <ol><li>本網站可能包含指向其他網站的連結。
         我們無法控制這些第三方網站的隱私政策及其資料處理方式。
         </li>
-      <li>建議您在使用這些網站時，查閱其隱私政策以了解如何保護您的個人資料。</li>
+      <li class="mt-2">建議您在使用這些網站時，查閱其隱私政策以了解如何保護您的個人資料。</li>
       </ol>
 
       <h1 class="text-lg mt-4">四、個人資料的刪除與更正</h1>
@@ -115,7 +115,7 @@ const email = "0.flunky-sojourn@icloud.com";
             </li>
           </ol>
         </li>
-        <li>
+        <li class="mt-2">
           <!-- 4.2. -->
           更正個人資料
           <ol>
@@ -142,7 +142,7 @@ const email = "0.flunky-sojourn@icloud.com";
             </li>
           </ol>
         </li>
-        <li>
+        <li class="mt-2">
           <!-- 2. -->
           共用原則：
           <ol>
@@ -152,13 +152,14 @@ const email = "0.flunky-sojourn@icloud.com";
         </li>
       </ol>
       <h1 class="text-lg mt-4">六、隱私政策的更新</h1>
-      <span class="ml-60">
-        我們保留隨時修改本隱私政策的權利。若有重大變更，我們將透過電子郵件或網站公告通知您。建議您定期查閱本政策，以確保瞭解最新內容。
-      </span>
+      <ol><li>我們保留隨時修改本隱私政策的權利。若有重大變更，我們將透過電子郵件或網站公告通知您。建議您定期查閱本政策，以確保瞭解最新內容。</li></ol>
       <h1 class="text-lg mt-4">七、聯絡方式</h1>
-      <div class="ml-60">
-        若您對本隱私政策有任何疑問，或需行使您的個人資料權利，請使用電子郵件，或前往「聯絡我們」分頁尋找網站管理人員的Discord，我們將竭誠為您服務。
+      <ol><li>若您對本隱私政策有任何疑問，或需行使您的個人資料權利，請使用電子郵件，或前往「聯絡我們」分頁尋找網站管理人員的Discord，我們將竭誠為您服務。</li></ol>
+      
+      <div class="text-lg mt-4 font-semibold">
+        感謝您信任我們，我們將竭力保護您的個人資料及隱私。
       </div>
+      
       <div class="ml-60 mt-4">
         電子郵件信箱：
         <VaInput v-model="email" readonly @click="copyToClipboard(email)" />
@@ -181,9 +182,7 @@ const email = "0.flunky-sojourn@icloud.com";
           前往「聯絡我們」
         </VaButton>
       </div>
-      <div class="mt-10 mb-20 text-2xl text-center">
-        感謝您信任我們，我們將竭力保護您的個人資料及隱私。
-      </div>
+
     </div>
   </div>
 </template>
