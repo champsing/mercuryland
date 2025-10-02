@@ -17,7 +17,6 @@ import { Robot as FaRobot } from "@vicons/fa";
 const props = defineProps<{
   tagList: string[];
   isAuthenticated?: boolean;
-  wrapperClass?: string;
 }>();
 
 const emit = defineEmits<{
@@ -247,27 +246,18 @@ const saveVod = async () => {
     isSavingVod.value = false;
   }
 };
+
+defineExpose({ open: openAddVodModal });
+
 </script>
 
 <template>
-  <div :class="props.wrapperClass ?? 'flex justify-end'">
-    <VaButton
-      v-if="isAuthenticated"
-      preset="plain"
-      size="small"
-      color="info"
-      aria-label="新增直播"
-      @click="openAddVodModal"
-    >
-      <VaIcon name="add" />
-    </VaButton>
-
-    <VaModal
-      v-model="showAddVodModal"
-      hide-default-actions
-      close-button
-      max-width="480px"
-    >
+  <VaModal
+    v-model="showAddVodModal"
+    hide-default-actions
+    close-button
+    max-width="480px"
+  >
       <div class="flex flex-col gap-4 p-4">
         <div class="text-lg font-semibold text-zinc-200">新增直播紀錄</div>
         <div class="flex items-end gap-2">
@@ -360,5 +350,4 @@ const saveVod = async () => {
         </div>
       </div>
     </VaModal>
-  </div>
 </template>

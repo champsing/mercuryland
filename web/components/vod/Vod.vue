@@ -51,6 +51,7 @@ const tagList = computed(() =>
 const computedTime = ref(0);
 const authState = useAuthState();
 const setVodRef = ref<{ open: (vod: VodItem) => void } | null>(null);
+const addVodRef = ref<{ open: () => void } | null>(null);
 
 const showRuleDescModal = ref(false);
 const showVodDescImg = ref(false);
@@ -243,16 +244,8 @@ const handleEditVod = (vod: VodItem) => {
               :isAuthenticated="authState.isAuthenticated"
               @updateTag="(tag) => updateTag(tag)"
               @editVod="handleEditVod"
-            >
-              <template #actions>
-                <AddVod
-                  :tag-list="tagList"
-                  :is-authenticated="authState.isAuthenticated"
-                  wrapper-class=""
-                  @saved="loadVodData"
-                />
-              </template>
-            </DataTable>
+              @addVod="addVodRef?.open()"
+            />
           </VaCardContent>
         </VaCard>
       </div>
@@ -272,6 +265,12 @@ const handleEditVod = (vod: VodItem) => {
       :is-authenticated="authState.isAuthenticated"
       @updated="loadVodData"
       @deleted="loadVodData"
+    />
+    <AddVod
+      ref="addVodRef"
+      :tag-list="tagList"
+      :is-authenticated="authState.isAuthenticated"
+      @saved="loadVodData"
     />
   </div>
 </template>
