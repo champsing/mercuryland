@@ -248,7 +248,6 @@ const saveVod = async () => {
 };
 
 defineExpose({ open: openAddVodModal });
-
 </script>
 
 <template>
@@ -258,96 +257,96 @@ defineExpose({ open: openAddVodModal });
     close-button
     max-width="480px"
   >
-      <div class="flex flex-col gap-4 p-4">
-        <div class="text-lg font-semibold text-zinc-200">新增直播紀錄</div>
-        <div class="flex items-end gap-2">
-          <VaInput
-            v-model="addVodForm.link"
-            label="YouTube 連結代碼"
-            placeholder="例如：mCW9..."
-            color="info"
-            class="flex-1"
-            required
-          />
-          <VaButton
-            preset="secondary"
-            color="info"
-            aria-label="使用機器人填入連結"
-            @click="handleLinkRobotClick"
-          >
-            <VaIcon>
-              <FaRobot />
-            </VaIcon>
-          </VaButton>
-        </div>
-        <VaDateInput
-          v-model="addVodForm.date"
-          label="日期"
-          color="info"
-          :format-date="formatDate"
-          :parse-date="parseDate"
-          manual-input
-          mode="auto"
-        />
+    <div class="flex flex-col gap-4 p-4">
+      <div class="text-lg font-semibold text-zinc-200">新增直播紀錄</div>
+      <div class="flex items-end gap-2">
         <VaInput
-          v-model="addVodForm.title"
-          label="直播標題"
+          v-model="addVodForm.link"
+          label="YouTube 連結代碼"
+          placeholder="例如：mCW9..."
           color="info"
+          class="flex-1"
           required
         />
-        <VaTimeInput
-          v-model="addVodDuration"
-          label="直播時長"
+        <VaButton
+          preset="secondary"
           color="info"
-          :ampm="false"
-          :hide-period-switch="true"
-          :manual-input="true"
-          view="seconds"
-        />
-        <VaSelect
-          v-model="addVodTags"
-          label="標籤"
-          color="info"
-          :options="addVodTagOptions"
-          multiple
-          clearable
-          searchable
-          allow-create
-          @create-new="handleCreateVodTag"
-          :search-fn="searchTagsByPrefix"
-          placeholder="請選擇或輸入標籤"
+          aria-label="使用機器人填入連結"
+          @click="handleLinkRobotClick"
         >
-          <template #content>
-            <VaChip
-              v-for="chip in addVodTags"
-              :key="chip"
-              color="#90dc52"
-              outline
-              size="small"
-              class="mr-1 my-1"
-              closeable
-              @update:model-value="removeAddVodTag(chip)"
-            >
-              {{ chip }}
-            </VaChip>
-          </template>
-        </VaSelect>
-        <p v-if="addVodError" class="text-sm text-red-400">{{ addVodError }}</p>
-        <p v-if="addVodSuccess" class="text-sm text-emerald-400">
-          {{ addVodSuccess }}
-        </p>
-        <div class="flex justify-end gap-2">
-          <VaButton
-            preset="secondary"
-            :disabled="isSavingVod"
-            @click="showAddVodModal = false"
-          >
-            取消
-          </VaButton>
-          <VaButton color="info" :loading="isSavingVod" @click="saveVod">
-            儲存
-          </VaButton>
-        </div>
+          <VaIcon>
+            <FaRobot />
+          </VaIcon>
+        </VaButton>
       </div>
-    </VaModal>
+      <VaDateInput
+        v-model="addVodForm.date"
+        label="日期"
+        color="info"
+        :format-date="formatDate"
+        :parse-date="parseDate"
+        manual-input
+        mode="auto"
+      />
+      <VaInput
+        v-model="addVodForm.title"
+        label="直播標題"
+        color="info"
+        required
+      />
+      <VaTimeInput
+        v-model="addVodDuration"
+        label="直播時長"
+        color="info"
+        :ampm="false"
+        :hide-period-switch="true"
+        :manual-input="true"
+        view="seconds"
+      />
+      <VaSelect
+        v-model="addVodTags"
+        label="標籤"
+        color="info"
+        :options="addVodTagOptions"
+        multiple
+        clearable
+        searchable
+        allow-create
+        @create-new="handleCreateVodTag"
+        :search-fn="searchTagsByPrefix"
+        placeholder="請選擇或輸入標籤"
+      >
+        <template #content>
+          <VaChip
+            v-for="chip in addVodTags"
+            :key="chip"
+            color="#90dc52"
+            outline
+            size="small"
+            class="mr-1 my-1"
+            closeable
+            @update:model-value="removeAddVodTag(chip)"
+          >
+            {{ chip }}
+          </VaChip>
+        </template>
+      </VaSelect>
+      <p v-if="addVodError" class="text-sm text-red-400">{{ addVodError }}</p>
+      <p v-if="addVodSuccess" class="text-sm text-emerald-400">
+        {{ addVodSuccess }}
+      </p>
+      <div class="flex justify-end gap-2">
+        <VaButton
+          preset="secondary"
+          :disabled="isSavingVod"
+          @click="showAddVodModal = false"
+        >
+          取消
+        </VaButton>
+        <VaButton color="info" :loading="isSavingVod" @click="saveVod">
+          儲存
+        </VaButton>
+      </div>
+    </div>
+  </VaModal>
 </template>
