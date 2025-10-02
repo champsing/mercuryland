@@ -1,5 +1,4 @@
 <script setup lang="ts">
-// TODO: Update ToS Page style
 import { VaButton, VaDivider, VaInput } from "vuestic-ui";
 import { backToTop, copyToClipboard } from "@/composables/utils";
 import { ref } from "vue";
