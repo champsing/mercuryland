@@ -7,26 +7,26 @@ import { WindowNew20Filled } from "@vicons/fluent";
 
 <script select-doc lang="ts">
 class LawDocEntry {
-    id: number;
-    name: string;
-    description: string;
-    url: string;
+  id: number;
+  name: string;
+  description: string;
+  url: string;
 }
 
 let currentDocument: Ref<LawDocEntry> = ref({
-    id: 0,
-    name: "《水星法》",
-    description: "水星伺服器法律支柱。",
-    url: "https://drive.google.com/file/d/17zIPRyN0BpR7TU10ARDJwkKVV-zLpsz8/preview?usp=drive_link",
-    group: "",
+  id: 0,
+  name: "《水星法》",
+  description: "水星伺服器法律支柱。",
+  url: "https://drive.google.com/file/d/17zIPRyN0BpR7TU10ARDJwkKVV-zLpsz8/preview?usp=drive_link",
+  group: "",
 });
 
 const lawDocOptions = lawDocument
-    .slice()
-    .map(({ id, name, group }) => ({ id: id, text: name, group: group }));
+  .slice()
+  .map(({ id, name, group }) => ({ id: id, text: name, group: group }));
 
 function findCurrentDoc(doc: string) {
-    currentDocument.value = lawDocument.filter((v) => v.name == doc)[0];
+  currentDocument.value = lawDocument.filter((v) => v.name == doc)[0];
 }
 
 // const newMercuryLaw: LawDocEntry = {
@@ -38,68 +38,68 @@ function findCurrentDoc(doc: string) {
 </script>
 
 <template>
-    <VaSplit :model-value="40" disabled>
-        <template #start>
-            <!-- <div class="mb-2 text-center">
+  <VaSplit :model-value="40" disabled>
+    <template #start>
+      <!-- <div class="mb-2 text-center">
                 <VaButton size="medium" color="rgb(78, 93, 137)" gradient @click="currentDocument = newMercuryLaw">
                     <div class="text-xl">查看新法</div>
                 </VaButton>
             </div> -->
-            <VaMenuList
-                class="text-white text-lg doc-menu-hover"
-                :options="lawDocOptions"
-                @selected="(doc) => findCurrentDoc(doc.text)"
-            />
-            <VaDivider class="mt-8" />
-            <div class="text-zinc-300 text-center text-3xl mt-4">
-                {{ currentDocument.name }}
-            </div>
-            <div class="text-zinc-300 text-center text-lg mt-4">
-                {{ currentDocument.description }}
-            </div>
-            <div class="text-center mt-5">
-                <VaButton
-                    round
-                    size="medium"
-                    color="#38b67d"
-                    :href="currentDocument.url"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                >
-                    <VaIcon size="large">
-                        <WindowNew20Filled />
-                    </VaIcon>
-                    <div class="ml-2 mr-2 text-center">在新分頁開啟</div>
-                </VaButton>
-            </div>
-        </template>
-        <template #end>
-            <!-- need calciFrameHeight() -->
-            <iframe
-                class="ml-2"
-                width="100%"
-                height="600"
-                frameborder="0"
-                :src="currentDocument.url"
-                title="preview iframe"
-            />
-        </template>
-    </VaSplit>
+      <VaMenuList
+        class="text-white text-lg doc-menu-hover"
+        :options="lawDocOptions"
+        @selected="(doc) => findCurrentDoc(doc.text)"
+      />
+      <VaDivider class="mt-8" />
+      <div class="text-zinc-300 text-center text-3xl mt-4">
+        {{ currentDocument.name }}
+      </div>
+      <div class="text-zinc-300 text-center text-lg mt-4">
+        {{ currentDocument.description }}
+      </div>
+      <div class="text-center mt-5">
+        <VaButton
+          round
+          size="medium"
+          color="#38b67d"
+          :href="currentDocument.url"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <VaIcon size="large">
+            <WindowNew20Filled />
+          </VaIcon>
+          <div class="ml-2 mr-2 text-center">在新分頁開啟</div>
+        </VaButton>
+      </div>
+    </template>
+    <template #end>
+      <!-- need calciFrameHeight() -->
+      <iframe
+        class="ml-2"
+        width="100%"
+        height="600"
+        frameborder="0"
+        :src="currentDocument.url"
+        title="preview iframe"
+      />
+    </template>
+  </VaSplit>
 </template>
 
 <style lang="scss">
 .va-menu-item__content {
-    @apply w-max block;
+  @apply w-max block;
 }
 
 .doc-menu-hover {
-    --va-menu-item-hover-color: #e13535;
-    --va-menu-item-hover-opacity: 0.6;
-    --va-menu-padding-x: 8px;
-    --va-menu-padding-y: 10px;
+  --va-menu-item-hover-color: #e13535;
+  --va-menu-item-hover-opacity: 0.6;
+  --va-menu-padding-x: 8px;
+  --va-menu-padding-y: 10px;
 }
 
 .va-menu-list__group-name {
-    top: -6px !important;
+  top: -6px !important;
 }
 </style>

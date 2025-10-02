@@ -1,62 +1,62 @@
 {
-    "css.validate": false,
-    "tailwindCSS.includeLanguages": {
-        "vue": "html",
-        "vue-html": "html"
-    },
-    "editor.quickSuggestions": {
-		"strings": true
-	},
-    "cSpell.words": [
-        "actix",
-        "ALTF",
-        "ashwamegh",
-        "axios",
-        "Banban",
-        "champsing",
-        "chrono",
-        "composables",
-        "daterange",
-        "Garten",
-        "HMAC",
-        "Hypixel",
-        "Iden",
-        "itertools",
-        "logicfan",
-        "mercuryland",
-        "Paon",
-        "Pien",
-        "reqwest",
-        "rusqlite",
-        "rustls",
-        "rustup",
-        "serde",
-        "Smilemo",
-        "stderrlog",
-        "tailwindcss",
-        "vfonts",
-        "vite",
-        "vuestic",
-        "webpki"
-    ],
-    "editor.rulers": [80],
-    "prettier.tabWidth": 4,
-    "[json]": {
-        "editor.defaultFormatter": "vscode.json-language-features"
-    },
-    "[css]": {
-        "editor.defaultFormatter": "esbenp.prettier-vscode"
-    },
-    "[html]": {
-        "editor.defaultFormatter": "esbenp.prettier-vscode"
-    },
-    "[typescript]": {
-        "editor.defaultFormatter": "esbenp.prettier-vscode"
-    },
-    "[javascript]": {
-        "editor.defaultFormatter": "esbenp.prettier-vscode"
-    },
-    "[vue]": {
-        "editor.defaultFormatter": "esbenp.prettier-vscode"
-    },
+  "css.validate": false,
+  "tailwindCSS.includeLanguages": {
+    "vue": "html",
+    "vue-html": "html"
+  },
+  "editor.quickSuggestions": {
+    "strings": true
+  },
+  "cSpell.words": [
+    "actix",
+    "ALTF",
+    "ashwamegh",
+    "axios",
+    "Banban",
+    "champsing",
+    "chrono",
+    "composables",
+    "daterange",
+    "Garten",
+    "HMAC",
+    "Hypixel",
+    "Iden",
+    "itertools",
+    "logicfan",
+    "mercuryland",
+    "Paon",
+    "Pien",
+    "reqwest",
+    "rusqlite",
+    "rustls",
+    "rustup",
+    "serde",
+    "Smilemo",
+    "stderrlog",
+    "tailwindcss",
+    "vfonts",
+    "vite",
+    "vuestic",
+    "webpki"
+  ],
+  "editor.rulers": [80],
+  "prettier.tabWidth": 4,
+  "[json]": {
+    "editor.defaultFormatter": "vscode.json-language-features"
+  },
+  "[css]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[html]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[typescript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[vue]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  }
 }
