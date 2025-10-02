@@ -22,17 +22,16 @@ const showVodDescImg = ref(false);
 
   <VaModal
     v-model="showRuleDescModal"
-    title="規則說明"
     hide-default-actions
     close-button
     z-index="4"
   >
-    <span class="text-3xl"> 直播時數規則說明 </span>
-    <div class="text-2xl mt-2">●概述</div>
+  <div class="text-lg font-semibold text-zinc-200">直播時數規則說明</div>
+    <div class="text-xl mt-2">一、概述</div>
     <div class="text-bg mt-2">
       惡靈公布直播紀錄檔時，此處會同步更新計算加班台的剩餘時數，並標上當天遊玩的遊戲，供使用者藉由上方的標籤篩選功能找到自己想看的遊戲直播。
     </div>
-    <div class="text-2xl mt-2">●時數計算說明</div>
+    <div class="text-xl mt-2">二、時數計算說明</div>
     <div class="text-bg mt-2">
       在計算明細表中，會以「計劃」、「直播」等項目的時數互相加減得出剩餘時數。
       <br />
@@ -65,7 +64,7 @@ const showVodDescImg = ref(false);
       </VaButton>
     </div>
 
-    <div class="text-2xl mt-2">●不可抗力因素</div>
+    <div class="text-xl mt-2">三、不可抗力因素</div>
     <div class="text-bg mt-2">
       若惡靈在直播過程中斷網或停電，則中間嘗試恢復的多次黑畫面直播紀錄檔將不會被採計，直到恢復1分鐘以上的穩定直播為止。
     </div>
