@@ -1,16 +1,16 @@
 <script setup lang="ts">
 import { computed, onMounted, ref, Ref } from "vue";
 import {
-    VaButton,
-    VaCard,
-    VaCardContent,
-    VaChip,
-    VaDateInput,
-    VaDivider,
-    VaIcon,
-    VaModal,
-    VaSelect,
-    VaSwitch,
+  VaButton,
+  VaCard,
+  VaCardContent,
+  VaChip,
+  VaDateInput,
+  VaDivider,
+  VaIcon,
+  VaModal,
+  VaSelect,
+  VaSwitch,
 } from "vuestic-ui";
 import axios from "axios";
 import DataTable from "./DataTable.vue";
@@ -22,30 +22,30 @@ import { BASE_URL, formatDate, parseDate } from "@/composables/utils";
 import { useAuthState } from "@/composables/authState";
 import { Info24Regular } from "@vicons/fluent";
 
-document.title = '直播隨選 - 水星人的夢幻樂園'
+document.title = "直播隨選 - 水星人的夢幻樂園";
 
 interface VodItem {
-    id?: number | null;
-    date: string;
-    link: string;
-    title: string;
-    tags: string[];
-    duration: string;
+  id?: number | null;
+  date: string;
+  link: string;
+  title: string;
+  tags: string[];
+  duration: string;
 }
 
 const dateRange = defineModel("dateRange", {
-    //1582992000 = 2020 03 01 12:00 AM Taipei ST; 8 hours = 28800 seconds
-    default: {
-        start: new Date(1582992000000),
-        end: new Date(Date.now() + 28800000),
-    },
+  //1582992000 = 2020 03 01 12:00 AM Taipei ST; 8 hours = 28800 seconds
+  default: {
+    start: new Date(1582992000000),
+    end: new Date(Date.now() + 28800000),
+  },
 });
 
 const strictFiltering = ref(false);
 const selectedTags: Ref<string[]> = ref([]);
 const vodData = ref<VodItem[]>([]);
 const tagList = computed(() =>
-    [...new Set(vodData.value.flatMap((x) => x.tags))].sort()
+  [...new Set(vodData.value.flatMap((x) => x.tags))].sort(),
 );
 
 const computedTime = ref(0);
@@ -56,228 +56,228 @@ const showRuleDescModal = ref(false);
 const showVodDescImg = ref(false);
 
 async function loadVodData() {
-    try {
-        const response = await axios.get<VodItem[]>(
-            `${BASE_URL}/api/video/list`
-        );
-        vodData.value = response.data
-            .map((item) => ({
-                ...item,
-                tags: item.tags ?? [],
-            }))
-            .sort((lhs, rhs) => lhs.date.localeCompare(rhs.date));
-    } catch (error) {
-        console.error("Failed to load VOD data", error);
-    }
+  try {
+    const response = await axios.get<VodItem[]>(`${BASE_URL}/api/video/list`);
+    vodData.value = response.data
+      .map((item) => ({
+        ...item,
+        tags: item.tags ?? [],
+      }))
+      .sort((lhs, rhs) => lhs.date.localeCompare(rhs.date));
+  } catch (error) {
+    console.error("Failed to load VOD data", error);
+  }
 }
 
 onMounted(loadVodData);
 
 function updateTag(tag: string) {
-    if (selectedTags.value.includes(tag)) {
-        selectedTags.value = selectedTags.value.filter((x) => x !== tag);
-    } else {
-        selectedTags.value.push(tag);
-    }
+  if (selectedTags.value.includes(tag)) {
+    selectedTags.value = selectedTags.value.filter((x) => x !== tag);
+  } else {
+    selectedTags.value.push(tag);
+  }
 }
 
 const handleEditVod = (vod: VodItem) => {
-    setVodRef.value?.open(vod);
+  setVodRef.value?.open(vod);
 };
-
 </script>
 
 <template>
-    <div class="m-auto w-full z-10">
-        <div class="flex h-14 w-full flex-row items-center justify-between gap-4 px-2">
-            <div class="flex w-3/4 flex-row items-center gap-4">
-                <div class="w-1/4 ml-12">
-                    <VaDateInput
-                        class="w-full"
-                        v-model="dateRange"
-                        :format-date="formatDate"
-                        :parse-date="parseDate"
-                        manual-input
-                        mode="auto"
-                    />
-                </div>
-                <div class="w-3/4">
-                    <!-- TODO: Vod tag 選項應支援搜尋 -->
-                    <VaSelect
-                        class="w-full"
-                        v-model="selectedTags"
-                        :options="tagList"
-                        multiple
-                        clearable
-                        placeholder="請選擇直播的TAG"
-                        dropdownIcon="va-plus"
-                    >
-                        <template #content>
-                            <VaChip
-                                v-for="chip in selectedTags"
-                                color="#90dc52"
-                                outline
-                                size="small"
-                                class="mr-1 my-1"
-                                closeable
-                                @update:model-value="updateTag(chip)"
-                            >
-                                {{ chip }}
-                            </VaChip>
-                        </template>
-                    </VaSelect>
-                </div>
-            </div>
-            <div class="flex w-1/4 flex-row items-center gap-4">
-                <div class="flex w-1/2 justify-center">
-                    <VaSwitch
-                        v-model="strictFiltering"
-                        off-color="#1ccba2"
-                        color="#3444a2"
-                        style="--va-switch-checker-background-color: #252723"
-                        false-inner-label="符合一項"
-                        true-inner-label="符合全部"
-                    />
-                </div>
-                <div class="flex w-1/2 justify-center">
-                    <VaButton
-                        preset="plain"
-                        class="w-full"
-                        color="#FFFFFF"
-                        @click="showRuleDescModal = !showRuleDescModal"
-                    >
-                        <VaIcon size="large" class="mr-2">
-                            <Info24Regular />
-                        </VaIcon>
-                        <div class="text-lg text-center">規則說明</div>
-                    </VaButton>
-                </div>
-            </div>
+  <div class="m-auto w-full z-10">
+    <div
+      class="flex h-14 w-full flex-row items-center justify-between gap-4 px-2"
+    >
+      <div class="flex w-3/4 flex-row items-center gap-4">
+        <div class="w-1/4 ml-12">
+          <VaDateInput
+            class="w-full"
+            v-model="dateRange"
+            :format-date="formatDate"
+            :parse-date="parseDate"
+            manual-input
+            mode="auto"
+          />
         </div>
-
-        <!-- TODO: 規則說明應拆分至獨立頁面 -->
-        <!-- 規則說明 -->
-        <VaModal
-            v-model="showRuleDescModal"
-            title="規則說明"
-            hide-default-actions
-            close-button
-            z-index="4"
-        >
-            <span class="text-3xl"> 直播時數規則說明 </span>
-            <div class="text-2xl mt-2">●概述</div>
-            <div class="text-bg mt-2">
-                惡靈公布直播紀錄檔時，此處會同步更新計算加班台的剩餘時數，並標上當天遊玩的遊戲，供使用者藉由上方的標籤篩選功能找到自己想看的遊戲直播。
-            </div>
-            <div class="text-2xl mt-2">●時數計算說明</div>
-            <div class="text-bg mt-2">
-                在計算明細表中，會以「計劃」、「直播」等項目的時數互相加減得出剩餘時數。
-                <br />
-                <ol class="ml-3">
-                    <li>
-                        <!-- 1. -->
-                        「計劃」為惡靈的常規直播時數，目前落在2小時左右，因此以2小時計算。
-                    </li>
-                    <li>
-                        <!-- 2. -->
-                        每次直播的時數沒意外的話以YouTube影片時長為準。若直播紀錄檔被和諧了，則以2小時計算。
-                    </li>
-                    <li>
-                        <!-- 3. -->
-                        有時在直播懲罰會生成加班台懲罰，此處也會以「懲罰」項目來增加剩餘的加班台時數。
-                    </li>
-                    <li>
-                        <!-- 4. -->
-                        觀眾可以用每小時真錢 10 美元或 1000 水星幣的價格購買加班台，此處也會以「課金」項目來增加剩餘的加班台時數。
-                    </li>
-                    <li>
-                        <!-- 5. -->
-                        若有其他因素導致時數加減也會以獨立項目處理。
-                    </li>
-                    <li>
-                        <!-- 6. -->
-                        伺服器時間每週三 00:00 會在計算明細表生成一項「計劃」。
-                    </li>
-                </ol>
-                <VaButton
-                    class="mt-2"
-                    preset="primary"
-                    border-color="info"
-                    color="info"
-                    gradient
-                    @click="showVodDescImg = !showVodDescImg"
-                >
-                    查看說明圖例
-                </VaButton>
-            </div>
-
-            <div class="text-2xl mt-2">●不可抗力因素</div>
-            <div class="text-bg mt-2">
-                若惡靈在直播過程中斷網或停電，則中間嘗試恢復的多次黑畫面直播紀錄檔將不會被採計，直到恢復1分鐘以上的穩定直播為止。
-            </div>
-        </VaModal>
-
-        <VaModal
-            v-model="showVodDescImg"
-            hide-default-actions
-            close-button
-            z-index="5"
-        >
-            <img src="/images/vod_time.webp" alt="直播時數規則說明" />
-        </VaModal>
-
-        <VaDivider class="!mt-0 !mb-2" />
-
-        <div class="flex flex-row gap-2 px-2 pb-2">
-            <div class="w-3/4">
-                <VaCard
-                    style="--va-card-padding: 0rem"
-                    class="h-full overflow-hidden rounded-xl"
-                >
-                    <VaCardContent class="!p-0">
-                        <DataTable
-                            :dateRange="dateRange"
-                            :selectedTags="selectedTags"
-                            :strictFiltering="strictFiltering"
-                            :vodData="vodData"
-                            :isAuthenticated="authState.isAuthenticated"
-                            @updateTag="(tag) => updateTag(tag)"
-                            @editVod="handleEditVod"
-                        >
-                            <template #actions>
-                                <AddVod
-                                    :tag-list="tagList"
-                                    :is-authenticated="authState.isAuthenticated"
-                                    wrapper-class=""
-                                    @saved="loadVodData"
-                                />
-                            </template>
-                        </DataTable>
-                    </VaCardContent>
-                </VaCard>
-            </div>
-
-            <div class="flex flex-col w-1/4">
-                <TimeSummary :t="computedTime" />
-                <TimeDetail
-                    :dateRange="dateRange"
-                    :vodData="vodData"
-                    @computedTime="(time) => (computedTime = time)"
-                />
-            </div>
+        <div class="w-3/4">
+          <!-- TODO: Vod tag 選項應支援搜尋 -->
+          <VaSelect
+            class="w-full"
+            v-model="selectedTags"
+            :options="tagList"
+            multiple
+            clearable
+            placeholder="請選擇直播的TAG"
+            dropdownIcon="va-plus"
+          >
+            <template #content>
+              <VaChip
+                v-for="chip in selectedTags"
+                color="#90dc52"
+                outline
+                size="small"
+                class="mr-1 my-1"
+                closeable
+                @update:model-value="updateTag(chip)"
+              >
+                {{ chip }}
+              </VaChip>
+            </template>
+          </VaSelect>
         </div>
-        <SetVod
-            ref="setVodRef"
-            :tag-list="tagList"
-            :is-authenticated="authState.isAuthenticated"
-            @updated="loadVodData"
-            @deleted="loadVodData"
-        />
+      </div>
+      <div class="flex w-1/4 flex-row items-center gap-4">
+        <div class="flex w-1/2 justify-center">
+          <VaSwitch
+            v-model="strictFiltering"
+            off-color="#1ccba2"
+            color="#3444a2"
+            style="--va-switch-checker-background-color: #252723"
+            false-inner-label="符合一項"
+            true-inner-label="符合全部"
+          />
+        </div>
+        <div class="flex w-1/2 justify-center">
+          <VaButton
+            preset="plain"
+            class="w-full"
+            color="#FFFFFF"
+            @click="showRuleDescModal = !showRuleDescModal"
+          >
+            <VaIcon size="large" class="mr-2">
+              <Info24Regular />
+            </VaIcon>
+            <div class="text-lg text-center">規則說明</div>
+          </VaButton>
+        </div>
+      </div>
     </div>
+
+    <!-- TODO: 規則說明應拆分至獨立頁面 -->
+    <!-- 規則說明 -->
+    <VaModal
+      v-model="showRuleDescModal"
+      title="規則說明"
+      hide-default-actions
+      close-button
+      z-index="4"
+    >
+      <span class="text-3xl"> 直播時數規則說明 </span>
+      <div class="text-2xl mt-2">●概述</div>
+      <div class="text-bg mt-2">
+        惡靈公布直播紀錄檔時，此處會同步更新計算加班台的剩餘時數，並標上當天遊玩的遊戲，供使用者藉由上方的標籤篩選功能找到自己想看的遊戲直播。
+      </div>
+      <div class="text-2xl mt-2">●時數計算說明</div>
+      <div class="text-bg mt-2">
+        在計算明細表中，會以「計劃」、「直播」等項目的時數互相加減得出剩餘時數。
+        <br />
+        <ol class="ml-3">
+          <li>
+            <!-- 1. -->
+            「計劃」為惡靈的常規直播時數，目前落在2小時左右，因此以2小時計算。
+          </li>
+          <li>
+            <!-- 2. -->
+            每次直播的時數沒意外的話以YouTube影片時長為準。若直播紀錄檔被和諧了，則以2小時計算。
+          </li>
+          <li>
+            <!-- 3. -->
+            有時在直播懲罰會生成加班台懲罰，此處也會以「懲罰」項目來增加剩餘的加班台時數。
+          </li>
+          <li>
+            <!-- 4. -->
+            觀眾可以用每小時真錢 10 美元或 1000
+            水星幣的價格購買加班台，此處也會以「課金」項目來增加剩餘的加班台時數。
+          </li>
+          <li>
+            <!-- 5. -->
+            若有其他因素導致時數加減也會以獨立項目處理。
+          </li>
+          <li>
+            <!-- 6. -->
+            伺服器時間每週三 00:00 會在計算明細表生成一項「計劃」。
+          </li>
+        </ol>
+        <VaButton
+          class="mt-2"
+          preset="primary"
+          border-color="info"
+          color="info"
+          gradient
+          @click="showVodDescImg = !showVodDescImg"
+        >
+          查看說明圖例
+        </VaButton>
+      </div>
+
+      <div class="text-2xl mt-2">●不可抗力因素</div>
+      <div class="text-bg mt-2">
+        若惡靈在直播過程中斷網或停電，則中間嘗試恢復的多次黑畫面直播紀錄檔將不會被採計，直到恢復1分鐘以上的穩定直播為止。
+      </div>
+    </VaModal>
+
+    <VaModal
+      v-model="showVodDescImg"
+      hide-default-actions
+      close-button
+      z-index="5"
+    >
+      <img src="/images/vod_time.webp" alt="直播時數規則說明" />
+    </VaModal>
+
+    <VaDivider class="!mt-0 !mb-2" />
+
+    <div class="flex flex-row gap-2 px-2 pb-2">
+      <div class="w-3/4">
+        <VaCard
+          style="--va-card-padding: 0rem"
+          class="h-full overflow-hidden rounded-xl"
+        >
+          <VaCardContent class="!p-0">
+            <DataTable
+              :dateRange="dateRange"
+              :selectedTags="selectedTags"
+              :strictFiltering="strictFiltering"
+              :vodData="vodData"
+              :isAuthenticated="authState.isAuthenticated"
+              @updateTag="(tag) => updateTag(tag)"
+              @editVod="handleEditVod"
+            >
+              <template #actions>
+                <AddVod
+                  :tag-list="tagList"
+                  :is-authenticated="authState.isAuthenticated"
+                  wrapper-class=""
+                  @saved="loadVodData"
+                />
+              </template>
+            </DataTable>
+          </VaCardContent>
+        </VaCard>
+      </div>
+
+      <div class="flex flex-col w-1/4">
+        <TimeSummary :t="computedTime" />
+        <TimeDetail
+          :dateRange="dateRange"
+          :vodData="vodData"
+          @computedTime="(time) => (computedTime = time)"
+        />
+      </div>
+    </div>
+    <SetVod
+      ref="setVodRef"
+      :tag-list="tagList"
+      :is-authenticated="authState.isAuthenticated"
+      @updated="loadVodData"
+      @deleted="loadVodData"
+    />
+  </div>
 </template>
 
 <style>
 .n-base-suffix__arrow {
-    --n-arrow-size: 20px;
+  --n-arrow-size: 20px;
 }
 </style>
