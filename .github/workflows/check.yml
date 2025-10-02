@@ -9,94 +9,71 @@ jobs:
   rust:
     name: Test Rust
     runs-on: ubuntu-latest
+    if: >-
+      ${{ github.event.pull_request.changed_files &&
+          (contains(github.event.pull_request.changed_files, 'Cargo.toml') ||
+           contains(github.event.pull_request.changed_files, 'Cargo.lock') ||
+           startsWith(github.event.pull_request.changed_files, 'src/')) }}
     steps:
       - name: Check out Source Code
         uses: actions/checkout@v4
 
-      - name: Determine if Rust Tests Should Run
-        id: rust_check
-        run: |
-          echo "should_run=$((
-            contains(github.event.pull_request.changed_files, 'Cargo.toml') ||
-            contains(github.event.pull_request.changed_files, 'Cargo.lock') ||
-            startsWith(github.event.pull_request.changed_files, 'src/')
-          ))" >> $GITHUB_ENV
-
-      - name: No-op
-        if: ${{ env.should_run == 'false' }}
-        run: echo "No relevant changes for Rust tests."
+      - name: Setup Rust Toolchain
+        uses: actions-rs/toolchain@v1
+        with:
+          profile: minimal
+          toolchain: stable
+          override: true
+          components: rustfmt
 
       - name: Format Check
-        if: ${{ env.should_run == 'true' }}
         run: cargo fmt --all -- --check
 
       - name: Test
-        if: ${{ env.should_run == 'true' }}
         run: cargo test
 
   docker:
     name: Test Docker
     runs-on: ubuntu-latest
+    if: >-
+      ${{ github.event.pull_request.changed_files &&
+          (contains(github.event.pull_request.changed_files, 'Dockerfile') ||
+           contains(github.event.pull_request.changed_files, 'docker-compose.yml') ||
+           contains(github.event.pull_request.changed_files, '.dockerignore')) }}
     steps:
       - name: Check out Source Code
         uses: actions/checkout@v4
-
-      - name: Determine if Docker Tests Should Run
-        id: docker_check
-        run: |
-          echo "should_run=$((
-            contains(github.event.pull_request.changed_files, 'Dockerfile') ||
-            contains(github.event.pull_request.changed_files, 'docker-compose.yml') ||
-            contains(github.event.pull_request.changed_files, '.dockerignore')
-          ))" >> $GITHUB_ENV
-
-      - name: No-op
-        if: ${{ env.should_run == 'false' }}
-        run: echo "No relevant changes for Docker tests."
-
       - name: Build
-        if: ${{ env.should_run == 'true' }}
         run: docker build -t mercury .
 
   vue_js:
     name: Test Vue.js
     runs-on: ubuntu-latest
+    if: >-
+      ${{ github.event.pull_request.changed_files &&
+          (startsWith(github.event.pull_request.changed_files, 'web/') ||
+           startsWith(github.event.pull_request.changed_files, 'public/') ||
+           contains(github.event.pull_request.changed_files, 'package.json') ||
+           contains(github.event.pull_request.changed_files, 'package-lock.json') ||
+           contains(github.event.pull_request.changed_files, 'tsconfig.json') ||
+           contains(github.event.pull_request.changed_files, 'tsconfig.node.json') ||
+           contains(github.event.pull_request.changed_files, 'vite.config.ts') ||
+           contains(github.event.pull_request.changed_files, 'tailwind.config.js') ||
+           contains(github.event.pull_request.changed_files, 'postcss.config.js') ||
+           contains(github.event.pull_request.changed_files, 'index.html')) }}
     steps:
       - name: Check out Source Code
         uses: actions/checkout@v4
-
-      - name: Determine if Vue.js Tests Should Run
-        id: vue_check
-        run: |
-          echo "should_run=$((
-            startsWith(github.event.pull_request.changed_files, 'web/') ||
-            startsWith(github.event.pull_request.changed_files, 'public/') ||
-            contains(github.event.pull_request.changed_files, 'package.json') ||
-            contains(github.event.pull_request.changed_files, 'package-lock.json') ||
-            contains(github.event.pull_request.changed_files, 'tsconfig.json') ||
-            contains(github.event.pull_request.changed_files, 'tsconfig.node.json') ||
-            contains(github.event.pull_request.changed_files, 'vite.config.ts') ||
-            contains(github.event.pull_request.changed_files, 'tailwind.config.js') ||
-            contains(github.event.pull_request.changed_files, 'postcss.config.js') ||
-            contains(github.event.pull_request.changed_files, 'index.html')
-          ))" >> $GITHUB_ENV
-
-      - name: No-op
-        if: ${{ env.should_run == 'false' }}
-        run: echo "No relevant changes for Vue.js tests."
-
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
       - name: Install Dependencies
-        if: ${{ env.should_run == 'true' }}
         run: npm ci
-
       - name: Check Formatting
-        if: ${{ env.should_run == 'true' }}
         run: npm run format:check
-
       - name: Type-check
-        if: ${{ env.should_run == 'true' }}
         run: npx vue-tsc --noEmit
-
       - name: Build
-        if: ${{ env.should_run == 'true' }}
         run: npm run build
