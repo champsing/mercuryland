@@ -161,6 +161,7 @@ ol li {
 }
 
 ol li ol li {
+  margin-left: 24px;
   list-style: lower-alpha;
   list-style-position: inside;
 }
