@@ -42,7 +42,7 @@ const dateRange = defineModel("dateRange", {
 });
 
 const strictFiltering = ref(false);
-const selectedTags: Ref<Set<string> | null> = ref(null);
+const selectedTags: Ref<string[] | null> = ref(null);
 const vodData = ref<VodItem[]>([]);
 const tagList = computed(() =>
     [...new Set(vodData.value.flatMap((x) => x.tags))].sort()
@@ -75,9 +75,11 @@ onMounted(loadVodData);
 
 function updateTag(tag: string) {
     if (selectedTags.value == null) {
-        selectedTags.value = new Set<string>();
+        selectedTags.value = [];
     }
-    selectedTags.value.add(tag);
+    if (!selectedTags.value.includes(tag)) {
+        selectedTags.value.push(tag);
+    }
 }
 
 const handleEditVod = (vod: VodItem) => {
