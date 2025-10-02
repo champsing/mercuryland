@@ -55,9 +55,7 @@ const data = computed(() => {
                     selected.slice().sort().toString()
                 );
 
-            return (
-                new Set(v.tags).intersection(new Set(selected)).size !== 0
-            );
+            return new Set(v.tags).intersection(new Set(selected)).size !== 0;
         })
         .sort((lhs, rhs) => rhs.date.localeCompare(lhs.date));
 });
@@ -73,21 +71,21 @@ const baseColumns = [
         thAlign: CENTER,
         tdAlign: CENTER,
         sortable: true,
-        sortingOptions: ["desc" as const, "asc" as const, null], // because these two string is defined as constants in src.
+        sortingOptions: ["desc" as const, "asc" as const, null],
     },
     {
         key: "title",
         label: "直播標題",
         thAlign: CENTER,
         tdAlign: CENTER,
-        width: 20
+        width: 20,
     },
     {
         key: "tags",
         label: "TAG",
         thAlign: CENTER,
         tdAlign: CENTER,
-        width: 20
+        width: 20,
     },
     {
         key: "duration",
@@ -148,7 +146,9 @@ function calcStyle(top: number) {
                 :columns="columns"
                 style="
                     --va-data-table-hover-color: #357286;
-                    --va-data-table-thead-background: var(--va-background-element);
+                    --va-data-table-thead-background: var(
+                        --va-background-element
+                    );
                     --va-data-table-thead-border: 0;
                     height: 100%;
                 "
@@ -177,32 +177,7 @@ function calcStyle(top: number) {
                         </VaButton>
                     </slot>
                 </template>
-            <!-- for checking day of week -->
-            <!-- <template #cell(date)="{ value }">
-                {{ value }}  {{ new Date(value).getDay() }}
-            </template> -->
-
-            <template #cell(title)="{ value, row }">
-                <!-- same as NextPageButton and ReturnTopButton -->
-                <VaButton
-                    preset="plain"
-                    size="small"
-                    color="textPrimary"
-                    hoverMaskColor="#5bc6a1"
-                    hoverOpacity="1"
-                    pressedMaskColor="info"
-                    :pressedOpacity="1"
-                    :href="`https://youtube.com/live/${row.rowData.link}`"
-                    target="_blank"
-                    rel="noreferrer noopener"
-                    class="mt-1"
-                >
-                    {{ value }}
-                </VaButton>
-            </template>
-            <template #cell(tags)="{ row }">
-                <!-- same as NextPageButton and ReturnTopButton -->
-                <template v-for="tag in row.rowData.tags">
+                <template #cell(title)="{ value, row }">
                     <VaButton
                         preset="plain"
                         size="small"
@@ -211,29 +186,47 @@ function calcStyle(top: number) {
                         hoverOpacity="1"
                         pressedMaskColor="info"
                         :pressedOpacity="1"
-                        @click="() => emit('updateTag', tag)"
+                        :href="`https://youtube.com/live/${row.rowData.link}`"
+                        target="_blank"
+                        rel="noreferrer noopener"
                         class="mt-1"
                     >
-                        {{ tag }}
+                        {{ value }}
                     </VaButton>
-                    <VaDivider
-                        vertical
-                        class="inline"
-                        v-if="tag !== row.rowData.tags.slice().reverse()[0]"
-                    />
                 </template>
-            </template>
-            <template v-if="showActions" #cell(actions)="{ row }">
-                <VaButton
-                    preset="plain"
-                    size="small"
-                    color="info"
-                    aria-label="編輯直播"
-                    @click="emit('editVod', row.rowData)"
-                >
-                    <VaIcon name="edit" />
-                </VaButton>
-            </template>
+                <template #cell(tags)="{ row }">
+                    <template v-for="tag in row.rowData.tags">
+                        <VaButton
+                            preset="plain"
+                            size="small"
+                            color="textPrimary"
+                            hoverMaskColor="#5bc6a1"
+                            hoverOpacity="1"
+                            pressedMaskColor="info"
+                            :pressedOpacity="1"
+                            @click="() => emit('updateTag', tag)"
+                            class="mt-1"
+                        >
+                            {{ tag }}
+                        </VaButton>
+                        <VaDivider
+                            vertical
+                            class="inline"
+                            v-if="tag !== row.rowData.tags.slice().reverse()[0]"
+                        />
+                    </template>
+                </template>
+                <template v-if="showActions" #cell(actions)="{ row }">
+                    <VaButton
+                        preset="plain"
+                        size="small"
+                        color="info"
+                        aria-label="編輯直播"
+                        @click="emit('editVod', row.rowData)"
+                    >
+                        <VaIcon name="edit" />
+                    </VaButton>
+                </template>
             </VaDataTable>
         </VaScrollContainer>
     </use-element-bounding>
