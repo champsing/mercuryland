@@ -14,24 +14,24 @@ import Setting from "./components/Setting.vue";
 import Welcome2 from "./components/welcome/Welcome2.vue";
 
 const routes = [
-    { path: "/", component: Welcome2 },
-    // { path: "/join", component: Join },
-    // { path: "/publication", component: Publication },
-    // { path: "/map", component: GameMap },
-    { path: "/vod", component: Vod },
-    { path: "/penalty", component: Penalty },
-    { path: "/contact", component: Contact },
-    { path: "/wheel", component: Wheel },
-    { path: "/tos", component: ToS },
-    { path: "/privacy", component: Privacy },
-    { path: "/leaderboard", component: Leaderboard },
-    { path: "/propose", component: Propose },
-    { path: "/setting", component: Setting },
+  { path: "/", component: Welcome2 },
+  // { path: "/join", component: Join },
+  // { path: "/publication", component: Publication },
+  // { path: "/map", component: GameMap },
+  { path: "/vod", component: Vod },
+  { path: "/penalty", component: Penalty },
+  { path: "/contact", component: Contact },
+  { path: "/wheel", component: Wheel },
+  { path: "/tos", component: ToS },
+  { path: "/privacy", component: Privacy },
+  { path: "/leaderboard", component: Leaderboard },
+  { path: "/propose", component: Propose },
+  { path: "/setting", component: Setting },
 ];
 
 const router = createRouter({
-    history: createWebHistory(),
-    routes,
+  history: createWebHistory(),
+  routes,
 });
 
 export default router;

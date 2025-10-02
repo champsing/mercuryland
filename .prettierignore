@@ -1,0 +1,8 @@
+node_modules/
+dist/
+target/
+*.lock
+*.log
+.env
+public/
+data/
