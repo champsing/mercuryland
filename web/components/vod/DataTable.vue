@@ -22,7 +22,7 @@ interface VodItem {
 const vh = useWindowSize().height;
 const props = defineProps<{
   dateRange: { start: Date; end: Date };
-  selectedTags?: string[] | null;
+  selectedTags: string[];
   strictFiltering: boolean;
   vodData: VodItem[];
   isAuthenticated?: boolean;
@@ -44,18 +44,13 @@ const data = computed(() => {
           new Date(props.dateRange.end.getTime() + 28800000).toISOString().slice(0, 10),
     )
     .filter((v) => {
-      const selected = props.selectedTags ?? [];
-      const hasSelected = selected.length > 0;
+      if (props.selectedTags.length === 0) return true;
 
-      if (!hasSelected) return true;
+      if (props.strictFiltering === true) {
+        return props.selectedTags.every((tag) => v.tags.includes(tag));
+      }
 
-      if (props.strictFiltering === true)
-        return (
-          v.tags.slice().sort().toString() ===
-          selected.slice().sort().toString()
-        );
-
-      return new Set(v.tags).intersection(new Set(selected)).size !== 0;
+      return v.tags.some((tag) => props.selectedTags.includes(tag));
     })
     .sort((lhs, rhs) => rhs.date.localeCompare(lhs.date));
 });
