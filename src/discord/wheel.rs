@@ -9,6 +9,7 @@ use crate::{
 use itertools::Itertools;
 
 #[poise::command(slash_command)]
+// TODO: Delete old code based wheel message fetch
 pub async fn fetch_wheel(ctx: super::Context<'_>, wheel_id: String) -> Result<(), ServerError> {
     let id = match u16::from_str_radix(&wheel_id, 16) {
         Err(_) => {

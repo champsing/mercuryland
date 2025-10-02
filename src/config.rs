@@ -1,3 +1,4 @@
+// TODO: Use environment variable for discord token and youtube token
 use chrono::{DateTime, Utc};
 use google_youtube3::yup_oauth2::ApplicationSecret;
 use serde::{Deserialize, Serialize};

@@ -1,3 +1,4 @@
+// TODO: Update Leaderboard style
 <script setup lang="ts">
 import axios from "axios";
 import { BASE_URL } from "@/composables/utils";

@@ -92,6 +92,7 @@ pub async fn deadline(ctx: super::Context<'_>, deadline: u64) -> Result<(), Serv
 }
 
 #[poise::command(slash_command)]
+// TODO: Make the vote automatically conclude the result
 pub async fn conclude(ctx: super::Context<'_>) -> Result<(), ServerError> {
     if !CONFIG.discord.admin.contains(&ctx.author().id.get()) {
         ctx.say("权限不足").await?;
