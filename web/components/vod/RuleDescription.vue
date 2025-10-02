@@ -1,10 +1,9 @@
 <script setup lang="ts">
 import { ref } from "vue";
-import { VaButton, VaIcon, VaModal } from "vuestic-ui";
+import { VaButton, VaIcon, VaModal, VaCollapse } from "vuestic-ui";
 import { Info24Regular } from "@vicons/fluent";
 
 const showRuleDescModal = ref(false);
-const showVodDescImg = ref(false);
 </script>
 
 <template>
@@ -26,7 +25,7 @@ const showVodDescImg = ref(false);
     close-button
     z-index="4"
   >
-  <div class="text-lg font-semibold text-zinc-200">直播時數規則說明</div>
+    <div class="text-lg font-semibold text-zinc-200">直播時數規則說明</div>
     <div class="text-xl mt-2">一、概述</div>
     <div class="text-bg mt-2">
       惡靈公布直播紀錄檔時，此處會同步更新計算加班台的剩餘時數，並標上當天遊玩的遊戲，供使用者藉由上方的標籤篩選功能找到自己想看的遊戲直播。
@@ -52,30 +51,14 @@ const showVodDescImg = ref(false);
         <li>若有其他因素導致時數加減也會以獨立項目處理。</li>
         <li>伺服器時間每週三 00:00 會在計算明細表生成一項「計劃」。</li>
       </ol>
-      <VaButton
-        class="mt-2"
-        preset="primary"
-        border-color="info"
-        color="info"
-        gradient
-        @click="showVodDescImg = !showVodDescImg"
-      >
-        查看說明圖例
-      </VaButton>
+      <VaCollapse class="mt-2" header="說明圖例">
+        <img src="/images/vod_time.webp" alt="直播時數規則說明" />
+      </VaCollapse>
     </div>
 
     <div class="text-xl mt-2">三、不可抗力因素</div>
     <div class="text-bg mt-2">
       若惡靈在直播過程中斷網或停電，則中間嘗試恢復的多次黑畫面直播紀錄檔將不會被採計，直到恢復1分鐘以上的穩定直播為止。
     </div>
-  </VaModal>
-
-  <VaModal
-    v-model="showVodDescImg"
-    hide-default-actions
-    close-button
-    z-index="5"
-  >
-    <img src="/images/vod_time.webp" alt="直播時數規則說明" />
   </VaModal>
 </template>
