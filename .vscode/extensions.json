@@ -1,7 +1,7 @@
 {
-    "recommendations": [
-        "Vue.vscode-typescript-vue-plugin",
-        "bradlc.vscode-tailwindcss",
-        "esbenp.prettier-vscode"
-    ]
+  "recommendations": [
+    "Vue.vscode-typescript-vue-plugin",
+    "bradlc.vscode-tailwindcss",
+    "esbenp.prettier-vscode"
+  ]
 }
