@@ -87,13 +87,15 @@ backToTop();
   </div>
 </template>
 
-<style>
+<style scoped>
 ol li {
   list-style: decimal;
   list-style-position: inside;
 }
 
-ol ol li {
-  margin-left: 40px;
+ol li ol li {
+  margin-left: 24px;
+  list-style: lower-alpha;
+  list-style-position: inside;
 }
 </style>
