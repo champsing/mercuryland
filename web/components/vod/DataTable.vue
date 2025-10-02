@@ -45,7 +45,7 @@ const data = computed(() => {
                     new Date(props.dateRange.end.getTime() + 28800000).toISOString().slice(0, 10)
         )
         .filter((v) => {
-            if (!selectedTags) return true;
+            if (selectedTags.size === 0) return true;
 
             if (props.strictFiltering) {
                 return (
