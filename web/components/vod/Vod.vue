@@ -75,7 +75,7 @@ function updateTag(tag: string) {
   if (selectedTags.value.includes(tag)) {
     selectedTags.value = selectedTags.value.filter((x) => x !== tag);
   } else {
-    selectedTags.value.push(tag);
+    selectedTags.value = [...selectedTags.value, tag];
   }
 }
 
