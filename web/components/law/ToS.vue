@@ -2,9 +2,11 @@
 // TODO: Update ToS Page style
 import { VaDivider } from "vuestic-ui";
 import { backToTop, copyToClipboard } from "@/composables/utils";
+import { ref } from "vue";
+
 backToTop();
 
-const email = "0.flunky-sojourn@icloud.com";
+const email = ref("0.flunky-sojourn@icloud.com");
 </script>
 
 <template>
