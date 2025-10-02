@@ -30,6 +30,7 @@ const props = defineProps<{
 const emit = defineEmits<{
   (e: "updateTag", tag: string): void;
   (e: "editVod", vod: VodItem): void;
+  (e: "addVod"): void;
 }>();
 
 const data = computed(() => {
@@ -165,6 +166,7 @@ function calcStyle(top: number) {
               size="small"
               color="info"
               aria-label="新增直播"
+              @click="$emit('addVod')"
             >
               <VaIcon name="add" />
             </VaButton>
