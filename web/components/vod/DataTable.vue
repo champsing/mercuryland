@@ -97,8 +97,8 @@ const columns = computed(() => {
     result.push({
       key: "actions",
       label: "",
-      thAlign: CENTER,
-      tdAlign: CENTER,
+      thAlign: "center" as const,
+      tdAlign: "center" as const,
       width: 12,
     });
   }
