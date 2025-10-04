@@ -12,7 +12,7 @@ import penaltyStatus from "@assets/data/penalty_status.json";
 import Table from "./Table.vue";
 import Statistics from "./Statistics.vue";
 import Syntax from "./Syntax.vue";
-import LatestPenalty from "./LatestPenalty.vue";
+import News from "./News.vue";
 import RuleDescription from "./RuleDescription.vue";
 import { formatDate, parseDate } from "@/composables/utils";
 
@@ -110,7 +110,7 @@ let finishOptions = penaltyStatus.map((x) => x.name).sort();
           <Statistics />
           <VaDivider class="m-3" />
           <Syntax />
-          <LatestPenalty class="mt-10" />
+          <News class="mt-10" />
         </div>
       </div>
     </div>
