@@ -13,7 +13,7 @@ jobs:
         uses: actions/checkout@v4
       - name: Build Docker Image
         run: |
-          docker build -t mercury .
+          docker build --build-arg DISCORD_TOKEN=${{ secrets.DISCORD_TOKEN }} -t mercury .
           docker images
           docker save --output mercury.tar mercury
       - name: Upload Artifacts
