@@ -106,21 +106,9 @@ let finishOptions = penaltyStatus.map((x) => x.name).sort();
       </div>
       <div class="flex flex-col w-1/4">
         <div class="flex flex-col m-auto mt-0 gap-2">
-          <VaCard style="--va-card-padding: 0rem" class="rounded-xl">
-            <VaCardContent>
-              <News />
-            </VaCardContent>
-          </VaCard>
-          <VaCard style="--va-card-padding: 0rem" class="rounded-xl">
-            <VaCardContent>
-              <Statistics />
-            </VaCardContent>
-          </VaCard>
-          <VaCard style="--va-card-padding: 0rem" class="rounded-xl">
-            <VaCardContent>
-              <Syntax />
-            </VaCardContent>
-          </VaCard>
+          <News />
+          <Statistics />
+          <Syntax />
         </div>
       </div>
     </div>

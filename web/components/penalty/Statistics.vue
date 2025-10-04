@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from "vue";
-import { VaButton, VaDivider, VaModal, VaTextarea } from "vuestic-ui";
+import { VaButton, VaDivider, VaModal, VaTextarea, VaCard, VaCardContent } from "vuestic-ui";
 import penaltyData from "@assets/data/penalty.json";
 import { copyToClipboard } from "@/composables/utils";
 
@@ -25,20 +25,24 @@ let proceedingPenalties = queryStatusPenaties("進行中");
 </script>
 
 <template>
-  <div>
-    <div class="text-center text-xl bg-stone-600 mb-3">懲罰數量統計</div>
+  <VaCard style="--va-card-padding: 0rem" class="rounded-xl">
+    <VaCardContent>
+      <div>
+        <div class="text-center text-xl bg-stone-600 mb-3">懲罰數量統計</div>
 
-    <div class="flex flex-col justify-center gap-3 m-4 mb-0" item-responsive>
-      <!--This div is for its own size, don't delete.-->
+        <div class="flex flex-col justify-center gap-3 m-4 mb-0" item-responsive>
+          <!--This div is for its own size, don't delete.-->
 
-      <VaButton color="danger" @click="showExistModal = !showExistModal">
-        <div class="text-xl">現存</div>
-      </VaButton>
-      <VaButton color="success" @click="showCompleteModal = !showCompleteModal">
-        <div class="text-xl">完成</div>
-      </VaButton>
-    </div>
-  </div>
+          <VaButton color="danger" @click="showExistModal = !showExistModal">
+            <div class="text-xl">現存</div>
+          </VaButton>
+          <VaButton color="success" @click="showCompleteModal = !showCompleteModal">
+            <div class="text-xl">完成</div>
+          </VaButton>
+        </div>
+      </div>
+    </VaCardContent>
+  </VaCard>
 
   <!-- 現存 和 完成 -->
   <VaModal

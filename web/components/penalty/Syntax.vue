@@ -8,6 +8,8 @@ import {
   VaTabs,
   VaTab,
   VaChip,
+  VaCard,
+  VaCardContent,
 } from "vuestic-ui";
 import { statusOf } from "@/composables/penalty";
 
@@ -92,26 +94,33 @@ const currentTab = (
 <template>
   <!-- !text-[#6d8581] !text-[#b91c1c] !text-[#4d7c0f] !text-[#047857] !text-[#b45309] -->
   <!-- TAILWIND CSS: DO NOT REMOVE ABOVE COMMENT -->
-  <div>
-    <div class="text-center text-xl bg-stone-600 mb-3">圖例</div>
+<template>
+  <!-- !text-[#6d8581] !text-[#b91c1c] !text-[#4d7c0f] !text-[#047857] !text-[#b45309] -->
+  <!-- TAILWIND CSS: DO NOT REMOVE ABOVE COMMENT -->
+  <VaCard style="--va-card-padding: 0rem" class="rounded-xl">
+    <VaCardContent>
+      <div>
+        <div class="text-center text-xl bg-stone-600 mb-3">圖例</div>
 
-    <div class="flex flex-col justify-center gap-3 m-4" item-responsive>
-      <VaButton
-        gradient
-        color="#28c9c7"
-        @click="showAdditionalSyntax = !showAdditionalSyntax"
-      >
-        <div class="text-xl">詳細資料類</div>
-      </VaButton>
-      <VaButton
-        gradient
-        color="#005c99"
-        @click="showStatusSyntax = !showStatusSyntax"
-      >
-        <div class="text-xl">完成狀態類</div>
-      </VaButton>
-    </div>
-  </div>
+        <div class="flex flex-col justify-center gap-3 m-4" item-responsive>
+          <VaButton
+            gradient
+            color="#28c9c7"
+            @click="showAdditionalSyntax = !showAdditionalSyntax"
+          >
+            <div class="text-xl">詳細資料類</div>
+          </VaButton>
+          <VaButton
+            gradient
+            color="#005c99"
+            @click="showStatusSyntax = !showStatusSyntax"
+          >
+            <div class="text-xl">完成狀態類</div>
+          </VaButton>
+        </div>
+      </div>
+    </VaCardContent>
+  </VaCard>
 
   <VaModal
     v-model="showAdditionalSyntax"
