@@ -77,3 +77,46 @@ jobs:
         run: npx vue-tsc --noEmit
       - name: Build
         run: npm run build
+
+  version_check:
+    name: Version Consistency
+    runs-on: ubuntu-latest
+    if: >-
+      ${{ github.event.pull_request.changed_files &&
+          (contains(github.event.pull_request.changed_files, 'Cargo.toml') ||
+           contains(github.event.pull_request.changed_files, 'Cargo.lock') ||
+           contains(github.event.pull_request.changed_files, 'package.json') ||
+           contains(github.event.pull_request.changed_files, 'package-lock.json')) }}
+    steps:
+      - name: Check out Source Code
+        uses: actions/checkout@v4
+      - name: Check Version Consistency
+        run: |
+          CARGO_VERSION=$(cargo metadata --format-version=1 --no-deps | jq -r '.packages[0].version')
+          PACKAGE_VERSION=$(jq -r '.version' package.json)
+          CARGO_LOCK_VERSION=$(grep -A 5 'name = "mercury_land"' Cargo.lock | grep '^version = ' | sed 's/version = "\(.*\)"/\1/')
+          PACKAGE_LOCK_VERSION=$(jq -r '.version' package-lock.json)
+          
+          if [ "$CARGO_VERSION" != "$PACKAGE_VERSION" ] || [ "$CARGO_VERSION" != "$CARGO_LOCK_VERSION" ] || [ "$CARGO_VERSION" != "$PACKAGE_LOCK_VERSION" ]; then
+            echo "Version mismatch:"
+            echo "Cargo.toml: $CARGO_VERSION"
+            echo "package.json: $PACKAGE_VERSION"
+            echo "Cargo.lock: $CARGO_LOCK_VERSION"
+            echo "package-lock.json: $PACKAGE_LOCK_VERSION"
+            exit 1
+          fi
+          echo "All versions are consistent: $CARGO_VERSION"
+      - name: Check Cargo.lock is up to date
+        run: |
+          if cargo update --dry-run 2>&1 | grep -q "Updating"; then
+            echo "Cargo.lock is not up to date. Run 'cargo update' to update dependencies."
+            exit 1
+          fi
+          echo "Cargo.lock is up to date"
+      - name: Check package-lock.json is up to date
+        run: |
+          if npm outdated 2>/dev/null | grep -q .; then
+            echo "package-lock.json is not up to date. Run 'npm update' to update dependencies."
+            exit 1
+          fi
+          echo "package-lock.json is up to date"
