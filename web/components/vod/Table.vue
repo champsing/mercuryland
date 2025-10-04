@@ -8,7 +8,8 @@ import {
   VaIcon,
   VaScrollContainer,
 } from "vuestic-ui";
-import { calcHeight } from "@/composables/style";
+import { FOOTNOTE_HEIGHT, FOOTNOTE_GAP } from "@/composables/constants";
+import { useWindowSize } from "@vueuse/core";
 
 interface VodItem {
   id?: number | null;
@@ -109,7 +110,13 @@ const headerColumns = computed(() =>
   columns.value.filter((column) => column.key !== "actions"),
 );
 
-const PB_DIV_FLEX = 8;
+const vh = useWindowSize().height;
+function tableHeight(top: number) {
+  let height = vh.value - window.scrollY - top - FOOTNOTE_HEIGHT - FOOTNOTE_GAP;
+  return {
+    height: "" + height + "px",
+  };
+}
 </script>
 
 <template>
@@ -119,7 +126,7 @@ const PB_DIV_FLEX = 8;
       color="#e0feb4"
       size="medium"
       class="h-full"
-      :style="calcHeight(top, PB_DIV_FLEX)"
+      :style="tableHeight(top)"
     >
       <VaDataTable
         :items="data"

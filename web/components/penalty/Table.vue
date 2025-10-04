@@ -7,7 +7,8 @@ import vodData from "@assets/data/vod.json";
 import PenaltyModal from "./PenaltyModal.vue";
 import { openLinks, truncateString } from "@/composables/utils";
 import { statusOf } from "@/composables/penalty";
-import { calcHeight } from "@/composables/style";
+import { FOOTNOTE_HEIGHT, FOOTNOTE_GAP } from "@/composables/constants";
+import { useWindowSize } from "@vueuse/core";
 
 const props = defineProps<{
   dateRange: { start: Date; end: Date };
@@ -105,7 +106,13 @@ function filterPenaltyData(
     .sort((lhs, rhs) => rhs.date.localeCompare(lhs.date));
 }
 
-const PB_DIV_FLEX = 8;
+const vh = useWindowSize().height;
+function tableHeight(top: number) {
+  let height = vh.value - window.scrollY - top - FOOTNOTE_HEIGHT - FOOTNOTE_GAP;
+  return {
+    height: "" + height + "px",
+  };
+}
 </script>
 
 <template>
@@ -115,7 +122,7 @@ const PB_DIV_FLEX = 8;
       color="#e0feb4"
       size="medium"
       class="h-full"
-      :style="calcHeight(top, PB_DIV_FLEX)"
+      :style="tableHeight(top)"
     >
       <VaDataTable
         :items="items"

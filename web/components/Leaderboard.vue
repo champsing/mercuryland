@@ -12,7 +12,8 @@ import {
   VaCard,
 } from "vuestic-ui";
 import { ArrowClockwise24Filled } from "@vicons/fluent";
-import { calcHeight } from "@/composables/style";
+import { useWindowSize } from "@vueuse/core";
+import { FOOTNOTE_HEIGHT, FOOTNOTE_GAP } from "@/composables/constants";
 
 document.title = "水星排行 - 水星人的夢幻樂園";
 
@@ -121,7 +122,13 @@ function rankEmoji(rank: number) {
   }
 }
 
-const MB_VA_CARD = 8;
+const vh = useWindowSize().height;
+function tableHeight(top: number) {
+  let height = vh.value - window.scrollY - top - FOOTNOTE_HEIGHT - FOOTNOTE_GAP;
+  return {
+    height: "" + height + "px",
+  };
+}
 </script>
 
 <template>
@@ -147,7 +154,7 @@ const MB_VA_CARD = 8;
         color="#e0feb4"
         size="medium"
         class="h-full"
-        :style="calcHeight(top, MB_VA_CARD)"
+        :style="tableHeight(top)"
       >
         <VaDataTable
           :items="leaderboard"
