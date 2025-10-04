@@ -52,7 +52,7 @@ impl User {
             ])
             .values([
                 self.youtube.clone().into(),
-                self.discord.map(|d| d as i64).into(),
+                self.discord.into(),
                 self.coin.into(),
                 self.display.clone().into(),
                 self.updated_at.into(),
@@ -144,7 +144,7 @@ impl User {
             .table(UserIden::Table)
             .values([
                 (UserIden::Youtube, self.youtube.clone().into()),
-                (UserIden::Discord, self.discord.map(|d| d as i64).into()),
+                (UserIden::Discord, self.discord.into()),
                 (UserIden::Display, self.display.clone().into()),
                 (UserIden::UpdatedAt, self.updated_at.into()),
                 (UserIden::Coin, self.coin.into()),
