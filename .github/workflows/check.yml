@@ -126,8 +126,10 @@ jobs:
           echo "All versions are consistent: $CARGO_VERSION"
       - name: Check Cargo.lock is up to date
         run: |
-          if cargo update --dry-run 2>&1 | grep -q "Updating"; then
+          output=$(cargo update --dry-run 2>&1)
+          if [ -n "$output" ]; then
             echo "Cargo.lock is not up to date. Run 'cargo update' to update dependencies."
+            echo "Output: $output"
             exit 1
           fi
           echo "Cargo.lock is up to date"
