@@ -1,5 +1,5 @@
-pub(crate) mod coin;
 mod migration;
+pub(crate) mod user;
 pub(crate) mod video;
 pub(crate) mod wheel;
 

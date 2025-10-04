@@ -1,7 +1,10 @@
+
 FROM rust:alpine AS build-rs
 WORKDIR /build
 RUN apk add --no-cache musl-dev sqlite-static openssl-dev openssl-libs-static pkgconf libpq-dev 
 COPY . .
+ARG DISCORD_TOKEN
+ENV DISCORD_TOKEN=${DISCORD_TOKEN}
 RUN cargo build --release
 
 FROM scratch

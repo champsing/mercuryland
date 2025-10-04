@@ -18,7 +18,6 @@ pub struct Config {
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct DiscordConfig {
-    pub token: String,
     pub exchange: u64,
     pub penalty: u64,
     pub admin: Vec<u64>,
@@ -29,6 +28,8 @@ pub static CONFIG: LazyLock<Config> = LazyLock::new(|| {
         fs::read_to_string("data/config.json").expect("[ERROR] Cannot read config files");
     serde_json::from_str(&contents).expect("[ERROR] Cannot parse config files")
 });
+
+pub static CFG_DISCORD_TOKEN: LazyLock<&str> = LazyLock::new(|| env!("DISCORD_TOKEN"));
 
 #[derive(Debug, Clone)]
 pub struct AuthCode {
