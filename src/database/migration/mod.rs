@@ -1,6 +1,6 @@
 use crate::error::ServerError;
 
-const VERSION: u32 = 6;
+const VERSION: u32 = 7;
 
 pub fn run_migration(transaction: &rusqlite::Transaction) -> Result<(), ServerError> {
     let mut version =
