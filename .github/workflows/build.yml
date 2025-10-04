@@ -15,7 +15,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 2
-      - name: Version Change Detection
+      - name: Version Change
         id: version_check
         run: |
           if git diff HEAD~1 -- Cargo.toml | grep -q '^+version = '; then
