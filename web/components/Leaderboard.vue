@@ -3,12 +3,30 @@
 import axios from "axios";
 import { BASE_URL } from "@/composables/utils";
 import { ref, Ref } from "vue";
-import { VaDataTable, VaButton, VaIcon, VaPopover, VaDivider } from "vuestic-ui";
+import { UseElementBounding } from "@vueuse/components";
+import { useWindowSize } from "@vueuse/core";
+import { VaDataTable, VaButton, VaIcon, VaPopover, VaDivider, VaScrollContainer, VaCard } from "vuestic-ui";
 import { ArrowClockwise24Filled } from "@vicons/fluent";
 
 document.title = "水星排行 - 水星人的夢幻樂園";
 
+const vh = useWindowSize().height;
 const leaderboard: Ref<UserRank[]> = ref([]);
+
+function calcStyle(top: number) {
+  let parentMarginBottom = 8;
+  let parentPaddingBottom = 8;
+  let footnoteHeight = 48;
+
+  let delta = parentMarginBottom + footnoteHeight + parentPaddingBottom;
+  let height = Math.max(
+    vh.value * 0.5,
+    vh.value - window.scrollY - top - delta,
+  );
+  return {
+    height: "" + height + "px",
+  };
+}
 
 function loadLeaderboard() {
   axios
@@ -58,40 +76,32 @@ class UserRank {
   updated_at: number;
 }
 
-const CENTER = "center" as const;
-
 const columns = [
   {
     key: "rank",
     label: "名次",
-    tdAlign: CENTER,
-    thAlign: CENTER,
-    width: 140,
+    tdAlign: "center",
+    thAlign: "center",
     sortable: true,
     sortingOptions: ["desc" as const, "asc" as const, null],
   },
   {
     key: "display",
-    label: "帳號顯示名稱",
-    tdAlign: CENTER,
-    thAlign: CENTER,
-    width: 250,
-    sortable: true,
-    sortingOptions: ["desc" as const, "asc" as const, null],
+    label: "名稱",
+    tdAlign: "center",
+    thAlign: "center",
   },
   {
     key: "coin",
-    label: "水星幣數量",
-    tdAlign: CENTER,
-    thAlign: CENTER,
-    width: 200,
+    label: "水星幣",
+    tdAlign: "center",
+    thAlign: "center",
   },
   {
     key: "updated_at",
-    label: "最後更新時間",
-    tdAlign: CENTER,
-    thAlign: CENTER,
-    width: 140,
+    label: "最近出现",
+    tdAlign: "center",
+    thAlign: "center",
     sortable: true,
     sortingOptions: ["desc" as const, "asc" as const, null],
   },
@@ -110,18 +120,30 @@ const columns = [
     </p>
     </div>
   </div>
-  <VaDivider class="w-full !mt-0 !mb-2" />
+    <VaDivider class="w-full !mt-0 !mb-2" />
   
-  <div class="h-80vh mx-10">
-    <VaDataTable
-      :items="leaderboard"
-      :columns="columns"
-      class="mt-5 mb-3"
-      style="--va-data-table-hover-color: #357286"
-      virtual-scroller
-      sticky-header
-      hoverable
-    >
+  <VaCard>
+    <use-element-bounding v-slot="{ top }" class="mb-2 mx-10">
+      <VaScrollContainer
+        vertical
+        color="#e0feb4"
+        size="medium"
+        class="h-full"
+        :style="calcStyle(top)"
+      >
+        <VaDataTable
+          :items="leaderboard"
+          :columns="columns"
+          style="
+            --va-data-table-hover-color: #357286;
+            --va-data-table-thead-background: var(--va-background-element);
+            --va-data-table-thead-border: 0;
+            height: 100%;
+          "
+          :virtual-scroller="false"
+          sticky-header
+          hoverable
+        >
       <template #header(rank)="{ label }">
         <div class="text-sm">
           <VaPopover icon="info" message="點擊可排序">
@@ -246,5 +268,13 @@ const columns = [
         </div>
       </template>
     </VaDataTable>
-  </div>
+  </VaScrollContainer>
+</use-element-bounding>
+  </VaCard>
 </template>
+
+<style scoped>
+:deep(.va-data-table__thead) {
+  background-color: var(--va-background-element);
+}
+</style>
