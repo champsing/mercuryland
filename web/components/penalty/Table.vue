@@ -182,6 +182,8 @@ function tableHeight(top: number) {
                     </div>
                 </template>
                 <template #cell(status)="{ value }">
+                    <!-- !bg-[#6d8581] !bg-[#b91c1c] !bg-[#4d7c0f] !bg-[#047857] !bg-[#b45309] -->
+                    <!-- TAILWIND CSS: DO NOT REMOVE ABOVE COMMENT -->
                     <div
                         class="text-center"
                         :class="`!bg-[${statusOf(value).color}]`"
