@@ -109,7 +109,7 @@ function filterPenaltyData(
       (v) =>
         search == "" || v.name.toLowerCase().includes(search.toLowerCase()),
     )
-    .sort((lhs, rhs) => lhs.date.localeCompare(rhs.date));
+    .sort((lhs, rhs) => rhs.date.localeCompare(lhs.date));
 }
 
 function calcStyle(top: number) {
@@ -140,7 +140,6 @@ function calcStyle(top: number) {
       <VaDataTable
         :items="items"
         :columns="columns"
-        :default-sort-by="{ key: 'date', order: 'desc' }"
         style="
           --va-data-table-hover-color: #357286;
           --va-data-table-thead-background: var(--va-background-element);
