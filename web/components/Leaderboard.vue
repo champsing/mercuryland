@@ -114,11 +114,11 @@ const columns = [
 ];
 
 function rankStyle(rank: number) {
-  if (rank == 1) {
+  if (rank === 1) {
     return "text-yellow-400 font-bold text-2xl";
-  } else if (rank == 2) {
+  } else if (rank === 2) {
     return "text-zinc-400 font-bold text-xl";
-  } else if (rank == 3) {
+  } else if (rank === 3) {
     return "text-amber-600 font-bold text-lg";
   } else {
     return "text-white";
@@ -128,9 +128,9 @@ function rankStyle(rank: number) {
 function rankEmoji(rank: number) {
   if (rank == 1) {
     return "🥇";
-  } else if (rank == 2) {
+  } else if (rank === 2) {
     return "🥈";
-  } else if (rank == 3) {
+  } else if (rank === 3) {
     return "🥉";
   } else {
     return "ㅤ"; // Invisible character to maintain layout
