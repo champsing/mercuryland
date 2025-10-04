@@ -105,7 +105,7 @@ const columns = [
   },
   {
     key: "updated_at",
-    label: "最近出现",
+    label: "最近出現",
     tdAlign: "center" as const,
     thAlign: "center" as const,
     sortable: true,
