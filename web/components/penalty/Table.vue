@@ -146,7 +146,7 @@ function calcStyle(top: number) {
           --va-data-table-thead-border: 0;
           height: 100%;
         "
-        virtual-scroller
+        :virtual-scroller="false"
         sticky-header
         hoverable
       >
