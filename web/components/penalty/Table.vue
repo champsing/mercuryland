@@ -1,19 +1,13 @@
 <script setup lang="ts">
 import { ref, Ref, computed } from "vue";
 import { UseElementBounding } from "@vueuse/components";
-import { useWindowSize } from "@vueuse/core";
-import {
-  VaButton,
-  VaDataTable,
-  VaScrollContainer,
-} from "vuestic-ui";
+import { VaButton, VaDataTable, VaScrollContainer } from "vuestic-ui";
 import penaltyData from "@assets/data/penalty.json";
 import vodData from "@assets/data/vod.json";
 import PenaltyModal from "./PenaltyModal.vue";
 import { openLinks, truncateString } from "@/composables/utils";
 import { statusOf } from "@/composables/penalty";
-
-const vh = useWindowSize().height;
+import { calcHeight } from "@/composables/style";
 
 const props = defineProps<{
   dateRange: { start: Date; end: Date };
@@ -111,20 +105,7 @@ function filterPenaltyData(
     .sort((lhs, rhs) => rhs.date.localeCompare(lhs.date));
 }
 
-function calcStyle(top: number) {
-  let parentMarginBottom = 8;
-  let parentPaddingBottom = 8;
-  let footnoteHeight = 48;
-
-  let delta = parentMarginBottom + footnoteHeight + parentPaddingBottom;
-  let height = Math.max(
-    vh.value * 0.5,
-    vh.value - window.scrollY - top - delta,
-  );
-  return {
-    height: "" + height + "px",
-  };
-}
+const PB_DIV_FLEX = 8;
 </script>
 
 <template>
@@ -134,7 +115,7 @@ function calcStyle(top: number) {
       color="#e0feb4"
       size="medium"
       class="h-full"
-      :style="calcStyle(top)"
+      :style="calcHeight(top, PB_DIV_FLEX)"
     >
       <VaDataTable
         :items="items"
