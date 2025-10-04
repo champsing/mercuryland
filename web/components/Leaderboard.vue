@@ -5,7 +5,14 @@ import { BASE_URL } from "@/composables/utils";
 import { onMounted, ref, Ref } from "vue";
 import { UseElementBounding } from "@vueuse/components";
 import { useWindowSize } from "@vueuse/core";
-import { VaDataTable, VaButton, VaIcon, VaDivider, VaScrollContainer, VaCard } from "vuestic-ui";
+import {
+  VaDataTable,
+  VaButton,
+  VaIcon,
+  VaDivider,
+  VaScrollContainer,
+  VaCard,
+} from "vuestic-ui";
 import { ArrowClockwise24Filled } from "@vicons/fluent";
 
 document.title = "水星排行 - 水星人的夢幻樂園";
@@ -120,18 +127,20 @@ function rankStyle(rank: number) {
 </script>
 
 <template>
-    <div
+  <div
     class="flex h-14 w-full flex-row items-center justify-between gap-4 px-2"
   >
     <h1 class="ml-12 text-2xl font-semibold">水星排行</h1>
     <div class="flex items-center">
-      <VaButton preset="plain" @click="loadLeaderboard()"><VaIcon><ArrowClockwise24Filled /></VaIcon></VaButton>
-    <p class="text-zinc-400 sm:text-right ml-2">
-       這裡顯示的是水星幣的排行榜，每次直播獲得的水星幣都會在這裡顯示。
-    </p>
+      <VaButton preset="plain" @click="loadLeaderboard()"
+        ><VaIcon><ArrowClockwise24Filled /></VaIcon
+      ></VaButton>
+      <p class="text-zinc-400 sm:text-right ml-2">
+        這裡顯示的是水星幣的排行榜，每次直播獲得的水星幣都會在這裡顯示。
+      </p>
     </div>
   </div>
-    <VaDivider class="w-full !mt-0 !mb-2" />
+  <VaDivider class="w-full !mt-0 !mb-2" />
 
   <VaCard class="m-2 overflow-hidden rounded-xl">
     <use-element-bounding v-slot="{ top }">
@@ -155,64 +164,64 @@ function rankStyle(rank: number) {
           sticky-header
           hoverable
         >
-        <template
-          v-for="column in columns"
-          #[`header(${column.key})`]="{ label }"
-          :key="column.key"
-        >
-          <div class="text-sm text-center">
-            {{ label }}
-          </div>
-        </template>
-      <template #cell(rank)="{ value, row }">
-        <div class="text-center">
-          <div v-if="row.rowData.rank == 1">
-            <div class="text-yellow-400 font-bold text-2xl">
-              🥇第 {{ value }} 名
-            </div>
-          </div>
-          <div v-else-if="row.rowData.rank == 2">
-            <div class="text-zinc-400 font-bold text-xl">
-              🥈第 {{ value }} 名
-            </div>
-          </div>
-          <div v-else-if="row.rowData.rank == 3">
-            <div class="text-amber-600 font-bold text-lg">
-              🥉第 {{ value }} 名
-            </div>
-          </div>
-          <div v-else>第 {{ value }} 名</div>
-        </div>
-      </template>
-      <template #cell(display)="{ value, row }">
-        <div class="text-center">
-          <VaButton
-            :href="`https://www.youtube.com/channel/${row.rowData.youtube}`"
-            target="_blank"
-            preset="plain"
-            rel="noopener noreferrer"
+          <template
+            v-for="column in columns"
+            #[`header(${column.key})`]="{ label }"
+            :key="column.key"
           >
-            <div :class="rankStyle(row.rowData.rank)">
-              {{ value }}
+            <div class="text-sm text-center">
+              {{ label }}
             </div>
-          </VaButton>
-        </div>
-      </template>
-      <template #cell(coin)="{ value, row }">
-        <div class="text-center">
-            <div :class="rankStyle(row.rowData.rank)">
-              {{ value }}
+          </template>
+          <template #cell(rank)="{ value, row }">
+            <div class="text-center">
+              <div v-if="row.rowData.rank == 1">
+                <div class="text-yellow-400 font-bold text-2xl">
+                  🥇第 {{ value }} 名
+                </div>
+              </div>
+              <div v-else-if="row.rowData.rank == 2">
+                <div class="text-zinc-400 font-bold text-xl">
+                  🥈第 {{ value }} 名
+                </div>
+              </div>
+              <div v-else-if="row.rowData.rank == 3">
+                <div class="text-amber-600 font-bold text-lg">
+                  🥉第 {{ value }} 名
+                </div>
+              </div>
+              <div v-else>第 {{ value }} 名</div>
             </div>
-        </div>
-      </template>
-      <template #cell(updated_at)="{ value }">
-        <div class="text-center">
-          {{ new Date(value).toDateString() }}
-        </div>
-      </template>
-    </VaDataTable>
-  </VaScrollContainer>
-</use-element-bounding>
+          </template>
+          <template #cell(display)="{ value, row }">
+            <div class="text-center">
+              <VaButton
+                :href="`https://www.youtube.com/channel/${row.rowData.youtube}`"
+                target="_blank"
+                preset="plain"
+                rel="noopener noreferrer"
+              >
+                <div :class="rankStyle(row.rowData.rank)">
+                  {{ value }}
+                </div>
+              </VaButton>
+            </div>
+          </template>
+          <template #cell(coin)="{ value, row }">
+            <div class="text-center">
+              <div :class="rankStyle(row.rowData.rank)">
+                {{ value }}
+              </div>
+            </div>
+          </template>
+          <template #cell(updated_at)="{ value }">
+            <div class="text-center">
+              {{ new Date(value).toDateString() }}
+            </div>
+          </template>
+        </VaDataTable>
+      </VaScrollContainer>
+    </use-element-bounding>
   </VaCard>
 </template>
 
