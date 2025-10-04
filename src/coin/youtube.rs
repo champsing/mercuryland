@@ -1,5 +1,5 @@
 use super::config::CoinConfig;
-pub use crate::database::user::Coin;
+pub use crate::database::user::User;
 use crate::{database::get_connection, error::ServerError};
 use chrono::{DateTime, TimeDelta, Utc};
 use std::{cmp::min, collections::HashMap};
@@ -50,7 +50,7 @@ impl CoinChatManager {
             let mut connection = get_connection()?;
             let transaction = connection.transaction()?;
 
-            let mut record = Coin::get_or_create(author_id, author_name, &transaction)?;
+            let mut record = User::get_or_create(author_id, author_name, &transaction)?;
             record.coin += coin;
             record.updated_at = now;
             record.update(&transaction)?;

@@ -1,5 +1,5 @@
 use super::config::CoinConfig;
-pub use crate::database::user::Coin;
+pub use crate::database::user::User;
 use crate::{config::CONFIG, database::get_connection, discord, error::ServerError};
 use chrono::{DateTime, Utc};
 use serenity::all::CreateMessage;
@@ -25,7 +25,7 @@ impl CoinCommandManager {
         let mut connection = get_connection()?;
         let transaction = connection.transaction()?;
 
-        if let Some(mut record) = Coin::by_youtube(user, &transaction)? {
+        if let Some(mut record) = User::by_youtube(user, &transaction)? {
             let cost = self.config.booster_cost(level);
             if record.coin >= cost {
                 record.coin -= cost;
@@ -47,7 +47,7 @@ _此為 YouTube 聊天室指令，須由管理員手動開啟退款單。_
                     content,
                     level,
                     record.display,
-                    record.id,
+                    record.youtube,
                     record.coin,
                     due.timestamp()
                 );

@@ -1,7 +1,7 @@
 use crate::coin::command::CoinCommandManager;
-use crate::coin::youtube::Coin;
+use crate::coin::youtube::User;
 use crate::config::CONFIG;
-use crate::database::{user::Coin as CoinUser, get_connection};
+use crate::database::{user::User as CoinUser, get_connection};
 use crate::error::ServerError;
 use chrono::Days;
 use poise::{self, CreateReply};
@@ -23,7 +23,7 @@ fn find_coin_user(msg_author_id: String) -> Result<Option<String>, ServerError> 
     let mut connection = get_connection()?;
     let transaction = connection.transaction()?;
     let user_id = match CoinUser::by_discord(msg_author_id, &transaction)? {
-        Some(u) => Some(u.id),
+        Some(u) => Some(u.youtube),
         None => None,
     };
     Ok(user_id)
@@ -59,14 +59,14 @@ pub async fn booster(
             None => String::from("User not found"),
         };
 
-        let mut record = match Coin::by_youtube(user_id, &transaction)? {
+        let mut record = match User::by_youtube(user_id, &transaction)? {
             Some(r) => r,
             None => {
                 break 'ret (CommandReply::NoUserFound, None);
             }
         };
 
-        if record.discord_id == 0 {
+        if record.discord.is_none() {
             break 'ret (CommandReply::NoUserFound, None);
         }
 
@@ -102,7 +102,7 @@ pub async fn booster(
                 penalty_content,
                 amp,
                 record.display,
-                record.id,
+                record.youtube,
                 record.coin,
                 due.timestamp()
             )),
@@ -272,14 +272,14 @@ pub async fn overtime(
         let mut connection = get_connection()?;
         let transaction = connection.transaction()?;
 
-        let mut record = match Coin::by_discord(author_id.to_string(), &transaction)? {
+        let mut record = match User::by_discord(author_id.to_string(), &transaction)? {
             Some(r) => r,
             None => {
                 break 'ret (CommandReply::NoUserFound, None);
             }
         };
 
-        if record.discord_id == 0 {
+        if record.discord.is_none() {
             break 'ret (CommandReply::NoUserFound, None);
         }
 
@@ -315,7 +315,7 @@ pub async fn overtime(
 ",
                 hours,
                 record.display,
-                record.id,
+                record.youtube,
                 record.coin,
                 content,
                 due.timestamp()
