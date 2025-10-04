@@ -3,7 +3,7 @@ use rusqlite::{Row, Transaction};
 use sea_query::{Expr, IdenStatic, Query, SqliteQueryBuilder, enum_def};
 use sea_query_rusqlite::RusqliteBinder;
 use serde::{Deserialize, Serialize};
-use uuid::{Uuid};
+use uuid::Uuid;
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
 #[enum_def]
