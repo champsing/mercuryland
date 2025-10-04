@@ -79,7 +79,7 @@ jobs:
         run: npm run build
 
   version_check:
-    name: Version Consistency
+    name: Version
     runs-on: ubuntu-latest
     if: >-
       ${{ github.event.pull_request.changed_files &&
