@@ -150,56 +150,56 @@ function calcStyle(top: number) {
         sticky-header
         hoverable
       >
-    <template
-      v-for="column in columns"
-      #[`header(${column.key})`]="{ label }"
-      :key="column.key"
-    >
-      <div class="text-sm text-center">
-        {{ label }}
-      </div>
-    </template>
-
-    <!-- check day of week:  {{ new Date(value).getDay() }} -->
-    <template #cell(date)="{ value, row }">
-      <div class="text-center">
-        <div v-if="row.rowData.status == '未生效'">----</div>
-        <div v-else>
-          <VaButton
-            color="textPrimary"
-            preset="plain"
-            class=""
-            @click="openLinks(vodLinkOfDate(value))"
-          >
-            {{ value }}
-          </VaButton>
-        </div>
-      </div>
-    </template>
-
-    <template #cell(name)="{ value, row }">
-      <div class="text-center">
-        <VaButton
-          @click="PEMContent = row.rowData as PenaltyDataEntry"
-          preset="plain"
-          color="textPrimary"
+        <template
+          v-for="column in columns"
+          #[`header(${column.key})`]="{ label }"
+          :key="column.key"
         >
-          {{ truncateString(value, 25) }}
-        </VaButton>
-      </div>
-    </template>
-    <template #cell(status)="{ value }">
-      <div class="text-center" :class="`!bg-[${statusOf(value).color}]`">
-        <VaButton
-          @click="() => emit('updateStatus', value)"
-          preset="plain"
-          color="textPrimary"
-        >
-          {{ value }}
-        </VaButton>
-      </div>
-    </template>
-  </VaDataTable>
+          <div class="text-sm text-center">
+            {{ label }}
+          </div>
+        </template>
+
+        <!-- check day of week:  {{ new Date(value).getDay() }} -->
+        <template #cell(date)="{ value, row }">
+          <div class="text-center">
+            <div v-if="row.rowData.status == '未生效'">----</div>
+            <div v-else>
+              <VaButton
+                color="textPrimary"
+                preset="plain"
+                class=""
+                @click="openLinks(vodLinkOfDate(value))"
+              >
+                {{ value }}
+              </VaButton>
+            </div>
+          </div>
+        </template>
+
+        <template #cell(name)="{ value, row }">
+          <div class="text-center">
+            <VaButton
+              @click="PEMContent = row.rowData as PenaltyDataEntry"
+              preset="plain"
+              color="textPrimary"
+            >
+              {{ truncateString(value, 25) }}
+            </VaButton>
+          </div>
+        </template>
+        <template #cell(status)="{ value }">
+          <div class="text-center" :class="`!bg-[${statusOf(value).color}]`">
+            <VaButton
+              @click="() => emit('updateStatus', value)"
+              preset="plain"
+              color="textPrimary"
+            >
+              {{ value }}
+            </VaButton>
+          </div>
+        </template>
+      </VaDataTable>
     </VaScrollContainer>
   </use-element-bounding>
 
