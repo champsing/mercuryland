@@ -1,19 +1,14 @@
 <script setup lang="ts">
 import { ref, Ref, computed } from "vue";
-import {
-  VaButton,
-  VaChip,
-  VaDataTable,
-  VaDivider,
-  VaIcon,
-  VaModal,
-  VaPopover,
-  VaProgressBar,
-} from "vuestic-ui";
+import { UseElementBounding } from "@vueuse/components";
+import { VaButton, VaDataTable, VaScrollContainer } from "vuestic-ui";
 import penaltyData from "@assets/data/penalty.json";
 import vodData from "@assets/data/vod.json";
-import { openLinks, ofId, truncateString } from "@/composables/utils";
+import PenaltyModal from "./PenaltyModal.vue";
+import { openLinks, truncateString } from "@/composables/utils";
 import { statusOf } from "@/composables/penalty";
+import { FOOTNOTE_HEIGHT, FOOTNOTE_GAP } from "@/composables/constants";
+import { useWindowSize } from "@vueuse/core";
 
 const props = defineProps<{
   dateRange: { start: Date; end: Date };
@@ -42,11 +37,9 @@ class PenaltyDataEntry {
   progress?: number;
 }
 
-const CENTER = "center" as const;
 const YOUTUBE_LIVE = "https://youtube.com/live/";
 
 const showPEM = ref(false); // showPenaltyEntryModal
-const showPenaltyScreenshotModal = ref(false);
 
 const PEMContent: Ref<PenaltyDataEntry> = defineModel("PEMContent", {
   default: null,
@@ -65,19 +58,22 @@ const columns = [
   {
     key: "date",
     label: "日期",
-    tdAlign: CENTER,
-    thAlign: CENTER,
-    width: 140,
+    tdAlign: "center" as const,
+    thAlign: "center" as const,
     sortable: true,
     sortingOptions: ["desc" as const, "asc" as const, null],
   },
-  { key: "name", label: "內容", tdAlign: CENTER, thAlign: CENTER },
+  {
+    key: "name",
+    label: "內容",
+    tdAlign: "center" as const,
+    thAlign: "center" as const,
+  },
   {
     key: "status",
     label: "完成狀態",
-    tdAlign: CENTER,
-    thAlign: CENTER,
-    width: 140,
+    tdAlign: "center" as const,
+    thAlign: "center" as const,
   },
 ];
 
@@ -107,253 +103,102 @@ function filterPenaltyData(
       (v) =>
         search == "" || v.name.toLowerCase().includes(search.toLowerCase()),
     )
-    .sort((lhs, rhs) => lhs.date.localeCompare(rhs.date));
+    .sort((lhs, rhs) => rhs.date.localeCompare(lhs.date));
+}
+
+const vh = useWindowSize().height;
+function tableHeight(top: number) {
+  let height = vh.value - window.scrollY - top - FOOTNOTE_HEIGHT - FOOTNOTE_GAP;
+  return {
+    height: "" + height + "px",
+  };
 }
 </script>
 
 <template>
-  <!-- !bg-[#6d8581] !bg-[#b91c1c] !bg-[#4d7c0f] !bg-[#047857] !bg-[#b45309] -->
-  <!-- TAILWIND CSS: DO NOT REMOVE ABOVE COMMENT -->
-  <VaDataTable
-    :items="items"
-    :columns="columns"
-    class="w-full"
-    style="--va-data-table-hover-color: #357286"
-    virtual-scroller
-    sticky-header
-    hoverable
-  >
-    <template #header(date)="{ label }">
-      <div class="text-sm">
-        <VaPopover icon="info" message="點擊日期可開啟當天所有直播紀錄檔">
-          {{ label }}
-          <VaIcon name="help_outline" />
-        </VaPopover>
-      </div>
-    </template>
-    <template #header(name)="{ label }">
-      <div class="text-sm">
-        {{ label }}
-      </div>
-    </template>
-    <template #header(status)="{ label }">
-      <div class="text-sm">
-        <VaPopover icon="info" message="點擊完成狀態可快速切換">
-          {{ label }}
-          <VaIcon name="help_outline" />
-        </VaPopover>
-      </div>
-    </template>
-
-    <!-- check day of week:  {{ new Date(value).getDay() }} -->
-    <template #cell(date)="{ value, row }">
-      <div class="text-center">
-        <div v-if="row.rowData.status == '未生效'">----</div>
-        <div v-else>
-          <VaButton
-            color="textPrimary"
-            preset="plain"
-            class=""
-            @click="openLinks(vodLinkOfDate(value))"
-          >
-            {{ value }}
-          </VaButton>
-        </div>
-      </div>
-    </template>
-
-    <template #cell(name)="{ value, row }">
-      <div class="text-center">
-        <VaButton
-          @click="PEMContent = row.rowData"
-          preset="plain"
-          color="textPrimary"
-        >
-          {{ truncateString(value, 25) }}
-        </VaButton>
-      </div>
-    </template>
-    <template #cell(status)="{ value }">
-      <div class="text-center" :class="`!bg-[${statusOf(value).color}]`">
-        <VaButton
-          @click="() => emit('updateStatus', value)"
-          preset="plain"
-          color="textPrimary"
-        >
-          {{ value }}
-        </VaButton>
-      </div>
-    </template>
-  </VaDataTable>
-
-  <VaModal v-model="showPEM" hide-default-actions size="small" close-button>
-    <!-- 本體 -->
-    <div class="text-xl">
-      {{ PEMContent.name }}
-      <VaChip
-        readonly
-        outline
-        size="small"
-        :color="`${statusOf(PEMContent.status).color}`"
-        class="ml-4"
+  <use-element-bounding v-slot="{ top }">
+    <VaScrollContainer
+      vertical
+      color="#e0feb4"
+      size="medium"
+      class="h-full"
+      :style="tableHeight(top)"
+    >
+      <VaDataTable
+        :items="items"
+        :columns="columns"
+        style="
+          --va-data-table-hover-color: #357286;
+          --va-data-table-thead-background: var(--va-background-element);
+          --va-data-table-thead-border: 0;
+          height: 100%;
+        "
+        :virtual-scroller="false"
+        sticky-header
+        hoverable
       >
-        ● {{ PEMContent.status }}
-      </VaChip>
-    </div>
-
-    <!-- 如果尚未生效 -->
-    <div v-if="PEMContent.status == '未生效'" class="mt-2">
-      <span class="text-sm text-gray-400 font-bold">
-        這個懲罰目前尚未生效，請耐心等候惡靈獲得新懲罰
-      </span>
-
-      <div class="text-xl text-gray-400 font-bold">
-        抽出日期：
-        <span class="text-xl text-orange-300">
-          {{ PEMContent.date }}
-        </span>
-      </div>
-    </div>
-
-    <!-- 補充說明 -->
-    <div v-if="PEMContent.description !== undefined" class="mt-4">
-      <template v-for="block in PEMContent.description">
-        <div>
-          <span v-if="block.type == 'text'">{{ block.text }}</span>
-
-          <VaButton
-            v-if="block.type == 'link'"
-            :href="block.uri_link"
-            rel="noopener noreferrer"
-            preset="plain"
-            color="textPrimary"
-          >
-            <div class="inline-block">{{ block.text }}（連結）</div>
-          </VaButton>
-
-          <VaButton
-            v-if="block.type == 'vod'"
-            :href="YOUTUBE_LIVE + `${ofId(vodData, block.uri_num).link}`"
-            target="_blank"
-            rel="noopener noreferrer"
-            color="#c82828"
-            size="small"
-            round
-            class="mt-2"
-          >
-            {{ ofId(vodData, block.uri_num).date }}．{{
-              ofId(vodData, block.uri_num).title
-            }}
-          </VaButton>
-
-          <VaButton
-            v-if="block.type == 'penalty'"
-            @click="
-              () => {
-                PEMContent = ofId(penaltyData, block.uri_num);
-                showPEM = !showPEM;
-              }
-            "
-            color="#8fc1ff"
-            size="small"
-            round
-            class="mt-4"
-          >
-            {{ ofId(penaltyData, block.uri_num).date }}．{{
-              ofId(penaltyData, block.uri_num).name
-            }}
-          </VaButton>
-
-          <VaButton
-            v-if="block.type == 'image'"
-            @click="showPenaltyScreenshotModal = !showPenaltyScreenshotModal"
-            gradient
-            color="#0e8110"
-            size="medium"
-          >
-            查看證明圖片
-          </VaButton>
-
-          <VaModal
-            v-if="block.type == 'image'"
-            v-model="showPenaltyScreenshotModal"
-            hide-default-actions
-            style="--va-modal-padding: 0px; width: max-content; left: 300px"
-            ok-text="完成"
-          >
-            <!-- left need to be calc() -->
-            <div class="text-center font-bold">
-              <VaIcon name="help_outline" />
-              點擊右鍵→[在新分頁開啟]可查看大圖
-            </div>
-            <div class="flex flex-row gap-4">
-              <img
-                v-for="img in block.uri_imgs"
-                :src="`images/penalty/${img}`"
-                class="h-fit"
-                :alt="block.text"
-              />
-            </div>
-          </VaModal>
-
-          <br v-if="block.type == 'br'" />
-        </div>
-      </template>
-    </div>
-
-    <!-- 進度條 -->
-    <template v-if="PEMContent.progress !== undefined">
-      <VaProgressBar
-        class="mt-4"
-        :model-value="PEMContent.progress"
-        content-inside
-        show-percent
-      />
-    </template>
-
-    <!-- 復活 -->
-    <template v-if="PEMContent.reapply !== undefined">
-      <div class="mt-3">
-        <span class="text-base">
-          😇&nbsp;復活&ensp;
-          <div class="inline text-2xl text-orange-300">
-            <!-- prettier-ignore -->
-            {{ PEMContent.reapply?.length }}
-          </div>
-          &ensp;次
-        </span>
-      </div>
-      <VaDivider class="!m-1" />
-    </template>
-
-    <!-- 復活次數 -->
-    <template v-for="entry in PEMContent.reapply">
-      <div class="mt-1">
-        <VaButton
-          @click="openLinks(vodLinkOfDate(entry.date))"
-          preset="plain"
-          color="textPrimary"
+        <template
+          v-for="column in columns"
+          #[`header(${column.key})`]="{ label }"
+          :key="column.key"
         >
-          {{ entry.date }}
-        </VaButton>
-        &ensp;
-        <!-- colorsOfStatus -->
-        <div class="inline-block text-sm">
-          <div :class="`!text-[${statusOf(entry.status).color}]`">◼</div>
-        </div>
-        &nbsp;{{ entry.status }}
-      </div>
-    </template>
+          <div class="text-sm text-center">
+            {{ label }}
+          </div>
+        </template>
 
-    <!-- steam store page -->
-    <template v-if="PEMContent.steamID !== undefined">
-      <VaDivider class="!mt-4 !mb-2" />
-      <iframe
-        :src="`https://store.steampowered.com/widget/${PEMContent.steamID}/`"
-        frameborder="0"
-        width="520"
-        height="150"
-      />
-    </template>
-  </VaModal>
+        <!-- check day of week:  {{ new Date(value).getDay() }} -->
+        <template #cell(date)="{ value, row }">
+          <div class="text-center">
+            <div v-if="row.rowData.status == '未生效'">----</div>
+            <div v-else>
+              <VaButton
+                color="textPrimary"
+                preset="plain"
+                class=""
+                @click="openLinks(vodLinkOfDate(value))"
+              >
+                {{ value }}
+              </VaButton>
+            </div>
+          </div>
+        </template>
+
+        <template #cell(name)="{ value, row }">
+          <div class="text-center">
+            <VaButton
+              @click="PEMContent = row.rowData as PenaltyDataEntry"
+              preset="plain"
+              color="textPrimary"
+            >
+              {{ truncateString(value, 25) }}
+            </VaButton>
+          </div>
+        </template>
+        <template #cell(status)="{ value }">
+          <div class="text-center" :class="`!bg-[${statusOf(value).color}]`">
+            <VaButton
+              @click="() => emit('updateStatus', value)"
+              preset="plain"
+              color="textPrimary"
+            >
+              {{ value }}
+            </VaButton>
+          </div>
+        </template>
+      </VaDataTable>
+    </VaScrollContainer>
+  </use-element-bounding>
+
+  <PenaltyModal
+    v-model="showPEM"
+    :penalty="PEMContent"
+    @changePenalty="PEMContent = $event"
+  />
 </template>
+
+<style scoped>
+:deep(.va-data-table__thead) {
+  background-color: var(--va-background-element);
+}
+</style>

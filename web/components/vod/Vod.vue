@@ -10,12 +10,12 @@ import {
   VaSwitch,
 } from "vuestic-ui";
 import axios from "axios";
-import DataTable from "./DataTable.vue";
-import TimeSummary from "./TimeSummary.vue";
-import TimeDetail from "./TimeDetail.vue";
+import DataTable from "./Table.vue";
+import Summary from "./time/Summary.vue";
+import Calculation from "./time/Calculation.vue";
 import AddVod from "./AddVod.vue";
 import SetVod from "./SetVod.vue";
-import RuleDescription from "./RuleDescription.vue";
+import Rule from "./Rule.vue";
 import { BASE_URL, formatDate, parseDate } from "@/composables/utils";
 import { useAuthState } from "@/composables/authState";
 
@@ -134,7 +134,7 @@ const handleEditVod = (vod: VodItem) => {
           />
         </div>
         <div class="flex w-1/2 justify-center">
-          <RuleDescription />
+          <Rule />
         </div>
       </div>
     </div>
@@ -163,8 +163,8 @@ const handleEditVod = (vod: VodItem) => {
       </div>
 
       <div class="flex flex-col w-1/4">
-        <TimeSummary :t="computedTime" />
-        <TimeDetail
+        <Summary :t="computedTime" />
+        <Calculation
           :dateRange="dateRange"
           :vodData="vodData"
           @computedTime="(time) => (computedTime = time)"

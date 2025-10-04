@@ -1,24 +1,22 @@
 <script setup lang="ts">
 // TODO: Convert Penalty Page to SQL based from JSON based Data Storage
 import {
-  VaButton,
   VaDateInput,
-  VaDivider,
-  VaIcon,
   VaInput,
-  VaModal,
   VaSelect,
+  VaDivider,
+  VaCard,
+  VaCardContent,
 } from "vuestic-ui";
 import penaltyStatus from "@assets/data/penalty_status.json";
-import TableSide from "./table_side/TableSide.vue";
 import Table from "./Table.vue";
+import Statistics from "./Statistics.vue";
+import Syntax from "./Syntax.vue";
+import News from "./News.vue";
+import Rule from "./Rule.vue";
 import { formatDate, parseDate } from "@/composables/utils";
-import { Info24Regular } from "@vicons/fluent";
-import { ref } from "vue";
 
 document.title = "直播懲罰 - 水星人的夢幻樂園";
-
-const showRuleDescModal = ref(false);
 
 let filterDate = defineModel("filterDate", {
   default: {
@@ -45,96 +43,77 @@ let finishOptions = penaltyStatus.map((x) => x.name).sort();
 </script>
 
 <template>
-  <div class="mt-4 m-auto w-[95%]">
-    <div class="flex-row justify-evenly hidden xl:flex">
-      <div class="w-3/8">
-        <VaDateInput
-          v-model="filterDate"
-          :format-date="formatDate"
-          :parse-date="parseDate"
-          manual-input
-          mode="auto"
-        />
+  <div class="m-auto w-full z-10">
+    <div
+      class="flex h-14 w-full flex-row items-center justify-between gap-4 px-2"
+    >
+      <div class="flex w-3/4 flex-row items-center gap-4">
+        <div class="w-1/4 ml-12">
+          <VaDateInput
+            v-model="filterDate"
+            :format-date="formatDate"
+            :parse-date="parseDate"
+            manual-input
+            mode="auto"
+          />
+        </div>
+        <div class="w-3/4">
+          <VaInput
+            class="w-full"
+            placeholder="輸入懲罰內容來搜尋"
+            v-model="filterSearch"
+          />
+        </div>
       </div>
-      <div class="w-3/8">
-        <VaSelect
-          v-model="filterStatus"
-          :options="finishOptions"
-          placeholder="請選擇一種完成狀態"
-          clearable
-          :clear-value="null"
-        />
-      </div>
-      <div class="w-1/4">
-        <VaInput
-          class="w-full"
-          placeholder="輸入懲罰內容來搜尋"
-          v-model="filterSearch"
-        />
-      </div>
-      <div class="w-1/8">
-        <VaButton
-          class="mt-1"
-          preset="plain"
-          color="#FFFFFF"
-          @click="showRuleDescModal = !showRuleDescModal"
-        >
-          <VaIcon size="large" class="mr-2">
-            <Info24Regular />
-          </VaIcon>
-          <div class="text-lg text-center">規則說明</div>
-        </VaButton>
+      <div class="flex w-1/4 flex-row items-center gap-4">
+        <div class="flex w-1/2 justify-center">
+          <VaSelect
+            v-model="filterStatus"
+            :options="finishOptions"
+            placeholder="完成狀態"
+            clearable
+            :clear-value="null"
+          />
+        </div>
+        <div class="flex w-1/2 justify-center">
+          <Rule />
+        </div>
       </div>
     </div>
 
-    <VaDivider class="!m-2" />
+    <VaDivider class="!mt-0 !mb-2" />
 
-    <div class="flex flex-row gap-4">
-      <div class="h-80vh w-5/6">
-        <Table
-          :dateRange="filterDate"
-          :status="filterStatus"
-          :search="filterSearch"
-          @updateStatus="
-            (status) => {
-              filterStatus == null
-                ? (filterStatus = status)
-                : (filterStatus = null);
-            }
-          "
-        />
+    <div class="flex flex-row gap-2 px-2 pb-2">
+      <div class="w-3/4">
+        <VaCard
+          style="--va-card-padding: 0rem"
+          class="h-full overflow-hidden rounded-xl"
+        >
+          <VaCardContent class="!p-0">
+            <Table
+              :dateRange="filterDate"
+              :status="filterStatus"
+              :search="filterSearch"
+              @updateStatus="
+                (status) => {
+                  filterStatus == null
+                    ? (filterStatus = status)
+                    : (filterStatus = null);
+                }
+              "
+            />
+          </VaCardContent>
+        </VaCard>
       </div>
-      <TableSide class="w-1/6" />
+      <div class="flex flex-col w-1/4">
+        <div class="flex flex-col m-auto mt-0 gap-2">
+          <News />
+          <Statistics />
+          <Syntax />
+        </div>
+      </div>
     </div>
   </div>
-
-  <!-- 規則說明 -->
-  <VaModal
-    v-model="showRuleDescModal"
-    title="規則說明"
-    hide-default-actions
-    close-button
-  >
-    <span class="text-3xl"> 直播懲罰規則說明 </span>
-    <div class="text-2xl mt-2">●概述</div>
-    <div class="text-base mt-2">
-      惡靈會在直播的時候跟觀眾打賭該局遊戲加減懲罰的賭注，然後在直播最後以隨機輪盤抽出當天的懲罰數量。
-      <br />
-      每個懲罰會各自擁有一個完成狀態，分別有：未開始、已完成、勉強過、進行中。
-      <br />
-      關於各完成狀態的說明，請點擊下方圖例中的「完成狀態」查看。
-    </div>
-    <div class="text-2xl mt-4">●加班台懲罰</div>
-    <div class="text-base mt-2">
-      如果懲罰主文要求加班台時數，則只有在該懲罰生成「之後」加的班才會被計算進該懲罰的完成進度裡。
-      <br />
-      例如：
-      <br />
-      01/01被懲罰加班台2小時，01/02惡靈有加班時數47分鐘，則這47分鐘可以被計算進01/01的「加班台2小時」懲罰裡。
-      <br />
-      反之，若在01/03也有懲罰加班台2小時懲罰，01/02的47分鐘就不會被算進01/03懲罰完成進度裡。
-    </div>
-  </VaModal>
 </template>
 
 <style>

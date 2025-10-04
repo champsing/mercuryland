@@ -3,7 +3,6 @@ import axios from "axios";
 import { BASE_URL } from "@/composables/utils";
 import { onMounted, ref, Ref } from "vue";
 import { UseElementBounding } from "@vueuse/components";
-import { useWindowSize } from "@vueuse/core";
 import {
   VaDataTable,
   VaButton,
@@ -13,25 +12,12 @@ import {
   VaCard,
 } from "vuestic-ui";
 import { ArrowClockwise24Filled } from "@vicons/fluent";
+import { useWindowSize } from "@vueuse/core";
+import { FOOTNOTE_HEIGHT, FOOTNOTE_GAP } from "@/composables/constants";
 
 document.title = "水星排行 - 水星人的夢幻樂園";
 
-const vh = useWindowSize().height;
 const leaderboard: Ref<UserRank[]> = ref([]);
-
-function calcStyle(top: number) {
-  let parentMarginBottom = 8;
-  let footnoteHeight = 48;
-
-  let delta = parentMarginBottom + footnoteHeight;
-  let height = Math.max(
-    vh.value * 0.5,
-    vh.value - window.scrollY - top - delta,
-  );
-  return {
-    height: "" + height + "px",
-  };
-}
 
 function loadLeaderboard() {
   axios
@@ -135,6 +121,14 @@ function rankEmoji(rank: number) {
     return "ㅤ"; // Invisible character to maintain layout
   }
 }
+
+const vh = useWindowSize().height;
+function tableHeight(top: number) {
+  let height = vh.value - window.scrollY - top - FOOTNOTE_HEIGHT - FOOTNOTE_GAP;
+  return {
+    height: "" + height + "px",
+  };
+}
 </script>
 
 <template>
@@ -160,7 +154,7 @@ function rankEmoji(rank: number) {
         color="#e0feb4"
         size="medium"
         class="h-full"
-        :style="calcStyle(top)"
+        :style="tableHeight(top)"
       >
         <VaDataTable
           :items="leaderboard"
