@@ -4,6 +4,7 @@ import {
   VaDateInput,
   VaInput,
   VaSelect,
+  VaDivider,
   VaCard,
   VaCardContent,
 } from "vuestic-ui";

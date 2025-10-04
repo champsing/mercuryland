@@ -13,25 +13,12 @@ import {
   VaCard,
 } from "vuestic-ui";
 import { ArrowClockwise24Filled } from "@vicons/fluent";
+import { calcHeight } from "@/composables/style";
 
 document.title = "水星排行 - 水星人的夢幻樂園";
 
 const vh = useWindowSize().height;
 const leaderboard: Ref<UserRank[]> = ref([]);
-
-function calcStyle(top: number) {
-  let parentMarginBottom = 8;
-  let footnoteHeight = 48;
-
-  let delta = parentMarginBottom + footnoteHeight;
-  let height = Math.max(
-    vh.value * 0.5,
-    vh.value - window.scrollY - top - delta,
-  );
-  return {
-    height: "" + height + "px",
-  };
-}
 
 function loadLeaderboard() {
   axios
@@ -135,6 +122,8 @@ function rankEmoji(rank: number) {
     return "ㅤ"; // Invisible character to maintain layout
   }
 }
+
+const MB_VA_CARD = 8;
 </script>
 
 <template>
@@ -160,7 +149,7 @@ function rankEmoji(rank: number) {
         color="#e0feb4"
         size="medium"
         class="h-full"
-        :style="calcStyle(top)"
+        :style="calcHeight(top, MB_VA_CARD)"
       >
         <VaDataTable
           :items="leaderboard"
