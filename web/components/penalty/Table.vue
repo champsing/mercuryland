@@ -1,17 +1,10 @@
 <script setup lang="ts">
 import { ref, Ref, computed } from "vue";
-import {
-  VaButton,
-  VaChip,
-  VaDataTable,
-  VaDivider,
-  VaIcon,
-  VaModal,
-  VaProgressBar,
-} from "vuestic-ui";
+import { VaButton, VaDataTable } from "vuestic-ui";
 import penaltyData from "@assets/data/penalty.json";
 import vodData from "@assets/data/vod.json";
-import { openLinks, ofId, truncateString } from "@/composables/utils";
+import PenaltyModal from "./PenaltyModal.vue";
+import { openLinks, truncateString } from "@/composables/utils";
 import { statusOf } from "@/composables/penalty";
 
 const props = defineProps<{
@@ -44,7 +37,6 @@ class PenaltyDataEntry {
 const YOUTUBE_LIVE = "https://youtube.com/live/";
 
 const showPEM = ref(false); // showPenaltyEntryModal
-const showPenaltyScreenshotModal = ref(false);
 
 const PEMContent: Ref<PenaltyDataEntry> = defineModel("PEMContent", {
   default: null,
@@ -154,7 +146,7 @@ function filterPenaltyData(
     <template #cell(name)="{ value, row }">
       <div class="text-center">
         <VaButton
-          @click="PEMContent = row.rowData"
+          @click="PEMContent = row.rowData as PenaltyDataEntry"
           preset="plain"
           color="textPrimary"
         >
@@ -175,174 +167,9 @@ function filterPenaltyData(
     </template>
   </VaDataTable>
 
-  <VaModal v-model="showPEM" hide-default-actions size="small" close-button>
-    <!-- 本體 -->
-    <div class="text-xl">
-      {{ PEMContent.name }}
-      <VaChip
-        readonly
-        outline
-        size="small"
-        :color="`${statusOf(PEMContent.status).color}`"
-        class="ml-4"
-      >
-        ● {{ PEMContent.status }}
-      </VaChip>
-    </div>
-
-    <!-- 如果尚未生效 -->
-    <div v-if="PEMContent.status == '未生效'" class="mt-2">
-      <span class="text-sm text-gray-400 font-bold">
-        這個懲罰目前尚未生效，請耐心等候惡靈獲得新懲罰
-      </span>
-
-      <div class="text-xl text-gray-400 font-bold">
-        抽出日期：
-        <span class="text-xl text-orange-300">
-          {{ PEMContent.date }}
-        </span>
-      </div>
-    </div>
-
-    <!-- 補充說明 -->
-    <div v-if="PEMContent.description !== undefined" class="mt-4">
-      <template v-for="block in PEMContent.description">
-        <div>
-          <span v-if="block.type == 'text'">{{ block.text }}</span>
-
-          <VaButton
-            v-if="block.type == 'link'"
-            :href="block.uri_link"
-            rel="noopener noreferrer"
-            preset="plain"
-            color="textPrimary"
-          >
-            <div class="inline-block">{{ block.text }}（連結）</div>
-          </VaButton>
-
-          <VaButton
-            v-if="block.type == 'vod'"
-            :href="YOUTUBE_LIVE + `${ofId(vodData, block.uri_num).link}`"
-            target="_blank"
-            rel="noopener noreferrer"
-            color="#c82828"
-            size="small"
-            round
-            class="mt-2"
-          >
-            {{ ofId(vodData, block.uri_num).date }}．{{
-              ofId(vodData, block.uri_num).title
-            }}
-          </VaButton>
-
-          <VaButton
-            v-if="block.type == 'penalty'"
-            @click="
-              () => {
-                PEMContent = ofId(penaltyData, block.uri_num);
-                showPEM = !showPEM;
-              }
-            "
-            color="#8fc1ff"
-            size="small"
-            round
-            class="mt-4"
-          >
-            {{ ofId(penaltyData, block.uri_num).date }}．{{
-              ofId(penaltyData, block.uri_num).name
-            }}
-          </VaButton>
-
-          <VaButton
-            v-if="block.type == 'image'"
-            @click="showPenaltyScreenshotModal = !showPenaltyScreenshotModal"
-            gradient
-            color="#0e8110"
-            size="medium"
-          >
-            查看證明圖片
-          </VaButton>
-
-          <VaModal
-            v-if="block.type == 'image'"
-            v-model="showPenaltyScreenshotModal"
-            hide-default-actions
-            style="--va-modal-padding: 0px; width: max-content; left: 300px"
-            ok-text="完成"
-          >
-            <!-- left need to be calc() -->
-            <div class="text-center font-bold">
-              <VaIcon name="help_outline" />
-              點擊右鍵→[在新分頁開啟]可查看大圖
-            </div>
-            <div class="flex flex-row gap-4">
-              <img
-                v-for="img in block.uri_imgs"
-                :src="`images/penalty/${img}`"
-                class="h-fit"
-                :alt="block.text"
-              />
-            </div>
-          </VaModal>
-
-          <br v-if="block.type == 'br'" />
-        </div>
-      </template>
-    </div>
-
-    <!-- 進度條 -->
-    <template v-if="PEMContent.progress !== undefined">
-      <VaProgressBar
-        class="mt-4"
-        :model-value="PEMContent.progress"
-        content-inside
-        show-percent
-      />
-    </template>
-
-    <!-- 復活 -->
-    <template v-if="PEMContent.reapply !== undefined">
-      <div class="mt-3">
-        <span class="text-base">
-          😇&nbsp;復活&ensp;
-          <div class="inline text-2xl text-orange-300">
-            <!-- prettier-ignore -->
-            {{ PEMContent.reapply?.length }}
-          </div>
-          &ensp;次
-        </span>
-      </div>
-      <VaDivider class="!m-1" />
-    </template>
-
-    <!-- 復活次數 -->
-    <template v-for="entry in PEMContent.reapply">
-      <div class="mt-1">
-        <VaButton
-          @click="openLinks(vodLinkOfDate(entry.date))"
-          preset="plain"
-          color="textPrimary"
-        >
-          {{ entry.date }}
-        </VaButton>
-        &ensp;
-        <!-- colorsOfStatus -->
-        <div class="inline-block text-sm">
-          <div :class="`!text-[${statusOf(entry.status).color}]`">◼</div>
-        </div>
-        &nbsp;{{ entry.status }}
-      </div>
-    </template>
-
-    <!-- steam store page -->
-    <template v-if="PEMContent.steamID !== undefined">
-      <VaDivider class="!mt-4 !mb-2" />
-      <iframe
-        :src="`https://store.steampowered.com/widget/${PEMContent.steamID}/`"
-        frameborder="0"
-        width="520"
-        height="150"
-      />
-    </template>
-  </VaModal>
+  <PenaltyModal
+    v-model="showPEM"
+    :penalty="PEMContent"
+    @changePenalty="PEMContent = $event"
+  />
 </template>
