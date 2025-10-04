@@ -5,7 +5,6 @@ import { useWindowSize } from "@vueuse/core";
 import {
   VaButton,
   VaDataTable,
-  VaDivider,
   VaScrollContainer,
 } from "vuestic-ui";
 import penaltyData from "@assets/data/penalty.json";
