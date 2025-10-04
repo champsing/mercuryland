@@ -78,12 +78,12 @@ let finishOptions = penaltyStatus.map((x) => x.name).sort();
           />
         </div>
         <div class="flex w-1/2 justify-center">
-        <VaButton
-          preset="plain"
-          class="w-full"
-          color="#FFFFFF"
-          @click="showRuleDescModal = !showRuleDescModal"
-        >
+          <VaButton
+            preset="plain"
+            class="w-full"
+            color="#FFFFFF"
+            @click="showRuleDescModal = !showRuleDescModal"
+          >
             <VaIcon size="large" class="mr-2">
               <Info24Regular />
             </VaIcon>
