@@ -31,7 +31,7 @@ pub async fn handler(request: web::Json<Request>) -> Result<impl Responder, Serv
     };
 
     let mut video = Video {
-        id: None,
+        id: 0,
         date,
         link: request.link,
         title: request.title,

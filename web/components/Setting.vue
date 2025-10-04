@@ -1,6 +1,7 @@
 <script setup lang="ts">
 // TODO: Make the wheel password into the setting page
 // TODO: Make vote channel, exchange channel & penalty channel into setting page
+// TODO: Split each setting card into separate Vue components
 import { ref, watch } from "vue";
 import axios from "axios";
 import {

@@ -7,7 +7,7 @@ on:
 
 jobs:
   changes:
-    name: File Change Detection
+    name: File Change
     runs-on: ubuntu-latest
     outputs:
       rust: ${{ steps.filter.outputs.rust }}
