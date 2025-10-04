@@ -93,8 +93,10 @@ impl User {
         transaction: &Transaction,
     ) -> Result<Option<Self>, ServerError> {
         let id_str = id.into();
-        let discord_id = id_str.parse::<u64>().map_err(|_| ServerError::Internal("Invalid discord id".to_string()))?;
-        
+        let discord_id = id_str
+            .parse::<u64>()
+            .map_err(|_| ServerError::Internal("Invalid discord id".to_string()))?;
+
         let (query, values) = Query::select()
             .columns([
                 UserIden::Id,
