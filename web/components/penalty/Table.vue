@@ -7,7 +7,6 @@ import {
   VaDivider,
   VaIcon,
   VaModal,
-  VaPopover,
   VaProgressBar,
 } from "vuestic-ui";
 import penaltyData from "@assets/data/penalty.json";
