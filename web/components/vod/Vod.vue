@@ -15,7 +15,7 @@ import Summary from "./time/Summary.vue";
 import Calculation from "./time/Calculation.vue";
 import AddVod from "./AddVod.vue";
 import SetVod from "./SetVod.vue";
-import RuleDescription from "./RuleDescription.vue";
+import Rule from "./Rule.vue";
 import { BASE_URL, formatDate, parseDate } from "@/composables/utils";
 import { useAuthState } from "@/composables/authState";
 
@@ -134,7 +134,7 @@ const handleEditVod = (vod: VodItem) => {
           />
         </div>
         <div class="flex w-1/2 justify-center">
-          <RuleDescription />
+          <Rule />
         </div>
       </div>
     </div>

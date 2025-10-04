@@ -12,7 +12,7 @@ import Table from "./Table.vue";
 import Statistics from "./Statistics.vue";
 import Syntax from "./Syntax.vue";
 import News from "./News.vue";
-import RuleDescription from "./RuleDescription.vue";
+import Rule from "./Rule.vue";
 import { formatDate, parseDate } from "@/composables/utils";
 
 document.title = "直播懲罰 - 水星人的夢幻樂園";
@@ -75,7 +75,7 @@ let finishOptions = penaltyStatus.map((x) => x.name).sort();
           />
         </div>
         <div class="flex w-1/2 justify-center">
-          <RuleDescription />
+          <Rule />
         </div>
       </div>
     </div>
