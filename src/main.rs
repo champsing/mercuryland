@@ -1,5 +1,6 @@
 use mercury_land::{discord, error::ServerError, webpage, youtube};
 use std::thread;
+use std::time::Duration;
 
 fn main() -> Result<(), ServerError> {
     env_logger::init();
@@ -9,7 +10,6 @@ fn main() -> Result<(), ServerError> {
 
     let mut handles = vec![];
 
-    // TODO: Add delayed backoff to avoid busy looping on repeated failures
     handles.push(thread::spawn(|| {
         loop {
             let res = tokio::runtime::Builder::new_multi_thread()
@@ -20,6 +20,7 @@ fn main() -> Result<(), ServerError> {
 
             if let Some(err) = res.err() {
                 log::error!("restarting, webpage failed: {:?}", err);
+                thread::sleep(Duration::from_secs(60));
             }
         }
     }));
@@ -34,6 +35,7 @@ fn main() -> Result<(), ServerError> {
 
             if let Some(err) = res.err() {
                 log::error!("restarting, discord bot failed: {:?}", err);
+                thread::sleep(Duration::from_secs(60));
             }
         }
     }));
@@ -48,6 +50,7 @@ fn main() -> Result<(), ServerError> {
 
             if let Some(err) = res.err() {
                 log::error!("restarting, youtube bot failed: {:?}", err);
+                thread::sleep(Duration::from_secs(60));
             }
         }
     }));
