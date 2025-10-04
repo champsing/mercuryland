@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { computed } from "vue";
 import { UseElementBounding } from "@vueuse/components";
-import { useWindowSize } from "@vueuse/core";
 import {
   VaButton,
   VaDataTable,
@@ -9,6 +8,7 @@ import {
   VaIcon,
   VaScrollContainer,
 } from "vuestic-ui";
+import { calcHeight } from "@/composables/style";
 
 interface VodItem {
   id?: number | null;
@@ -19,7 +19,6 @@ interface VodItem {
   duration: string;
 }
 
-const vh = useWindowSize().height;
 const props = defineProps<{
   dateRange: { start: Date; end: Date };
   selectedTags: string[];
@@ -110,20 +109,8 @@ const headerColumns = computed(() =>
   columns.value.filter((column) => column.key !== "actions"),
 );
 
-function calcStyle(top: number) {
-  let parentMarginBottom = 8;
-  let parentPaddingBottom = 8;
-  let footnoteHeight = 48;
-
-  let delta = parentMarginBottom + footnoteHeight + parentPaddingBottom;
-  let height = Math.max(
-    vh.value * 0.5,
-    vh.value - window.scrollY - top - delta,
-  );
-  return {
-    height: "" + height + "px",
-  };
-}
+const PB_DIV_FLEX = 8;
+const MB_USE_ELEMENT_BOUNDING = 8;
 </script>
 
 <template>
@@ -133,7 +120,7 @@ function calcStyle(top: number) {
       color="#e0feb4"
       size="medium"
       class="h-full"
-      :style="calcStyle(top)"
+      :style="calcHeight(top, PB_DIV_FLEX + MB_USE_ELEMENT_BOUNDING)"
     >
       <VaDataTable
         :items="data"

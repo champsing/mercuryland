@@ -3,7 +3,6 @@ import axios from "axios";
 import { BASE_URL } from "@/composables/utils";
 import { onMounted, ref, Ref } from "vue";
 import { UseElementBounding } from "@vueuse/components";
-import { useWindowSize } from "@vueuse/core";
 import {
   VaDataTable,
   VaButton,
@@ -17,7 +16,6 @@ import { calcHeight } from "@/composables/style";
 
 document.title = "水星排行 - 水星人的夢幻樂園";
 
-const vh = useWindowSize().height;
 const leaderboard: Ref<UserRank[]> = ref([]);
 
 function loadLeaderboard() {
