@@ -10,7 +10,7 @@ import {
   VaSwitch,
 } from "vuestic-ui";
 import axios from "axios";
-import DataTable from "./DataTable.vue";
+import DataTable from "./Table.vue";
 import TimeSummary from "./TimeSummary.vue";
 import TimeDetail from "./TimeDetail.vue";
 import AddVod from "./AddVod.vue";
