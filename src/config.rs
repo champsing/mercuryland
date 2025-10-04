@@ -16,24 +16,20 @@ pub struct Config {
     pub dcyt_link: ApplicationSecret,
 }
 
-
 #[derive(Debug, Serialize, Deserialize)]
 pub struct DiscordConfig {
-    #[serde(skip)]
-    pub token: String,
     pub exchange: u64,
     pub penalty: u64,
     pub admin: Vec<u64>,
 }
 
-
 pub static CONFIG: LazyLock<Config> = LazyLock::new(|| {
-    let contents = fs::read_to_string("data/config.json").expect("[ERROR] Cannot read config files");
-    let mut config: Config = serde_json::from_str(&contents).expect("[ERROR] Cannot parse config files");
-    // Load Discord token from build-time environment variable
-    config.discord.token = env!("DISCORD_TOKEN").to_string();
-    config
+    let contents =
+        fs::read_to_string("data/config.json").expect("[ERROR] Cannot read config files");
+    serde_json::from_str(&contents).expect("[ERROR] Cannot parse config files")
 });
+
+pub static CFG_DISCORD_TOKEN: LazyLock<&str> = LazyLock::new(|| env!("DISCORD_TOKEN"));
 
 #[derive(Debug, Clone)]
 pub struct AuthCode {
