@@ -8,6 +8,8 @@ import {
   VaInput,
   VaModal,
   VaSelect,
+  VaCard,
+  VaCardContent,
 } from "vuestic-ui";
 import penaltyStatus from "@assets/data/penalty_status.json";
 import TableSide from "./table_side/TableSide.vue";
@@ -95,22 +97,31 @@ let finishOptions = penaltyStatus.map((x) => x.name).sort();
 
     <VaDivider class="!mt-0 !mb-2" />
 
-    <div class="flex flex-row gap-4">
-      <div class="h-80vh w-5/6">
-        <Table
-          :dateRange="filterDate"
-          :status="filterStatus"
-          :search="filterSearch"
-          @updateStatus="
-            (status) => {
-              filterStatus == null
-                ? (filterStatus = status)
-                : (filterStatus = null);
-            }
-          "
-        />
+    <div class="flex flex-row gap-2 px-2 pb-2">
+      <div class="w-3/4">
+        <VaCard
+          style="--va-card-padding: 0rem"
+          class="h-full overflow-hidden rounded-xl"
+        >
+          <VaCardContent class="!p-0">
+            <Table
+              :dateRange="filterDate"
+              :status="filterStatus"
+              :search="filterSearch"
+              @updateStatus="
+                (status) => {
+                  filterStatus == null
+                    ? (filterStatus = status)
+                    : (filterStatus = null);
+                }
+              "
+            />
+          </VaCardContent>
+        </VaCard>
       </div>
-      <TableSide class="w-1/6" />
+      <div class="flex flex-col w-1/4">
+        <TableSide />
+      </div>
     </div>
 
     <!-- 規則說明 -->
