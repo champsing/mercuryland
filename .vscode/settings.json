@@ -7,39 +7,7 @@
   "editor.quickSuggestions": {
     "strings": true
   },
-  "cSpell.words": [
-    "actix",
-    "ALTF",
-    "ashwamegh",
-    "axios",
-    "Banban",
-    "champsing",
-    "chrono",
-    "composables",
-    "daterange",
-    "Garten",
-    "HMAC",
-    "Hypixel",
-    "Iden",
-    "itertools",
-    "logicfan",
-    "mercuryland",
-    "Paon",
-    "Pien",
-    "reqwest",
-    "rusqlite",
-    "rustls",
-    "rustup",
-    "serde",
-    "Smilemo",
-    "stderrlog",
-    "tailwindcss",
-    "vfonts",
-    "vite",
-    "vuestic",
-    "webpki"
-  ],
-  "editor.rulers": [80],
+  "editor.rulers": [120],
   "prettier.tabWidth": 4,
   "[json]": {
     "editor.defaultFormatter": "vscode.json-language-features"
@@ -58,5 +26,8 @@
   },
   "[vue]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "rust-analyzer.check.extraEnv": {
+    "DISCORD_TOKEN": "REDACTED"
   }
 }
