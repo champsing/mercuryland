@@ -1,8 +1,10 @@
 name: Build Docker Image
 on:
   push:
-    tags:
-      - "*"
+    branches:
+      - main
+    paths:
+      - 'Cargo.toml'
 
 jobs:
   build:
@@ -11,11 +13,25 @@ jobs:
     steps:
       - name: Check out Source Code
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+      - name: Version Change Detection
+        id: version_check
+        run: |
+          if git diff HEAD~1 -- Cargo.toml | grep -q '^+version = '; then
+            echo "version_changed=true" >> $GITHUB_OUTPUT
+            current_version=$(grep '^version = ' Cargo.toml | sed 's/version = "\(.*\)"/\1/')
+            echo "current_version=$current_version" >> $GITHUB_OUTPUT
+          else
+            echo "version_changed=false" >> $GITHUB_OUTPUT
+          fi
       - name: Build Docker Image
+        if: steps.version_check.outputs.version_changed == 'true'
         run: |
           docker build --build-arg DISCORD_TOKEN=${{ secrets.DISCORD_TOKEN }} -t mercury .
           docker images
           docker save --output mercury.tar mercury
       - name: Upload Artifacts
+        if: steps.version_check.outputs.version_changed == 'true'
         run: |
           curl -F file=@mercury.tar $( curl -H 'Content-Type: application/json' -d '{"access_code": "${{ secrets.QNAP_ACCESS }}", "composed_link_id": "${{ secrets.QNAP_LINK_ID }}", "overwrite": true, "path": "/"}' -X POST https://www.myqnapcloud.com/ajax/share_upload_link | jq -r '.result.upload_url')

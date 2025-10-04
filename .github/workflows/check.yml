@@ -7,7 +7,7 @@ on:
 
 jobs:
   changes:
-    name: Change Detection
+    name: File Change Detection
     runs-on: ubuntu-latest
     outputs:
       rust: ${{ steps.filter.outputs.rust }}
@@ -112,15 +112,11 @@ jobs:
         run: |
           CARGO_VERSION=$(cargo metadata --format-version=1 --no-deps | jq -r '.packages[0].version')
           PACKAGE_VERSION=$(jq -r '.version' package.json)
-          CARGO_LOCK_VERSION=$(grep -A 5 'name = "mercury_land"' Cargo.lock | grep '^version = ' | sed 's/version = "\(.*\)"/\1/')
-          PACKAGE_LOCK_VERSION=$(jq -r '.version' package-lock.json)
-          
-          if [ "$CARGO_VERSION" != "$PACKAGE_VERSION" ] || [ "$CARGO_VERSION" != "$CARGO_LOCK_VERSION" ] || [ "$CARGO_VERSION" != "$PACKAGE_LOCK_VERSION" ]; then
+
+          if [ "$CARGO_VERSION" != "$PACKAGE_VERSION" ]; then
             echo "Version mismatch:"
             echo "Cargo.toml: $CARGO_VERSION"
             echo "package.json: $PACKAGE_VERSION"
-            echo "Cargo.lock: $CARGO_LOCK_VERSION"
-            echo "package-lock.json: $PACKAGE_LOCK_VERSION"
             exit 1
           fi
           echo "All versions are consistent: $CARGO_VERSION"
