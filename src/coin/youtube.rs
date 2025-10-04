@@ -50,10 +50,23 @@ impl CoinChatManager {
             let mut connection = get_connection()?;
             let transaction = connection.transaction()?;
 
-            let mut record = User::get_or_create(author_id, author_name, &transaction)?;
-            record.coin += coin;
-            record.updated_at = now;
-            record.update(&transaction)?;
+            let record = User::by_youtube(author_id, &transaction)?;
+            if let Some(mut record) = record {
+                record.coin += coin;
+                record.updated_at = now;
+                record.display = author_name.clone();
+                record.update(&transaction)?;
+            } else {
+                let record = User {
+                    id: 0, // Will be set by autoincrement
+                    youtube: author_id.clone(),
+                    discord: None,
+                    coin,
+                    display: author_name.clone(),
+                    updated_at: now,
+                };
+                record.insert(&transaction)?;
+            }
 
             transaction.commit()?;
         }

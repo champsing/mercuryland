@@ -8,6 +8,7 @@ use serde::{Deserialize, Serialize};
 #[derive(Debug, Serialize, Deserialize, Clone)]
 #[enum_def]
 pub struct User {
+    pub id: i64,
     pub youtube: String,
     pub discord: Option<u64>,
     pub coin: i64,
@@ -28,6 +29,7 @@ impl TryFrom<&Row<'_>> for User {
 
     fn try_from(value: &Row<'_>) -> Result<Self, Self::Error> {
         Ok(Self {
+            id: value.get(UserIden::Id.as_str())?,
             youtube: value.get(UserIden::Youtube.as_str())?,
             discord: value.get(UserIden::Discord.as_str())?,
             coin: value.get(UserIden::Coin.as_str())?,
@@ -67,6 +69,7 @@ impl User {
     ) -> Result<Option<Self>, ServerError> {
         let (query, values) = Query::select()
             .columns([
+                UserIden::Id,
                 UserIden::Youtube,
                 UserIden::Discord,
                 UserIden::Coin,
@@ -94,6 +97,7 @@ impl User {
         
         let (query, values) = Query::select()
             .columns([
+                UserIden::Id,
                 UserIden::Youtube,
                 UserIden::Discord,
                 UserIden::Coin,
@@ -115,6 +119,7 @@ impl User {
     pub fn all(transaction: &Transaction) -> Result<Vec<Self>, ServerError> {
         let (query, values) = Query::select()
             .columns([
+                UserIden::Id,
                 UserIden::Youtube,
                 UserIden::Discord,
                 UserIden::Coin,
@@ -131,75 +136,18 @@ impl User {
 
         Ok(value)
     }
-    pub fn update_display(
-        id: impl Into<String>,
-        display: impl Into<String>,
-        transaction: &Transaction,
-    ) -> Result<(), ServerError> {
-        let id = id.into();
-        let mut conditions = vec![Expr::col(UserIden::Youtube).eq(id.clone())];
-        
-        if let Ok(discord_id) = id.parse::<u64>() {
-            conditions.push(Expr::col(UserIden::Discord).eq(discord_id));
-        }
-        
-        let (query, values) = Query::update()
-            .table(UserIden::Table)
-            .values([(UserIden::Display, display.into().into())])
-            .and_where(conditions.into_iter().fold(Expr::cust("1=0"), |acc, expr| acc.or(expr)))
-            .build_rusqlite(SqliteQueryBuilder);
-        transaction.execute(&query, &*values.as_params())?;
-
-        Ok(())
-    }
-
-    pub fn get_or_create(
-        id: impl Into<String>,
-        display: impl Into<String>,
-        transaction: &Transaction,
-    ) -> Result<Self, ServerError> {
-        let id = id.into();
-        let display = display.into();
-        Self::update_display(id.clone(), display.clone(), transaction)?;
-        if let Some(user) = Self::by_youtube(id.clone(), transaction)? {
-            Ok(user)
-        } else if let Ok(discord_id) = id.parse::<u64>() {
-            if let Some(user) = Self::by_discord(discord_id.to_string(), transaction)? {
-                Ok(user)
-            } else {
-                let user = Self {
-                    youtube: id,
-                    discord: None,
-                    coin: 0,
-                    display: display.into(),
-                    updated_at: Utc::now(),
-                };
-                user.insert(transaction)?;
-                Ok(user)
-            }
-        } else {
-            let user = Self {
-                youtube: id,
-                discord: None,
-                coin: 0,
-                display: display.into(),
-                updated_at: Utc::now(),
-            };
-            user.insert(transaction)?;
-            Ok(user)
-        }
-    }
 
     pub fn update(&self, transaction: &Transaction) -> Result<(), ServerError> {
         let (query, values) = Query::update()
             .table(UserIden::Table)
             .values([
-                (UserIden::Coin, self.coin.into()),
+                (UserIden::Youtube, self.youtube.clone().into()),
                 (UserIden::Discord, self.discord.map(|d| d as i64).into()),
                 (UserIden::Display, self.display.clone().into()),
                 (UserIden::UpdatedAt, self.updated_at.into()),
+                (UserIden::Coin, self.coin.into()),
             ])
-            .and_where(Expr::col(UserIden::Youtube).eq(self.youtube.clone()))
+            .and_where(Expr::col(UserIden::Id).eq(self.id))
             .build_rusqlite(SqliteQueryBuilder);
         transaction.execute(&query, &*values.as_params())?;
 
@@ -222,6 +170,7 @@ mod tests {
 
         let tran = conn.transaction()?;
         let user = User {
+            id: 1,
             youtube: String::from("test_id"),
             discord: None,
             coin: 0,
@@ -243,6 +192,7 @@ mod tests {
 
         let tran = conn.transaction()?;
         let mut u = User {
+            id: 1,
             youtube: String::from("test_id"),
             discord: Some(123456),
             coin: 0,
