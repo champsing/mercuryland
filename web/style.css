@@ -3,8 +3,8 @@
 @tailwind utilities;
 
 .va-card {
-  background-color: var(--va-background-element) !important;
-  box-shadow: none !important;
+    background-color: var(--va-background-element) !important;
+    box-shadow: none !important;
 }
 
 /* @layer base {
