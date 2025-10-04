@@ -11,8 +11,8 @@ import {
 } from "vuestic-ui";
 import axios from "axios";
 import DataTable from "./Table.vue";
-import TimeSummary from "./time/TimeSummary.vue";
-import TimeDetail from "./time/TimeDetail.vue";
+import Summary from "./time/Summary.vue";
+import Calculation from "./time/Calculation.vue";
 import AddVod from "./AddVod.vue";
 import SetVod from "./SetVod.vue";
 import RuleDescription from "./RuleDescription.vue";
@@ -163,8 +163,8 @@ const handleEditVod = (vod: VodItem) => {
       </div>
 
       <div class="flex flex-col w-1/4">
-        <TimeSummary :t="computedTime" />
-        <TimeDetail
+        <Summary :t="computedTime" />
+        <Calculation
           :dateRange="dateRange"
           :vodData="vodData"
           @computedTime="(time) => (computedTime = time)"
