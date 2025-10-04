@@ -1,5 +1,5 @@
 use crate::{
-    coin::youtube::Coin,
+    coin::youtube::User,
     config::CONFIG,
     database::{self},
     discord,
@@ -17,7 +17,7 @@ use poise::{self, reply::CreateReply, serenity_prelude::CreateMessage};
 async fn check_exist(context: super::Context<'_>) -> Result<bool, ServerError> {
     let mut connection = database::get_connection()?;
     let transaction = connection.transaction()?;
-    let existence = match Coin::by_discord(context.author().id.get().to_string(), &transaction) {
+    let existence = match User::by_discord(context.author().id.get().to_string(), &transaction) {
         Ok(Some(_)) => true,
         Ok(None) => false,
         Err(_) => return Err(String::from("Account already linked").into()),
@@ -97,9 +97,9 @@ pub async fn link(ctx: super::Context<'_>) -> Result<(), ServerError> {
         let mut connection = database::get_connection()?;
         let transaction = connection.transaction()?;
 
-        let _ = match Coin::by_youtube(channel, &transaction) {
+        let _ = match User::by_youtube(channel, &transaction) {
             Ok(Some(mut r)) => {
-                r.discord_id = author.id.get();
+                r.discord = Some(author.id.get());
                 r.updated_at = Utc::now();
                 r.update(&transaction)?;
                 transaction.commit()?;
@@ -148,9 +148,9 @@ pub async fn unlink(ctx: super::Context<'_>) -> Result<(), ServerError> {
         let mut connection = database::get_connection()?;
         let transaction = connection.transaction()?;
 
-        let _ = match Coin::by_discord(ctx.author().id.get().to_string(), &transaction) {
+        let _ = match User::by_discord(ctx.author().id.get().to_string(), &transaction) {
             Ok(Some(mut r)) => {
-                r.discord_id = 0;
+                r.discord = None;
                 r.updated_at = Utc::now();
                 r.update(&transaction)?;
                 transaction.commit()?;

@@ -1,4 +1,5 @@
 pub mod auth;
+pub mod image;
 pub mod leaderboard;
 pub mod ping;
 pub mod video;
@@ -31,7 +32,9 @@ pub async fn run() -> Result<(), ServerError> {
             .service(video::delete::handler)
             .service(video::update::handler)
             .service(video::metadata::handler)
-            .service(leaderboard::ldb::handler)
+            .service(leaderboard::get::handler)
+            .service(image::upload::handler)
+            .service(image::get::handler)
     })
     .bind(("0.0.0.0", 8080))?
     .run()

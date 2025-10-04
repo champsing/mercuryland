@@ -11,7 +11,7 @@ mod wheel;
 
 use once_cell::sync::OnceCell as OnceLock;
 
-use crate::{config::CONFIG, error::ServerError};
+use crate::{config::CFG_DISCORD_TOKEN, error::ServerError};
 use poise::serenity_prelude::CommandOptionType;
 use poise::serenity_prelude::{ClientBuilder, GatewayIntents};
 use poise::{self};
@@ -314,7 +314,7 @@ pub async fn run() -> Result<(), ServerError> {
         .build();
 
     let mut client = ClientBuilder::new(
-        &CONFIG.discord.token,
+        *CFG_DISCORD_TOKEN,
         GatewayIntents::non_privileged() | GatewayIntents::MESSAGE_CONTENT,
     )
     .framework(framework)

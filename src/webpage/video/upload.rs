@@ -74,7 +74,6 @@ pub async fn handler(mut payload: Multipart) -> Result<impl Responder, ServerErr
     let mut skipped = 0usize;
 
     for mut video in videos {
-        video.id = None;
         match video.insert(&transaction) {
             Ok(_) => inserted += 1,
             Err(err) => {

@@ -1,6 +1,5 @@
 use crate::{
-    coin::youtube::Coin,
-    database::{self},
+    database::{self, user::User},
     error::ServerError,
 };
 use actix_web::{HttpResponse, Responder, get};
@@ -9,7 +8,7 @@ use actix_web::{HttpResponse, Responder, get};
 pub async fn handler() -> Result<impl Responder, ServerError> {
     let mut connection = database::get_connection()?;
     let transaction = connection.transaction()?;
-    let export = Coin::all(&transaction)?;
+    let export = User::all(&transaction)?;
     // println!("{:?}", export);
     Ok(HttpResponse::Ok().json(export))
 }
