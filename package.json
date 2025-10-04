@@ -22,7 +22,6 @@
     "chartjs-adapter-date-fns": "^3.0.0",
     "date-fns": "^2.0.0",
     "google-auth-library": "^9.15.1",
-    "mercury_land": "file:",
     "naive-ui": "^2.38.2",
     "vfonts": "^0.0.3",
     "vue": "^3.4.15",
