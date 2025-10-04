@@ -95,7 +95,7 @@ impl User {
         let id_str = id.into();
         let discord_id = id_str
             .parse::<u64>()
-            .map_err(|_| ServerError::Internal("Invalid discord id".to_string()))?;
+            .map_err(|_| ServerError::Internal(format!("Invalid discord id: '{}'", id_str)))?;
 
         let (query, values) = Query::select()
             .columns([
