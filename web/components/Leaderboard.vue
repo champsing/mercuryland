@@ -5,7 +5,7 @@ import { BASE_URL } from "@/composables/utils";
 import { ref, Ref } from "vue";
 import { UseElementBounding } from "@vueuse/components";
 import { useWindowSize } from "@vueuse/core";
-import { VaDataTable, VaButton, VaIcon, VaPopover, VaDivider, VaScrollContainer, VaCard } from "vuestic-ui";
+import { VaDataTable, VaButton, VaIcon, VaDivider, VaScrollContainer, VaCard } from "vuestic-ui";
 import { ArrowClockwise24Filled } from "@vicons/fluent";
 
 document.title = "水星排行 - 水星人的夢幻樂園";
@@ -15,10 +15,9 @@ const leaderboard: Ref<UserRank[]> = ref([]);
 
 function calcStyle(top: number) {
   let parentMarginBottom = 8;
-  let parentPaddingBottom = 8;
   let footnoteHeight = 48;
 
-  let delta = parentMarginBottom + footnoteHeight + parentPaddingBottom;
+  let delta = parentMarginBottom + footnoteHeight;
   let height = Math.max(
     vh.value * 0.5,
     vh.value - window.scrollY - top - delta,
@@ -39,7 +38,7 @@ function loadLeaderboard() {
             youtube: u.youtube,
             coin: u.coin,
             display: u.display,
-            updated_at: new Date(u.updated_at).getTime(),
+            updated_at: u.updated_at,
           } as UserRank;
         })
         .sort((a: UserRank, b: UserRank) => {
@@ -144,33 +143,15 @@ const columns = [
           sticky-header
           hoverable
         >
-      <template #header(rank)="{ label }">
-        <div class="text-sm">
-          <VaPopover icon="info" message="點擊可排序">
+        <template
+          v-for="column in columns"
+          #[`header(${column.key})`]="{ label }"
+          :key="column.key"
+        >
+          <div class="text-sm text-center">
             {{ label }}
-            <VaIcon name="help_outline" />
-          </VaPopover>
-        </div>
-      </template>
-      <template #header(display)="{ label }">
-        <div class="text-sm">
-          <VaPopover
-            icon="info"
-            message="點擊用戶名稱可以開啟該用戶的 YouTube 頻道頁面"
-          >
-            {{ label }}
-            <VaIcon name="help_outline" />
-          </VaPopover>
-        </div>
-      </template>
-      <template #header(updated_at)="{ label }">
-        <div class="text-sm">
-          <VaPopover icon="info" message="點擊可排序">
-            {{ label }}
-            <VaIcon name="help_outline" />
-          </VaPopover>
-        </div>
-      </template>
+          </div>
+        </template>
       <template #cell(rank)="{ value, row }">
         <div class="text-center">
           <div v-if="row.rowData.rank == 1">
@@ -264,7 +245,7 @@ const columns = [
       </template>
       <template #cell(updated_at)="{ value }">
         <div class="text-center">
-          {{ new Date(parseInt(value)).toLocaleString() }}
+          {{ new Date(value).toDateString() }}
         </div>
       </template>
     </VaDataTable>
