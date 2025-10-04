@@ -2,7 +2,7 @@
 // TODO: Update Leaderboard style
 import axios from "axios";
 import { BASE_URL } from "@/composables/utils";
-import { ref, Ref } from "vue";
+import { onMounted, ref, Ref } from "vue";
 import { UseElementBounding } from "@vueuse/components";
 import { useWindowSize } from "@vueuse/core";
 import { VaDataTable, VaButton, VaIcon, VaDivider, VaScrollContainer, VaCard } from "vuestic-ui";
@@ -56,7 +56,7 @@ function loadLeaderboard() {
     });
 }
 
-loadLeaderboard();
+onMounted(loadLeaderboard);
 
 class User {
   id: number;
@@ -105,6 +105,18 @@ const columns = [
     sortingOptions: ["desc" as const, "asc" as const, null],
   },
 ];
+
+function rankStyle(rank: number) {
+  if (rank == 1) {
+    return "text-yellow-400 font-bold text-2xl";
+  } else if (rank == 2) {
+    return "text-zinc-400 font-bold text-xl";
+  } else if (rank == 3) {
+    return "text-amber-600 font-bold text-lg";
+  } else {
+    return "text-white";
+  }
+}
 </script>
 
 <template>
@@ -174,73 +186,23 @@ const columns = [
       </template>
       <template #cell(display)="{ value, row }">
         <div class="text-center">
-          <div v-if="row.rowData.rank == 1">
-            <VaButton
-              :href="`https://www.youtube.com/channel/${row.rowData.youtube}`"
-              target="_blank"
-              preset="plain"
-              rel="noopener noreferrer"
-            >
-              <div class="text-yellow-400 font-bold text-xl">
-                {{ value }}
-              </div>
-            </VaButton>
-          </div>
-          <div v-else-if="row.rowData.rank == 2">
-            <VaButton
-              :href="`https://www.youtube.com/channel/${row.rowData.youtube}`"
-              target="_blank"
-              preset="plain"
-              rel="noopener noreferrer"
-            >
-              <div class="text-zinc-400 font-bold text-xl">
-                {{ value }}
-              </div>
-            </VaButton>
-          </div>
-          <div v-else-if="row.rowData.rank == 3">
-            <VaButton
-              :href="`https://www.youtube.com/channel/${row.rowData.youtube}`"
-              target="_blank"
-              preset="plain"
-              rel="noopener noreferrer"
-            >
-              <div class="text-amber-600 font-bold text-xl">
-                {{ value }}
-              </div>
-            </VaButton>
-          </div>
-          <div v-else>
-            <VaButton
-              :href="`https://www.youtube.com/channel/${row.rowData.youtube}`"
-              target="_blank"
-              preset="plain"
-              color="textPrimary"
-              rel="noopener noreferrer"
-            >
+          <VaButton
+            :href="`https://www.youtube.com/channel/${row.rowData.youtube}`"
+            target="_blank"
+            preset="plain"
+            rel="noopener noreferrer"
+          >
+            <div :class="rankStyle(row.rowData.rank)">
               {{ value }}
-            </VaButton>
-          </div>
+            </div>
+          </VaButton>
         </div>
       </template>
       <template #cell(coin)="{ value, row }">
         <div class="text-center">
-          <div v-if="row.rowData.rank == 1">
-            <div class="text-yellow-400 text-base font-bold">
+            <div :class="rankStyle(row.rowData.rank)">
               {{ value }}
             </div>
-          </div>
-          <div v-else-if="row.rowData.rank == 2">
-            <div class="text-zinc-400 text-base font-bold">
-              {{ value }}
-            </div>
-          </div>
-          <div v-else-if="row.rowData.rank == 3">
-            <div class="text-amber-600 text-base font-bold">
-              {{ value }}
-            </div>
-          </div>
-          <div v-else>{{ value }}</div>
         </div>
       </template>
       <template #cell(updated_at)="{ value }">
