@@ -9,6 +9,7 @@ fn main() -> Result<(), ServerError> {
 
     let mut handles = vec![];
 
+    // TODO: Add delayed backoff to avoid busy looping on repeated failures
     handles.push(thread::spawn(|| {
         loop {
             let res = tokio::runtime::Builder::new_multi_thread()
