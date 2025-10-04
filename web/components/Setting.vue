@@ -23,9 +23,23 @@ const vodUploadInputResetKey = ref(0);
 const isVodUploading = ref(false);
 const isVodDownloading = ref(false);
 
+const showImageUploadModal = ref(false);
+const imageUploadFile = ref<File | null>(null);
+const imageUploadMessage = ref<string | null>(null);
+const imageUploadError = ref<string | null>(null);
+const imageUploadInputResetKey = ref(0);
+const isImageUploading = ref(false);
+const uploadedImageUrl = ref<string | null>(null);
+
 watch(showVodUploadModal, (visible) => {
   if (!visible) {
     resetVodUploadState();
+  }
+});
+
+watch(showImageUploadModal, (visible) => {
+  if (!visible) {
+    resetImageUploadState();
   }
 });
 
@@ -37,10 +51,25 @@ function resetVodUploadState() {
   isVodUploading.value = false;
 }
 
+function resetImageUploadState() {
+  imageUploadFile.value = null;
+  imageUploadMessage.value = null;
+  imageUploadError.value = null;
+  imageUploadInputResetKey.value += 1;
+  isImageUploading.value = false;
+  uploadedImageUrl.value = null;
+}
+
 function openVodUploadModal() {
   vodUploadMessage.value = null;
   vodUploadError.value = null;
   showVodUploadModal.value = true;
+}
+
+function openImageUploadModal() {
+  imageUploadMessage.value = null;
+  imageUploadError.value = null;
+  showImageUploadModal.value = true;
 }
 
 function onVodFileSelected(event: Event) {
@@ -48,6 +77,13 @@ function onVodFileSelected(event: Event) {
   vodUploadFile.value = target.files?.[0] ?? null;
   vodUploadMessage.value = null;
   vodUploadError.value = null;
+}
+
+function onImageFileSelected(event: Event) {
+  const target = event.target as HTMLInputElement;
+  imageUploadFile.value = target.files?.[0] ?? null;
+  imageUploadMessage.value = null;
+  imageUploadError.value = null;
 }
 
 async function submitVodUpload() {
@@ -85,6 +121,42 @@ async function submitVodUpload() {
     vodUploadError.value = "上傳失敗，請稍後再試";
   } finally {
     isVodUploading.value = false;
+  }
+}
+
+async function submitImageUpload() {
+  if (isImageUploading.value) return;
+
+  if (!imageUploadFile.value) {
+    imageUploadError.value = "請選擇要上傳的圖片檔案";
+    return;
+  }
+
+  const token = localStorage.getItem("token");
+  if (!token) {
+    imageUploadError.value = "請先登入管理員帳號";
+    return;
+  }
+
+  const formData = new FormData();
+  formData.append("token", token);
+  formData.append("file", imageUploadFile.value);
+
+  try {
+    isImageUploading.value = true;
+    imageUploadError.value = null;
+    const response = await axios.post(`${BASE_URL}/api/image/upload`, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+    imageUploadMessage.value = "上傳完成";
+    uploadedImageUrl.value = response.data.url;
+  } catch (error) {
+    console.error("Image upload failed", error);
+    imageUploadError.value = "上傳失敗，請稍後再試";
+  } finally {
+    isImageUploading.value = false;
   }
 }
 
@@ -160,6 +232,24 @@ async function downloadVodJson() {
         class="px-6 pt-6 text-lg font-medium text-zinc-200"
         style="font-size: 20px; justify-content: center"
       >
+        圖片上傳
+      </VaCardTitle>
+      <VaCardContent class="px-6 pb-6 text-sm text-zinc-300">
+        <VaButton
+          preset="primary"
+          color="success"
+          class="w-full"
+          @click="openImageUploadModal"
+        >
+          上傳圖片
+        </VaButton>
+      </VaCardContent>
+    </VaCard>
+    <VaCard class="rounded-xl border border-zinc-700">
+      <VaCardTitle
+        class="px-6 pt-6 text-lg font-medium text-zinc-200"
+        style="font-size: 20px; justify-content: center"
+      >
         使用者與權限
       </VaCardTitle>
       <VaCardContent class="px-6 pb-6 text-sm text-zinc-300">
@@ -226,6 +316,59 @@ async function downloadVodJson() {
           color="info"
           :loading="isVodUploading"
           @click="submitVodUpload"
+        >
+          確認上傳
+        </VaButton>
+      </div>
+    </div>
+  </VaModal>
+
+  <VaModal
+    v-model="showImageUploadModal"
+    hide-default-actions
+    close-button
+    max-width="420px"
+  >
+    <div class="flex flex-col gap-4 p-4">
+      <div class="text-base text-zinc-200">上傳圖片</div>
+      <p class="text-sm text-zinc-400">
+        選擇要上傳的圖片檔案，支援 JPG、PNG、GIF 等格式，檔案大小限制為 1MB。
+      </p>
+      <input
+        :key="imageUploadInputResetKey"
+        type="file"
+        accept="image/*"
+        class="text-sm text-zinc-200"
+        @change="onImageFileSelected"
+      />
+      <p v-if="imageUploadError" class="text-sm text-red-400">
+        {{ imageUploadError }}
+      </p>
+      <p v-if="imageUploadMessage" class="text-sm text-emerald-400">
+        {{ imageUploadMessage }}
+      </p>
+      <div v-if="uploadedImageUrl" class="mt-2">
+        <p class="text-sm text-zinc-300 mb-2">上傳成功！圖片連結：</p>
+        <a
+          :href="uploadedImageUrl"
+          target="_blank"
+          class="text-sm text-blue-400 underline break-all"
+        >
+          {{ uploadedImageUrl }}
+        </a>
+      </div>
+      <div class="flex justify-end gap-2">
+        <VaButton
+          preset="secondary"
+          @click="showImageUploadModal = false"
+          :disabled="isImageUploading"
+        >
+          取消
+        </VaButton>
+        <VaButton
+          color="success"
+          :loading="isImageUploading"
+          @click="submitImageUpload"
         >
           確認上傳
         </VaButton>
