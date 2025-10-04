@@ -2,7 +2,6 @@
 // TODO: Convert Penalty Page to SQL based from JSON based Data Storage
 import {
   VaDateInput,
-  VaDivider,
   VaInput,
   VaSelect,
   VaCard,
@@ -108,9 +107,7 @@ let finishOptions = penaltyStatus.map((x) => x.name).sort();
       <div class="flex flex-col w-1/4">
         <div class="flex flex-col m-auto mt-0">
           <News />
-          <VaDivider class="m-3" />
           <Statistics />
-          <VaDivider class="m-3" />
           <Syntax />
         </div>
       </div>
