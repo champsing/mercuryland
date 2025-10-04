@@ -1,11 +1,20 @@
 <script setup lang="ts">
 import { ref, Ref, computed } from "vue";
-import { VaButton, VaDataTable } from "vuestic-ui";
+import { UseElementBounding } from "@vueuse/components";
+import { useWindowSize } from "@vueuse/core";
+import {
+  VaButton,
+  VaDataTable,
+  VaDivider,
+  VaScrollContainer,
+} from "vuestic-ui";
 import penaltyData from "@assets/data/penalty.json";
 import vodData from "@assets/data/vod.json";
 import PenaltyModal from "./PenaltyModal.vue";
 import { openLinks, truncateString } from "@/composables/utils";
 import { statusOf } from "@/composables/penalty";
+
+const vh = useWindowSize().height;
 
 const props = defineProps<{
   dateRange: { start: Date; end: Date };
@@ -102,20 +111,45 @@ function filterPenaltyData(
     )
     .sort((lhs, rhs) => lhs.date.localeCompare(rhs.date));
 }
+
+function calcStyle(top: number) {
+  let parentMarginBottom = 8;
+  let parentPaddingBottom = 8;
+  let footnoteHeight = 48;
+
+  let delta = parentMarginBottom + footnoteHeight + parentPaddingBottom;
+  let height = Math.max(
+    vh.value * 0.5,
+    vh.value - window.scrollY - top - delta,
+  );
+  return {
+    height: "" + height + "px",
+  };
+}
 </script>
 
 <template>
-  <!-- !bg-[#6d8581] !bg-[#b91c1c] !bg-[#4d7c0f] !bg-[#047857] !bg-[#b45309] -->
-  <!-- TAILWIND CSS: DO NOT REMOVE ABOVE COMMENT -->
-  <VaDataTable
-    :items="items"
-    :columns="columns"
-    class="w-full"
-    style="--va-data-table-hover-color: #357286"
-    virtual-scroller
-    sticky-header
-    hoverable
-  >
+  <use-element-bounding v-slot="{ top }" class="mb-2">
+    <VaScrollContainer
+      vertical
+      color="#e0feb4"
+      size="medium"
+      class="h-full"
+      :style="calcStyle(top)"
+    >
+      <VaDataTable
+        :items="items"
+        :columns="columns"
+        style="
+          --va-data-table-hover-color: #357286;
+          --va-data-table-thead-background: var(--va-background-element);
+          --va-data-table-thead-border: 0;
+          height: 100%;
+        "
+        virtual-scroller
+        sticky-header
+        hoverable
+      >
     <template
       v-for="column in columns"
       #[`header(${column.key})`]="{ label }"
@@ -166,6 +200,8 @@ function filterPenaltyData(
       </div>
     </template>
   </VaDataTable>
+    </VaScrollContainer>
+  </use-element-bounding>
 
   <PenaltyModal
     v-model="showPEM"
@@ -173,3 +209,9 @@ function filterPenaltyData(
     @changePenalty="PEMContent = $event"
   />
 </template>
+
+<style scoped>
+:deep(.va-data-table__thead) {
+  background-color: var(--va-background-element);
+}
+</style>
