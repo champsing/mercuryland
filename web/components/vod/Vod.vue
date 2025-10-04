@@ -11,8 +11,8 @@ import {
 } from "vuestic-ui";
 import axios from "axios";
 import DataTable from "./Table.vue";
-import TimeSummary from "./TimeSummary.vue";
-import TimeDetail from "./TimeDetail.vue";
+import TimeSummary from "./time/TimeSummary.vue";
+import TimeDetail from "./time/TimeDetail.vue";
 import AddVod from "./AddVod.vue";
 import SetVod from "./SetVod.vue";
 import RuleDescription from "./RuleDescription.vue";
