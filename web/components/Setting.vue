@@ -150,7 +150,7 @@ async function submitImageUpload() {
         "Content-Type": "multipart/form-data",
       },
     });
-    imageUploadMessage.value = "上傳完成";
+    imageUploadMessage.value = response.data.message || "上傳完成";
     uploadedImageUrl.value = response.data.url;
   } catch (error) {
     console.error("Image upload failed", error);

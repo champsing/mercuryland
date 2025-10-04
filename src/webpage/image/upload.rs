@@ -85,6 +85,19 @@ pub async fn handler(mut payload: Multipart) -> Result<impl Responder, ServerErr
 
     let name = Uuid::new_v5(&Uuid::NAMESPACE_OID, &data);
 
+    let mut connection = database::get_connection()?;
+    let transaction = connection.transaction()?;
+
+    // Check if image already exists
+    if Image::by_name(&name, &transaction)?.is_some() {
+        let url = format!("/api/image/get/{}", name);
+        return Ok(HttpResponse::Ok().json(json!({
+            "name": name.to_string(),
+            "url": url,
+            "message": "Image already exists"
+        })));
+    }
+
     let mut image = Image {
         id: 0, // will be set by insert
         name,
@@ -92,8 +105,6 @@ pub async fn handler(mut payload: Multipart) -> Result<impl Responder, ServerErr
         mime,
     };
 
-    let mut connection = database::get_connection()?;
-    let transaction = connection.transaction()?;
     image.insert(&transaction)?;
     transaction.commit()?;
 
