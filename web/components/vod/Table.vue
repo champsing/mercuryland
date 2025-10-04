@@ -110,17 +110,16 @@ const headerColumns = computed(() =>
 );
 
 const PB_DIV_FLEX = 8;
-const MB_USE_ELEMENT_BOUNDING = 8;
 </script>
 
 <template>
-  <use-element-bounding v-slot="{ top }" class="mb-2">
+  <use-element-bounding v-slot="{ top }">
     <VaScrollContainer
       vertical
       color="#e0feb4"
       size="medium"
       class="h-full"
-      :style="calcHeight(top, PB_DIV_FLEX + MB_USE_ELEMENT_BOUNDING)"
+      :style="calcHeight(top, PB_DIV_FLEX)"
     >
       <VaDataTable
         :items="data"
