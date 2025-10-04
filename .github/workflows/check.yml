@@ -6,14 +6,48 @@ on:
     branches: [main]
 
 jobs:
+  changes:
+    runs-on: ubuntu-latest
+    outputs:
+      rust: ${{ steps.filter.outputs.rust }}
+      docker: ${{ steps.filter.outputs.docker }}
+      vue: ${{ steps.filter.outputs.vue }}
+      version: ${{ steps.filter.outputs.version }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dorny/paths-filter@v2
+        id: filter
+        with:
+          filters: |
+            rust:
+              - 'Cargo.toml'
+              - 'Cargo.lock'
+              - 'src/**'
+            docker:
+              - 'Dockerfile'
+              - 'docker-compose.yml'
+              - '.dockerignore'
+            vue:
+              - 'web/**'
+              - 'public/**'
+              - 'package.json'
+              - 'package-lock.json'
+              - 'tsconfig.json'
+              - 'tsconfig.node.json'
+              - 'vite.config.ts'
+              - 'tailwind.config.js'
+              - 'postcss.config.js'
+              - 'index.html'
+            version:
+              - 'Cargo.toml'
+              - 'Cargo.lock'
+              - 'package.json'
+              - 'package-lock.json'
   rust:
     name: Rust
     runs-on: ubuntu-latest
-    if: >-
-      ${{ github.event.pull_request.changed_files &&
-          (contains(github.event.pull_request.changed_files, 'Cargo.toml') ||
-           contains(github.event.pull_request.changed_files, 'Cargo.lock') ||
-           startsWith(github.event.pull_request.changed_files, 'src/')) }}
+    needs: changes
+    if: needs.changes.outputs.rust == 'true'
     steps:
       - name: Check out Source Code
         uses: actions/checkout@v4
@@ -35,11 +69,8 @@ jobs:
   docker:
     name: Docker
     runs-on: ubuntu-latest
-    if: >-
-      ${{ github.event.pull_request.changed_files &&
-          (contains(github.event.pull_request.changed_files, 'Dockerfile') ||
-           contains(github.event.pull_request.changed_files, 'docker-compose.yml') ||
-           contains(github.event.pull_request.changed_files, '.dockerignore')) }}
+    needs: changes
+    if: needs.changes.outputs.docker == 'true'
     steps:
       - name: Check out Source Code
         uses: actions/checkout@v4
@@ -49,18 +80,8 @@ jobs:
   vue_js:
     name: Vue.js
     runs-on: ubuntu-latest
-    if: >-
-      ${{ github.event.pull_request.changed_files &&
-          (startsWith(github.event.pull_request.changed_files, 'web/') ||
-           startsWith(github.event.pull_request.changed_files, 'public/') ||
-           contains(github.event.pull_request.changed_files, 'package.json') ||
-           contains(github.event.pull_request.changed_files, 'package-lock.json') ||
-           contains(github.event.pull_request.changed_files, 'tsconfig.json') ||
-           contains(github.event.pull_request.changed_files, 'tsconfig.node.json') ||
-           contains(github.event.pull_request.changed_files, 'vite.config.ts') ||
-           contains(github.event.pull_request.changed_files, 'tailwind.config.js') ||
-           contains(github.event.pull_request.changed_files, 'postcss.config.js') ||
-           contains(github.event.pull_request.changed_files, 'index.html')) }}
+    needs: changes
+    if: needs.changes.outputs.vue == 'true'
     steps:
       - name: Check out Source Code
         uses: actions/checkout@v4
@@ -81,12 +102,8 @@ jobs:
   version_check:
     name: Version
     runs-on: ubuntu-latest
-    if: >-
-      ${{ github.event.pull_request.changed_files &&
-          (contains(github.event.pull_request.changed_files, 'Cargo.toml') ||
-           contains(github.event.pull_request.changed_files, 'Cargo.lock') ||
-           contains(github.event.pull_request.changed_files, 'package.json') ||
-           contains(github.event.pull_request.changed_files, 'package-lock.json')) }}
+    needs: changes
+    if: needs.changes.outputs.version == 'true'
     steps:
       - name: Check out Source Code
         uses: actions/checkout@v4
