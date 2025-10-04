@@ -53,28 +53,28 @@ function vodLinkOfDate(date: string): string[] {
 
 <template>
   <VaModal
-    :model-value="modelValue"
+    :model-value="props.modelValue"
     @update:model-value="emit('update:modelValue', $event)"
     hide-default-actions
     size="small"
     close-button
   >
     <!-- 本體 -->
-    <div v-if="penalty" class="text-xl">
-      {{ penalty.name }}
+    <div v-if="props.penalty" class="text-xl">
+      {{ props.penalty.name }}
       <VaChip
         readonly
         outline
         size="small"
-        :color="`${statusOf(penalty.status).color}`"
+        :color="`${statusOf(props.penalty.status).color}`"
         class="ml-4"
       >
-        ● {{ penalty.status }}
+        ● {{ props.penalty.status }}
       </VaChip>
     </div>
 
     <!-- 如果尚未生效 -->
-    <div v-if="penalty && penalty.status == '未生效'" class="mt-2">
+    <div v-if="props.penalty && props.penalty.status == '未生效'" class="mt-2">
       <span class="text-sm text-gray-400 font-bold">
         這個懲罰目前尚未生效，請耐心等候惡靈獲得新懲罰
       </span>
@@ -82,14 +82,17 @@ function vodLinkOfDate(date: string): string[] {
       <div class="text-xl text-gray-400 font-bold">
         抽出日期：
         <span class="text-xl text-orange-300">
-          {{ penalty.date }}
+          {{ props.penalty.date }}
         </span>
       </div>
     </div>
 
     <!-- 補充說明 -->
-    <div v-if="penalty && penalty.description !== undefined" class="mt-4">
-      <template v-for="block in penalty.description">
+    <div
+      v-if="props.penalty && props.penalty.description !== undefined"
+      class="mt-4"
+    >
+      <template v-for="block in props.penalty.description">
         <div>
           <span v-if="block.type == 'text'">{{ block.text }}</span>
 
@@ -169,23 +172,23 @@ function vodLinkOfDate(date: string): string[] {
     </div>
 
     <!-- 進度條 -->
-    <template v-if="penalty && penalty.progress !== undefined">
+    <template v-if="props.penalty && props.penalty.progress !== undefined">
       <VaProgressBar
         class="mt-4"
-        :model-value="penalty.progress"
+        :model-value="props.penalty.progress"
         content-inside
         show-percent
       />
     </template>
 
     <!-- 復活 -->
-    <template v-if="penalty && penalty.reapply !== undefined">
+    <template v-if="props.penalty && props.penalty.reapply !== undefined">
       <div class="mt-3">
         <span class="text-base">
           😇&nbsp;復活&ensp;
           <div class="inline text-2xl text-orange-300">
             <!-- prettier-ignore -->
-            {{ penalty.reapply?.length }}
+            {{ props.penalty.reapply?.length }}
           </div>
           &ensp;次
         </span>
@@ -213,10 +216,10 @@ function vodLinkOfDate(date: string): string[] {
     </template>
 
     <!-- steam store page -->
-    <template v-if="penalty && penalty.steamID !== undefined">
+    <template v-if="props.penalty && props.penalty.steamID !== undefined">
       <VaDivider class="!mt-4 !mb-2" />
       <iframe
-        :src="`https://store.steampowered.com/widget/${penalty.steamID}/`"
+        :src="`https://store.steampowered.com/widget/${props.penalty.steamID}/`"
         frameborder="0"
         width="520"
         height="150"
