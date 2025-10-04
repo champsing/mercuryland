@@ -15,7 +15,7 @@ import { ArrowClockwise24Filled } from "@vicons/fluent";
 import { useWindowSize } from "@vueuse/core";
 import { FOOTNOTE_HEIGHT, FOOTNOTE_GAP } from "@/composables/constants";
 
-document.title = "水星排行 - 水星人的夢幻樂園";
+document.title = "水星ddddd排行 - 水星人的夢幻樂園";
 
 const leaderboard: Ref<UserRank[]> = ref([]);
 

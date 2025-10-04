@@ -5,7 +5,7 @@ RUN apk add --no-cache musl-dev sqlite-static openssl-dev openssl-libs-static pk
 COPY . .
 ARG DISCORD_TOKEN
 ENV DISCORD_TOKEN=${DISCORD_TOKEN}
-RUN cargo build --release
+RUN cargo build --release --versbose
 
 FROM scratch
 WORKDIR /mercury

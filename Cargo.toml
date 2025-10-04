@@ -1,6 +1,6 @@
 [package]
 name = "mercury_land"
-version = "2.12.2"
+version = "2.12.3"
 authors = ["logicfan", "champsing"]
 edition = "2024"
 
