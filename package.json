@@ -1,45 +1,48 @@
 {
-  "name": "mercury_land",
-  "private": true,
-  "version": "2.12.2",
-  "type": "module",
-  "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "preview": "vite preview",
-    "format": "prettier --write .",
-    "format:check": "prettier --check ."
-  },
-  "dependencies": {
-    "@vicons/fluent": "^0.12.0",
-    "@vicons/ionicons5": "^0.13.0",
-    "@vicons/tabler": "^0.12.0",
-    "@vueuse/components": "^10.11.0",
-    "@vueuse/core": "^10.11.0",
-    "appwrite": "^16.1.0",
-    "axios": "^1.7.7",
-    "date-fns": "^2.0.0",
-    "google-auth-library": "^9.15.1",
-    "naive-ui": "^2.38.2",
-    "vfonts": "^0.0.3",
-    "vue": "^3.4.15",
-    "vue-router": "^4.4.0",
-    "vue-tsc": "^2.1.10",
-    "vue-wheel-spinner": "^0.2.8",
-    "vuestic-ui": "^1.10.0"
-  },
-  "devDependencies": {
-    "@types/node": "^20.14.2",
-    "@vicons/fa": "^0.12.0",
-    "@vicons/ionicons4": "^0.12.0",
-    "@vitejs/plugin-vue": "^5.0.3",
-    "autoprefixer": "^10.4.20",
-    "postcss": "^8.4.38",
-    "prettier": "^3.6.2",
-    "sass": "^1.77.8",
-    "tailwindcss": "^3.4.4",
-    "typescript": "^5.4.5",
-    "url": "^0.11.3",
-    "vite": "^6.3.5"
-  }
+    "name": "mercury_land",
+    "private": true,
+    "version": "2.12.2",
+    "type": "module",
+    "scripts": {
+        "dev": "vite",
+        "build": "vite build",
+        "preview": "vite preview",
+        "format": "prettier --write .",
+        "format:check": "prettier --check ."
+    },
+    "dependencies": {
+        "@vicons/fluent": "^0.12.0",
+        "@vicons/ionicons5": "^0.13.0",
+        "@vicons/tabler": "^0.12.0",
+        "@vueuse/components": "^10.11.0",
+        "@vueuse/core": "^10.11.0",
+        "appwrite": "^16.1.0",
+        "axios": "^1.7.7",
+        "date-fns": "^2.0.0",
+        "google-auth-library": "^9.15.1",
+        "naive-ui": "^2.38.2",
+        "vfonts": "^0.0.3",
+        "vue": "^3.4.15",
+        "vue-router": "^4.4.0",
+        "vue-tsc": "^2.1.10",
+        "vue-wheel-spinner": "^0.2.8",
+        "vuestic-ui": "^1.10.0"
+    },
+    "devDependencies": {
+        "@types/node": "^20.14.2",
+        "@vicons/fa": "^0.12.0",
+        "@vicons/ionicons4": "^0.12.0",
+        "@vitejs/plugin-vue": "^5.0.3",
+        "autoprefixer": "^10.4.20",
+        "postcss": "^8.4.38",
+        "prettier": "^3.6.2",
+        "sass": "^1.77.8",
+        "tailwindcss": "^3.4.4",
+        "typescript": "^5.4.5",
+        "url": "^0.11.3",
+        "vite": "^6.3.5"
+    },
+    "prettier": {
+        "tabWidth": 4
+    }
 }

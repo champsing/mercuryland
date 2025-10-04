@@ -13,26 +13,26 @@ import Slide5 from "./Slide5.vue";
 </script>
 
 <template>
-  <div ref="slide">
-    <Slide1 />
-    <Slide2 />
-    <Slide3 />
-    <Slide4 />
-    <Slide5 />
-  </div>
+    <div ref="slide">
+        <Slide1 />
+        <Slide2 />
+        <Slide3 />
+        <Slide4 />
+        <Slide5 />
+    </div>
 </template>
 
 <style>
 @tailwind utilities;
 @layer utilities {
-  .x-center {
-    @apply left-1/2;
-    @apply -translate-x-1/2;
-  }
+    .x-center {
+        @apply left-1/2;
+        @apply -translate-x-1/2;
+    }
 
-  .y-center {
-    @apply top-1/2;
-    @apply -translate-y-1/2;
-  }
+    .y-center {
+        @apply top-1/2;
+        @apply -translate-y-1/2;
+    }
 }
 </style>
