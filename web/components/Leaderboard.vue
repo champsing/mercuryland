@@ -3,54 +3,56 @@
 import axios from "axios";
 import { BASE_URL } from "@/composables/utils";
 import { ref, Ref } from "vue";
-import { VaDataTable, VaButton, VaIcon, VaPopover } from "vuestic-ui";
+import { VaDataTable, VaButton, VaIcon, VaPopover, VaDivider } from "vuestic-ui";
 import { ArrowClockwise24Filled } from "@vicons/fluent";
 
 document.title = "水星排行 - 水星人的夢幻樂園";
 
-const leaderboard: Ref<Coin[]> = ref([]);
-const lastUpdated: Ref<string> = ref("載入中...");
+const leaderboard: Ref<UserRank[]> = ref([]);
 
-function refreshLeaderboard() {
+function loadLeaderboard() {
   axios
     .get(BASE_URL + "/api/leaderboard")
     .then((response) => {
       leaderboard.value = response.data
-        .map((x) => {
-          const coin: Coin = {
+        .map((u: User) => {
+          return {
             rank: 0, // Placeholder for rank, will be assigned later,
-            id: x.id,
-            coin: x.coin,
-            display: x.display,
-            updated_at: new Date(x.updated_at).getTime(),
-          };
-          return coin;
+            youtube: u.youtube,
+            coin: u.coin,
+            display: u.display,
+            updated_at: new Date(u.updated_at).getTime(),
+          } as UserRank;
         })
-        .sort((a, b) => {
+        .sort((a: UserRank, b: UserRank) => {
           return a.coin < b.coin ? 1 : -1; // Sort by coin in descending order
         })
-        .sort((a, b) => {
-          return a.id.localeCompare(b.id, "en") ? 1 : -1; // Sort by updated_at in descending order
-        })
-        .map((x, index) => {
-          x.rank = index + 1; // Assign rank based on the sorted order
-          return x;
+        .map((r: UserRank, index: number) => {
+          r.rank = index + 1; // Assign rank based on the sorted order
+          return r;
         })
         .slice(0, 50);
       console.log(leaderboard.value);
-      lastUpdated.value = new Date().toLocaleString();
-      console.log("已更新排行榜", lastUpdated.value);
     })
     .catch((error) => {
       console.error("更新排行榜失敗:", error);
     });
 }
 
-refreshLeaderboard();
+loadLeaderboard();
 
-class Coin {
+class User {
+  id: number;
+  youtube: string;
+  discord: number | null;
+  display: string;
+  coin: number;
+  updated_at: number;
+}
+
+class UserRank {
   rank: number;
-  id: string;
+  youtube: string;
   coin: number;
   display: string;
   updated_at: number;
@@ -97,29 +99,19 @@ const columns = [
 </script>
 
 <template>
-  <div class="flex flex-row text-center justify-center gap-10 mt-4">
-    <div class="text-center text-3xl font-bold justify-center mt-5 mb-5">
-      水星排行
-    </div>
-    <div class="flex flex-col text-center justify-center gap-4">
-      <div class="text-base text-zinc-400">
-        這裡顯示的是水星幣的排行榜，每次直播獲得的水星幣都會在這裡顯示。
-      </div>
-      <div>
-        上次更新時間： {{ lastUpdated }}
-        <div class="inline ml-4 select-none">
-          <VaButton color="info" preset="plain" @click="refreshLeaderboard()">
-            <div class="flex flex-row gap-2">
-              <VaIcon size="medium">
-                <ArrowClockwise24Filled />
-              </VaIcon>
-              立即更新排行榜
-            </div>
-          </VaButton>
-        </div>
-      </div>
+    <div
+    class="flex h-14 w-full flex-row items-center justify-between gap-4 px-2"
+  >
+    <h1 class="ml-12 text-2xl font-semibold">水星排行</h1>
+    <div class="flex items-center">
+      <VaButton preset="plain" @click="loadLeaderboard()"><VaIcon><ArrowClockwise24Filled /></VaIcon></VaButton>
+    <p class="text-zinc-400 sm:text-right ml-2">
+       這裡顯示的是水星幣的排行榜，每次直播獲得的水星幣都會在這裡顯示。
+    </p>
     </div>
   </div>
+  <VaDivider class="w-full !mt-0 !mb-2" />
+  
   <div class="h-80vh mx-10">
     <VaDataTable
       :items="leaderboard"
@@ -181,7 +173,7 @@ const columns = [
         <div class="text-center">
           <div v-if="row.rowData.rank == 1">
             <VaButton
-              :href="`https://www.youtube.com/channel/${row.rowData.id}`"
+              :href="`https://www.youtube.com/channel/${row.rowData.youtube}`"
               target="_blank"
               preset="plain"
               rel="noopener noreferrer"
@@ -193,7 +185,7 @@ const columns = [
           </div>
           <div v-else-if="row.rowData.rank == 2">
             <VaButton
-              :href="`https://www.youtube.com/channel/${row.rowData.id}`"
+              :href="`https://www.youtube.com/channel/${row.rowData.youtube}`"
               target="_blank"
               preset="plain"
               rel="noopener noreferrer"
@@ -205,7 +197,7 @@ const columns = [
           </div>
           <div v-else-if="row.rowData.rank == 3">
             <VaButton
-              :href="`https://www.youtube.com/channel/${row.rowData.id}`"
+              :href="`https://www.youtube.com/channel/${row.rowData.youtube}`"
               target="_blank"
               preset="plain"
               rel="noopener noreferrer"
@@ -217,7 +209,7 @@ const columns = [
           </div>
           <div v-else>
             <VaButton
-              :href="`https://www.youtube.com/channel/${row.rowData.id}`"
+              :href="`https://www.youtube.com/channel/${row.rowData.youtube}`"
               target="_blank"
               preset="plain"
               color="textPrimary"
