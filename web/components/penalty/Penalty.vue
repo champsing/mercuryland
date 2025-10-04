@@ -9,7 +9,7 @@ import {
   VaCardContent,
 } from "vuestic-ui";
 import penaltyStatus from "@assets/data/penalty_status.json";
-import TableSide from "./table_side/TableSide.vue";
+import TableSide from "./TableSide.vue";
 import Table from "./Table.vue";
 import RuleDescription from "./RuleDescription.vue";
 import { formatDate, parseDate } from "@/composables/utils";
