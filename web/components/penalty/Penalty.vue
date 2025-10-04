@@ -107,10 +107,11 @@ let finishOptions = penaltyStatus.map((x) => x.name).sort();
       </div>
       <div class="flex flex-col w-1/4">
         <div class="flex flex-col m-auto mt-0">
+          <News />
+          <VaDivider class="m-3" />
           <Statistics />
           <VaDivider class="m-3" />
           <Syntax />
-          <News class="mt-10" />
         </div>
       </div>
     </div>
