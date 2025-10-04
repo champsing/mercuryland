@@ -9,8 +9,10 @@ import {
   VaCardContent,
 } from "vuestic-ui";
 import penaltyStatus from "@assets/data/penalty_status.json";
-import TableSide from "./TableSide.vue";
 import Table from "./Table.vue";
+import Statistics from "./Statistics.vue";
+import Syntax from "./Syntax.vue";
+import LatestPenalty from "./LatestPenalty.vue";
 import RuleDescription from "./RuleDescription.vue";
 import { formatDate, parseDate } from "@/composables/utils";
 
@@ -104,7 +106,12 @@ let finishOptions = penaltyStatus.map((x) => x.name).sort();
         </VaCard>
       </div>
       <div class="flex flex-col w-1/4">
-        <TableSide />
+        <div class="flex flex-col m-auto mt-0">
+          <Statistics />
+          <VaDivider class="m-3" />
+          <Syntax />
+          <LatestPenalty class="mt-10" />
+        </div>
       </div>
     </div>
   </div>
