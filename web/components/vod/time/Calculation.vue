@@ -13,6 +13,7 @@ import {
 import { UseElementBounding, UseWindowSize } from "@vueuse/components";
 import { parseHMS, formatHMS } from "@composables/utils.ts";
 import vodSchedule from "@assets/data/schedule.json";
+import { FOOTNOTE_HEIGHT, FOOTNOTE_GAP } from "@/composables/constants";
 
 class DataType {
   date: string;
@@ -138,19 +139,10 @@ function format(seconds: number): string {
 }
 
 function calcStyle(top: number, vh: number) {
-  let parentPaddingBottom = 20;
-  let parentBorderBottom = 1;
-  let parentMarginBottom = 8;
-  let footnoteHeight = 48;
-  let parentPaddingBottom2 = 8;
-
-  let delta =
-    parentPaddingBottom +
-    parentBorderBottom +
-    parentMarginBottom +
-    footnoteHeight +
-    parentPaddingBottom2;
-  let height = Math.max(vh * 0.2, vh - window.scrollY - top - delta);
+  let height = Math.max(
+    vh * 0.2,
+    vh - window.scrollY - top - FOOTNOTE_HEIGHT - FOOTNOTE_GAP,
+  );
   return {
     height: "" + height + "px",
   };
