@@ -42,7 +42,6 @@ class PenaltyDataEntry {
   progress?: number;
 }
 
-const CENTER = "center" as const;
 const YOUTUBE_LIVE = "https://youtube.com/live/";
 
 const showPEM = ref(false); // showPenaltyEntryModal
@@ -65,19 +64,22 @@ const columns = [
   {
     key: "date",
     label: "日期",
-    tdAlign: CENTER,
-    thAlign: CENTER,
-    width: 140,
+    tdAlign: "center" as const,
+    thAlign: "center" as const,
     sortable: true,
     sortingOptions: ["desc" as const, "asc" as const, null],
   },
-  { key: "name", label: "內容", tdAlign: CENTER, thAlign: CENTER },
+  {
+    key: "name",
+    label: "內容",
+    tdAlign: "center" as const,
+    thAlign: "center" as const,
+  },
   {
     key: "status",
     label: "完成狀態",
-    tdAlign: CENTER,
-    thAlign: CENTER,
-    width: 140,
+    tdAlign: "center" as const,
+    thAlign: "center" as const,
   },
 ];
 
@@ -123,25 +125,13 @@ function filterPenaltyData(
     sticky-header
     hoverable
   >
-    <template #header(date)="{ label }">
-      <div class="text-sm">
-        <VaPopover icon="info" message="點擊日期可開啟當天所有直播紀錄檔">
-          {{ label }}
-          <VaIcon name="help_outline" />
-        </VaPopover>
-      </div>
-    </template>
-    <template #header(name)="{ label }">
-      <div class="text-sm">
+    <template
+      v-for="column in columns"
+      #[`header(${column.key})`]="{ label }"
+      :key="column.key"
+    >
+      <div class="text-sm text-center">
         {{ label }}
-      </div>
-    </template>
-    <template #header(status)="{ label }">
-      <div class="text-sm">
-        <VaPopover icon="info" message="點擊完成狀態可快速切換">
-          {{ label }}
-          <VaIcon name="help_outline" />
-        </VaPopover>
       </div>
     </template>
 
