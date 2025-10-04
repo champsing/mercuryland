@@ -3,7 +3,7 @@ use rusqlite::{Row, Transaction};
 use sea_query::{Expr, IdenStatic, Query, SqliteQueryBuilder, enum_def};
 use sea_query_rusqlite::RusqliteBinder;
 use serde::{Deserialize, Serialize};
-use uuid::Uuid;
+use uuid::{Uuid};
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
 #[enum_def]
@@ -28,20 +28,22 @@ impl TryFrom<&Row<'_>> for Image {
 }
 
 impl Image {
-    pub fn insert(
-        name: Uuid,
-        data: Vec<u8>,
-        mime: String,
-        transaction: &Transaction,
-    ) -> Result<i64, ServerError> {
+    pub fn insert(&mut self, transaction: &Transaction) -> Result<(), ServerError> {
+        // Create a UUIDv5 based on the image data to ensure uniqueness
+        assert!(self.name == Uuid::new_v5(&Uuid::NAMESPACE_OID, self.data.as_slice()));
+
         let (query, values) = Query::insert()
             .into_table(ImageIden::Table)
             .columns([ImageIden::Name, ImageIden::Data, ImageIden::Mime])
-            .values([name.into(), data.into(), mime.into()])?
+            .values([
+                self.name.into(),
+                self.data.clone().into(),
+                self.mime.clone().into(),
+            ])?
             .build_rusqlite(SqliteQueryBuilder);
 
         transaction.execute(&query, &*values.as_params())?;
-        Ok(transaction.last_insert_rowid())
+        Ok(())
     }
 
     pub fn by_name(name: &Uuid, transaction: &Transaction) -> Result<Option<Self>, ServerError> {

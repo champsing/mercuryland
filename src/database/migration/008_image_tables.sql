@@ -1,6 +1,6 @@
 CREATE TABLE `image` (
     `id` INTEGER PRIMARY KEY NOT NULL,
     `name` TEXT NOT NULL UNIQUE,
-    `data` BLOB NOT NULL,
+    `data` BLOB NOT NULL UNIQUE,
     `mime` TEXT NOT NULL
 );
