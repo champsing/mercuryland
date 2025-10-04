@@ -9,7 +9,7 @@ use serde_json::{from_str, to_string};
 #[derive(Debug, Serialize, Deserialize, Clone)]
 #[enum_def]
 pub struct Video {
-    pub id: Option<i64>,
+    pub id: i64,
     pub date: NaiveDate,
     pub link: String,
     pub title: String,
@@ -32,7 +32,7 @@ impl TryFrom<&Row<'_>> for Video {
         })?;
 
         Ok(Self {
-            id: Some(value.get(VideoIden::Id.as_str())?),
+            id: value.get(VideoIden::Id.as_str())?,
             date,
             link: value.get(VideoIden::Link.as_str())?,
             title: value.get(VideoIden::Title.as_str())?,
@@ -44,7 +44,6 @@ impl TryFrom<&Row<'_>> for Video {
 
 impl Video {
     pub fn insert(&mut self, transaction: &Transaction) -> Result<(), ServerError> {
-        assert!(self.id.is_none(), "video.id must be None before insert");
         let tags_json = to_string(&self.tags)?;
         let (query, values) = Query::insert()
             .into_table(VideoIden::Table)
@@ -66,7 +65,7 @@ impl Video {
 
         transaction.execute(&query, &*values.as_params())?;
 
-        self.id = Some(transaction.last_insert_rowid());
+        self.id = transaction.last_insert_rowid();
 
         Ok(())
     }
@@ -140,16 +139,11 @@ impl Video {
     }
 
     pub fn delete(&self, transaction: &Transaction) -> Result<usize, ServerError> {
-        let mut query = Query::delete();
-        query.from_table(VideoIden::Table);
+        let (query, values) = Query::delete()
+            .from_table(VideoIden::Table)
+            .and_where(Expr::col(VideoIden::Id).eq(self.id))
+            .build_rusqlite(SqliteQueryBuilder);
 
-        if let Some(id) = self.id {
-            query.and_where(Expr::col(VideoIden::Id).eq(id));
-        } else {
-            query.and_where(Expr::col(VideoIden::Link).eq(self.link.clone()));
-        }
-
-        let (query, values) = query.build_rusqlite(SqliteQueryBuilder);
         let affected = transaction.execute(&query, &*values.as_params())?;
         Ok(affected as usize)
     }
@@ -157,24 +151,19 @@ impl Video {
     pub fn update(&self, transaction: &Transaction) -> Result<usize, ServerError> {
         let tags_json = to_string(&self.tags)?;
 
-        let mut query = Query::update();
-        query.table(VideoIden::Table).values([
-            (
-                VideoIden::Date,
-                self.date.format("%Y-%m-%d").to_string().into(),
-            ),
-            (VideoIden::Title, self.title.clone().into()),
-            (VideoIden::Tags, tags_json.into()),
-            (VideoIden::Duration, self.duration.clone().into()),
-        ]);
-
-        if let Some(id) = self.id {
-            query.and_where(Expr::col(VideoIden::Id).eq(id));
-        } else {
-            query.and_where(Expr::col(VideoIden::Link).eq(self.link.clone()));
-        }
-
-        let (query, values) = query.build_rusqlite(SqliteQueryBuilder);
+        let (query, values) = Query::update()
+            .table(VideoIden::Table)
+            .values([
+                (
+                    VideoIden::Date,
+                    self.date.format("%Y-%m-%d").to_string().into(),
+                ),
+                (VideoIden::Title, self.title.clone().into()),
+                (VideoIden::Tags, tags_json.into()),
+                (VideoIden::Duration, self.duration.clone().into()),
+            ])
+            .and_where(Expr::col(VideoIden::Id).eq(self.id))
+            .build_rusqlite(SqliteQueryBuilder);
         let affected = transaction.execute(&query, &*values.as_params())?;
         Ok(affected as usize)
     }
@@ -198,7 +187,7 @@ mod tests {
     fn insert_and_find() -> Result<(), ServerError> {
         let mut conn = setup_conn()?;
         let mut video = Video {
-            id: None,
+            id: 0,
             date: NaiveDate::from_ymd_opt(2020, 3, 8).expect("valid date"),
             link: "video_link".into(),
             title: "Some title".into(),
@@ -208,14 +197,14 @@ mod tests {
 
         let tran = conn.transaction()?;
         video.insert(&tran)?;
-        let id = video.id.expect("id set");
+        let id = video.id;
         tran.commit()?;
 
         let tran = conn.transaction()?;
         let fetched = Video::find_by_link(&video.link, &tran)?.expect("video");
         let fetched_by_id = Video::find_by_id(id, &tran)?.expect("video");
-        assert_eq!(Some(id), fetched.id);
-        assert_eq!(Some(id), fetched_by_id.id);
+        assert_eq!(id, fetched.id);
+        assert_eq!(id, fetched_by_id.id);
         assert_eq!(video.link, fetched_by_id.link);
         assert_eq!(video.title, fetched.title);
         assert_eq!(video.title, fetched_by_id.title);
@@ -232,7 +221,7 @@ mod tests {
     fn list_delete_and_update() -> Result<(), ServerError> {
         let mut conn = setup_conn()?;
         let mut first = Video {
-            id: None,
+            id: 0,
             date: NaiveDate::from_ymd_opt(2020, 3, 8).expect("valid date"),
             link: "first".into(),
             title: "First".into(),
@@ -240,7 +229,7 @@ mod tests {
             duration: "00:01:00".into(),
         };
         let mut second = Video {
-            id: None,
+            id: 0,
             date: NaiveDate::from_ymd_opt(2020, 4, 1).expect("valid date"),
             link: "second".into(),
             title: "Second".into(),

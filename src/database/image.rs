@@ -28,7 +28,12 @@ impl TryFrom<&Row<'_>> for Image {
 }
 
 impl Image {
-    pub fn insert(name: Uuid, data: Vec<u8>, mime: String, transaction: &Transaction) -> Result<i64, ServerError> {
+    pub fn insert(
+        name: Uuid,
+        data: Vec<u8>,
+        mime: String,
+        transaction: &Transaction,
+    ) -> Result<i64, ServerError> {
         let (query, values) = Query::insert()
             .into_table(ImageIden::Table)
             .columns([ImageIden::Name, ImageIden::Data, ImageIden::Mime])
@@ -41,7 +46,12 @@ impl Image {
 
     pub fn by_name(name: &Uuid, transaction: &Transaction) -> Result<Option<Self>, ServerError> {
         let (query, values) = Query::select()
-            .columns([ImageIden::Id, ImageIden::Name, ImageIden::Data, ImageIden::Mime])
+            .columns([
+                ImageIden::Id,
+                ImageIden::Name,
+                ImageIden::Data,
+                ImageIden::Mime,
+            ])
             .from(ImageIden::Table)
             .and_where(Expr::col(ImageIden::Name).eq(*name))
             .build_rusqlite(SqliteQueryBuilder);
