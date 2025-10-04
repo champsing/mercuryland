@@ -124,6 +124,18 @@ function rankStyle(rank: number) {
     return "text-white";
   }
 }
+
+function rankEmoji(rank: number) {
+  if (rank == 1) {
+    return "🥇";
+  } else if (rank == 2) {
+    return "🥈";
+  } else if (rank == 3) {
+    return "🥉";
+  } else {
+    return "ㅤ"; // Invisible character to maintain layout
+  }
+}
 </script>
 
 <template>
@@ -175,22 +187,9 @@ function rankStyle(rank: number) {
           </template>
           <template #cell(rank)="{ value, row }">
             <div class="text-center">
-              <div v-if="row.rowData.rank == 1">
-                <div class="text-yellow-400 font-bold text-2xl">
-                  🥇第 {{ value }} 名
-                </div>
+              <div :class="rankStyle(row.rowData.rank)">
+                {{ rankEmoji(row.rowData.rank) }}第 {{ value }} 名
               </div>
-              <div v-else-if="row.rowData.rank == 2">
-                <div class="text-zinc-400 font-bold text-xl">
-                  🥈第 {{ value }} 名
-                </div>
-              </div>
-              <div v-else-if="row.rowData.rank == 3">
-                <div class="text-amber-600 font-bold text-lg">
-                  🥉第 {{ value }} 名
-                </div>
-              </div>
-              <div v-else>第 {{ value }} 名</div>
             </div>
           </template>
           <template #cell(display)="{ value, row }">
