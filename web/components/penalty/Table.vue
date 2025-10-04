@@ -140,6 +140,7 @@ function calcStyle(top: number) {
       <VaDataTable
         :items="items"
         :columns="columns"
+        :default-sort-by="{ key: 'date', order: 'desc' }"
         style="
           --va-data-table-hover-color: #357286;
           --va-data-table-thead-background: var(--va-background-element);
