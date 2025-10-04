@@ -56,38 +56,36 @@ const data = computed(() => {
     .sort((lhs, rhs) => rhs.date.localeCompare(lhs.date));
 });
 
-const CENTER = "center" as const;
-
 const showActions = computed(() => props.isAuthenticated === true);
 
 const baseColumns = [
   {
     key: "date",
     label: "日期",
-    thAlign: CENTER,
-    tdAlign: CENTER,
+    thAlign: "center" as const,
+    tdAlign: "center" as const,
     sortable: true,
     sortingOptions: ["desc" as const, "asc" as const, null], // because these two string is defined as constants in src.
   },
   {
     key: "title",
     label: "直播標題",
-    thAlign: CENTER,
-    tdAlign: CENTER,
+    thAlign: "center" as const,
+    tdAlign: "center" as const,
     width: 20,
   },
   {
     key: "tags",
     label: "TAG",
-    thAlign: CENTER,
-    tdAlign: CENTER,
+    thAlign: "center" as const,
+    tdAlign: "center" as const,
     width: 20,
   },
   {
     key: "duration",
     label: "直播時長",
-    thAlign: CENTER,
-    tdAlign: CENTER,
+    thAlign: "center" as const,
+    tdAlign: "center" as const,
     sortable: true,
   },
 ];

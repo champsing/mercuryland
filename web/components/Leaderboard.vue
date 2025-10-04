@@ -80,28 +80,28 @@ const columns = [
   {
     key: "rank",
     label: "名次",
-    tdAlign: "center",
-    thAlign: "center",
+    tdAlign: "center" as const,
+    thAlign: "center" as const,
     sortable: true,
     sortingOptions: ["desc" as const, "asc" as const, null],
   },
   {
     key: "display",
     label: "名稱",
-    tdAlign: "center",
-    thAlign: "center",
+    tdAlign: "center" as const,
+    thAlign: "center" as const,
   },
   {
     key: "coin",
     label: "水星幣",
-    tdAlign: "center",
-    thAlign: "center",
+    tdAlign: "center" as const,
+    thAlign: "center" as const,
   },
   {
     key: "updated_at",
     label: "最近出现",
-    tdAlign: "center",
-    thAlign: "center",
+    tdAlign: "center" as const,
+    thAlign: "center" as const,
     sortable: true,
     sortingOptions: ["desc" as const, "asc" as const, null],
   },
@@ -121,9 +121,9 @@ const columns = [
     </div>
   </div>
     <VaDivider class="w-full !mt-0 !mb-2" />
-  
-  <VaCard>
-    <use-element-bounding v-slot="{ top }" class="mb-2 mx-10">
+
+  <VaCard class="m-2 overflow-hidden rounded-xl">
+    <use-element-bounding v-slot="{ top }">
       <VaScrollContainer
         vertical
         color="#e0feb4"
