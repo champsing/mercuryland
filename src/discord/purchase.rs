@@ -1,7 +1,7 @@
 use crate::coin::command::CoinCommandManager;
 use crate::coin::youtube::Coin;
 use crate::config::CONFIG;
-use crate::database::{coin::Coin as CoinUser, get_connection};
+use crate::database::{user::Coin as CoinUser, get_connection};
 use crate::error::ServerError;
 use chrono::Days;
 use poise::{self, CreateReply};

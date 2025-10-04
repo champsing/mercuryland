@@ -1,6 +1,6 @@
 use crate::{
     config::CONFIG,
-    database::{self, coin::Coin as CoinUser},
+    database::{self, user::Coin as CoinUser},
     error::ServerError,
 };
 use poise;

@@ -1,5 +1,5 @@
 use super::config::CoinConfig;
-pub use crate::database::coin::Coin;
+pub use crate::database::user::Coin;
 use crate::{database::get_connection, error::ServerError};
 use chrono::{DateTime, TimeDelta, Utc};
 use std::{cmp::min, collections::HashMap};

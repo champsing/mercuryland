@@ -1,5 +1,5 @@
 use super::config::CoinConfig;
-pub use crate::database::coin::Coin;
+pub use crate::database::user::Coin;
 use crate::{config::CONFIG, database::get_connection, discord, error::ServerError};
 use chrono::{DateTime, Utc};
 use serenity::all::CreateMessage;
