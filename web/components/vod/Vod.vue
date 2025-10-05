@@ -151,13 +151,17 @@ const handleEditVod = (vod: VodItem) => {
                     />
                 </div>
 
-                <div class="flex flex-col w-1/4">
-                    <Summary :t="computedTime" />
-                    <Calculation
-                        :dateRange="dateRange"
-                        :vodData="vodData"
-                        @computedTime="(time) => (computedTime = time)"
-                    />
+                <div class="flex flex-col w-1/4 gap-2 h-full">
+                    <div class="h-1/4">
+                        <Summary :t="computedTime" />
+                    </div>
+                    <div class="h-3/4">
+                        <Calculation
+                            :dateRange="dateRange"
+                            :vodData="vodData"
+                            @computedTime="(time) => (computedTime = time)"
+                        />
+                    </div>
                 </div>
             </div>
         </ViewportHeight>
