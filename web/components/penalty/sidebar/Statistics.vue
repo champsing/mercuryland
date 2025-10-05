@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { reactive } from "vue";
 import {
     VaButton,
     VaDivider,
@@ -14,7 +14,7 @@ import { stateColor, stateString, PenItem } from "@/composables/penalty";
 
 const props = defineProps<{ penalties: PenItem[] }>();
 
-const modal = ref({
+const modal = reactive({
     show: false,
     title: "現存",
     color: "#ffffff",
@@ -27,39 +27,39 @@ const modal = ref({
 });
 
 function fillModalData() {
-    modal.value.leftCount = props.penalties.filter(
-        (x) => x.state === modal.value.leftSlot,
+    modal.leftCount = props.penalties.filter(
+        (x) => x.state === modal.leftSlot,
     ).length;
-    modal.value.rightCount = props.penalties.filter(
-        (x) => x.state === modal.value.rightSlot,
+    modal.rightCount = props.penalties.filter(
+        (x) => x.state === modal.rightSlot,
     ).length;
 
-    modal.value.leftText = props.penalties
-        .filter((x) => x.state === modal.value.leftSlot)
+    modal.leftText = props.penalties
+        .filter((x) => x.state === modal.leftSlot)
         .map((x) => x.name)
         .join("\n");
 
-    modal.value.rightText = props.penalties
-        .filter((x) => x.state === modal.value.rightSlot)
+    modal.rightText = props.penalties
+        .filter((x) => x.state === modal.rightSlot)
         .map((x) => x.name)
         .join("\n");
 }
 
 function clickExist() {
-    modal.value.show = true;
-    modal.value.title = "現存";
-    modal.value.color = "#b73813";
-    modal.value.leftSlot = 1;
-    modal.value.rightSlot = 2;
+    modal.show = true;
+    modal.title = "現存";
+    modal.color = "#b73813";
+    modal.leftSlot = 1;
+    modal.rightSlot = 2;
     fillModalData();
 }
 
 function clickDone() {
-    modal.value.show = true;
-    modal.value.title = "完成";
-    modal.value.color = "#297a33";
-    modal.value.leftSlot = 3;
-    modal.value.rightSlot = 4;
+    modal.show = true;
+    modal.title = "完成";
+    modal.color = "#297a33";
+    modal.leftSlot = 3;
+    modal.rightSlot = 4;
     fillModalData();
 }
 </script>
