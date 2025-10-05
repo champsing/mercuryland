@@ -10,7 +10,7 @@ import {
     VaListItem,
     VaListItemSection,
 } from "vuestic-ui";
-import { parseHMS, formatHMS, VodItem } from "@composables/utils.ts";
+import { parseHMS, formatHMS, VodItem } from "@composables/vod";
 import vodSchedule from "@assets/data/schedule.json";
 
 interface CalculationEntry {

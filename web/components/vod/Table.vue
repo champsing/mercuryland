@@ -9,7 +9,7 @@ import {
     VaIcon,
     VaScrollContainer,
 } from "vuestic-ui";
-import { VodItem } from "@/composables/utils";
+import { VodItem } from "@/composables/vod";
 
 const props = defineProps<{
     dateRange: { start: Date; end: Date };

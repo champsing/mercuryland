@@ -8,7 +8,8 @@ import Calculation from "./time/Calculation.vue";
 import AddVod from "./AddVod.vue";
 import SetVod from "./SetVod.vue";
 import Rule from "./Rule.vue";
-import { BASE_URL, formatDate, parseDate, VodItem } from "@/composables/utils";
+import { BASE_URL, formatDate, parseDate } from "@/composables/utils";
+import { VodItem } from "@/composables/vod";
 import { useAuthState } from "@/composables/authState";
 import ViewportHeight from "../ViewportHeight.vue";
 

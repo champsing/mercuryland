@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed } from "vue";
 import { VaCard, VaCardTitle, VaCardContent } from "vuestic-ui";
-import { formatHMS } from "@composables/utils.ts";
+import { formatHMS } from "@composables/vod";
 
 const props = defineProps<{ t: number }>();
 const text = computed(() =>
