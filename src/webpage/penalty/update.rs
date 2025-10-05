@@ -11,9 +11,7 @@ pub struct Request {
     pub id: i64,
     pub date: String,
     pub name: String,
-    pub detail: String,
     pub state: i32,
-    pub history: Vec<(i32, NaiveDate)>,
 }
 
 #[post("/api/penalty/update")]
@@ -37,11 +35,26 @@ pub async fn handler(request: web::Json<Request>) -> Result<impl Responder, Serv
         None => return Ok(HttpResponse::NotFound().finish()),
     };
 
+    if penalty.state < 0 || penalty.state > 4 {
+        return Ok(HttpResponse::BadRequest().finish());
+    }
+
+    // Clear up any state that is out of order
+    penalty.history.retain(|(state, _)| *state <= request.state);
+    if let Some((_, initial_date)) = penalty.history.first_mut() {
+        // Always update the initial date to the new date
+        *initial_date = date;
+    };
+    if let Some((last_state, _)) = penalty.history.last() {
+        // Only add a new history entry if the state has changed
+        if *last_state != request.state {
+            penalty.history.push((request.state, date));
+        }
+    };
+
     penalty.date = date;
     penalty.name = request.name;
-    penalty.detail = request.detail;
     penalty.state = request.state;
-    penalty.history = request.history;
 
     let updated = penalty.update(&transaction)?;
     if updated == 0 {
