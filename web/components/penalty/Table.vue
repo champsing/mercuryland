@@ -15,12 +15,12 @@ import { stateString } from "@/composables/penalty";
 const props = defineProps<{
     penalties: PenItem[];
     dateRange: { start: Date; end: Date };
-    state?: number | null;
+    state?: string | null;
     search: string;
 }>();
 
 const emit = defineEmits<{
-    (e: "updateState", state: number): void;
+    (e: "updateState", state: string): void;
 }>();
 
 interface PenaltyDataEntry {
@@ -95,7 +95,7 @@ function vodLinkOfDate(date: string): string[] {
 function filterPenaltyData(
     data: PenItem[],
     dateRange: { start: Date; end: Date },
-    state: number | null,
+    state: string | null,
     search: string,
 ): PenItem[] {
     return data
@@ -107,7 +107,7 @@ function filterPenaltyData(
                         .toISOString()
                         .slice(0, 10),
         )
-        .filter((v) => state == null || state == v.state)
+        .filter((v) => state == null || parseInt(state) == v.state)
         .filter(
             (v) =>
                 search == "" ||
@@ -193,7 +193,7 @@ function filterPenaltyData(
                         <VaButton
                             :class="`bg-penalty-state-${Number(value)} text-white font-bold rounded-lg px-2`"
                             @click="
-                                () => emit('updateState', Number(value))
+                                () => emit('updateState', value.toString())
                             "
                             preset="plain"
                             color="textPrimary"
