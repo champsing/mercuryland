@@ -148,7 +148,10 @@ watch(
                 <VaTextarea
                     v-model="editedDetail"
                     placeholder="Enter HTML detail"
-                    rows="5"
+                    class="w-full"
+                    :resize="false"
+                    min-rows="9"
+                    max-rows="9"
                 />
                 <div class="flex justify-between mt-2">
                     <VaButton @click="cancelEdit" color="secondary">
