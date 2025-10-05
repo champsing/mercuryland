@@ -24,7 +24,6 @@ const addPenaltySuccess = ref<string | null>(null);
 const addPenaltyForm = reactive({
     date: new Date(),
     name: "",
-    detail: "",
     state: 0,
 });
 
@@ -45,7 +44,6 @@ watch(showAddPenaltyModal, (visible) => {
 function resetAddPenaltyForm() {
     addPenaltyForm.date = new Date();
     addPenaltyForm.name = "";
-    addPenaltyForm.detail = "";
     addPenaltyForm.state = 0;
     addPenaltyError.value = null;
     addPenaltySuccess.value = null;
@@ -78,7 +76,7 @@ const savePenalty = async () => {
         token,
         date: formatDate(addPenaltyForm.date),
         name: addPenaltyForm.name.trim(),
-        detail: addPenaltyForm.detail.trim(),
+        detail: "",
         state: addPenaltyForm.state,
     };
 
@@ -126,11 +124,6 @@ defineExpose({ open: openAddPenaltyModal });
                 label="內容"
                 color="info"
                 required
-            />
-            <VaInput
-                v-model="addPenaltyForm.detail"
-                label="詳細說明"
-                color="info"
             />
             <VaSelect
                 v-model="addPenaltyForm.state"
