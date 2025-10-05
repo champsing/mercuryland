@@ -27,7 +27,7 @@ interface PenaltyDataEntry {
     id: number;
     date: string;
     name: string;
-    status: string;
+    state: number;
     description?: {
         type: string;
         text?: string;
@@ -35,7 +35,7 @@ interface PenaltyDataEntry {
         uri_imgs?: string[];
         uri_num?: number;
     }[];
-    reapply?: { date: string; status: string }[];
+    reapply?: { date: string; state: number }[];
     steamID?: number;
     progress?: number;
 }
@@ -173,9 +173,9 @@ function filterPenaltyData(
                                     id: row.rowData.id,
                                     date: row.rowData.date,
                                     name: row.rowData.name,
-                                    status: stateString(row.rowData.state),
+                                    state: row.rowData.state,
                                     description: [],
-                                    reapply: [],
+                                    reapply: row.rowData.history.map(([state, date]) => ({ date, state })),
                                     steamID: undefined,
                                     progress: undefined,
                                 }
