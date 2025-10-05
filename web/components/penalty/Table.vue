@@ -6,6 +6,7 @@ import {
     VaScrollContainer,
     VaCard,
     VaCardContent,
+    VaChip,
 } from "vuestic-ui";
 import penaltyData from "@assets/data/penalty.json";
 import vodData from "@assets/data/vod.json";
@@ -184,9 +185,13 @@ function filterPenaltyData(
                         <!-- !bg-[#6d8581] !bg-[#b91c1c] !bg-[#4d7c0f] !bg-[#047857] !bg-[#b45309] -->
                         <!-- TAILWIND CSS: DO NOT REMOVE ABOVE COMMENT -->
                         <VaChip
-                            :class="`!bg-[${statusOf(value).color}] text-white font-bold rounded-lg px-2`"
+                            :class="`!bg-[${statusOf(value).color}] text-white font-bold rounded-lg`"
+                            style="
+                                --va-chip-border: 0;
+                                --va-chip-sm-height: 20px;
+                            "
                             @click="() => emit('updateStatus', value)"
-                            size="medium"
+                            size="small"
                         >
                             {{ value }}
                         </VaChip>
