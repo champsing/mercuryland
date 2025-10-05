@@ -15,6 +15,25 @@ pub enum PenaltyState {
     Completed = 4,
 }
 
+impl From<i32> for PenaltyState {
+    fn from(value: i32) -> Self {
+        match value {
+            0 => PenaltyState::Inactive,
+            1 => PenaltyState::NotStarted,
+            2 => PenaltyState::InProgress,
+            3 => PenaltyState::BarelyDone,
+            4 => PenaltyState::Completed,
+            _ => PenaltyState::Inactive, // Default to Inactive for invalid values
+        }
+    }
+}
+
+impl From<PenaltyState> for i32 {
+    fn from(state: PenaltyState) -> i32 {
+        state as i32
+    }
+}
+
 #[derive(Debug, Serialize, Deserialize, Clone)]
 #[enum_def]
 pub struct Penalty {
@@ -37,28 +56,11 @@ impl TryFrom<&Row<'_>> for Penalty {
         
         // Convert i32 values to PenaltyState in history
         let history: Vec<(PenaltyState, NaiveDate)> = history.into_iter()
-            .map(|(state_num, date)| {
-                let state = match state_num {
-                    0 => PenaltyState::Inactive,
-                    1 => PenaltyState::NotStarted,
-                    2 => PenaltyState::InProgress,
-                    3 => PenaltyState::BarelyDone,
-                    4 => PenaltyState::Completed,
-                    _ => return Err(rusqlite::Error::FromSqlConversionFailure(0, Type::Integer, Box::new(std::io::Error::new(std::io::ErrorKind::InvalidData, "Invalid penalty state")))),
-                };
-                Ok((state, date))
-            })
-            .collect::<Result<Vec<_>, _>>()?;
+            .map(|(state_num, date)| (PenaltyState::from(state_num), date))
+            .collect();
 
         let state_num: i32 = value.get(PenaltyIden::State.as_str())?;
-        let state = match state_num {
-            0 => PenaltyState::Inactive,
-            1 => PenaltyState::NotStarted,
-            2 => PenaltyState::InProgress,
-            3 => PenaltyState::BarelyDone,
-            4 => PenaltyState::Completed,
-            _ => return Err(rusqlite::Error::FromSqlConversionFailure(0, Type::Integer, Box::new(std::io::Error::new(std::io::ErrorKind::InvalidData, "Invalid penalty state")))),
-        };
+        let state = PenaltyState::from(state_num);
 
         let date_str: String = value.get(PenaltyIden::Date.as_str())?;
         let date = NaiveDate::parse_from_str(&date_str, "%Y-%m-%d").map_err(|err| {
@@ -78,7 +80,7 @@ impl TryFrom<&Row<'_>> for Penalty {
 
 impl Penalty {
     pub fn insert(&mut self, transaction: &Transaction) -> Result<(), ServerError> {
-        let history_json = to_string(&self.history.iter().map(|(state, date)| (state.clone() as i32, *date)).collect::<Vec<_>>())?;
+        let history_json = to_string(&self.history.iter().map(|(state, date)| (i32::from(*state), *date)).collect::<Vec<_>>())?;
         let (query, values) = Query::insert()
             .into_table(PenaltyIden::Table)
             .columns([
@@ -92,7 +94,7 @@ impl Penalty {
                 self.date.format("%Y-%m-%d").to_string().into(),
                 self.name.clone().into(),
                 self.detail.clone().into(),
-                (self.state as i32).into(),
+                i32::from(self.state).into(),
                 history_json.into(),
             ])?
             .build_rusqlite(SqliteQueryBuilder);
@@ -148,7 +150,7 @@ impl Penalty {
     }
 
     pub fn update(&self, transaction: &Transaction) -> Result<usize, ServerError> {
-        let history_json = to_string(&self.history.iter().map(|(state, date)| (state.clone() as i32, *date)).collect::<Vec<_>>())?;
+        let history_json = to_string(&self.history.iter().map(|(state, date)| (i32::from(*state), *date)).collect::<Vec<_>>())?;
 
         let (query, values) = Query::update()
             .table(PenaltyIden::Table)
@@ -159,7 +161,7 @@ impl Penalty {
                 ),
                 (PenaltyIden::Name, self.name.clone().into()),
                 (PenaltyIden::Detail, self.detail.clone().into()),
-                (PenaltyIden::State, (self.state as i32).into()),
+                (PenaltyIden::State, i32::from(self.state).into()),
                 (PenaltyIden::History, history_json.into()),
             ])
             .and_where(Expr::col(PenaltyIden::Id).eq(self.id))

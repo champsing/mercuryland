@@ -14,8 +14,8 @@ pub struct Request {
     pub date: String,
     pub name: String,
     pub detail: String,
-    pub state: PenaltyState,
-    pub history: Vec<(PenaltyState, NaiveDate)>,
+    pub state: i32,
+    pub history: Vec<(i32, NaiveDate)>,
 }
 
 #[post("/api/penalty/update")]
@@ -42,8 +42,8 @@ pub async fn handler(request: web::Json<Request>) -> Result<impl Responder, Serv
     penalty.date = date;
     penalty.name = request.name;
     penalty.detail = request.detail;
-    penalty.state = request.state;
-    penalty.history = request.history;
+    penalty.state = PenaltyState::from(request.state);
+    penalty.history = request.history.into_iter().map(|(state, date)| (PenaltyState::from(state), date)).collect();
 
     let updated = penalty.update(&transaction)?;
     if updated == 0 {

@@ -13,8 +13,8 @@ pub struct Request {
     pub date: String,
     pub name: String,
     pub detail: String,
-    pub state: PenaltyState,
-    pub history: Vec<(PenaltyState, NaiveDate)>,
+    pub state: i32,
+    pub history: Vec<(i32, NaiveDate)>,
 }
 
 #[post("/api/penalty/insert")]
@@ -35,8 +35,8 @@ pub async fn handler(request: web::Json<Request>) -> Result<impl Responder, Serv
         date,
         name: request.name,
         detail: request.detail,
-        state: request.state,
-        history: request.history,
+        state: PenaltyState::from(request.state),
+        history: request.history.into_iter().map(|(state, date)| (PenaltyState::from(state), date)).collect(),
     };
 
     let mut connection = database::get_connection()?;
