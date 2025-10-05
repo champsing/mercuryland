@@ -1,84 +1,93 @@
 <script setup lang="ts">
-import { ref, Ref, computed } from "vue";
+import { computed, ref } from "vue";
 import {
     VaButton,
     VaDataTable,
     VaScrollContainer,
     VaCard,
     VaCardContent,
+    VaIcon,
 } from "vuestic-ui";
-import penaltyData from "@assets/data/penalty.json";
 import vodData from "@assets/data/vod.json";
-import PenaltyModal from "./PenaltyModal.vue";
+import Detail from "./Detail.vue";
 import { openLinks } from "@/composables/utils";
-import { statusOf } from "@/composables/penalty";
+import { stateString, stateColor, PenItem } from "@/composables/penalty";
+import { useAuthState } from "@/composables/authState";
 
 const props = defineProps<{
+    penalties: PenItem[];
     dateRange: { start: Date; end: Date };
-    status?: string;
+    state?: number | null;
     search: string;
 }>();
 
 const emit = defineEmits<{
-    (e: "updateStatus", status: string): void;
+    (e: "updateState", state: number): void;
+    (e: "addPenalty"): void;
+    (e: "editPenalty", penalty: PenItem): void;
 }>();
 
-class PenaltyDataEntry {
-    id: number;
-    date: string;
-    name: string;
-    status: string;
-    description?: {
-        type: string;
-        text?: string;
-        uri_link?: string;
-        uri_imgs?: string[];
-        uri_num?: number;
-    }[];
-    reapply?: { date: string; status: string }[];
-    steamID?: number;
-    progress?: number;
-}
+const authState = useAuthState();
+const showActions = computed(() => authState.isAuthenticated);
 
 const YOUTUBE_LIVE = "https://youtube.com/live/";
 
-const showPEM = ref(false); // showPenaltyEntryModal
+const modal = ref(null as number | null);
 
-const PEMContent: Ref<PenaltyDataEntry> = defineModel("PEMContent", {
-    default: null,
-    set(value) {
-        showPEM.value = !showPEM.value;
-        return value;
-    },
-}); // penaltyEntryModalContent
-
-// [DONE] 修正成跟 DataTable.vue 裡面一樣使用 columns {row} 形式
 const items = computed(() =>
-    filterPenaltyData(props.dateRange, props.status, props.search).slice(),
+    filterPenaltyData(
+        props.penalties,
+        props.dateRange,
+        props.state,
+        props.search,
+    ).slice(),
 );
 
-const columns = [
+const baseColumns = [
     {
         key: "date",
         label: "日期",
-        tdAlign: "center" as const,
         thAlign: "center" as const,
+        tdAlign: "center" as const,
         sortable: true,
         sortingOptions: ["desc" as const, "asc" as const, null],
+        width: 100,
     },
     {
         key: "name",
         label: "內容",
-        tdAlign: "center" as const,
         thAlign: "center" as const,
+        tdAlign: "center" as const,
+        width: 20,
     },
     {
-        key: "status",
-        label: "完成狀態",
-        tdAlign: "center" as const,
+        key: "state",
+        label: "狀態",
         thAlign: "center" as const,
+        tdAlign: "center" as const,
+        width: 100,
     },
 ];
+
+const columns = computed(() => {
+    const result = [...baseColumns];
+
+    if (showActions.value) {
+        result.push({
+            key: "actions",
+            label: "",
+            thAlign: "center" as const,
+            tdAlign: "center" as const,
+            width: 12,
+        });
+    }
+
+    return result;
+});
+
+const headerColumns = computed(() =>
+    columns.value.filter((column) => column.key !== "actions"),
+);
 
 function vodLinkOfDate(date: string): string[] {
     let linkIDArray = vodData.filter((x) => x.date == date).map((x) => x.link);
@@ -88,11 +97,12 @@ function vodLinkOfDate(date: string): string[] {
 }
 
 function filterPenaltyData(
+    data: PenItem[],
     dateRange: { start: Date; end: Date },
-    status: string,
+    state: number | null,
     search: string,
-): typeof penaltyData {
-    return penaltyData
+): PenItem[] {
+    return data
         .filter(
             (v) =>
                 v.date >= dateRange.start.toISOString().slice(0, 10) &&
@@ -101,7 +111,7 @@ function filterPenaltyData(
                         .toISOString()
                         .slice(0, 10),
         )
-        .filter((v) => status == null || status == v.status)
+        .filter((v) => state == null || state == v.state)
         .filter(
             (v) =>
                 search == "" ||
@@ -139,7 +149,7 @@ function filterPenaltyData(
                     hoverable
                 >
                     <template
-                        v-for="column in columns"
+                        v-for="column in headerColumns"
                         #[`header(${column.key})`]="{ label }"
                         :key="column.key"
                     >
@@ -147,24 +157,30 @@ function filterPenaltyData(
                             {{ label }}
                         </div>
                     </template>
-                    <template #cell(date)="{ value, row }">
-                        <div v-if="row.rowData.status == '未生效'">----</div>
-                        <div v-else>
-                            <VaButton
-                                color="textPrimary"
-                                preset="plain"
-                                @click="openLinks(vodLinkOfDate(value))"
-                                class="align-middle"
-                            >
-                                {{ value }}
-                            </VaButton>
-                        </div>
+                    <template v-if="showActions" #header(actions)>
+                        <VaButton
+                            preset="plain"
+                            size="small"
+                            color="info"
+                            aria-label="新增懲罰"
+                            @click="$emit('addPenalty')"
+                        >
+                            <VaIcon name="add" />
+                        </VaButton>
+                    </template>
+                    <template #cell(date)="{ value }">
+                        <VaButton
+                            color="textPrimary"
+                            preset="plain"
+                            @click="openLinks(vodLinkOfDate(value))"
+                            class="align-middle"
+                        >
+                            {{ value }}
+                        </VaButton>
                     </template>
                     <template #cell(name)="{ value, row }">
                         <VaButton
-                            @click="
-                                PEMContent = row.rowData as PenaltyDataEntry
-                            "
+                            @click="modal = row.rowData.id"
                             preset="plain"
                             color="textPrimary"
                             class="align-middle inline-block max-w-96"
@@ -172,30 +188,34 @@ function filterPenaltyData(
                             <div class="truncate">{{ value }}</div>
                         </VaButton>
                     </template>
-                    <template #cell(status)="{ value }">
-                        <!-- !bg-[#6d8581] !bg-[#b91c1c] !bg-[#4d7c0f] !bg-[#047857] !bg-[#b45309] -->
-                        <!-- TAILWIND CSS: DO NOT REMOVE ABOVE COMMENT -->
+                    <template #cell(state)="{ value }">
                         <VaButton
-                            :class="`!bg-[${statusOf(value).color}] text-white font-bold rounded-lg px-2`"
-                            @click="() => emit('updateStatus', value)"
+                            :class="stateColor(Number(value), 'bg')"
+                            @click="() => emit('updateState', Number(value))"
                             preset="plain"
                             color="textPrimary"
                             :style="{
                                 backgroundClip: 'padding-box',
                             }"
-                            class="align-middle"
+                            class="align-middle text-white font-bold rounded-lg px-2"
                         >
-                            {{ value }}
+                            {{ stateString(Number(value)) }}
+                        </VaButton>
+                    </template>
+                    <template v-if="showActions" #cell(actions)="{ row }">
+                        <VaButton
+                            preset="plain"
+                            color="info"
+                            aria-label="編輯懲罰"
+                            @click="emit('editPenalty', row.rowData)"
+                        >
+                            <VaIcon name="edit" />
                         </VaButton>
                     </template>
                 </VaDataTable>
             </VaScrollContainer>
 
-            <PenaltyModal
-                v-model="showPEM"
-                :penalty="PEMContent"
-                @changePenalty="PEMContent = $event"
-            />
+            <Detail v-model="modal" />
         </VaCardContent>
     </VaCard>
 </template>

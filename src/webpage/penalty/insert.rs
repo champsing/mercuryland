@@ -1,8 +1,6 @@
-use crate::{
-    database::{self, video::Video},
-    error::ServerError,
-    webpage::auth,
-};
+use crate::database::{self, penalty::Penalty};
+use crate::error::ServerError;
+use crate::webpage::auth;
 use actix_web::{HttpResponse, Responder, post, web};
 use chrono::NaiveDate;
 use serde::Deserialize;
@@ -11,13 +9,12 @@ use serde::Deserialize;
 pub struct Request {
     pub token: String,
     pub date: String,
-    pub link: String,
-    pub title: String,
-    pub tags: Vec<String>,
-    pub duration: String,
+    pub name: String,
+    pub detail: String,
+    pub state: i32,
 }
 
-#[post("/api/video/insert")]
+#[post("/api/penalty/insert")]
 pub async fn handler(request: web::Json<Request>) -> Result<impl Responder, ServerError> {
     let request = request.into_inner();
 
@@ -30,25 +27,28 @@ pub async fn handler(request: web::Json<Request>) -> Result<impl Responder, Serv
         Err(_) => return Ok(HttpResponse::BadRequest().finish()),
     };
 
-    let mut video = Video {
+    let history = if request.state == 0 {
+        vec![(0, date)]
+    } else if request.state == 1 {
+        vec![(0, date), (1, date)]
+    } else {
+        return Ok(HttpResponse::BadRequest().finish());
+    };
+
+    let mut penalty = Penalty {
         id: 0,
         date,
-        link: request.link,
-        title: request.title,
-        tags: request.tags,
-        duration: request.duration,
+        name: request.name,
+        detail: request.detail,
+        state: request.state,
+        history,
     };
 
     let mut connection = database::get_connection()?;
     let transaction = connection.transaction()?;
 
-    if Video::by_link(&video.link, &transaction)?.is_some() {
-        transaction.rollback()?;
-        return Ok(HttpResponse::Conflict().finish());
-    }
-
-    video.insert(&transaction)?;
+    penalty.insert(&transaction)?;
     transaction.commit()?;
 
-    Ok(HttpResponse::Ok().json(video))
+    Ok(HttpResponse::Ok().json(penalty))
 }

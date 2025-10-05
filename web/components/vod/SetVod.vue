@@ -11,19 +11,11 @@ import {
 } from "vuestic-ui";
 import axios from "axios";
 import { BASE_URL, formatDate, parseDate } from "@/composables/utils";
-
-interface VodItem {
-    id?: number | null;
-    date: string;
-    link: string;
-    title: string;
-    tags: string[];
-    duration: string;
-}
+import { VodItem } from "@/composables/vod";
+import { useAuthState } from "@/composables/authState";
 
 const props = defineProps<{
     tagList: string[];
-    isAuthenticated?: boolean;
 }>();
 
 const emit = defineEmits<{
@@ -31,10 +23,12 @@ const emit = defineEmits<{
     (event: "deleted"): void;
 }>();
 
+const authState = useAuthState();
+
 const showEditVodModal = ref(false);
 const showDeleteConfirmModal = ref(false);
 const editVodForm = reactive({
-    id: null as number | null,
+    id: 0 as number,
     date: new Date(),
     link: "",
     title: "",
@@ -70,7 +64,7 @@ watch(showEditVodModal, (visible) => {
 });
 
 const resetEditVodForm = () => {
-    editVodForm.id = null;
+    editVodForm.id = 0;
     editVodForm.date = new Date();
     editVodForm.link = "";
     editVodForm.title = "";
@@ -151,11 +145,7 @@ const parseDurationToDate = (duration: string): Date | null => {
 };
 
 const open = (vod: VodItem) => {
-    if (!props.isAuthenticated) {
-        return;
-    }
-    if (vod.id == null) {
-        console.warn("Cannot edit VOD without an id", vod);
+    if (!authState.isAuthenticated) {
         return;
     }
 
@@ -183,7 +173,7 @@ const formatDuration = (value: Date) => {
 };
 
 const saveVod = async () => {
-    if (isSavingVod.value || !props.isAuthenticated) {
+    if (isSavingVod.value || !authState.isAuthenticated) {
         return;
     }
 
@@ -194,7 +184,6 @@ const saveVod = async () => {
     }
 
     if (
-        editVodForm.id == null ||
         !editVodForm.date ||
         !editVodForm.title.trim() ||
         !editVodDuration.value
@@ -243,18 +232,13 @@ const requestDeleteVod = () => {
 };
 
 const deleteVod = async () => {
-    if (isDeletingVod.value || !props.isAuthenticated) {
+    if (isDeletingVod.value || !authState.isAuthenticated) {
         return;
     }
 
     const token = localStorage.getItem("token");
     if (!token) {
         deleteVodError.value = "請先登入管理員帳號";
-        return;
-    }
-
-    if (editVodForm.id == null) {
-        deleteVodError.value = "找不到要刪除的直播";
         return;
     }
 
@@ -359,16 +343,15 @@ defineExpose({
             <p v-if="editVodSuccess" class="text-sm text-emerald-400">
                 {{ editVodSuccess }}
             </p>
-            <div class="flex flex-col gap-2">
+            <div class="flex justify-between gap-2">
                 <VaButton
                     color="danger"
-                    preset="primary"
-                    class="w-full"
+                    :disabled="isSavingVod"
                     @click="requestDeleteVod"
                 >
-                    刪除直播
+                    刪除
                 </VaButton>
-                <div class="flex justify-end gap-2">
+                <div class="flex gap-2">
                     <VaButton
                         preset="secondary"
                         :disabled="isSavingVod"

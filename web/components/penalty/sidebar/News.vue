@@ -1,10 +1,14 @@
 <script setup lang="ts">
-import { VaCard, VaCardContent, VaCardTitle } from "vuestic-ui";
-import penaltyData from "@assets/data/penalty.json";
-import { ref } from "vue";
-import { statusOf } from "@/composables/penalty";
+import { VaCard, VaCardContent, VaCardTitle, VaChip } from "vuestic-ui";
+import { computed } from "vue";
+import { stateString } from "@/composables/penalty";
+import { stateColor, PenItem } from "@/composables/penalty";
 
-const latestPenalty = ref(penaltyData.slice().reverse()[0]);
+const props = defineProps<{ penalties: PenItem[] }>();
+
+const latestPenalty = computed(() =>
+    props.penalties.length > 0 ? props.penalties.slice().reverse()[0] : null,
+);
 </script>
 
 <template>
@@ -15,20 +19,29 @@ const latestPenalty = ref(penaltyData.slice().reverse()[0]);
         <VaCardTitle class="!text-xl justify-center"> 最新 </VaCardTitle>
         <VaCardContent>
             <div
-                class="flex flex-col justify-center gap-2 mb-2"
+                v-if="latestPenalty"
+                class="flex flex-col justify-center items-center gap-2 mb-2"
                 item-responsive
             >
-                <div
-                    :class="`inline !text-[${
-                        statusOf(latestPenalty.status).color
-                    }] font-bold text-center`"
+                <VaChip
+                    readonly
+                    outline
+                    size="small"
+                    :color="stateColor(latestPenalty.state, 'raw')"
+                    class="w-24"
                 >
-                    ● {{ latestPenalty.status }}
-                </div>
+                    ● {{ stateString(latestPenalty.state) }}
+                </VaChip>
 
                 <div class="text-center text-lg mb-3 line-clamp-3">
                     {{ latestPenalty.name }}
                 </div>
+            </div>
+            <div
+                v-else
+                class="flex justify-center items-center h-full text-center text-gray-500"
+            >
+                暫無懲罰
             </div>
         </VaCardContent>
     </VaCard>

@@ -9,19 +9,11 @@ import AddVod from "./AddVod.vue";
 import SetVod from "./SetVod.vue";
 import Rule from "./Rule.vue";
 import { BASE_URL, formatDate, parseDate } from "@/composables/utils";
+import { VodItem } from "@/composables/vod";
 import { useAuthState } from "@/composables/authState";
 import ViewportHeight from "../ViewportHeight.vue";
 
 document.title = "直播隨選 - 水星人的夢幻樂園";
-
-interface VodItem {
-    id?: number | null;
-    date: string;
-    link: string;
-    title: string;
-    tags: string[];
-    duration: string;
-}
 
 const dateRange = defineModel("dateRange", {
     //1582992000 = 2020 03 01 12:00 AM Taipei ST; 8 hours = 28800 seconds
@@ -168,16 +160,10 @@ const handleEditVod = (vod: VodItem) => {
         <SetVod
             ref="setVodRef"
             :tag-list="tagList"
-            :is-authenticated="authState.isAuthenticated"
             @updated="loadVodData"
             @deleted="loadVodData"
         />
-        <AddVod
-            ref="addVodRef"
-            :tag-list="tagList"
-            :is-authenticated="authState.isAuthenticated"
-            @saved="loadVodData"
-        />
+        <AddVod ref="addVodRef" :tag-list="tagList" @saved="loadVodData" />
     </div>
 </template>
 

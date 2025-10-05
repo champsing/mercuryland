@@ -1,6 +1,7 @@
 pub mod auth;
 pub mod image;
 pub mod leaderboard;
+pub mod penalty;
 pub mod ping;
 pub mod video;
 pub mod wheel;
@@ -33,6 +34,12 @@ pub async fn run() -> Result<(), ServerError> {
             .service(video::update::handler)
             .service(video::metadata::handler)
             .service(leaderboard::get::handler)
+            .service(penalty::list::handler)
+            .service(penalty::insert::handler)
+            .service(penalty::delete::handler)
+            .service(penalty::update::handler)
+            .service(penalty::detail::handler)
+            .service(penalty::update_detail::handler)
             .service(image::upload::handler)
             .service(image::get::handler)
     })

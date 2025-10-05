@@ -1,13 +1,17 @@
 <script setup lang="ts">
 // TODO: Convert Penalty Page to SQL based from JSON based Data Storage
+import { ref, onMounted } from "vue";
 import { VaDateInput, VaInput, VaSelect, VaDivider } from "vuestic-ui";
-import penaltyStatus from "@assets/data/penalty_status.json";
+import axios from "axios";
 import Table from "./Table.vue";
 import Statistics from "./sidebar/Statistics.vue";
 import Syntax from "./sidebar/Syntax.vue";
 import News from "./sidebar/News.vue";
 import Rule from "./Rule.vue";
-import { formatDate, parseDate } from "@/composables/utils";
+import AddPenalty from "./AddPenalty.vue";
+import SetPenalty from "./SetPenalty.vue";
+import { formatDate, parseDate, BASE_URL } from "@/composables/utils";
+import { PenItem } from "@/composables/penalty";
 import ViewportHeight from "../ViewportHeight.vue";
 
 document.title = "直播懲罰 - 水星人的夢幻樂園";
@@ -20,20 +24,42 @@ let filterDate = defineModel("filterDate", {
 });
 
 let filterStatus = defineModel("filterStatus", {
-    default: null,
-    set(value) {
-        return value;
-    },
+    default: null as number | null,
 });
 
 let filterSearch = defineModel("filterSearch", {
-    default: "",
-    set(value) {
-        return value;
-    },
+    default: "" as string,
 });
 
-let finishOptions = penaltyStatus.map((x) => x.name).sort();
+let finishOptions = [
+    { valueBy: 0, textBy: "已抽选" },
+    { valueBy: 1, textBy: "已生效" },
+    { valueBy: 2, textBy: "進行中" },
+    { valueBy: 3, textBy: "勉強過" },
+    { valueBy: 4, textBy: "已完成" },
+];
+
+const textByFinish = (option: { textBy: string }) => option.textBy;
+const valueByFinish = (option: { valueBy: number }) => option.valueBy;
+
+const penalties = ref<PenItem[]>([]);
+
+const addPenaltyRef = ref<{ open: () => void } | null>(null);
+const setPenaltyRef = ref<{ open: (penalty: PenItem) => void } | null>(null);
+
+async function loadPenData() {
+    try {
+        const response = await axios.get<PenItem[]>(
+            `${BASE_URL}/api/penalty/list`,
+        );
+        penalties.value = response.data;
+        console.log("Penalty data loaded:", penalties.value);
+    } catch (error) {
+        console.error("Failed to load penalty data", error);
+    }
+}
+
+onMounted(loadPenData);
 </script>
 
 <template>
@@ -65,6 +91,8 @@ let finishOptions = penaltyStatus.map((x) => x.name).sort();
                         v-model="filterStatus"
                         :options="finishOptions"
                         placeholder="完成狀態"
+                        :text-by="textByFinish"
+                        :value-by="valueByFinish"
                         clearable
                         :clear-value="null"
                     />
@@ -81,24 +109,27 @@ let finishOptions = penaltyStatus.map((x) => x.name).sort();
             <div class="flex flex-row gap-2 px-2 h-full">
                 <div class="w-3/4 h-full">
                     <Table
+                        :penalties="penalties"
                         :dateRange="filterDate"
-                        :status="filterStatus"
+                        :state="filterStatus"
                         :search="filterSearch"
-                        @updateStatus="
-                            (status) => {
+                        @updateState="
+                            (state) => {
                                 filterStatus == null
-                                    ? (filterStatus = status)
+                                    ? (filterStatus = state)
                                     : (filterStatus = null);
                             }
                         "
+                        @addPenalty="addPenaltyRef?.open()"
+                        @editPenalty="setPenaltyRef?.open($event)"
                     />
                 </div>
                 <div class="flex flex-col w-1/4 gap-2 h-full">
                     <div class="h-1/3">
-                        <News />
+                        <News :penalties="penalties" />
                     </div>
                     <div class="h-1/3">
-                        <Statistics />
+                        <Statistics :penalties="penalties" />
                     </div>
                     <div class="h-1/3">
                         <Syntax />
@@ -106,6 +137,12 @@ let finishOptions = penaltyStatus.map((x) => x.name).sort();
                 </div>
             </div>
         </ViewportHeight>
+        <AddPenalty ref="addPenaltyRef" @saved="loadPenData" />
+        <SetPenalty
+            ref="setPenaltyRef"
+            @updated="loadPenData"
+            @deleted="loadPenData"
+        />
     </div>
 </template>
 

@@ -1,6 +1,6 @@
 use crate::error::ServerError;
 
-const VERSION: u32 = 8;
+const VERSION: u32 = 9;
 
 pub fn run_migration(transaction: &rusqlite::Transaction) -> Result<(), ServerError> {
     let mut version =
@@ -33,6 +33,7 @@ pub fn run_migration(transaction: &rusqlite::Transaction) -> Result<(), ServerEr
     migrate!(6, "006_video_tables.sql");
     migrate!(7, "007_user_table_restructure.sql");
     migrate!(8, "008_image_tables.sql");
+    migrate!(9, "009_penalty_tables.sql");
 
     if version != VERSION {
         Err(format!(
