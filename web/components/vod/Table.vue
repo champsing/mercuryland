@@ -159,16 +159,14 @@ const headerColumns = computed(() =>
                             </VaButton>
                         </slot>
                     </template>
-                    <!-- for checking day of week -->
-                    <!-- <template #cell(date)="{ value }">
-                        {{ value }}  {{ new Date(value).getDay() }}
-                    </template> -->
-
+                    <template #cell(date)="{ value }">
+                        <div class="text-[1rem] text-center pl-2">
+                            {{ value }}
+                        </div>
+                    </template>
                     <template #cell(title)="{ value, row }">
-                        <!-- same as NextPageButton and ReturnTopButton -->
                         <VaButton
                             preset="plain"
-                            size="small"
                             color="textPrimary"
                             hoverMaskColor="#5bc6a1"
                             hoverOpacity="1"
@@ -177,24 +175,21 @@ const headerColumns = computed(() =>
                             :href="`https://youtube.com/live/${row.rowData.link}`"
                             target="_blank"
                             rel="noreferrer noopener"
-                            class="mt-1"
+                            class="truncate"
                         >
                             {{ value }}
                         </VaButton>
                     </template>
                     <template #cell(tags)="{ row }">
-                        <!-- same as NextPageButton and ReturnTopButton -->
                         <template v-for="tag in row.rowData.tags">
                             <VaButton
                                 preset="plain"
-                                size="small"
                                 color="textPrimary"
                                 hoverMaskColor="#5bc6a1"
                                 hoverOpacity="1"
                                 pressedMaskColor="info"
                                 :pressedOpacity="1"
                                 @click="() => emit('updateTag', tag)"
-                                class="mt-1"
                             >
                                 {{ tag }}
                             </VaButton>
@@ -208,10 +203,14 @@ const headerColumns = computed(() =>
                             />
                         </template>
                     </template>
+                    <template #cell(duration)="{ value }">
+                        <div class="text-[1rem] text-center pr-2">
+                            {{ value }}
+                        </div>
+                    </template>
                     <template v-if="showActions" #cell(actions)="{ row }">
                         <VaButton
                             preset="plain"
-                            size="small"
                             color="info"
                             aria-label="編輯直播"
                             @click="emit('editVod', row.rowData)"
