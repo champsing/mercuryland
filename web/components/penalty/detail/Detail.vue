@@ -5,7 +5,7 @@ import { BASE_URL } from "@/composables/utils";
 import { stateString, stateColor, PenItem } from "@/composables/penalty";
 import { useAuthState } from "@/composables/authState";
 import axios from "axios";
-import Timeline from "./Timeline.vue";
+import Timeline from "../Timeline.vue";
 
 const props = defineProps<{
     modelValue: number | null;
