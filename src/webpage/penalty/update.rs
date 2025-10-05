@@ -1,5 +1,5 @@
 use crate::{
-    database::{self, penalty::Penalty},
+    database::{self, penalty::{Penalty, PenaltyState}},
     error::ServerError,
     webpage::auth,
 };
@@ -14,8 +14,8 @@ pub struct Request {
     pub date: String,
     pub name: String,
     pub detail: String,
-    pub state: i32,
-    pub history: Vec<(i32, NaiveDate)>,
+    pub state: PenaltyState,
+    pub history: Vec<(PenaltyState, NaiveDate)>,
 }
 
 #[post("/api/penalty/update")]
