@@ -8,8 +8,8 @@ cursor = conn.cursor()
 # Delete all items from penalty table
 cursor.execute('DELETE FROM penalty')
 
-# Load data from penalty_4.json
-with open('web/assets/data/penalty_4.json', 'r', encoding='utf-8') as f:
+# Load data from penalty_5.json
+with open('web/assets/data/penalty_5.json', 'r', encoding='utf-8') as f:
     penalties = json.load(f)
 
 # Insert each penalty
