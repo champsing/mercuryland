@@ -140,7 +140,10 @@ function format(seconds: number): string {
 <template>
     <VaCard style="--va-card-padding: 0rem" class="h-full rounded-xl">
         <VaCardContent class="h-full">
-            <VaList style="--va-list-label-padding: 1rem" class="h-full flex flex-col">
+            <VaList
+                style="--va-list-label-padding: 1rem"
+                class="h-full flex flex-col"
+            >
                 <VaListLabel class="text-xl" color="textPrimary">
                     計算明細
                 </VaListLabel>

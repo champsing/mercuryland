@@ -15,6 +15,7 @@ These steps help maintain code quality and catch issues early.
 For Rust-related changes (files in `src/`, `Cargo.toml`, etc.), always use `cargo dotenv` to load environment variables from a `.env` file for local testing.
 
 Examples:
+
 - `cargo dotenv test` - Runs tests with environment variables loaded.
 - `cargo dotenv run` - Runs the application with environment variables loaded.
 
