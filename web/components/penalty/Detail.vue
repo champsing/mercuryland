@@ -73,6 +73,8 @@ watch(
     (newId) => {
         if (newId !== null) {
             loadPenalty(newId);
+        } else {
+            isEditing.value = false;
         }
     },
     { immediate: true },
