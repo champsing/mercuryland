@@ -97,7 +97,7 @@ function clickDone() {
         >
             <div class="flex flex-row mb-8 mr-4 justify-center items-center">
                 <div class="text-lg font-semibold text-zinc-200 flex-grow">
-                    懲罰數量統計：{{ modal.title }}
+                    懲罰統計：{{ modal.title }}
                 </div>
                 <VaButton
                     :color="modal.color"
