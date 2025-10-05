@@ -74,7 +74,7 @@ const columns = [
     },
     {
         key: "status",
-        label: "完成狀態",
+        label: "狀態",
         tdAlign: "center" as const,
         thAlign: "center" as const,
     },
