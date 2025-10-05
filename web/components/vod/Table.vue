@@ -65,6 +65,7 @@ const baseColumns = [
         tdAlign: "center" as const,
         sortable: true,
         sortingOptions: ["desc" as const, "asc" as const, null], // because these two string is defined as constants in src.
+        width: 100,
     },
     {
         key: "title",
@@ -86,6 +87,7 @@ const baseColumns = [
         thAlign: "center" as const,
         tdAlign: "center" as const,
         sortable: true,
+        width: 100,
     },
 ];
 
@@ -159,16 +161,14 @@ const headerColumns = computed(() =>
                             </VaButton>
                         </slot>
                     </template>
-                    <!-- for checking day of week -->
-                    <!-- <template #cell(date)="{ value }">
-                        {{ value }}  {{ new Date(value).getDay() }}
-                    </template> -->
-
+                    <template #cell(date)="{ value }">
+                        <div class="text-[1rem] text-center align-middle">
+                            {{ value }}
+                        </div>
+                    </template>
                     <template #cell(title)="{ value, row }">
-                        <!-- same as NextPageButton and ReturnTopButton -->
                         <VaButton
                             preset="plain"
-                            size="small"
                             color="textPrimary"
                             hoverMaskColor="#5bc6a1"
                             hoverOpacity="1"
@@ -177,30 +177,31 @@ const headerColumns = computed(() =>
                             :href="`https://youtube.com/live/${row.rowData.link}`"
                             target="_blank"
                             rel="noreferrer noopener"
-                            class="mt-1"
+                            class="align-middle inline-block max-w-64"
                         >
-                            {{ value }}
+                            <div class="truncate">
+                                {{ value }}
+                            </div>
                         </VaButton>
                     </template>
                     <template #cell(tags)="{ row }">
-                        <!-- same as NextPageButton and ReturnTopButton -->
                         <template v-for="tag in row.rowData.tags">
                             <VaButton
-                                preset="plain"
                                 size="small"
+                                preset="plain"
                                 color="textPrimary"
                                 hoverMaskColor="#5bc6a1"
                                 hoverOpacity="1"
                                 pressedMaskColor="info"
                                 :pressedOpacity="1"
                                 @click="() => emit('updateTag', tag)"
-                                class="mt-1"
+                                class="align-middle inline-block max-w-24"
                             >
-                                {{ tag }}
+                                <div class="truncate">{{ tag }}</div>
                             </VaButton>
                             <VaDivider
                                 vertical
-                                class="inline"
+                                class="inline align-middle"
                                 v-if="
                                     tag !==
                                     row.rowData.tags.slice().reverse()[0]
@@ -208,10 +209,14 @@ const headerColumns = computed(() =>
                             />
                         </template>
                     </template>
+                    <template #cell(duration)="{ value }">
+                        <div class="text-[1rem] text-center align-middle">
+                            {{ value }}
+                        </div>
+                    </template>
                     <template v-if="showActions" #cell(actions)="{ row }">
                         <VaButton
                             preset="plain"
-                            size="small"
                             color="info"
                             aria-label="編輯直播"
                             @click="emit('editVod', row.rowData)"
@@ -226,7 +231,8 @@ const headerColumns = computed(() =>
 </template>
 
 <style scoped>
-:deep(.va-data-table__thead) {
-    background-color: var(--va-background-element);
+:deep(.va-data-table__td) {
+    display: flex;
+    align-items: center;
 }
 </style>
