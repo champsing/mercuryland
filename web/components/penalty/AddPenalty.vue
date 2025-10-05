@@ -10,6 +10,7 @@ import {
 import axios from "axios";
 import { BASE_URL, formatDate, parseDate } from "@/composables/utils";
 import { useAuthState } from "@/composables/authState";
+import { stateString } from "@/composables/penalty";
 
 const emit = defineEmits<{
     (event: "saved"): void;
@@ -28,8 +29,8 @@ const addPenaltyForm = reactive({
 });
 
 const stateOptions = [
-    { value: 0, text: "已抽选" },
-    { value: 1, text: "已生效" },
+    { value: 0, text: stateString(0) },
+    { value: 1, text: stateString(1) },
 ];
 
 const textBy = (option: { text: string }) => option.text;

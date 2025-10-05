@@ -9,7 +9,7 @@ import {
 } from "vuestic-ui";
 import axios from "axios";
 import { BASE_URL, formatDate, parseDate } from "@/composables/utils";
-import { PenItem } from "@/composables/penalty";
+import { PenItem, stateString } from "@/composables/penalty";
 import { useAuthState } from "@/composables/authState";
 
 const emit = defineEmits<{
@@ -34,11 +34,11 @@ const editPenaltyForm = reactive({
 });
 
 const stateOptions = [
-    { value: 0, text: "已抽选" },
-    { value: 1, text: "已生效" },
-    { value: 2, text: "進行中" },
-    { value: 3, text: "勉強過" },
-    { value: 4, text: "已完成" },
+    { value: 0, text: stateString(0) },
+    { value: 1, text: stateString(1) },
+    { value: 2, text: stateString(2) },
+    { value: 3, text: stateString(3) },
+    { value: 4, text: stateString(4) },
 ];
 
 const textBy = (option: { text: string }) => option.text;
