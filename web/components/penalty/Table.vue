@@ -95,7 +95,7 @@ function vodLinkOfDate(date: string): string[] {
 function filterPenaltyData(
     data: PenItem[],
     dateRange: { start: Date; end: Date },
-    status: number | null,
+    state: number | null,
     search: string,
 ): PenItem[] {
     return data
@@ -107,7 +107,7 @@ function filterPenaltyData(
                         .toISOString()
                         .slice(0, 10),
         )
-        .filter((v) => status == null || status == v.state)
+        .filter((v) => state == null || state == v.state)
         .filter(
             (v) =>
                 search == "" ||
