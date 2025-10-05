@@ -1,5 +1,6 @@
 pub(crate) mod image;
 mod migration;
+pub(crate) mod penalty;
 pub(crate) mod user;
 pub(crate) mod video;
 pub(crate) mod wheel;
