@@ -10,7 +10,6 @@ import News from "./sidebar/News.vue";
 import Rule from "./Rule.vue";
 import { formatDate, parseDate, PenItem, BASE_URL } from "@/composables/utils";
 import ViewportHeight from "../ViewportHeight.vue";
-import { stateString } from "@/composables/penalty";
 
 document.title = "直播懲罰 - 水星人的夢幻樂園";
 
