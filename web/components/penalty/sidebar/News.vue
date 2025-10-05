@@ -2,8 +2,7 @@
 import { VaCard, VaCardContent, VaCardTitle, VaChip } from "vuestic-ui";
 import { computed } from "vue";
 import { stateString } from "@/composables/penalty";
-import type { PenItem } from "@/composables/utils";
-import { stateColor } from "@/composables/penalty";
+import { stateColor, PenItem } from "@/composables/penalty";
 
 const props = defineProps<{ penalties: PenItem[] }>();
 

@@ -1,5 +1,14 @@
 import penaltyStatus from "@assets/data/penalty_status.json";
 
+export interface PenItem {
+    id: number;
+    date: string;
+    name: string;
+    detail: string;
+    state: number;
+    history: [number, string][];
+}
+
 export function statusOf(status: string): (typeof penaltyStatus)[0] {
     return penaltyStatus.filter((x) => x.name == status)[0];
 }

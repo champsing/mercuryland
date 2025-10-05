@@ -4,15 +4,6 @@ export const BASE_URL = import.meta.env.PROD
     ? "https://api.mercuryland.pp.ua"
     : "http://127.0.0.1:8080";
 
-export interface PenItem {
-    id: number;
-    date: string;
-    name: string;
-    detail: string;
-    state: number;
-    history: [number, string][];
-}
-
 export function openLinks(links: Array<string>) {
     for (let i = 0; i < links.length; i++) {
         window.open(links[i], "_blank", "noopener noreferrer");

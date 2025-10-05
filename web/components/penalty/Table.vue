@@ -10,8 +10,8 @@ import {
 } from "vuestic-ui";
 import vodData from "@assets/data/vod.json";
 import PenaltyModal from "./PenaltyModal.vue";
-import { openLinks, PenItem } from "@/composables/utils";
-import { stateString, stateColor } from "@/composables/penalty";
+import { openLinks } from "@/composables/utils";
+import { stateString, stateColor, PenItem } from "@/composables/penalty";
 import { useAuthState } from "@/composables/authState";
 
 const props = defineProps<{

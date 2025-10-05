@@ -9,8 +9,8 @@ import {
     VaCardTitle,
     VaCardContent,
 } from "vuestic-ui";
-import { copyToClipboard, PenItem } from "@/composables/utils";
-import { stateColor, stateString } from "@/composables/penalty";
+import { copyToClipboard } from "@/composables/utils";
+import { stateColor, stateString, PenItem } from "@/composables/penalty";
 
 const props = defineProps<{ penalties: PenItem[] }>();
 
