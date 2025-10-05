@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { ref, Ref, computed } from "vue";
-import { UseElementBounding } from "@vueuse/components";
 import {
     VaButton,
     VaDataTable,
@@ -13,8 +12,6 @@ import vodData from "@assets/data/vod.json";
 import PenaltyModal from "./PenaltyModal.vue";
 import { openLinks, truncateString } from "@/composables/utils";
 import { statusOf } from "@/composables/penalty";
-import { FOOTNOTE_HEIGHT, FOOTNOTE_GAP } from "@/composables/constants";
-import { useWindowSize } from "@vueuse/core";
 
 const props = defineProps<{
     dateRange: { start: Date; end: Date };
@@ -112,15 +109,6 @@ function filterPenaltyData(
         )
         .sort((lhs, rhs) => rhs.date.localeCompare(lhs.date));
 }
-
-const vh = useWindowSize().height;
-function tableHeight(top: number) {
-    let height =
-        vh.value - window.scrollY - top - FOOTNOTE_HEIGHT - FOOTNOTE_GAP;
-    return {
-        height: "" + height + "px",
-    };
-}
 </script>
 
 <template>
@@ -129,91 +117,87 @@ function tableHeight(top: number) {
         class="h-full overflow-hidden rounded-xl"
     >
         <VaCardContent class="!p-0 h-full">
-            <use-element-bounding v-slot="{ top }">
-                <VaScrollContainer
-                    vertical
-                    color="#e0feb4"
-                    size="medium"
-                    class="h-full"
-                    :style="tableHeight(top)"
+            <VaScrollContainer
+                vertical
+                color="#e0feb4"
+                size="medium"
+                class="h-full"
+            >
+                <VaDataTable
+                    :items="items"
+                    :columns="columns"
+                    style="
+                        --va-data-table-hover-color: #357286;
+                        --va-data-table-thead-background: var(
+                            --va-background-element
+                        );
+                        --va-data-table-thead-border: 0;
+                        height: 100%;
+                    "
+                    :virtual-scroller="false"
+                    sticky-header
+                    hoverable
                 >
-                    <VaDataTable
-                        :items="items"
-                        :columns="columns"
-                        style="
-                            --va-data-table-hover-color: #357286;
-                            --va-data-table-thead-background: var(
-                                --va-background-element
-                            );
-                            --va-data-table-thead-border: 0;
-                            height: 100%;
-                        "
-                        :virtual-scroller="false"
-                        sticky-header
-                        hoverable
+                    <template
+                        v-for="column in columns"
+                        #[`header(${column.key})`]="{ label }"
+                        :key="column.key"
                     >
-                        <template
-                            v-for="column in columns"
-                            #[`header(${column.key})`]="{ label }"
-                            :key="column.key"
-                        >
-                            <div class="text-sm text-center">
-                                {{ label }}
-                            </div>
-                        </template>
+                        <div class="text-sm text-center">
+                            {{ label }}
+                        </div>
+                    </template>
 
-                        <!-- check day of week:  {{ new Date(value).getDay() }} -->
-                        <template #cell(date)="{ value, row }">
-                            <div class="text-center">
-                                <div v-if="row.rowData.status == '未生效'">
-                                    ----
-                                </div>
-                                <div v-else>
-                                    <VaButton
-                                        color="textPrimary"
-                                        preset="plain"
-                                        class=""
-                                        @click="openLinks(vodLinkOfDate(value))"
-                                    >
-                                        {{ value }}
-                                    </VaButton>
-                                </div>
+                    <!-- check day of week:  {{ new Date(value).getDay() }} -->
+                    <template #cell(date)="{ value, row }">
+                        <div class="text-center">
+                            <div v-if="row.rowData.status == '未生效'">
+                                ----
                             </div>
-                        </template>
-
-                        <template #cell(name)="{ value, row }">
-                            <div class="text-center">
+                            <div v-else>
                                 <VaButton
-                                    @click="
-                                        PEMContent =
-                                            row.rowData as PenaltyDataEntry
-                                    "
-                                    preset="plain"
                                     color="textPrimary"
-                                >
-                                    {{ truncateString(value, 25) }}
-                                </VaButton>
-                            </div>
-                        </template>
-                        <template #cell(status)="{ value }">
-                            <!-- !bg-[#6d8581] !bg-[#b91c1c] !bg-[#4d7c0f] !bg-[#047857] !bg-[#b45309] -->
-                            <!-- TAILWIND CSS: DO NOT REMOVE ABOVE COMMENT -->
-                            <div
-                                class="text-center"
-                                :class="`!bg-[${statusOf(value).color}]`"
-                            >
-                                <VaButton
-                                    @click="() => emit('updateStatus', value)"
                                     preset="plain"
-                                    color="textPrimary"
+                                    class=""
+                                    @click="openLinks(vodLinkOfDate(value))"
                                 >
                                     {{ value }}
                                 </VaButton>
                             </div>
-                        </template>
-                    </VaDataTable>
-                </VaScrollContainer>
-            </use-element-bounding>
+                        </div>
+                    </template>
+
+                    <template #cell(name)="{ value, row }">
+                        <div class="text-center">
+                            <VaButton
+                                @click="
+                                    PEMContent = row.rowData as PenaltyDataEntry
+                                "
+                                preset="plain"
+                                color="textPrimary"
+                            >
+                                {{ truncateString(value, 25) }}
+                            </VaButton>
+                        </div>
+                    </template>
+                    <template #cell(status)="{ value }">
+                        <!-- !bg-[#6d8581] !bg-[#b91c1c] !bg-[#4d7c0f] !bg-[#047857] !bg-[#b45309] -->
+                        <!-- TAILWIND CSS: DO NOT REMOVE ABOVE COMMENT -->
+                        <div
+                            class="text-center"
+                            :class="`!bg-[${statusOf(value).color}]`"
+                        >
+                            <VaButton
+                                @click="() => emit('updateStatus', value)"
+                                preset="plain"
+                                color="textPrimary"
+                            >
+                                {{ value }}
+                            </VaButton>
+                        </div>
+                    </template>
+                </VaDataTable>
+            </VaScrollContainer>
 
             <PenaltyModal
                 v-model="showPEM"
