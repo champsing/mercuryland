@@ -13,7 +13,7 @@ import {
 import { parseHMS, formatHMS, VodItem } from "@composables/utils.ts";
 import vodSchedule from "@assets/data/schedule.json";
 
-class DataType {
+interface CalculationEntry {
     date: string;
     offset: number;
     previous: number;
@@ -29,14 +29,14 @@ const emit = defineEmits<{ (e: "computedTime", tag: number): void }>();
 const rawData = computed(() => calcRawData(props.vodData));
 const data = computed(() => {
     let filtered = rawData.value.filter(
-        (v: DataType) =>
+        (v: CalculationEntry) =>
             v.date >= props.dateRange.start.toISOString().slice(0, 10) &&
             v.date <=
                 new Date(props.dateRange.end.getTime() + 28800000)
                     .toISOString()
                     .slice(0, 10),
     );
-    let i0 = filtered.findIndex((x: DataType) => x.divider);
+    let i0 = filtered.findIndex((x: CalculationEntry) => x.divider);
 
     if (i0 == null) return Array();
     else return filtered.slice(i0);
@@ -52,8 +52,8 @@ watch(
     { immediate: true },
 );
 
-function calcRawData(vodItems: VodItem[]): DataType[] {
-    let re: DataType[] = [];
+function calcRawData(vodItems: VodItem[]): CalculationEntry[] {
+    let re: CalculationEntry[] = [];
 
     let sch = vodSchedule.schedule;
     let ove = vodSchedule.override;
