@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { computed } from "vue";
-import { UseElementBounding } from "@vueuse/components";
 import {
     VaButton,
     VaCard,
@@ -10,8 +9,6 @@ import {
     VaIcon,
     VaScrollContainer,
 } from "vuestic-ui";
-import { FOOTNOTE_HEIGHT, FOOTNOTE_GAP } from "@/composables/constants";
-import { useWindowSize } from "@vueuse/core";
 
 interface VodItem {
     id?: number | null;
