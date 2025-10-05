@@ -297,13 +297,13 @@ defineExpose({ open: openAddVodModal });
             />
             <VaInput
                 v-model="addVodForm.title"
-                label="直播標題"
+                label="標題"
                 color="info"
                 required
             />
             <VaTimeInput
                 v-model="addVodDuration"
-                label="直播時長"
+                label="時長"
                 color="info"
                 :ampm="false"
                 :hide-period-switch="true"

@@ -63,7 +63,7 @@ const baseColumns = [
     },
     {
         key: "title",
-        label: "直播標題",
+        label: "標題",
         thAlign: "center" as const,
         tdAlign: "center" as const,
         width: 20,
@@ -77,7 +77,7 @@ const baseColumns = [
     },
     {
         key: "duration",
-        label: "直播時長",
+        label: "時長",
         thAlign: "center" as const,
         tdAlign: "center" as const,
         sortable: true,
