@@ -27,8 +27,7 @@ const latestPenalty = ref(penaltyData.slice().reverse()[0]);
                 </div>
 
                 <div class="text-center text-lg mb-3 line-clamp-3">
-                    {{ latestPenalty.name }}xxxxxxxxx xxxxxx xxxxxxx xxxxxxxxxxx
-                    xxxxxxxxxx xxxxxxxxxxxx xxxxx xxxxxx
+                    {{ latestPenalty.name }}
                 </div>
             </div>
         </VaCardContent>
