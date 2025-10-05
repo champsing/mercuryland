@@ -6,11 +6,13 @@ import {
     VaScrollContainer,
     VaCard,
     VaCardContent,
+    VaIcon,
 } from "vuestic-ui";
 import vodData from "@assets/data/vod.json";
 import PenaltyModal from "./PenaltyModal.vue";
 import { openLinks, PenItem } from "@/composables/utils";
 import { stateString, stateColor } from "@/composables/penalty";
+import { useAuthState } from "@/composables/authState";
 
 const props = defineProps<{
     penalties: PenItem[];
@@ -22,6 +24,9 @@ const props = defineProps<{
 const emit = defineEmits<{
     (e: "updateState", state: number): void;
 }>();
+
+const authState = useAuthState();
+const showActions = computed(() => authState.isAuthenticated);
 
 interface PenaltyDataEntry {
     id: number;
@@ -52,6 +57,19 @@ const PEMContent: Ref<PenaltyDataEntry> = defineModel("PEMContent", {
     },
 }); // penaltyEntryModalContent
 
+function createNewPenalty(): PenaltyDataEntry {
+    return {
+        id: -1, // indicate new
+        date: new Date().toISOString().slice(0, 10),
+        name: "",
+        state: 0,
+        description: [],
+        reapply: [],
+        steamID: undefined,
+        progress: undefined,
+    };
+}
+
 // [DONE] 修正成跟 DataTable.vue 裡面一樣使用 columns {row} 形式
 const items = computed(() =>
     filterPenaltyData(
@@ -62,28 +80,51 @@ const items = computed(() =>
     ).slice(),
 );
 
-const columns = [
+const baseColumns = [
     {
         key: "date",
         label: "日期",
-        tdAlign: "center" as const,
         thAlign: "center" as const,
+        tdAlign: "center" as const,
         sortable: true,
         sortingOptions: ["desc" as const, "asc" as const, null],
+        width: 100,
     },
     {
         key: "name",
         label: "內容",
-        tdAlign: "center" as const,
         thAlign: "center" as const,
+        tdAlign: "center" as const,
+        width: 20,
     },
     {
         key: "state",
         label: "狀態",
-        tdAlign: "center" as const,
         thAlign: "center" as const,
+        tdAlign: "center" as const,
+        width: 100,
     },
 ];
+
+const columns = computed(() => {
+    const result = [...baseColumns];
+
+    if (showActions.value) {
+        result.push({
+            key: "actions",
+            label: "",
+            thAlign: "center" as const,
+            tdAlign: "center" as const,
+            width: 12,
+        });
+    }
+
+    return result;
+});
+
+const headerColumns = computed(() =>
+    columns.value.filter((column) => column.key !== "actions"),
+);
 
 function vodLinkOfDate(date: string): string[] {
     let linkIDArray = vodData.filter((x) => x.date == date).map((x) => x.link);
@@ -145,13 +186,24 @@ function filterPenaltyData(
                     hoverable
                 >
                     <template
-                        v-for="column in columns"
+                        v-for="column in headerColumns"
                         #[`header(${column.key})`]="{ label }"
                         :key="column.key"
                     >
                         <div class="text-sm text-center">
                             {{ label }}
                         </div>
+                    </template>
+                    <template v-if="showActions" #header(actions)>
+                        <VaButton
+                            preset="plain"
+                            size="small"
+                            color="info"
+                            aria-label="新增懲罰"
+                            @click="PEMContent = createNewPenalty()"
+                        >
+                            <VaIcon name="add" />
+                        </VaButton>
                     </template>
                     <template #cell(date)="{ value, row }">
                         <div v-if="row.rowData.state == 0">----</div>
@@ -203,6 +255,29 @@ function filterPenaltyData(
                             class="align-middle text-white font-bold rounded-lg px-2"
                         >
                             {{ stateString(Number(value)) }}
+                        </VaButton>
+                    </template>
+                    <template v-if="showActions" #cell(actions)="{ row }">
+                        <VaButton
+                            preset="plain"
+                            color="info"
+                            aria-label="編輯懲罰"
+                            @click="
+                                PEMContent = {
+                                    id: row.rowData.id,
+                                    date: row.rowData.date,
+                                    name: row.rowData.name,
+                                    state: row.rowData.state,
+                                    description: [],
+                                    reapply: row.rowData.history.map(
+                                        ([state, date]) => ({ date, state }),
+                                    ),
+                                    steamID: undefined,
+                                    progress: undefined,
+                                }
+                            "
+                        >
+                            <VaIcon name="edit" />
                         </VaButton>
                     </template>
                 </VaDataTable>
