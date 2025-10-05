@@ -1,5 +1,4 @@
 <script setup lang="ts">
-// TODO: Convert Penalty Page to SQL based from JSON based Data Storage
 import { ref, onMounted } from "vue";
 import { VaDateInput, VaInput, VaSelect, VaDivider } from "vuestic-ui";
 import axios from "axios";
