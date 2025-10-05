@@ -20,7 +20,7 @@ let filterDate = defineModel("filterDate", {
     },
 });
 
-let filterStatus = ref<string | null>(null);
+let filterStatus = ref<number | null>(null);
 
 let filterSearch = defineModel("filterSearch", {
     default: "",
@@ -30,11 +30,11 @@ let filterSearch = defineModel("filterSearch", {
 });
 
 let finishOptions = [
-    { value: "0", label: "未生效" },
-    { value: "1", label: "未開始" },
-    { value: "2", label: "進行中" },
-    { value: "3", label: "勉強過" },
-    { value: "4", label: "已完成" },
+    { value: 0, label: "未生效" },
+    { value: 1, label: "未開始" },
+    { value: 2, label: "進行中" },
+    { value: 3, label: "勉強過" },
+    { value: 4, label: "已完成" },
 ];
 
 const penalties = ref<PenItem[]>([]);
@@ -84,7 +84,7 @@ onMounted(loadPenData);
                         :options="finishOptions"
                         placeholder="完成狀態"
                         clearable
-                        :clearValue="null"
+                        :clear-value="null"
                     />
                 </div>
                 <div class="flex w-1/2 justify-center">

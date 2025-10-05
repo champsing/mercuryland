@@ -3,6 +3,7 @@ import { VaCard, VaCardContent, VaCardTitle } from "vuestic-ui";
 import { computed } from "vue";
 import { stateString } from "@/composables/penalty";
 import type { PenItem } from "@/composables/utils";
+import { stateColor } from "@/composables/penalty";
 
 const props = defineProps<{ penalties: PenItem[] }>();
 
@@ -24,7 +25,7 @@ const latestPenalty = computed(() =>
                 item-responsive
             >
                 <div
-                    :class="`inline text-penalty-state-${latestPenalty.state} font-bold text-center`"
+                    :class="`inline ${stateColor(latestPenalty.state, 'text')} font-bold text-center`"
                 >
                     ● {{ stateString(latestPenalty.state) }}
                 </div>

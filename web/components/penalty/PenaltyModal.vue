@@ -11,7 +11,7 @@ import {
 import penaltyData from "@assets/data/penalty.json";
 import vodData from "@assets/data/vod.json";
 import { openLinks, ofId } from "@/composables/utils";
-import { stateString } from "@/composables/penalty";
+import { stateString, stateColor } from "@/composables/penalty";
 
 function stateFromString(status: string): number {
     const statuses = ["未生效", "未開始", "進行中", "勉強過", "已完成"];
@@ -71,7 +71,7 @@ function vodLinkOfDate(date: string): string[] {
                 readonly
                 outline
                 size="small"
-                :class="`bg-penalty-state-${props.penalty.state} text-white`"
+                :color="stateColor(props.penalty.state, 'raw')"
                 class="ml-4"
             >
                 ● {{ stateString(props.penalty.state) }}
@@ -79,10 +79,7 @@ function vodLinkOfDate(date: string): string[] {
         </div>
 
         <!-- 如果尚未生效 -->
-        <div
-            v-if="props.penalty && props.penalty.state == 0"
-            class="mt-2"
-        >
+        <div v-if="props.penalty && props.penalty.state == 0" class="mt-2">
             <span class="text-sm text-gray-400 font-bold">
                 這個懲罰目前尚未生效，請耐心等候惡靈獲得新懲罰
             </span>
@@ -137,19 +134,20 @@ function vodLinkOfDate(date: string): string[] {
                         @click="
                             (() => {
                                 const p = ofId(penaltyData, block.uri_num);
-                                emit(
-                                    'changePenalty',
-                                    {
-                                        id: p.id,
-                                        date: p.date,
-                                        name: p.name,
-                                        state: stateFromString(p.status),
-                                        description: p.description,
-                                        reapply: p.reapply?.map(r => ({ date: r.date, state: stateFromString(r.status) })) || [],
-                                        steamID: p.steamID,
-                                        progress: p.progress,
-                                    },
-                                );
+                                emit('changePenalty', {
+                                    id: p.id,
+                                    date: p.date,
+                                    name: p.name,
+                                    state: stateFromString(p.status),
+                                    description: p.description,
+                                    reapply:
+                                        p.reapply?.map((r) => ({
+                                            date: r.date,
+                                            state: stateFromString(r.status),
+                                        })) || [],
+                                    steamID: p.steamID,
+                                    progress: p.progress,
+                                });
                             })()
                         "
                         color="#8fc1ff"
@@ -244,9 +242,7 @@ function vodLinkOfDate(date: string): string[] {
                 &ensp;
                 <!-- colorsOfStatus -->
                 <div class="inline-block text-sm">
-                    <div :class="`text-penalty-state-${entry.state}`">
-                        ◼
-                    </div>
+                    <div :class="stateColor(entry.state, 'text')">◼</div>
                 </div>
                 &nbsp;{{ stateString(entry.state) }}
             </div>

@@ -10,17 +10,17 @@ import {
 import vodData from "@assets/data/vod.json";
 import PenaltyModal from "./PenaltyModal.vue";
 import { openLinks, PenItem } from "@/composables/utils";
-import { stateString } from "@/composables/penalty";
+import { stateString, stateColor } from "@/composables/penalty";
 
 const props = defineProps<{
     penalties: PenItem[];
     dateRange: { start: Date; end: Date };
-    state?: string | null;
+    state?: number | null;
     search: string;
 }>();
 
 const emit = defineEmits<{
-    (e: "updateState", state: string): void;
+    (e: "updateState", state: number): void;
 }>();
 
 interface PenaltyDataEntry {
@@ -95,7 +95,7 @@ function vodLinkOfDate(date: string): string[] {
 function filterPenaltyData(
     data: PenItem[],
     dateRange: { start: Date; end: Date },
-    state: string | null,
+    state: number | null,
     search: string,
 ): PenItem[] {
     return data
@@ -107,7 +107,7 @@ function filterPenaltyData(
                         .toISOString()
                         .slice(0, 10),
         )
-        .filter((v) => state == null || parseInt(state) == v.state)
+        .filter((v) => state == null || state == v.state)
         .filter(
             (v) =>
                 search == "" ||
@@ -175,7 +175,9 @@ function filterPenaltyData(
                                     name: row.rowData.name,
                                     state: row.rowData.state,
                                     description: [],
-                                    reapply: row.rowData.history.map(([state, date]) => ({ date, state })),
+                                    reapply: row.rowData.history.map(
+                                        ([state, date]) => ({ date, state }),
+                                    ),
                                     steamID: undefined,
                                     progress: undefined,
                                 }
@@ -191,16 +193,14 @@ function filterPenaltyData(
                         <!-- !bg-[#6d8581] !bg-[#b91c1c] !bg-[#4d7c0f] !bg-[#047857] !bg-[#b45309] -->
                         <!-- TAILWIND CSS: DO NOT REMOVE ABOVE COMMENT -->
                         <VaButton
-                            :class="`bg-penalty-state-${Number(value)} text-white font-bold rounded-lg px-2`"
-                            @click="
-                                () => emit('updateState', value.toString())
-                            "
+                            :class="stateColor(Number(value), 'bg')"
+                            @click="() => emit('updateState', Number(value))"
                             preset="plain"
                             color="textPrimary"
                             :style="{
                                 backgroundClip: 'padding-box',
                             }"
-                            class="align-middle"
+                            class="align-middle text-white font-bold rounded-lg px-2"
                         >
                             {{ stateString(Number(value)) }}
                         </VaButton>
