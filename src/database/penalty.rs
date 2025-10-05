@@ -83,10 +83,10 @@ impl Penalty {
                 PenaltyIden::Id,
                 PenaltyIden::Date,
                 PenaltyIden::Name,
-                PenaltyIden::Detail,
-                PenaltyIden::State,
-                PenaltyIden::History,
             ])
+            .expr_as(Expr::value(""), PenaltyIden::Detail.as_str())
+            .column(PenaltyIden::State)
+            .expr_as(Expr::value("[]"), PenaltyIden::History.as_str())
             .from(PenaltyIden::Table)
             .build_rusqlite(SqliteQueryBuilder);
 
@@ -224,6 +224,11 @@ mod tests {
         let tran = conn.transaction()?;
         let all = Penalty::all(&tran)?;
         assert_eq!(all.len(), 2);
+        // Check that detail and history are dummy for all()
+        for penalty in &all {
+            assert_eq!(penalty.detail, "");
+            assert_eq!(penalty.history, vec![]);
+        }
         tran.finish()?;
 
         let tran = conn.transaction()?;
@@ -236,6 +241,65 @@ mod tests {
         assert_eq!(all.len(), 1);
         tran.finish()?;
 
+        Ok(())
+    }
+
+    #[test]
+    fn update_penalty() -> Result<(), ServerError> {
+        let mut conn = setup_conn()?;
+        let mut penalty = Penalty {
+            id: 0,
+            date: NaiveDate::from_ymd_opt(2025, 10, 5).expect("valid date"),
+            name: "Original Name".into(),
+            detail: "<p>Original detail</p>".into(),
+            state: PENALTY_STATE_NOT_STARTED,
+            history: vec![(PENALTY_STATE_NOT_STARTED, NaiveDate::from_ymd_opt(2025, 10, 5).unwrap())],
+        };
+
+        let tran = conn.transaction()?;
+        penalty.insert(&tran)?;
+        let id = penalty.id;
+        tran.commit()?;
+
+        // Update the penalty
+        let updated_penalty = Penalty {
+            id,
+            date: NaiveDate::from_ymd_opt(2025, 10, 6).expect("valid date"),
+            name: "Updated Name".into(),
+            detail: "<p>Updated detail</p>".into(),
+            state: PENALTY_STATE_COMPLETED,
+            history: vec![
+                (PENALTY_STATE_NOT_STARTED, NaiveDate::from_ymd_opt(2025, 10, 5).unwrap()),
+                (PENALTY_STATE_COMPLETED, NaiveDate::from_ymd_opt(2025, 10, 6).unwrap()),
+            ],
+        };
+
+        let tran = conn.transaction()?;
+        let affected = updated_penalty.update(&tran)?;
+        assert_eq!(affected, 1);
+        tran.commit()?;
+
+        // Fetch and verify
+        let tran = conn.transaction()?;
+        let fetched = Penalty::by_id(id, &tran)?.expect("penalty");
+        assert_eq!(fetched.id, id);
+        assert_eq!(fetched.name, "Updated Name");
+        assert_eq!(fetched.detail, "<p>Updated detail</p>");
+        assert_eq!(fetched.state, PENALTY_STATE_COMPLETED);
+        assert_eq!(fetched.history.len(), 2);
+        assert_eq!(fetched.date, NaiveDate::from_ymd_opt(2025, 10, 6).unwrap());
+        tran.finish()?;
+
+        Ok(())
+    }
+
+    #[test]
+    fn by_id_not_found() -> Result<(), ServerError> {
+        let mut conn = setup_conn()?;
+        let tran = conn.transaction()?;
+        let result = Penalty::by_id(999, &tran)?;
+        assert!(result.is_none());
+        tran.finish()?;
         Ok(())
     }
 }
