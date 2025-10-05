@@ -3,9 +3,9 @@
 import { VaDateInput, VaInput, VaSelect, VaDivider } from "vuestic-ui";
 import penaltyStatus from "@assets/data/penalty_status.json";
 import Table from "./Table.vue";
-import Statistics from "./Statistics.vue";
-import Syntax from "./Syntax.vue";
-import News from "./News.vue";
+import Statistics from "./sidebar/Statistics.vue";
+import Syntax from "./sidebar/Syntax.vue";
+import News from "./sidebar/News.vue";
 import Rule from "./Rule.vue";
 import { formatDate, parseDate } from "@/composables/utils";
 import ViewportHeight from "../ViewportHeight.vue";
