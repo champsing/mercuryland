@@ -4,7 +4,6 @@ use crate::{
 };
 use actix_web::{HttpResponse, Responder, get};
 
-
 #[get("/api/penalty/list")]
 pub async fn handler() -> Result<impl Responder, ServerError> {
     let mut connection = database::get_connection()?;

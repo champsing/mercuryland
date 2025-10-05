@@ -27,13 +27,21 @@ pub async fn handler(request: web::Json<Request>) -> Result<impl Responder, Serv
         Err(_) => return Ok(HttpResponse::BadRequest().finish()),
     };
 
+    let history = if request.state == 0 {
+        vec![(0, date)]
+    } else if request.state == 1 {
+        vec![(0, date), (1, date)]
+    } else {
+        return Ok(HttpResponse::BadRequest().finish());
+    };
+
     let mut penalty = Penalty {
         id: 0,
         date,
         name: request.name,
         detail: request.detail,
         state: request.state,
-        history: vec![(request.state, date)],
+        history,
     };
 
     let mut connection = database::get_connection()?;

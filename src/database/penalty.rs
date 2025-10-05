@@ -51,7 +51,13 @@ impl TryFrom<&Row<'_>> for Penalty {
 
 impl Penalty {
     pub fn insert(&mut self, transaction: &Transaction) -> Result<(), ServerError> {
-        let history_json = to_string(&self.history.iter().map(|(state, date)| (i32::from(*state), *date)).collect::<Vec<_>>())?;
+        let history_json = to_string(
+            &self
+                .history
+                .iter()
+                .map(|(state, date)| (i32::from(*state), *date))
+                .collect::<Vec<_>>(),
+        )?;
         let (query, values) = Query::insert()
             .into_table(PenaltyIden::Table)
             .columns([
@@ -79,11 +85,7 @@ impl Penalty {
 
     pub fn all(transaction: &Transaction) -> Result<Vec<Self>, ServerError> {
         let (query, values) = Query::select()
-            .columns([
-                PenaltyIden::Id,
-                PenaltyIden::Date,
-                PenaltyIden::Name,
-            ])
+            .columns([PenaltyIden::Id, PenaltyIden::Date, PenaltyIden::Name])
             .expr_as(Expr::value(""), PenaltyIden::Detail.as_str())
             .column(PenaltyIden::State)
             .expr_as(Expr::value("[]"), PenaltyIden::History.as_str())
@@ -121,7 +123,13 @@ impl Penalty {
     }
 
     pub fn update(&self, transaction: &Transaction) -> Result<usize, ServerError> {
-        let history_json = to_string(&self.history.iter().map(|(state, date)| (i32::from(*state), *date)).collect::<Vec<_>>())?;
+        let history_json = to_string(
+            &self
+                .history
+                .iter()
+                .map(|(state, date)| (i32::from(*state), *date))
+                .collect::<Vec<_>>(),
+        )?;
 
         let (query, values) = Query::update()
             .table(PenaltyIden::Table)

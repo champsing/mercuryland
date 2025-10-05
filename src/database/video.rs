@@ -91,10 +91,7 @@ impl Video {
         Ok(videos)
     }
 
-    pub fn by_link(
-        link: &str,
-        transaction: &Transaction,
-    ) -> Result<Option<Self>, ServerError> {
+    pub fn by_link(link: &str, transaction: &Transaction) -> Result<Option<Self>, ServerError> {
         let (query, values) = Query::select()
             .columns([
                 VideoIden::Id,
