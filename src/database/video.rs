@@ -91,7 +91,7 @@ impl Video {
         Ok(videos)
     }
 
-    pub fn find_by_link(
+    pub fn by_link(
         link: &str,
         transaction: &Transaction,
     ) -> Result<Option<Self>, ServerError> {
@@ -116,7 +116,7 @@ impl Video {
         Ok(video.transpose()?)
     }
 
-    pub fn find_by_id(id: i64, transaction: &Transaction) -> Result<Option<Self>, ServerError> {
+    pub fn by_id(id: i64, transaction: &Transaction) -> Result<Option<Self>, ServerError> {
         let (query, values) = Query::select()
             .columns([
                 VideoIden::Id,
@@ -201,8 +201,8 @@ mod tests {
         tran.commit()?;
 
         let tran = conn.transaction()?;
-        let fetched = Video::find_by_link(&video.link, &tran)?.expect("video");
-        let fetched_by_id = Video::find_by_id(id, &tran)?.expect("video");
+        let fetched = Video::by_link(&video.link, &tran)?.expect("video");
+        let fetched_by_id = Video::by_id(id, &tran)?.expect("video");
         assert_eq!(id, fetched.id);
         assert_eq!(id, fetched_by_id.id);
         assert_eq!(video.link, fetched_by_id.link);
@@ -258,7 +258,7 @@ mod tests {
         tran.commit()?;
 
         let tran = conn.transaction()?;
-        let fetched = Video::find_by_link("first", &tran)?.expect("video");
+        let fetched = Video::by_link("first", &tran)?.expect("video");
         assert_eq!(fetched.tags, vec!["x".to_string()]);
         assert_eq!(fetched.date, first.date);
         assert_eq!(fetched.title, first.title);

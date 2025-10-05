@@ -23,7 +23,7 @@ pub async fn handler(request: web::Json<Request>) -> Result<impl Responder, Serv
     let mut connection = database::get_connection()?;
     let transaction = connection.transaction()?;
 
-    let video = match Video::find_by_id(request.id, &transaction)? {
+    let video = match Video::by_id(request.id, &transaction)? {
         Some(video) => video,
         None => return Ok(HttpResponse::NotFound().finish()),
     };

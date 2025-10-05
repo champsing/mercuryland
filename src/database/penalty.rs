@@ -84,7 +84,7 @@ impl Penalty {
         Ok(penalties)
     }
 
-    pub fn find_by_id(id: i64, transaction: &Transaction) -> Result<Option<Self>, ServerError> {
+    pub fn by_id(id: i64, transaction: &Transaction) -> Result<Option<Self>, ServerError> {
         let (query, values) = Query::select()
             .columns([
                 PenaltyIden::Id,
@@ -149,7 +149,7 @@ mod tests {
         tran.commit()?;
 
         let tran = conn.transaction()?;
-        let fetched = Penalty::find_by_id(id, &tran)?.expect("penalty");
+        let fetched = Penalty::by_id(id, &tran)?.expect("penalty");
         assert_eq!(id, fetched.id);
         assert_eq!(penalty.name, fetched.name);
         assert_eq!(penalty.detail, fetched.detail);

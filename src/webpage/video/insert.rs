@@ -42,7 +42,7 @@ pub async fn handler(request: web::Json<Request>) -> Result<impl Responder, Serv
     let mut connection = database::get_connection()?;
     let transaction = connection.transaction()?;
 
-    if Video::find_by_link(&video.link, &transaction)?.is_some() {
+    if Video::by_link(&video.link, &transaction)?.is_some() {
         transaction.rollback()?;
         return Ok(HttpResponse::Conflict().finish());
     }
