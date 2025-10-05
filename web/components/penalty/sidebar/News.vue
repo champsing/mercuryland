@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { VaCard, VaCardContent, VaCardTitle } from "vuestic-ui";
+import { VaCard, VaCardContent, VaCardTitle, VaChip } from "vuestic-ui";
 import { computed } from "vue";
 import { stateString } from "@/composables/penalty";
 import type { PenItem } from "@/composables/utils";
@@ -21,14 +21,18 @@ const latestPenalty = computed(() =>
         <VaCardContent>
             <div
                 v-if="latestPenalty"
-                class="flex flex-col justify-center gap-2 mb-2"
+                class="flex flex-col justify-center items-center gap-2 mb-2"
                 item-responsive
             >
-                <div
-                    :class="`inline ${stateColor(latestPenalty.state, 'text')} font-bold text-center`"
+                <VaChip
+                    readonly
+                    outline
+                    size="small"
+                    :color="stateColor(latestPenalty.state, 'raw')"
+                    class="w-24"
                 >
                     ● {{ stateString(latestPenalty.state) }}
-                </div>
+                </VaChip>
 
                 <div class="text-center text-lg mb-3 line-clamp-3">
                     {{ latestPenalty.name }}
