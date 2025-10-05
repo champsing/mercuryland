@@ -48,7 +48,9 @@ pub async fn handler(request: web::Json<Request>) -> Result<impl Responder, Serv
     if let Some((last_state, _)) = penalty.history.last() {
         // Only add a new history entry if the state has changed
         if *last_state != request.state {
-            penalty.history.push((request.state, Utc::now().date_naive()));
+            penalty
+                .history
+                .push((request.state, Utc::now().date_naive()));
         }
     };
 
