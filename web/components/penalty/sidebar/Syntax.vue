@@ -14,6 +14,8 @@ import {
 } from "vuestic-ui";
 import { statusOf } from "@/composables/penalty";
 
+// TODO: Remove legacy colorOfStatus function later
+// TODO: Clear up inconsistent style in Modal
 function colorOfStatus(status: string): string {
     return statusOf(status).color;
 }

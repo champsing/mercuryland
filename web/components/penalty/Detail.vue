@@ -147,6 +147,7 @@ watch(
                 </div>
             </div>
             <div v-if="isEditing" class="mt-4">
+                <!-- TODO: support image upload -->
                 <VaTextarea
                     v-model="editedDetail"
                     placeholder="Enter HTML detail"
@@ -165,6 +166,7 @@ watch(
                 </div>
             </div>
             <div v-else class="mt-4">
+                <!-- TODO: give this Modal a fixed height -->
                 <div v-html="penalty.detail"></div>
                 <div v-if="authState.isAuthenticated" class="mt-2">
                     <VaButton @click="startEdit" color="success" class="w-full">
