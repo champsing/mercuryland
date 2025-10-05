@@ -106,6 +106,7 @@ watch(
                 </VaChip>
                 <div class="truncate text-xl flex-1">{{ penalty.name }}</div>
             </div>
+            <div class="text-lg mt-2">{{ penalty.name }}</div>
             <Timeline :history="penalty.history" />
             <div v-if="isEditing" class="mt-4">
                 <!-- TODO: support image upload -->
@@ -127,7 +128,6 @@ watch(
                 </div>
             </div>
             <div v-else class="mt-4">
-                <div class="text-lg">{{ penalty.name }}</div>
                 <div v-html="penalty.detail"></div>
                 <div v-if="authState.isAuthenticated" class="mt-2">
                     <VaButton @click="startEdit" color="success" class="w-full">
