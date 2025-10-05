@@ -10,7 +10,7 @@ import {
 import vodData from "@assets/data/vod.json";
 import PenaltyModal from "./PenaltyModal.vue";
 import { openLinks, PenItem } from "@/composables/utils";
-import { statusOf } from "@/composables/penalty";
+import { stateString } from "@/composables/penalty";
 
 const props = defineProps<{
     penalties: PenItem[];
@@ -52,18 +52,10 @@ const PEMContent: Ref<PenaltyDataEntry> = defineModel("PEMContent", {
     },
 }); // penaltyEntryModalContent
 
-function mapStateToStatus(state: number): string {
-    const statuses = ["未生效", "未開始", "進行中", "勉強過", "已完成"];
-    return statuses[state] || "未知";
-}
-
 // [DONE] 修正成跟 DataTable.vue 裡面一樣使用 columns {row} 形式
 const items = computed(() =>
     filterPenaltyData(
-        props.penalties.map((p) => ({
-            ...p,
-            status: mapStateToStatus(p.state),
-        })),
+        props.penalties,
         props.dateRange,
         props.status,
         props.search,
@@ -86,7 +78,7 @@ const columns = [
         thAlign: "center" as const,
     },
     {
-        key: "status",
+        key: "state",
         label: "狀態",
         tdAlign: "center" as const,
         thAlign: "center" as const,
@@ -101,11 +93,11 @@ function vodLinkOfDate(date: string): string[] {
 }
 
 function filterPenaltyData(
-    data: (PenItem & { status: string })[],
+    data: PenItem[],
     dateRange: { start: Date; end: Date },
     status: string,
     search: string,
-): (PenItem & { status: string })[] {
+): PenItem[] {
     return data
         .filter(
             (v) =>
@@ -115,7 +107,7 @@ function filterPenaltyData(
                         .toISOString()
                         .slice(0, 10),
         )
-        .filter((v) => status == null || status == v.status)
+        .filter((v) => status == null || status == stateString(v.state))
         .filter(
             (v) =>
                 search == "" ||
@@ -162,7 +154,7 @@ function filterPenaltyData(
                         </div>
                     </template>
                     <template #cell(date)="{ value, row }">
-                        <div v-if="row.rowData.status == '未生效'">----</div>
+                        <div v-if="row.rowData.state == 0">----</div>
                         <div v-else>
                             <VaButton
                                 color="textPrimary"
@@ -181,7 +173,7 @@ function filterPenaltyData(
                                     id: row.rowData.id,
                                     date: row.rowData.date,
                                     name: row.rowData.name,
-                                    status: row.rowData.status,
+                                    status: stateString(row.rowData.state),
                                     description: [],
                                     reapply: [],
                                     steamID: undefined,
@@ -195,12 +187,14 @@ function filterPenaltyData(
                             <div class="truncate">{{ value }}</div>
                         </VaButton>
                     </template>
-                    <template #cell(status)="{ value }">
+                    <template #cell(state)="{ value }">
                         <!-- !bg-[#6d8581] !bg-[#b91c1c] !bg-[#4d7c0f] !bg-[#047857] !bg-[#b45309] -->
                         <!-- TAILWIND CSS: DO NOT REMOVE ABOVE COMMENT -->
                         <VaButton
-                            :class="`!bg-[${statusOf(value).color}] text-white font-bold rounded-lg px-2`"
-                            @click="() => emit('updateStatus', value)"
+                            :class="`bg-penalty-state-${Number(value)} text-white font-bold rounded-lg px-2`"
+                            @click="
+                                () => emit('updateStatus', stateString(Number(value)))
+                            "
                             preset="plain"
                             color="textPrimary"
                             :style="{
@@ -208,7 +202,7 @@ function filterPenaltyData(
                             }"
                             class="align-middle"
                         >
-                            {{ value }}
+                            {{ stateString(Number(value)) }}
                         </VaButton>
                     </template>
                 </VaDataTable>
