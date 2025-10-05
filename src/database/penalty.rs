@@ -106,6 +106,25 @@ impl Penalty {
         Ok(penalty.transpose()?)
     }
 
+    pub fn update(&self, transaction: &Transaction) -> Result<usize, ServerError> {
+        let (query, values) = Query::update()
+            .table(PenaltyIden::Table)
+            .values([
+                (
+                    PenaltyIden::Date,
+                    self.date.format("%Y-%m-%d").to_string().into(),
+                ),
+                (PenaltyIden::Name, self.name.clone().into()),
+                (PenaltyIden::Detail, self.detail.clone().into()),
+                (PenaltyIden::State, self.state.into()),
+                (PenaltyIden::History, self.history.clone().into()),
+            ])
+            .and_where(Expr::col(PenaltyIden::Id).eq(self.id))
+            .build_rusqlite(SqliteQueryBuilder);
+        let affected = transaction.execute(&query, &*values.as_params())?;
+        Ok(affected as usize)
+    }
+
     pub fn delete(&self, transaction: &Transaction) -> Result<usize, ServerError> {
         let (query, values) = Query::delete()
             .from_table(PenaltyIden::Table)
