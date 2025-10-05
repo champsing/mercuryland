@@ -1,8 +1,6 @@
-use crate::{
-    database::{self, penalty::{Penalty, PenaltyState}},
-    error::ServerError,
-    webpage::auth,
-};
+use crate::database::{self, penalty::Penalty};
+use crate::error::ServerError;
+use crate::webpage::auth;
 use actix_web::{HttpResponse, Responder, post, web};
 use chrono::NaiveDate;
 use serde::Deserialize;
@@ -42,8 +40,8 @@ pub async fn handler(request: web::Json<Request>) -> Result<impl Responder, Serv
     penalty.date = date;
     penalty.name = request.name;
     penalty.detail = request.detail;
-    penalty.state = PenaltyState::from(request.state);
-    penalty.history = request.history.into_iter().map(|(state, date)| (PenaltyState::from(state), date)).collect();
+    penalty.state = request.state;
+    penalty.history = request.history;
 
     let updated = penalty.update(&transaction)?;
     if updated == 0 {

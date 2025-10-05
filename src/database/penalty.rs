@@ -6,33 +6,12 @@ use sea_query_rusqlite::RusqliteBinder;
 use serde::{Deserialize, Serialize};
 use serde_json::{from_str, to_string};
 
-#[derive(Debug, Serialize, Deserialize, Clone, Copy, PartialEq)]
-pub enum PenaltyState {
-    Inactive = 0,
-    NotStarted = 1,
-    InProgress = 2,
-    BarelyDone = 3,
-    Completed = 4,
-}
-
-impl From<i32> for PenaltyState {
-    fn from(value: i32) -> Self {
-        match value {
-            0 => PenaltyState::Inactive,
-            1 => PenaltyState::NotStarted,
-            2 => PenaltyState::InProgress,
-            3 => PenaltyState::BarelyDone,
-            4 => PenaltyState::Completed,
-            _ => PenaltyState::Inactive, // Default to Inactive for invalid values
-        }
-    }
-}
-
-impl From<PenaltyState> for i32 {
-    fn from(state: PenaltyState) -> i32 {
-        state as i32
-    }
-}
+// Penalty state constants
+pub const PENALTY_STATE_INACTIVE: i32 = 0;
+pub const PENALTY_STATE_NOT_STARTED: i32 = 1;
+pub const PENALTY_STATE_IN_PROGRESS: i32 = 2;
+pub const PENALTY_STATE_BARELY_DONE: i32 = 3;
+pub const PENALTY_STATE_COMPLETED: i32 = 4;
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
 #[enum_def]
@@ -41,8 +20,8 @@ pub struct Penalty {
     pub date: NaiveDate,
     pub name: String,
     pub detail: String,
-    pub state: PenaltyState,
-    pub history: Vec<(PenaltyState, NaiveDate)>,
+    pub state: i32,
+    pub history: Vec<(i32, NaiveDate)>,
 }
 
 impl TryFrom<&Row<'_>> for Penalty {
@@ -53,14 +32,6 @@ impl TryFrom<&Row<'_>> for Penalty {
         let history: Vec<(i32, NaiveDate)> = from_str(&history_json).map_err(|err| {
             rusqlite::Error::FromSqlConversionFailure(0, Type::Text, Box::new(err))
         })?;
-        
-        // Convert i32 values to PenaltyState in history
-        let history: Vec<(PenaltyState, NaiveDate)> = history.into_iter()
-            .map(|(state_num, date)| (PenaltyState::from(state_num), date))
-            .collect();
-
-        let state_num: i32 = value.get(PenaltyIden::State.as_str())?;
-        let state = PenaltyState::from(state_num);
 
         let date_str: String = value.get(PenaltyIden::Date.as_str())?;
         let date = NaiveDate::parse_from_str(&date_str, "%Y-%m-%d").map_err(|err| {
@@ -72,7 +43,7 @@ impl TryFrom<&Row<'_>> for Penalty {
             date,
             name: value.get(PenaltyIden::Name.as_str())?,
             detail: value.get(PenaltyIden::Detail.as_str())?,
-            state,
+            state: value.get(PenaltyIden::State.as_str())?,
             history,
         })
     }
@@ -94,7 +65,7 @@ impl Penalty {
                 self.date.format("%Y-%m-%d").to_string().into(),
                 self.name.clone().into(),
                 self.detail.clone().into(),
-                i32::from(self.state).into(),
+                self.state.into(),
                 history_json.into(),
             ])?
             .build_rusqlite(SqliteQueryBuilder);
@@ -161,7 +132,7 @@ impl Penalty {
                 ),
                 (PenaltyIden::Name, self.name.clone().into()),
                 (PenaltyIden::Detail, self.detail.clone().into()),
-                (PenaltyIden::State, i32::from(self.state).into()),
+                (PenaltyIden::State, self.state.into()),
                 (PenaltyIden::History, history_json.into()),
             ])
             .and_where(Expr::col(PenaltyIden::Id).eq(self.id))
@@ -203,7 +174,7 @@ mod tests {
             date: NaiveDate::from_ymd_opt(2025, 10, 5).expect("valid date"),
             name: "Test Penalty".into(),
             detail: "<p>Test detail</p>".into(),
-            state: PenaltyState::NotStarted,
+            state: PENALTY_STATE_NOT_STARTED,
             history: vec![],
         };
 
@@ -233,7 +204,7 @@ mod tests {
             date: NaiveDate::from_ymd_opt(2025, 10, 1).expect("valid date"),
             name: "First Penalty".into(),
             detail: "<p>First detail</p>".into(),
-            state: PenaltyState::Inactive,
+            state: PENALTY_STATE_INACTIVE,
             history: vec![],
         };
         let mut second = Penalty {
@@ -241,7 +212,7 @@ mod tests {
             date: NaiveDate::from_ymd_opt(2025, 10, 2).expect("valid date"),
             name: "Second Penalty".into(),
             detail: "<p>Second detail</p>".into(),
-            state: PenaltyState::InProgress,
+            state: PENALTY_STATE_IN_PROGRESS,
             history: vec![],
         };
 

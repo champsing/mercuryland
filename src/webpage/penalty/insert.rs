@@ -1,8 +1,6 @@
-use crate::{
-    database::{self, penalty::{Penalty, PenaltyState}},
-    error::ServerError,
-    webpage::auth,
-};
+use crate::database::{self, penalty::Penalty};
+use crate::error::ServerError;
+use crate::webpage::auth;
 use actix_web::{HttpResponse, Responder, post, web};
 use chrono::NaiveDate;
 use serde::Deserialize;
@@ -35,8 +33,8 @@ pub async fn handler(request: web::Json<Request>) -> Result<impl Responder, Serv
         date,
         name: request.name,
         detail: request.detail,
-        state: PenaltyState::from(request.state),
-        history: request.history.into_iter().map(|(state, date)| (PenaltyState::from(state), date)).collect(),
+        state: request.state,
+        history: request.history,
     };
 
     let mut connection = database::get_connection()?;
