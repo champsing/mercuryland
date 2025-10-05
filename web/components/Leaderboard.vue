@@ -2,7 +2,6 @@
 import axios from "axios";
 import { BASE_URL } from "@/composables/utils";
 import { onMounted, ref, Ref } from "vue";
-import { UseElementBounding } from "@vueuse/components";
 import {
     VaDataTable,
     VaButton,
@@ -12,8 +11,7 @@ import {
     VaCard,
 } from "vuestic-ui";
 import { ArrowClockwise24Filled } from "@vicons/fluent";
-import { useWindowSize } from "@vueuse/core";
-import { FOOTNOTE_HEIGHT, FOOTNOTE_GAP } from "@/composables/constants";
+import ViewportHeight from "./ViewportHeight.vue";
 
 document.title = "水星排行 - 水星人的夢幻樂園";
 
@@ -121,15 +119,6 @@ function rankEmoji(rank: number) {
         return "ㅤ"; // Invisible character to maintain layout
     }
 }
-
-const vh = useWindowSize().height;
-function tableHeight(top: number) {
-    let height =
-        vh.value - window.scrollY - top - FOOTNOTE_HEIGHT - FOOTNOTE_GAP;
-    return {
-        height: "" + height + "px",
-    };
-}
 </script>
 
 <template>
@@ -148,14 +137,13 @@ function tableHeight(top: number) {
     </div>
     <VaDivider class="w-full !mt-0 !mb-2" />
 
-    <VaCard class="m-2 overflow-hidden rounded-xl">
-        <use-element-bounding v-slot="{ top }">
+    <ViewportHeight>
+        <VaCard class="mx-2 overflow-hidden rounded-xl h-full">
             <VaScrollContainer
                 vertical
                 color="#e0feb4"
                 size="medium"
                 class="h-full"
-                :style="tableHeight(top)"
             >
                 <VaDataTable
                     :items="leaderboard"
@@ -217,8 +205,8 @@ function tableHeight(top: number) {
                     </template>
                 </VaDataTable>
             </VaScrollContainer>
-        </use-element-bounding>
-    </VaCard>
+        </VaCard>
+    </ViewportHeight>
 </template>
 
 <style scoped>
