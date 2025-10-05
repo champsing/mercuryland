@@ -13,6 +13,15 @@ export interface VodItem {
     duration: string;
 }
 
+export interface PenItem {
+    id: number;
+    date: string;
+    name: string;
+    detail: string;
+    state: number;
+    history: [number, string][];
+}
+
 export function openLinks(links: Array<string>) {
     for (let i = 0; i < links.length; i++) {
         window.open(links[i], "_blank", "noopener noreferrer");
