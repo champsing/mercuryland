@@ -9,27 +9,59 @@ import {
     VaCardTitle,
     VaCardContent,
 } from "vuestic-ui";
-import penaltyData from "@assets/data/penalty.json";
-import { copyToClipboard } from "@/composables/utils";
+import { copyToClipboard, PenItem } from "@/composables/utils";
+import { stateColor, stateString } from "@/composables/penalty";
 
-const showExistModal = ref(false);
-const showCompleteModal = ref(false);
+const props = defineProps<{ penalties: PenItem[] }>();
 
-function queryStatusPenaties(status: string) {
-    return penaltyData
-        .filter((x) => x.status == status)
+const modal = ref({
+    show: false,
+    title: "現存",
+    color: "#ffffff",
+    leftSlot: 0,
+    leftCount: 0,
+    leftText: "",
+    rightSlot: 0,
+    rightCount: 0,
+    rightText: "",
+});
+
+function fillModalData() {
+    modal.value.leftCount = props.penalties.filter(
+        (x) => x.state === modal.value.leftSlot,
+    ).length;
+    modal.value.rightCount = props.penalties.filter(
+        (x) => x.state === modal.value.rightSlot,
+    ).length;
+
+    modal.value.leftText = props.penalties
+        .filter((x) => x.state === modal.value.leftSlot)
         .map((x) => x.name)
-        .join("\n")
-        .toString();
+        .join("\n");
+
+    modal.value.rightText = props.penalties
+        .filter((x) => x.state === modal.value.rightSlot)
+        .map((x) => x.name)
+        .join("\n");
 }
 
-let notYetStartedPenalties = queryStatusPenaties("未開始");
+function clickExist() {
+    modal.value.show = true;
+    modal.value.title = "現存";
+    modal.value.color = "#b73813";
+    modal.value.leftSlot = 1;
+    modal.value.rightSlot = 2;
+    fillModalData();
+}
 
-let completedPenalties = queryStatusPenaties("已完成");
-
-let barelyPassedPenalties = queryStatusPenaties("勉強過");
-
-let proceedingPenalties = queryStatusPenaties("進行中");
+function clickDone() {
+    modal.value.show = true;
+    modal.value.title = "完成";
+    modal.value.color = "#297a33";
+    modal.value.leftSlot = 3;
+    modal.value.rightSlot = 4;
+    fillModalData();
+}
 </script>
 
 <template>
@@ -43,41 +75,47 @@ let proceedingPenalties = queryStatusPenaties("進行中");
                 <VaButton
                     class="w-full h-full"
                     color="danger"
-                    @click="showExistModal = !showExistModal"
+                    @click="clickExist"
                 >
                     <div class="text-xl">現存<br />懲罰</div>
                 </VaButton>
                 <VaButton
                     class="w-full h-full"
                     color="success"
-                    @click="showCompleteModal = !showCompleteModal"
+                    @click="clickDone"
                 >
                     <div class="text-xl">完成<br />懲罰</div>
                 </VaButton>
             </VaCardContent>
         </VaCard>
 
-        <!-- 現存 和 完成 -->
         <VaModal
-            v-model="showExistModal"
-            title="懲罰數量統計"
+            v-model="modal.show"
             size="small"
             close-button
             hide-default-actions
         >
-            <div class="flex flex-row mb-8">
-                <div class="text-xl flex-grow">懲罰數量統計：現存</div>
+            <div class="flex flex-row mb-8 mr-4 justify-center items-center">
+                <div class="text-lg font-semibold text-zinc-200 flex-grow">
+                    懲罰數量統計：{{ modal.title }}
+                </div>
                 <VaButton
-                    color="warning"
+                    :color="modal.color"
                     gradient
-                    class="-mt-2"
                     @click="
                         copyToClipboard(
-                            notYetStartedPenalties + '\n' + proceedingPenalties,
+                            penalties
+                                .filter(
+                                    (x) =>
+                                        x.state === modal.leftSlot ||
+                                        x.state === modal.rightSlot,
+                                )
+                                .map((x) => x.name)
+                                .join('\n'),
                         )
                     "
                 >
-                    複製所有現存懲罰
+                    複製所有{{ modal.title }}懲罰
                 </VaButton>
             </div>
 
@@ -85,131 +123,61 @@ let proceedingPenalties = queryStatusPenaties("進行中");
 
             <div class="flex justify-center text-center gap-32 ml-4">
                 <div class="flex flex-col">
-                    <div class="text-sm mt-1 text-[#ef3b3b]">未開始</div>
+                    <div
+                        class="text-sm mt-1"
+                        :class="stateColor(modal.leftSlot, 'text')"
+                    >
+                        {{ stateString(modal.leftSlot) }}
+                    </div>
                     <div class="text-3xl mt-1">
-                        {{
-                            penaltyData.filter((x) => x.status == "未開始")
-                                .length
-                        }}
+                        {{ modal.leftCount }}
                     </div>
                 </div>
                 <div class="flex flex-col">
-                    <div class="text-sm mt-1 text-[#de8039]">進行中</div>
+                    <div
+                        class="text-sm mt-1"
+                        :class="stateColor(modal.rightSlot, 'text')"
+                    >
+                        {{ stateString(modal.rightSlot) }}
+                    </div>
                     <div class="text-3xl mt-1">
-                        {{
-                            penaltyData.filter((x) => x.status == "進行中")
-                                .length
-                        }}
+                        {{ modal.rightCount }}
                     </div>
                 </div>
                 <div class="flex flex-col">
-                    <div class="text-sm mt-1 text-[#eda9a9]">現存總計</div>
+                    <div class="text-sm mt-1" :style="{ color: modal.color }">
+                        {{ modal.title }}總計
+                    </div>
                     <div class="text-3xl mt-1">
-                        {{
-                            penaltyData.filter(
-                                (x) =>
-                                    x.status == "未開始" ||
-                                    x.status == "進行中",
-                            ).length
-                        }}
+                        {{ modal.leftCount + modal.rightCount }}
                     </div>
                 </div>
             </div>
             <VaDivider class="!mt-2 !mb-1" />
             <div class="flex text-center justify-between">
                 <div class="flex flex-col">
-                    <div class="text-sm mt-4 mb-2">未開始</div>
+                    <div
+                        class="text-sm mt-4 mb-2"
+                        :class="stateColor(modal.leftSlot, 'text')"
+                    >
+                        {{ stateString(modal.leftSlot) }}
+                    </div>
                     <VaTextarea
-                        v-model="notYetStartedPenalties"
+                        v-model="modal.leftText"
                         :maxRows="7"
                         :resize="false"
                         readonly
                     />
                 </div>
                 <div class="flex flex-col">
-                    <div class="text-sm mt-4 mb-2">進行中</div>
-                    <VaTextarea
-                        v-model="proceedingPenalties"
-                        :maxRows="7"
-                        :resize="false"
-                        readonly
-                    />
-                </div>
-            </div>
-            <div class="flex justify-start mt-4 text-sm">
-                <kbd>Ctrl</kbd>&nbsp;<kbd>A</kbd>&ensp;可快速選取全部項目
-            </div>
-        </VaModal>
-
-        <VaModal
-            v-model="showCompleteModal"
-            title="懲罰數量統計"
-            size="small"
-            hide-default-actions
-            close-button
-        >
-            <div class="flex flex-row mb-8">
-                <div class="text-xl flex-grow">懲罰數量統計：完成</div>
-                <VaButton
-                    color="success"
-                    gradient
-                    class="-mt-2"
-                    @click="
-                        copyToClipboard(
-                            completedPenalties + '\n' + barelyPassedPenalties,
-                        )
-                    "
-                >
-                    複製所有完成懲罰
-                </VaButton>
-            </div>
-            <div class="flex justify-center text-center gap-32 ml-4">
-                <div class="flex flex-col">
-                    <div class="text-sm mt-1 text-[#4be66c]">已完成</div>
-                    <div class="text-3xl mt-1">
-                        {{
-                            penaltyData.filter((x) => x.status == "已完成")
-                                .length
-                        }}
+                    <div
+                        class="text-sm mt-4 mb-2"
+                        :class="stateColor(modal.rightSlot, 'text')"
+                    >
+                        {{ stateString(modal.rightSlot) }}
                     </div>
-                </div>
-                <div class="flex flex-col">
-                    <div class="text-sm mt-1 text-[#218d37]">勉強過</div>
-                    <div class="text-3xl mt-1">
-                        {{
-                            penaltyData.filter((x) => x.status == "勉強過")
-                                .length
-                        }}
-                    </div>
-                </div>
-                <div class="flex flex-col">
-                    <div class="text-sm mt-1 text-[#39e3e3]">完成總計</div>
-                    <div class="text-3xl mt-1">
-                        {{
-                            penaltyData.filter(
-                                (x) =>
-                                    x.status == "已完成" ||
-                                    x.status == "勉強過",
-                            ).length
-                        }}
-                    </div>
-                </div>
-            </div>
-            <VaDivider class="!mt-2 !mb-1" />
-            <div class="flex justify-between text-center">
-                <div class="flex flex-col">
-                    <div class="text-sm mt-4 mb-2">已完成</div>
                     <VaTextarea
-                        v-model="completedPenalties"
-                        :maxRows="7"
-                        :resize="false"
-                        readonly
-                    />
-                </div>
-                <div class="flex flex-col">
-                    <div class="text-sm mt-4 mb-2">勉強過</div>
-                    <VaTextarea
-                        v-model="barelyPassedPenalties"
+                        v-model="modal.rightText"
                         :maxRows="7"
                         :resize="false"
                         readonly

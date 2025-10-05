@@ -83,7 +83,9 @@ onMounted(loadPenData);
                         :options="finishOptions"
                         placeholder="完成狀態"
                         :text-by="(option: { textBy: string }) => option.textBy"
-                        :value-by="(option: { valueBy: number }) => option.valueBy"
+                        :value-by="
+                            (option: { valueBy: number }) => option.valueBy
+                        "
                         clearable
                         :clear-value="null"
                     />
@@ -118,7 +120,7 @@ onMounted(loadPenData);
                         <News :penalties="penalties" />
                     </div>
                     <div class="h-1/3">
-                        <Statistics />
+                        <Statistics :penalties="penalties" />
                     </div>
                     <div class="h-1/3">
                         <Syntax />
