@@ -65,6 +65,7 @@ const baseColumns = [
         tdAlign: "center" as const,
         sortable: true,
         sortingOptions: ["desc" as const, "asc" as const, null], // because these two string is defined as constants in src.
+        width: 100,
     },
     {
         key: "title",
@@ -86,6 +87,7 @@ const baseColumns = [
         thAlign: "center" as const,
         tdAlign: "center" as const,
         sortable: true,
+        width: 100,
     },
 ];
 
@@ -160,7 +162,7 @@ const headerColumns = computed(() =>
                         </slot>
                     </template>
                     <template #cell(date)="{ value }">
-                        <div class="text-[1rem] text-center pl-2">
+                        <div class="text-[1rem] text-center align-middle">
                             {{ value }}
                         </div>
                     </template>
@@ -175,14 +177,17 @@ const headerColumns = computed(() =>
                             :href="`https://youtube.com/live/${row.rowData.link}`"
                             target="_blank"
                             rel="noreferrer noopener"
-                            class="truncate"
+                            class="align-middle inline-block max-w-64"
                         >
-                            {{ value }}
+                            <div class="truncate">
+                                {{ value }}
+                            </div>
                         </VaButton>
                     </template>
                     <template #cell(tags)="{ row }">
                         <template v-for="tag in row.rowData.tags">
                             <VaButton
+                                size="small"
                                 preset="plain"
                                 color="textPrimary"
                                 hoverMaskColor="#5bc6a1"
@@ -190,12 +195,13 @@ const headerColumns = computed(() =>
                                 pressedMaskColor="info"
                                 :pressedOpacity="1"
                                 @click="() => emit('updateTag', tag)"
+                                class="align-middle inline-block max-w-24"
                             >
-                                {{ tag }}
+                                <div class="truncate">{{ tag }}</div>
                             </VaButton>
                             <VaDivider
                                 vertical
-                                class="inline"
+                                class="inline align-middle"
                                 v-if="
                                     tag !==
                                     row.rowData.tags.slice().reverse()[0]
@@ -204,7 +210,7 @@ const headerColumns = computed(() =>
                         </template>
                     </template>
                     <template #cell(duration)="{ value }">
-                        <div class="text-[1rem] text-center pr-2">
+                        <div class="text-[1rem] text-center align-middle">
                             {{ value }}
                         </div>
                     </template>
@@ -225,7 +231,8 @@ const headerColumns = computed(() =>
 </template>
 
 <style scoped>
-:deep(.va-data-table__thead) {
-    background-color: var(--va-background-element);
+:deep(.va-data-table__td) {
+    display: flex;
+    align-items: center;
 }
 </style>
