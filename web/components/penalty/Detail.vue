@@ -109,15 +109,23 @@ watch(
             <div class="text-lg mt-2">{{ penalty.name }}</div>
             <Timeline :history="penalty.history" />
             <div v-if="isEditing" class="mt-4">
-                <!-- TODO: support image upload -->
-                <VaTextarea
-                    v-model="editedDetail"
-                    placeholder="Enter HTML detail"
-                    class="w-full"
-                    :resize="false"
-                    min-rows="9"
-                    max-rows="9"
-                />
+                <div class="flex gap-2">
+                    <!-- TODO: support image upload -->
+                    <VaTextarea
+                        v-model="editedDetail"
+                        placeholder="Enter HTML detail"
+                        class="w-3/4"
+                        :resize="false"
+                        min-rows="9"
+                        max-rows="9"
+                    />
+                    <div class="flex gap-2 w-1/4">
+                        <!-- TODO: support add vod -->
+                        <!-- TODO: support image upload -->
+                        <!-- TODO: support add state upload -->
+                        <!-- TODO: support add steam page -->
+                    </div>
+                </div>
                 <div class="flex justify-between mt-2">
                     <VaButton @click="cancelEdit" color="secondary">
                         取消
