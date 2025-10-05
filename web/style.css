@@ -7,41 +7,23 @@
     box-shadow: none !important;
 }
 
-/* @layer base {
-    @font-face {
-        font-family: "Mona Song TC";
-        src: url("@assets/fonts/mona-song-tc.otf") format("opentype");
-        font-weight: 400;
-        font-style: normal;
-    }
-    
-    @font-face {
-        font-family: "Taipei Sans";
-        src: url("@assets/fonts/taipei-sans-tc-regular.ttf") format("truetype");
-        font-weight: 400;
-        font-style: normal;
-    }
+.text-penalty-state-0 {
+    color: #6d8581;
+}
 
-    @font-face {
-        font-family: "Taipei Sans Bold";
-        src: url("@assets/fonts/taipei-sans-tc-bold.ttf") format("truetype");
-        font-weight: 400;
-        font-style: normal;
-    }
+.text-penalty-state-1 {
+    color: #b91c1c;
+}
 
-    @font-face {
-        font-family: "Taipei Sans Light";
-        src: url("@assets/fonts/taipei-sans-tc-light.ttf") format("truetype");
-        font-weight: 400;
-        font-style: normal;
-    }
-} */
+.text-penalty-state-2 {
+    color: #4d7c0f;
+}
 
-/* 
-.woff files: Use format('woff')
-.woff2 files: Use format('woff2')
-.ttf files: Use format('truetype')
-.otf files: Use format('opentype')
-.eot files: Use format('embedded-opentype')
-.svg files: Use format('svg')
-*/
+.text-penalty-state-3 {
+    color: #047857;
+}
+
+.text-penalty-state-4 {
+    color: #b45309;
+}
+
