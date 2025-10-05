@@ -150,20 +150,20 @@ watch(
                     placeholder="Enter HTML detail"
                     rows="5"
                 />
-                <div class="flex gap-2 mt-2">
+                <div class="flex justify-between mt-2">
                     <VaButton @click="cancelEdit" color="secondary">
-                        Cancel
+                        取消
                     </VaButton>
                     <VaButton @click="saveDetail" color="primary">
-                        Save
+                        保存
                     </VaButton>
                 </div>
             </div>
             <div v-else class="mt-4">
                 <div v-html="penalty.detail"></div>
                 <div v-if="authState.isAuthenticated" class="mt-2">
-                    <VaButton @click="startEdit" color="success">
-                        Edit
+                    <VaButton @click="startEdit" color="success" class="w-full">
+                        编辑内容
                     </VaButton>
                 </div>
             </div>
