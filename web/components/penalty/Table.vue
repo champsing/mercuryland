@@ -23,6 +23,7 @@ const props = defineProps<{
 
 const emit = defineEmits<{
     (e: "updateState", state: number): void;
+    (e: "addPenalty"): void;
 }>();
 
 const authState = useAuthState();
@@ -56,19 +57,6 @@ const PEMContent: Ref<PenaltyDataEntry> = defineModel("PEMContent", {
         return value;
     },
 }); // penaltyEntryModalContent
-
-function createNewPenalty(): PenaltyDataEntry {
-    return {
-        id: -1, // indicate new
-        date: new Date().toISOString().slice(0, 10),
-        name: "",
-        state: 0,
-        description: [],
-        reapply: [],
-        steamID: undefined,
-        progress: undefined,
-    };
-}
 
 // [DONE] 修正成跟 DataTable.vue 裡面一樣使用 columns {row} 形式
 const items = computed(() =>
@@ -200,7 +188,7 @@ function filterPenaltyData(
                             size="small"
                             color="info"
                             aria-label="新增懲罰"
-                            @click="PEMContent = createNewPenalty()"
+                            @click="$emit('addPenalty')"
                         >
                             <VaIcon name="add" />
                         </VaButton>

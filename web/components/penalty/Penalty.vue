@@ -8,6 +8,7 @@ import Statistics from "./sidebar/Statistics.vue";
 import Syntax from "./sidebar/Syntax.vue";
 import News from "./sidebar/News.vue";
 import Rule from "./Rule.vue";
+import AddPenalty from "./AddPenalty.vue";
 import { formatDate, parseDate, PenItem, BASE_URL } from "@/composables/utils";
 import ViewportHeight from "../ViewportHeight.vue";
 
@@ -37,6 +38,8 @@ let finishOptions = [
 ];
 
 const penalties = ref<PenItem[]>([]);
+
+const addPenaltyRef = ref<{ open: () => void } | null>(null);
 
 async function loadPenData() {
     try {
@@ -113,6 +116,7 @@ onMounted(loadPenData);
                                     : (filterStatus = null);
                             }
                         "
+                        @addPenalty="addPenaltyRef?.open()"
                     />
                 </div>
                 <div class="flex flex-col w-1/4 gap-2 h-full">
@@ -128,6 +132,7 @@ onMounted(loadPenData);
                 </div>
             </div>
         </ViewportHeight>
+        <AddPenalty ref="addPenaltyRef" @saved="loadPenData" />
     </div>
 </template>
 
