@@ -130,8 +130,7 @@ async function downloadVodJson() {
     <div class="grid grid-cols-3 gap-2 px-2">
         <VaCard class="rounded-xl border border-zinc-700">
             <VaCardTitle
-                class="px-6 pt-6 text-lg font-medium text-zinc-200"
-                style="font-size: 20px; justify-content: center"
+                class="px-6 pt-6 !text-xl font-medium text-zinc-200 justify-center"
             >
                 直播随选
             </VaCardTitle>
@@ -159,8 +158,7 @@ async function downloadVodJson() {
         </VaCard>
         <VaCard class="rounded-xl border border-zinc-700">
             <VaCardTitle
-                class="px-6 pt-6 text-lg font-medium text-zinc-200"
-                style="font-size: 20px; justify-content: center"
+                class="px-6 pt-6 !text-xl font-medium text-zinc-200 justify-center"
             >
                 使用者與權限
             </VaCardTitle>
@@ -170,8 +168,7 @@ async function downloadVodJson() {
         </VaCard>
         <VaCard class="rounded-xl border border-zinc-700">
             <VaCardTitle
-                class="px-6 pt-6 text-lg font-medium text-zinc-200"
-                style="font-size: 20px; justify-content: center"
+                class="px-6 pt-6 !text-xl font-medium text-zinc-200 justify-center"
             >
                 通知與整合
             </VaCardTitle>
@@ -181,8 +178,7 @@ async function downloadVodJson() {
         </VaCard>
         <VaCard class="rounded-xl border border-zinc-700">
             <VaCardTitle
-                class="px-6 pt-6 text-lg font-medium text-zinc-200"
-                style="font-size: 20px; justify-content: center"
+                class="px-6 pt-6 !text-xl font-medium text-zinc-200 justify-center"
             >
                 系統維護
             </VaCardTitle>

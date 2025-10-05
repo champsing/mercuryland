@@ -1,20 +1,14 @@
 <script setup lang="ts">
 // TODO: Convert Penalty Page to SQL based from JSON based Data Storage
-import {
-    VaDateInput,
-    VaInput,
-    VaSelect,
-    VaDivider,
-    VaCard,
-    VaCardContent,
-} from "vuestic-ui";
+import { VaDateInput, VaInput, VaSelect, VaDivider } from "vuestic-ui";
 import penaltyStatus from "@assets/data/penalty_status.json";
 import Table from "./Table.vue";
-import Statistics from "./Statistics.vue";
-import Syntax from "./Syntax.vue";
-import News from "./News.vue";
+import Statistics from "./sidebar/Statistics.vue";
+import Syntax from "./sidebar/Syntax.vue";
+import News from "./sidebar/News.vue";
 import Rule from "./Rule.vue";
 import { formatDate, parseDate } from "@/composables/utils";
+import ViewportHeight from "../ViewportHeight.vue";
 
 document.title = "直播懲罰 - 水星人的夢幻樂園";
 
@@ -83,36 +77,35 @@ let finishOptions = penaltyStatus.map((x) => x.name).sort();
 
         <VaDivider class="!mt-0 !mb-2" />
 
-        <div class="flex flex-row gap-2 px-2 pb-2">
-            <div class="w-3/4">
-                <VaCard
-                    style="--va-card-padding: 0rem"
-                    class="h-full overflow-hidden rounded-xl"
-                >
-                    <VaCardContent class="!p-0">
-                        <Table
-                            :dateRange="filterDate"
-                            :status="filterStatus"
-                            :search="filterSearch"
-                            @updateStatus="
-                                (status) => {
-                                    filterStatus == null
-                                        ? (filterStatus = status)
-                                        : (filterStatus = null);
-                                }
-                            "
-                        />
-                    </VaCardContent>
-                </VaCard>
-            </div>
-            <div class="flex flex-col w-1/4">
-                <div class="flex flex-col m-auto mt-0 gap-2">
-                    <News />
-                    <Statistics />
-                    <Syntax />
+        <ViewportHeight>
+            <div class="flex flex-row gap-2 px-2 h-full">
+                <div class="w-3/4 h-full">
+                    <Table
+                        :dateRange="filterDate"
+                        :status="filterStatus"
+                        :search="filterSearch"
+                        @updateStatus="
+                            (status) => {
+                                filterStatus == null
+                                    ? (filterStatus = status)
+                                    : (filterStatus = null);
+                            }
+                        "
+                    />
+                </div>
+                <div class="flex flex-col w-1/4 gap-2 h-full">
+                    <div class="h-1/3">
+                        <News />
+                    </div>
+                    <div class="h-1/3">
+                        <Statistics />
+                    </div>
+                    <div class="h-1/3">
+                        <Syntax />
+                    </div>
                 </div>
             </div>
-        </div>
+        </ViewportHeight>
     </div>
 </template>
 

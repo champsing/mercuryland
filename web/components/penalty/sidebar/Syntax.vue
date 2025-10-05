@@ -95,33 +95,29 @@ const currentTab = (
 <template>
     <!-- !text-[#6d8581] !text-[#b91c1c] !text-[#4d7c0f] !text-[#047857] !text-[#b45309] -->
     <!-- TAILWIND CSS: DO NOT REMOVE ABOVE COMMENT -->
-    <div>
-        <VaCard style="--va-card-padding: 1rem" class="rounded-xl">
-            <VaCardTitle
-                class="px-6 pt-6 text-lg font-medium text-zinc-200"
-                style="font-size: 20px; justify-content: center"
-            >
-                圖例
-            </VaCardTitle>
-            <VaCardContent>
-                <div class="flex justify-center gap-4">
-                    <VaButton
-                        class="w-full"
-                        gradient
-                        color="#28c9c7"
-                        @click="showAdditionalSyntax = !showAdditionalSyntax"
-                    >
-                        <div class="text-xl">詳細資料類</div>
-                    </VaButton>
-                    <VaButton
-                        class="w-full"
-                        gradient
-                        color="#005c99"
-                        @click="showStatusSyntax = !showStatusSyntax"
-                    >
-                        <div class="text-xl">完成狀態類</div>
-                    </VaButton>
-                </div>
+    <div class="h-full">
+        <VaCard
+            style="--va-card-padding: 1rem"
+            class="rounded-xl h-full flex flex-col"
+        >
+            <VaCardTitle class="!text-xl justify-center"> 圖例 </VaCardTitle>
+            <VaCardContent class="flex justify-stretch gap-4 flex-1">
+                <VaButton
+                    class="w-full h-full"
+                    gradient
+                    color="#28c9c7"
+                    @click="showAdditionalSyntax = !showAdditionalSyntax"
+                >
+                    <div class="text-xl">詳細<br />資料</div>
+                </VaButton>
+                <VaButton
+                    class="w-full h-full"
+                    gradient
+                    color="#005c99"
+                    @click="showStatusSyntax = !showStatusSyntax"
+                >
+                    <div class="text-xl">完成<br />狀態</div>
+                </VaButton>
             </VaCardContent>
         </VaCard>
 
