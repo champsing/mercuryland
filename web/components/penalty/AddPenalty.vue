@@ -120,8 +120,9 @@ defineExpose({ open: openAddPenaltyModal });
                 v-model="addPenaltyForm.name"
                 label="內容"
                 color="info"
-                :rows="3"
-                :style="{ resize: 'none' }"
+                :resize="false"
+                min-rows="3"
+                max-rows="3"
                 required
             />
             <VaSelect
