@@ -20,12 +20,7 @@ let filterDate = defineModel("filterDate", {
     },
 });
 
-let filterStatus = defineModel("filterStatus", {
-    default: null as number | null,
-    set(value) {
-        return value;
-    },
-});
+let filterStatus = ref<number | null>(null);
 
 let filterSearch = defineModel("filterSearch", {
     default: "",
