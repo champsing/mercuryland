@@ -10,7 +10,7 @@ import {
     VaListItem,
     VaListItemSection,
 } from "vuestic-ui";
-import { parseHMS, formatHMS } from "@composables/utils.ts";
+import { parseHMS, formatHMS, VodItem } from "@composables/utils.ts";
 import vodSchedule from "@assets/data/schedule.json";
 
 class DataType {
@@ -19,15 +19,6 @@ class DataType {
     previous: number;
     reason: string;
     divider: boolean;
-}
-
-interface VodItem {
-    id?: number | null;
-    date: string;
-    link: string;
-    title: string;
-    tags: string[];
-    duration: string;
 }
 
 const props = defineProps<{

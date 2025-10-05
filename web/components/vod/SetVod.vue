@@ -10,16 +10,7 @@ import {
     VaTimeInput,
 } from "vuestic-ui";
 import axios from "axios";
-import { BASE_URL, formatDate, parseDate } from "@/composables/utils";
-
-interface VodItem {
-    id?: number | null;
-    date: string;
-    link: string;
-    title: string;
-    tags: string[];
-    duration: string;
-}
+import { BASE_URL, formatDate, parseDate, VodItem } from "@/composables/utils";
 
 const props = defineProps<{
     tagList: string[];
@@ -34,7 +25,7 @@ const emit = defineEmits<{
 const showEditVodModal = ref(false);
 const showDeleteConfirmModal = ref(false);
 const editVodForm = reactive({
-    id: null as number | null,
+    id: 0 as number,
     date: new Date(),
     link: "",
     title: "",
@@ -70,7 +61,7 @@ watch(showEditVodModal, (visible) => {
 });
 
 const resetEditVodForm = () => {
-    editVodForm.id = null;
+    editVodForm.id = 0;
     editVodForm.date = new Date();
     editVodForm.link = "";
     editVodForm.title = "";
@@ -154,10 +145,6 @@ const open = (vod: VodItem) => {
     if (!props.isAuthenticated) {
         return;
     }
-    if (vod.id == null) {
-        console.warn("Cannot edit VOD without an id", vod);
-        return;
-    }
 
     editVodForm.id = vod.id;
     editVodForm.link = vod.link ?? "";
@@ -194,7 +181,6 @@ const saveVod = async () => {
     }
 
     if (
-        editVodForm.id == null ||
         !editVodForm.date ||
         !editVodForm.title.trim() ||
         !editVodDuration.value
@@ -250,11 +236,6 @@ const deleteVod = async () => {
     const token = localStorage.getItem("token");
     if (!token) {
         deleteVodError.value = "請先登入管理員帳號";
-        return;
-    }
-
-    if (editVodForm.id == null) {
-        deleteVodError.value = "找不到要刪除的直播";
         return;
     }
 
