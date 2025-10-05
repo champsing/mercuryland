@@ -9,6 +9,7 @@ import Syntax from "./sidebar/Syntax.vue";
 import News from "./sidebar/News.vue";
 import Rule from "./Rule.vue";
 import AddPenalty from "./AddPenalty.vue";
+import SetPenalty from "./SetPenalty.vue";
 import { formatDate, parseDate, BASE_URL } from "@/composables/utils";
 import { PenItem } from "@/composables/penalty";
 import ViewportHeight from "../ViewportHeight.vue";
@@ -38,9 +39,13 @@ let finishOptions = [
     { valueBy: 4, textBy: "已完成" },
 ];
 
+const textByFinish = (option: { textBy: string }) => option.textBy;
+const valueByFinish = (option: { valueBy: number }) => option.valueBy;
+
 const penalties = ref<PenItem[]>([]);
 
 const addPenaltyRef = ref<{ open: () => void } | null>(null);
+const setPenaltyRef = ref<{ open: (penalty: PenItem) => void } | null>(null);
 
 async function loadPenData() {
     try {
@@ -86,10 +91,8 @@ onMounted(loadPenData);
                         v-model="filterStatus"
                         :options="finishOptions"
                         placeholder="完成狀態"
-                        :text-by="(option: { textBy: string }) => option.textBy"
-                        :value-by="
-                            (option: { valueBy: number }) => option.valueBy
-                        "
+                        :text-by="textByFinish"
+                        :value-by="valueByFinish"
                         clearable
                         :clear-value="null"
                     />
@@ -118,6 +121,7 @@ onMounted(loadPenData);
                             }
                         "
                         @addPenalty="addPenaltyRef?.open()"
+                        @editPenalty="setPenaltyRef?.open($event)"
                     />
                 </div>
                 <div class="flex flex-col w-1/4 gap-2 h-full">
@@ -134,6 +138,11 @@ onMounted(loadPenData);
             </div>
         </ViewportHeight>
         <AddPenalty ref="addPenaltyRef" @saved="loadPenData" />
+        <SetPenalty
+            ref="setPenaltyRef"
+            @updated="loadPenData"
+            @deleted="loadPenData"
+        />
     </div>
 </template>
 

@@ -32,6 +32,9 @@ const stateOptions = [
     { value: 1, text: "已生效" },
 ];
 
+const textBy = (option: { text: string }) => option.text;
+const valueBy = (option: { value: number }) => option.value;
+
 watch(showAddPenaltyModal, (visible) => {
     if (!visible) {
         resetAddPenaltyForm();
@@ -131,8 +134,8 @@ defineExpose({ open: openAddPenaltyModal });
                 label="狀態"
                 color="info"
                 :options="stateOptions"
-                :text-by="(option: { text: string }) => option.text"
-                :value-by="(option: { value: number }) => option.value"
+                :text-by="textBy"
+                :value-by="valueBy"
                 required
             />
             <p v-if="addPenaltyError" class="text-sm text-red-400">

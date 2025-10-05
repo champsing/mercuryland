@@ -24,6 +24,7 @@ const props = defineProps<{
 const emit = defineEmits<{
     (e: "updateState", state: number): void;
     (e: "addPenalty"): void;
+    (e: "editPenalty", penalty: PenItem): void;
 }>();
 
 const authState = useAuthState();
@@ -250,20 +251,7 @@ function filterPenaltyData(
                             preset="plain"
                             color="info"
                             aria-label="編輯懲罰"
-                            @click="
-                                PEMContent = {
-                                    id: row.rowData.id,
-                                    date: row.rowData.date,
-                                    name: row.rowData.name,
-                                    state: row.rowData.state,
-                                    description: [],
-                                    reapply: row.rowData.history.map(
-                                        ([state, date]) => ({ date, state }),
-                                    ),
-                                    steamID: undefined,
-                                    progress: undefined,
-                                }
-                            "
+                            @click="emit('editPenalty', row.rowData)"
                         >
                             <VaIcon name="edit" />
                         </VaButton>
