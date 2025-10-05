@@ -12,16 +12,18 @@ import {
 import axios from "axios";
 import { BASE_URL, formatDate, parseDate } from "@/composables/utils";
 import { VodItem } from "@/composables/vod";
+import { useAuthState } from "@/composables/authState";
 
 const props = defineProps<{
     tagList: string[];
-    isAuthenticated?: boolean;
 }>();
 
 const emit = defineEmits<{
     (event: "updated"): void;
     (event: "deleted"): void;
 }>();
+
+const authState = useAuthState();
 
 const showEditVodModal = ref(false);
 const showDeleteConfirmModal = ref(false);
@@ -143,7 +145,7 @@ const parseDurationToDate = (duration: string): Date | null => {
 };
 
 const open = (vod: VodItem) => {
-    if (!props.isAuthenticated) {
+    if (!authState.isAuthenticated) {
         return;
     }
 
@@ -171,7 +173,7 @@ const formatDuration = (value: Date) => {
 };
 
 const saveVod = async () => {
-    if (isSavingVod.value || !props.isAuthenticated) {
+    if (isSavingVod.value || !authState.isAuthenticated) {
         return;
     }
 
@@ -230,7 +232,7 @@ const requestDeleteVod = () => {
 };
 
 const deleteVod = async () => {
-    if (isDeletingVod.value || !props.isAuthenticated) {
+    if (isDeletingVod.value || !authState.isAuthenticated) {
         return;
     }
 

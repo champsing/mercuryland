@@ -13,15 +13,17 @@ import {
 import axios from "axios";
 import { BASE_URL, formatDate, parseDate } from "@/composables/utils";
 import { Robot as FaRobot } from "@vicons/fa";
+import { useAuthState } from "@/composables/authState";
 
 const props = defineProps<{
     tagList: string[];
-    isAuthenticated?: boolean;
 }>();
 
 const emit = defineEmits<{
     (event: "saved"): void;
 }>();
+
+const authState = useAuthState();
 
 const showAddVodModal = ref(false);
 const isSavingVod = ref(false);
@@ -181,7 +183,7 @@ const handleLinkRobotClick = async () => {
 };
 
 const openAddVodModal = () => {
-    if (!props.isAuthenticated) {
+    if (!authState.isAuthenticated) {
         return;
     }
     showAddVodModal.value = true;
@@ -196,7 +198,7 @@ const formatDuration = (value: Date) => {
 };
 
 const saveVod = async () => {
-    if (isSavingVod.value || !props.isAuthenticated) {
+    if (isSavingVod.value || !authState.isAuthenticated) {
         return;
     }
 

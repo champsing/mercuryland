@@ -160,16 +160,10 @@ const handleEditVod = (vod: VodItem) => {
         <SetVod
             ref="setVodRef"
             :tag-list="tagList"
-            :is-authenticated="authState.isAuthenticated"
             @updated="loadVodData"
             @deleted="loadVodData"
         />
-        <AddVod
-            ref="addVodRef"
-            :tag-list="tagList"
-            :is-authenticated="authState.isAuthenticated"
-            @saved="loadVodData"
-        />
+        <AddVod ref="addVodRef" :tag-list="tagList" @saved="loadVodData" />
     </div>
 </template>
 
