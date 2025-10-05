@@ -2,7 +2,7 @@ use crate::database::{self, penalty::Penalty};
 use crate::error::ServerError;
 use crate::webpage::auth;
 use actix_web::{HttpResponse, Responder, post, web};
-use chrono::NaiveDate;
+use chrono::{NaiveDate, Utc};
 use serde::Deserialize;
 
 #[derive(Debug, Deserialize)]
@@ -48,7 +48,7 @@ pub async fn handler(request: web::Json<Request>) -> Result<impl Responder, Serv
     if let Some((last_state, _)) = penalty.history.last() {
         // Only add a new history entry if the state has changed
         if *last_state != request.state {
-            penalty.history.push((request.state, date));
+            penalty.history.push((request.state, Utc::now().date_naive()));
         }
     };
 
