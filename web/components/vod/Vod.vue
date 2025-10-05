@@ -1,16 +1,8 @@
 <script setup lang="ts">
 import { computed, onMounted, ref, Ref } from "vue";
-import {
-    VaCard,
-    VaCardContent,
-    VaChip,
-    VaDateInput,
-    VaDivider,
-    VaSelect,
-    VaSwitch,
-} from "vuestic-ui";
+import { VaChip, VaDateInput, VaDivider, VaSelect, VaSwitch } from "vuestic-ui";
 import axios from "axios";
-import DataTable from "./Table.vue";
+import Table from "./Table.vue";
 import Summary from "./time/Summary.vue";
 import Calculation from "./time/Calculation.vue";
 import AddVod from "./AddVod.vue";
@@ -147,23 +139,16 @@ const handleEditVod = (vod: VodItem) => {
         <ViewportHeight>
             <div class="flex flex-row gap-2 px-2 h-full">
                 <div class="w-3/4 h-full">
-                    <VaCard
-                        style="--va-card-padding: 0rem"
-                        class="h-full overflow-hidden rounded-xl"
-                    >
-                        <VaCardContent class="!p-0 h-full">
-                            <DataTable
-                                :dateRange="dateRange"
-                                :selectedTags="selectedTags"
-                                :strictFiltering="strictFiltering"
-                                :vodData="vodData"
-                                :isAuthenticated="authState.isAuthenticated"
-                                @updateTag="(tag) => updateTag(tag)"
-                                @editVod="handleEditVod"
-                                @addVod="addVodRef?.open()"
-                            />
-                        </VaCardContent>
-                    </VaCard>
+                    <Table
+                        :dateRange="dateRange"
+                        :selectedTags="selectedTags"
+                        :strictFiltering="strictFiltering"
+                        :vodData="vodData"
+                        :isAuthenticated="authState.isAuthenticated"
+                        @updateTag="(tag) => updateTag(tag)"
+                        @editVod="handleEditVod"
+                        @addVod="addVodRef?.open()"
+                    />
                 </div>
 
                 <div class="flex flex-col w-1/4">
