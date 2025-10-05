@@ -33,30 +33,27 @@ let proceedingPenalties = queryStatusPenaties("進行中");
 </script>
 
 <template>
-    <div>
-        <VaCard style="--va-card-padding: 1rem" class="rounded-xl">
-            <VaCardTitle
-                class="px-6 pt-6 !text-xl font-medium text-zinc-200 justify-center"
-            >
-                統計
-            </VaCardTitle>
-            <VaCardContent>
-                <div class="flex justify-center gap-4">
-                    <VaButton
-                        class="w-full"
-                        color="danger"
-                        @click="showExistModal = !showExistModal"
-                    >
-                        <div class="text-xl">現存</div>
-                    </VaButton>
-                    <VaButton
-                        class="w-full"
-                        color="success"
-                        @click="showCompleteModal = !showCompleteModal"
-                    >
-                        <div class="text-xl">完成</div>
-                    </VaButton>
-                </div>
+    <div class="h-full">
+        <VaCard
+            style="--va-card-padding: 1rem"
+            class="rounded-xl h-full flex flex-col"
+        >
+            <VaCardTitle class="!text-xl justify-center"> 統計 </VaCardTitle>
+            <VaCardContent class="flex justify-stretch gap-4 flex-1">
+                <VaButton
+                    class="w-full h-full"
+                    color="danger"
+                    @click="showExistModal = !showExistModal"
+                >
+                    <div class="text-xl">現存<br />懲罰</div>
+                </VaButton>
+                <VaButton
+                    class="w-full h-full"
+                    color="success"
+                    @click="showCompleteModal = !showCompleteModal"
+                >
+                    <div class="text-xl">完成<br />懲罰</div>
+                </VaButton>
             </VaCardContent>
         </VaCard>
 
