@@ -37,7 +37,7 @@ const latestPenalty = computed(() =>
                 v-else
                 class="flex justify-center items-center h-full text-center text-gray-500"
             >
-                No penalties yet
+                暫無懲罰
             </div>
         </VaCardContent>
     </VaCard>
