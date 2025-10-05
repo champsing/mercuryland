@@ -45,6 +45,7 @@ async function loadPenData() {
             `${BASE_URL}/api/penalty/list`,
         );
         penalties.value = response.data;
+        console.log("Penalty data loaded:", penalties.value);
     } catch (error) {
         console.error("Failed to load penalty data", error);
     }
