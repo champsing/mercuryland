@@ -121,6 +121,7 @@ defineExpose({ open: openAddPenaltyModal });
                 label="內容"
                 color="info"
                 :rows="3"
+                :style="{ resize: 'none' }"
                 required
             />
             <VaSelect
