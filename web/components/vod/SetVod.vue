@@ -10,7 +10,8 @@ import {
     VaTimeInput,
 } from "vuestic-ui";
 import axios from "axios";
-import { BASE_URL, formatDate, parseDate, VodItem } from "@/composables/utils";
+import { BASE_URL, formatDate, parseDate } from "@/composables/utils";
+import { VodItem } from "@/composables/vod";
 
 const props = defineProps<{
     tagList: string[];

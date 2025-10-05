@@ -114,7 +114,7 @@ onMounted(loadPenData);
                 </div>
                 <div class="flex flex-col w-1/4 gap-2 h-full">
                     <div class="h-1/3">
-                        <News />
+                        <News :penalties="penalties" />
                     </div>
                     <div class="h-1/3">
                         <Statistics />

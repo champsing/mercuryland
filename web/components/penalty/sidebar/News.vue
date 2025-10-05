@@ -1,10 +1,12 @@
 <script setup lang="ts">
 import { VaCard, VaCardContent, VaCardTitle } from "vuestic-ui";
-import penaltyData from "@assets/data/penalty.json";
-import { ref } from "vue";
-import { statusOf } from "@/composables/penalty";
+import { computed } from "vue";
+import { stateString } from "@/composables/penalty";
+import type { PenItem } from "@/composables/utils";
 
-const latestPenalty = ref(penaltyData.slice().reverse()[0]);
+const props = defineProps<{ penalties: PenItem[] }>();
+
+const latestPenalty = computed(() => props.penalties.slice().reverse()[0]);
 </script>
 
 <template>
@@ -19,11 +21,9 @@ const latestPenalty = ref(penaltyData.slice().reverse()[0]);
                 item-responsive
             >
                 <div
-                    :class="`inline !text-[${
-                        statusOf(latestPenalty.status).color
-                    }] font-bold text-center`"
+                    :class="`inline text-penalty-state-${latestPenalty.state} font-bold text-center`"
                 >
-                    ● {{ latestPenalty.status }}
+                    ● {{ stateString(latestPenalty.state) }}
                 </div>
 
                 <div class="text-center text-lg mb-3 line-clamp-3">
