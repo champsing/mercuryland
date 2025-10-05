@@ -6,7 +6,9 @@ import type { PenItem } from "@/composables/utils";
 
 const props = defineProps<{ penalties: PenItem[] }>();
 
-const latestPenalty = computed(() => props.penalties.slice().reverse()[0]);
+const latestPenalty = computed(() =>
+    props.penalties.length > 0 ? props.penalties.slice().reverse()[0] : null,
+);
 </script>
 
 <template>
@@ -17,6 +19,7 @@ const latestPenalty = computed(() => props.penalties.slice().reverse()[0]);
         <VaCardTitle class="!text-xl justify-center"> 最新 </VaCardTitle>
         <VaCardContent>
             <div
+                v-if="latestPenalty"
                 class="flex flex-col justify-center gap-2 mb-2"
                 item-responsive
             >
@@ -29,6 +32,12 @@ const latestPenalty = computed(() => props.penalties.slice().reverse()[0]);
                 <div class="text-center text-lg mb-3 line-clamp-3">
                     {{ latestPenalty.name }}
                 </div>
+            </div>
+            <div
+                v-else
+                class="flex justify-center items-center h-full text-center text-gray-500"
+            >
+                No penalties yet
             </div>
         </VaCardContent>
     </VaCard>
