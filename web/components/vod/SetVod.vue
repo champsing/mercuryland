@@ -343,16 +343,15 @@ defineExpose({
             <p v-if="editVodSuccess" class="text-sm text-emerald-400">
                 {{ editVodSuccess }}
             </p>
-            <div class="flex flex-col gap-2">
+            <div class="flex justify-between gap-2">
                 <VaButton
                     color="danger"
-                    preset="primary"
-                    class="w-full"
+                    :disabled="isSavingVod"
                     @click="requestDeleteVod"
                 >
-                    刪除直播
+                    刪除
                 </VaButton>
-                <div class="flex justify-end gap-2">
+                <div class="flex gap-2">
                     <VaButton
                         preset="secondary"
                         :disabled="isSavingVod"
