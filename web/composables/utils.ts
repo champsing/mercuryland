@@ -93,21 +93,3 @@ export async function copyToClipboard(text: string) {
         console.error("Failed to copy: ", err);
     }
 }
-
-// export function ccMix(text: string): string {
-//     return Array.from(text).map((c) => {
-//         if (Math.random() < 0.5) {
-//             return c
-//         } else {
-//             return ccConvertText(c)
-//         }
-//     }).join("")
-// }
-
-export function truncateString(str, num) {
-    if (str.length > num) {
-        return str.slice(0, num) + "...";
-    } else {
-        return str;
-    }
-}

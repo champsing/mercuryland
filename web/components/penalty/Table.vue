@@ -10,7 +10,7 @@ import {
 import penaltyData from "@assets/data/penalty.json";
 import vodData from "@assets/data/vod.json";
 import PenaltyModal from "./PenaltyModal.vue";
-import { openLinks, truncateString } from "@/composables/utils";
+import { openLinks } from "@/composables/utils";
 import { statusOf } from "@/composables/penalty";
 
 const props = defineProps<{
@@ -147,8 +147,6 @@ function filterPenaltyData(
                             {{ label }}
                         </div>
                     </template>
-
-                    <!-- check day of week:  {{ new Date(value).getDay() }} -->
                     <template #cell(date)="{ value, row }">
                         <div v-if="row.rowData.status == '未生效'">----</div>
                         <div v-else>
@@ -156,12 +154,12 @@ function filterPenaltyData(
                                 color="textPrimary"
                                 preset="plain"
                                 @click="openLinks(vodLinkOfDate(value))"
+                                class="align-middle"
                             >
                                 {{ value }}
                             </VaButton>
                         </div>
                     </template>
-
                     <template #cell(name)="{ value, row }">
                         <VaButton
                             @click="
@@ -169,8 +167,9 @@ function filterPenaltyData(
                             "
                             preset="plain"
                             color="textPrimary"
+                            class="align-middle inline-block max-w-96"
                         >
-                            {{ truncateString(value, 25) }}
+                            <div class="truncate">{{ value }}</div>
                         </VaButton>
                     </template>
                     <template #cell(status)="{ value }">
@@ -184,6 +183,7 @@ function filterPenaltyData(
                             :style="{
                                 backgroundClip: 'padding-box',
                             }"
+                            class="align-middle"
                         >
                             {{ value }}
                         </VaButton>
