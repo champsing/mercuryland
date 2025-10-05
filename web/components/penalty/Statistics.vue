@@ -36,8 +36,7 @@ let proceedingPenalties = queryStatusPenaties("進行中");
     <div>
         <VaCard style="--va-card-padding: 1rem" class="rounded-xl">
             <VaCardTitle
-                class="px-6 pt-6 text-lg font-medium text-zinc-200"
-                style="font-size: 20px; justify-content: center"
+                class="px-6 pt-6 !text-xl font-medium text-zinc-200 justify-center"
             >
                 統計
             </VaCardTitle>

@@ -22,7 +22,7 @@ function calcStyle(width: number) {
 <template>
     <use-element-bounding v-slot="{ width }">
         <VaCard :style="calcStyle(width)" class="rounded-xl">
-            <VaCardTitle style="font-size: 20px; justify-content: center">
+            <VaCardTitle class="!text-xl justify-center">
                 剩餘時間
             </VaCardTitle>
             <VaCardContent class="font-bold text-center mb-2">
