@@ -15,7 +15,7 @@ pub struct Request {
     pub name: String,
     pub detail: String,
     pub state: i32,
-    pub history: String,
+    pub history: Vec<(i32, NaiveDate)>,
 }
 
 #[post("/api/penalty/update")]
