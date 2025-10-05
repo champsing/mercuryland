@@ -18,6 +18,7 @@ import SetVod from "./SetVod.vue";
 import Rule from "./Rule.vue";
 import { BASE_URL, formatDate, parseDate } from "@/composables/utils";
 import { useAuthState } from "@/composables/authState";
+import ViewportHeight from "../ViewportHeight.vue";
 
 document.title = "直播隨選 - 水星人的夢幻樂園";
 
@@ -82,7 +83,7 @@ const handleEditVod = (vod: VodItem) => {
 </script>
 
 <template>
-    <div class="m-auto w-full z-10">
+    <div>
         <div
             class="flex h-14 w-full flex-row items-center justify-between gap-4 px-2"
         >
@@ -143,36 +144,38 @@ const handleEditVod = (vod: VodItem) => {
 
         <VaDivider class="!mt-0 !mb-2" />
 
-        <div class="flex flex-row gap-2 px-2 pb-2">
-            <div class="w-3/4">
-                <VaCard
-                    style="--va-card-padding: 0rem"
-                    class="h-full overflow-hidden rounded-xl"
-                >
-                    <VaCardContent class="!p-0">
-                        <DataTable
-                            :dateRange="dateRange"
-                            :selectedTags="selectedTags"
-                            :strictFiltering="strictFiltering"
-                            :vodData="vodData"
-                            :isAuthenticated="authState.isAuthenticated"
-                            @updateTag="(tag) => updateTag(tag)"
-                            @editVod="handleEditVod"
-                            @addVod="addVodRef?.open()"
-                        />
-                    </VaCardContent>
-                </VaCard>
-            </div>
+        <ViewportHeight>
+            <div class="flex flex-row gap-2 px-2 h-full">
+                <div class="w-3/4 h-full">
+                    <VaCard
+                        style="--va-card-padding: 0rem"
+                        class="h-full overflow-hidden rounded-xl"
+                    >
+                        <VaCardContent class="!p-0 h-full">
+                            <DataTable
+                                :dateRange="dateRange"
+                                :selectedTags="selectedTags"
+                                :strictFiltering="strictFiltering"
+                                :vodData="vodData"
+                                :isAuthenticated="authState.isAuthenticated"
+                                @updateTag="(tag) => updateTag(tag)"
+                                @editVod="handleEditVod"
+                                @addVod="addVodRef?.open()"
+                            />
+                        </VaCardContent>
+                    </VaCard>
+                </div>
 
-            <div class="flex flex-col w-1/4">
-                <Summary :t="computedTime" />
-                <Calculation
-                    :dateRange="dateRange"
-                    :vodData="vodData"
-                    @computedTime="(time) => (computedTime = time)"
-                />
+                <div class="flex flex-col w-1/4">
+                    <Summary :t="computedTime" />
+                    <Calculation
+                        :dateRange="dateRange"
+                        :vodData="vodData"
+                        @computedTime="(time) => (computedTime = time)"
+                    />
+                </div>
             </div>
-        </div>
+        </ViewportHeight>
         <SetVod
             ref="setVodRef"
             :tag-list="tagList"
