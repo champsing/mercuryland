@@ -32,7 +32,7 @@ const showActions = computed(() => authState.isAuthenticated);
 
 const YOUTUBE_LIVE = "https://youtube.com/live/";
 
-const modal = ref(null as number | null)
+const modal = ref(null as number | null);
 
 const items = computed(() =>
     filterPenaltyData(

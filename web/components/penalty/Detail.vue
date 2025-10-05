@@ -9,11 +9,7 @@ import {
     VaProgressBar,
 } from "vuestic-ui";
 import { openLinks, ofId, BASE_URL } from "@/composables/utils";
-import {
-    stateString,
-    stateColor,
-    PenItem,
-} from "@/composables/penalty";
+import { stateString, stateColor, PenItem } from "@/composables/penalty";
 import axios from "axios";
 
 const props = defineProps<{
@@ -35,7 +31,9 @@ const penalty = ref<PenItem>({
 
 async function loadPenalty(id: number) {
     try {
-        const response = await axios.get(`${BASE_URL}/api/penalty/detail/${id}`);
+        const response = await axios.get(
+            `${BASE_URL}/api/penalty/detail/${id}`,
+        );
         if (response.status === 200) {
             console.log("Fetched penalty:", response.data);
             penalty.value = response.data;
@@ -45,7 +43,7 @@ async function loadPenalty(id: number) {
     } catch (error) {
         console.error(error);
     }
-};
+}
 watch(
     () => props.modelValue,
     (newId) => {
@@ -60,7 +58,9 @@ watch(
 <template>
     <VaModal
         :model-value="props.modelValue !== null"
-        @update:model-value="emit('update:modelValue', $event ? props.modelValue : null)"
+        @update:model-value="
+            emit('update:modelValue', $event ? props.modelValue : null)
+        "
         hide-default-actions
         size="small"
         close-button
@@ -77,6 +77,5 @@ watch(
                 ● {{ stateString(penalty.state) }}
             </VaChip>
         </div>
-
     </VaModal>
 </template>
