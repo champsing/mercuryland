@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, watch } from "vue";
-import { VaChip, VaModal, VaTextarea } from "vuestic-ui";
+import { VaChip, VaModal, VaTextarea, VaButton } from "vuestic-ui";
 import { BASE_URL } from "@/composables/utils";
 import { stateString, stateColor, PenItem } from "@/composables/penalty";
 import { useAuthState } from "@/composables/authState";
@@ -151,29 +151,20 @@ watch(
                     rows="5"
                 />
                 <div class="flex gap-2 mt-2">
-                    <button
-                        @click="saveDetail"
-                        class="px-4 py-2 bg-blue-500 text-white rounded"
-                    >
-                        Save
-                    </button>
-                    <button
-                        @click="cancelEdit"
-                        class="px-4 py-2 bg-gray-500 text-white rounded"
-                    >
+                    <VaButton @click="cancelEdit" color="secondary">
                         Cancel
-                    </button>
+                    </VaButton>
+                    <VaButton @click="saveDetail" color="primary">
+                        Save
+                    </VaButton>
                 </div>
             </div>
             <div v-else class="mt-4">
                 <div v-html="penalty.detail"></div>
                 <div v-if="authState.isAuthenticated" class="mt-2">
-                    <button
-                        @click="startEdit"
-                        class="px-4 py-2 bg-green-500 text-white rounded"
-                    >
+                    <VaButton @click="startEdit" color="success">
                         Edit
-                    </button>
+                    </VaButton>
                 </div>
             </div>
         </template>
