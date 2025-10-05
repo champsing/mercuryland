@@ -3,7 +3,6 @@
 import { ref, onMounted } from "vue";
 import { VaDateInput, VaInput, VaSelect, VaDivider } from "vuestic-ui";
 import axios from "axios";
-import penaltyStatus from "@assets/data/penalty_status.json";
 import Table from "./Table.vue";
 import Statistics from "./sidebar/Statistics.vue";
 import Syntax from "./sidebar/Syntax.vue";
@@ -22,7 +21,7 @@ let filterDate = defineModel("filterDate", {
 });
 
 let filterStatus = defineModel("filterStatus", {
-    default: null,
+    default: null as number | null,
     set(value) {
         return value;
     },
@@ -35,7 +34,13 @@ let filterSearch = defineModel("filterSearch", {
     },
 });
 
-let finishOptions = penaltyStatus.map((x) => x.name).sort();
+let finishOptions = [
+    { value: 0, label: "未生效" },
+    { value: 1, label: "未開始" },
+    { value: 2, label: "進行中" },
+    { value: 3, label: "勉強過" },
+    { value: 4, label: "已完成" },
+];
 
 const penalties = ref<PenItem[]>([]);
 
