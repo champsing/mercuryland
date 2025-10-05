@@ -168,18 +168,15 @@ function filterPenaltyData(
                             <VaIcon name="add" />
                         </VaButton>
                     </template>
-                    <template #cell(date)="{ value, row }">
-                        <div v-if="row.rowData.state == 0">----</div>
-                        <div v-else>
-                            <VaButton
-                                color="textPrimary"
-                                preset="plain"
-                                @click="openLinks(vodLinkOfDate(value))"
-                                class="align-middle"
-                            >
-                                {{ value }}
-                            </VaButton>
-                        </div>
+                    <template #cell(date)="{ value }">
+                        <VaButton
+                            color="textPrimary"
+                            preset="plain"
+                            @click="openLinks(vodLinkOfDate(value))"
+                            class="align-middle"
+                        >
+                            {{ value }}
+                        </VaButton>
                     </template>
                     <template #cell(name)="{ value, row }">
                         <VaButton
@@ -192,8 +189,6 @@ function filterPenaltyData(
                         </VaButton>
                     </template>
                     <template #cell(state)="{ value }">
-                        <!-- !bg-[#6d8581] !bg-[#b91c1c] !bg-[#4d7c0f] !bg-[#047857] !bg-[#b45309] -->
-                        <!-- TAILWIND CSS: DO NOT REMOVE ABOVE COMMENT -->
                         <VaButton
                             :class="stateColor(Number(value), 'bg')"
                             @click="() => emit('updateState', Number(value))"

@@ -66,7 +66,6 @@ watch(
         close-button
     >
         <div v-if="penalty" class="text-xl">
-            {{ penalty.name }}
             <VaChip
                 readonly
                 outline
@@ -76,6 +75,7 @@ watch(
             >
                 ● {{ stateString(penalty.state) }}
             </VaChip>
+            <div class="truncate">{{ penalty.name }}</div>
         </div>
     </VaModal>
 </template>
