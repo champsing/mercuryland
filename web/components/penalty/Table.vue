@@ -155,7 +155,6 @@ function filterPenaltyData(
                             <VaButton
                                 color="textPrimary"
                                 preset="plain"
-                                class=""
                                 @click="openLinks(vodLinkOfDate(value))"
                             >
                                 {{ value }}
@@ -178,11 +177,13 @@ function filterPenaltyData(
                         <!-- !bg-[#6d8581] !bg-[#b91c1c] !bg-[#4d7c0f] !bg-[#047857] !bg-[#b45309] -->
                         <!-- TAILWIND CSS: DO NOT REMOVE ABOVE COMMENT -->
                         <VaButton
-                            :class="`!bg-[${statusOf(value).color}] text-white font-bold rounded-lg`"
+                            :class="`!bg-[${statusOf(value).color}] text-white font-bold rounded-lg px-2`"
                             @click="() => emit('updateStatus', value)"
                             preset="plain"
-                            :color="statusOf(value).color"
-                            background-opacity="1"
+                            color="textPrimary"
+                            :style="{
+                                backgroundClip: 'padding-box',
+                            }"
                         >
                             {{ value }}
                         </VaButton>
