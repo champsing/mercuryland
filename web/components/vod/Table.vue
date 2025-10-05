@@ -10,19 +10,21 @@ import {
     VaScrollContainer,
 } from "vuestic-ui";
 import { VodItem } from "@/composables/vod";
+import { useAuthState } from "@/composables/authState";
 
 const props = defineProps<{
     dateRange: { start: Date; end: Date };
     selectedTags: string[];
     strictFiltering: boolean;
     vodData: VodItem[];
-    isAuthenticated?: boolean;
 }>();
 const emit = defineEmits<{
     (e: "updateTag", tag: string): void;
     (e: "editVod", vod: VodItem): void;
     (e: "addVod"): void;
 }>();
+
+const authState = useAuthState();
 
 const data = computed(() => {
     return props.vodData
@@ -47,7 +49,7 @@ const data = computed(() => {
         .sort((lhs, rhs) => rhs.date.localeCompare(lhs.date));
 });
 
-const showActions = computed(() => props.isAuthenticated === true);
+const showActions = computed(() => authState.isAuthenticated);
 
 const baseColumns = [
     {
