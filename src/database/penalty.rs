@@ -7,11 +7,11 @@ use serde::{Deserialize, Serialize};
 use serde_json::{from_str, to_string};
 
 // Penalty state constants
-pub const PENALTY_STATE_INACTIVE: i32 = 0;
-pub const PENALTY_STATE_NOT_STARTED: i32 = 1;
-pub const PENALTY_STATE_IN_PROGRESS: i32 = 2;
-pub const PENALTY_STATE_BARELY_DONE: i32 = 3;
-pub const PENALTY_STATE_COMPLETED: i32 = 4;
+// pub const PENALTY_STATE_INACTIVE: i32 = 0;
+// pub const PENALTY_STATE_NOT_STARTED: i32 = 1;
+// pub const PENALTY_STATE_IN_PROGRESS: i32 = 2;
+// pub const PENALTY_STATE_BARELY_DONE: i32 = 3;
+// pub const PENALTY_STATE_COMPLETED: i32 = 4;
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
 #[enum_def]
@@ -174,7 +174,7 @@ mod tests {
             date: NaiveDate::from_ymd_opt(2025, 10, 5).expect("valid date"),
             name: "Test Penalty".into(),
             detail: "<p>Test detail</p>".into(),
-            state: PENALTY_STATE_NOT_STARTED,
+            state: 1,
             history: vec![],
         };
 
@@ -204,7 +204,7 @@ mod tests {
             date: NaiveDate::from_ymd_opt(2025, 10, 1).expect("valid date"),
             name: "First Penalty".into(),
             detail: "<p>First detail</p>".into(),
-            state: PENALTY_STATE_INACTIVE,
+            state: 0,
             history: vec![],
         };
         let mut second = Penalty {
@@ -212,7 +212,7 @@ mod tests {
             date: NaiveDate::from_ymd_opt(2025, 10, 2).expect("valid date"),
             name: "Second Penalty".into(),
             detail: "<p>Second detail</p>".into(),
-            state: PENALTY_STATE_IN_PROGRESS,
+            state: 2,
             history: vec![],
         };
 
@@ -252,8 +252,8 @@ mod tests {
             date: NaiveDate::from_ymd_opt(2025, 10, 5).expect("valid date"),
             name: "Original Name".into(),
             detail: "<p>Original detail</p>".into(),
-            state: PENALTY_STATE_NOT_STARTED,
-            history: vec![(PENALTY_STATE_NOT_STARTED, NaiveDate::from_ymd_opt(2025, 10, 5).unwrap())],
+            state: 1,
+            history: vec![(1, NaiveDate::from_ymd_opt(2025, 10, 5).unwrap())],
         };
 
         let tran = conn.transaction()?;
@@ -267,10 +267,10 @@ mod tests {
             date: NaiveDate::from_ymd_opt(2025, 10, 6).expect("valid date"),
             name: "Updated Name".into(),
             detail: "<p>Updated detail</p>".into(),
-            state: PENALTY_STATE_COMPLETED,
+            state: 4,
             history: vec![
-                (PENALTY_STATE_NOT_STARTED, NaiveDate::from_ymd_opt(2025, 10, 5).unwrap()),
-                (PENALTY_STATE_COMPLETED, NaiveDate::from_ymd_opt(2025, 10, 6).unwrap()),
+                (1, NaiveDate::from_ymd_opt(2025, 10, 5).unwrap()),
+                (4, NaiveDate::from_ymd_opt(2025, 10, 6).unwrap()),
             ],
         };
 
@@ -285,7 +285,7 @@ mod tests {
         assert_eq!(fetched.id, id);
         assert_eq!(fetched.name, "Updated Name");
         assert_eq!(fetched.detail, "<p>Updated detail</p>");
-        assert_eq!(fetched.state, PENALTY_STATE_COMPLETED);
+        assert_eq!(fetched.state, 4);
         assert_eq!(fetched.history.len(), 2);
         assert_eq!(fetched.date, NaiveDate::from_ymd_opt(2025, 10, 6).unwrap());
         tran.finish()?;
