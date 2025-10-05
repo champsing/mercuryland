@@ -90,8 +90,9 @@ watch(
         hide-default-actions
         size="small"
         close-button
+        class=""
     >
-        <template v-if="penalty">
+        <div v-if="penalty" class="min-h-[50vh]">
             <div class="flex gap-4 items-center">
                 <VaChip
                     readonly
@@ -166,7 +167,7 @@ watch(
                 </div>
             </div>
             <div v-else class="mt-4">
-                <!-- TODO: give this Modal a fixed height -->
+                <div class="text-lg">{{ penalty.name }}</div>
                 <div v-html="penalty.detail"></div>
                 <div v-if="authState.isAuthenticated" class="mt-2">
                     <VaButton @click="startEdit" color="success" class="w-full">
@@ -174,6 +175,6 @@ watch(
                     </VaButton>
                 </div>
             </div>
-        </template>
+        </div>
     </VaModal>
 </template>
