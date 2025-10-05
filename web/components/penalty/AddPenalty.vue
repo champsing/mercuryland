@@ -3,9 +3,9 @@ import { reactive, ref, watch } from "vue";
 import {
     VaButton,
     VaDateInput,
-    VaInput,
     VaModal,
     VaSelect,
+    VaTextarea,
 } from "vuestic-ui";
 import axios from "axios";
 import { BASE_URL, formatDate, parseDate } from "@/composables/utils";
@@ -116,11 +116,10 @@ defineExpose({ open: openAddPenaltyModal });
                 mode="auto"
                 required
             />
-            <VaInput
+            <VaTextarea
                 v-model="addPenaltyForm.name"
                 label="內容"
                 color="info"
-                type="textarea"
                 :rows="3"
                 required
             />
