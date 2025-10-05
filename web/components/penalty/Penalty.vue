@@ -1,13 +1,15 @@
 <script setup lang="ts">
 // TODO: Convert Penalty Page to SQL based from JSON based Data Storage
+import { ref, onMounted } from "vue";
 import { VaDateInput, VaInput, VaSelect, VaDivider } from "vuestic-ui";
+import axios from "axios";
 import penaltyStatus from "@assets/data/penalty_status.json";
 import Table from "./Table.vue";
 import Statistics from "./sidebar/Statistics.vue";
 import Syntax from "./sidebar/Syntax.vue";
 import News from "./sidebar/News.vue";
 import Rule from "./Rule.vue";
-import { formatDate, parseDate } from "@/composables/utils";
+import { formatDate, parseDate, PenItem, BASE_URL } from "@/composables/utils";
 import ViewportHeight from "../ViewportHeight.vue";
 
 document.title = "直播懲罰 - 水星人的夢幻樂園";
@@ -34,6 +36,21 @@ let filterSearch = defineModel("filterSearch", {
 });
 
 let finishOptions = penaltyStatus.map((x) => x.name).sort();
+
+const penalties = ref<PenItem[]>([]);
+
+async function loadPenData() {
+    try {
+        const response = await axios.get<PenItem[]>(
+            `${BASE_URL}/api/penalty/list`,
+        );
+        penalties.value = response.data;
+    } catch (error) {
+        console.error("Failed to load penalty data", error);
+    }
+}
+
+onMounted(loadPenData);
 </script>
 
 <template>
@@ -81,6 +98,7 @@ let finishOptions = penaltyStatus.map((x) => x.name).sort();
             <div class="flex flex-row gap-2 px-2 h-full">
                 <div class="w-3/4 h-full">
                     <Table
+                        :penalties="penalties"
                         :dateRange="filterDate"
                         :status="filterStatus"
                         :search="filterSearch"

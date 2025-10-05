@@ -7,13 +7,13 @@ import {
     VaCard,
     VaCardContent,
 } from "vuestic-ui";
-import penaltyData from "@assets/data/penalty.json";
 import vodData from "@assets/data/vod.json";
 import PenaltyModal from "./PenaltyModal.vue";
-import { openLinks } from "@/composables/utils";
+import { openLinks, PenItem } from "@/composables/utils";
 import { statusOf } from "@/composables/penalty";
 
 const props = defineProps<{
+    penalties: PenItem[];
     dateRange: { start: Date; end: Date };
     status?: string;
     search: string;
@@ -23,7 +23,7 @@ const emit = defineEmits<{
     (e: "updateStatus", status: string): void;
 }>();
 
-class PenaltyDataEntry {
+interface PenaltyDataEntry {
     id: number;
     date: string;
     name: string;
@@ -52,9 +52,22 @@ const PEMContent: Ref<PenaltyDataEntry> = defineModel("PEMContent", {
     },
 }); // penaltyEntryModalContent
 
+function mapStateToStatus(state: number): string {
+    const statuses = ["未生效", "未開始", "進行中", "勉強過", "已完成"];
+    return statuses[state] || "未知";
+}
+
 // [DONE] 修正成跟 DataTable.vue 裡面一樣使用 columns {row} 形式
 const items = computed(() =>
-    filterPenaltyData(props.dateRange, props.status, props.search).slice(),
+    filterPenaltyData(
+        props.penalties.map((p) => ({
+            ...p,
+            status: mapStateToStatus(p.state),
+        })),
+        props.dateRange,
+        props.status,
+        props.search,
+    ).slice(),
 );
 
 const columns = [
@@ -88,11 +101,12 @@ function vodLinkOfDate(date: string): string[] {
 }
 
 function filterPenaltyData(
+    data: (PenItem & { status: string })[],
     dateRange: { start: Date; end: Date },
     status: string,
     search: string,
-): typeof penaltyData {
-    return penaltyData
+): (PenItem & { status: string })[] {
+    return data
         .filter(
             (v) =>
                 v.date >= dateRange.start.toISOString().slice(0, 10) &&
@@ -163,7 +177,16 @@ function filterPenaltyData(
                     <template #cell(name)="{ value, row }">
                         <VaButton
                             @click="
-                                PEMContent = row.rowData as PenaltyDataEntry
+                                PEMContent = {
+                                    id: row.rowData.id,
+                                    date: row.rowData.date,
+                                    name: row.rowData.name,
+                                    status: row.rowData.status,
+                                    description: [],
+                                    reapply: [],
+                                    steamID: undefined,
+                                    progress: undefined,
+                                }
                             "
                             preset="plain"
                             color="textPrimary"
