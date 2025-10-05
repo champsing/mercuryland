@@ -10,6 +10,7 @@ import News from "./sidebar/News.vue";
 import Rule from "./Rule.vue";
 import { formatDate, parseDate, PenItem, BASE_URL } from "@/composables/utils";
 import ViewportHeight from "../ViewportHeight.vue";
+import { stateString } from "@/composables/penalty";
 
 document.title = "直播懲罰 - 水星人的夢幻樂園";
 
@@ -20,21 +21,20 @@ let filterDate = defineModel("filterDate", {
     },
 });
 
-let filterStatus = ref<number | null>(null);
+let filterStatus = defineModel("filterStatus", {
+    default: null as number | null,
+});
 
 let filterSearch = defineModel("filterSearch", {
-    default: "",
-    set(value) {
-        return value;
-    },
+    default: "" as string,
 });
 
 let finishOptions = [
-    { value: 0, label: "未生效" },
-    { value: 1, label: "未開始" },
-    { value: 2, label: "進行中" },
-    { value: 3, label: "勉強過" },
-    { value: 4, label: "已完成" },
+    { valueBy: 0, textBy: "未生效" },
+    { valueBy: 1, textBy: "未開始" },
+    { valueBy: 2, textBy: "進行中" },
+    { valueBy: 3, textBy: "勉強過" },
+    { valueBy: 4, textBy: "已完成" },
 ];
 
 const penalties = ref<PenItem[]>([]);
@@ -83,6 +83,8 @@ onMounted(loadPenData);
                         v-model="filterStatus"
                         :options="finishOptions"
                         placeholder="完成狀態"
+                        :text-by="(option: { textBy: string }) => option.textBy"
+                        :value-by="(option: { valueBy: number }) => option.valueBy"
                         clearable
                         :clear-value="null"
                     />
