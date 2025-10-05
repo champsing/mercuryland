@@ -30,9 +30,6 @@ const addPenaltyForm = reactive({
 const stateOptions = [
     { value: 0, text: "未生效" },
     { value: 1, text: "未開始" },
-    { value: 2, text: "進行中" },
-    { value: 3, text: "勉強過" },
-    { value: 4, text: "已完成" },
 ];
 
 watch(showAddPenaltyModal, (visible) => {
@@ -123,6 +120,8 @@ defineExpose({ open: openAddPenaltyModal });
                 v-model="addPenaltyForm.name"
                 label="內容"
                 color="info"
+                type="textarea"
+                :rows="3"
                 required
             />
             <VaSelect
