@@ -106,12 +106,12 @@ onMounted(loadPenData);
                     <Table
                         :penalties="penalties"
                         :dateRange="filterDate"
-                        :status="filterStatus"
+                        :state="filterStatus"
                         :search="filterSearch"
-                        @updateStatus="
-                            (status) => {
+                        @updateState="
+                            (state) => {
                                 filterStatus == null
-                                    ? (filterStatus = status)
+                                    ? (filterStatus = state)
                                     : (filterStatus = null);
                             }
                         "
