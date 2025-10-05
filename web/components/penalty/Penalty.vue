@@ -30,8 +30,8 @@ let filterSearch = defineModel("filterSearch", {
 });
 
 let finishOptions = [
-    { valueBy: 0, textBy: "未生效" },
-    { valueBy: 1, textBy: "未開始" },
+    { valueBy: 0, textBy: "已抽选" },
+    { valueBy: 1, textBy: "已生效" },
     { valueBy: 2, textBy: "進行中" },
     { valueBy: 3, textBy: "勉強過" },
     { valueBy: 4, textBy: "已完成" },
