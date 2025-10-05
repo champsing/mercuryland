@@ -1,11 +1,5 @@
 <script setup lang="ts">
-import {
-    VaDivider,
-    VaBadge,
-    VaCard,
-    VaCardContent,
-    VaCardTitle,
-} from "vuestic-ui";
+import { VaCard, VaCardContent, VaCardTitle } from "vuestic-ui";
 import penaltyData from "@assets/data/penalty.json";
 import { ref } from "vue";
 import { statusOf } from "@/composables/penalty";
@@ -32,8 +26,9 @@ const latestPenalty = ref(penaltyData.slice().reverse()[0]);
                     ● {{ latestPenalty.status }}
                 </div>
 
-                <div class="text-center text-lg mb-3">
-                    {{ latestPenalty.name }}xxxxxxxxx xxxxxx xxxxxxx xxxxxxxxxxx xxxxxxxxxx xxxxxxxxxxxx xxxxx xxxxxx
+                <div class="text-center text-lg mb-3 line-clamp-3">
+                    {{ latestPenalty.name }}xxxxxxxxx xxxxxx xxxxxxx xxxxxxxxxxx
+                    xxxxxxxxxx xxxxxxxxxxxx xxxxx xxxxxx
                 </div>
             </div>
         </VaCardContent>
