@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, Ref, computed } from "vue";
+import { computed, ref } from "vue";
 import {
     VaButton,
     VaDataTable,
@@ -9,7 +9,7 @@ import {
     VaIcon,
 } from "vuestic-ui";
 import vodData from "@assets/data/vod.json";
-import PenaltyModal from "./PenaltyModal.vue";
+import Detail from "./Detail.vue";
 import { openLinks } from "@/composables/utils";
 import { stateString, stateColor, PenItem } from "@/composables/penalty";
 import { useAuthState } from "@/composables/authState";
@@ -30,36 +30,10 @@ const emit = defineEmits<{
 const authState = useAuthState();
 const showActions = computed(() => authState.isAuthenticated);
 
-interface PenaltyDataEntry {
-    id: number;
-    date: string;
-    name: string;
-    state: number;
-    description?: {
-        type: string;
-        text?: string;
-        uri_link?: string;
-        uri_imgs?: string[];
-        uri_num?: number;
-    }[];
-    reapply?: { date: string; state: number }[];
-    steamID?: number;
-    progress?: number;
-}
-
 const YOUTUBE_LIVE = "https://youtube.com/live/";
 
-const showPEM = ref(false); // showPenaltyEntryModal
+const modal = ref(null as number | null)
 
-const PEMContent: Ref<PenaltyDataEntry> = defineModel("PEMContent", {
-    default: null,
-    set(value) {
-        showPEM.value = !showPEM.value;
-        return value;
-    },
-}); // penaltyEntryModalContent
-
-// [DONE] 修正成跟 DataTable.vue 裡面一樣使用 columns {row} 形式
 const items = computed(() =>
     filterPenaltyData(
         props.penalties,
@@ -209,20 +183,7 @@ function filterPenaltyData(
                     </template>
                     <template #cell(name)="{ value, row }">
                         <VaButton
-                            @click="
-                                PEMContent = {
-                                    id: row.rowData.id,
-                                    date: row.rowData.date,
-                                    name: row.rowData.name,
-                                    state: row.rowData.state,
-                                    description: [],
-                                    reapply: row.rowData.history.map(
-                                        ([state, date]) => ({ date, state }),
-                                    ),
-                                    steamID: undefined,
-                                    progress: undefined,
-                                }
-                            "
+                            @click="modal = row.rowData.id"
                             preset="plain"
                             color="textPrimary"
                             class="align-middle inline-block max-w-96"
@@ -259,11 +220,7 @@ function filterPenaltyData(
                 </VaDataTable>
             </VaScrollContainer>
 
-            <PenaltyModal
-                v-model="showPEM"
-                :penalty="PEMContent"
-                @changePenalty="PEMContent = $event"
-            />
+            <Detail v-model="modal" />
         </VaCardContent>
     </VaCard>
 </template>
