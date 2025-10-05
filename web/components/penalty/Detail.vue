@@ -1,14 +1,10 @@
 <script setup lang="ts">
 import { computed, ref, watch } from "vue";
 import {
-    VaButton,
     VaChip,
-    VaDivider,
-    VaIcon,
     VaModal,
-    VaProgressBar,
 } from "vuestic-ui";
-import { openLinks, ofId, BASE_URL } from "@/composables/utils";
+import { BASE_URL } from "@/composables/utils";
 import { stateString, stateColor, PenItem } from "@/composables/penalty";
 import axios from "axios";
 
@@ -20,14 +16,7 @@ const emit = defineEmits<{
     (e: "update:modelValue", value: number | null): void;
 }>();
 
-const penalty = ref<PenItem>({
-    id: 0,
-    date: "1970-01-01",
-    name: "加载中",
-    detail: "加载中",
-    state: 0,
-    history: [[0, "1970-01-01"]],
-});
+const penalty = ref<PenItem | null>(null);
 
 async function loadPenalty(id: number) {
     try {
@@ -65,17 +54,21 @@ watch(
         size="small"
         close-button
     >
-        <div v-if="penalty" class="text-xl">
+        <template v-if="penalty">
+        <div class="flex gap-4 items-center">
             <VaChip
                 readonly
                 outline
                 size="small"
                 :color="stateColor(penalty.state, 'raw')"
-                class="ml-4"
+                class="w-24"
             >
                 ● {{ stateString(penalty.state) }}
             </VaChip>
-            <div class="truncate">{{ penalty.name }}</div>
+            <div class="truncate text-xl flex-1">{{ penalty.name }}</div>
         </div>
+        <div></div>
+        <div v-html="penalty.detail" class="mt-4"></div>
+        </template>
     </VaModal>
 </template>
