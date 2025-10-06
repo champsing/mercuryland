@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref, computed } from "vue";
-import { VaInput, VaModal, VaButton } from "vuestic-ui";
+import { VaInput, VaModal, VaButton, VaIcon } from "vuestic-ui";
+import { BrandSteam } from "@vicons/tabler";
 
 const props = defineProps<{
     textareaRef: any; // Ref to the VaTextarea
@@ -42,8 +43,11 @@ function save() {
 </script>
 
 <template>
-    <VaButton @click="openModal" color="primary" class="w-full h-full">
-        添加Steam
+    <VaButton @click="openModal" color="#2a475e" class="w-full h-full">
+        <VaIcon class="mr-2">
+            <BrandSteam />
+        </VaIcon>
+        添加游戏
     </VaButton>
 
     <VaModal
