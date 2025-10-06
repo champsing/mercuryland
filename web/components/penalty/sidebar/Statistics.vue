@@ -103,7 +103,11 @@ function clickDone() {
 
         <VaModal
             :model-value="modal !== null"
-            @update:model-value="(value) => { if (!value) modal = null; }"
+            @update:model-value="
+                (value) => {
+                    if (!value) modal = null;
+                }
+            "
             size="small"
             close-button
             hide-default-actions
