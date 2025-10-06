@@ -1,33 +1,38 @@
 <script setup lang="ts">
-import { ref, computed } from "vue";
+import { ref } from "vue";
 import {
     VaButton,
-    VaIcon,
     VaModal,
-    VaDivider,
     VaTabs,
     VaTab,
-    VaChip,
     VaCard,
     VaCardTitle,
     VaCardContent,
 } from "vuestic-ui";
-import { stateColor, stateString, statusOf } from "@/composables/penalty";
+import { stateColor, stateString } from "@/composables/penalty";
 
 interface ModalData {
     title: string;
     items: string[];
 }
 
-const syntaxs = ["🆙增加", "🔁重抽", "2️⃣備案", "😇復活", "📝修改", "➕其他"];
-
-const states = [
-    "<span class='text-[#6d8581]'>▲</span>未開始",
-    "<span class='text-[#b91c1c]'>▲</span>已完成",
-    "<span class='text-[#4d7c0f]'>▲</span>勉強過",
-    "<span class='text-[#047857]'>▲</span>進行中",
-    "<span class='text-[#b45309]'>▲</span>未生效",
+const syntaxs = [
+    "🆙增加",
+    "🔁重抽",
+    "2️⃣備案",
+    "😇復活",
+    "📝修改",
+    "✅已抽",
+    "➕其他",
 ];
+const states = [0, 1, 2, 3, 4].map(
+    (s) =>
+        "<span class='" +
+        stateColor(s, "text") +
+        "'>▲" +
+        stateString(s) +
+        "</span>",
+);
 
 const modal = ref<ModalData | null>(null);
 const tabs = ref<string | null>(null);
@@ -37,52 +42,17 @@ function clickSyntax() {
         title: "詳細",
         items: syntaxs,
     };
+    tabs.value = syntaxs[0];
+}
+function clickState() {
+    modal.value = {
+        title: "狀態",
+        items: states,
+    };
+    tabs.value = states[0];
 }
 
-const syntax0 = ref(false);
-
-// TODO: Remove legacy colorOfStatus function later
-// TODO: Clear up inconsistent style in Modal
-function colorOfStatus(status: string): string {
-    return statusOf(status).color;
-}
-
-const statusColorSet = [
-    colorOfStatus("未開始"),
-    colorOfStatus("已完成"),
-    colorOfStatus("勉強過"),
-    colorOfStatus("進行中"),
-    colorOfStatus("未生效"),
-];
-
-const showStatusSyntax = ref(false);
-const statusSyntaxTabs = [
-    {
-        title: "四大完成狀態",
-        content: "",
-    },
-    {
-        title: "未生效",
-        content:
-            "多抽出預備的懲罰，在沒被加新懲罰之前不會生效；<br>加懲罰時依時間順序優先成為懲罰。",
-    },
-    {
-        title: "✅已抽",
-        content: "該懲罰中所產生的內容已經抽出",
-    },
-    {
-        title: "🏁給過",
-        content:
-            "「勉強過」成立的原因，例如原主人放過惡靈一馬，<br>或群組投票通過惡靈可以勉強通過懲罰。<br>不清楚原主人時則由群組投票，<br>若之後惡靈補完成全部的條件，則一樣能夠獲得「已完成」。",
-    },
-    {
-        title: "⏲️⚔️目前進度",
-        content: "「進行中」懲罰目前的進度",
-    },
-];
-const statusTabValue = ref(statusSyntaxTabs[0].title);
-
-const showExtraConditionDesc = ref(false);
+const footnote0 = ref(false);
 </script>
 
 <template>
@@ -105,7 +75,7 @@ const showExtraConditionDesc = ref(false);
                     class="w-full h-full"
                     gradient
                     color="#005c99"
-                    @click="showStatusSyntax = !showStatusSyntax"
+                    @click="clickState"
                 >
                     <div class="text-xl">完成<br />狀態</div>
                 </VaButton>
@@ -132,7 +102,7 @@ const showExtraConditionDesc = ref(false);
             <VaTabs v-model="tabs" color="info" vertical grow>
                 <template #tabs>
                     <VaTab v-for="t in modal.items" :key="t" :name="t">
-                        {{ t }}
+                        <div v-html="t"></div>
                     </VaTab>
                 </template>
 
@@ -145,7 +115,7 @@ const showExtraConditionDesc = ref(false);
                         <VaButton
                             preset="plain"
                             color="warning"
-                            @click="syntax0 = true"
+                            @click="footnote0 = true"
                         >
                             <div class="mt-2 text-sm text-left">
                                 <sup>1</sup>無法完成的懲罰與轉換條件
@@ -166,13 +136,40 @@ const showExtraConditionDesc = ref(false);
                         原主人要求修改懲罰主文的內容。<br />
                         以「📝原主人修改n次」的方式表示，n為修改次數。
                     </p>
-                    <p v-else-if="tabs === syntaxs[5]">其他後來增加的條件</p>
+                    <p v-else-if="tabs === syntaxs[5]">
+                        該懲罰中所產生的內容已經抽出。
+                    </p>
+                    <p v-else-if="tabs === syntaxs[6]">其他後來增加的條件。</p>
+                    <p v-else-if="tabs === states[0]">
+                        多抽出預備的懲罰，在沒被加新懲罰之前不會生效；<br />
+                        加懲罰時依時間順序優先成為懲罰。
+                    </p>
+                    <p v-else-if="tabs === states[1]">
+                        尚未開始嘗試完成該懲罰，沒有進度。
+                    </p>
+                    <p v-else-if="tabs === states[2]">
+                        正在嘗試完成，已經有進度的懲罰。<br />
+                        <br />
+                        ⏲️⚔️目前進度<br />
+                        「進行中」懲罰目前的進度。
+                    </p>
+                    <p v-else-if="tabs === states[3]">
+                        在沒有完成全部條件情況下，以最低及格線通過該懲罰。<br />
+                        <br />
+                        🏁給過<br />
+                        原主人放過惡靈一馬，或群組投票通過。<br />
+                        不清楚原主人時則由群組投票，<br />
+                        若之後惡靈補完成全部的條件，則一樣能夠獲得「已完成」。
+                    </p>
+                    <p v-else-if="tabs === states[4]">
+                        已經完成該懲罰的所有條件，獲得「已完成」狀態。
+                    </p>
                 </div>
             </VaTabs>
         </VaModal>
 
         <VaModal
-            v-model:model-value="syntax0"
+            v-model:model-value="footnote0"
             hide-default-actions
             close-button
         >
