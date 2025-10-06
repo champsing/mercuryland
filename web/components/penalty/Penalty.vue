@@ -10,7 +10,7 @@ import Rule from "./Rule.vue";
 import AddPenalty from "./AddPenalty.vue";
 import SetPenalty from "./SetPenalty.vue";
 import { formatDate, parseDate, BASE_URL } from "@/composables/utils";
-import { PenItem } from "@/composables/penalty";
+import { PenItem, stateString } from "@/composables/penalty";
 import ViewportHeight from "../ViewportHeight.vue";
 
 document.title = "直播懲罰 - 水星人的夢幻樂園";
@@ -31,11 +31,11 @@ let filterSearch = defineModel("filterSearch", {
 });
 
 let finishOptions = [
-    { valueBy: 0, textBy: "已抽选" },
-    { valueBy: 1, textBy: "已生效" },
-    { valueBy: 2, textBy: "進行中" },
-    { valueBy: 3, textBy: "勉強過" },
-    { valueBy: 4, textBy: "已完成" },
+    { valueBy: 0, textBy: stateString(0) },
+    { valueBy: 1, textBy: stateString(1) },
+    { valueBy: 2, textBy: stateString(2) },
+    { valueBy: 3, textBy: stateString(3) },
+    { valueBy: 4, textBy: stateString(4) },
 ];
 
 const textByFinish = (option: { textBy: string }) => option.textBy;
