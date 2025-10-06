@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { reactive } from "vue";
+import { ref } from "vue";
 import {
     VaButton,
     VaDivider,
@@ -12,54 +12,66 @@ import {
 import { copyToClipboard } from "@/composables/utils";
 import { stateColor, stateString, PenItem } from "@/composables/penalty";
 
+interface ModalData {
+    title: string;
+    color: string;
+    leftSlot: number;
+    leftCount: number;
+    leftText: string;
+    rightSlot: number;
+    rightCount: number;
+    rightText: string;
+}
+
 const props = defineProps<{ penalties: PenItem[] }>();
 
-const modal = reactive({
-    show: false,
-    title: "現存",
-    color: "#ffffff",
-    leftSlot: 0,
-    leftCount: 0,
-    leftText: "",
-    rightSlot: 0,
-    rightCount: 0,
-    rightText: "",
-});
+const modal = ref<ModalData | null>(null);
 
 function fillModalData() {
-    modal.leftCount = props.penalties.filter(
-        (x) => x.state === modal.leftSlot,
+    if (!modal.value) return;
+    modal.value.leftCount = props.penalties.filter(
+        (x) => x.state === modal.value.leftSlot,
     ).length;
-    modal.rightCount = props.penalties.filter(
-        (x) => x.state === modal.rightSlot,
+    modal.value.rightCount = props.penalties.filter(
+        (x) => x.state === modal.value.rightSlot,
     ).length;
 
-    modal.leftText = props.penalties
-        .filter((x) => x.state === modal.leftSlot)
+    modal.value.leftText = props.penalties
+        .filter((x) => x.state === modal.value.leftSlot)
         .map((x) => x.name)
         .join("\n");
 
-    modal.rightText = props.penalties
-        .filter((x) => x.state === modal.rightSlot)
+    modal.value.rightText = props.penalties
+        .filter((x) => x.state === modal.value.rightSlot)
         .map((x) => x.name)
         .join("\n");
 }
 
 function clickExist() {
-    modal.show = true;
-    modal.title = "現存";
-    modal.color = "#b73813";
-    modal.leftSlot = 1;
-    modal.rightSlot = 2;
+    modal.value = {
+        title: "現存",
+        color: "#b73813",
+        leftSlot: 1,
+        leftCount: 0,
+        leftText: "",
+        rightSlot: 2,
+        rightCount: 0,
+        rightText: "",
+    };
     fillModalData();
 }
 
 function clickDone() {
-    modal.show = true;
-    modal.title = "完成";
-    modal.color = "#297a33";
-    modal.leftSlot = 3;
-    modal.rightSlot = 4;
+    modal.value = {
+        title: "完成",
+        color: "#297a33",
+        leftSlot: 3,
+        leftCount: 0,
+        leftText: "",
+        rightSlot: 4,
+        rightCount: 0,
+        rightText: "",
+    };
     fillModalData();
 }
 </script>
@@ -90,7 +102,8 @@ function clickDone() {
         </VaCard>
 
         <VaModal
-            v-model="modal.show"
+            :model-value="modal !== null"
+            @update:model-value="(value) => { if (!value) modal = null; }"
             size="small"
             close-button
             hide-default-actions
