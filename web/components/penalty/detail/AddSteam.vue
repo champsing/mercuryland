@@ -17,7 +17,7 @@ const steamId = ref("");
 const steamHtml = computed(() => {
     if (!steamId.value.trim()) return "";
     let url = `https://store.steampowered.com/widget/${steamId.value.trim()}/`;
-    return `<iframe src="${url}" frameborder="0" width="510" height="200" scrolling="no"/>`;
+    return `<div style="height: 400px;"><iframe src="${url}" frameborder="0" width="510" height="200" scrolling="no"/></div>`;
 });
 
 function openModal() {
