@@ -17,7 +17,7 @@ const steamId = ref("");
 const steamHtml = computed(() => {
     if (!steamId.value.trim()) return "";
     let url = `https://store.steampowered.com/widget/${steamId.value.trim()}/`;
-    return `<div style="height: 400px;"><iframe src="${url}" frameborder="0" width="510" height="200" scrolling="no"/></div>`;
+    return `<div style="height: 200px;"><iframe src="${url}" frameborder="0" width="510" height="200" scrolling="no"/></div>`;
 });
 
 function openModal() {
@@ -56,30 +56,29 @@ function save() {
         hide-default-actions
         size="small"
         close-button
-        title="Add Steam Game"
     >
         <div class="space-y-4">
             <VaInput
                 v-model="steamId"
-                label="Steam Game ID"
-                placeholder="Enter Steam Game ID"
+                label="Steam游戏ID"
+                placeholder="请输入Steam游戏ID，例如：289070"
             />
 
             <div>
-                <label class="block text-sm font-medium mb-2">Preview:</label>
+                <label class="block text-sm font-medium mb-2">预览:</label>
                 <div v-html="steamHtml"></div>
             </div>
 
             <div class="flex justify-end gap-2">
                 <VaButton @click="closeModal" color="secondary">
-                    Cancel
+                    取消
                 </VaButton>
                 <VaButton
                     @click="save"
                     color="primary"
                     :disabled="!steamId.trim()"
                 >
-                    Save
+                    保存
                 </VaButton>
             </div>
         </div>
