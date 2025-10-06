@@ -6,6 +6,7 @@ import { stateString, stateColor, PenItem } from "@/composables/penalty";
 import { useAuthState } from "@/composables/authState";
 import axios from "axios";
 import Timeline from "./Timeline.vue";
+import AddSteam from "./AddSteam.vue";
 
 const props = defineProps<{
     modelValue: number | null;
@@ -20,6 +21,7 @@ const penalty = ref<PenItem | null>(null);
 const authState = useAuthState();
 const isEditing = ref(false);
 const editedDetail = ref("");
+const textareaRef = ref();
 
 async function loadPenalty(id: number) {
     try {
@@ -69,6 +71,13 @@ async function saveDetail() {
         console.error(error);
     }
 }
+
+function insertHtml(html: string, position: number) {
+    editedDetail.value =
+        editedDetail.value.slice(0, position) +
+        html +
+        editedDetail.value.slice(position);
+}
 watch(
     () => props.modelValue,
     (newId) => {
@@ -110,8 +119,8 @@ watch(
             <Timeline :history="penalty.history" />
             <div v-if="isEditing" class="mt-4">
                 <div class="flex gap-2">
-                    <!-- TODO: support image upload -->
                     <VaTextarea
+                        ref="textareaRef"
                         v-model="editedDetail"
                         placeholder="Enter HTML detail"
                         class="w-3/4"
@@ -120,6 +129,12 @@ watch(
                         max-rows="9"
                     />
                     <div class="flex gap-2 w-1/4">
+                        <div class="h-1/3 w-full">
+                            <AddSteam
+                                :textarea-ref="textareaRef"
+                                @insert-html="insertHtml"
+                            />
+                        </div>
                         <!-- TODO: support add vod -->
                         <!-- TODO: support image upload -->
                         <!-- TODO: support add state upload -->
