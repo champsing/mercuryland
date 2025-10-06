@@ -12,7 +12,7 @@ import {
     VaCardTitle,
     VaCardContent,
 } from "vuestic-ui";
-import { statusOf } from "@/composables/penalty";
+import { stateColor, stateString, statusOf } from "@/composables/penalty";
 
 interface ModalData {
     title: string;
@@ -179,21 +179,28 @@ const showExtraConditionDesc = ref(false);
             <div class="text-lg font-semibold">
                 無法完成的懲罰與轉換條件說明
             </div>
-            某些懲罰的主文有可能存在會造成該懲罰永遠無法完成的條件，例如時間限制等；雖然這類懲罰通常會在進入轉盤之前被過濾，但難保完全沒有。而這類懲罰在該條件無法被滿足之後會被判定失敗，永遠無法獲得
-            <div :class="`inline !text-[${statusColorSet[1]}]`">▲已完成</div>
-            狀態，僅可獲得
-            <div :class="`inline !text-[${statusColorSet[2]}]`">▲勉強過</div>
-            。
-            除非該懲罰帶有「否則」、「失敗」等語，即視為擁有轉換條件，當前項條件無法被滿足時，會轉換為後面所說的懲罰。
+            <p>
+                某些懲罰的主文有可能存在會造成該懲罰永遠無法完成的條件，例如時間限制等；雖然這類懲罰通常會在進入轉盤之前被過濾，但難保完全沒有。而這類懲罰在該條件無法被滿足之後會被判定失敗，永遠無法獲得<span
+                    :class="stateColor(4, 'text')"
+                    >▲{{ stateString(4) }}</span
+                >狀態，僅可獲得<span :class="stateColor(3, 'text')"
+                    >▲{{ stateString(3) }}</span
+                >。除非該懲罰帶有「否則」、「失敗」等語，即視為擁有轉換條件，當前項條件無法被滿足時，會轉換為後面所說的懲罰。
+            </p>
             <br />
+            <p>
+                假設今有一個懲罰：「2024年結束以前打完星鐵主線」；如主文所示，在2024年結束之後便永遠無法達成前項條件，此時將會判定為懲罰失敗，並將永遠無法獲得<span
+                    :class="stateColor(4, 'text')"
+                    >▲{{ stateString(4) }}</span
+                >；唯一的完成方式是懲罰原主人或投票給過，即以<span
+                    :class="stateColor(3, 'text')"
+                    >▲{{ stateString(3) }}</span
+                >的方式完成。
+            </p>
             <br />
-            假設今有一個懲罰：「2024年結束以前打完星鐵主線」；如主文所示，在2024年結束之後便永遠無法達成前項條件，此時將會判定為懲罰失敗，並將永遠無法獲得
-            <div :class="`inline !text-[${statusColorSet[1]}]`">▲已完成</div>
-            ；唯一的完成方式是懲罰原主人或投票給過，即以
-            <div :class="`inline !text-[${statusColorSet[2]}]`">▲勉強過</div>
-            方式完成。
-            <br />
-            但是，若懲罰為「2024年結束以前打完星鐵主線，否則懲罰+2」，就會在判定失敗時將原懲罰取代為2個新的未抽出懲罰，並於之後由直播時抽出，原懲罰便轉化為2個新的懲罰了。
+            <p>
+                但是，若懲罰為「2024年結束以前打完星鐵主線，否則懲罰+2」，就會在判定失敗時將原懲罰取代為2個新的未抽出懲罰，並於之後由直播時抽出，原懲罰便轉化為2個新的懲罰了。
+            </p>
         </VaModal>
     </div>
 </template>
