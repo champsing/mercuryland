@@ -72,11 +72,18 @@ async function saveDetail() {
     }
 }
 
-function insertHtml(html: string, position: number) {
-    editedDetail.value =
-        editedDetail.value.slice(0, position) +
-        html +
-        editedDetail.value.slice(position);
+function insertHtml(html: string, range: { start: number; end: number }) {
+    const content = editedDetail.value ?? "";
+    const start = Math.min(
+        Math.max(range?.start ?? content.length, 0),
+        content.length,
+    );
+    const end = Math.min(
+        Math.max(range?.end ?? range?.start ?? content.length, start),
+        content.length,
+    );
+
+    editedDetail.value = content.slice(0, start) + html + content.slice(end);
 }
 watch(
     () => props.modelValue,
