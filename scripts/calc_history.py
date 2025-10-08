@@ -65,3 +65,20 @@ h[81] = [['未開始', '2023-11-19'], ['已完成', '2024-06-01']]
 with open("../web/assets/data/calc_history.json", "w") as f:
     json.dump(h, f, ensure_ascii=False, indent=2)
 # %% 
+import json
+with open("../web/assets/data/calc_history.json", "r") as f:
+    h = json.load(f)
+
+with open("../web/assets/data/history.json", "r") as f:
+    latest = json.load(f)[-1][1]
+
+for entry in latest:
+    id = str(entry["id"])
+    if id not in h:
+        raise ValueError(f"ID {id} not found in calc_history.json")
+    entry["date"] = h[id][0][1]
+    entry["history"] = h[id]
+
+with open("../web/assets/data/latest.json", "w") as f:
+    json.dump(latest, f, ensure_ascii=False, indent=2)
+# %%
