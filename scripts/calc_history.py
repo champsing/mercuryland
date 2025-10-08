@@ -3,11 +3,11 @@ import json
 with open("../web/assets/data/history.json", "r") as f:
     history = json.load(f)
 
-# %%
+# %% Process history data
 # id -> [event, date]
 h: dict[int, list[str, str]] = {}
 
-p = ["未生效", "未開始", "已完成", "勉強過", "進行中"]
+p = ["未生效", "未開始", "進行中", "勉強過", "已完成"]
 
 for commit, file in history:
     commit_date = commit[1]
@@ -57,8 +57,11 @@ for commit, file in history:
             if h[id][-1][0] != state:
                 h[id].append([state, commit_date])
 
+# %% Manual fix
+del h[250511] # Remove this id as it is not a valid entry
+h[25] = [['未開始', '2023-04-09'], ['勉強過', '2024-06-01']]
+h[81] = [['未開始', '2023-11-19'], ['已完成', '2024-06-01']]
+
 with open("../web/assets/data/calc_history.json", "w") as f:
     json.dump(h, f, ensure_ascii=False, indent=2)
-# %%
-# issue items
-# 25, 40, 81
+# %% 
