@@ -62,7 +62,7 @@ def normalize(s: str) -> str:
     s = emoji_pattern.sub('', s)
     return s
 
-# %%
+# %% Mapping for id changes on 2024-11-18
 import copy
 commit0 = next((x for x in files0 if x[0][0] == "987ff4686d1d4d1658de1bf6ab7ca9e251cd1a95"))
 commit1 = next((x for x in files0 if x[0][0] == "5c1e4f7e20328f18fcde218024319959eae3aebd"))
@@ -114,4 +114,62 @@ for commit, file in files1:
 for commit, file in files1:
     print(commit, file)
 
+# %%
+commit0 = next((x for x in files1 if x[0][0] == "6c79c029cd4e39371b9c60511ef486abb415c911"))
+commit1 = next((x for x in files1 if x[0][0] == "68224d1b79ae037c2974e9a94ef4a54fced6e6ec"))
+assert len(commit0[1]) + 1 == len(commit1[1])
+
+t0 = {}
+for entry in commit0[1]:
+    t0[entry["name"]] = (entry["id"], 0)
+for entry in commit1[1]:
+    if entry["name"] in t0:
+        t0[entry["name"]] = (t0[entry["name"]][0], entry["id"])
+    else:
+        print(f"New entry: {entry['name']}")
+        t0[entry["name"]] = (0, entry["id"])
+
+m241120 = {}
+for name, (old_id, new_id) in t0.items():
+    m241120[old_id] = (new_id, name)
+
+# Manual fix for 加班台2小時 and 開加班台
+m241120[17] = (23423, "加班台2小時")
+m241120[18] = (23423, "開加班台")
+m241120[50] = (23910.6, "開加班台")
+m241120[57] = (23924.2, "加班台2小時")
+
+print(m241120)
+
+del commit0
+del commit1
+del t0
+
+files2 = copy.deepcopy(files1)
+for commit, file in files2:
+    if commit[1] < "2024-11-20" or commit[0] in [
+        "d8d563c13e77b51dcf2e260a6605c584e30f2eb6", 
+        "7a8475fbc319b051dd4d04cee8c7f4ae9f6bb60e",
+        "6c79c029cd4e39371b9c60511ef486abb415c911",
+    ]:
+        for entry in file:
+            try:
+                def check_name(new_name: str, old_name: str) -> str:
+                    new_name = normalize(new_name)
+                    old_name = normalize(old_name)
+                    if new_name == old_name:
+                        return True
+                    else:
+                        print(f"Normalizing mismatch: {new_name} != {old_name}")
+                        return False
+                
+                assert check_name(entry["name"], m241120[entry["id"]][1])
+                i = entry["id"]
+                entry["id"] = m241120[i][0]
+                entry["name"] = m241120[i][1]
+            except KeyError:
+                print(f"KeyError: [{commit}] {entry['id']}, {entry['name']}")
+
+for commit, file in files2:
+    print(commit, file)
 # %%
