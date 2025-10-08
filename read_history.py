@@ -190,7 +190,7 @@ for commit, file in files3:
 
 del files2
 
-# %%
+# %% Mapping for id changes on 2025-06-08
 commit0 = next((x for x in files3 if x[0][0] == "39f4a0530ea7a62e9b7fb649703a155eaf967090"))
 commit1 = next((x for x in files3 if x[0][0] == "e7fa087599e25323209f64f9d33101f1de946275"))
 
@@ -242,3 +242,52 @@ for commit, file in files4:
 
 del m250608
 del files3
+
+# %% Manual fix for 港鬼實錄 id change
+files5 = copy.deepcopy(files4)
+for commit, file in files5:
+    for entry in file:
+        if entry["id"] == 190 and entry["name"] == "港鬼實錄":
+            entry["id"] = 206
+
+for commit, file in files5:
+    print(commit, file)
+
+del files4
+
+
+# %% Output the latest version
+entries = {}
+latest_file = files5[-1][1]
+for entry in latest_file:
+    if entry["id"] == 190 and entry["name"] == "港鬼實錄":
+        entry["id"] = 206
+    entries[entry["id"]] = entry["name"]
+print(entries)
+
+for commit, file in files5:
+    for entry in file:
+        if entry["id"] == 250511:
+            print(f"[{commit}] Skipping invalid id 250511")
+            continue
+
+        def check_name(new_name: str, old_name: str) -> str:
+            new_name = normalize(new_name)
+            old_name = normalize(old_name)
+            if new_name == old_name:
+                return True
+            elif new_name == "今年4月1日之前补完所有直播时数，否则懲罰+2" and old_name == "今年4月1日之前补完所有直播时数，否则惩罚+2":
+                return True
+            elif new_name == "玩迷你空管成功引導150架次飛機" and old_name == "玩迷你空管成功引導200架次飛機":
+                return True
+            else:
+                print(f"[{commit}]Normalizing mismatch: {new_name} != {old_name}")
+                return False
+
+        if not check_name(entries[entry["id"]], entry["name"]):
+            print(f"[{commit}] Final normalization mismatch: {entries[entry['id']]} != {entry['name']}")
+
+# %%
+with open("history.json", "w", encoding="utf-8") as f:
+    json.dump(files5, f, ensure_ascii=False, indent=2)
+# %%
