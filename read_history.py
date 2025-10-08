@@ -104,8 +104,8 @@ for commit, file in files1:
                         print(f"Normalizing mismatch: {new_name} != {old_name}")
                         return False
                 
-                assert check_name(entry["name"], m241118[entry["id"]][1])
                 i = entry["id"]
+                assert check_name(entry["name"], m241118[i][1])
                 entry["id"] = m241118[i][0]
                 entry["name"] = m241118[i][1]
             except KeyError:
@@ -114,7 +114,10 @@ for commit, file in files1:
 for commit, file in files1:
     print(commit, file)
 
-# %%
+del files0
+del m241118
+
+# %% Mapping for id changes on 2024-11-20
 commit0 = next((x for x in files1 if x[0][0] == "6c79c029cd4e39371b9c60511ef486abb415c911"))
 commit1 = next((x for x in files1 if x[0][0] == "68224d1b79ae037c2974e9a94ef4a54fced6e6ec"))
 assert len(commit0[1]) + 1 == len(commit1[1])
@@ -163,8 +166,8 @@ for commit, file in files2:
                         print(f"Normalizing mismatch: {new_name} != {old_name}")
                         return False
                 
-                assert check_name(entry["name"], m241120[entry["id"]][1])
                 i = entry["id"]
+                assert check_name(entry["name"], m241120[i][1])
                 entry["id"] = m241120[i][0]
                 entry["name"] = m241120[i][1]
             except KeyError:
@@ -172,4 +175,70 @@ for commit, file in files2:
 
 for commit, file in files2:
     print(commit, file)
+
+del files1
+del m241120
+
+# %% Manual fix for 開每日迷因頻道 日更連續至少1星期
+files3 = copy.deepcopy(files2)
+for commit, file in files3:
+    if commit[0] == "1da5ad196b6d807715e7eacce4334a3e230720c1":
+        for entry in file:
+            if entry["id"] == 250202.4:
+                assert entry["name"] == "開每日迷因頻道 日更連續至少1星期"
+                entry["id"] = 250202.5
+
+del files2
+
 # %%
+commit0 = next((x for x in files3 if x[0][0] == "39f4a0530ea7a62e9b7fb649703a155eaf967090"))
+commit1 = next((x for x in files3 if x[0][0] == "e7fa087599e25323209f64f9d33101f1de946275"))
+
+assert len(commit0[1]) + 4 == len(commit1[1])
+
+m250608 = {}
+for (old_entry, new_entry) in zip(commit0[1], commit1[1]):
+    assert old_entry["name"] == new_entry["name"]
+    m250608[old_entry["id"]] = (new_entry["id"], new_entry["name"])
+
+# After 0324, 未生效 are randomly assigned new ids
+m250608[67012669] = (162, "玩狂亂之境4 打敗BOSS百變獸")
+m250608[9026498] = (165, "考試考歐洲所有國家首都 不算私人國家而已 三星期後考")
+m250608[8772780] = (166, "玩Mad Max")
+
+files4 = copy.deepcopy(files3)
+for commit, file in files4:
+    if commit[1] < "2025-06-08":
+        for entry in file:
+            try:
+                def check_name(new_name: str, old_name: str) -> str:
+                    new_name = normalize(new_name)
+                    old_name = normalize(old_name)
+                    if new_name == old_name:
+                        return True
+                    elif new_name == "加班台2小時" and old_name == "開加班台":
+                        return True
+                    elif new_name == "Project2M16目標全達成" and old_name == "Project2M只要把你現在找到的羊毛放到要放的位置就能用旁觀+創造帶大家看一下地圖和剩餘的羊毛放到該放的位置上":
+                        return True
+                    else:
+                        print(f"[{commit}]Normalizing mismatch: {new_name} != {old_name}")
+                        return False
+                
+                i = entry["id"]
+                if i == 250309 and entry["name"] == "玩狂亂之境4 打敗BOSS百變獸":
+                    print("Manual fix for 玩狂亂之境4打敗BOSS百變獸")
+                    entry["id"] = 162
+                elif i == 250511:
+                    continue  # invalid id
+                else:
+                    assert check_name(entry["name"], m250608[i][1])
+                    entry["id"] = m250608[i][0]
+                    entry["name"] = m250608[i][1]
+            except KeyError:
+                print(f"KeyError: [{commit}] {entry['id']}, {entry['name']}")
+
+for commit, file in files4:
+    print(commit, file)
+
+del m250608
+del files3
