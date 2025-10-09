@@ -308,6 +308,7 @@ function save() {
         @click="openModal"
         color="#ff0000"
         class="w-full h-full"
+        gradient
     >
         <VaIcon class="mr-2">
             <BrandYoutube />

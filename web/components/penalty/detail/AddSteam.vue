@@ -133,6 +133,7 @@ function save() {
         @click="openModal"
         color="#2a475e"
         class="w-full h-full"
+        gradient
     >
         <VaIcon class="mr-2">
             <BrandSteam />
