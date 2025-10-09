@@ -1,5 +1,6 @@
 use crate::{
     coin::youtube::User,
+    config::CONFIG,
     database::{self},
     discord,
     error::ServerError,
@@ -43,13 +44,12 @@ pub async fn link(ctx: super::Context<'_>) -> Result<(), ServerError> {
     // if the author hasn't completed OAuth2 yet
     author.dm(ctx, CreateMessage::new().content("您正在執行的操作是授權我們存取您的 Google 帳號以讀取您帳號旗下的 YouTube 頻道，用於將您的 Discord 帳號與 YouTube 頻道建立內部資料庫連結。")).await?;
 
-    let auth =
-        yup_oauth2::DeviceFlowAuthenticator::builder(crate::config::CFG_YOUTUBE_TOKEN.clone())
-            .flow_delegate(Box::new(FlowDelegateForDiscord(discord::Receiver::UserId(
-                author.id.get(),
-            ))))
-            .build()
-            .await?;
+    let auth = yup_oauth2::DeviceFlowAuthenticator::builder(CONFIG.dcyt_link.clone())
+        .flow_delegate(Box::new(FlowDelegateForDiscord(discord::Receiver::UserId(
+            author.id.get(),
+        ))))
+        .build()
+        .await?;
 
     let client = hyper_util::client::legacy::Client::builder(hyper_util::rt::TokioExecutor::new())
         .build(

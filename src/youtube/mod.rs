@@ -66,14 +66,13 @@ pub async fn run() -> Result<(), ServerError> {
         discord::Receiver::UserId(CONFIG.discord.admin[0]).message(CreateMessage::new().content(&format!("您正在執行的操作是授權我們存取您的 Google 帳號以讀取您帳號旗下的 YouTube 頻道，用於讀取惡靈直播聊天室的訊息。"))).await?;
     }
 
-    let auth =
-        yup_oauth2::DeviceFlowAuthenticator::builder(crate::config::CFG_YOUTUBE_TOKEN.clone())
-            .persist_tokens_to_disk("data/youtube.secret")
-            .flow_delegate(Box::new(FlowDelegateForDiscord(discord::Receiver::UserId(
-                CONFIG.discord.admin[0],
-            ))))
-            .build()
-            .await?;
+    let auth = yup_oauth2::DeviceFlowAuthenticator::builder(CONFIG.yt_chat_viewer.clone())
+        .persist_tokens_to_disk("data/youtube.secret")
+        .flow_delegate(Box::new(FlowDelegateForDiscord(discord::Receiver::UserId(
+            CONFIG.discord.admin[0],
+        ))))
+        .build()
+        .await?;
 
     let client = hyper_util::client::legacy::Client::builder(hyper_util::rt::TokioExecutor::new())
         .build(
