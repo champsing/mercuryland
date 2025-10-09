@@ -151,7 +151,7 @@ const embedHtml = computed(() => {
         : (video?.title ?? "YouTube video");
     const escapedTitle = escapeHtml(iframeTitleSource);
 
-    return [
+    const container = [
         "",
         '<div class="penalty-youtube" style="margin: 1rem 0;">',
         '  <div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 12px; background-color: #000;">',
@@ -159,9 +159,9 @@ const embedHtml = computed(() => {
         "  </div>",
         "</div>",
         "",
-    ]
-        .filter((segment) => segment.length > 0)
-        .join("\n");
+    ].join("\n");
+
+    return `\n${container}\n`;
 });
 
 function resolveTextarea(): HTMLTextAreaElement | null {
