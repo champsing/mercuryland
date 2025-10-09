@@ -40,6 +40,7 @@ pub async fn run() -> Result<(), ServerError> {
             .service(penalty::update::handler)
             .service(penalty::detail::handler)
             .service(penalty::update_detail::handler)
+            .service(penalty::update_history::handler)
             .service(image::upload::handler)
             .service(image::get::handler)
     })
