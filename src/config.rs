@@ -40,3 +40,23 @@ pub struct AuthCode {
 }
 
 pub static AUTH_CODE: LazyLock<RwLock<Vec<AuthCode>>> = LazyLock::new(|| RwLock::new(Vec::new()));
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_discord_token_non_empty() {
+        assert!(
+            !CFG_DISCORD_TOKEN.is_empty(),
+            "DISCORD_TOKEN should not be empty"
+        );
+    }
+
+    #[test]
+    fn test_youtube_token_parses() {
+        // Accessing CFG_YOUTUBE_TOKEN will initialize it and panic if YOUTUBE_TOKEN is invalid JSON
+        let _token = &*CFG_YOUTUBE_TOKEN;
+        // If we reach here without panic, the token parsed successfully
+    }
+}
