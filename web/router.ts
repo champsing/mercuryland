@@ -10,7 +10,7 @@ import Wheel from "./components/Wheel.vue";
 import Privacy from "./components/law/Privacy.vue";
 import Leaderboard from "./components/Leaderboard.vue";
 import Propose from "./components/Propose.vue";
-import Setting from "./components/Setting.vue";
+import Setting from "./components/setting/Setting.vue";
 import Welcome2 from "./components/welcome/Welcome2.vue";
 
 const routes = [

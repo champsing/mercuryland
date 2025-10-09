@@ -25,6 +25,7 @@ rusqlite = { version = "0.32", features = [
     "uuid",
     "serde_json",
     "chrono",
+    "backup",
 ] }
 sea-query = "0.32"
 sea-query-rusqlite = { version = "0.7", features = [
@@ -48,6 +49,7 @@ async-trait = "0.1"
 tokio = { version = "1.44", features = ["rt-multi-thread"] }
 derive_more = { version = "1.0", features = ["display", "from"] }
 uuid = { version = "1.10", features = ["v4", "v5", "v7", "serde"] }
+tempfile = "3.0"
 chrono = { version = "0.4", features = ["serde"] }
 itertools = "0.13"
 phf = { version = "0.13", features = ["macros"] }
