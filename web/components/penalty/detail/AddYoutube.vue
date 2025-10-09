@@ -329,7 +329,7 @@ function save() {
                 {{ loadError }}
             </VaAlert>
 
-            <div class="flex items-end gap-2">
+            <div class="flex items-end gap-2 overflow-hidden">
                 <VaSelect
                     v-if="!useManualVideo"
                     v-model="selectedVideoId"
@@ -342,7 +342,7 @@ function save() {
                     clearable
                     :loading="isLoading"
                     :disabled="Boolean(loadError)"
-                    class="w-4/5"
+                    class="flex-grow"
                 />
                 <VaInput
                     v-else
@@ -351,7 +351,7 @@ function save() {
                     placeholder="輸入 YouTube 影片 ID，例如：ms8uu0zeU88"
                     clearable
                     :disabled="Boolean(loadError)"
-                    class="w-4/5"
+                    class="flex-grow"
                 />
                 <VaSwitch
                     v-model="useManualVideo"
@@ -360,20 +360,8 @@ function save() {
                     false-inner-label="列表"
                     true-inner-label="链接"
                     :disabled="Boolean(loadError)"
-                    class="mb-1.5 flex-grow"
+                    class="mb-1.5 mr-1"
                 />
-            </div>
-
-            <div v-if="!loadError && !useManualVideo">
-                <div v-if="isLoading" class="text-sm text-zinc-300">
-                    正在載入影片...
-                </div>
-                <div
-                    v-else-if="!videoOptions.length"
-                    class="text-sm text-zinc-400"
-                >
-                    目前沒有可選的影片
-                </div>
             </div>
 
             <VaInput
