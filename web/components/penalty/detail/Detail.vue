@@ -9,6 +9,7 @@ import Timeline from "./Timeline.vue";
 import AddSteam from "./AddSteam.vue";
 import AddYoutube from "./AddYoutube.vue";
 import AddImage from "./AddImage.vue";
+import AddSyntax from "./AddSyntax.vue";
 
 const props = defineProps<{
     modelValue: number | null;
@@ -169,7 +170,12 @@ watch(
                                 @insert-html="insertHtml"
                             />
                         </div>
-                        <!-- TODO: support add state upload -->
+                        <div>
+                            <AddSyntax
+                                :textarea-ref="textareaRef"
+                                @insert-html="insertHtml"
+                            />
+                        </div>
                     </div>
                 </div>
                 <div class="flex justify-between mt-2">
