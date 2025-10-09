@@ -5,6 +5,7 @@ use actix_web::{HttpResponse, Responder, post, web};
 use chrono::{NaiveDate, Utc};
 use serde::Deserialize;
 
+// TODO: support updating history in a different endpoint
 #[derive(Debug, Deserialize)]
 pub struct Request {
     pub token: String,
