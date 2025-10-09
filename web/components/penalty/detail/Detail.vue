@@ -1,10 +1,15 @@
 <script setup lang="ts">
-import { ref, watch } from "vue";
+import { computed, ref, watch } from "vue";
 import { VaChip, VaModal, VaTextarea, VaButton } from "vuestic-ui";
 import { BASE_URL } from "@/composables/utils";
 import { stateString, stateColor, PenItem } from "@/composables/penalty";
 import { useAuthState } from "@/composables/authState";
 import axios from "axios";
+import Timeline from "./Timeline.vue";
+import AddSteam from "./AddSteam.vue";
+import AddYoutube from "./AddYoutube.vue";
+import AddImage from "./AddImage.vue";
+import AddSyntax from "./AddSyntax.vue";
 
 const props = defineProps<{
     modelValue: number | null;
@@ -19,6 +24,20 @@ const penalty = ref<PenItem | null>(null);
 const authState = useAuthState();
 const isEditing = ref(false);
 const editedDetail = ref("");
+const textareaRef = ref();
+
+const renderedDetail = computed(() => {
+    const detail = penalty.value?.detail ?? "";
+    if (!detail) {
+        return "";
+    }
+
+    const base = BASE_URL.replace(/\/$/, "");
+    return detail.replace(
+        /src=(['"])(\/api\/image\/[^'"]+)\1/g,
+        (_match, quote, path) => `src=${quote}${base}${path}${quote}`,
+    );
+});
 
 async function loadPenalty(id: number) {
     try {
@@ -68,6 +87,20 @@ async function saveDetail() {
         console.error(error);
     }
 }
+
+function insertHtml(html: string, range: { start: number; end: number }) {
+    const content = editedDetail.value ?? "";
+    const start = Math.min(
+        Math.max(range?.start ?? content.length, 0),
+        content.length,
+    );
+    const end = Math.min(
+        Math.max(range?.end ?? range?.start ?? content.length, start),
+        content.length,
+    );
+
+    editedDetail.value = content.slice(0, start) + html + content.slice(end);
+}
 watch(
     () => props.modelValue,
     (newId) => {
@@ -90,8 +123,9 @@ watch(
         hide-default-actions
         size="small"
         close-button
+        class=""
     >
-        <template v-if="penalty">
+        <div v-if="penalty" class="min-h-[50vh]">
             <div class="flex gap-4 items-center">
                 <VaChip
                     readonly
@@ -104,58 +138,46 @@ watch(
                 </VaChip>
                 <div class="truncate text-xl flex-1">{{ penalty.name }}</div>
             </div>
-            <div
-                v-if="penalty.history && penalty.history.length > 0"
-                class="mt-4"
-            >
-                <div class="relative">
-                    <div
-                        class="absolute top-4 left-0 right-0 h-0.5 bg-gray-300"
-                    ></div>
-                    <div class="flex justify-between">
-                        <div
-                            v-for="(item, index) in penalty.history"
-                            :key="index"
-                            class="flex flex-col items-center"
-                            :style="{
-                                flex:
-                                    index === 0 ||
-                                    index === penalty.history.length - 1
-                                        ? '0 0 auto'
-                                        : '1',
-                            }"
-                        >
-                            <div
-                                class="w-3 h-3 rounded-full shadow-md"
-                                :style="{
-                                    backgroundColor: stateColor(item[0], 'raw'),
-                                }"
-                            ></div>
-                            <div class="text-xs text-center mt-1">
-                                <div
-                                    class="font-medium mt-1"
-                                    :style="{
-                                        color: stateColor(item[0], 'raw'),
-                                    }"
-                                >
-                                    {{ stateString(item[0]) }}
-                                </div>
-                                <div class="text-gray-500">{{ item[1] }}</div>
-                            </div>
+            <div class="text-lg mt-2">{{ penalty.name }}</div>
+            <Timeline :history="penalty.history" />
+            <div v-if="isEditing" class="mt-4">
+                <div class="flex gap-2">
+                    <VaTextarea
+                        ref="textareaRef"
+                        v-model="editedDetail"
+                        placeholder="Enter HTML detail"
+                        class="w-3/4"
+                        :resize="false"
+                        min-rows="9"
+                        max-rows="9"
+                    />
+                    <div class="flex flex-col gap-2 w-1/4">
+                        <div class="flex-1">
+                            <AddSteam
+                                :textarea-ref="textareaRef"
+                                @insert-html="insertHtml"
+                            />
+                        </div>
+                        <div class="flex-1">
+                            <AddYoutube
+                                :textarea-ref="textareaRef"
+                                @insert-html="insertHtml"
+                            />
+                        </div>
+                        <div class="flex-1">
+                            <AddImage
+                                :textarea-ref="textareaRef"
+                                @insert-html="insertHtml"
+                            />
+                        </div>
+                        <div class="flex-1">
+                            <AddSyntax
+                                :textarea-ref="textareaRef"
+                                @insert-html="insertHtml"
+                            />
                         </div>
                     </div>
                 </div>
-            </div>
-            <div v-if="isEditing" class="mt-4">
-                <!-- TODO: support image upload -->
-                <VaTextarea
-                    v-model="editedDetail"
-                    placeholder="Enter HTML detail"
-                    class="w-full"
-                    :resize="false"
-                    min-rows="9"
-                    max-rows="9"
-                />
                 <div class="flex justify-between mt-2">
                     <VaButton @click="cancelEdit" color="secondary">
                         取消
@@ -166,14 +188,13 @@ watch(
                 </div>
             </div>
             <div v-else class="mt-4">
-                <!-- TODO: give this Modal a fixed height -->
-                <div v-html="penalty.detail"></div>
+                <div v-html="renderedDetail"></div>
                 <div v-if="authState.isAuthenticated" class="mt-2">
                     <VaButton @click="startEdit" color="success" class="w-full">
                         编辑内容
                     </VaButton>
                 </div>
             </div>
-        </template>
+        </div>
     </VaModal>
 </template>

@@ -7,6 +7,14 @@
     box-shadow: none !important;
 }
 
+.va-select-content__option {
+    @apply truncate;
+}
+
+.va-select-option {
+    @apply truncate;
+}
+
 .text-6d8581 {
     color: #6d8581 !important;
 }

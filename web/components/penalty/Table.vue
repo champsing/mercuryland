@@ -9,7 +9,7 @@ import {
     VaIcon,
 } from "vuestic-ui";
 import vodData from "@assets/data/vod.json";
-import Detail from "./Detail.vue";
+import Detail from "./detail/Detail.vue";
 import { openLinks } from "@/composables/utils";
 import { stateString, stateColor, PenItem } from "@/composables/penalty";
 import { useAuthState } from "@/composables/authState";
