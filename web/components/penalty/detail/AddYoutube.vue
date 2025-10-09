@@ -152,13 +152,11 @@ const embedHtml = computed(() => {
     const escapedTitle = escapeHtml(iframeTitleSource);
 
     const container = [
-        "",
         '<div class="penalty-youtube" style="margin: 1rem 0;">',
         '  <div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 12px; background-color: #000;">',
         `    <iframe src="${embedSrc}" title="${escapedTitle}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen style="position: absolute; inset: 0; width: 100%; height: 100%; border: 0;"></iframe>`,
         "  </div>",
         "</div>",
-        "",
     ].join("\n");
 
     return `\n${container}\n`;
