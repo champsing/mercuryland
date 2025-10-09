@@ -15,9 +15,16 @@ const emit = defineEmits<{
     (e: "cancel"): void;
 }>();
 
-const editedHistory = ref<Array<[number, Date]>>(
-    props.history.map(([state, dateStr]) => [state, parseDate(dateStr)]),
+const editedHistory = ref<Array<{ state: number; date: Date }>>(
+    props.history.map(([state, dateStr]) => ({
+        state,
+        date: parseDate(dateStr),
+    })),
 );
+
+const isSaving = ref(false);
+const saveError = ref<string | null>(null);
+const saveSuccess = ref<string | null>(null);
 
 const stateOptions = [
     { value: 0, text: stateString(0) },
@@ -27,54 +34,74 @@ const stateOptions = [
     { value: 4, text: stateString(4) },
 ];
 
+const textBy = (option: { text: string }) => option.text;
+const valueBy = (option: { value: number }) => option.value;
+
+const allowedDays = (date: Date) => {
+    const minDate = sortedHistory.value[0]?.date;
+    return !minDate || date.getTime() >= minDate.getTime();
+};
+
 const sortedHistory = computed(() => {
     return [...editedHistory.value].sort((a, b) => {
-        const dateA = new Date(a[1]);
-        const dateB = new Date(b[1]);
-        return dateA.getTime() - dateB.getTime();
+        return a.date.getTime() - b.date.getTime();
     });
 });
 
 function addNewEntry() {
     const today = new Date();
-    editedHistory.value.push([0, today]);
+    editedHistory.value.push({ state: 0, date: today });
 }
 
-function removeEntry(index: number) {
-    editedHistory.value.splice(index, 1);
-}
-
-function updateState(index: number, newState: number) {
-    editedHistory.value[index][0] = newState;
+function removeEntry(item: { state: number; date: Date }) {
+    const idx = editedHistory.value.indexOf(item);
+    if (idx !== -1) {
+        editedHistory.value.splice(idx, 1);
+    }
 }
 
 async function saveHistory() {
     const token = localStorage.getItem("token");
-    if (!token) return;
+    if (!token) {
+        saveError.value = "請先登入管理員帳號";
+        return;
+    }
 
     try {
+        isSaving.value = true;
+        saveError.value = null;
+        saveSuccess.value = null;
         const response = await axios.post(
             `${BASE_URL}/api/penalty/history/update`,
             {
                 token,
                 id: props.penaltyId,
-                history: sortedHistory.value.map(([state, date]) => [
+                history: sortedHistory.value.map(({ state, date }) => [
                     state,
                     formatDate(date),
                 ]),
             },
         );
         if (response.data.success) {
+            saveSuccess.value = "更新成功";
             emit(
                 "update:history",
-                sortedHistory.value.map(([state, date]) => [
+                sortedHistory.value.map(({ state, date }) => [
                     state,
                     formatDate(date),
                 ]),
             );
+            setTimeout(() => {
+                emit("cancel");
+            }, 600);
+        } else {
+            saveError.value = "更新失敗";
         }
     } catch (error) {
         console.error(error);
+        saveError.value = "更新失敗，請稍後再試";
+    } finally {
+        isSaving.value = false;
     }
 }
 
@@ -85,10 +112,10 @@ function cancelEdit() {
 watch(
     () => props.history,
     (newHistory) => {
-        editedHistory.value = newHistory.map(([state, dateStr]) => [
+        editedHistory.value = newHistory.map(([state, dateStr]) => ({
             state,
-            parseDate(dateStr),
-        ]);
+            date: parseDate(dateStr),
+        }));
     },
     { immediate: true },
 );
@@ -98,27 +125,30 @@ watch(
     <div class="mt-4">
         <div>
             <div
-                v-for="(item, index) in editedHistory"
+                v-for="(item, index) in sortedHistory"
                 :key="index"
                 class="flex items-center gap-2 pb-2"
             >
                 <VaDateInput
-                    v-model="item[1]"
+                    v-model="item.date"
                     :format-date="formatDate"
                     :parse-date="parseDate"
+                    :disabled="index === 0"
+                    :allowed-days="allowedDays"
                     manual-input
                     mode="auto"
                     class="w-40 flex-1"
                 />
                 <VaSelect
-                    v-model="item[0]"
+                    v-model="item.state"
                     :options="stateOptions"
+                    :text-by="textBy"
+                    :value-by="valueBy"
                     class="w-32 flex-1"
-                    @update:model-value="(value) => updateState(index, value)"
                 />
                 <VaButton
                     v-if="editedHistory.length > 1"
-                    @click="removeEntry(index)"
+                    @click="removeEntry(item)"
                     color="danger"
                     size="medium"
                     icon="remove"
@@ -130,7 +160,15 @@ watch(
         </div>
         <div class="mt-4 flex justify-between">
             <VaButton @click="cancelEdit" color="secondary"> 取消 </VaButton>
-            <VaButton @click="saveHistory" color="primary"> 保存 </VaButton>
+            <VaButton @click="saveHistory" color="primary" :disabled="isSaving">
+                {{ isSaving ? "儲存中..." : "保存" }}
+            </VaButton>
         </div>
+        <p v-if="saveError" class="text-sm text-red-400 mt-2">
+            {{ saveError }}
+        </p>
+        <p v-if="saveSuccess" class="text-sm text-emerald-400 mt-2">
+            {{ saveSuccess }}
+        </p>
     </div>
 </template>
