@@ -60,15 +60,6 @@ const activeVideoLink = computed(() => {
     return selectedVideo.value?.link ?? null;
 });
 
-const previewTitle = computed(() => {
-    if (useManualVideo.value) {
-        return sanitizedManualVideoId.value
-            ? `手動：${sanitizedManualVideoId.value}`
-            : "手動輸入影片";
-    }
-    return selectedVideo.value?.title ?? "";
-});
-
 const previewUrl = computed(() => {
     const link = activeVideoLink.value;
     if (!link) return "";
@@ -157,7 +148,7 @@ const embedHtml = computed(() => {
 
     const iframeTitleSource = useManualVideo.value
         ? sanitizedManualVideoId.value || "YouTube video"
-        : video?.title ?? "YouTube video";
+        : (video?.title ?? "YouTube video");
     const escapedTitle = escapeHtml(iframeTitleSource);
 
     return [
@@ -338,18 +329,7 @@ function save() {
                 {{ loadError }}
             </VaAlert>
 
-            <div class="space-y-2">
-                <div class="flex items-center justify-between text-sm text-zinc-300">
-                    <span>影片</span>
-                    <VaSwitch
-                        v-model="useManualVideo"
-                        size="small"
-                        color="info"
-                        false-inner-label="列表"
-                        true-inner-label="手動"
-                        :disabled="Boolean(loadError)"
-                    />
-                </div>
+            <div class="flex items-end gap-2">
                 <VaSelect
                     v-if="!useManualVideo"
                     v-model="selectedVideoId"
@@ -357,17 +337,30 @@ function save() {
                     value-by="value"
                     text-by="text"
                     placeholder="選擇要嵌入的影片"
+                    label="影片"
                     searchable
                     clearable
                     :loading="isLoading"
                     :disabled="Boolean(loadError)"
+                    class="w-4/5"
                 />
                 <VaInput
                     v-else
+                    label="影片"
                     v-model="manualVideoId"
                     placeholder="輸入 YouTube 影片 ID，例如：ms8uu0zeU88"
                     clearable
                     :disabled="Boolean(loadError)"
+                    class="w-4/5"
+                />
+                <VaSwitch
+                    v-model="useManualVideo"
+                    size="small"
+                    color="info"
+                    false-inner-label="列表"
+                    true-inner-label="链接"
+                    :disabled="Boolean(loadError)"
+                    class="mb-1.5 flex-grow"
                 />
             </div>
 
@@ -396,16 +389,23 @@ function save() {
                 messages="空白則從頭播放"
             />
 
-            <div v-if="previewUrl" class="space-y-2">
-                <div class="text-sm text-zinc-300">預覽：{{ previewTitle }}</div>
-                <div class="rounded-lg overflow-hidden bg-black">
+            <div>
+                <label class="block text-sm font-medium mb-2">预览:</label>
+                <div class="border border-slate-200 rounded-lg p-2">
                     <iframe
+                        v-if="previewUrl"
                         :src="previewUrl"
                         frameborder="0"
                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                         allowfullscreen
-                        class="w-full h-56"
+                        class="w-full h-[300px] rounded-xl"
                     ></iframe>
+                    <div
+                        v-else
+                        class="h-[300px] grid place-content-center text-sm text-slate-400"
+                    >
+                        选择视频后显示预览
+                    </div>
                 </div>
             </div>
 

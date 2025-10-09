@@ -152,6 +152,7 @@ function save() {
                 v-model="steamId"
                 label="Steam游戏ID"
                 placeholder="请输入Steam游戏ID，例如：289070"
+                class="w-full"
             />
 
             <div>
