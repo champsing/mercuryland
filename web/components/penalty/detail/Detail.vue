@@ -152,25 +152,25 @@ watch(
                         max-rows="9"
                     />
                     <div class="flex flex-col gap-2 w-1/4">
-                        <div>
+                        <div class="flex-1">
                             <AddSteam
                                 :textarea-ref="textareaRef"
                                 @insert-html="insertHtml"
                             />
                         </div>
-                        <div>
+                        <div class="flex-1">
                             <AddYoutube
                                 :textarea-ref="textareaRef"
                                 @insert-html="insertHtml"
                             />
                         </div>
-                        <div>
+                        <div class="flex-1">
                             <AddImage
                                 :textarea-ref="textareaRef"
                                 @insert-html="insertHtml"
                             />
                         </div>
-                        <div>
+                        <div class="flex-1">
                             <AddSyntax
                                 :textarea-ref="textareaRef"
                                 @insert-html="insertHtml"
