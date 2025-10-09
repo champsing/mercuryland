@@ -136,7 +136,7 @@ watch(
                         max-rows="9"
                     />
                     <div class="flex gap-2 w-1/4">
-                        <div class="h-1/3 w-full">
+                        <div class="h-1/4 w-full">
                             <AddSteam
                                 :textarea-ref="textareaRef"
                                 @insert-html="insertHtml"
@@ -145,7 +145,6 @@ watch(
                         <!-- TODO: support add vod -->
                         <!-- TODO: support image upload -->
                         <!-- TODO: support add state upload -->
-                        <!-- TODO: support add steam page -->
                     </div>
                 </div>
                 <div class="flex justify-between mt-2">
