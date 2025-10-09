@@ -8,6 +8,7 @@ import axios from "axios";
 import Timeline from "./Timeline.vue";
 import AddSteam from "./AddSteam.vue";
 import AddYoutube from "./AddYoutube.vue";
+import AddImage from "./AddImage.vue";
 
 const props = defineProps<{
     modelValue: number | null;
@@ -149,7 +150,12 @@ watch(
                                 @insert-html="insertHtml"
                             />
                         </div>
-                        <!-- TODO: support image upload -->
+                        <div>
+                            <AddImage
+                                :textarea-ref="textareaRef"
+                                @insert-html="insertHtml"
+                            />
+                        </div>
                         <!-- TODO: support add state upload -->
                     </div>
                 </div>
