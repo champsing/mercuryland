@@ -10,6 +10,7 @@ import AddSteam from "./AddSteam.vue";
 import AddYoutube from "./AddYoutube.vue";
 import AddImage from "./AddImage.vue";
 import AddSyntax from "./AddSyntax.vue";
+import EditTimeline from "./EditTimeline.vue";
 
 const props = defineProps<{
     modelValue: number | null;
@@ -25,6 +26,7 @@ const authState = useAuthState();
 const isEditing = ref(false);
 const editedDetail = ref("");
 const textareaRef = ref();
+const isEditingHistory = ref(false);
 
 const renderedDetail = computed(() => {
     const detail = penalty.value?.detail ?? "";
@@ -88,6 +90,21 @@ async function saveDetail() {
     }
 }
 
+function startEditHistory() {
+    isEditingHistory.value = true;
+}
+
+function cancelEditHistory() {
+    isEditingHistory.value = false;
+}
+
+function updateHistory(newHistory: Array<[number, string]>) {
+    if (penalty.value) {
+        penalty.value.history = newHistory;
+        isEditingHistory.value = false;
+    }
+}
+
 function insertHtml(html: string, range: { start: number; end: number }) {
     const content = editedDetail.value ?? "";
     const start = Math.min(
@@ -108,6 +125,7 @@ watch(
             loadPenalty(newId);
         } else {
             isEditing.value = false;
+            isEditingHistory.value = false;
         }
     },
     { immediate: true },
@@ -139,7 +157,27 @@ watch(
                 <div class="truncate text-xl flex-1">{{ penalty.name }}</div>
             </div>
             <div class="text-lg mt-2">{{ penalty.name }}</div>
-            <Timeline :history="penalty.history" />
+            <Timeline v-if="!isEditingHistory" :history="penalty.history" />
+            <div
+                v-if="!isEditingHistory && authState.isAuthenticated"
+                class="mt-2"
+            >
+                <VaButton
+                    @click="startEditHistory"
+                    color="success"
+                    class="w-full"
+                >
+                    编辑历史
+                </VaButton>
+            </div>
+            <EditTimeline
+                v-else
+                :history="penalty.history"
+                :penalty-id="penalty.id"
+                @update:history="updateHistory"
+                @cancel="cancelEditHistory"
+            />
+
             <div v-if="isEditing" class="mt-4">
                 <div class="flex gap-2">
                     <VaTextarea
