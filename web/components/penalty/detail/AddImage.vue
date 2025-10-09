@@ -117,16 +117,6 @@ function onFileChange(event: Event) {
     }
 }
 
-function ensureAbsoluteUrl(url: string) {
-    if (/^https?:\/\//i.test(url)) {
-        return url;
-    }
-
-    const base = BASE_URL.replace(/\/$/, "");
-    const path = url.startsWith("/") ? url : `/${url}`;
-    return `${base}${path}`;
-}
-
 function escapeHtml(value: string) {
     return value
         .replace(/&/g, "&amp;")
@@ -167,7 +157,11 @@ async function save() {
             return;
         }
 
-        const finalUrl = ensureAbsoluteUrl(url);
+        const finalUrl = url.trim();
+        if (!finalUrl) {
+            uploadError.value = "無法取得圖片位置";
+            return;
+        }
         const altText = imageAlt.value.trim();
         const escapedAlt = escapeHtml(altText);
 

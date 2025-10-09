@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, watch } from "vue";
+import { computed, ref, watch } from "vue";
 import { VaChip, VaModal, VaTextarea, VaButton } from "vuestic-ui";
 import { BASE_URL } from "@/composables/utils";
 import { stateString, stateColor, PenItem } from "@/composables/penalty";
@@ -24,6 +24,19 @@ const authState = useAuthState();
 const isEditing = ref(false);
 const editedDetail = ref("");
 const textareaRef = ref();
+
+const renderedDetail = computed(() => {
+    const detail = penalty.value?.detail ?? "";
+    if (!detail) {
+        return "";
+    }
+
+    const base = BASE_URL.replace(/\/$/, "");
+    return detail.replace(
+        /src=(['"])(\/api\/image\/[^'"]+)\1/g,
+        (_match, quote, path) => `src=${quote}${base}${path}${quote}`,
+    );
+});
 
 async function loadPenalty(id: number) {
     try {
@@ -169,7 +182,7 @@ watch(
                 </div>
             </div>
             <div v-else class="mt-4">
-                <div v-html="penalty.detail"></div>
+                <div v-html="renderedDetail"></div>
                 <div v-if="authState.isAuthenticated" class="mt-2">
                     <VaButton @click="startEdit" color="success" class="w-full">
                         编辑内容
