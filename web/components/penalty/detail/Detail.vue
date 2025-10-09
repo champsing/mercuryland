@@ -7,6 +7,7 @@ import { useAuthState } from "@/composables/authState";
 import axios from "axios";
 import Timeline from "./Timeline.vue";
 import AddSteam from "./AddSteam.vue";
+import AddYoutube from "./AddYoutube.vue";
 
 const props = defineProps<{
     modelValue: number | null;
@@ -135,14 +136,19 @@ watch(
                         min-rows="9"
                         max-rows="9"
                     />
-                    <div class="flex gap-2 w-1/4">
-                        <div class="h-1/4 w-full">
+                    <div class="flex flex-col gap-2 w-1/4">
+                        <div>
                             <AddSteam
                                 :textarea-ref="textareaRef"
                                 @insert-html="insertHtml"
                             />
                         </div>
-                        <!-- TODO: support add vod -->
+                        <div>
+                            <AddYoutube
+                                :textarea-ref="textareaRef"
+                                @insert-html="insertHtml"
+                            />
+                        </div>
                         <!-- TODO: support image upload -->
                         <!-- TODO: support add state upload -->
                     </div>
