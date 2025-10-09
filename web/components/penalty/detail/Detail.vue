@@ -157,26 +157,26 @@ watch(
                 <div class="truncate text-xl flex-1">{{ penalty.name }}</div>
             </div>
             <div class="text-lg mt-2">{{ penalty.name }}</div>
-            <Timeline v-if="!isEditingHistory" :history="penalty.history" />
-            <div
-                v-if="!isEditingHistory && authState.isAuthenticated"
-                class="mt-2"
-            >
-                <VaButton
-                    @click="startEditHistory"
-                    color="success"
-                    class="w-full"
-                >
-                    编辑历史
-                </VaButton>
+            <div v-if="isEditingHistory">
+                <EditTimeline
+                    :history="penalty.history"
+                    :penalty-id="penalty.id"
+                    @update:history="updateHistory"
+                    @cancel="cancelEditHistory"
+                />
             </div>
-            <EditTimeline
-                v-else
-                :history="penalty.history"
-                :penalty-id="penalty.id"
-                @update:history="updateHistory"
-                @cancel="cancelEditHistory"
-            />
+            <div v-else>
+                <Timeline :history="penalty.history" />
+                <div v-if="authState.isAuthenticated" class="mt-2">
+                    <VaButton
+                        @click="startEditHistory"
+                        color="success"
+                        class="w-full"
+                    >
+                        编辑历史
+                    </VaButton>
+                </div>
+            </div>
 
             <div v-if="isEditingDetail" class="mt-4">
                 <div class="flex gap-2">
