@@ -23,7 +23,7 @@ const emit = defineEmits<{
 const penalty = ref<PenItem | null>(null);
 
 const authState = useAuthState();
-const isEditing = ref(false);
+const isEditingDetail = ref(false);
 const editedDetail = ref("");
 const textareaRef = ref();
 const isEditingHistory = ref(false);
@@ -60,12 +60,12 @@ async function loadPenalty(id: number) {
 function startEdit() {
     if (penalty.value) {
         editedDetail.value = penalty.value.detail;
-        isEditing.value = true;
+        isEditingDetail.value = true;
     }
 }
 
 function cancelEdit() {
-    isEditing.value = false;
+    isEditingDetail.value = false;
 }
 
 async function saveDetail() {
@@ -83,7 +83,7 @@ async function saveDetail() {
         );
         if (response.data.success) {
             penalty.value.detail = editedDetail.value;
-            isEditing.value = false;
+            isEditingDetail.value = false;
         }
     } catch (error) {
         console.error(error);
@@ -124,7 +124,7 @@ watch(
         if (newId !== null) {
             loadPenalty(newId);
         } else {
-            isEditing.value = false;
+            isEditingDetail.value = false;
             isEditingHistory.value = false;
         }
     },
@@ -178,7 +178,7 @@ watch(
                 @cancel="cancelEditHistory"
             />
 
-            <div v-if="isEditing" class="mt-4">
+            <div v-if="isEditingDetail" class="mt-4">
                 <div class="flex gap-2">
                     <VaTextarea
                         ref="textareaRef"
