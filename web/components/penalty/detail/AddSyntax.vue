@@ -26,20 +26,6 @@ const selectedSyntax = ref<string | null>(syntaxOptions[0] ?? null);
 const syntaxDetail = ref("");
 const selectionRange = ref<{ start: number; end: number } | null>(null);
 
-const syntaxMeta: Record<string, { icon: string; name: string }> = {
-    "🆙增加": { icon: "🆙", name: "增加" },
-    "🔁重抽": { icon: "🔁", name: "重抽" },
-    "2️⃣備案": { icon: "2️⃣", name: "備案" },
-    "😇復活": { icon: "😇", name: "復活" },
-    "📝修改": { icon: "📝", name: "修改" },
-    "✅已抽": { icon: "✅", name: "已抽" },
-    "➕其他": { icon: "➕", name: "其他" },
-};
-
-const activeSyntax = computed(
-    () => syntaxMeta[selectedSyntax.value ?? ""] ?? null,
-);
-
 function resolveTextarea(): HTMLTextAreaElement | null {
     const candidate = props.textareaRef as any;
     if (!candidate) return null;
@@ -116,30 +102,20 @@ function escapeHtml(value: string) {
 }
 
 const syntaxHtml = computed(() => {
-    const syntax = activeSyntax.value;
+    const syntax = selectedSyntax.value;
     if (!syntax) {
         return "";
     }
 
     const detail = syntaxDetail.value.trim();
     const escapedDetail = escapeHtml(detail).replace(/\n/g, "<br />");
-    const prefix = `${syntax.icon} ${syntax.name}`.trim();
 
-    const segments = [
-        "",
-        '<div class="penalty-syntax" style="margin: 1rem 0;">',
-        `  <div class="penalty-syntax-title" style="font-weight: 600;">${prefix}</div>`,
-        detail
-            ? `  <div class="penalty-syntax-content" style="margin-top: 0.5rem;">${escapedDetail}</div>`
-            : "",
-        "</div>",
-        "",
-    ].filter(Boolean);
+    const container = `<div style="border: 1px solid grey; border-radius: 12px; margin: 1rem 0; padding: 0.5rem;">${syntax}: ${escapedDetail}</div>`;
 
-    return segments.join("\n");
+    return `\n${container}\n`;
 });
 
-const isInsertDisabled = computed(() => !activeSyntax.value);
+const isInsertDisabled = computed(() => !selectedSyntax.value);
 
 function save() {
     if (isInsertDisabled.value) {
