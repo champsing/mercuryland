@@ -1886,6 +1886,7 @@ dependencies = [
  "serde_json",
  "serenity",
  "sha2",
+ "tempfile",
  "tokio",
  "uuid",
 ]

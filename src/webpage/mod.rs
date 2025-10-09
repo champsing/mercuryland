@@ -3,6 +3,7 @@ pub mod image;
 pub mod leaderboard;
 pub mod penalty;
 pub mod ping;
+pub mod setting;
 pub mod video;
 pub mod wheel;
 
@@ -40,6 +41,7 @@ pub async fn run() -> Result<(), ServerError> {
             .service(penalty::update::handler)
             .service(penalty::detail::handler)
             .service(penalty::update_detail::handler)
+            .service(setting::backup::handler)
             .service(image::upload::handler)
             .service(image::get::handler)
     })
