@@ -5,6 +5,7 @@ use actix_web::{HttpResponse, Responder, post, web};
 use chrono::{NaiveDate, Utc};
 use serde::Deserialize;
 
+// TODO: support updating history in a different endpoint
 #[derive(Debug, Deserialize)]
 pub struct Request {
     pub token: String,
@@ -39,8 +40,6 @@ pub async fn handler(request: web::Json<Request>) -> Result<impl Responder, Serv
         return Ok(HttpResponse::BadRequest().finish());
     }
 
-    // Clear up any state that is out of order
-    penalty.history.retain(|(state, _)| *state <= request.state);
     if let Some((_, initial_date)) = penalty.history.first_mut() {
         // Always update the initial date to the new date
         *initial_date = date;
