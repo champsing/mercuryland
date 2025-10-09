@@ -21,6 +21,9 @@ pub async fn handler(query: web::Query<Query>) -> Result<impl Responder, ServerE
 
     Ok(HttpResponse::Ok()
         .content_type("application/octet-stream")
-        .append_header(("Content-Disposition", format!("attachment; filename=\"{}\"", filename)))
+        .append_header((
+            "Content-Disposition",
+            format!("attachment; filename=\"{}\"", filename),
+        ))
         .body(data))
 }
