@@ -1,0 +1,1 @@
+ALTER TABLE anonymous DROP COLUMN content;

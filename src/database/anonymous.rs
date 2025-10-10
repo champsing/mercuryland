@@ -10,7 +10,6 @@ use serde::{Deserialize, Serialize};
 pub struct Anonymous {
     pub id: i64,
     pub author: i64,
-    pub content: String,
     pub updated_at: DateTime<Utc>,
 }
 
@@ -21,7 +20,6 @@ impl TryFrom<&Row<'_>> for Anonymous {
         Ok(Self {
             id: value.get(AnonymousIden::Id.as_str())?,
             author: value.get(AnonymousIden::Author.as_str())?,
-            content: value.get(AnonymousIden::Content.as_str())?,
             updated_at: value.get(AnonymousIden::UpdatedAt.as_str())?,
         })
     }
@@ -33,12 +31,10 @@ impl Anonymous {
             .into_table(AnonymousIden::Table)
             .columns([
                 AnonymousIden::Author,
-                AnonymousIden::Content,
                 AnonymousIden::UpdatedAt,
             ])
             .values([
                 self.author.into(),
-                self.content.clone().into(),
                 self.updated_at.into(),
             ])?
             .build_rusqlite(SqliteQueryBuilder);
@@ -52,7 +48,6 @@ impl Anonymous {
             .columns([
                 AnonymousIden::Id,
                 AnonymousIden::Author,
-                AnonymousIden::Content,
                 AnonymousIden::UpdatedAt,
             ])
             .from(AnonymousIden::Table)
@@ -88,7 +83,6 @@ mod tests {
         let a = Anonymous {
             id: 0, // will be set by insert
             author: 123456789,
-            content: String::from("test content"),
             updated_at: Utc::now(),
         };
         let inserted_id = a.insert(&tran)?;
@@ -100,7 +94,6 @@ mod tests {
         assert_eq!(all.len(), 1);
         let a0 = &all[0];
         assert_eq!(a.author, a0.author);
-        assert_eq!(a.content, a0.content);
         assert_eq!(a.updated_at, a0.updated_at);
         tran.finish()?;
 

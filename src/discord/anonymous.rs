@@ -43,7 +43,7 @@ pub async fn handle_component(ctx: serenity::all::Context, component: serenity::
 }
 
 pub async fn handle_modal(ctx: serenity::all::Context, modal: serenity::all::ModalInteraction) {
-    let mut content = if let serenity::all::ActionRowComponent::InputText(ref input_text) = modal.data.components[0].components[0] {
+    let content = if let serenity::all::ActionRowComponent::InputText(ref input_text) = modal.data.components[0].components[0] {
         input_text.value.clone().unwrap_or_default()
     } else {
         String::new()
@@ -59,10 +59,6 @@ pub async fn handle_modal(ctx: serenity::all::Context, modal: serenity::all::Mod
         String::new()
     };
 
-    if !image_url.is_empty() {
-        content.push_str(&format!("\n{}", image_url));
-    }
-
     let user_id = modal.user.id.get() as i64;
     let channel_id = modal.channel_id;
     let http = ctx.http.clone();
@@ -73,7 +69,6 @@ pub async fn handle_modal(ctx: serenity::all::Context, modal: serenity::all::Mod
         let anonymous = Anonymous {
             id: 0,
             author: user_id,
-            content: content.clone(),
             updated_at: Utc::now(),
         };
         let id = anonymous.insert(&tran)?;
