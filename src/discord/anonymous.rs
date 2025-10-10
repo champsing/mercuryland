@@ -1,7 +1,8 @@
 use crate::{
-    database::{self, config::Config},
+    database::{anonymous::Anonymous},
     error::ServerError,
 };
+use chrono::Utc;
 use poise::serenity_prelude::*;
 use poise;
 use serenity::all::EventHandler;
@@ -44,16 +45,46 @@ pub async fn handle_modal(ctx: serenity::all::Context, modal: serenity::all::Mod
     } else {
         String::new()
     };
+
+    let user_id = modal.user.id.get() as i64;
     let channel_id = modal.channel_id;
-    let button = serenity::all::CreateButton::new("anonymous_button")
-        .label("匿名發言")
-        .style(serenity::all::ButtonStyle::Primary);
-    let components = serenity::all::CreateActionRow::Buttons(vec![button]);
-    let message = serenity::all::CreateMessage::new()
-        .content(&content)
-        .components(vec![components]);
-    let _ = channel_id.send_message(&ctx.http, message).await;
-    let _ = modal.create_response(&ctx.http, serenity::all::CreateInteractionResponse::Message(serenity::all::CreateInteractionResponseMessage::new().content("發送成功").ephemeral(true))).await;
+    let http = ctx.http.clone();
+
+    let result: Result<Result<(i64, String), ServerError>, tokio::task::JoinError> = tokio::task::spawn_blocking(move || {
+        let mut conn = crate::database::get_connection()?;
+        let tran = conn.transaction()?;
+        let anonymous = Anonymous {
+            id: 0,
+            author: user_id,
+            content: content.clone(),
+            updated_at: Utc::now(),
+        };
+        let id = anonymous.insert(&tran)?;
+        tran.commit()?;
+        Ok((id, content))
+    }).await;
+
+    match result {
+        Ok(Ok((id, content))) => {
+            let button = serenity::all::CreateButton::new("anonymous_button")
+                .label("匿名發言")
+                .style(serenity::all::ButtonStyle::Primary);
+            let components = serenity::all::CreateActionRow::Buttons(vec![button]);
+            let message_content = format!("Anonymous #{}: {}", id, content);
+            let message = serenity::all::CreateMessage::new()
+                .content(&message_content)
+                .components(vec![components]);
+            let _ = channel_id.send_message(&http, message).await;
+            let _ = modal.create_response(&ctx.http, serenity::all::CreateInteractionResponse::Message(
+                serenity::all::CreateInteractionResponseMessage::new().content("發送成功").ephemeral(true)
+            )).await;
+        }
+        _ => {
+            let _ = modal.create_response(&ctx.http, serenity::all::CreateInteractionResponse::Message(
+                serenity::all::CreateInteractionResponseMessage::new().content("資料庫錯誤").ephemeral(true)
+            )).await;
+        }
+    }
 }
 
 pub struct AnonymousEventHandler;
