@@ -1,8 +1,7 @@
 use crate::error::ServerError;
-use rusqlite::{Row, Transaction};
+use rusqlite::Transaction;
 use sea_query::{Expr, Iden, Query, SqliteQueryBuilder};
 use sea_query_rusqlite::RusqliteBinder;
-use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum Config {
@@ -68,7 +67,7 @@ impl Config {
 mod tests {
     use super::*;
     use crate::database;
-    use rusqlite::{Connection, config};
+    use rusqlite::Connection;
 
     fn setup_conn() -> Result<Connection, ServerError> {
         let mut conn = Connection::open_in_memory()?;
