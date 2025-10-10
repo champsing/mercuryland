@@ -35,22 +35,39 @@ pub async fn create(ctx: super::Context<'_>) -> Result<(), ServerError> {
 
 pub async fn handle_component(ctx: serenity::all::Context, component: serenity::all::ComponentInteraction) {
     let modal = serenity::all::CreateModal::new("anonymous_modal", "匿名發言")
-        .components(vec![serenity::all::CreateActionRow::InputText(serenity::all::CreateInputText::new(serenity::all::InputTextStyle::Paragraph, "內容", "content").max_length(2000))]);
+        .components(vec![
+            serenity::all::CreateActionRow::InputText(serenity::all::CreateInputText::new(serenity::all::InputTextStyle::Paragraph, "內容", "content").max_length(2000)),
+            serenity::all::CreateActionRow::InputText(serenity::all::CreateInputText::new(serenity::all::InputTextStyle::Short, "圖片 URL (可選)", "image_url").required(false)),
+        ]);
     let _ = component.create_response(&ctx.http, serenity::all::CreateInteractionResponse::Modal(modal)).await;
 }
 
 pub async fn handle_modal(ctx: serenity::all::Context, modal: serenity::all::ModalInteraction) {
-    let content = if let serenity::all::ActionRowComponent::InputText(ref input_text) = modal.data.components[0].components[0] {
+    let mut content = if let serenity::all::ActionRowComponent::InputText(ref input_text) = modal.data.components[0].components[0] {
         input_text.value.clone().unwrap_or_default()
     } else {
         String::new()
     };
 
+    let image_url = if modal.data.components.len() > 1 {
+        if let serenity::all::ActionRowComponent::InputText(ref input_text) = modal.data.components[1].components[0] {
+            input_text.value.clone().unwrap_or_default()
+        } else {
+            String::new()
+        }
+    } else {
+        String::new()
+    };
+
+    if !image_url.is_empty() {
+        content.push_str(&format!("\n{}", image_url));
+    }
+
     let user_id = modal.user.id.get() as i64;
     let channel_id = modal.channel_id;
     let http = ctx.http.clone();
 
-    let result: Result<Result<(i64, String), ServerError>, tokio::task::JoinError> = tokio::task::spawn_blocking(move || {
+    let result: Result<Result<(i64, String, String), ServerError>, tokio::task::JoinError> = tokio::task::spawn_blocking(move || {
         let mut conn = crate::database::get_connection()?;
         let tran = conn.transaction()?;
         let anonymous = Anonymous {
@@ -61,11 +78,11 @@ pub async fn handle_modal(ctx: serenity::all::Context, modal: serenity::all::Mod
         };
         let id = anonymous.insert(&tran)?;
         tran.commit()?;
-        Ok((id, content))
+        Ok((id, content, image_url))
     }).await;
 
     match result {
-        Ok(Ok((id, content))) => {
+        Ok(Ok((id, content, image_url))) => {
             let button = serenity::all::CreateButton::new("anonymous_button")
                 .label("匿名發言")
                 .style(serenity::all::ButtonStyle::Primary);
@@ -74,10 +91,13 @@ pub async fn handle_modal(ctx: serenity::all::Context, modal: serenity::all::Mod
             let g = rand::random::<u8>();
             let b = rand::random::<u8>();
             let color = serenity::all::Color::from_rgb(r, g, b);
-            let embed = serenity::all::CreateEmbed::new()
+            let mut embed = serenity::all::CreateEmbed::new()
                 .title(format!("匿名水星 #{}", id))
                 .description(&content)
                 .color(color);
+            if !image_url.is_empty() {
+                embed = embed.image(&image_url);
+            }
             let message = serenity::all::CreateMessage::new()
                 .embed(embed)
                 .components(vec![components]);
