@@ -7,7 +7,6 @@ mod link;
 mod purchase;
 mod refund;
 mod vote;
-mod wheel;
 
 use once_cell::sync::OnceCell as OnceLock;
 
@@ -60,33 +59,6 @@ pub async fn run() -> Result<(), ServerError> {
                 )]),
                 help_text: Some(String::from("產生一組 8 碼英數驗證碼。")),
                 ..auth::auth()
-            },
-            poise::Command {
-                name: String::from("fetch_wheel"),
-                description: Some(String::from(
-                    "Fetch the text in the Drawn Zone of the specified wheel",
-                )),
-                description_localizations: HashMap::from([(
-                    zh_tw.clone(),
-                    String::from("獲取輪盤抽中區"),
-                )]),
-                help_text: Some(String::from("獲取輪盤抽中區")),
-                parameters: vec![poise::CommandParameter {
-                    name: String::from("wheel_id"),
-                    name_localizations: HashMap::new(),
-                    description: Some(String::from("The id of wheel session")),
-                    description_localizations: HashMap::from([(
-                        zh_tw.clone(),
-                        String::from("輪盤連線階段的 ID"),
-                    )]),
-                    required: true,
-                    channel_types: None,
-                    choices: vec![],
-                    type_setter: Some(|b: CreateCommandOption| b.kind(CommandOptionType::String)),
-                    __non_exhaustive: (),
-                    autocomplete_callback: None,
-                }],
-                ..wheel::fetch_wheel()
             },
             poise::Command {
                 name: String::from("coin"),
