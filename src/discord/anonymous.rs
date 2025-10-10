@@ -85,6 +85,12 @@ pub async fn handle_modal(ctx: serenity::all::Context, modal: serenity::all::Mod
             let _ = modal.create_response(&ctx.http, serenity::all::CreateInteractionResponse::Message(
                 serenity::all::CreateInteractionResponseMessage::new().content("發送成功").ephemeral(true)
             )).await;
+
+            // Remove the button from the original message
+            if let Some(mut original_message) = modal.message.clone() {
+                let edit_message = serenity::all::EditMessage::new().components(vec![]);
+                let _ = original_message.edit(&ctx.http, edit_message).await;
+            }
         }
         _ => {
             let _ = modal.create_response(&ctx.http, serenity::all::CreateInteractionResponse::Message(
