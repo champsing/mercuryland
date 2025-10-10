@@ -1,0 +1,4 @@
+CREATE TABLE `config` (
+    `id` INTEGER PRIMARY KEY NOT NULL,
+    `text` TEXT NOT NULL
+);
