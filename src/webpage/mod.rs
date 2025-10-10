@@ -11,8 +11,17 @@ pub mod wheel;
 use crate::error::ServerError;
 use actix_cors::Cors;
 use actix_web::{App, HttpServer};
+use tokio;
+use tokio::task::spawn;
 
 pub async fn run() -> Result<(), ServerError> {
+    // Spawn the cache update task
+    spawn(async {
+        if let Err(e) = anonymous::update_cache().await {
+            log::error!("Anonymous cache update failed: {:?}", e);
+        }
+    });
+
     HttpServer::new(|| {
         let cors = Cors::default()
             .allowed_origin("http://localhost:5173")
