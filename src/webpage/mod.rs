@@ -25,8 +25,6 @@ pub async fn run() -> Result<(), ServerError> {
             .service(ping::handler)
             .service(auth::login::login_handler)
             .service(auth::tick::handler)
-            .service(wheel::create::handler)
-            .service(wheel::update::handler)
             .service(wheel::submit::handler)
             .service(video::list::handler)
             .service(video::upload::handler)
