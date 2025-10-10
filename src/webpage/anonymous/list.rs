@@ -2,9 +2,10 @@ use crate::{
     config::CFG_DISCORD_TOKEN,
     database::{self, anonymous::Anonymous},
     error::ServerError,
+    webpage::auth,
 };
-use actix_web::{HttpResponse, Responder, get};
-use serde::Serialize;
+use actix_web::{HttpResponse, Responder, get, web};
+use serde::{Deserialize, Serialize};
 use serenity::http::Http;
 use serenity::model::id::UserId;
 
@@ -15,8 +16,16 @@ struct AnonymousResponse {
     updated_at: chrono::DateTime<chrono::Utc>,
 }
 
+#[derive(Debug, Deserialize)]
+pub struct Query {
+    pub token: String,
+}
+
 #[get("/api/anonymous/list")]
-pub async fn handler() -> Result<impl Responder, ServerError> {
+pub async fn handler(query: web::Query<Query>) -> Result<impl Responder, ServerError> {
+    if !auth::verify(&query.token) {
+        return Ok(HttpResponse::Forbidden().finish());
+    }
     let mut connection = database::get_connection()?;
     let transaction = connection.transaction()?;
     let anonymous_entries = Anonymous::all(&transaction)?;

@@ -1,3 +1,4 @@
+pub(crate) mod anonymous;
 pub(crate) mod config;
 pub(crate) mod image;
 mod migration;
@@ -5,7 +6,6 @@ pub(crate) mod penalty;
 pub(crate) mod user;
 pub(crate) mod video;
 pub(crate) mod wheel;
-pub(crate) mod anonymous;
 
 use crate::error::ServerError;
 use rusqlite::Connection;

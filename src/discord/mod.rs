@@ -1,3 +1,4 @@
+mod anonymous;
 mod auth;
 mod coin;
 mod command_mentions;
@@ -8,7 +9,6 @@ mod purchase;
 mod refund;
 mod vote;
 mod wheel;
-mod anonymous;
 
 use once_cell::sync::OnceCell as OnceLock;
 
@@ -306,18 +306,16 @@ pub async fn run() -> Result<(), ServerError> {
                     String::from("匿名相關指令"),
                 )]),
                 help_text: Some(String::from("匿名相關指令")),
-                subcommands: vec![
-                    poise::Command {
-                        name: String::from("create"),
-                        description: Some(String::from("Create anonymous channel")),
-                        description_localizations: HashMap::from([(
-                            zh_tw.clone(),
-                            String::from("建立匿名頻道"),
-                        )]),
-                        help_text: Some(String::from("建立匿名頻道")),
-                        ..anonymous::create()
-                    },
-                ],
+                subcommands: vec![poise::Command {
+                    name: String::from("create"),
+                    description: Some(String::from("Create anonymous channel")),
+                    description_localizations: HashMap::from([(
+                        zh_tw.clone(),
+                        String::from("建立匿名頻道"),
+                    )]),
+                    help_text: Some(String::from("建立匿名頻道")),
+                    ..anonymous::create()
+                }],
                 subcommand_required: true,
                 ..anonymous::anonymous()
             },

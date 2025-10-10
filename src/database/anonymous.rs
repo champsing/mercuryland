@@ -29,14 +29,8 @@ impl Anonymous {
     pub fn insert(&self, transaction: &Transaction) -> Result<i64, ServerError> {
         let (query, values) = Query::insert()
             .into_table(AnonymousIden::Table)
-            .columns([
-                AnonymousIden::Author,
-                AnonymousIden::UpdatedAt,
-            ])
-            .values([
-                self.author.into(),
-                self.updated_at.into(),
-            ])?
+            .columns([AnonymousIden::Author, AnonymousIden::UpdatedAt])
+            .values([self.author.into(), self.updated_at.into()])?
             .build_rusqlite(SqliteQueryBuilder);
         transaction.execute(&query, &*values.as_params())?;
 
