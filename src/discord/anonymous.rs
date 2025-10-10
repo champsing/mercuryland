@@ -1,4 +1,5 @@
 use crate::{
+    config::CONFIG,
     database::{anonymous::Anonymous},
     error::ServerError,
 };
@@ -14,6 +15,11 @@ pub async fn anonymous(_ctx: super::Context<'_>) -> Result<(), ServerError> {
 
 #[poise::command(slash_command)]
 pub async fn create(ctx: super::Context<'_>) -> Result<(), ServerError> {
+    if !CONFIG.discord.admin.contains(&ctx.author().id.get()) {
+        ctx.send(poise::CreateReply::default().content("您没有权限").ephemeral(true)).await?;
+        return Ok(());
+    }
+
     let channel_id = ctx.channel_id().get();
 
     let button = CreateButton::new("anonymous_button")
