@@ -258,7 +258,7 @@ const modal3 = reactive({
             <div class="wheel-wrapper w-2/5 mt-4">
                 <Spinner
                     ref="wheelRef"
-                    :items="items.map((item) => item.label)"
+                    :items="items"
                     @winner="handleWinner"
                 />
             </div>
