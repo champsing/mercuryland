@@ -1,6 +1,5 @@
 <script setup lang="ts">
-// TODO: Make the wheel password into the setting page
-// TODO: Make vote channel, exchange channel & penalty channel into setting page
+// TODO: Make vote channel, exchange channel into setting page
 import { VaDivider } from "vuestic-ui";
 import Backup from "./Backup.vue";
 import Wheel from "./Wheel.vue";
