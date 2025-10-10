@@ -1,3 +1,4 @@
+pub mod anonymous;
 pub mod auth;
 pub mod image;
 pub mod leaderboard;
@@ -25,6 +26,7 @@ pub async fn run() -> Result<(), ServerError> {
             .service(ping::handler)
             .service(auth::login::login_handler)
             .service(auth::tick::handler)
+            .service(anonymous::list::handler)
             .service(wheel::create::handler)
             .service(wheel::update::handler)
             .service(wheel::submit::handler)
