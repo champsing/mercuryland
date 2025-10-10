@@ -13,7 +13,9 @@ import { BASE_URL } from "@/composables/utils";
 
 interface AnonymousEntry {
     id: number;
-    author: string;
+    author_id: number;
+    nickname: string;
+    avatar: string;
     updated_at: string;
 }
 
@@ -57,23 +59,38 @@ onMounted(() => {
 
 const columns = [
     {
-        key: "id",
-        label: "ID",
+        key: "avatar",
+        label: "头像",
         thAlign: "center" as const,
         tdAlign: "center" as const,
-        sortable: true,
+        sortable: false,
         width: 80,
     },
     {
-        key: "author",
-        label: "作者",
+        key: "nickname",
+        label: "昵称",
         thAlign: "center" as const,
-        tdAlign: "left" as const,
+        tdAlign: "center" as const,
         sortable: true,
     },
     {
+        key: "author_id",
+        label: "用户",
+        thAlign: "center" as const,
+        tdAlign: "center" as const,
+        sortable: true,
+    },
+    {
+        key: "id",
+        label: "消息ID",
+        thAlign: "center" as const,
+        tdAlign: "center" as const,
+        sortable: true,
+        width: 100,
+    },
+    {
         key: "updated_at",
-        label: "更新时间",
+        label: "发送时间",
         thAlign: "center" as const,
         tdAlign: "center" as const,
         sortable: true,
@@ -122,6 +139,20 @@ const columns = [
             "
             hoverable
         >
+            <template #cell(avatar)="{ value }">
+                <img
+                    v-if="value"
+                    :src="value"
+                    alt="Avatar"
+                    class="w-8 h-8 rounded-full mx-auto"
+                />
+                <div
+                    v-else
+                    class="w-8 h-8 rounded-full bg-gray-500 mx-auto flex items-center justify-center text-xs text-white"
+                >
+                    ?
+                </div>
+            </template>
             <template #cell(updated_at)="{ value }">
                 {{ new Date(value).toLocaleString("zh-CN") }}
             </template>
