@@ -121,9 +121,6 @@ const columns = [
                 --va-data-table-thead-border: 0;
             "
             hoverable
-            :per-page="25"
-            :per-page-options="[10, 25, 50, 100]"
-            paginated
         >
             <template #cell(updated_at)="{ value }">
                 {{ new Date(value).toLocaleString("zh-CN") }}
