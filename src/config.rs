@@ -12,8 +12,6 @@ pub struct Config {
     pub wheel_password: String,
     pub discord: DiscordConfig,
     pub youtube_channel_id: String,
-    pub yt_chat_viewer: ApplicationSecret,
-    pub dcyt_link: ApplicationSecret,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
@@ -30,6 +28,11 @@ pub static CONFIG: LazyLock<Config> = LazyLock::new(|| {
 });
 
 pub static CFG_DISCORD_TOKEN: LazyLock<&str> = LazyLock::new(|| env!("DISCORD_TOKEN"));
+
+pub static CFG_YOUTUBE_TOKEN: LazyLock<ApplicationSecret> = LazyLock::new(|| {
+    let json_str = std::env::var("YOUTUBE_TOKEN").expect("[ERROR] YOUTUBE_TOKEN not set");
+    serde_json::from_str(&json_str).expect("[ERROR] Cannot parse YOUTUBE_TOKEN")
+});
 
 #[derive(Debug, Clone)]
 pub struct AuthCode {
