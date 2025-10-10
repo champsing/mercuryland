@@ -3,6 +3,7 @@
 // TODO: Make vote channel, exchange channel & penalty channel into setting page
 import { VaDivider } from "vuestic-ui";
 import Backup from "./Backup.vue";
+import Wheel from "./Wheel.vue";
 
 document.title = "系统设置 - 水星人的夢幻樂園";
 </script>
@@ -21,6 +22,7 @@ document.title = "系统设置 - 水星人的夢幻樂園";
 
     <div class="grid grid-cols-3 gap-2 px-2">
         <Backup />
+        <Wheel />
     </div>
 </template>
 

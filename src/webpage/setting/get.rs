@@ -17,8 +17,9 @@ pub async fn handler(query: web::Query<Query>) -> Result<impl Responder, ServerE
         return Ok(HttpResponse::Forbidden().finish());
     }
 
-    if query.id == 0 { // WheelPassword is not retrievable
-        return Ok(HttpResponse::Ok().json(serde_json::json!({ "value": "" })))
+    if query.id == 0 {
+        // WheelPassword is not retrievable
+        return Ok(HttpResponse::Ok().json(serde_json::json!({ "value": "" })));
     }
 
     let mut connection = crate::database::get_connection()?;
@@ -33,5 +34,4 @@ pub async fn handler(query: web::Query<Query>) -> Result<impl Responder, ServerE
     };
     let value = config.get(&transaction)?;
     Ok(HttpResponse::Ok().json(serde_json::json!({ "value": value })))
-
 }
