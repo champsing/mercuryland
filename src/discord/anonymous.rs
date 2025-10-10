@@ -15,13 +15,6 @@ pub async fn anonymous(_ctx: super::Context<'_>) -> Result<(), ServerError> {
 pub async fn create(ctx: super::Context<'_>) -> Result<(), ServerError> {
     let channel_id = ctx.channel_id().get();
 
-    {
-        let mut connection = database::get_connection()?;
-        let transaction = connection.transaction()?;
-        Config::ChannelAnonymous.set(channel_id.to_string(), &transaction)?;
-        transaction.commit()?;
-    }
-
     let button = CreateButton::new("anonymous_button")
         .label("匿名發言")
         .style(ButtonStyle::Primary);
