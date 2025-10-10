@@ -11,10 +11,9 @@ mod vote;
 use once_cell::sync::OnceCell as OnceLock;
 
 use crate::{config::CFG_DISCORD_TOKEN, error::ServerError};
-use poise::serenity_prelude::CommandOptionType;
 use poise::serenity_prelude::{ClientBuilder, GatewayIntents};
 use poise::{self};
-use serenity::all::{CreateCommandOption, CreateMessage, Http, Message};
+use serenity::all::{CreateMessage, Http, Message};
 use std::collections::HashMap;
 use std::sync::{Arc, RwLock};
 use std::time::Duration;
