@@ -40,20 +40,20 @@ fn main() -> Result<(), ServerError> {
         }
     }));
 
-    // handles.push(thread::spawn(|| {
-    //     loop {
-    //         let res = tokio::runtime::Builder::new_multi_thread()
-    //             .enable_all()
-    //             .build()
-    //             .map_err(|err| ServerError::from(err))
-    //             .and_then(|rt| rt.block_on(async { youtube::run().await }));
+    handles.push(thread::spawn(|| {
+        loop {
+            let res = tokio::runtime::Builder::new_multi_thread()
+                .enable_all()
+                .build()
+                .map_err(|err| ServerError::from(err))
+                .and_then(|rt| rt.block_on(async { youtube::run().await }));
 
-    //         if let Some(err) = res.err() {
-    //             log::error!("restarting, youtube bot failed: {:?}", err);
-    //             thread::sleep(Duration::from_secs(60));
-    //         }
-    //     }
-    // }));
+            if let Some(err) = res.err() {
+                log::error!("restarting, youtube bot failed: {:?}", err);
+                thread::sleep(Duration::from_secs(60));
+            }
+        }
+    }));
 
     for handle in handles {
         handle.join().unwrap();
