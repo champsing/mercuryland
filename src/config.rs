@@ -41,3 +41,40 @@ pub struct AuthCode {
 }
 
 pub static AUTH_CODE: LazyLock<RwLock<Vec<AuthCode>>> = LazyLock::new(|| RwLock::new(Vec::new()));
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_discord_token_structure() {
+        let token = *CFG_DISCORD_TOKEN;
+        assert!(!token.is_empty(), "DISCORD_TOKEN should not be empty");
+
+        let parts: Vec<&str> = token.split('.').collect();
+        assert!(
+            parts.len() == 3,
+            "Discord token should contain three sections"
+        );
+
+        for part in &parts {
+            assert!(
+                !part.is_empty(),
+                "Each segment of the token should be non-empty"
+            );
+
+            assert!(
+                part.chars()
+                    .all(|c| c.is_alphanumeric() || c == '-' || c == '_'),
+                "Each segment of the token should contain only letters, digits, hyphens, or underscores"
+            );
+        }
+    }
+
+    #[test]
+    fn test_youtube_token_parses() {
+        // Accessing CFG_YOUTUBE_TOKEN will initialize it and panic if YOUTUBE_TOKEN is not set or invalid JSON.
+        let _token = &*CFG_YOUTUBE_TOKEN;
+        // Reaching this point means the token was set and parsed successfully.
+    }
+}
