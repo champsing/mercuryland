@@ -5,6 +5,9 @@ RUN apk add --no-cache musl-dev sqlite-static openssl-dev openssl-libs-static pk
 COPY . .
 ARG DISCORD_TOKEN
 ENV DISCORD_TOKEN=${DISCORD_TOKEN}
+ARG YOUTUBE_TOKEN
+ENV YOUTUBE_TOKEN=${YOUTUBE_TOKEN}
+RUN cargo test --release
 RUN cargo build --release
 
 FROM scratch

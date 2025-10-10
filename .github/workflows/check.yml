@@ -65,7 +65,7 @@ jobs:
               run: cargo fmt --all -- --check
 
             - name: Test
-              run: DISCORD_TOKEN=${{ secrets.DISCORD_TOKEN }} cargo test
+              run: DISCORD_TOKEN='${{ secrets.DISCORD_TOKEN }}' YOUTUBE_TOKEN='${{ secrets.YOUTUBE_TOKEN }}' cargo test
 
     docker:
         name: Docker
@@ -76,7 +76,7 @@ jobs:
             - name: Check out Source Code
               uses: actions/checkout@v4
             - name: Build
-              run: docker build --build-arg DISCORD_TOKEN=${{ secrets.DISCORD_TOKEN }} -t mercury .
+              run: docker build --build-arg DISCORD_TOKEN='${{ secrets.DISCORD_TOKEN }}' --build-arg YOUTUBE_TOKEN='${{ secrets.YOUTUBE_TOKEN }}' -t mercury .
 
     vue_js:
         name: Vue.js
