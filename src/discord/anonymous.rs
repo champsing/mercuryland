@@ -35,7 +35,7 @@ pub async fn create(ctx: super::Context<'_>) -> Result<(), ServerError> {
     let channel = ChannelId::new(channel_id);
     channel.send_message(&ctx.http(), message).await?;
 
-    ctx.say("匿名頻道已設定").await?;
+    ctx.send(poise::CreateReply::default().content("匿名頻道已設定").ephemeral(true)).await?;
     Ok(())
 }
 
