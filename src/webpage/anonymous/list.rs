@@ -29,7 +29,7 @@ pub async fn handler() -> Result<impl Responder, ServerError> {
     let mut responses = Vec::new();
     for entry in anonymous_entries {
         let username = match http.get_user(UserId::from(entry.author as u64)).await {
-            Ok(user) => user.name,
+            Ok(user) => format!("{} ({})", user.name, entry.author),
             Err(_) => format!("Unknown User ({})", entry.author),
         };
         responses.push(AnonymousResponse {
