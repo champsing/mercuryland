@@ -70,9 +70,16 @@ pub async fn handle_modal(ctx: serenity::all::Context, modal: serenity::all::Mod
                 .label("匿名發言")
                 .style(serenity::all::ButtonStyle::Primary);
             let components = serenity::all::CreateActionRow::Buttons(vec![button]);
-            let message_content = format!("Anonymous #{}: {}", id, content);
+            let r = rand::random::<u8>();
+            let g = rand::random::<u8>();
+            let b = rand::random::<u8>();
+            let color = serenity::all::Color::from_rgb(r, g, b);
+            let embed = serenity::all::CreateEmbed::new()
+                .title(format!("匿名水星 #{}", id))
+                .description(&content)
+                .color(color);
             let message = serenity::all::CreateMessage::new()
-                .content(&message_content)
+                .embed(embed)
                 .components(vec![components]);
             let _ = channel_id.send_message(&http, message).await;
             let _ = modal.create_response(&ctx.http, serenity::all::CreateInteractionResponse::Message(
