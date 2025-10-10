@@ -22,7 +22,6 @@ pub async fn handler(request: web::Json<Request>) -> Result<impl Responder, Serv
         1 => Config::ChannelPenalty,
         2 => Config::ChannelCoin,
         3 => Config::ChannelVote,
-        4 => Config::ChannelAnonymous,
         _ => return Ok(HttpResponse::BadRequest().finish()),
     };
 
