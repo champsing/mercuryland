@@ -28,6 +28,7 @@
         "editor.defaultFormatter": "esbenp.prettier-vscode"
     },
     "rust-analyzer.check.extraEnv": {
-        "DISCORD_TOKEN": "REDACTED"
+        "DISCORD_TOKEN": "REDACTED",
+        "YOUTUBE_TOKEN": "REDACTED"
     }
 }
