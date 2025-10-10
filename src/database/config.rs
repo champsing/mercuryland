@@ -9,7 +9,6 @@ pub enum Config {
     ChannelPenalty = 1,
     ChannelCoin = 2,
     ChannelVote = 3,
-    ChannelAnonymous = 4,
 }
 
 #[derive(Debug, Iden)]

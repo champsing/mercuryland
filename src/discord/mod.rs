@@ -1,3 +1,4 @@
+mod anonymous;
 mod auth;
 mod coin;
 mod command_mentions;
@@ -297,6 +298,27 @@ pub async fn run() -> Result<(), ServerError> {
                 subcommand_required: true,
                 ..vote::vote()
             },
+            poise::Command {
+                name: String::from("anonymous"),
+                description: Some(String::from("Anonymous commands")),
+                description_localizations: HashMap::from([(
+                    zh_tw.clone(),
+                    String::from("匿名相關指令"),
+                )]),
+                help_text: Some(String::from("匿名相關指令")),
+                subcommands: vec![poise::Command {
+                    name: String::from("create"),
+                    description: Some(String::from("Create anonymous channel")),
+                    description_localizations: HashMap::from([(
+                        zh_tw.clone(),
+                        String::from("建立匿名頻道"),
+                    )]),
+                    help_text: Some(String::from("建立匿名頻道")),
+                    ..anonymous::create()
+                }],
+                subcommand_required: true,
+                ..anonymous::anonymous()
+            },
         ],
         ..Default::default()
     };
@@ -318,6 +340,7 @@ pub async fn run() -> Result<(), ServerError> {
         GatewayIntents::non_privileged() | GatewayIntents::MESSAGE_CONTENT,
     )
     .framework(framework)
+    .event_handler(anonymous::AnonymousEventHandler)
     .await?;
 
     HTTP.get_or_init(|| client.http.clone());
