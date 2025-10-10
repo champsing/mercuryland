@@ -6,7 +6,7 @@ import Penalty from "@components/penalty/Penalty.vue";
 // import GameMap from "@components/GameMap.vue";
 import Contact from "@components/contact/Contact.vue";
 import ToS from "./components/law/ToS.vue";
-import Wheel from "./components/Wheel.vue";
+import Wheel from "./components/wheel/Wheel.vue";
 import Privacy from "./components/law/Privacy.vue";
 import Leaderboard from "./components/Leaderboard.vue";
 import Propose from "./components/Propose.vue";
