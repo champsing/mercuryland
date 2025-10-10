@@ -8,7 +8,6 @@ use std::{
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Config {
-    pub wheel_password: String,
     pub discord: DiscordConfig,
     pub youtube_channel_id: String,
 }
@@ -16,7 +15,6 @@ pub struct Config {
 #[derive(Debug, Serialize, Deserialize)]
 pub struct DiscordConfig {
     pub exchange: u64,
-    pub penalty: u64,
     pub admin: Vec<u64>,
 }
 
