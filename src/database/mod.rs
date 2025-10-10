@@ -5,6 +5,7 @@ pub(crate) mod penalty;
 pub(crate) mod user;
 pub(crate) mod video;
 pub(crate) mod wheel;
+pub(crate) mod anonymous;
 
 use crate::error::ServerError;
 use rusqlite::Connection;
