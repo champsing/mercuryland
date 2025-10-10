@@ -65,7 +65,7 @@ jobs:
               run: cargo fmt --all -- --check
 
             - name: Test
-              run: DISCORD_TOKEN=${{ secrets.DISCORD_TOKEN }} YOUTUBE_TOKEN=${{ secrets.YOUTUBE_TOKEN }} cargo test
+              run: DISCORD_TOKEN='${{ secrets.DISCORD_TOKEN }}' YOUTUBE_TOKEN='${{ secrets.YOUTUBE_TOKEN }}' cargo test
 
     docker:
         name: Docker
