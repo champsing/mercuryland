@@ -3,10 +3,11 @@ pub mod list;
 use std::collections::HashMap;
 use std::sync::{LazyLock, RwLock};
 
-pub static ANONYMOUS_CACHE: LazyLock<RwLock<HashMap<u64, (String, String)>>> = LazyLock::new(|| RwLock::new(HashMap::new()));
+pub static ANONYMOUS_CACHE: LazyLock<RwLock<HashMap<u64, (String, String)>>> =
+    LazyLock::new(|| RwLock::new(HashMap::new()));
 
-use crate::database;
 use crate::config::CFG_DISCORD_TOKEN;
+use crate::database;
 use crate::error::ServerError;
 use serenity::http::Http;
 use serenity::model::id::UserId;
@@ -40,7 +41,10 @@ pub async fn update_cache() -> Result<(), ServerError> {
             // Fetch user
             match http.get_user(UserId::from(author_id)).await {
                 Ok(user) => {
-                    let nickname = user.global_name.clone().unwrap_or_else(|| user.name.clone());
+                    let nickname = user
+                        .global_name
+                        .clone()
+                        .unwrap_or_else(|| user.name.clone());
                     let avatar = user.avatar_url().unwrap_or_else(|| "".to_string());
                     to_insert.push((author_id, (nickname, avatar)));
                 }

@@ -4,8 +4,8 @@ use crate::{
     webpage::auth,
 };
 use actix_web::{HttpResponse, Responder, get, web};
-use serde::Deserialize;
 use chrono::{DateTime, Utc};
+use serde::Deserialize;
 use serde::Serialize;
 
 #[derive(Debug, Deserialize)]
@@ -36,7 +36,10 @@ pub async fn handler(query: web::Query<Query>) -> Result<impl Responder, ServerE
     let mut result = Vec::new();
     for entry in anonymous_entries {
         let author_id = entry.author as u64;
-        let (nickname, avatar) = cache.get(&author_id).cloned().unwrap_or_else(|| ("Unknown".to_string(), "".to_string()));
+        let (nickname, avatar) = cache
+            .get(&author_id)
+            .cloned()
+            .unwrap_or_else(|| ("Unknown".to_string(), "".to_string()));
         result.push(AnonymousWithUser {
             id: entry.id,
             author_id,
