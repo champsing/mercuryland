@@ -1,3 +1,4 @@
+pub(crate) mod config;
 pub(crate) mod image;
 mod migration;
 pub(crate) mod penalty;

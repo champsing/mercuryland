@@ -10,15 +10,6 @@ export function openLinks(links: Array<string>) {
     }
 }
 
-export function ofId<T extends { id: number }>(data: T[], id: number): T {
-    for (let i = 0; i < data.length; i++) {
-        if (data[i].id == id) {
-            return data[i];
-        }
-    }
-    return null;
-}
-
 export function formatDate(date: Date): string {
     let year = date.getFullYear();
     let month = date.getMonth() + 1;

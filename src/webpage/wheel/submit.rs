@@ -3,8 +3,7 @@ use serenity::all::CreateMessage;
 use std::iter::once;
 
 use crate::{
-    config::CONFIG,
-    database::{self, wheel::Wheel},
+    database::{config::Config, wheel::Wheel},
     discord,
     error::ServerError,
 };
@@ -20,12 +19,24 @@ struct Request {
 
 #[post("/api/wheel/submit")]
 pub async fn handler(request: web::Json<Request>) -> Result<impl Responder, ServerError> {
-    if request.password == CONFIG.wheel_password {
-        let mut connection = database::get_connection()?;
-        let transaction = connection.transaction()?;
+    let mut connection = crate::database::get_connection()?;
+    let transaction = connection.transaction()?;
 
-        let penalty_channel_id: u64 = CONFIG.discord.penalty; // 惡靈懲罰
+    let wheel_password = if let Some(text) = Config::WheelPassword.get(&transaction)? {
+        text
+    } else {
+        return Ok(HttpResponse::ServiceUnavailable().finish());
+    };
 
+    let channel_penalty = if let Some(text) = Config::ChannelPenalty.get(&transaction)?
+        && let Ok(channel) = text.parse::<u64>()
+    {
+        channel
+    } else {
+        return Ok(HttpResponse::ServiceUnavailable().finish());
+    };
+
+    if request.password == wheel_password {
         let w = match Wheel::by_id(request.id, &transaction)? {
             None => return Ok(HttpResponse::NotFound().finish()),
             Some(w) => w,
@@ -46,7 +57,7 @@ pub async fn handler(request: web::Json<Request>) -> Result<impl Responder, Serv
 
         let message = once(format!("<t:{}:D>", time)).chain(content).join("\n");
 
-        discord::Receiver::ChannelId(penalty_channel_id)
+        discord::Receiver::ChannelId(channel_penalty)
             .message(CreateMessage::new().content(message))
             .await?;
 
