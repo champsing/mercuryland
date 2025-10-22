@@ -1,3 +1,4 @@
+pub(crate) mod anonymous;
 pub(crate) mod config;
 pub(crate) mod image;
 mod migration;
@@ -17,6 +18,7 @@ pub(crate) fn get_connection() -> Result<Connection, rusqlite::Error> {
 
 pub fn init() -> Result<(), ServerError> {
     fs::create_dir_all("data/")?;
+    fs::create_dir_all("/tmp/")?;
 
     let mut conn = get_connection()?;
     let tran = conn.transaction()?;

@@ -47,20 +47,6 @@ import ContactCard from "./ContactCard.vue";
                     </VaButton>
                 </template>
             </ContactCard>
-
-            <ContactCard
-                name1="邏輯"
-                name2="Logic"
-                :tags="['摸鱼专家']"
-                discord="logic_f"
-            >
-                <template #avatar>
-                    <img
-                        src="/images/admin_avatars/logic.webp"
-                        class="w-full h-full object-contain"
-                    />
-                </template>
-            </ContactCard>
         </div>
         <VaDivider class="!mb-2" />
         <div class="w-full mb-6">

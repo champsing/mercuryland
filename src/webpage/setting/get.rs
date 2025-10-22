@@ -29,7 +29,6 @@ pub async fn handler(query: web::Query<Query>) -> Result<impl Responder, ServerE
         1 => Config::ChannelPenalty,
         2 => Config::ChannelCoin,
         3 => Config::ChannelVote,
-        4 => Config::ChannelAnonymous,
         _ => return Ok(HttpResponse::BadRequest().finish()),
     };
     let value = config.get(&transaction)?;
