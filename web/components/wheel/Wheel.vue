@@ -15,7 +15,10 @@ import {
 import axios from "axios";
 import { BASE_URL } from "@/composables/utils";
 import { AlertCircleOutline } from "@vicons/ionicons5";
-import { ArrowClockwise24Filled } from "@vicons/fluent";
+import {
+    ArrowClockwise24Filled,
+    ArrowSyncCheckmark24Filled,
+} from "@vicons/fluent";
 
 document.title = "幸運轉盤 - 水星人的夢幻樂園";
 
@@ -26,35 +29,18 @@ interface WheelItem {
 
 const re = /x[1-9][0-9]*$/;
 const wheelRef = ref<any>(null);
-const items = ref<WheelItem[]>([]);
+const items = ref<WheelItem[]>([{label: "example", weight: 1}]);
 const isSpinning = ref(false); //轉盤旋轉中
 const isLeftAreaLocked = ref(false); //鎖定待抽區
 const clearRightArea = ref(true); //清除右邊區域
 const currentWinnerIndex = ref<number | null>(null);
 
-let wheelConnect = reactive({
-    id: 0,
-    secret: "",
-});
-
-if (sessionStorage.getItem("wheelConnect")) {
-    wheelConnect = JSON.parse(sessionStorage.getItem("wheelConnect"));
-} else {
-    axios.get(BASE_URL + "/api/wheel/create").then(
-        (response) => {
-            wheelConnect.id = response.data.id;
-            wheelConnect.secret = response.data.secret;
-            console.log(wheelConnect);
-            sessionStorage.setItem(
-                "wheelConnect",
-                JSON.stringify(wheelConnect),
-            );
-        },
-        (error) => {
-            wheelConnect.id = -1;
-            console.log(error);
-        },
-    );
+async function APIStatus() {
+    const status = await axios.get(BASE_URL + "/api/ping").then((response) => {
+        return response.data.status;
+    });
+    if (status == "operational") return true;
+    else return false;
 }
 
 function parseWheelItems(value: string): WheelItem[] {
@@ -92,30 +78,16 @@ const textArea2 = defineModel("textArea2", {
     type: String,
     default: sessionStorage.getItem("textArea2") || "",
     set(value: string) {
-        let content = value.split("\n").filter((x) => x != "");
-        axios.post(BASE_URL + "/api/wheel/update", {
-            id: wheelConnect.id,
-            secret: wheelConnect.secret,
-            content: content,
-        });
         sessionStorage.setItem("textArea2", value);
         return value;
     },
 });
 
 function submit(hide?: CallableFunction) {
-    //強制refresh textArea2 讓資料庫更新
-    axios.post(BASE_URL + "/api/wheel/update", {
-        id: wheelConnect.id,
-        secret: wheelConnect.secret,
-        content: textArea2.value.split("\n").filter((x) => x != ""),
-    });
-
     axios
         .post(BASE_URL + "/api/wheel/submit", {
-            id: wheelConnect.id,
-            secret: wheelConnect.secret,
             password: modal3.password,
+            penalties: textArea.value.split("\n").filter((x) => x != ""),
         })
         .then((response) => {
             console.log(response);
@@ -221,46 +193,9 @@ const modal3 = reactive({
 
 <template>
     <div class="mt-8 m-auto w-11/12">
-        <div class="flex w-full justify-end">
-            <div class="flex-col">
-                <div class="text-lime-400 font-bold text-4xl text-right">
-                    {{
-                        wheelConnect.id <= 0
-                            ? "----"
-                            : wheelConnect.id
-                                  .toString(16)
-                                  .padStart(4, "0")
-                                  .toUpperCase()
-                    }}
-                </div>
-                <div
-                    class="flex flex-row gap-2 text-sm text-gray-400 !text-right"
-                    v-if="wheelConnect.id == 0"
-                >
-                    <VaIcon size="large">
-                        <ArrowClockwise24Filled />
-                    </VaIcon>
-                    正在連接伺服器...
-                </div>
-                <div
-                    class="flex flex-row gap-2 text-sm text-red-600 !text-right"
-                    v-if="wheelConnect.id == -1"
-                >
-                    <VaIcon size="large">
-                        <AlertCircleOutline />
-                    </VaIcon>
-                    無法連接到伺服器
-                </div>
-            </div>
-        </div>
-
         <div class="flex w-full justify-evenly">
             <div class="wheel-wrapper w-2/5 mt-4">
-                <Spinner
-                    ref="wheelRef"
-                    :items="items"
-                    @winner="handleWinner"
-                />
+                <Spinner ref="wheelRef" :items="items" @winner="handleWinner" />
             </div>
             <div class="w-1/5">
                 <div class="va-h4">待抽區 ({{ count(textArea) }}個)</div>
@@ -282,17 +217,12 @@ const modal3 = reactive({
                     class="w-full mt-8"
                     @click="modal3.show = true"
                     :disabled="
-                        isSpinning ||
-                        count(textArea2) == 0 ||
-                        wheelConnect.id <= 0
+                        isSpinning || count(textArea2) == 0 || !APIStatus()
                     "
                 >
                     完成抽選
                 </VaButton>
-                <div
-                    class="text-red-500 text-right"
-                    v-if="wheelConnect.id <= 0"
-                >
+                <div class="text-red-500 text-right" v-if="!APIStatus()">
                     <VaDivider color="danger" orientation="right">
                         停用
                     </VaDivider>
@@ -323,9 +253,31 @@ const modal3 = reactive({
                         :disabled="isSpinning"
                     />
                 </div>
-                <div class="text-bg text-teal-400 mt-10">
-                    <VaIcon name="info" />
-                    轉盤動畫不影響轉盤隨機抽選結果，敬請安心使用。
+                <div class="mt-10">
+                    <div class="flex flex-row gap-2 text-sm text-lime-400">
+                        <VaIcon size="large">
+                            <ArrowSyncCheckmark24Filled />
+                        </VaIcon>
+                        已連接到伺服器
+                    </div>
+                    <div
+                        class="flex flex-row gap-2 text-sm text-gray-400"
+                        v-if="!APIStatus()"
+                    >
+                        <VaIcon size="large">
+                            <ArrowClockwise24Filled />
+                        </VaIcon>
+                        正在連接伺服器...
+                    </div>
+                    <div
+                        class="flex flex-row gap-2 text-sm text-red-600"
+                        v-if="!APIStatus()"
+                    >
+                        <VaIcon size="large">
+                            <AlertCircleOutline />
+                        </VaIcon>
+                        無法連接到伺服器
+                    </div>
                 </div>
                 <div class="h-44"></div>
             </div>
