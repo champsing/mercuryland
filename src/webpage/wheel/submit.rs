@@ -4,10 +4,7 @@ use serenity::all::CreateMessage;
 use std::iter::once;
 
 use crate::{
-    database::{
-        config::Config,
-        penalty::Penalty,
-    },
+    database::{config::Config, penalty::Penalty},
     discord,
     error::ServerError,
 };

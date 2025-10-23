@@ -29,7 +29,7 @@ interface WheelItem {
 
 const re = /x[1-9][0-9]*$/;
 const wheelRef = ref<any>(null);
-const items = ref<WheelItem[]>([{label: "example", weight: 1}]);
+const items = ref<WheelItem[]>([{ label: "example", weight: 1 }]);
 const isSpinning = ref(false); //轉盤旋轉中
 const isLeftAreaLocked = ref(false); //鎖定待抽區
 const clearRightArea = ref(true); //清除右邊區域
