@@ -30,8 +30,26 @@ jobs:
               run: |
                   docker build --build-arg DISCORD_TOKEN='${{ secrets.DISCORD_TOKEN }}' --build-arg YOUTUBE_TOKEN='${{ secrets.YOUTUBE_TOKEN }}' -t mercury .
                   docker images
-                  docker save --output mercury.tar mercury
-            - name: Upload Artifacts
+                  docker save --output mercury-${{ github.run_number }}.tar mercury:${{ github.run_number }}
+            - name: Upload Docker Image to Compute Engine VM
               if: steps.version_check.outputs.version_changed == 'true'
+              env:
+                  GCE_VM: mercuryland
+                  GCE_ZONE: asia-east1-b
+                  GCP_PROJECT: mercuryland
               run: |
-                  curl -F file=@mercury.tar $( curl -H 'Content-Type: application/json' -d '{"access_code": "${{ secrets.QNAP_ACCESS }}", "composed_link_id": "${{ secrets.QNAP_LINK_ID }}", "overwrite": true, "path": "/"}' -X POST https://www.myqnapcloud.com/ajax/share_upload_link | jq -r '.result.upload_url')
+                  echo "${{ secrets.GCP_SA_KEY }}" > gcp-key.json
+
+                  # 登入 Google Cloud
+                  gcloud auth activate-service-account --key-file=gcp-key.json
+                  gcloud config set project $GCP_PROJECT
+
+                  # 驗證連線
+                  gcloud compute instances list --filter="name=$GCE_VM"
+
+                  # 上傳 docker image 檔案
+                  gcloud compute scp mercury.tar ${GCE_VM}:~/docker_images/mercury-${{ github.run_number }}.tar --zone=${GCE_ZONE} --quiet
+            # - name: Upload Artifacts
+            #  if: steps.version_check.outputs.version_changed == 'true'
+            #   run: |
+            #       curl -F file=@mercury.tar $( curl -H 'Content-Type: application/json' -d '{"access_code": "${{ secrets.QNAP_ACCESS }}", "composed_link_id": "${{ secrets.QNAP_LINK_ID }}", "overwrite": true, "path": "/"}' -X POST https://www.myqnapcloud.com/ajax/share_upload_link | jq -r '.result.upload_url')
