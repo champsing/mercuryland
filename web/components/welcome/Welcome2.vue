@@ -10,7 +10,7 @@ document.title = "歡迎來到水星人的夢幻樂園";
     <div class="relative overflow-hidden" style="height: calc(100vh - 48px)">
         <NextPageButton :page="1" />
         <div class="absolute x-center y-center text-center">
-            <div class="text-white font-bold text-8xl">水星乐园</div>
+            <div class="text-white font-bold text-8xl">水星樂園</div>
             <VaDivider class="mt-6 mb-6 opacity-70" />
             <div class="text-white italic text-3xl">The Mercury Land</div>
         </div>

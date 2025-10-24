@@ -34,13 +34,20 @@ const isSpinning = ref(false); //轉盤旋轉中
 const isLeftAreaLocked = ref(false); //鎖定待抽區
 const clearRightArea = ref(true); //清除右邊區域
 const currentWinnerIndex = ref<number | null>(null);
+const APIstatus = ref<boolean | null>(null);
 
-async function APIStatus() {
-    const status = await axios.get(BASE_URL + "/api/ping").then((response) => {
-        return response.data.status;
-    });
-    if (status == "operational") return true;
-    else return false;
+async function getAPIStatus() {
+    const status = await axios
+        .get(BASE_URL + "/api/ping")
+        .then((response) => {
+            return response.data.status;
+        })
+        .catch((e) => {
+            console.log(e);
+            return "down";
+        });
+    if (status === "operational") APIstatus.value = true;
+    else APIstatus.value = false;
 }
 
 function parseWheelItems(value: string): WheelItem[] {
@@ -168,6 +175,7 @@ function count(text: string): number {
 }
 
 onMounted(() => {
+    getAPIStatus();
     if (wheelRef.value) {
         wheelRef.value.drawWheel();
     }
@@ -217,12 +225,12 @@ const modal3 = reactive({
                     class="w-full mt-8"
                     @click="modal3.show = true"
                     :disabled="
-                        isSpinning || count(textArea2) == 0 || !APIStatus()
+                        isSpinning || count(textArea2) == 0 || !APIstatus
                     "
                 >
                     完成抽選
                 </VaButton>
-                <div class="text-red-500 text-right" v-if="!APIStatus()">
+                <div class="text-red-500 text-right" v-if="!APIstatus">
                     <VaDivider color="danger" orientation="right">
                         停用
                     </VaDivider>
@@ -254,29 +262,32 @@ const modal3 = reactive({
                     />
                 </div>
                 <div class="mt-10">
-                    <div class="flex flex-row gap-2 text-sm text-lime-400">
+                    <div
+                        class="flex flex-row gap-2 text-sm text-lime-400"
+                        v-if="APIstatus"
+                    >
                         <VaIcon size="large">
                             <ArrowSyncCheckmark24Filled />
                         </VaIcon>
                         已連接到伺服器
                     </div>
                     <div
-                        class="flex flex-row gap-2 text-sm text-gray-400"
-                        v-if="!APIStatus()"
-                    >
-                        <VaIcon size="large">
-                            <ArrowClockwise24Filled />
-                        </VaIcon>
-                        正在連接伺服器...
-                    </div>
-                    <div
                         class="flex flex-row gap-2 text-sm text-red-600"
-                        v-if="!APIStatus()"
+                        v-else-if="APIstatus == null"
                     >
                         <VaIcon size="large">
                             <AlertCircleOutline />
                         </VaIcon>
                         無法連接到伺服器
+                    </div>
+                    <div
+                        class="flex flex-row gap-2 text-sm text-gray-400"
+                        v-else
+                    >
+                        <VaIcon size="large">
+                            <ArrowClockwise24Filled />
+                        </VaIcon>
+                        正在連接伺服器...
                     </div>
                 </div>
                 <div class="h-44"></div>
