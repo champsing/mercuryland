@@ -44,14 +44,34 @@ pub async fn present_user_code(device_auth_resp: &DeviceAuthResponse, recv: disc
         Err(_) => Ok(printable_time.to_string()),
     };
 
-    match recv.message(
-        CreateMessage::new().content(&format!(
-            "請在 {} 輸入 {} 以授予本應用程式權限。\n除非您已完成驗證或拒絕授權本應用程式，否則請勿關閉驗證視窗。\n驗證碼將在 {} 後失效。",
-            device_auth_resp.verification_uri, device_auth_resp.user_code, formatted_time.unwrap()
-        ))
-    ).await {
+    match recv
+        .message(CreateMessage::new().content(&format!(
+            "請在 {} 輸入以下代碼以授予本應用程式權限：",
+            device_auth_resp.verification_uri
+        )))
+        .await
+    {
         Err(err) => log::error!("{}", err),
-        _ => ()
+        _ => (),
+    }
+
+    match recv
+        .message(CreateMessage::new().content(&format!("> {}", device_auth_resp.user_code)))
+        .await
+    {
+        Err(err) => log::error!("{}", err),
+        _ => (),
+    }
+
+    match recv
+        .message(CreateMessage::new().content(&format!(
+            "除非您已完成驗證或拒絕授權本應用程式，否則請勿關閉驗證視窗。\n驗證碼將在 {} 後失效。",
+            formatted_time.unwrap()
+        )))
+        .await
+    {
+        Err(err) => log::error!("{}", err),
+        _ => (),
     }
 }
 
