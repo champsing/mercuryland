@@ -30,7 +30,7 @@ jobs:
               run: |
                   docker build --build-arg DISCORD_TOKEN='${{ secrets.DISCORD_TOKEN }}' --build-arg YOUTUBE_TOKEN='${{ secrets.YOUTUBE_TOKEN }}' -t mercury .
                   docker images
-                  docker save --output mercury-${{ github.run_number }}.tar mercury:${{ github.run_number }}
+                  docker save --output mercury-${{ github.run_number }}.tar mercury:latest
             - name: Upload Docker Image to Compute Engine VM
               if: steps.version_check.outputs.version_changed == 'true'
               env:
