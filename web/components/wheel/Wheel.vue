@@ -276,18 +276,18 @@ const modal3 = reactive({
                         v-else-if="APIstatus == null"
                     >
                         <VaIcon size="large">
-                            <AlertCircleOutline />
+                            <ArrowClockwise24Filled />
                         </VaIcon>
-                        無法連接到伺服器
+                        正在連接伺服器...
                     </div>
                     <div
                         class="flex flex-row gap-2 text-sm text-gray-400"
                         v-else
                     >
                         <VaIcon size="large">
-                            <ArrowClockwise24Filled />
+                            <AlertCircleOutline />
                         </VaIcon>
-                        正在連接伺服器...
+                        無法連接到伺服器
                     </div>
                 </div>
                 <div class="h-44"></div>
