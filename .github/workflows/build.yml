@@ -38,7 +38,7 @@ jobs:
                   GCE_ZONE: us-central1-b
                   GCP_PROJECT: rational-energy-311213
               run: |
-                  echo "${{ secrets.GCP_SA_KEY }}" > gcp-key.json
+                  echo '${{ secrets.GCP_SA_KEY }}' > gcp-key.json
 
                   # 登入 Google Cloud
                   gcloud auth activate-service-account mercuryland@rational-energy-311213.iam.gserviceaccount.com --key-file=gcp-key.json
