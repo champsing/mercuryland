@@ -37,9 +37,11 @@ jobs:
                   GCE_VM: mercuryland
                   GCE_ZONE: us-central1-c
                   GCP_PROJECT: rational-energy-311213
+                  GCP_SSH_PUBLIC_KEY: ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDKz+lRVWOtEj9lBb5OuLd9SERfTyQ8P9Zzu0ywmdWji mercury@mercury
               run: |
                   echo '${{ secrets.GCP_SA_KEY }}' > gcp-key.json
-                  echo '${{ secrets.GCP_SSH_KEY }}' > ssh-key.json
+                  echo '${{ secrets.GCP_SSH_KEY }}' > ssh-key
+                  echo ${GCP_SSH_PUBLIC_KEY} > ssh-key.pub
 
                   # 登入 Google Cloud
                   gcloud auth activate-service-account mercuryland@rational-energy-311213.iam.gserviceaccount.com --key-file=gcp-key.json
@@ -49,7 +51,7 @@ jobs:
                   gcloud compute instances list --filter="name=$GCE_VM"
 
                   # 上傳 docker image 檔案
-                  gcloud compute scp mercury-${{ github.run_number }}.tar ${GCE_VM}:~/docker_images --zone=${GCE_ZONE} --ssh-key-file=ssh-key.json --quiet
+                  gcloud compute scp mercury-${{ github.run_number }}.tar ${GCE_VM}:~/docker_images --zone=${GCE_ZONE} --ssh-key-file=ssh-key --quiet
             # - name: Upload Artifacts
             #  if: steps.version_check.outputs.version_changed == 'true'
             #   run: |
