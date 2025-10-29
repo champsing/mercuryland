@@ -42,6 +42,8 @@ jobs:
                   echo '${{ secrets.GCP_SSH_PRIVATE_KEY }}' > ssh-key
                   echo '${{ secrets.GCP_SSH_PUBLIC_KEY }}' > ssh-key.pub
 
+                  chmod 600 ssh-key
+
                   # 登入 Google Cloud
                   gcloud auth activate-service-account mercuryland@rational-energy-311213.iam.gserviceaccount.com --key-file=gcp-key.json
                   gcloud config set project $GCP_PROJECT
