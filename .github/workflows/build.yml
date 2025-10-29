@@ -37,6 +37,7 @@ jobs:
                   GCE_VM: mercuryland
                   GCE_ZONE: us-central1-c
                   GCP_PROJECT: rational-energy-311213
+                  GCP_SSH_PUBLIC_KEY: ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDKz+lRVWOtEj9lBb5OuLd9SERfTyQ8P9Zzu0ywmdWji mercury@mercury
               run: |
                   echo '${{ secrets.GCP_SA_KEY }}' > gcp-key.json
                   echo '${{ secrets.GCP_SSH_PRIVATE_KEY }}' > ssh-key
