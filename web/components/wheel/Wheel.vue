@@ -272,7 +272,7 @@ const modal3 = reactive({
                         已連接到伺服器
                     </div>
                     <div
-                        class="flex flex-row gap-2 text-sm text-red-600"
+                        class="flex flex-row gap-2 text-sm text-gray-400"
                         v-else-if="APIstatus == null"
                     >
                         <VaIcon size="large">
@@ -281,7 +281,7 @@ const modal3 = reactive({
                         正在連接伺服器...
                     </div>
                     <div
-                        class="flex flex-row gap-2 text-sm text-gray-400"
+                        class="flex flex-row gap-2 text-sm text-red-600"
                         v-else
                     >
                         <VaIcon size="large">
