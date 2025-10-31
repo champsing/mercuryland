@@ -53,6 +53,8 @@ jobs:
 
                   # 上傳 docker image 檔案
                   gcloud compute scp mercury-${{ github.run_number }}.tar mercury@${GCE_VM}:~/docker_images --zone=${GCE_ZONE} --ssh-key-file=ssh-key --quiet
+
+                  gcloud compute ssh mercury@${GCE_VM} --zone=${GCE_ZONE} --ssh-key-file=ssh-key --quiet --command="cd ~; docker load -i docker_images/mercury-${{ github.run_number }}.tar; docker compose down; dockercompose up --detach --force-recreate"
             # - name: Upload Artifacts
             #  if: steps.version_check.outputs.version_changed == 'true'
             #   run: |
