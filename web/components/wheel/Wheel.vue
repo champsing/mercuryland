@@ -103,7 +103,7 @@ function submit(hide?: CallableFunction) {
     axios
         .post(BASE_URL + "/api/wheel/submit", {
             token: token,
-            penalties: textArea.value.split("\n").filter((x) => x != ""),
+            penalties: textArea2.value.split("\n").filter((x) => x != ""),
         })
         .then((response) => {
             console.log(response);
