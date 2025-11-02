@@ -7,7 +7,6 @@ import {
     VaButton,
     VaModal,
     VaSwitch,
-    VaInput,
     VaIcon,
     VaDivider,
     useToast,
@@ -97,6 +96,7 @@ function submit(hide?: CallableFunction) {
     const token = localStorage.getItem("token");
     if (!token) {
         window.alert("請先登入管理員帳號");
+        modal3.fail = true;
         return;
     }
 
@@ -120,13 +120,11 @@ function submit(hide?: CallableFunction) {
                 message: "廣播失敗，請重新登入或再試一次",
                 color: "danger",
             });
-            modal3.password = "";
             modal3.fail = true;
         });
 }
 
 function beforeCancel(hide: CallableFunction) {
-    modal3.password = "";
     modal3.fail = false;
     modal3.show = false;
     hide();
@@ -203,7 +201,6 @@ const modal2 = reactive({
 });
 const modal3 = reactive({
     show: false,
-    password: "",
     fail: false,
 });
 
@@ -345,22 +342,10 @@ const isSubmitAvailable = ref<boolean | null>(
             :before-cancel="beforeCancel"
         >
             <div class="items-baseline text-xl text-center">
-                請輸入轉盤廣播密碼
+                您確定要送出抽選結果並廣播到Discord嗎？
             </div>
-            <div
-                id="submit-wheel"
-                class="flex items-baseline justify-evenly h-14 mt-4"
-            >
-                <VaInput
-                    v-model="modal3.password"
-                    label="轉盤廣播密碼"
-                    type="password"
-                    name="password"
-                    immediate-validation
-                    error-messages="Submission failed"
-                    :error="modal3.fail"
-                    @input="modal3.fail = false"
-                />
+            <div class="text-red-500 mt-4" v-if="modal3.fail">
+                廣播失敗，請重新登入或再試一次。
             </div>
         </VaModal>
     </div>
