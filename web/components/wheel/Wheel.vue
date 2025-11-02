@@ -240,7 +240,7 @@ const isSubmitAvailable = ref<boolean | null>(
                 <VaButton
                     class="w-full mt-8"
                     @click="modal3.show = true"
-                    :disabled="isSubmitAvailable"
+                    :disabled="!isSubmitAvailable"
                 >
                     完成抽選
                 </VaButton>
