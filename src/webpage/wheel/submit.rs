@@ -7,13 +7,14 @@ use crate::{
     database::{config::Config, penalty::Penalty},
     discord,
     error::ServerError,
+    webpage::auth,
 };
 use actix_web::{HttpResponse, Responder, post, web};
 use serde::Deserialize;
 
 #[derive(Debug, Clone, Deserialize)]
 struct Request {
-    password: String,
+    token: String,
     penalties: Vec<(String, i32)>,
 }
 
@@ -30,12 +31,6 @@ pub async fn handler(request: web::Json<Request>) -> Result<impl Responder, Serv
     let mut connection = crate::database::get_connection()?;
     let transaction = connection.transaction()?;
 
-    let wheel_password = if let Some(text) = Config::WheelPassword.get(&transaction)? {
-        text
-    } else {
-        return Ok(HttpResponse::ServiceUnavailable().finish());
-    };
-
     let channel_penalty = if let Some(text) = Config::ChannelPenalty.get(&transaction)?
         && let Ok(channel) = text.parse::<u64>()
     {
@@ -49,9 +44,10 @@ pub async fn handler(request: web::Json<Request>) -> Result<impl Responder, Serv
         return Ok(HttpResponse::BadRequest().finish());
     }
 
-    if request.password != wheel_password {
+    if !auth::verify(&request.token) {
         return Ok(HttpResponse::Forbidden().finish());
     }
+
     transaction.commit()?;
 
     let transaction = connection.transaction()?;

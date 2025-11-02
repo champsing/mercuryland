@@ -94,9 +94,15 @@ const textArea2 = defineModel("textArea2", {
 });
 
 function submit(hide?: CallableFunction) {
+    const token = localStorage.getItem("token");
+    if (!token) {
+        window.alert("請先登入管理員帳號");
+        return;
+    }
+
     axios
         .post(BASE_URL + "/api/wheel/submit", {
-            password: modal3.password,
+            token: token,
             penalties: textArea.value.split("\n").filter((x) => x != ""),
         })
         .then((response) => {
@@ -111,7 +117,7 @@ function submit(hide?: CallableFunction) {
             console.log(error);
             useToast().init({
                 duration: 2000,
-                message: "廣播失敗",
+                message: "廣播失敗，請重新登入或再試一次",
                 color: "danger",
             });
             modal3.password = "";
