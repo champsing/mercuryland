@@ -196,7 +196,9 @@ const headerColumns = computed(() =>
                                     @click="() => emit('updateTag', tag)"
                                     class="align-middle inline-block max-w-24 truncate"
                                 >
-                                    <div class="text-center truncate">{{ tag }}</div>
+                                    <div class="text-center truncate">
+                                        {{ tag }}
+                                    </div>
                                 </VaButton>
 
                                 <VaDivider
