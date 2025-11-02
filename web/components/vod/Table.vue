@@ -179,29 +179,35 @@ const headerColumns = computed(() =>
                         </VaButton>
                     </template>
                     <template #cell(tags)="{ row }">
-                        <template v-for="tag in row.rowData.tags">
-                            <VaButton
-                                size="small"
-                                preset="plain"
-                                color="textPrimary"
-                                hoverMaskColor="#5bc6a1"
-                                hoverOpacity="1"
-                                pressedMaskColor="info"
-                                :pressedOpacity="1"
-                                @click="() => emit('updateTag', tag)"
-                                class="align-middle inline-block max-w-24"
+                        <div class="flex flex-wrap gap-2">
+                            <!-- 外層 flex-wrap 讓按鈕換行 -->
+                            <template
+                                v-for="(tag, index) in row.rowData.tags"
+                                :key="tag"
                             >
-                                <div class="truncate">{{ tag }}</div>
-                            </VaButton>
-                            <VaDivider
-                                vertical
-                                class="inline align-middle"
-                                v-if="
-                                    tag !==
-                                    row.rowData.tags.slice().reverse()[0]
-                                "
-                            />
-                        </template>
+                                <VaButton
+                                    size="small"
+                                    preset="plain"
+                                    color="textPrimary"
+                                    hoverMaskColor="#5bc6a1"
+                                    hoverOpacity="1"
+                                    pressedMaskColor="info"
+                                    :pressedOpacity="1"
+                                    @click="() => emit('updateTag', tag)"
+                                    class="align-middle inline-block max-w-24 truncate"
+                                >
+                                    <div class="text-center truncate">
+                                        {{ tag }}
+                                    </div>
+                                </VaButton>
+
+                                <VaDivider
+                                    vertical
+                                    class="inline align-middle"
+                                    v-if="index !== row.rowData.tags.length - 1"
+                                />
+                            </template>
+                        </div>
                     </template>
                     <template #cell(duration)="{ value }">
                         <div class="text-[1rem] text-center align-middle">
