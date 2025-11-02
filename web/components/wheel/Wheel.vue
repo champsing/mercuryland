@@ -19,6 +19,7 @@ import {
     ArrowClockwise24Filled,
     ArrowSyncCheckmark24Filled,
 } from "@vicons/fluent";
+import { useAuthState } from "@/composables/authState";
 
 document.title = "幸運轉盤 - 水星人的夢幻樂園";
 
@@ -26,6 +27,8 @@ interface WheelItem {
     label: string;
     weight: number;
 }
+
+const authState = useAuthState();
 
 const re = /x[1-9][0-9]*$/;
 const wheelRef = ref<any>(null);
@@ -197,6 +200,13 @@ const modal3 = reactive({
     password: "",
     fail: false,
 });
+
+const isSubmitAvailable = ref<boolean | null>(
+    isSpinning.value ||
+        count(textArea2.value) == 0 ||
+        !APIstatus.value ||
+        !authState.isAuthenticated,
+);
 </script>
 
 <template>
@@ -224,13 +234,11 @@ const modal3 = reactive({
                 <VaButton
                     class="w-full mt-8"
                     @click="modal3.show = true"
-                    :disabled="
-                        isSpinning || count(textArea2) == 0 || !APIstatus
-                    "
+                    :disabled="isSubmitAvailable"
                 >
                     完成抽選
                 </VaButton>
-                <div class="text-red-500 text-right" v-if="!APIstatus">
+                <div class="text-red-500 text-right" v-if="!isSubmitAvailable">
                     <VaDivider color="danger" orientation="right">
                         停用
                     </VaDivider>
