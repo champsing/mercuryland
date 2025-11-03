@@ -32,6 +32,14 @@ const videoTimestamp = ref("");
 const useManualVideo = ref(false);
 const manualVideoId = ref("");
 
+// 🆕 插入模式：iframe 或 button
+const insertMode = ref<"iframe" | "button">("iframe");
+
+const insertModeOptions = [
+    { text: "嵌入視窗 (iframe)", value: "iframe" },
+    { text: "按鈕開啟連結", value: "button" },
+];
+
 const videoOptions = computed(() =>
     [...videos.value]
         .sort((a, b) => (b.date ?? "").localeCompare(a.date ?? ""))
@@ -122,6 +130,7 @@ const timestampInfo = computed(() => {
     return { seconds: parsed, error: null } as const;
 });
 
+// 🆕 根據插入模式動態產生 HTML
 const embedHtml = computed(() => {
     const link = activeVideoLink.value;
     if (!link) {
@@ -129,15 +138,10 @@ const embedHtml = computed(() => {
     }
 
     const video = selectedVideo.value;
-    const embedUrl = `https://www.youtube.com/embed/${link}`;
     const startSeconds = timestampInfo.value.seconds;
-    let embedSrc = embedUrl;
+    const baseUrl = `https://www.youtube.com/watch?v=${link}`;
+    const url = startSeconds ? `${baseUrl}&t=${startSeconds}s` : baseUrl;
 
-    if (startSeconds !== null) {
-        const clampedStart = Math.max(0, startSeconds);
-        const embedSeparator = embedUrl.includes("?") ? "&" : "?";
-        embedSrc = `${embedUrl}${embedSeparator}start=${clampedStart}`;
-    }
     const escapeHtml = (value: string) =>
         value
             .replace(/&/g, "&amp;")
@@ -151,15 +155,29 @@ const embedHtml = computed(() => {
         : (video?.title ?? "YouTube video");
     const escapedTitle = escapeHtml(iframeTitleSource);
 
-    const container = [
-        '<div class="penalty-youtube" style="margin: 1rem 0;">',
-        '  <div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 12px; background-color: #000;">',
-        `    <iframe src="${embedSrc}" title="${escapedTitle}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen style="position: absolute; inset: 0; width: 100%; height: 100%; border: 0;"></iframe>`,
-        "  </div>",
-        "</div>",
-    ].join("\n");
+    // iframe 模式
+    if (insertMode.value === "iframe") {
+        const embedUrl = `https://www.youtube.com/embed/${link}`;
+        const embedSrc =
+            startSeconds !== null
+                ? `${embedUrl}?start=${Math.max(0, startSeconds)}`
+                : embedUrl;
+        return `\n<div class="penalty-youtube" style="margin: 1rem 0;">
+                <div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 12px; background-color: #000;">
+                    <iframe src="${embedSrc}" title="${escapedTitle}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen style="position: absolute; inset: 0; width: 100%; height: 100%; border: 0;"></iframe>
+                </div>
+                </div>\n`;
+    }
 
-    return `\n${container}\n`;
+    // 按鈕模式
+    return `\n<div class="youtube-link-button text-center my-4">
+            <a href="${url}"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="inline items-center text-sm px-2 py-1 bg-red-600 hover:bg-red-700 text-white rounded-2xl font-semibold no-underline transition-colors">
+                ${video.date}：${escapedTitle}
+            </a>
+            </div>\n`;
 });
 
 function resolveTextarea(): HTMLTextAreaElement | null {
@@ -198,10 +216,7 @@ function captureSelection() {
     const start = textarea.selectionStart ?? textarea.value.length ?? 0;
     const end = textarea.selectionEnd ?? textarea.value.length ?? start;
 
-    selectionRange.value = {
-        start,
-        end,
-    };
+    selectionRange.value = { start, end };
 }
 
 function getSelectionFallback() {
@@ -251,6 +266,7 @@ function openModal() {
     videoTimestamp.value = "";
     manualVideoId.value = "";
     useManualVideo.value = false;
+    insertMode.value = "iframe";
     isModalOpen.value = true;
     ensureVideosLoaded();
 }
@@ -275,9 +291,7 @@ const isInsertDisabled = computed(() => {
 });
 
 function save() {
-    if (isInsertDisabled.value) {
-        return;
-    }
+    if (isInsertDisabled.value) return;
 
     const range = selectionRange.value ?? getSelectionFallback();
     const start = Math.max(range.start, 0);
@@ -308,9 +322,7 @@ function save() {
         class="w-full h-full"
         gradient
     >
-        <VaIcon class="mr-2">
-            <BrandYoutube />
-        </VaIcon>
+        <VaIcon class="mr-2"><BrandYoutube /></VaIcon>
         添加影片
     </VaButton>
 
@@ -363,6 +375,14 @@ function save() {
                 />
             </div>
 
+            <!-- 🆕 插入模式 -->
+            <VaSelect
+                v-model="insertMode"
+                :options="insertModeOptions"
+                label="插入方式"
+                class="w-full"
+            />
+
             <VaInput
                 v-model="videoTimestamp"
                 label="起始時間 (可選)"
@@ -376,8 +396,8 @@ function save() {
                 messages="空白則從頭播放"
             />
 
-            <div>
-                <label class="block text-sm font-medium mb-2">预览:</label>
+            <div v-if="insertMode === 'iframe'">
+                <label class="block text-sm font-medium mb-2">預覽:</label>
                 <div class="border border-slate-200 rounded-lg p-2">
                     <iframe
                         v-if="previewUrl"
@@ -391,7 +411,7 @@ function save() {
                         v-else
                         class="h-[300px] grid place-content-center text-sm text-slate-400"
                     >
-                        选择视频后显示预览
+                        選擇影片後顯示預覽
                     </div>
                 </div>
             </div>
