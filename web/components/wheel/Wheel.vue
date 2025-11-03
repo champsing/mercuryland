@@ -100,10 +100,17 @@ function submit(hide?: CallableFunction) {
         return;
     }
 
+    const penaltiesPayload = textArea2.value
+        .split("\n")
+        .filter((x) => x != "")
+        .map((line) => {
+            return [line, 1];
+        });
+
     axios
         .post(BASE_URL + "/api/wheel/submit", {
             token: token,
-            penalties: textArea2.value.split("\n").filter((x) => x != ""),
+            penalties: penaltiesPayload,
         })
         .then((response) => {
             console.log(response);
