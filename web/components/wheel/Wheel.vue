@@ -212,9 +212,9 @@ const modal3 = reactive({
 });
 
 const isSubmitAvailable = ref<boolean | null>(
-    !isSpinning.value ||
-        count(textArea2.value) !== 0 ||
-        APIstatus.value ||
+    !isSpinning.value &&
+        count(textArea2.value) !== 0 &&
+        APIstatus.value &&
         authState.isAuthenticated,
 );
 </script>
