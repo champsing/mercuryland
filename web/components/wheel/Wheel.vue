@@ -1,7 +1,14 @@
 <script setup lang="ts">
 // TODO: Update Wheel style
 import Spinner from "./Spinner.vue";
-import { ref, onMounted, reactive, onBeforeUnmount } from "vue";
+import {
+    ref,
+    onMounted,
+    reactive,
+    onBeforeUnmount,
+    computed,
+    ComputedRef,
+} from "vue";
 import {
     VaTextarea,
     VaButton,
@@ -211,12 +218,14 @@ const modal3 = reactive({
     fail: false,
 });
 
-const isSubmitAvailable = ref<boolean | null>(
-    !isSpinning.value &&
+const isSubmitAvailable: ComputedRef<boolean> = computed(() => {
+    return (
+        !isSpinning.value &&
         count(textArea2.value) != 0 &&
         APIstatus.value &&
-        authState.isAuthenticated,
-);
+        authState.isAuthenticated
+    );
+});
 </script>
 
 <template>
