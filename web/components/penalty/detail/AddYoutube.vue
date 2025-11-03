@@ -169,7 +169,7 @@ const embedHtml = computed(() => {
                 </div>\n`;
     }
 
-    if (insertMode.value === "button" && video) {
+    if (video) {
         // 按鈕模式列表直播
         return `\n<div class="youtube-link-button text-center my-4">
             <a href="${url}"
