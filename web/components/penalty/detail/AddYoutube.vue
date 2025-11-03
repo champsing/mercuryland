@@ -169,13 +169,25 @@ const embedHtml = computed(() => {
                 </div>\n`;
     }
 
-    // 按鈕模式
+    if (insertMode.value === "button" && video) {
+        // 按鈕模式列表直播
+        return `\n<div class="youtube-link-button text-center my-4">
+            <a href="${url}"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="inline items-center text-sm px-2 py-1 bg-red-600 hover:bg-red-700 text-white rounded-2xl font-semibold no-underline transition-colors">
+                直播：【${video.date}】${escapedTitle}
+            </a>
+            </div>\n`;
+    }
+
+    // 按鈕模式非列表直播
     return `\n<div class="youtube-link-button text-center my-4">
             <a href="${url}"
                 target="_blank"
                 rel="noopener noreferrer"
                 class="inline items-center text-sm px-2 py-1 bg-red-600 hover:bg-red-700 text-white rounded-2xl font-semibold no-underline transition-colors">
-                ${video.date}：${escapedTitle}
+                影片：${escapedTitle}
             </a>
             </div>\n`;
 });
