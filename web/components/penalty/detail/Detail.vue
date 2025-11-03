@@ -11,6 +11,7 @@ import AddYoutube from "./AddYoutube.vue";
 import AddImage from "./AddImage.vue";
 import AddSyntax from "./AddSyntax.vue";
 import EditTimeline from "./EditTimeline.vue";
+import AddPenaltyBtn from "./AddPenaltyBtn.vue";
 
 const props = defineProps<{
     modelValue: number | null;
@@ -21,8 +22,8 @@ const emit = defineEmits<{
 }>();
 
 const penalty = ref<PenItem | null>(null);
-
 const authState = useAuthState();
+
 const isEditingDetail = ref(false);
 const editedDetail = ref("");
 const textareaRef = ref();
@@ -93,11 +94,9 @@ async function saveDetail() {
 function startEditHistory() {
     isEditingHistory.value = true;
 }
-
 function cancelEditHistory() {
     isEditingHistory.value = false;
 }
-
 function updateHistory(newHistory: Array<[number, string]>) {
     if (penalty.value) {
         penalty.value.history = newHistory;
@@ -118,6 +117,7 @@ function insertHtml(html: string, range: { start: number; end: number }) {
 
     editedDetail.value = content.slice(0, start) + html + content.slice(end);
 }
+
 watch(
     () => props.modelValue,
     (newId) => {
@@ -141,7 +141,6 @@ watch(
         hide-default-actions
         size="small"
         close-button
-        class=""
     >
         <div v-if="penalty" class="min-h-[50vh]">
             <div class="flex gap-4 items-center">
@@ -156,7 +155,9 @@ watch(
                 </VaChip>
                 <div class="truncate text-xl flex-1">{{ penalty.name }}</div>
             </div>
+
             <div class="text-lg mt-2">{{ penalty.name }}</div>
+
             <div v-if="isEditingHistory">
                 <EditTimeline
                     :history="penalty.history"
@@ -214,6 +215,12 @@ watch(
                                 @insert-html="insertHtml"
                             />
                         </div>
+                        <div class="flex-1">
+                            <AddPenaltyBtn
+                                :textarea-ref="textareaRef"
+                                @insert-html="insertHtml"
+                            />
+                        </div>
                     </div>
                 </div>
                 <div class="flex justify-between mt-2">
@@ -225,8 +232,10 @@ watch(
                     </VaButton>
                 </div>
             </div>
+
             <div v-else class="mt-4">
                 <div v-html="renderedDetail"></div>
+
                 <div v-if="authState.isAuthenticated" class="mt-2">
                     <VaButton @click="startEdit" color="success" class="w-full">
                         编辑内容
