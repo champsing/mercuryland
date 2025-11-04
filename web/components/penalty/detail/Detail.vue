@@ -234,7 +234,7 @@ watch(
             </div>
 
             <div v-else class="mt-4">
-                <div v-html="renderedDetail"></div>
+                <div v-html="renderedDetail" class="max-h-10"></div>
 
                 <div v-if="authState.isAuthenticated" class="mt-2">
                     <VaButton @click="startEdit" color="success" class="w-full">
