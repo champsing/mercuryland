@@ -357,8 +357,13 @@ const isSubmitAvailable: ComputedRef<boolean> = computed(() => {
             :before-ok="submit"
             :before-cancel="beforeCancel"
         >
-            <div class="items-baseline text-xl text-center">
-                您確定要送出抽選結果並廣播到Discord嗎？
+            <div class="flex flex-col gap-2 items-center text-center">
+                <div class="text-xl">
+                    您確定要送出抽選結果並廣播到Discord嗎？
+                </div>
+                <div class="text-lg">
+                    抽選結果會自動加入到「直播懲罰」頁面。
+                </div>
             </div>
             <div class="text-red-500 mt-4" v-if="modal3.fail">
                 廣播失敗，請重新登入或再試一次。
