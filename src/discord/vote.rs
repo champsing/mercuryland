@@ -2,6 +2,7 @@ use crate::database::config::Config;
 use crate::database::get_connection;
 use crate::{config::CONFIG, error::ServerError};
 use core::panic;
+use std::time::Duration;
 use itertools::Itertools;
 use poise;
 use serenity::all::{ChannelId, EditMessage, ReactionType, UserId};
@@ -9,40 +10,56 @@ use std::collections::{HashMap, HashSet};
 use std::sync::Arc;
 use tokio::sync::{Mutex, OnceCell};
 
-fn fetch_vote_channel_and_msg() -> Result<(u64, u64), ServerError> {
-    // 獲取連接並開始事務的區塊保持不變
-    let (channel_vote, message_vote) = {
-        let mut connection = get_connection()?;
-        let transaction = connection.transaction()?;
+// 將原本的 fetch_vote_channel_and_msg 改寫為更安全的讀取函數
+fn read_vote_config() -> Result<(u64, Option<u64>), ServerError> {
+    let mut connection = get_connection()?;
 
-        // --- 獲取 CHANNEL_ID 的值 (在您的程式碼中命名為 channel_vote) ---
-        let vote_channel_id = if let Some(text) = Config::ChannelVote.get(&transaction)?
-            && let Ok(channel) = text.parse::<u64>()
-        {
-            channel
-        } else {
-            return Err(ServerError::Internal(String::from(
-                "Parse ChannelCoin channel id for ChannelVote failed.",
-            )));
-        };
+    // [關鍵修改] 設定 10000ms (10秒) 的等待時間
+    connection.busy_timeout(Duration::from_millis(10000))?;
 
-        let vote_message_id = if let Some(text) = Config::MessageVote.get(&transaction)?
-            && let Ok(message_id) = text.parse::<u64>()
-        {
-            message_id // 這裡將值命名為 message_vote_id 以反映其用途
-        } else {
-            return Err(ServerError::Internal(String::from(
-                "Parse ChannelCoin message id for MessageVote failed.",
-            )));
-        };
+    let transaction = connection.transaction()?; // 開啟讀取事務
 
-        // 成功讀取並解析後，返回這兩個 u64 值
-        (vote_channel_id, vote_message_id)
+    // 1. 讀取 Channel ID
+    let vote_channel_id = if let Some(text) = Config::ChannelVote.get(&transaction)?
+        && let Ok(channel) = text.parse::<u64>()
+    {
+        channel
+    } else {
+        return Err(ServerError::Internal(String::from(
+            "Parse ChannelCoin channel id for ChannelVote failed.",
+        )));
     };
 
-    Ok((channel_vote, message_vote))
+    // 2. 讀取 Message ID (允許為 None)
+    let vote_message_id = if let Some(text) = Config::MessageVote.get(&transaction)?
+        && let Ok(message_id) = text.parse::<u64>()
+    {
+        Some(message_id)
+    } else {
+        None
+    };
+
+    // 3. 顯式提交/釋放 (雖然 Rust 會自動 drop，但在 SQLite 中顯式 commit 讀取事務是個好習慣，能確保鎖被釋放)
+    // 對於唯讀事務，commit 和 rollback 效果一樣，都是結束事務
+    transaction.commit()?;
+
+    Ok((vote_channel_id, vote_message_id))
 }
 
+// 新增一個專門用來更新 Message ID 的函數
+fn update_vote_message_id(new_id: u64) -> Result<(), ServerError> {
+    let mut connection = get_connection()?;
+
+    // [關鍵修改] 設定 10000ms (10秒) 的等待時間
+    connection.busy_timeout(Duration::from_millis(10000))?;
+
+    let transaction = connection.transaction()?; // 開啟寫入事務
+
+    Config::MessageVote.set(new_id.to_string(), &transaction)?;
+
+    transaction.commit()?; // 提交寫入
+    Ok(())
+}
 
 static BALLOT: OnceCell<Arc<Mutex<Ballot>>> = OnceCell::const_new();
 
@@ -168,13 +185,50 @@ struct Ballot {
 
 impl Ballot {
     async fn fetch(&mut self, ctx: super::Context<'_>) -> Result<(), ServerError> {
-        
-        let (channel_vote, message_vote) = fetch_vote_channel_and_msg()?;
-        
-        let message = ChannelId::from(channel_vote)
-            .message(&ctx.http(), message_vote)
-            .await?;
+        // Step 1: 讀取 (持有鎖 -> 釋放鎖)
+        let (channel_vote, message_vote_opt) = read_vote_config()?;
+        let channel_id = ChannelId::from(channel_vote);
 
+        let init_process = || async {
+            println!("正在初始化投票訊息..."); // Debug 用
+
+            // Step 2: 網絡請求 (無資料庫鎖，耗時操作)
+            let new_message = channel_id
+                .send_message(
+                    &ctx.http(),
+                    serenity::all::CreateMessage::new().content("# 正在初始化投票..."),
+                )
+                .await?;
+
+            println!("訊息發送成功 ID: {}，準備寫入資料庫...", new_message.id); // Debug 用
+
+            // Step 3: 寫入 (持有鎖 -> 釋放鎖)
+            // 這裡現在有了 busy_timeout，如果資料庫忙碌，它會等待而不是報錯
+            match update_vote_message_id(new_message.id.get()) {
+                Ok(_) => println!("資料庫寫入成功"),
+                Err(e) => {
+                    // 如果還是失敗，至少我們知道是在這一步
+                    println!("資料庫寫入失敗: {:?}", e);
+                    return Err(e);
+                }
+            }
+
+            Ok::<_, ServerError>(new_message)
+        };
+
+        let message = match message_vote_opt {
+            Some(message_id) => {
+                match channel_id.message(&ctx.http(), message_id).await {
+                    Ok(msg) => msg,
+                    // Discord 找不到該訊息 -> 觸發初始化
+                    Err(_) => init_process().await?,
+                }
+            }
+            // 資料庫沒紀錄 -> 觸發初始化
+            None => init_process().await?,
+        };
+
+        // 解析選項
         for options in message
             .content
             .lines()
@@ -192,7 +246,12 @@ impl Ballot {
         // Step 3: Add reactions that are in options but not in reactions, and sort options based on adding order
         // Step 4: Update the message content
 
-        let (channel_vote, message_vote) = fetch_vote_channel_and_msg()?;
+        // 使用新的讀取函數
+        let (channel_vote, message_vote_opt) = read_vote_config()?;
+
+        // 如果要 Commit 但找不到 ID，這是不正常的 (因為 fetch 應該已經處理過了)
+        let message_vote = message_vote_opt
+            .ok_or_else(|| ServerError::Internal("無法提交投票：找不到投票訊息 ID".to_string()))?;
 
         let mut message = ChannelId::from(channel_vote)
             .message(&ctx.http(), message_vote)
@@ -293,7 +352,14 @@ impl Ballot {
         if let Some(deadline) = self.deadline {
             Ok(format!("当前投票截止时间: __**<t:{}:f>**__", deadline))
         } else {
-            let (channel_vote, message_vote) = fetch_vote_channel_and_msg()?;
+            // 使用新的讀取函數
+            let (channel_vote, message_vote_opt) = read_vote_config()?;
+
+            // 處理 None 的情況
+            let message_vote = match message_vote_opt {
+                Some(id) => id,
+                None => return Ok("# __**当前没有投票**__".to_string()),
+            };
 
             let reactions = ChannelId::from(channel_vote)
                 .message(&ctx.http(), message_vote)
