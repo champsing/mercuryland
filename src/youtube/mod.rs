@@ -1,7 +1,7 @@
 mod chat;
 mod video;
 
-use crate::{config::CONFIG, discord, error::ServerError};
+use crate::{config::CONFIG, database::config::Config, discord, error::ServerError};
 use actix_web::cookie::time::{UtcOffset, format_description};
 use google_youtube3::{
     YouTube,
@@ -76,7 +76,22 @@ pub async fn present_user_code(device_auth_resp: &DeviceAuthResponse, recv: disc
 }
 
 pub async fn run() -> Result<(), ServerError> {
-    let channel_id: &str = CONFIG.youtube_channel_id.as_str(); // oreki channel id
+    let mut connection = crate::database::get_connection()?;
+    let transaction = connection.transaction()?;
+
+    let query_youtube_id = match Config::YoutubeChannelId.get(&transaction) {
+        // 處理 Config::YoutubeChannelId.get 自身的 Result 錯誤
+        Ok(channel_id_option) => channel_id_option.expect("No Oreki channel found."),
+        Err(_) => {
+            return Err(ServerError::Internal(String::from(
+                "Fetch Oreki channel id failed.",
+            )));
+        }
+    };
+
+    transaction.commit()?;
+
+    let channel_id: &str = &query_youtube_id.as_str(); // 將 String 轉為 &str
 
     if OpenOptions::new()
         .read(true)

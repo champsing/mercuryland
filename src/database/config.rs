@@ -5,10 +5,11 @@ use sea_query_rusqlite::RusqliteBinder;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum Config {
-    WheelPassword = 0,
-    ChannelPenalty = 1,
-    ChannelCoin = 2,
-    ChannelVote = 3,
+    ChannelPenalty = 0,
+    ChannelCoin = 1,
+    ChannelVote = 2,
+    MessageVote = 3,
+    YoutubeChannelId = 4,
 }
 
 #[derive(Debug, Iden)]
@@ -79,7 +80,7 @@ mod tests {
     #[test]
     fn insert_and_find() -> Result<(), ServerError> {
         let mut conn = setup_conn()?;
-        let config = Config::WheelPassword;
+        let config = Config::ChannelPenalty;
         let text = "Test text".to_string();
 
         let tran = conn.transaction()?;
@@ -98,7 +99,7 @@ mod tests {
     fn by_id_not_found() -> Result<(), ServerError> {
         let mut conn = setup_conn()?;
         let tran = conn.transaction()?;
-        let config = Config::WheelPassword;
+        let config = Config::ChannelPenalty;
         let result = config.get(&tran)?;
         assert!(result.is_none());
         tran.finish()?;

@@ -9,12 +9,10 @@ use std::{
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Config {
     pub discord: DiscordConfig,
-    pub youtube_channel_id: String,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct DiscordConfig {
-    pub exchange: u64,
     pub admin: Vec<u64>,
 }
 
