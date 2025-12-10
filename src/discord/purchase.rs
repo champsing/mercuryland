@@ -1,7 +1,6 @@
 use crate::coin::command::CoinCommandManager;
 use crate::coin::youtube::User;
-use crate::config::CONFIG;
-use crate::database::{get_connection, user::User as CoinUser};
+use crate::database::{config::Config, get_connection, user::User as CoinUser};
 use crate::error::ServerError;
 use chrono::Days;
 use poise::{self, CreateReply};
@@ -42,7 +41,21 @@ pub async fn booster(
     penalty_content: String,
 ) -> Result<(), ServerError> {
     let author = ctx.author();
-    let channel_id = CONFIG.discord.exchange;
+
+    let channel_coin = {
+        let mut connection = crate::database::get_connection()?;
+        let transaction = connection.transaction()?;
+        let channel_outcome = if let Some(text) = Config::ChannelCoin.get(&transaction)?
+            && let Ok(channel) = text.parse::<u64>()
+        {
+            channel
+        } else {
+            return Err(ServerError::Internal(String::from(
+                "Parse ChannelCoin channel id to u64 failed.",
+            )));
+        };
+        channel_outcome
+    };
 
     // 在一个同步块里处理所有 DB 逻辑，生成好要发送的 message
     let (reply, content) = 'ret: {
@@ -151,7 +164,7 @@ pub async fn booster(
 
     // 此处已经不再持有 rusqlite::Transaction，可以安全 .await
     if let Some(content) = content {
-        let mut message = ChannelId::from(channel_id)
+        let mut message = ChannelId::from(channel_coin)
             .send_message(
                 &ctx.serenity_context().http,
                 CreateMessage::new()
@@ -221,7 +234,7 @@ pub async fn booster(
             let author = ctx.author().clone();
             let case_number = Alphanumeric.sample_string(&mut rand::thread_rng(), 6);
 
-            let refund = ChannelId::new(CONFIG.discord.exchange) //CONFIG.discord.exchange 1248793225767026758
+            let refund = ChannelId::new(channel_coin) //channel_coin 1248793225767026758
                 .create_thread_from_message(
                     ctx.http(),
                     message.id,
@@ -260,7 +273,21 @@ pub async fn overtime(
     content: String,
 ) -> Result<(), ServerError> {
     let author_id = ctx.author().id.get();
-    let channel_id = CONFIG.discord.exchange; // 水星交易所
+
+    let channel_coin = {
+        let mut connection = crate::database::get_connection()?;
+        let transaction = connection.transaction()?;
+        let channel_outcome = if let Some(text) = Config::ChannelCoin.get(&transaction)?
+            && let Ok(channel) = text.parse::<u64>()
+        {
+            channel
+        } else {
+            return Err(ServerError::Internal(String::from(
+                "Parse ChannelCoin channel id to u64 failed.",
+            )));
+        };
+        channel_outcome
+    };
 
     // 在一个同步块里处理所有 DB 逻辑，生成好要发送的 message
     let (reply, content) = 'ret: {
@@ -365,7 +392,7 @@ pub async fn overtime(
 
     // 此处已经不再持有 rusqlite::Transaction，可以安全 .await
     if let Some(content) = content {
-        let mut message = ChannelId::from(channel_id)
+        let mut message = ChannelId::from(channel_coin)
             .send_message(
                 &ctx.serenity_context().http,
                 CreateMessage::new()
@@ -435,7 +462,7 @@ pub async fn overtime(
             let author = ctx.author().clone();
             let case_number = Alphanumeric.sample_string(&mut rand::thread_rng(), 6);
 
-            let refund = ChannelId::new(CONFIG.discord.exchange) //CONFIG.discord.exchange 1248793225767026758
+            let refund = ChannelId::new(channel_coin) //channel_coin 1248793225767026758
                 .create_thread_from_message(
                     ctx.http(),
                     message.id,

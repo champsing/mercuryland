@@ -1,6 +1,10 @@
 use super::config::CoinConfig;
 pub use crate::database::user::User;
-use crate::{config::CONFIG, database::get_connection, discord, error::ServerError};
+use crate::{
+    database::{config::Config, get_connection},
+    discord,
+    error::ServerError,
+};
 use chrono::{DateTime, Utc};
 use serenity::all::CreateMessage;
 
@@ -20,10 +24,18 @@ impl CoinCommandManager {
         content: &String,
         now: DateTime<Utc>,
     ) -> Result<(), ServerError> {
-        let channel_id: u64 = CONFIG.discord.exchange; // 水星交易所
-
         let mut connection = get_connection()?;
         let transaction = connection.transaction()?;
+
+        let channel_coin = if let Some(text) = Config::ChannelCoin.get(&transaction)?
+            && let Ok(channel) = text.parse::<u64>()
+        {
+            channel
+        } else {
+            return Err(ServerError::Internal(String::from(
+                "Parse ChannelCoin channel id to u64 failed.",
+            )));
+        };
 
         if let Some(mut record) = User::by_youtube(user, &transaction)? {
             let cost = self.config.booster_cost(level);
@@ -52,7 +64,7 @@ _此為 YouTube 聊天室指令，須由管理員手動開啟退款單。_
                     due.timestamp()
                 );
 
-                discord::Receiver::ChannelId(channel_id)
+                discord::Receiver::ChannelId(channel_coin)
                     .message(CreateMessage::new().content(content))
                     .await?;
             }

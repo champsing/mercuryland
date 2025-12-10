@@ -17,18 +17,15 @@ pub async fn handler(query: web::Query<Query>) -> Result<impl Responder, ServerE
         return Ok(HttpResponse::Forbidden().finish());
     }
 
-    if query.id == 0 {
-        // WheelPassword is not retrievable
-        return Ok(HttpResponse::Ok().json(serde_json::json!({ "value": "" })));
-    }
-
     let mut connection = crate::database::get_connection()?;
     let transaction = connection.transaction()?;
 
     let config = match query.id {
-        1 => Config::ChannelPenalty,
-        2 => Config::ChannelCoin,
-        3 => Config::ChannelVote,
+        0 => Config::ChannelPenalty,
+        1 => Config::ChannelCoin,
+        2 => Config::ChannelVote,
+        3 => Config::MessageVote,
+        4 => Config::YoutubeChannelId,
         _ => return Ok(HttpResponse::BadRequest().finish()),
     };
     let value = config.get(&transaction)?;

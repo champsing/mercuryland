@@ -18,10 +18,11 @@ pub async fn handler(request: web::Json<Request>) -> Result<impl Responder, Serv
     }
 
     let config = match request.id {
-        0 => Config::WheelPassword,
-        1 => Config::ChannelPenalty,
-        2 => Config::ChannelCoin,
-        3 => Config::ChannelVote,
+        0 => Config::ChannelPenalty,
+        1 => Config::ChannelCoin,
+        2 => Config::ChannelVote,
+        3 => Config::MessageVote,
+        4 => Config::YoutubeChannelId,
         _ => return Ok(HttpResponse::BadRequest().finish()),
     };
 
