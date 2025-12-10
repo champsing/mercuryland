@@ -1,3 +1,5 @@
+use crate::database::config::Config;
+use crate::database::get_connection;
 use crate::{config::CONFIG, error::ServerError};
 use core::panic;
 use itertools::Itertools;
@@ -7,8 +9,40 @@ use std::collections::{HashMap, HashSet};
 use std::sync::Arc;
 use tokio::sync::{Mutex, OnceCell};
 
-const MESSAGE_ID: u64 = 1415245626983059456;
-const CHANNEL_ID: u64 = 1414180925591392316;
+fn fetch_vote_channel_and_msg() -> Result<(u64, u64), ServerError> {
+    // 獲取連接並開始事務的區塊保持不變
+    let (channel_vote, message_vote) = {
+        let mut connection = get_connection()?;
+        let transaction = connection.transaction()?;
+
+        // --- 獲取 CHANNEL_ID 的值 (在您的程式碼中命名為 channel_vote) ---
+        let vote_channel_id = if let Some(text) = Config::ChannelVote.get(&transaction)?
+            && let Ok(channel) = text.parse::<u64>()
+        {
+            channel
+        } else {
+            return Err(ServerError::Internal(String::from(
+                "Parse ChannelCoin channel id for ChannelVote failed.",
+            )));
+        };
+
+        let vote_message_id = if let Some(text) = Config::MessageVote.get(&transaction)?
+            && let Ok(message_id) = text.parse::<u64>()
+        {
+            message_id // 這裡將值命名為 message_vote_id 以反映其用途
+        } else {
+            return Err(ServerError::Internal(String::from(
+                "Parse ChannelCoin message id for MessageVote failed.",
+            )));
+        };
+
+        // 成功讀取並解析後，返回這兩個 u64 值
+        (vote_channel_id, vote_message_id)
+    };
+
+    Ok((channel_vote, message_vote))
+}
+
 
 static BALLOT: OnceCell<Arc<Mutex<Ballot>>> = OnceCell::const_new();
 
@@ -134,8 +168,11 @@ struct Ballot {
 
 impl Ballot {
     async fn fetch(&mut self, ctx: super::Context<'_>) -> Result<(), ServerError> {
-        let message = ChannelId::from(CHANNEL_ID)
-            .message(&ctx.http(), MESSAGE_ID)
+        
+        let (channel_vote, message_vote) = fetch_vote_channel_and_msg()?;
+        
+        let message = ChannelId::from(channel_vote)
+            .message(&ctx.http(), message_vote)
             .await?;
 
         for options in message
@@ -155,8 +192,10 @@ impl Ballot {
         // Step 3: Add reactions that are in options but not in reactions, and sort options based on adding order
         // Step 4: Update the message content
 
-        let mut message = ChannelId::from(CHANNEL_ID)
-            .message(&ctx.http(), MESSAGE_ID)
+        let (channel_vote, message_vote) = fetch_vote_channel_and_msg()?;
+
+        let mut message = ChannelId::from(channel_vote)
+            .message(&ctx.http(), message_vote)
             .await?;
 
         let mut content = Vec::new();
@@ -254,8 +293,10 @@ impl Ballot {
         if let Some(deadline) = self.deadline {
             Ok(format!("当前投票截止时间: __**<t:{}:f>**__", deadline))
         } else {
-            let reactions = ChannelId::from(CHANNEL_ID)
-                .message(&ctx.http(), MESSAGE_ID)
+            let (channel_vote, message_vote) = fetch_vote_channel_and_msg()?;
+
+            let reactions = ChannelId::from(channel_vote)
+                .message(&ctx.http(), message_vote)
                 .await?
                 .reactions;
 
