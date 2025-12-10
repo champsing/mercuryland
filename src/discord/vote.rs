@@ -2,12 +2,12 @@ use crate::database::config::Config;
 use crate::database::get_connection;
 use crate::{config::CONFIG, error::ServerError};
 use core::panic;
-use std::time::Duration;
 use itertools::Itertools;
 use poise;
 use serenity::all::{ChannelId, EditMessage, ReactionType, UserId};
 use std::collections::{HashMap, HashSet};
 use std::sync::Arc;
+use std::time::Duration;
 use tokio::sync::{Mutex, OnceCell};
 
 // 將原本的 fetch_vote_channel_and_msg 改寫為更安全的讀取函數
