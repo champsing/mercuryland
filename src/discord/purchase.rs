@@ -54,6 +54,7 @@ pub async fn booster(
                 "Parse ChannelCoin channel id to u64 failed.",
             )));
         };
+        transaction.commit()?;
         channel_outcome
     };
 
@@ -286,6 +287,7 @@ pub async fn overtime(
                 "Parse ChannelCoin channel id to u64 failed.",
             )));
         };
+        transaction.commit()?;
         channel_outcome
     };
 

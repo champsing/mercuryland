@@ -89,6 +89,8 @@ pub async fn run() -> Result<(), ServerError> {
         }
     };
 
+    transaction.commit()?;
+
     let channel_id: &str = &query_youtube_id.as_str(); // 將 String 轉為 &str
 
     if OpenOptions::new()
