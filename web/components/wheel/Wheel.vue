@@ -24,6 +24,8 @@ import { AlertCircleOutline } from "@vicons/ionicons5";
 import {
     ArrowClockwise24Filled,
     ArrowSyncCheckmark24Filled,
+    PersonLock20Filled,
+    PresenceBlocked12Regular,
 } from "@vicons/fluent";
 import { useAuthState } from "@/composables/authState";
 
@@ -288,7 +290,7 @@ const isSubmitAvailable: ComputedRef<boolean> = computed(() => {
                         :disabled="isSpinning"
                     />
                 </div>
-                <div class="mt-10">
+                <div class="flex flex-col gap-2 mt-10">
                     <div
                         class="flex flex-row gap-2 text-sm text-lime-400"
                         v-if="APIstatus"
@@ -315,6 +317,25 @@ const isSubmitAvailable: ComputedRef<boolean> = computed(() => {
                             <AlertCircleOutline />
                         </VaIcon>
                         無法連接到伺服器
+                    </div>
+
+                    <div
+                        class="flex flex-row gap-2 text-sm text-lime-400"
+                        v-if="authState.isAuthenticated"
+                    >
+                        <VaIcon size="large">
+                            <PersonLock20Filled />
+                        </VaIcon>
+                        已登入管理權限
+                    </div>
+                    <div
+                        class="flex flex-row gap-2 text-sm text-red-600"
+                        v-else
+                    >
+                        <VaIcon size="large">
+                            <PresenceBlocked12Regular />
+                        </VaIcon>
+                        尚未登入管理權限
                     </div>
                 </div>
                 <div class="h-44"></div>
