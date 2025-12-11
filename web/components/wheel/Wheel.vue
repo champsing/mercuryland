@@ -291,54 +291,51 @@ const isSubmitAvailable: ComputedRef<boolean> = computed(() => {
                     />
                 </div>
                 <div class="flex flex-col gap-2 mt-10">
-                    <div>
-                        <div
-                            class="flex flex-row gap-2 text-sm text-lime-400"
-                            v-if="APIstatus"
-                        >
-                            <VaIcon size="large">
-                                <ArrowSyncCheckmark24Filled />
-                            </VaIcon>
-                            已連接到伺服器
-                        </div>
-                        <div
-                            class="flex flex-row gap-2 text-sm text-gray-400"
-                            v-else-if="APIstatus == null"
-                        >
-                            <VaIcon size="large">
-                                <ArrowClockwise24Filled />
-                            </VaIcon>
-                            正在連接伺服器...
-                        </div>
-                        <div
-                            class="flex flex-row gap-2 text-sm text-red-600"
-                            v-else
-                        >
-                            <VaIcon size="large">
-                                <AlertCircleOutline />
-                            </VaIcon>
-                            無法連接到伺服器
-                        </div>
+                    <div
+                        class="flex flex-row gap-2 text-sm text-lime-400"
+                        v-if="APIstatus"
+                    >
+                        <VaIcon size="large">
+                            <ArrowSyncCheckmark24Filled />
+                        </VaIcon>
+                        已連接到伺服器
                     </div>
-                    <div>
-                        <div
-                            class="flex flex-row gap-2 text-sm text-lime-400"
-                            v-if="authState.isAuthenticated"
-                        >
-                            <VaIcon size="large">
-                                <PersonLock20Filled />
-                            </VaIcon>
-                            已登入管理權限
-                        </div>
-                        <div
-                            class="flex flex-row gap-2 text-sm text-red-600"
-                            v-else
-                        >
-                            <VaIcon size="large">
-                                <PresenceBlocked12Regular />
-                            </VaIcon>
-                            尚未登入管理權限
-                        </div>
+                    <div
+                        class="flex flex-row gap-2 text-sm text-gray-400"
+                        v-else-if="APIstatus == null"
+                    >
+                        <VaIcon size="large">
+                            <ArrowClockwise24Filled />
+                        </VaIcon>
+                        正在連接伺服器...
+                    </div>
+                    <div
+                        class="flex flex-row gap-2 text-sm text-red-600"
+                        v-else
+                    >
+                        <VaIcon size="large">
+                            <AlertCircleOutline />
+                        </VaIcon>
+                        無法連接到伺服器
+                    </div>
+
+                    <div
+                        class="flex flex-row gap-2 text-sm text-lime-400"
+                        v-if="authState.isAuthenticated"
+                    >
+                        <VaIcon size="large">
+                            <PersonLock20Filled />
+                        </VaIcon>
+                        已登入管理權限
+                    </div>
+                    <div
+                        class="flex flex-row gap-2 text-sm text-red-600"
+                        v-else
+                    >
+                        <VaIcon size="large">
+                            <PresenceBlocked12Regular />
+                        </VaIcon>
+                        尚未登入管理權限
                     </div>
                 </div>
                 <div class="h-44"></div>
