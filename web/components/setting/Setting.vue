@@ -1,8 +1,7 @@
 <script setup lang="ts">
-// TODO: Make vote channel, exchange channel into setting page
 import { VaDivider } from "vuestic-ui";
 import Backup from "./Backup.vue";
-import Wheel from "./Wheel.vue";
+import Channels from "./Channels.vue";
 import Anonymous from "./Anonymous.vue";
 
 document.title = "系统设置 - 水星人的夢幻樂園";
@@ -20,9 +19,9 @@ document.title = "系统设置 - 水星人的夢幻樂園";
     </div>
     <VaDivider class="w-full !mt-0 !mb-2" />
 
-    <div class="grid grid-cols-3 gap-2 px-2">
+    <div class="grid grid-cols-3 gap-2 m-4">
         <Backup />
-        <Wheel />
+        <Channels />
         <Anonymous />
     </div>
 </template>
