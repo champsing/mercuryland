@@ -26,7 +26,7 @@
         "vue-router": "^4.4.0",
         "vue-tsc": "^2.1.10",
         "vue-wheel-spinner": "^0.2.8",
-        "vuestic-ui": "^1.10.0"
+        "vuestic-ui": "^1.10.3"
     },
     "devDependencies": {
         "@types/node": "^20.14.2",

@@ -52,8 +52,8 @@ async function downloadDatabase() {
         </VaCardTitle>
         <VaCardContent class="px-6 pb-6 text-sm text-zinc-300">
             <VaButton
-                preset="primary"
-                color="info"
+                preset="plains"
+                color="success"
                 class="w-full"
                 :loading="isVodDownloading"
                 @click="downloadDatabase"
