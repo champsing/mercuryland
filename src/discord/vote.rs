@@ -1,6 +1,7 @@
 use crate::database::config::Config;
 use crate::database::get_connection;
 use crate::{config::CONFIG, error::ServerError};
+use chrono::{FixedOffset, TimeZone};
 use core::panic;
 use itertools::Itertools;
 use poise;
@@ -128,17 +129,47 @@ pub async fn revoke(ctx: super::Context<'_>, id: String) -> Result<(), ServerErr
 }
 
 #[poise::command(slash_command)]
-pub async fn deadline(ctx: super::Context<'_>, deadline: u64) -> Result<(), ServerError> {
+pub async fn deadline(
+    ctx: super::Context<'_>,
+    #[description = "年份 (例如 2025)"] year: i32,
+    #[description = "月份 (1-12)"] month: u32,
+    #[description = "日期 (1-31)"] day: u32,
+) -> Result<(), ServerError> {
+    // 權限檢查
     if !CONFIG.discord.admin.contains(&ctx.author().id.get()) {
         ctx.say("权限不足").await?;
         return Ok(());
     }
-    let binding = init_ballot(ctx).await?;
-    let mut ballot = binding.lock().await;
-    ballot.deadline = Some(deadline);
-    ctx.say(format!("截止时间设置为: <t:{}:f>", deadline))
-        .await?;
-    ballot.commit(ctx).await?;
+
+    // 使用 chrono::Utc 構建日期
+    // 時間固定在該日的 23:59:00 UTC+8
+
+    let fixed_offset_8 = FixedOffset::east_opt(8 * 3600).expect("Can't offset time.");
+
+    let datetime_opt = fixed_offset_8
+        .with_ymd_and_hms(year, month, day, 23, 59, 0)
+        .single();
+
+    match datetime_opt {
+        Some(dt) => {
+            let ts = dt.timestamp() as u64;
+
+            let binding = init_ballot(ctx).await?;
+            let mut ballot = binding.lock().await;
+            ballot.deadline = Some(ts);
+
+            // Discord 會根據用戶所在時區顯示這個 UTC 時間戳
+            ctx.say(format!("✅ 截止日期已設置為: <t:{}:f>", ts))
+                .await?;
+
+            ballot.commit(ctx).await?;
+        }
+        None => {
+            ctx.say("❌ 無效的日期（請檢查年份、月份或該月是否有這一天）。")
+                .await?;
+        }
+    }
+
     Ok(())
 }
 
