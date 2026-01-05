@@ -14,6 +14,7 @@ import {
     VaButton,
     VaModal,
     VaSwitch,
+    VaPopover,
     VaIcon,
     VaDivider,
     useToast,
@@ -101,6 +102,36 @@ const textArea2 = defineModel("textArea2", {
     },
 });
 
+// 新增一個介面來處理待送出的懲罰項目
+interface PenaltySubmissionItem {
+    label: string;
+    isActive: boolean;
+}
+
+const penaltyItems = ref<PenaltySubmissionItem[]>([]);
+
+// 處理開啟狀態設定 Modal 的邏輯
+function openStatusModal() {
+    if (count(textArea2.value) === 0)
+        return useToast().init({
+            duration: 2000,
+            message: "請先抽選至少一個懲罰",
+            color: "danger",
+        });
+
+    // 將 textArea2 的文字轉為物件陣列，預設為 true (1)
+    penaltyItems.value = textArea2.value
+        .split("\n")
+        .filter((x) => x.trim() !== "")
+        .map((line) => ({
+            label: line,
+            isActive: true, // 預設勾選，代表已生效 (1)
+        }));
+
+    modal4.show = true;
+}
+
+// 修改後的提交邏輯
 function submit(hide?: CallableFunction) {
     const token = localStorage.getItem("token");
     if (!token) {
@@ -109,28 +140,27 @@ function submit(hide?: CallableFunction) {
         return;
     }
 
-    const penaltiesPayload = textArea2.value
-        .split("\n")
-        .filter((x) => x != "")
-        .map((line) => {
-            return [line, 1];
-        });
+    // 根據 penaltyItems 的勾選狀態生成 payload
+    // 勾選為 1 (已生效，待完成), 未勾選為 0 (未生效)
+    const penaltiesPayload = penaltyItems.value.map((item) => {
+        return [item.label, item.isActive ? 1 : 0];
+    });
 
     axios
         .post(BASE_URL + "/api/wheel/submit", {
             token: token,
             penalties: penaltiesPayload,
         })
-        .then((response) => {
-            console.log(response);
+        .then(() => {
             useToast().init({
                 duration: 2000,
-                message: "已廣播至Discord",
+                message: "已廣播至Discord並記錄狀態",
             });
-            hide();
+            if (hide) hide();
+            modal4.show = false; // 關閉狀態視窗
         })
         .catch((error) => {
-            console.log(error);
+            console.error(error);
             useToast().init({
                 duration: 2000,
                 message: "廣播失敗，請重新登入或再試一次",
@@ -220,6 +250,11 @@ const modal3 = reactive({
     fail: false,
 });
 
+// 新增 Modal 控制變數
+const modal4 = reactive({
+    show: false,
+});
+
 const isSubmitAvailable: ComputedRef<boolean> = computed(() => {
     return (
         !isSpinning.value &&
@@ -254,7 +289,7 @@ const isSubmitAvailable: ComputedRef<boolean> = computed(() => {
                 </VaButton>
                 <VaButton
                     class="w-full mt-8"
-                    @click="modal3.show = true"
+                    @click="openStatusModal"
                     :disabled="!isSubmitAvailable"
                 >
                     完成抽選
@@ -388,6 +423,56 @@ const isSubmitAvailable: ComputedRef<boolean> = computed(() => {
             </div>
             <div class="text-red-500 mt-4" v-if="modal3.fail">
                 廣播失敗，請重新登入或再試一次。
+            </div>
+        </VaModal>
+        <VaModal
+            v-model="modal4.show"
+            title="確認懲罰生效狀態"
+            ok-text="設定完成"
+            cancel-text="取消"
+            :before-ok="() => (modal3.show = true)"
+        >
+            <div class="mb-2 text-bg">請選擇懲罰送出時的完成狀態</div>
+            <div class="mb-4 text-gray-400 text-sm">
+                勾選代表「未完成」，未勾選代表「未生效」。
+            </div>
+
+            <div class="max-h-96 overflow-y-auto overflow-x-auto pr-2">
+                <div
+                    v-for="(item, index) in penaltyItems"
+                    :key="index"
+                    class="flex flex-row items-center justify-between p-2 border-b border-gray-700 last:border-0"
+                >
+                    <div>
+                        <VaPopover v-if="item.label.length > 30">
+                            <p class="text-lg truncate max-w-lg">
+                                {{ item.label }}
+                            </p>
+                            <template #body>
+                                <p class="text-lg text-wrap max-w-lg">
+                                    {{ item.label }}
+                                </p>
+                            </template>
+                        </VaPopover>
+                        <span v-else class="text-lg max-w-lg">
+                            {{ item.label }}
+                        </span>
+                    </div>
+                    <div>
+                        <VaSwitch
+                            v-model="item.isActive"
+                            size="small"
+                            true-inner-label="未完成"
+                            false-inner-label="未生效"
+                            color="danger"
+                            off-color="textPrimary"
+                        />
+                    </div>
+                </div>
+            </div>
+
+            <div class="text-red-500 mt-4" v-if="modal3.fail">
+                廣播失敗，請檢查權限或伺服器狀態。
             </div>
         </VaModal>
     </div>
