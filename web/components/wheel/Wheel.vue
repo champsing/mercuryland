@@ -112,12 +112,7 @@ const penaltyItems = ref<PenaltySubmissionItem[]>([]);
 
 // 處理開啟狀態設定 Modal 的邏輯
 function openStatusModal() {
-    if (count(textArea2.value) === 0)
-        return useToast().init({
-            duration: 2000,
-            message: "請先抽選至少一個懲罰",
-            color: "danger",
-        });
+    if (count(textArea2.value) === 0) return;
 
     // 將 textArea2 的文字轉為物件陣列，預設為 true (1)
     penaltyItems.value = textArea2.value
