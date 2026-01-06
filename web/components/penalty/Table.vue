@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref } from "vue";
+import { computed, onMounted, ref } from "vue";
 import {
     VaButton,
     VaDataTable,
@@ -31,7 +31,7 @@ const emit = defineEmits<{
 
 const vodData = ref<VodItem[]>([]);
 
-export async function loadVodData() {
+async function loadVodData() {
     try {
         const response = await axios.get<VodItem[]>(`${BASE_URL}/api/vod/list`);
         vodData.value = response.data;
@@ -40,6 +40,8 @@ export async function loadVodData() {
         console.error("Failed to load penalty data", error);
     }
 }
+
+onMounted(loadVodData);
 
 const authState = useAuthState();
 const showActions = computed(() => authState.isAuthenticated);
