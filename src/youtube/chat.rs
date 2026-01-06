@@ -117,7 +117,6 @@ pub mod coin {
 pub mod command {
     use super::*;
     use crate::coin::command::CoinCommandManager;
-    use itertools::Itertools;
     use serenity::futures::lock::Mutex;
     use std::sync::LazyLock;
 
@@ -139,15 +138,30 @@ pub mod command {
 
         if message.starts_with("/purchase booster") {
             let mut split = message.split_ascii_whitespace();
-            let _ = split.next(); // the first one is command, ignore.
 
-            let level = split.next().unwrap_or("").parse().unwrap_or(0);
-            if level == 0 {
-                log::warn!("{}: incorrect level", message);
+            // 正確跳過前兩個 token
+            split.next(); // "/purchase"
+            split.next(); // "booster"
+
+            // 解析 Level
+            let level_str = split.next().unwrap_or("");
+            let level = level_str.parse::<i64>().unwrap_or(0);
+
+            if level <= 0 {
+                // 建議改為 <= 0，防止負數或是解析失敗
+                log::warn!("Invalid command format or level: {}", message);
                 return Ok(());
             }
 
-            let content = split.join(" ");
+            // 收集剩餘部分
+            let remaining: Vec<&str> = split.collect();
+            let content = if remaining.is_empty() {
+                // 如果沒有剩餘內容，給予預設值
+                "(未指定內容)".to_string()
+            } else {
+                // 如果有內容，則用空格組合回來
+                remaining.join(" ")
+            };
 
             let manager = CONTEXT.lock().await;
             manager
