@@ -141,6 +141,7 @@ watch(
         hide-default-actions
         size="small"
         close-button
+        no-dismiss
     >
         <div v-if="penalty" class="min-h-[50vh]">
             <div class="flex gap-4 items-center">
