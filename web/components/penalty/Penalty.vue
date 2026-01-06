@@ -46,7 +46,7 @@ const penalties = ref<PenItem[]>([]);
 const addPenaltyRef = ref<{ open: () => void } | null>(null);
 const setPenaltyRef = ref<{ open: (penalty: PenItem) => void } | null>(null);
 
-async function loadPenData() {
+export async function loadPenData() {
     try {
         const response = await axios.get<PenItem[]>(
             `${BASE_URL}/api/penalty/list`,
