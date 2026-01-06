@@ -437,7 +437,7 @@ const isSubmitAvailable: ComputedRef<boolean> = computed(() => {
                 勾選代表「未完成」，未勾選代表「未生效」。
             </div>
 
-            <div class="max-h-96 overflow-y-auto overflow-x-auto pr-2">
+            <div class="max-h-96 overflow-y-auto overflow-x-hidden pr-2">
                 <div
                     v-for="(item, index) in penaltyItems"
                     :key="index"
