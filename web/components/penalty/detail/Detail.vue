@@ -154,7 +154,7 @@ watch(
                 >
                     ● {{ stateString(penalty.state) }}
                 </VaChip>
-                <div class="truncate text-xl flex-1">{{ penalty.name }}</div>
+                <div class="text-xl flex-1">{{ penalty.date }}</div>
             </div>
 
             <div class="text-lg mt-2">{{ penalty.name }}</div>
