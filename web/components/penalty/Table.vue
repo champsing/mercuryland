@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref } from "vue";
+import { computed, onMounted, ref } from "vue";
 import {
     VaButton,
     VaDataTable,
@@ -8,11 +8,13 @@ import {
     VaCardContent,
     VaIcon,
 } from "vuestic-ui";
-import vodData from "@assets/data/vod.json";
+
 import Detail from "./detail/Detail.vue";
-import { openLinks } from "@/composables/utils";
+import { BASE_URL, openLinks } from "@/composables/utils";
 import { stateString, stateColor, PenItem } from "@/composables/penalty";
 import { useAuthState } from "@/composables/authState";
+import axios from "axios";
+import { VodItem } from "@/composables/vod";
 
 const props = defineProps<{
     penalties: PenItem[];
@@ -26,6 +28,20 @@ const emit = defineEmits<{
     (e: "addPenalty"): void;
     (e: "editPenalty", penalty: PenItem): void;
 }>();
+
+const vodData = ref<VodItem[]>([]);
+
+async function loadVodData() {
+    try {
+        const response = await axios.get<VodItem[]>(`${BASE_URL}/api/vod/list`);
+        vodData.value = response.data;
+        console.log("Penalty data loaded:", vodData.value);
+    } catch (error) {
+        console.error("Failed to load penalty data", error);
+    }
+}
+
+onMounted(loadVodData);
 
 const authState = useAuthState();
 const showActions = computed(() => authState.isAuthenticated);
@@ -90,7 +106,9 @@ const headerColumns = computed(() =>
 );
 
 function vodLinkOfDate(date: string): string[] {
-    let linkIDArray = vodData.filter((x) => x.date == date).map((x) => x.link);
+    let linkIDArray = vodData.value
+        .filter((x) => x.date == date)
+        .map((x) => x.link);
     for (let i = 0; i < linkIDArray.length; i++)
         linkIDArray[i] = YOUTUBE_LIVE + linkIDArray[i];
     return linkIDArray;
