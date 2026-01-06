@@ -164,6 +164,7 @@ defineExpose({ open });
         v-model="showEditPenaltyModal"
         hide-default-actions
         close-button
+        no-outside-dismiss
         max-width="480px"
     >
         <div class="flex flex-col gap-4 p-4">
