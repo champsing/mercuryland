@@ -33,9 +33,7 @@ const vodData = ref<VodItem[]>([]);
 
 export async function loadVodData() {
     try {
-        const response = await axios.get<VodItem[]>(
-            `${BASE_URL}/api/vod/list`,
-        );
+        const response = await axios.get<VodItem[]>(`${BASE_URL}/api/vod/list`);
         vodData.value = response.data;
         console.log("Penalty data loaded:", vodData.value);
     } catch (error) {
@@ -106,7 +104,9 @@ const headerColumns = computed(() =>
 );
 
 function vodLinkOfDate(date: string): string[] {
-    let linkIDArray = vodData.value.filter((x) => x.date == date).map((x) => x.link);
+    let linkIDArray = vodData.value
+        .filter((x) => x.date == date)
+        .map((x) => x.link);
     for (let i = 0; i < linkIDArray.length; i++)
         linkIDArray[i] = YOUTUBE_LIVE + linkIDArray[i];
     return linkIDArray;
