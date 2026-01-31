@@ -10,7 +10,7 @@ import {
     VaTimeInput,
 } from "vuestic-ui";
 import api from "@composables/axios";
-import { BASE_URL, formatDate, parseDate } from "@/composables/utils";
+import { formatDate, parseDate } from "@/composables/utils";
 import { VodItem } from "@/composables/vod";
 import { useAuthState } from "@/composables/authState";
 

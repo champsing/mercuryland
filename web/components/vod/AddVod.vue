@@ -11,7 +11,7 @@ import {
     VaIcon,
 } from "vuestic-ui";
 import api from "@composables/axios";
-import { BASE_URL, formatDate, parseDate } from "@/composables/utils";
+import { formatDate, parseDate } from "@/composables/utils";
 import { Robot as FaRobot } from "@vicons/fa";
 import { useAuthState } from "@/composables/authState";
 

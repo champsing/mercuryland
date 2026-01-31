@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { nextTick, onBeforeUnmount, ref } from "vue";
 import { VaAlert, VaButton, VaIcon, VaInput, VaModal } from "vuestic-ui";
-import axios, { isAxiosError } from "axios";
+import { isAxiosError } from "axios";
 
 import { Photo } from "@vicons/tabler";
 import api from "@/composables/axios";

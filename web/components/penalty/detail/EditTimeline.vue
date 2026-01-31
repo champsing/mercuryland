@@ -2,7 +2,7 @@
 import { ref, computed, watch } from "vue";
 import { VaButton, VaSelect, VaDateInput } from "vuestic-ui";
 import { stateString } from "@/composables/penalty";
-import { BASE_URL, formatDate, parseDate } from "@/composables/utils";
+import { formatDate, parseDate } from "@/composables/utils";
 import api from "@composables/axios";
 
 const props = defineProps<{

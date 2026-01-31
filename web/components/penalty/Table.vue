@@ -10,7 +10,7 @@ import {
 } from "vuestic-ui";
 
 import Detail from "./detail/Detail.vue";
-import { BASE_URL, openLinks } from "@/composables/utils";
+import { openLinks } from "@/composables/utils";
 import { stateString, stateColor, PenItem } from "@/composables/penalty";
 import { useAuthState } from "@/composables/authState";
 import api from "@composables/axios";
