@@ -21,9 +21,7 @@ api.interceptors.request.use((config) => {
     // 使用 test() 檢查是否符合正則表達式
     const isWhiteListed = whiteList.some((pattern) => {
         if (pattern instanceof RegExp) {
-            
             return pattern.test(url);
-            
         }
         return url.includes(pattern); // 保留對字串的兼容
     });
