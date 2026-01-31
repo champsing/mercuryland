@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { ref, computed, nextTick } from "vue";
 import { VaButton, VaModal, VaSelect, VaAlert, VaIcon } from "vuestic-ui";
-import axios from "axios";
-import { BASE_URL } from "@/composables/utils";
+import api from "@composables/axios";
+
 import { PenItem, stateString } from "@/composables/penalty";
 import { Gavel } from "@vicons/tabler"; // 法槌 icon
 
@@ -40,7 +40,7 @@ async function ensurePenaltiesLoaded() {
     try {
         isLoading.value = true;
         loadError.value = null;
-        const response = await axios.get(`${BASE_URL}/api/penalty/list`);
+        const response = await api.get(`/api/penalty/list`);
         penalties.value = response.data ?? [];
     } catch (error) {
         console.error("Failed to load penalties", error);

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref } from "vue";
-import axios from "axios";
+// 這裡改為 import 你配置了攔截器的 axios 實例
+import api from "@composables/axios";
 import {
     VaButton,
     VaCard,
@@ -9,133 +10,93 @@ import {
     VaInput,
     VaModal,
 } from "vuestic-ui";
-import { BASE_URL } from "@/composables/utils";
 
 const showPenaltyChannelModal = ref(false);
 const showCoinChannelModal = ref(false);
 const showVoteConfigModal = ref(false);
+
 const penaltyChannel = ref("");
 const coinChannel = ref("");
 const voteChannel = ref("");
 const voteMessage = ref("");
 
+// --- 懲罰頻道 ---
 async function openPenaltyChannelModal() {
-    const token = localStorage.getItem("token");
-    if (!token) {
-        console.error("No token found");
-        return;
-    }
-
     try {
-        const response = await axios.get(
-            `${BASE_URL}/api/setting/config?token=${token}&id=0`,
-        );
-        penaltyChannel.value = response.data.value;
-        showPenaltyChannelModal.value = true;
-    } catch (error) {
-        console.error("Failed to fetch wheel password", error);
-    }
-}
-
-async function savePenaltyChannel() {
-    const token = localStorage.getItem("token");
-    if (!token) {
-        console.error("No token found");
-        return;
-    }
-
-    try {
-        await axios.post(`${BASE_URL}/api/setting/config`, {
-            token,
-            id: 0,
-            value: penaltyChannel.value,
-        });
-        showPenaltyChannelModal.value = false;
-    } catch (error) {
-        console.error("Failed to save wheel password", error);
-    }
-}
-
-async function openCoinChannelModal() {
-    const token = localStorage.getItem("token");
-    if (!token) {
-        console.error("No token found");
-        return;
-    }
-
-    try {
-        const response = await axios.get(
-            `${BASE_URL}/api/setting/config?token=${token}&id=1`,
-        );
-        penaltyChannel.value = response.data.value;
+        const { data } = await api.get("/api/setting/config?id=0");
+        penaltyChannel.value = data.value;
         showPenaltyChannelModal.value = true;
     } catch (error) {
         console.error("Failed to fetch penalty channel", error);
     }
 }
 
-async function saveCoinChannel() {
-    const token = localStorage.getItem("token");
-    if (!token) {
-        console.error("No token found");
-        return;
-    }
-
+async function savePenaltyChannel() {
     try {
-        await axios.post(`${BASE_URL}/api/setting/config`, {
-            token,
+        await api.post("/api/setting/config", {
+            id: 0,
+            value: penaltyChannel.value,
+        });
+        showPenaltyChannelModal.value = false;
+    } catch (error) {
+        console.error("Failed to save penalty channel", error);
+    }
+}
+
+// --- 交易所頻道 ---
+async function openCoinChannelModal() {
+    try {
+        const { data } = await api.get("/api/setting/config?id=1");
+        coinChannel.value = data.value; // 修正：原代碼誤寫為 penaltyChannel
+        showCoinChannelModal.value = true;
+    } catch (error) {
+        console.error("Failed to fetch coin channel", error);
+    }
+}
+
+async function saveCoinChannel() {
+    try {
+        await api.post("/api/setting/config", {
             id: 1,
             value: coinChannel.value,
         });
         showCoinChannelModal.value = false;
     } catch (error) {
-        console.error("Failed to save penalty channel", error);
+        console.error("Failed to save coin channel", error);
     }
 }
 
+// --- 投票配置 ---
 async function openVoteConfigModal() {
-    const token = localStorage.getItem("token");
-    if (!token) {
-        console.error("No token found");
-        return;
-    }
-
     try {
-        const voteChannelResponse = await axios.get(
-            `${BASE_URL}/api/setting/config?token=${token}&id=2`,
-        );
-        voteChannel.value = voteChannelResponse.data.value;
-        const voteMessageResponse = await axios.get(
-            `${BASE_URL}/api/setting/config?token=${token}&id=3`,
-        );
-        voteMessage.value = voteMessageResponse.data.value;
+        // 使用 Promise.all 同時發送請求，效率更高
+        const [resChannel, resMsg] = await Promise.all([
+            api.get("/api/setting/config?id=2"),
+            api.get("/api/setting/config?id=3"),
+        ]);
+        voteChannel.value = resChannel.data.value;
+        voteMessage.value = resMsg.data.value;
         showVoteConfigModal.value = true;
     } catch (error) {
-        console.error("Failed to fetch vote channel or msg", error);
+        console.error("Failed to fetch vote config", error);
     }
 }
 
 async function saveVoteConfig() {
-    const token = localStorage.getItem("token");
-    if (!token) {
-        console.error("No token found");
-        return;
-    }
-
     try {
-        await axios.post(`${BASE_URL}/api/setting/config`, {
-            token,
-            id: 2,
-            value: voteChannel.value,
-        });
-        await axios.post(`${BASE_URL}/api/setting/config`, {
-            token,
-            id: 3,
-            value: voteMessage.value,
-        });
+        await Promise.all([
+            api.post("/api/setting/config", {
+                id: 2,
+                value: voteChannel.value,
+            }),
+            api.post("/api/setting/config", {
+                id: 3,
+                value: voteMessage.value,
+            }),
+        ]);
         showVoteConfigModal.value = false;
     } catch (error) {
-        console.error("Failed to save penalty channel", error);
+        console.error("Failed to save vote config", error);
     }
 }
 </script>
@@ -148,11 +109,10 @@ async function saveVoteConfig() {
             頻道與訊息
         </VaCardTitle>
         <VaCardContent class="px-6 pb-6 text-sm text-zinc-300">
-            <div class="grid grid-cols-2 grid-rows-2 gap-4">
+            <div class="grid grid-cols-2 gap-4">
                 <VaButton
                     preset="primary"
                     color="info"
-                    class="flex-1"
                     @click="openPenaltyChannelModal"
                 >
                     惩罚频道
@@ -160,7 +120,6 @@ async function saveVoteConfig() {
                 <VaButton
                     preset="primary"
                     color="info"
-                    class="flex-1"
                     @click="openCoinChannelModal"
                 >
                     交易所频道
@@ -168,7 +127,6 @@ async function saveVoteConfig() {
                 <VaButton
                     preset="primary"
                     color="info"
-                    class="flex-1"
                     @click="openVoteConfigModal"
                 >
                     投票频道與訊息
@@ -180,58 +138,30 @@ async function saveVoteConfig() {
     <VaModal
         v-model="showPenaltyChannelModal"
         @ok="savePenaltyChannel"
-        max-width="400px"
-        close-button
         ok-text="保存"
         cancel-text="取消"
     >
-        <VaInput
-            v-model="penaltyChannel"
-            label="惩罚频道"
-            placeholder="更改惩罚频道"
-            class="w-full"
-        />
+        <VaInput v-model="penaltyChannel" label="惩罚频道" class="w-full" />
     </VaModal>
 
     <VaModal
         v-model="showCoinChannelModal"
         @ok="saveCoinChannel"
-        max-width="400px"
-        close-button
         ok-text="保存"
         cancel-text="取消"
     >
-        <VaInput
-            v-model="coinChannel"
-            label="交易所頻道"
-            placeholder="更改交易所頻道"
-            class="w-full"
-        />
+        <VaInput v-model="coinChannel" label="交易所頻道" class="w-full" />
     </VaModal>
 
     <VaModal
         v-model="showVoteConfigModal"
         @ok="saveVoteConfig"
-        max-width="400px"
-        close-button
         ok-text="保存"
         cancel-text="取消"
     >
         <div class="flex flex-col gap-2">
-            <VaInput
-                v-model="voteChannel"
-                label="投票頻道"
-                placeholder="更改投票頻道"
-                class="w-full"
-            />
-            <VaInput
-                v-model="voteMessage"
-                label="投票訊息"
-                placeholder="更改投票訊息"
-                class="w-full"
-            />
+            <VaInput v-model="voteChannel" label="投票頻道" class="w-full" />
+            <VaInput v-model="voteMessage" label="投票訊息" class="w-full" />
         </div>
     </VaModal>
 </template>
-
-<style scoped></style>

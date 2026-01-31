@@ -9,8 +9,8 @@ import {
     VaSelect,
     VaTimeInput,
 } from "vuestic-ui";
-import axios from "axios";
-import { BASE_URL, formatDate, parseDate } from "@/composables/utils";
+import api from "@composables/axios";
+import { formatDate, parseDate } from "@/composables/utils";
 import { VodItem } from "@/composables/vod";
 import { useAuthState } from "@/composables/authState";
 
@@ -212,7 +212,7 @@ const saveVod = async () => {
     try {
         isSavingVod.value = true;
         editVodError.value = null;
-        await axios.post(`${BASE_URL}/api/video/update`, payload);
+        await api.post(`/api/video/update`, payload);
         editVodSuccess.value = "更新成功";
         emit("updated");
         setTimeout(() => {
@@ -245,7 +245,7 @@ const deleteVod = async () => {
     try {
         isDeletingVod.value = true;
         deleteVodError.value = null;
-        await axios.post(`${BASE_URL}/api/video/delete`, {
+        await api.post(`/api/video/delete`, {
             token,
             id: editVodForm.id,
         });

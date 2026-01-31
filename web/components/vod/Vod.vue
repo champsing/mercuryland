@@ -1,14 +1,14 @@
 <script setup lang="ts">
 import { computed, onMounted, ref, Ref } from "vue";
 import { VaChip, VaDateInput, VaDivider, VaSelect, VaSwitch } from "vuestic-ui";
-import axios from "axios";
+import api from "@composables/axios";
 import Table from "./Table.vue";
 import Summary from "./time/Summary.vue";
 import Calculation from "./time/Calculation.vue";
 import AddVod from "./AddVod.vue";
 import SetVod from "./SetVod.vue";
 import Rule from "./Rule.vue";
-import { BASE_URL, formatDate, parseDate } from "@/composables/utils";
+import { formatDate, parseDate } from "@/composables/utils";
 import { VodItem } from "@/composables/vod";
 import { useAuthState } from "@/composables/authState";
 import ViewportHeight from "../ViewportHeight.vue";
@@ -37,9 +37,7 @@ const addVodRef = ref<{ open: () => void } | null>(null);
 
 async function loadVodData() {
     try {
-        const response = await axios.get<VodItem[]>(
-            `${BASE_URL}/api/video/list`,
-        );
+        const response = await api.get<VodItem[]>(`/api/video/list`);
         vodData.value = response.data
             .map((item) => ({
                 ...item,

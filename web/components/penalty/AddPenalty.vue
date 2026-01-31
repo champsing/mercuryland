@@ -7,8 +7,8 @@ import {
     VaSelect,
     VaTextarea,
 } from "vuestic-ui";
-import axios from "axios";
-import { BASE_URL, formatDate, parseDate } from "@/composables/utils";
+import api from "@composables/axios";
+import { formatDate, parseDate } from "@/composables/utils";
 import { useAuthState } from "@/composables/authState";
 import { stateString } from "@/composables/penalty";
 
@@ -84,7 +84,7 @@ const savePenalty = async () => {
     try {
         isSavingPenalty.value = true;
         addPenaltyError.value = null;
-        await axios.post(`${BASE_URL}/api/penalty/insert`, payload);
+        await api.post(`/api/penalty/insert`, payload);
         addPenaltySuccess.value = "新增成功";
         emit("saved");
         setTimeout(() => {
