@@ -19,8 +19,8 @@ import {
     VaDivider,
     useToast,
 } from "vuestic-ui";
-import axios from "axios";
-import { BASE_URL } from "@/composables/utils";
+import api from "@composables/axios";
+
 import { AlertCircleOutline } from "@vicons/ionicons5";
 import {
     ArrowClockwise24Filled,
@@ -49,8 +49,8 @@ const currentWinnerIndex = ref<number | null>(null);
 const APIstatus = ref<boolean | null>(null);
 
 async function getAPIStatus() {
-    const status = await axios
-        .get(BASE_URL + "/api/ping")
+    const status = await api
+        .get("/api/ping")
         .then((response) => {
             return response.data.status;
         })
@@ -141,11 +141,10 @@ function submit(hide?: CallableFunction) {
         return [item.label, item.isActive ? 1 : 0];
     });
 
-    axios
-        .post(BASE_URL + "/api/wheel/submit", {
-            token: token,
-            penalties: penaltiesPayload,
-        })
+    api.post("/api/wheel/submit", {
+        token: token,
+        penalties: penaltiesPayload,
+    })
         .then(() => {
             useToast().init({
                 duration: 2000,

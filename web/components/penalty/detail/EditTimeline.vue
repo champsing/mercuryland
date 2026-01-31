@@ -3,7 +3,7 @@ import { ref, computed, watch } from "vue";
 import { VaButton, VaSelect, VaDateInput } from "vuestic-ui";
 import { stateString } from "@/composables/penalty";
 import { BASE_URL, formatDate, parseDate } from "@/composables/utils";
-import axios from "axios";
+import api from "@composables/axios";
 
 const props = defineProps<{
     history: Array<[number, string]>;
@@ -71,17 +71,14 @@ async function saveHistory() {
         isSaving.value = true;
         saveError.value = null;
         saveSuccess.value = null;
-        const response = await axios.post(
-            `${BASE_URL}/api/penalty/history/update`,
-            {
-                token,
-                id: props.penaltyId,
-                history: sortedHistory.value.map(({ state, date }) => [
-                    state,
-                    formatDate(date),
-                ]),
-            },
-        );
+        const response = await api.post(`/api/penalty/history/update`, {
+            token,
+            id: props.penaltyId,
+            history: sortedHistory.value.map(({ state, date }) => [
+                state,
+                formatDate(date),
+            ]),
+        });
         if (response.data.success) {
             saveSuccess.value = "更新成功";
             emit(

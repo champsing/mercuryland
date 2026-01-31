@@ -2,8 +2,9 @@
 import { nextTick, onBeforeUnmount, ref } from "vue";
 import { VaAlert, VaButton, VaIcon, VaInput, VaModal } from "vuestic-ui";
 import axios, { isAxiosError } from "axios";
-import { BASE_URL } from "@/composables/utils";
+
 import { Photo } from "@vicons/tabler";
+import api from "@/composables/axios";
 
 const props = defineProps<{
     textareaRef: any;
@@ -146,8 +147,8 @@ async function save() {
         isUploading.value = true;
         uploadError.value = null;
 
-        const response = await axios.post<{ url: string }>(
-            `${BASE_URL}/api/image/upload`,
+        const response = await api.post<{ url: string }>(
+            `/api/image/upload`,
             formData,
         );
 

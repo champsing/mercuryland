@@ -13,7 +13,7 @@ import Detail from "./detail/Detail.vue";
 import { BASE_URL, openLinks } from "@/composables/utils";
 import { stateString, stateColor, PenItem } from "@/composables/penalty";
 import { useAuthState } from "@/composables/authState";
-import axios from "axios";
+import api from "@composables/axios";
 import { VodItem } from "@/composables/vod";
 
 const props = defineProps<{
@@ -33,7 +33,7 @@ const vodData = ref<VodItem[]>([]);
 
 async function loadVodData() {
     try {
-        const response = await axios.get<VodItem[]>(`${BASE_URL}/api/vod/list`);
+        const response = await api.get<VodItem[]>(`/api/video/list`);
         vodData.value = response.data;
         console.log("Penalty data loaded:", vodData.value);
     } catch (error) {

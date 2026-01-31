@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, onMounted } from "vue";
 import { VaDateInput, VaInput, VaSelect, VaDivider } from "vuestic-ui";
-import axios from "axios";
+import api from "@composables/axios";
 import Table from "./Table.vue";
 import Statistics from "./sidebar/Statistics.vue";
 import Syntax from "./sidebar/Syntax.vue";
@@ -9,7 +9,7 @@ import News from "./sidebar/News.vue";
 import Rule from "./Rule.vue";
 import AddPenalty from "./AddPenalty.vue";
 import SetPenalty from "./SetPenalty.vue";
-import { formatDate, parseDate, BASE_URL } from "@/composables/utils";
+import { formatDate, parseDate } from "@/composables/utils";
 import { PenItem, stateString } from "@/composables/penalty";
 import ViewportHeight from "../ViewportHeight.vue";
 
@@ -48,9 +48,7 @@ const setPenaltyRef = ref<{ open: (penalty: PenItem) => void } | null>(null);
 
 async function loadPenData() {
     try {
-        const response = await axios.get<PenItem[]>(
-            `${BASE_URL}/api/penalty/list`,
-        );
+        const response = await api.get<PenItem[]>(`/api/penalty/list`);
         penalties.value = response.data;
         console.log("Penalty data loaded:", penalties.value);
     } catch (error) {

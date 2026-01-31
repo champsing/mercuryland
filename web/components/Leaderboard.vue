@@ -1,6 +1,5 @@
 <script setup lang="ts">
-import axios from "axios";
-import { BASE_URL } from "@/composables/utils";
+import api from "@composables/axios";
 import { onMounted, ref, Ref } from "vue";
 import {
     VaDataTable,
@@ -18,8 +17,7 @@ document.title = "水星排行 - 水星人的夢幻樂園";
 const leaderboard: Ref<UserRank[]> = ref([]);
 
 function loadLeaderboard() {
-    axios
-        .get(BASE_URL + "/api/leaderboard")
+    api.get("/api/leaderboard")
         .then((response) => {
             leaderboard.value = response.data
                 .map((u: User) => {

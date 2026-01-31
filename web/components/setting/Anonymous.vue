@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
-import axios from "axios";
+import api from "@composables/axios";
 import {
     VaButton,
     VaCard,
@@ -9,7 +9,6 @@ import {
     VaDataTable,
     VaModal,
 } from "vuestic-ui";
-import { BASE_URL } from "@/composables/utils";
 
 interface AnonymousEntry {
     id: number;
@@ -25,17 +24,9 @@ const isLoading = ref(true);
 const isLoaded = ref(false);
 
 async function fetchAnonymousData() {
-    const token = localStorage.getItem("token");
-    if (!token) {
-        console.error("No token found");
-        return;
-    }
-
     try {
         isLoading.value = true;
-        const response = await axios.get(
-            `${BASE_URL}/api/anonymous/list?token=${token}`,
-        );
+        const response = await api.get(`/api/anonymous/list`);
         // Sort by ID in descending order (newest first)
         anonymousData.value = response.data.sort(
             (a: AnonymousEntry, b: AnonymousEntry) => b.id - a.id,

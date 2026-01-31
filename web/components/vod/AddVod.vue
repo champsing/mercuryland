@@ -10,7 +10,7 @@ import {
     VaTimeInput,
     VaIcon,
 } from "vuestic-ui";
-import axios from "axios";
+import api from "@composables/axios";
 import { BASE_URL, formatDate, parseDate } from "@/composables/utils";
 import { Robot as FaRobot } from "@vicons/fa";
 import { useAuthState } from "@/composables/authState";
@@ -130,7 +130,7 @@ const handleLinkRobotClick = async () => {
 
     try {
         addVodError.value = null;
-        const response = await axios.post(`${BASE_URL}/api/video/metadata`, {
+        const response = await api.post(`/api/video/metadata`, {
             url: addVodForm.link.trim(),
         });
 
@@ -240,7 +240,7 @@ const saveVod = async () => {
     try {
         isSavingVod.value = true;
         addVodError.value = null;
-        await axios.post(`${BASE_URL}/api/video/insert`, payload);
+        await api.post(`/api/video/insert`, payload);
         addVodSuccess.value = "新增成功";
         emit("saved");
         setTimeout(() => {

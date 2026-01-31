@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import { computed, ref, watch } from "vue";
 import { VaChip, VaModal, VaTextarea, VaButton } from "vuestic-ui";
-import { BASE_URL } from "@/composables/utils";
+
 import { stateString, stateColor, PenItem } from "@/composables/penalty";
 import { useAuthState } from "@/composables/authState";
-import axios from "axios";
+import api from "@composables/axios";
 import Timeline from "./Timeline.vue";
 import AddSteam from "./AddSteam.vue";
 import AddYoutube from "./AddYoutube.vue";
@@ -12,6 +12,7 @@ import AddImage from "./AddImage.vue";
 import AddSyntax from "./AddSyntax.vue";
 import EditTimeline from "./EditTimeline.vue";
 import AddPenaltyBtn from "./AddPenaltyBtn.vue";
+import { BASE_URL } from "@/composables/utils";
 
 const props = defineProps<{
     modelValue: number | null;
@@ -44,9 +45,7 @@ const renderedDetail = computed(() => {
 
 async function loadPenalty(id: number) {
     try {
-        const response = await axios.get(
-            `${BASE_URL}/api/penalty/detail/${id}`,
-        );
+        const response = await api.get(`/api/penalty/detail/${id}`);
         if (response.status === 200) {
             console.log("Fetched penalty:", response.data);
             penalty.value = response.data;
@@ -74,14 +73,11 @@ async function saveDetail() {
     if (!token || !penalty.value) return;
 
     try {
-        const response = await axios.post(
-            `${BASE_URL}/api/penalty/detail/update`,
-            {
-                token,
-                id: penalty.value.id,
-                detail: editedDetail.value,
-            },
-        );
+        const response = await api.post(`/api/penalty/detail/update`, {
+            token,
+            id: penalty.value.id,
+            detail: editedDetail.value,
+        });
         if (response.data.success) {
             penalty.value.detail = editedDetail.value;
             isEditingDetail.value = false;

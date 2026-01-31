@@ -1,28 +1,19 @@
 <script setup lang="ts">
 import { ref } from "vue";
-import axios from "axios";
+import api from "@composables/axios";
+
 import { VaButton, VaCard, VaCardContent, VaCardTitle } from "vuestic-ui";
-import { BASE_URL } from "@/composables/utils";
 
 const isVodDownloading = ref(false);
 
 async function downloadDatabase() {
     if (isVodDownloading.value) return;
 
-    const token = localStorage.getItem("token");
-    if (!token) {
-        console.error("No token found");
-        return;
-    }
-
     try {
         isVodDownloading.value = true;
-        const response = await axios.get(
-            `${BASE_URL}/api/setting/backup?token=${token}`,
-            {
-                responseType: "blob",
-            },
-        );
+        const response = await api.get(`/api/setting/backup`, {
+            responseType: "blob",
+        });
 
         const blob = new Blob([response.data], {
             type: "application/octet-stream",

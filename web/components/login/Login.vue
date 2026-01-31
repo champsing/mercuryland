@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { onMounted, reactive, ref } from "vue";
 import { VaButton, VaIcon, VaInput, VaModal } from "vuestic-ui";
-import axios from "axios";
-import { BASE_URL } from "@/composables/utils";
+import api from "@composables/axios";
+
 import { useAuthState } from "@/composables/authState";
 import { SignInAlt, SignOutAlt } from "@vicons/fa";
 
@@ -57,7 +57,7 @@ async function authenticate() {
 
     isSubmitting.value = true;
     try {
-        const response = await axios.post(BASE_URL + "/api/auth/login", {
+        const response = await api.post("/api/auth/login", {
             code: trimmed,
             ip: clientIP.value,
         });
@@ -88,10 +88,9 @@ function tick() {
         return;
     }
 
-    axios
-        .post(BASE_URL + "/api/auth/tick", {
-            token,
-        })
+    api.post("/api/auth/tick", {
+        token,
+    })
         .then((response) => {
             localStorage.setItem("token", response.data);
             modal.auth = true;

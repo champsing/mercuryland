@@ -9,8 +9,8 @@ import {
     VaSelect,
     VaSwitch,
 } from "vuestic-ui";
-import axios from "axios";
-import { BASE_URL } from "@/composables/utils";
+import api from "@composables/axios";
+
 import type { VodItem } from "@/composables/vod";
 import { BrandYoutube } from "@vicons/tabler";
 
@@ -255,9 +255,7 @@ async function ensureVideosLoaded() {
     try {
         isLoading.value = true;
         loadError.value = null;
-        const response = await axios.get<VodItem[]>(
-            `${BASE_URL}/api/video/list`,
-        );
+        const response = await api.get<VodItem[]>(`/api/video/list`);
         videos.value = response.data
             .map((video) => ({
                 ...video,
