@@ -6,12 +6,13 @@ const api = axios.create({
 });
 
 // 使用 Regex 定義白名單
-const whiteList = [
+const whiteList: RegExp[] = [
     /^\/api\/penalty\/list$/, // 精確匹配 list
     /^\/api\/penalty\/detail\/[a-zA-Z0-9_-]+$/, // 只匹配 detail/{id}，不允許後面還有 /update
     /^\/api\/video\/list/, // 匹配 video list 開頭的所有請求
     /^\/api\/leaderboard/, // 匹配 leaderboard 開頭的所有請求
     /^\/api\/auth\/login$/, // 精確匹配 login
+    /^\/api\/ping/, // 匹配 ping 開頭的所有請求
 ];
 
 api.interceptors.request.use((config) => {
