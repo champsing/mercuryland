@@ -13,25 +13,18 @@ use tokio::sync::{Mutex, OnceCell};
 
 // 將原本的 fetch_vote_channel_and_msg 改寫為更安全的讀取函數
 fn read_vote_config() -> Result<(u64, Option<u64>), ServerError> {
-    let mut connection = get_connection()?;
+    let mut connection = get_connection()?; // 這裡現在會自動從全局池拿連接
 
-    // [關鍵修改] 設定 10000ms (10秒) 的等待時間
-    connection.busy_timeout(Duration::from_millis(10000))?;
+    let transaction = connection.transaction()?; 
 
-    let transaction = connection.transaction()?; // 開啟讀取事務
-
-    // 1. 讀取 Channel ID
     let vote_channel_id = if let Some(text) = Config::ChannelVote.get(&transaction)?
         && let Ok(channel) = text.parse::<u64>()
     {
         channel
     } else {
-        return Err(ServerError::Internal(String::from(
-            "Parse ChannelCoin channel id for ChannelVote failed.",
-        )));
+        return Err(ServerError::Internal(String::from("Parse ChannelVote failed.")));
     };
 
-    // 2. 讀取 Message ID (允許為 None)
     let vote_message_id = if let Some(text) = Config::MessageVote.get(&transaction)?
         && let Ok(message_id) = text.parse::<u64>()
     {
@@ -40,10 +33,7 @@ fn read_vote_config() -> Result<(u64, Option<u64>), ServerError> {
         None
     };
 
-    // 3. 顯式提交/釋放 (雖然 Rust 會自動 drop，但在 SQLite 中顯式 commit 讀取事務是個好習慣，能確保鎖被釋放)
-    // 對於唯讀事務，commit 和 rollback 效果一樣，都是結束事務
     transaction.commit()?;
-
     Ok((vote_channel_id, vote_message_id))
 }
 
