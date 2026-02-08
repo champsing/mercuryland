@@ -15,14 +15,16 @@ use tokio::sync::{Mutex, OnceCell};
 fn read_vote_config() -> Result<(u64, Option<u64>), ServerError> {
     let mut connection = get_connection()?; // 這裡現在會自動從全局池拿連接
 
-    let transaction = connection.transaction()?; 
+    let transaction = connection.transaction()?;
 
     let vote_channel_id = if let Some(text) = Config::ChannelVote.get(&transaction)?
         && let Ok(channel) = text.parse::<u64>()
     {
         channel
     } else {
-        return Err(ServerError::Internal(String::from("Parse ChannelVote failed.")));
+        return Err(ServerError::Internal(String::from(
+            "Parse ChannelVote failed.",
+        )));
     };
 
     let vote_message_id = if let Some(text) = Config::MessageVote.get(&transaction)?
