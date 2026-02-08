@@ -67,13 +67,12 @@ pub async fn handler(mut payload: Multipart) -> Result<impl Responder, ServerErr
         Err(_) => return Ok(HttpResponse::BadRequest().body("invalid video payload")),
     };
 
-    let mut connection = database::get_connection()?;
-    let transaction = connection.transaction()?;
-
     let mut inserted = 0usize;
     let mut skipped = 0usize;
 
     for mut video in videos {
+        let mut connection = database::get_connection()?;
+        let transaction = connection.transaction()?;
         match video.insert(&transaction) {
             Ok(_) => inserted += 1,
             Err(err) => {
@@ -81,9 +80,8 @@ pub async fn handler(mut payload: Multipart) -> Result<impl Responder, ServerErr
                 skipped += 1;
             }
         }
+        transaction.commit()?;
     }
-
-    transaction.commit()?;
 
     Ok(HttpResponse::Ok().json(json!({
         "inserted": inserted,

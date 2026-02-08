@@ -28,15 +28,18 @@ fn state_text(state: i32) -> &'static str {
 
 #[post("/api/wheel/submit")]
 pub async fn handler(request: web::Json<Request>) -> Result<impl Responder, ServerError> {
-    let mut connection = crate::database::get_connection()?;
-    let transaction = connection.transaction()?;
+    let channel_penalty = {
+        let mut connection = crate::database::get_connection()?;
+        let transaction = connection.transaction()?;
 
-    let channel_penalty = if let Some(text) = Config::ChannelPenalty.get(&transaction)?
-        && let Ok(channel) = text.parse::<u64>()
-    {
-        channel
-    } else {
-        return Ok(HttpResponse::ServiceUnavailable().finish());
+        if let Some(text) = Config::ChannelPenalty.get(&transaction)?
+            && let Ok(channel) = text.parse::<u64>()
+        {
+            transaction.commit()?;
+            channel
+        } else {
+            return Ok(HttpResponse::ServiceUnavailable().finish());
+        }
     };
 
     if request.penalties.iter().any(|p| p.1 != 0 && p.1 != 1) {
@@ -48,9 +51,6 @@ pub async fn handler(request: web::Json<Request>) -> Result<impl Responder, Serv
         return Ok(HttpResponse::Forbidden().finish());
     }
 
-    transaction.commit()?;
-
-    let transaction = connection.transaction()?;
     let now = chrono::Utc::now();
 
     {
@@ -73,7 +73,10 @@ pub async fn handler(request: web::Json<Request>) -> Result<impl Responder, Serv
                 history: history,
                 detail: String::new(),
             };
+            let mut connection = crate::database::get_connection()?;
+            let transaction = connection.transaction()?;
             penalty.insert(&transaction)?;
+            transaction.commit()?;
         }
     }
 
@@ -92,8 +95,6 @@ pub async fn handler(request: web::Json<Request>) -> Result<impl Responder, Serv
             .message(CreateMessage::new().content(message))
             .await?;
     }
-
-    transaction.commit()?;
 
     Ok(HttpResponse::Ok().finish())
 }
