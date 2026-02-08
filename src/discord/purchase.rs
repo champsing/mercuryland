@@ -19,7 +19,7 @@ pub enum CommandReply {
 }
 
 fn find_coin_user(msg_author_id: String) -> Result<Option<String>, ServerError> {
-    let mut connection = get_connection()?;
+    let mut connection = get_connection()?; // 自動獲取
     let transaction = connection.transaction()?;
     let user_id = match CoinUser::by_discord(msg_author_id, &transaction)? {
         Some(u) => Some(u.youtube),
