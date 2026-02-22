@@ -17,7 +17,7 @@
         "@vueuse/components": "^10.11.0",
         "@vueuse/core": "^10.11.0",
         "appwrite": "^16.1.0",
-        "axios": "^1.7.7",
+        "axios": "^1.13.5",
         "date-fns": "^2.0.0",
         "google-auth-library": "^9.15.1",
         "naive-ui": "^2.38.2",
