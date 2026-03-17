@@ -40,8 +40,6 @@ jobs:
               run: |
                   echo '${{ secrets.GCP_SA_KEY }}' > gcp-key.json
                   echo '${{ secrets.GCP_SSH_PRIVATE_KEY }}' > ssh-key
-                  echo '${{ secrets.GCP_SSH_PUBLIC_KEY }}' > ssh-key.pub
-
                   chmod 600 ssh-key
 
                   # 登入 Google Cloud
@@ -54,4 +52,4 @@ jobs:
                   # 上傳 docker image 檔案
                   gcloud compute scp mercury.tar mercury@${GCE_VM}:~ --zone=${GCE_ZONE} --ssh-key-file=ssh-key --quiet
 
-                  gcloud compute ssh mercury@${GCE_VM} --zone=${GCE_ZONE} --ssh-key-file=ssh-key --quiet --command="cd ~; sudo docker load -i mercury.tar; sudo docker compose down; sudo docker compose up --detach --force-recreate"
+                  gcloud compute ssh mercury@${GCE_VM} --zone=${GCE_ZONE} --ssh-key-file=ssh-key --quiet --command="cd ~; docker load -i mercury.tar; ./restart_docker_compose.sh"
