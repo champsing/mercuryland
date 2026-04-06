@@ -307,7 +307,7 @@ pub async fn run() -> Result<(), ServerError> {
         .build();
 
     let mut client = ClientBuilder::new(
-        *CFG_DISCORD_TOKEN,
+        CFG_DISCORD_TOKEN.clone(),
         GatewayIntents::non_privileged() | GatewayIntents::MESSAGE_CONTENT,
     )
     .framework(framework)
