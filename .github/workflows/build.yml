@@ -59,7 +59,7 @@ jobs:
                     mercury.tar champsing@$SSH_URL:~/custom_apps/mercury/
 
                   # 4. 遠端執行 Docker 指令
-                    scp -o "ProxyCommand=cloudflared access ssh \
+                    ssh -o "ProxyCommand=cloudflared access ssh \
                             --hostname $SSH_URL \
                             --service-token-id $CF_CLIENT_ID \
                             --service-token-secret $CF_CLIENT_SECRET" \
