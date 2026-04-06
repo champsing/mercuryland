@@ -317,5 +317,12 @@ pub async fn run() -> Result<(), ServerError> {
     HTTP.get_or_init(|| client.http.clone());
     client.start().await?;
 
+    tokio::select! {
+        res = client.start() => res?,
+        _ = tokio::signal::ctrl_c() => {
+            client.shard_manager.shutdown_all().await;
+        }
+    }
+
     Ok(())
 }
