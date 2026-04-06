@@ -1,10 +1,9 @@
 use chrono::{DateTime, Utc};
 use google_youtube3::yup_oauth2::ApplicationSecret;
 use serde::{Deserialize, Serialize};
-use std::{
-    fs,
-    sync::{LazyLock, RwLock},
-};
+use std::env;
+use std::sync::LazyLock;
+use std::{fs, sync::RwLock};
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Config {
@@ -22,10 +21,17 @@ pub static CONFIG: LazyLock<Config> = LazyLock::new(|| {
     serde_json::from_str(&contents).expect("[ERROR] Cannot parse config files")
 });
 
-pub static CFG_DISCORD_TOKEN: LazyLock<&str> = LazyLock::new(|| env!("DISCORD_TOKEN"));
+// 統一使用 std::env::var 在執行時讀取變數
+pub static CFG_DISCORD_TOKEN: LazyLock<String> = LazyLock::new(|| {
+    env::var("DISCORD_TOKEN").expect("[ERROR] DISCORD_TOKEN environment variable not set")
+});
 
 pub static CFG_YOUTUBE_TOKEN: LazyLock<ApplicationSecret> = LazyLock::new(|| {
-    serde_json::from_str(env!("YOUTUBE_TOKEN")).expect("[ERROR] Cannot parse YOUTUBE_TOKEN")
+    let raw_json =
+        env::var("YOUTUBE_TOKEN").expect("[ERROR] YOUTUBE_TOKEN environment variable not set");
+
+    // 建議增加 trim() 以防 GitHub Actions 注入時帶有不可見的換行符
+    serde_json::from_str(raw_json.trim()).expect("[ERROR] Cannot parse YOUTUBE_TOKEN")
 });
 
 #[derive(Debug, Clone)]
@@ -42,7 +48,7 @@ mod tests {
 
     #[test]
     fn test_discord_token_structure() {
-        let token = *CFG_DISCORD_TOKEN;
+        let token = CFG_DISCORD_TOKEN.clone();
         assert!(!token.is_empty(), "DISCORD_TOKEN should not be empty");
 
         let parts: Vec<&str> = token.split('.').collect();

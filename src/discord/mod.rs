@@ -307,7 +307,7 @@ pub async fn run() -> Result<(), ServerError> {
         .build();
 
     let mut client = ClientBuilder::new(
-        *CFG_DISCORD_TOKEN,
+        CFG_DISCORD_TOKEN.clone(),
         GatewayIntents::non_privileged() | GatewayIntents::MESSAGE_CONTENT,
     )
     .framework(framework)
@@ -316,6 +316,13 @@ pub async fn run() -> Result<(), ServerError> {
 
     HTTP.get_or_init(|| client.http.clone());
     client.start().await?;
+
+    tokio::select! {
+        res = client.start() => res?,
+        _ = tokio::signal::ctrl_c() => {
+            client.shard_manager.shutdown_all().await;
+        }
+    }
 
     Ok(())
 }

@@ -22,7 +22,7 @@ pub async fn run() -> Result<(), ServerError> {
         }
     });
 
-    HttpServer::new(|| {
+    let server = HttpServer::new(|| {
         let cors = Cors::default()
             .allowed_origin("http://localhost:5173")
             .allowed_origin("https://mercuryland.pp.ua")
@@ -57,8 +57,17 @@ pub async fn run() -> Result<(), ServerError> {
             .service(image::get::handler)
     })
     .bind(("0.0.0.0", 8080))?
-    .run()
-    .await?;
+    .run();
+
+    // actix-web 原生支援，收到訊號後會等現有請求處理完再退出
+    let server_handle = server.handle();
+
+    tokio::select! {
+        res = server => res?,
+        _ = tokio::signal::ctrl_c() => {
+            server_handle.stop(true).await; // true = graceful
+        }
+    }
 
     Ok(())
 }

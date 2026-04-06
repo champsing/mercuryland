@@ -1,7 +1,7 @@
 use crate::error::ServerError;
 use google_youtube3::YouTube;
 use google_youtube3::{api::Video, common::Connector};
-use std::{thread, time::Duration};
+use std::time::Duration;
 
 fn chat_id(video: &Video) -> Option<&String> {
     if let Some(content) = video.live_streaming_details.as_ref() {
@@ -60,7 +60,7 @@ pub mod chat {
                     break;
                 }
 
-                thread::sleep(Duration::from_millis(polling_ms));
+                tokio::time::sleep(Duration::from_millis(polling_ms)).await;
             }
         }
 

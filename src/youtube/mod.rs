@@ -20,7 +20,7 @@ use google_youtube3::{
 };
 use regex::Regex;
 use serenity::all::CreateMessage;
-use std::{fs::OpenOptions, future::Future, pin::Pin, thread, time::Duration};
+use std::{fs::OpenOptions, future::Future, pin::Pin, time::Duration};
 use video as h;
 
 pub struct FlowDelegateForDiscord(pub discord::Receiver);
@@ -31,6 +31,17 @@ impl DeviceFlowDelegate for FlowDelegateForDiscord {
     ) -> Pin<Box<dyn Future<Output = ()> + Send + 'a>> {
         Box::pin(present_user_code(device_auth_resp, self.0))
     }
+}
+
+fn fetch_youtube_channel_id() -> Result<String, ServerError> {
+    let mut connection = database::get_connection()?;
+    let transaction = connection.transaction()?;
+    let id = Config::YoutubeChannelId
+        .get(&transaction)
+        .map_err(|_| ServerError::Internal("Fetch ID failed".into()))?
+        .expect("No ID found");
+    transaction.commit()?;
+    Ok(id)
 }
 
 pub async fn present_user_code(device_auth_resp: &DeviceAuthResponse, recv: discord::Receiver) {
@@ -118,28 +129,25 @@ pub async fn run() -> Result<(), ServerError> {
     println!("YouTube authentication complete");
 
     // 用一個 block 把資料庫操作包起來
-    let query_youtube_id = {
-        let mut connection = database::get_connection()?;
-        let transaction = connection.transaction()?;
-        let id = Config::YoutubeChannelId
-            .get(&transaction)
-            .map_err(|_| ServerError::Internal("Fetch Oreki channel id failed.".into()))?
-            .expect("No Oreki channel found.");
-        transaction.commit()?;
-        id // id 被傳出去，connection 在這裡被 drop
-    };
-    let channel_id: &str = &query_youtube_id.as_str(); // 將 String 轉為 &str
+    let channel_id = fetch_youtube_channel_id()?;
 
     loop {
-        if let Some(id) = get_broadcast_id(&api, channel_id).await? {
-            if let Some(video) = video_from_id(&api, &id).await? {
-                h::chat::handle(&api, &video).await?;
-            } else {
-                log::error!("cannot find broadcast {}", id);
+        tokio::select! {
+            res = async {
+                // 注意：這裡直接使用上面拿到的 channel_id (String)
+                if let Some(id) = get_broadcast_id(&api, channel_id.clone()).await? {
+                    if let Some(video) = video_from_id(&api, &id).await? {
+                        h::chat::handle(&api, &video).await?;
+                    }
+                }
+                tokio::time::sleep(Duration::from_secs(60)).await;
+                Ok::<(), ServerError>(())
+            } => res?,
+            _ = tokio::signal::ctrl_c() => {
+                log::info!("youtube listener shutting down");
+                return Ok(());
             }
         }
-
-        thread::sleep(Duration::from_secs(60));
     }
 }
 
@@ -148,13 +156,10 @@ pub async fn run() -> Result<(), ServerError> {
  */
 async fn get_broadcast_id<C>(
     _: &YouTube<C>,
-    channel: impl Into<String>,
+    channel: String,
 ) -> Result<Option<String>, ServerError> {
-    let response = reqwest::get(format!(
-        "https://www.youtube.com/channel/{}/live",
-        channel.into()
-    ))
-    .await?;
+    let response =
+        reqwest::get(format!("https://www.youtube.com/channel/{}/live", channel)).await?;
     let text = response.text().await?;
 
     if text.matches("\"isLive\":true").count() >= 2 {

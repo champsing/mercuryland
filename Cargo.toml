@@ -1,6 +1,6 @@
 [package]
 name = "mercury_land"
-version = "2.21.0"
+version = "2.22.0"
 authors = ["logicfan", "champsing"]
 edition = "2024"
 
@@ -56,3 +56,4 @@ chrono = { version = "0.4", features = ["serde"] }
 itertools = "0.13"
 phf = { version = "0.13", features = ["macros"] }
 futures-util = "0.3"
+ctrlc = "3.5.2"
