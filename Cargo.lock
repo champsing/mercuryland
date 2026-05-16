@@ -1929,7 +1929,7 @@ checksum = "f8ca58f447f06ed17d5fc4043ce1b10dd205e060fb3ce5b979b8ed8e59ff3f79"
 
 [[package]]
 name = "mercury_land"
-version = "2.22.3"
+version = "2.22.4"
 dependencies = [
  "actix-cors",
  "actix-files",
