@@ -4,8 +4,9 @@ document.title = "資料公開 - 水星人的夢幻樂園";
 import { VaDivider, VaIcon } from "vuestic-ui";
 import Law from "./Law.vue";
 // import NewLaw from "./NewLaw.vue"; //如果沒有新版本水星法可以註解起來
-import Archive from "./Archive.vue";
 import { WindowNew20Filled } from "@vicons/fluent";
+import Archive from "./Archive.vue";
+import Join from "./Join.vue";
 </script>
 
 <template>
@@ -15,6 +16,8 @@ import { WindowNew20Filled } from "@vicons/fluent";
         <NewLaw /> 
         <VaDivider /> 
         -->
+        <Join />
+        <VaDivider class="!mt-6 !mb-2" />
         <div class="text-4xl text-neutral-100 text-left mt-4 mb-6">
             法規與資料
         </div>

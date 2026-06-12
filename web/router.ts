@@ -1,4 +1,3 @@
-import Join from "@/components/join/Join.vue";
 import Contact from "@components/contact/Contact.vue";
 import GameMap from "@components/GameMap.vue";
 import Penalty from "@components/penalty/Penalty.vue";
@@ -14,7 +13,6 @@ import Wheel from "./components/wheel/Wheel.vue";
 
 const routes = [
     { path: "/", component: Welcome2 },
-    { path: "/join", component: Join },
     { path: "/publication", component: Publication },
     { path: "/map", component: GameMap },
     { path: "/vod", component: Vod },
