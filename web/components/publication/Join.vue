@@ -6,7 +6,6 @@ import {
     VaCard,
     VaCardContent,
     VaCardTitle,
-    VaInput,
     VaStepper,
 } from "vuestic-ui";
 
@@ -144,12 +143,6 @@ const steps = [
                 </VaButton>
                 <br />
                 或使用連結：
-                <VaInput
-                    v-model="discordInvitation"
-                    readonly
-                    style="width: 260px"
-                    @click="copyToClipboard(discordInvitation)"
-                />
             </template>
             <template #step-content-1>
                 <div class="text-2xl">
