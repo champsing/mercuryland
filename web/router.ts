@@ -1,22 +1,22 @@
-import { createWebHistory, createRouter } from "vue-router";
-import Vod from "@components/vod/Vod.vue";
-import Penalty from "@components/penalty/Penalty.vue";
-// import Join from "@/components/join/Join.vue";
-// import Publication from "@components/publication/Publication.vue";
-// import GameMap from "@components/GameMap.vue";
+import Join from "@/components/join/Join.vue";
 import Contact from "@components/contact/Contact.vue";
-import ToS from "./components/law/ToS.vue";
-import Wheel from "./components/wheel/Wheel.vue";
+import GameMap from "@components/GameMap.vue";
+import Penalty from "@components/penalty/Penalty.vue";
+import Publication from "@components/publication/Publication.vue";
+import Vod from "@components/vod/Vod.vue";
+import { createRouter, createWebHistory } from "vue-router";
 import Privacy from "./components/law/Privacy.vue";
+import ToS from "./components/law/ToS.vue";
 import Leaderboard from "./components/Leaderboard.vue";
 import Setting from "./components/setting/Setting.vue";
 import Welcome2 from "./components/welcome/Welcome2.vue";
+import Wheel from "./components/wheel/Wheel.vue";
 
 const routes = [
     { path: "/", component: Welcome2 },
-    // { path: "/join", component: Join },
-    // { path: "/publication", component: Publication },
-    // { path: "/map", component: GameMap },
+    { path: "/join", component: Join },
+    { path: "/publication", component: Publication },
+    { path: "/map", component: GameMap },
     { path: "/vod", component: Vod },
     { path: "/penalty", component: Penalty },
     { path: "/contact", component: Contact },

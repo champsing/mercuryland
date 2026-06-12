@@ -140,7 +140,7 @@ onBeforeUnmount(() => {
                     class="flex flex-row items-center gap-2"
                     style="font-family: playfair display"
                 >
-                    <div>Copyright © 2025 The Mercury Land</div>
+                    <div>Copyright © 2026 The Mercury Land</div>
                     <div>保留一切權利。</div>
                 </div>
                 <div class="flex flex-row items-center">
