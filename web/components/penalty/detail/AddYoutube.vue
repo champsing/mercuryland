@@ -413,7 +413,15 @@ function save() {
                         v-if="previewUrl"
                         :src="previewUrl"
                         frameborder="0"
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                        allow="
+                            accelerometer;
+                            autoplay;
+                            clipboard-write;
+                            encrypted-media;
+                            gyroscope;
+                            picture-in-picture;
+                            web-share;
+                        "
                         allowfullscreen
                         class="w-full h-[300px] rounded-xl"
                     ></iframe>

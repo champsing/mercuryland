@@ -57,7 +57,15 @@ import ContactCard from "./ContactCard.vue";
                 frameborder="0"
                 height="400"
                 width="800"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                allow="
+                    accelerometer;
+                    autoplay;
+                    clipboard-write;
+                    encrypted-media;
+                    gyroscope;
+                    picture-in-picture;
+                    web-share;
+                "
                 referrerpolicy="strict-origin-when-cross-origin"
                 allowfullscreen
             ></iframe>
