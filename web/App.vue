@@ -11,8 +11,7 @@ useColors().applyPreset("dark");
 const authState = useAuthState();
 
 const baseTabs = [
-    { path: "/join", label: "加入伺服" },
-    { path: "/publication", label: "資料公開" },
+    { path: "/publication", label: "水星伺服器" },
     { path: "/vod", label: "直播隨選" },
     { path: "/penalty", label: "直播懲罰" },
     { path: "/wheel", label: "幸運轉盤" },

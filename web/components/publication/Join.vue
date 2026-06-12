@@ -28,9 +28,9 @@ function prev() {
 }
 
 const serverOnline = true; // Set to false if the server is offline
-const serverIP = "play.mercuryland.pp.ua:25565";
-const seed = -9100272987300380909;
-const version = 1.21;
+const serverIP = "mercuryland.exaroton.me";
+const seed = "NOT REVEALED";
+const version = "26.1.2";
 const discordInvitation = "https://discord.gg/A2cMZRr";
 const applyWhitelist = "https://discord.gg/CXSQq4nVAH";
 
