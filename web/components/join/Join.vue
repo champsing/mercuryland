@@ -27,7 +27,7 @@ function prev() {
     else currentStep.value--;
 }
 
-const serverOnline = false; // Set to false if the server is offline
+const serverOnline = true; // Set to false if the server is offline
 const serverIP = "play.mercuryland.pp.ua:25565";
 const seed = -9100272987300380909;
 const version = 1.21;
