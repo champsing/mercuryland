@@ -1,23 +1,22 @@
 <script setup lang="ts">
-import { VaButton, VaDivider, useColors } from "vuestic-ui";
-import { RouterLink } from "vue-router";
-import { computed, onBeforeUnmount, onMounted, ref } from "vue";
 import Login from "@/components/login/Login.vue";
-import { backToTop } from "./composables/utils";
+import { computed, onBeforeUnmount, onMounted, ref } from "vue";
+import { RouterLink } from "vue-router";
+import { VaButton, VaDivider, useColors } from "vuestic-ui";
 import { useAuthState } from "./composables/authState";
+import { backToTop } from "./composables/utils";
 
 useColors().applyPreset("dark");
 
 const authState = useAuthState();
 
 const baseTabs = [
-    // { path: "/join", label: "加入伺服" },
-    // { path: "/publication", label: "資料公開" },
+    { path: "/join", label: "加入伺服" },
+    { path: "/publication", label: "資料公開" },
     { path: "/vod", label: "直播隨選" },
     { path: "/penalty", label: "直播懲罰" },
     { path: "/wheel", label: "幸運轉盤" },
     { path: "/leaderboard", label: "水星排行" },
-    // { path: "/propose", label: "直播提案" },
     { path: "/contact", label: "聯絡我們" },
     { path: "/setting", label: "系统设置", requiresAuth: true },
 ];
