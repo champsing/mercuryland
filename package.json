@@ -33,7 +33,7 @@
         "@types/node": "^20.14.2",
         "@vicons/fa": "^0.12.0",
         "@vicons/ionicons4": "^0.12.0",
-        "@vitejs/plugin-vue": "^5.0.3",
+        "@vitejs/plugin-vue": "^6.0.7",
         "autoprefixer": "^10.4.20",
         "baseline-browser-mapping": "^2.9.11",
         "postcss": "^8.5.14",
@@ -42,7 +42,7 @@
         "tailwindcss": "^3.4.4",
         "typescript": "^5.4.5",
         "url": "^0.11.3",
-        "vite": "^6.4.2"
+        "vite": "^7.3.5"
     },
     "prettier": {
         "tabWidth": 4
