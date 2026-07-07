@@ -99,7 +99,7 @@ const latestPenalty = computed(() =>
 .latest-card h2 {
     margin: 0.1rem 0 0;
     color: #f7f7f8;
-    font-size: 1.15rem;
+    font-size: 1rem;
     font-weight: 800;
     letter-spacing: 0;
 }
