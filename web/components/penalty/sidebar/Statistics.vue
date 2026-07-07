@@ -1,16 +1,16 @@
 <script setup lang="ts">
+import { PenItem, stateColor, stateString } from "@/composables/penalty";
+import { copyToClipboard } from "@/composables/utils";
 import { ref } from "vue";
 import {
     VaButton,
+    VaCard,
+    VaCardContent,
     VaDivider,
+    VaIcon,
     VaModal,
     VaTextarea,
-    VaCard,
-    VaCardTitle,
-    VaCardContent,
 } from "vuestic-ui";
-import { copyToClipboard } from "@/composables/utils";
-import { stateColor, stateString, PenItem } from "@/composables/penalty";
 
 interface ModalData {
     title: string;
@@ -77,27 +77,34 @@ function clickDone() {
 </script>
 
 <template>
-    <div class="h-full">
-        <VaCard
-            style="--va-card-padding: 1rem"
-            class="rounded-xl h-full flex flex-col"
-        >
-            <VaCardTitle class="!text-xl justify-center"> 統計 </VaCardTitle>
-            <VaCardContent class="flex justify-stretch gap-4 flex-1">
-                <VaButton
-                    class="w-full h-full"
-                    color="danger"
-                    @click="clickExist"
-                >
-                    <div class="text-xl">現存<br />懲罰</div>
-                </VaButton>
-                <VaButton
-                    class="w-full h-full"
-                    color="success"
-                    @click="clickDone"
-                >
-                    <div class="text-xl">完成<br />懲罰</div>
-                </VaButton>
+    <div>
+        <VaCard class="side-card">
+            <VaCardContent class="side-card__content">
+                <div class="side-card__header">
+                    <div>
+                        <span class="side-card__eyebrow">Insights</span>
+                        <h2>統計</h2>
+                    </div>
+                    <VaIcon name="query_stats" size="large" />
+                </div>
+                <div class="stat-actions">
+                    <VaButton
+                        class="stat-action stat-action--danger"
+                        color="danger"
+                        size="small"
+                        @click="clickExist"
+                    >
+                        <strong>現存懲罰</strong>
+                    </VaButton>
+                    <VaButton
+                        class="stat-action stat-action--success"
+                        color="success"
+                        size="small"
+                        @click="clickDone"
+                    >
+                        <strong>完成懲罰</strong>
+                    </VaButton>
+                </div>
             </VaCardContent>
         </VaCard>
 
@@ -135,8 +142,6 @@ function clickDone() {
                     複製所有{{ modal.title }}懲罰
                 </VaButton>
             </div>
-
-            <!-- Colors below are specially picked, don't use statusColorSet constant. -->
 
             <div class="flex justify-center text-center gap-32 ml-4">
                 <div class="flex flex-col">
@@ -207,3 +212,80 @@ function clickDone() {
         </VaModal>
     </div>
 </template>
+
+<style scoped>
+.side-card {
+    --va-card-padding: 0;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 8px;
+    background: rgba(18, 21, 27, 0.92) !important;
+}
+
+.side-card__content {
+    display: flex;
+    min-height: 8.25rem;
+    flex-direction: column;
+    gap: 0.7rem;
+    padding: 0.85rem !important;
+}
+
+.side-card__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    color: #45d483;
+}
+
+.side-card__header h2 {
+    margin: 0.1rem 0 0;
+    color: #f7f7f8;
+    font-size: 1rem;
+    font-weight: 800;
+    letter-spacing: 0;
+}
+
+.side-card__eyebrow {
+    color: #45d483;
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0;
+    text-transform: uppercase;
+}
+
+.stat-actions {
+    display: grid;
+    flex: 1;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.75rem;
+}
+
+.stat-action {
+    min-height: 3.75rem;
+    border-radius: 8px;
+}
+
+.stat-action :deep(.va-button__content) {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+}
+
+.stat-action span {
+    font-size: 0.78rem;
+    font-weight: 700;
+}
+
+.stat-action strong {
+    font-size: 0.98rem;
+    line-height: 1;
+}
+
+.stat-action--danger {
+    background: #b73813 !important;
+}
+
+.stat-action--success {
+    background: #297a33 !important;
+}
+</style>
