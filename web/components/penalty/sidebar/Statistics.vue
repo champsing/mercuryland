@@ -261,14 +261,8 @@ function clickDone() {
 }
 
 .stat-action {
-    min-height: 3.75rem;
+    min-height: 1rem;
     border-radius: 8px;
-}
-
-.stat-action :deep(.va-button__content) {
-    display: flex;
-    flex-direction: column;
-    gap: 0.15rem;
 }
 
 .stat-action span {

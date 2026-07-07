@@ -57,7 +57,7 @@ const footnote0 = ref(false);
 
 <template>
     <div>
-        <VaCard class="side-card legend-card">
+        <VaCard class="side-card">
             <VaCardContent class="side-card__content">
                 <div class="side-card__header">
                     <div>
@@ -221,7 +221,7 @@ const footnote0 = ref(false);
     display: flex;
     min-height: 8.25rem;
     flex-direction: column;
-    gap: 0.7rem;
+    gap: 3rem;
     padding: 0.85rem !important;
 }
 
@@ -257,14 +257,8 @@ const footnote0 = ref(false);
 }
 
 .legend-action {
-    min-height: 3.75rem;
+    min-height: 1rem;
     border-radius: 8px;
-}
-
-.legend-action :deep(.va-button__content) {
-    display: flex;
-    flex-direction: column;
-    gap: 0.15rem;
 }
 
 .legend-action span {

@@ -1,8 +1,7 @@
 <script setup lang="ts">
-import { VaCard, VaCardContent, VaChip, VaIcon } from "vuestic-ui";
+import { PenItem, stateColor, stateString } from "@/composables/penalty";
 import { computed } from "vue";
-import { stateString } from "@/composables/penalty";
-import { stateColor, PenItem } from "@/composables/penalty";
+import { VaCard, VaCardContent, VaChip, VaIcon } from "vuestic-ui";
 
 const props = defineProps<{ penalties: PenItem[] }>();
 
@@ -37,6 +36,7 @@ const latestPenalty = computed(() =>
                         <strong class="latest-release__id"
                             >#{{ latestPenalty.id }}</strong
                         >
+                        <span>{{ latestPenalty.date }}</span>
                         <VaChip
                             readonly
                             outline
@@ -44,10 +44,9 @@ const latestPenalty = computed(() =>
                             :color="stateColor(latestPenalty.state, 'raw')"
                             class="latest-release__chip"
                         >
-                            {{ stateString(latestPenalty.state) }}
+                            ● {{ stateString(latestPenalty.state) }}
                         </VaChip>
                     </div>
-                    <span>{{ latestPenalty.date }}</span>
                 </div>
 
                 <p class="latest-release__title">
