@@ -61,7 +61,7 @@ const footnote0 = ref(false);
             <VaCardContent class="side-card__content">
                 <div class="side-card__header">
                     <div>
-                        <span class="side-card__eyebrow">Reference</span>
+                        <span class="side-card__eyebrow">Icons</span>
                         <h2>圖例</h2>
                     </div>
                     <VaIcon name="category" size="large" />

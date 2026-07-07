@@ -82,7 +82,7 @@ function clickDone() {
             <VaCardContent class="side-card__content">
                 <div class="side-card__header">
                     <div>
-                        <span class="side-card__eyebrow">Insights</span>
+                        <span class="side-card__eyebrow">Statistics</span>
                         <h2>統計</h2>
                     </div>
                     <VaIcon name="query_stats" size="large" />
