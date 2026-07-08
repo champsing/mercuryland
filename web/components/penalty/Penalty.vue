@@ -1,17 +1,16 @@
 <script setup lang="ts">
-import { ref, onMounted } from "vue";
-import { VaDateInput, VaInput, VaSelect, VaDivider } from "vuestic-ui";
-import api from "@composables/axios";
-import Table from "./Table.vue";
-import Statistics from "./sidebar/Statistics.vue";
-import Syntax from "./sidebar/Syntax.vue";
-import News from "./sidebar/News.vue";
-import Rule from "./Rule.vue";
-import AddPenalty from "./AddPenalty.vue";
-import SetPenalty from "./SetPenalty.vue";
-import { formatDate, parseDate } from "@/composables/utils";
 import { PenItem, stateString } from "@/composables/penalty";
-import ViewportHeight from "../ViewportHeight.vue";
+import { formatDate, parseDate } from "@/composables/utils";
+import api from "@composables/axios";
+import { onMounted, ref } from "vue";
+import { VaDateInput, VaIcon, VaInput, VaSelect } from "vuestic-ui";
+import AddPenalty from "./AddPenalty.vue";
+import Rule from "./Rule.vue";
+import SetPenalty from "./SetPenalty.vue";
+import Table from "./Table.vue";
+import News from "./header/News.vue";
+import Statistics from "./header/Statistics.vue";
+import Syntax from "./header/Syntax.vue";
 
 document.title = "直播懲罰 - 水星人的夢幻樂園";
 
@@ -60,51 +59,49 @@ onMounted(loadPenData);
 </script>
 
 <template>
-    <div class="m-auto w-full z-10">
-        <div
-            class="flex h-14 w-full flex-row items-center justify-between gap-4 px-2"
-        >
-            <div class="flex w-3/4 flex-row items-center gap-4">
-                <div class="w-1/4 ml-12">
-                    <VaDateInput
-                        v-model="filterDate"
-                        :format-date="formatDate"
-                        :parse-date="parseDate"
-                        manual-input
-                        mode="auto"
-                    />
-                </div>
-                <div class="w-3/4">
-                    <VaInput
-                        class="w-full"
-                        placeholder="輸入懲罰內容來搜尋"
-                        v-model="filterSearch"
-                    />
-                </div>
-            </div>
-            <div class="flex w-1/4 flex-row items-center gap-4">
-                <div class="flex w-1/2 justify-center">
-                    <VaSelect
-                        v-model="filterStatus"
-                        :options="finishOptions"
-                        placeholder="完成狀態"
-                        :text-by="textByFinish"
-                        :value-by="valueByFinish"
-                        clearable
-                        :clear-value="null"
-                    />
-                </div>
-                <div class="flex w-1/2 justify-center">
+    <main class="penalty-page">
+        <section class="penalty-shell">
+            <section class="penalty-quick-panels" aria-label="懲罰快速面板">
+                <News :penalties="penalties" />
+                <Statistics :penalties="penalties" />
+                <Syntax />
+            </section>
+
+            <section class="penalty-filter-bar" aria-label="懲罰篩選">
+                <VaDateInput
+                    v-model="filterDate"
+                    :format-date="formatDate"
+                    :parse-date="parseDate"
+                    manual-input
+                    mode="auto"
+                    class="penalty-date"
+                />
+                <VaInput
+                    v-model="filterSearch"
+                    class="penalty-search"
+                    placeholder="搜尋懲罰內容"
+                >
+                    <template #prependInner>
+                        <VaIcon name="search" size="small" />
+                    </template>
+                </VaInput>
+                <VaSelect
+                    v-model="filterStatus"
+                    :options="finishOptions"
+                    placeholder="完成狀態"
+                    :text-by="textByFinish"
+                    :value-by="valueByFinish"
+                    clearable
+                    :clear-value="null"
+                    class="penalty-status"
+                />
+                <div class="penalty-rule">
                     <Rule />
                 </div>
-            </div>
-        </div>
+            </section>
 
-        <VaDivider class="!mt-0 !mb-2" />
-
-        <ViewportHeight>
-            <div class="flex flex-row gap-2 px-2 h-full">
-                <div class="w-3/4 h-full">
+            <ViewportHeight>
+                <section class="penalty-main">
                     <Table
                         :penalties="penalties"
                         :dateRange="filterDate"
@@ -120,30 +117,81 @@ onMounted(loadPenData);
                         @addPenalty="addPenaltyRef?.open()"
                         @editPenalty="setPenaltyRef?.open($event)"
                     />
-                </div>
-                <div class="flex flex-col w-1/4 gap-2 h-full">
-                    <div class="h-1/3">
-                        <News :penalties="penalties" />
-                    </div>
-                    <div class="h-1/3">
-                        <Statistics :penalties="penalties" />
-                    </div>
-                    <div class="h-1/3">
-                        <Syntax />
-                    </div>
-                </div>
-            </div>
-        </ViewportHeight>
+                </section>
+            </ViewportHeight>
+        </section>
         <AddPenalty ref="addPenaltyRef" @saved="loadPenData" />
         <SetPenalty
             ref="setPenaltyRef"
             @updated="loadPenData"
             @deleted="loadPenData"
         />
-    </div>
+    </main>
 </template>
 
 <style>
+.penalty-page {
+    min-height: calc(100vh - 48px);
+    background:
+        radial-gradient(
+            circle at 15% 0%,
+            rgba(88, 166, 255, 0.2),
+            transparent 32rem
+        ),
+        linear-gradient(135deg, #0f1117 0%, #16191f 48%, #101318 100%);
+    color: #f7f7f8;
+    padding: 4.25rem 1rem 1.25rem;
+}
+
+.penalty-shell {
+    width: min(1680px, 100%);
+    margin: 0 auto;
+}
+
+.penalty-quick-panels {
+    display: grid;
+    grid-template-columns: minmax(18rem, 1.15fr) repeat(2, minmax(16rem, 1fr));
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.penalty-quick-panels .latest-card__content,
+.penalty-quick-panels .side-card__content {
+    min-height: 8.25rem;
+    gap: 0.7rem;
+    padding: 0.85rem !important;
+}
+
+.penalty-quick-panels .latest-release__title {
+    -webkit-line-clamp: 2;
+    font-size: 1rem;
+}
+
+.penalty-filter-bar {
+    display: grid;
+    grid-template-columns:
+        minmax(13rem, 0.9fr) minmax(16rem, 1.8fr) minmax(11rem, 0.8fr)
+        auto;
+    gap: 0.75rem;
+    align-items: center;
+    margin-bottom: 1rem;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 8px;
+    background: rgba(22, 25, 31, 0.86);
+    padding: 0.8rem;
+    backdrop-filter: blur(16px);
+}
+
+.penalty-rule {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.penalty-main {
+    min-height: 0;
+    width: 100%;
+}
+
 .overall-button {
     margin-top: 0.65rem;
     --va-button-group-font-size: 1.15rem;
@@ -166,5 +214,36 @@ kbd {
     line-height: 1;
     padding: 2px 4px;
     white-space: nowrap;
+}
+
+@media (max-width: 1180px) {
+    .penalty-quick-panels {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 900px) {
+    .penalty-filter-bar {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .penalty-rule {
+        justify-content: stretch;
+    }
+
+    .penalty-quick-panels {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 720px) {
+    .penalty-page {
+        padding: 4rem 0.75rem 1rem;
+    }
+
+    .penalty-filter-bar {
+        grid-template-columns: 1fr;
+        padding: 0.7rem;
+    }
 }
 </style>

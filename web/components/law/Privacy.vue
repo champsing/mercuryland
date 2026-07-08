@@ -21,7 +21,7 @@ const email = ref("0.flunky-sojourn@icloud.com");
     <div class="m-auto flex w-full flex-col items-center">
         <div class="w-11/12">
             <p class="text-lg font-semibold">
-                本隱私政策旨在規範使用者（以下簡稱「您」）在使用水星伺服器網（以下簡稱「本網站」）時，本網站對您的個人資料之蒐集、處理、使用、儲存及保護等事項，並告知您相關權利。
+                本隱私政策旨在規範使用者（以下簡稱「您」）在使用水星樂園（以下簡稱「本網站」）時，本網站對您的個人資料之蒐集、處理、使用、儲存及保護等事項，並告知您相關權利。
             </p>
 
             <p class="text-lg font-semibold mt-4">

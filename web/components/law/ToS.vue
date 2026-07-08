@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { VaButton, VaDivider, VaInput } from "vuestic-ui";
 import { backToTop, copyToClipboard } from "@/composables/utils";
 import { ref } from "vue";
+import { VaButton, VaDivider, VaInput } from "vuestic-ui";
 
 backToTop();
 
@@ -22,7 +22,7 @@ const email = ref("0.flunky-sojourn@icloud.com");
     <div class="m-auto flex w-full flex-col items-center">
         <div class="w-11/12">
             <p class="text-lg font-semibold">
-                本聲明旨在規範網際網路連接視聽閱覽者（以下簡稱「閱聽人」）存取水星伺服器網（以下簡稱「本網站」）所提供之多媒體內容，包括但不限於：文字、文件、圖片、影音、壓縮檔與外部連結，所應享有之權利與應履行之義務，並規範閱聽人與本網站管理者之間的權利義務關係。
+                本聲明旨在規範網際網路連接視聽閱覽者（以下簡稱「閱聽人」）存取水星樂園（以下簡稱「本網站」）所提供之多媒體內容，包括但不限於：文字、文件、圖片、影音、壓縮檔與外部連結，所應享有之權利與應履行之義務，並規範閱聽人與本網站管理者之間的權利義務關係。
             </p>
 
             <h1 class="text-lg mt-4">一、總則</h1>
