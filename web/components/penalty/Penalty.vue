@@ -8,9 +8,9 @@ import AddPenalty from "./AddPenalty.vue";
 import Rule from "./Rule.vue";
 import SetPenalty from "./SetPenalty.vue";
 import Table from "./Table.vue";
-import News from "./sidebar/News.vue";
-import Statistics from "./sidebar/Statistics.vue";
-import Syntax from "./sidebar/Syntax.vue";
+import News from "./header/News.vue";
+import Statistics from "./header/Statistics.vue";
+import Syntax from "./header/Syntax.vue";
 
 document.title = "直播懲罰 - 水星人的夢幻樂園";
 
