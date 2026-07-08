@@ -18,151 +18,67 @@ const latestPenalty = computed(() =>
 </script>
 
 <template>
-    <VaCard class="latest-card">
-        <VaCardContent class="latest-card__content">
-            <div class="latest-card__header">
+    <VaCard
+        class="overflow-hidden rounded-lg border border-[rgba(255,255,255,0.08)] !bg-[linear-gradient(135deg,rgba(229,9,20,0.14),transparent_42%),rgba(18,21,27,0.92)]"
+        style="--va-card-padding: 0"
+    >
+        <VaCardContent class="flex flex-col gap-4 !p-4">
+            <div class="flex items-center justify-between gap-3">
                 <div>
-                    <span class="latest-card__eyebrow">Latest release</span>
-                    <h2>最新發布</h2>
+                    <span
+                        class="text-[0.72rem] font-extrabold uppercase tracking-normal text-[#ff6978]"
+                    >
+                        Latest release
+                    </span>
+                    <h2
+                        class="mt-[0.1rem] text-base font-extrabold tracking-normal text-[#f7f7f8]"
+                    >
+                        最新發布
+                    </h2>
                 </div>
-                <div class="latest-card__icon" aria-hidden="true">
+                <div
+                    class="grid h-11 w-11 place-items-center rounded-lg bg-[rgba(229,9,20,0.14)] text-[#ff6978]"
+                    aria-hidden="true"
+                >
                     <VaIcon name="campaign" size="large" />
                 </div>
             </div>
 
-            <div v-if="latestPenalty" class="latest-release">
-                <div class="latest-release__meta">
-                    <div class="latest-release__identity">
-                        <strong class="latest-release__id"
-                            >#{{ latestPenalty.id }}</strong
+            <div v-if="latestPenalty" class="block">
+                <div
+                    class="flex items-center justify-between gap-3 text-[0.82rem] text-[#aeb7c7]"
+                >
+                    <div class="inline-flex min-w-0 items-center gap-[0.45rem]">
+                        <strong
+                            class="text-[0.9rem] font-black leading-none text-[#f7f7f8]"
                         >
+                            #{{ latestPenalty.id }}
+                        </strong>
                         <span>{{ latestPenalty.date }}</span>
                         <VaChip
                             readonly
                             outline
                             size="small"
                             :color="stateColor(latestPenalty.state, 'raw')"
-                            class="latest-release__chip"
+                            class="min-w-[5rem] justify-center"
                         >
                             ● {{ stateString(latestPenalty.state) }}
                         </VaChip>
-                        <p class="latest-release__title">
+                        <p
+                            class="ml-2 line-clamp-4 text-[1.12rem] font-extrabold leading-[1.45] text-[#f7f7f8]"
+                        >
                             {{ latestPenalty.name }}
                         </p>
                     </div>
                 </div>
             </div>
-            <div v-else class="latest-empty">
+            <div
+                v-else
+                class="grid flex-1 place-items-center gap-2 text-center text-[#8f98a8]"
+            >
                 <VaIcon name="inbox" size="large" />
                 <span>暫無懲罰</span>
             </div>
         </VaCardContent>
     </VaCard>
 </template>
-
-<style scoped>
-.latest-card {
-    --va-card-padding: 0;
-    overflow: hidden;
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: 8px;
-    background:
-        linear-gradient(135deg, rgba(229, 9, 20, 0.14), transparent 42%),
-        rgba(18, 21, 27, 0.92) !important;
-}
-
-.latest-card__content {
-    display: flex;
-    min-height: 13rem;
-    flex-direction: column;
-    gap: 1rem;
-    padding: 1rem !important;
-}
-
-.latest-card__header,
-.latest-release__meta {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 0.75rem;
-}
-
-.latest-card__eyebrow {
-    color: #ff6978;
-    font-size: 0.72rem;
-    font-weight: 800;
-    letter-spacing: 0;
-    text-transform: uppercase;
-}
-
-.latest-card h2 {
-    margin: 0.1rem 0 0;
-    color: #f7f7f8;
-    font-size: 1rem;
-    font-weight: 800;
-    letter-spacing: 0;
-}
-
-.latest-card__icon {
-    display: grid;
-    width: 2.75rem;
-    height: 2.75rem;
-    place-items: center;
-    border-radius: 8px;
-    background: rgba(229, 9, 20, 0.14);
-    color: #ff6978;
-}
-
-.latest-release {
-    display: flex;
-    flex: 1;
-    flex-direction: column;
-    justify-content: space-between;
-    gap: 1rem;
-}
-
-.latest-release__meta {
-    color: #aeb7c7;
-    font-size: 0.82rem;
-}
-
-.latest-release__chip {
-    min-width: 5rem;
-    justify-content: center;
-}
-
-.latest-release__title {
-    display: -webkit-box;
-    margin: 0;
-    color: #f7f7f8;
-    overflow: hidden;
-    font-size: 1.12rem;
-    font-weight: 800;
-    line-height: 1.45;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 4;
-}
-
-.latest-release__identity {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.45rem;
-    min-width: 0;
-}
-
-.latest-release__id {
-    color: #f7f7f8;
-    font-size: 0.9rem;
-    font-weight: 900;
-    line-height: 1;
-}
-
-.latest-empty {
-    display: grid;
-    flex: 1;
-    place-items: center;
-    gap: 0.5rem;
-    color: #8f98a8;
-    text-align: center;
-}
-</style>
