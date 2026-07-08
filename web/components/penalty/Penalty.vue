@@ -140,7 +140,7 @@ onMounted(loadPenData);
         ),
         linear-gradient(135deg, #0f1117 0%, #16191f 48%, #101318 100%);
     color: #f7f7f8;
-    padding: 4.25rem 1rem 1.25rem;
+    padding: 2.5rem 1rem 1.25rem;
 }
 
 .penalty-shell {
