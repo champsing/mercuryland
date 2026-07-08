@@ -46,12 +46,11 @@ const latestPenalty = computed(() =>
                         >
                             ● {{ stateString(latestPenalty.state) }}
                         </VaChip>
+                        <p class="latest-release__title">
+                            {{ latestPenalty.name }}
+                        </p>
                     </div>
                 </div>
-
-                <p class="latest-release__title">
-                    {{ latestPenalty.name }}
-                </p>
             </div>
             <div v-else class="latest-empty">
                 <VaIcon name="inbox" size="large" />
