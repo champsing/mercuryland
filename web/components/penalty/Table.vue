@@ -138,7 +138,6 @@ function filterPenaltyData(
 <template>
     <VaCard class="penalty-table-card">
         <VaCardContent class="penalty-table-card__content">
-
             <VaScrollContainer
                 vertical
                 horizontal
@@ -195,19 +194,16 @@ function filterPenaltyData(
                         </button>
                     </template>
                     <template #cell(state)="{ value }">
-                        <!-- Tailwind safelist: bg-[6d8581] bg-b91c1c bg-b45309 bg-047857 bg-4d7c0f -->
+                        <!-- Tailwind safelist: bg-6d8581 bg-b91c1c bg-b45309 bg-047857 bg-4d7c0f -->
                         <VaButton
                             :class="stateColor(Number(value), 'bg')"
-                            :style="{
-                                backgroundColor: stateColor(
-                                    Number(value),
-                                    'raw',
-                                ),
-                            }"
                             @click="() => emit('updateState', Number(value))"
                             preset="plain"
                             color="textPrimary"
-                            class="penalty-state-button"
+                            :style="{
+                                backgroundClip: 'padding-box',
+                            }"
+                            class="align-middle text-white font-bold rounded-lg px-2"
                         >
                             {{ stateString(Number(value)) }}
                         </VaButton>
