@@ -28,12 +28,12 @@ const latestPenalty = computed(() =>
                     <span
                         class="text-[0.72rem] font-extrabold uppercase tracking-normal text-[#ff6978]"
                     >
-                        Latest release
+                        Latest penalty
                     </span>
                     <h2
                         class="mt-[0.1rem] text-base font-extrabold tracking-normal text-[#f7f7f8]"
                     >
-                        最新發布
+                        最新懲罰
                     </h2>
                 </div>
                 <div
