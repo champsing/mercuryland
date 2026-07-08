@@ -157,7 +157,7 @@ function filterPenaltyData(
                         --va-data-table-thead-background: #191d25;
                         --va-data-table-thead-border: 0;
                     "
-                    :virtual-scroller="false"
+                    :virtual-scroller="true"
                     sticky-header
                     hoverable
                 >
