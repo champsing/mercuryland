@@ -67,21 +67,21 @@ const baseColumns = [
         tdAlign: "left" as const,
         sortable: true,
         sortingOptions: ["desc" as const, "asc" as const, null],
-        width: 132,
+        width: "132px",
     },
     {
         key: "name",
         label: "內容",
         thAlign: "left" as const,
         tdAlign: "left" as const,
-        width: 560,
+        // 移除固定的 width: 560，讓此欄位彈性填滿剩餘寬度
     },
     {
         key: "state",
         label: "狀態",
         thAlign: "center" as const,
         tdAlign: "center" as const,
-        width: 128,
+        width: "128px",
     },
 ];
 
@@ -94,7 +94,7 @@ const columns = computed(() => {
             label: "操作",
             thAlign: "center" as const,
             tdAlign: "center" as const,
-            width: 76,
+            width: "76px",
         });
     }
 
@@ -136,19 +136,27 @@ function filterPenaltyData(
 </script>
 
 <template>
-    <VaCard class="penalty-table-card">
-        <VaCardContent class="penalty-table-card__content">
+    <VaCard
+        class="h-[36rem] min-h-[30rem] md:h-[42rem] lg:h-[min(68vh,46rem)] lg:min-h-[34rem] overflow-hidden border border-white/10 rounded-lg !bg-[#12151b]/90"
+        style="--va-card-padding: 0"
+    >
+        <VaCardContent class="flex flex-col h-full !p-0">
             <VaScrollContainer
                 vertical
                 horizontal
                 color="#8ea2ff"
                 size="medium"
-                class="penalty-table-scroll"
+                class="flex-1 min-h-0"
             >
                 <VaDataTable
                     :items="items"
                     :columns="columns"
-                    class="penalty-data-table"
+                    class="w-full h-full [&_.va-data-table__table-tr]:border-b [&_.va-data-table__table-tr]:border-white/5 [&_.va-data-table__table-td]:p-[0.72rem_0.9rem] [&_.va-data-table__table-th]:p-[0.72rem_0.9rem]"
+                    style="
+                        --va-data-table-hover-color: rgba(88, 101, 242, 0.14);
+                        --va-data-table-thead-background: #191d25;
+                        --va-data-table-thead-border: 0;
+                    "
                     :virtual-scroller="false"
                     sticky-header
                     hoverable
@@ -158,43 +166,47 @@ function filterPenaltyData(
                         #[`header(${column.key})`]="{ label }"
                         :key="column.key"
                     >
-                        <div class="penalty-table-header">
+                        <div
+                            class="text-[#aeb7c7] text-[0.76rem] font-extrabold tracking-normal uppercase"
+                        >
                             {{ label }}
                         </div>
                     </template>
+
                     <template v-if="showActions" #header(actions)>
                         <VaButton
-                            class="penalty-add-button"
+                            class="rounded-lg font-extrabold [&_.va-button__content]:gap-[0.35rem]"
                             color="#5865f2"
                             aria-label="新增懲罰"
                             @click="$emit('addPenalty')"
                         >
                             <VaIcon name="add" />
-                            <span>新增</span>
                         </VaButton>
                     </template>
+
                     <template #cell(date)="{ value }">
                         <VaButton
                             color="textPrimary"
                             preset="plain"
                             @click="openLinks(vodLinkOfDate(value))"
-                            class="penalty-date-button"
+                            class="inline-flex items-center max-w-full text-[#f7f7f8] [&_.va-button__content]:gap-[0.35rem] [&_.va-button__content]:whitespace-nowrap"
                         >
                             <VaIcon name="play_circle" size="small" />
                             <span>{{ value }}</span>
                         </VaButton>
                     </template>
+
                     <template #cell(name)="{ value, row }">
                         <button
                             type="button"
-                            class="penalty-name-button"
+                            class="inline-flex items-center w-full max-w-[44rem] border-0 bg-transparent py-[0.4rem] px-0 text-left leading-[1.35] cursor-pointer overflow-hidden text-ellipsis whitespace-nowrap text-[#f7f7f8] hover:text-[#8ea2ff]"
                             @click="modal = row.rowData.id"
                         >
                             {{ value }}
                         </button>
                     </template>
+
                     <template #cell(state)="{ value }">
-                        <!-- Tailwind safelist: bg-6d8581 bg-b91c1c bg-b45309 bg-047857 bg-4d7c0f -->
                         <VaButton
                             :class="stateColor(Number(value), 'bg')"
                             @click="() => emit('updateState', Number(value))"
@@ -208,9 +220,10 @@ function filterPenaltyData(
                             {{ stateString(Number(value)) }}
                         </VaButton>
                     </template>
+
                     <template v-if="showActions" #cell(actions)="{ row }">
                         <VaButton
-                            class="penalty-edit-button"
+                            class="w-9 h-9 rounded-lg bg-[#8ea2ff]/10"
                             preset="plain"
                             color="#8ea2ff"
                             aria-label="編輯懲罰"
@@ -226,168 +239,3 @@ function filterPenaltyData(
         </VaCardContent>
     </VaCard>
 </template>
-
-<style scoped>
-.penalty-table-card {
-    --va-card-padding: 0;
-    height: min(68vh, 46rem);
-    min-height: 34rem;
-    overflow: hidden;
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: 8px;
-    background: rgba(18, 21, 27, 0.92) !important;
-}
-
-.penalty-table-card__content {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-    padding: 0 !important;
-}
-
-.penalty-table-toolbar {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 1rem;
-    padding: 1rem 1rem 0.85rem;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-}
-
-.penalty-table-toolbar h2 {
-    margin: 0.1rem 0 0;
-    color: #f7f7f8;
-    font-size: 1.15rem;
-    font-weight: 800;
-    letter-spacing: 0;
-}
-
-.penalty-table-eyebrow {
-    color: #8ea2ff;
-    font-size: 0.72rem;
-    font-weight: 800;
-    letter-spacing: 0;
-    text-transform: uppercase;
-}
-
-.penalty-table-actions {
-    display: flex;
-    align-items: center;
-    gap: 0.6rem;
-    flex-shrink: 0;
-}
-
-.penalty-count {
-    min-width: 4.5rem;
-    justify-content: center;
-}
-
-.penalty-add-button {
-    min-width: 5.5rem;
-    border-radius: 8px;
-    font-weight: 800;
-}
-
-.penalty-add-button :deep(.va-button__content) {
-    gap: 0.35rem;
-}
-
-.penalty-table-scroll {
-    flex: 1;
-    min-height: 0;
-}
-
-.penalty-data-table {
-    min-width: 46rem;
-    height: 100%;
-    --va-data-table-hover-color: rgba(88, 101, 242, 0.14);
-    --va-data-table-thead-background: #191d25;
-    --va-data-table-thead-border: 0;
-}
-
-.penalty-table-header {
-    color: #aeb7c7;
-    font-size: 0.76rem;
-    font-weight: 800;
-    letter-spacing: 0;
-    text-transform: uppercase;
-}
-
-.penalty-date-button,
-.penalty-name-button {
-    display: inline-flex;
-    align-items: center;
-    max-width: 100%;
-    color: #f7f7f8;
-}
-
-.penalty-date-button :deep(.va-button__content) {
-    gap: 0.35rem;
-    white-space: nowrap;
-}
-
-.penalty-name-button {
-    width: min(100%, 44rem);
-    border: 0;
-    background: transparent;
-    padding: 0.4rem 0;
-    text-align: left;
-    font: inherit;
-    line-height: 1.35;
-    cursor: pointer;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-}
-
-.penalty-name-button:hover {
-    color: #8ea2ff;
-}
-
-.penalty-state-button {
-    min-width: 5.4rem;
-    border-radius: 8px;
-    color: #ffffff !important;
-    font-weight: 800;
-    background-clip: padding-box;
-}
-
-.penalty-edit-button {
-    width: 2.25rem;
-    height: 2.25rem;
-    border-radius: 8px;
-    background: rgba(142, 162, 255, 0.1);
-}
-
-:deep(.va-data-table__table-tr) {
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-}
-
-:deep(.va-data-table__table-td),
-:deep(.va-data-table__table-th) {
-    padding: 0.72rem 0.9rem;
-}
-
-@media (max-width: 1180px) {
-    .penalty-table-card {
-        height: 42rem;
-    }
-}
-
-@media (max-width: 720px) {
-    .penalty-table-card {
-        height: 36rem;
-        min-height: 30rem;
-    }
-
-    .penalty-table-toolbar {
-        align-items: flex-start;
-        flex-direction: column;
-    }
-
-    .penalty-table-actions {
-        width: 100%;
-        justify-content: space-between;
-    }
-}
-</style>
