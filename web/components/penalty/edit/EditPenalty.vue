@@ -21,11 +21,7 @@ const showModal = ref(false);
 const activeTab = ref<"status" | "detail" | "history">("status");
 
 // 🌟 解構出共用的詳情獲取邏輯（將 penalty 重新命名為 fullPenalty 避免名稱衝突）
-const {
-    penalty: fullPenalty,
-    loadPenalty,
-    isLoading: isLoadingFull,
-} = usePenaltyDetail();
+const { penalty: fullPenalty, loadPenalty } = usePenaltyDetail();
 
 // ---------- 狀態 ----------
 const statusForm = reactive({
