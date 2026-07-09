@@ -12,27 +12,21 @@
     },
     "dependencies": {
         "@vicons/fluent": "^0.12.0",
+        "@vicons/ionicons4": "^0.12.0",
         "@vicons/ionicons5": "^0.13.0",
         "@vicons/tabler": "^0.12.0",
+        "@vicons/fa": "^0.12.0",
         "@vueuse/components": "^10.11.0",
         "@vueuse/core": "^10.11.0",
-        "appwrite": "^16.1.0",
         "axios": "^1.16.0",
-        "date-fns": "^2.0.0",
-        "google-auth-library": "^9.15.1",
-        "naive-ui": "^2.38.2",
-        "uuid": "^14.0.0",
         "vfonts": "^0.0.3",
         "vue": "^3.4.15",
         "vue-router": "^4.4.0",
-        "vue-tsc": "^3.2.5",
         "vue-wheel-spinner": "^0.2.8",
         "vuestic-ui": "^1.10.3"
     },
     "devDependencies": {
         "@types/node": "^20.14.2",
-        "@vicons/fa": "^0.12.0",
-        "@vicons/ionicons4": "^0.12.0",
         "@vitejs/plugin-vue": "^6.0.7",
         "autoprefixer": "^10.4.20",
         "baseline-browser-mapping": "^2.9.11",
@@ -42,7 +36,8 @@
         "tailwindcss": "^3.4.4",
         "typescript": "^5.4.5",
         "url": "^0.11.3",
-        "vite": "^7.3.5"
+        "vite": "^7.3.5",
+        "vue-tsc": "^3.2.5"
     },
     "prettier": {
         "tabWidth": 4

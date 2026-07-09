@@ -1,4 +1,3 @@
-<!-- components/edit/History.vue -->
 <script setup lang="ts">
 import { formatDate, parseDate } from "@/composables/utils";
 import { computed } from "vue";
@@ -10,7 +9,6 @@ export interface HistoryEntry {
 }
 
 const props = defineProps<{
-    entries: HistoryEntry[];
     stateOptions: { value: number; text: string }[];
     saving: boolean;
     error: string | null;
@@ -18,13 +16,15 @@ const props = defineProps<{
 }>();
 
 const emit = defineEmits<{
-    (e: "update:entries", value: HistoryEntry[]): void;
     (e: "save"): void;
     (e: "back"): void;
 }>();
 
+// 🌟 使用 defineModel 自動接管 v-model:entries
+const entries = defineModel<HistoryEntry[]>("entries", { default: () => [] });
+
 const sortedEntries = computed(() =>
-    [...props.entries].sort((a, b) => a.date.getTime() - b.date.getTime()),
+    [...entries.value].sort((a, b) => a.date.getTime() - b.date.getTime()),
 );
 
 const allowedDays = (date: Date) => {
@@ -33,17 +33,11 @@ const allowedDays = (date: Date) => {
 };
 
 function addEntry() {
-    const newEntry = { state: 0, date: new Date() };
-    emit("update:entries", [...props.entries, newEntry]);
+    entries.value = [...entries.value, { state: 0, date: new Date() }];
 }
 
 function removeEntry(item: HistoryEntry) {
-    const idx = props.entries.indexOf(item);
-    if (idx !== -1) {
-        const newEntries = [...props.entries];
-        newEntries.splice(idx, 1);
-        emit("update:entries", newEntries);
-    }
+    entries.value = entries.value.filter((e) => e !== item);
 }
 
 function updateEntry(
@@ -51,11 +45,11 @@ function updateEntry(
     field: keyof HistoryEntry,
     value: any,
 ) {
-    const idx = props.entries.indexOf(item);
+    const idx = entries.value.indexOf(item);
     if (idx !== -1) {
-        const newEntries = [...props.entries];
+        const newEntries = [...entries.value];
         newEntries[idx] = { ...newEntries[idx], [field]: value };
-        emit("update:entries", newEntries);
+        entries.value = newEntries;
     }
 }
 

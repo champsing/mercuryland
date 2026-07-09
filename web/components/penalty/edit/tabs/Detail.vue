@@ -1,6 +1,5 @@
-<!-- components/edit/Detail.vue -->
 <script setup lang="ts">
-import { BASE_URL } from "@/composables/utils";
+import { formatDetailHtml } from "@/composables/penalty.ts";
 import { computed, ref } from "vue";
 import { VaButton, VaTextarea } from "vuestic-ui";
 import AddImage from "../add/Image.vue";
@@ -10,22 +9,25 @@ import AddSyntax from "../add/Syntax.vue";
 import AddYoutube from "../add/Youtube.vue";
 
 const props = defineProps<{
-    detail: string;
     saving: boolean;
     error: string | null;
     success: string | null;
 }>();
 
 const emit = defineEmits<{
-    (e: "update:detail", value: string): void;
     (e: "save"): void;
     (e: "back"): void;
 }>();
 
+const detail = defineModel<string>("detail", { default: "" });
+
+// 🌟 直接使用抽離出來的純函數
+const renderedDetail = computed(() => formatDetailHtml(detail.value));
+
 const textareaRef = ref<HTMLTextAreaElement>();
 
 function insertHtml(html: string, range?: { start: number; end: number }) {
-    const content = props.detail ?? "";
+    const content = detail.value ?? "";
     const start = Math.min(
         Math.max(range?.start ?? content.length, 0),
         content.length,
@@ -34,19 +36,9 @@ function insertHtml(html: string, range?: { start: number; end: number }) {
         Math.max(range?.end ?? range?.start ?? content.length, start),
         content.length,
     );
-    const newContent = content.slice(0, start) + html + content.slice(end);
-    emit("update:detail", newContent);
+    // 直接修改 detail.value，Vue 會自動 emit 更新給父組件
+    detail.value = content.slice(0, start) + html + content.slice(end);
 }
-
-const renderedDetail = computed(() => {
-    const detail = props.detail ?? "";
-    if (!detail) return "";
-    const base = BASE_URL.replace(/\/$/, "");
-    return detail.replace(
-        /src=(['"])(\/api\/image\/[^'"]+)\1/g,
-        (_match, quote, path) => `src=${quote}${base}${path}${quote}`,
-    );
-});
 </script>
 
 <template>
@@ -54,8 +46,7 @@ const renderedDetail = computed(() => {
         <div class="flex gap-2">
             <VaTextarea
                 ref="textareaRef"
-                :model-value="detail"
-                @update:model-value="emit('update:detail', $event)"
+                v-model="detail"
                 placeholder="輸入 HTML 詳情"
                 class="w-3/4"
                 :resize="false"
