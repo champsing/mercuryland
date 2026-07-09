@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { BASE_URL } from "@/composables/utils";
+import { formatDetailHtml } from "@/composables/penalty.ts";
 import { computed, ref } from "vue";
 import { VaButton, VaTextarea } from "vuestic-ui";
 import AddImage from "../add/Image.vue";
@@ -19,8 +19,10 @@ const emit = defineEmits<{
     (e: "back"): void;
 }>();
 
-// 🌟 使用 defineModel 自動接管 v-model:detail 的雙向綁定
 const detail = defineModel<string>("detail", { default: "" });
+
+// 🌟 直接使用抽離出來的純函數
+const renderedDetail = computed(() => formatDetailHtml(detail.value));
 
 const textareaRef = ref<HTMLTextAreaElement>();
 
@@ -37,16 +39,6 @@ function insertHtml(html: string, range?: { start: number; end: number }) {
     // 直接修改 detail.value，Vue 會自動 emit 更新給父組件
     detail.value = content.slice(0, start) + html + content.slice(end);
 }
-
-const renderedDetail = computed(() => {
-    const content = detail.value ?? "";
-    if (!content) return "";
-    const base = BASE_URL.replace(/\/$/, "");
-    return content.replace(
-        /src=(['"])(\/api\/image\/[^'"]+)\1/g,
-        (_match, quote, path) => `src=${quote}${base}${path}${quote}`,
-    );
-});
 </script>
 
 <template>
