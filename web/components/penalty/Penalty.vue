@@ -6,8 +6,8 @@ import { onMounted, ref } from "vue";
 import { VaDateInput, VaIcon, VaInput, VaSelect } from "vuestic-ui";
 import AddPenalty from "./AddPenalty.vue";
 import Rule from "./Rule.vue";
-import SetPenalty from "./SetPenalty.vue";
 import Table from "./Table.vue";
+import EditPenalty from "./edit/EditPenalty.vue";
 import News from "./header/News.vue";
 import Statistics from "./header/Statistics.vue";
 import Syntax from "./header/Syntax.vue";
@@ -121,7 +121,7 @@ onMounted(loadPenData);
             </ViewportHeight>
         </section>
         <AddPenalty ref="addPenaltyRef" @saved="loadPenData" />
-        <SetPenalty
+        <EditPenalty
             ref="setPenaltyRef"
             @updated="loadPenData"
             @deleted="loadPenData"

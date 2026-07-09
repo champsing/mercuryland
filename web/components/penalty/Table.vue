@@ -14,7 +14,7 @@ import { PenItem, stateColor, stateString } from "@/composables/penalty";
 import { openLinks } from "@/composables/utils";
 import { VodItem } from "@/composables/vod";
 import api from "@composables/axios";
-import Detail from "./detail/Detail.vue";
+import Detail from "./Detail.vue";
 
 const props = defineProps<{
     penalties: PenItem[];
