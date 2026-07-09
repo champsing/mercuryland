@@ -1,10 +1,10 @@
-<!-- components/edit/EditPenalty.vue -->
 <script setup lang="ts">
 import { useAuthState } from "@/composables/authState";
-import { PenItem, stateString } from "@/composables/penalty";
+// 🌟 引入我們寫好的 usePenaltyDetail 組合式函數
+import { PenItem, stateString, usePenaltyDetail } from "@/composables/penalty";
 import { formatDate, parseDate } from "@/composables/utils";
 import api from "@composables/axios";
-import { reactive, ref } from "vue";
+import { reactive, ref, watch } from "vue"; // 🌟 記得引入 watch
 import { VaButton, VaModal, VaTab, VaTabs } from "vuestic-ui";
 import Detail from "./tabs/Detail.vue";
 import History from "./tabs/History.vue";
@@ -19,6 +19,13 @@ const authState = useAuthState();
 
 const showModal = ref(false);
 const activeTab = ref<"status" | "detail" | "history">("status");
+
+// 🌟 解構出共用的詳情獲取邏輯（將 penalty 重新命名為 fullPenalty 避免名稱衝突）
+const {
+    penalty: fullPenalty,
+    loadPenalty,
+    isLoading: isLoadingFull,
+} = usePenaltyDetail();
 
 // ---------- 狀態 ----------
 const statusForm = reactive({
@@ -60,19 +67,35 @@ const showDeleteConfirm = ref(false);
 const isDeleting = ref(false);
 const deleteError = ref<string | null>(null);
 
+// 🌟 監聽非同步載入的完整懲罰資料，一旦後端回傳，立刻填入 Detail 與 History 的 ref 中
+watch(fullPenalty, (newPenalty) => {
+    if (newPenalty) {
+        detailContent.value = newPenalty.detail ?? "";
+        historyEntries.value = newPenalty.history
+            ? newPenalty.history.map(([state, dateStr]) => ({
+                  state,
+                  date: parseDate(dateStr),
+              }))
+            : [];
+    }
+});
+
 // ---------- 打开 Modal ----------
 function open(penalty: PenItem) {
     if (!authState.isAuthenticated) return;
+
+    // 1. 先用清單傳進來的基本資料填充（讓使用者點開時不感覺卡頓）
     statusForm.id = penalty.id;
     statusForm.date = parseDate(penalty.date);
     statusForm.name = penalty.name;
     statusForm.state = penalty.state;
-    detailContent.value = penalty.detail ?? "";
-    historyEntries.value = penalty.history.map(([state, dateStr]) => ({
-        state,
-        date: parseDate(dateStr),
-    }));
-    // 重置所有状态
+
+    // 2. 先清空舊的詳情與歷史，防止前一次編輯的資料殘留「閃爍」一下
+    detailContent.value = "";
+    historyEntries.value = [];
+    fullPenalty.value = null;
+
+    // 3. 重置所有狀態
     statusError.value = null;
     statusSuccess.value = null;
     detailError.value = null;
@@ -83,6 +106,9 @@ function open(penalty: PenItem) {
     showDeleteConfirm.value = false;
     activeTab.value = "status";
     showModal.value = true;
+
+    // 4. 🌟 呼叫 Composable 函數，去後端拉取該 ID 的完整資料 (包含 detail, history)
+    loadPenalty(penalty.id);
 }
 
 // ---------- 保存各标签 ----------
@@ -244,6 +270,7 @@ defineExpose({ open });
                 @save="saveDetail"
                 @back="activeTab = 'status'"
             />
+
             <History
                 v-if="activeTab === 'history'"
                 v-model:entries="historyEntries"
@@ -275,8 +302,9 @@ defineExpose({ open });
                     <VaButton
                         color="secondary"
                         @click="showDeleteConfirm = false"
-                        >取消</VaButton
                     >
+                        取消
+                    </VaButton>
                     <VaButton
                         color="danger"
                         :disabled="isDeleting"
