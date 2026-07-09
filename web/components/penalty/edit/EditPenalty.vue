@@ -178,11 +178,6 @@ async function saveHistory() {
     }
 }
 
-function resetHistory() {
-    historyError.value = null;
-    historySuccess.value = null;
-}
-
 async function deletePenalty() {
     if (isDeleting.value || !authState.isAuthenticated) return;
     const token = localStorage.getItem("token");
@@ -257,7 +252,7 @@ defineExpose({ open });
                 :error="historyError"
                 :success="historySuccess"
                 @save="saveHistory"
-                @reset="resetHistory"
+                @back="activeTab = 'status'"
             />
         </div>
 
