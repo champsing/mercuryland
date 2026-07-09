@@ -1,9 +1,11 @@
 <!-- components/Detail.vue -->
 <script setup lang="ts">
-import { PenItem, stateColor, stateString } from "@/composables/penalty";
-import { BASE_URL } from "@/composables/utils";
-import api from "@composables/axios";
-import { computed, ref, watch } from "vue";
+import {
+    stateColor,
+    stateString,
+    usePenaltyDetail,
+} from "@/composables/penalty";
+import { watch } from "vue";
 import { VaChip, VaModal } from "vuestic-ui";
 import Timeline from "./Timeline.vue";
 
@@ -15,28 +17,8 @@ const emit = defineEmits<{
     (e: "update:modelValue", value: number | null): void;
 }>();
 
-const penalty = ref<PenItem | null>(null);
-
-const renderedDetail = computed(() => {
-    const detail = penalty.value?.detail ?? "";
-    if (!detail) return "";
-    const base = BASE_URL.replace(/\/$/, "");
-    return detail.replace(
-        /src=(['"])(\/api\/image\/[^'"]+)\1/g,
-        (_match, quote, path) => `src=${quote}${base}${path}${quote}`,
-    );
-});
-
-async function loadPenalty(id: number) {
-    try {
-        const response = await api.get(`/api/penalty/detail/${id}`);
-        if (response.status === 200) {
-            penalty.value = response.data;
-        }
-    } catch (error) {
-        console.error(error);
-    }
-}
+// 🌟 直接解構出我們寫好的共用邏輯
+const { penalty, loadPenalty, renderedDetail } = usePenaltyDetail();
 
 watch(
     () => props.modelValue,
@@ -44,7 +26,7 @@ watch(
         if (newId !== null) {
             loadPenalty(newId);
         } else {
-            penalty.value = null;
+            penalty.value = null; // 關閉時清空
         }
     },
     { immediate: true },
