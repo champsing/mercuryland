@@ -6,6 +6,9 @@ import { formatDate, parseDate } from "@/composables/utils";
 import api from "@composables/axios";
 import { reactive, ref } from "vue";
 import { VaButton, VaModal, VaTab, VaTabs } from "vuestic-ui";
+import Detail from "./tabs/Detail.vue";
+import History from "./tabs/History.vue";
+import Status from "./tabs/Status.vue";
 
 const emit = defineEmits<{
     (event: "updated"): void;
@@ -18,15 +21,15 @@ const showModal = ref(false);
 const activeTab = ref<"status" | "detail" | "history">("status");
 
 // ---------- 狀態 ----------
-const basicForm = reactive({
+const statusForm = reactive({
     id: 0,
     date: new Date(),
     name: "",
     state: 0,
 });
-const isSavingBasic = ref(false);
-const basicError = ref<string | null>(null);
-const basicSuccess = ref<string | null>(null);
+const isSavingstatus = ref(false);
+const statusError = ref<string | null>(null);
+const statusSuccess = ref<string | null>(null);
 
 const stateOptions = [
     { value: 0, text: stateString(0) },
@@ -60,18 +63,18 @@ const deleteError = ref<string | null>(null);
 // ---------- 打开 Modal ----------
 function open(penalty: PenItem) {
     if (!authState.isAuthenticated) return;
-    basicForm.id = penalty.id;
-    basicForm.date = parseDate(penalty.date);
-    basicForm.name = penalty.name;
-    basicForm.state = penalty.state;
+    statusForm.id = penalty.id;
+    statusForm.date = parseDate(penalty.date);
+    statusForm.name = penalty.name;
+    statusForm.state = penalty.state;
     detailContent.value = penalty.detail ?? "";
     historyEntries.value = penalty.history.map(([state, dateStr]) => ({
         state,
         date: parseDate(dateStr),
     }));
     // 重置所有状态
-    basicError.value = null;
-    basicSuccess.value = null;
+    statusError.value = null;
+    statusSuccess.value = null;
     detailError.value = null;
     detailSuccess.value = null;
     historyError.value = null;
@@ -83,36 +86,36 @@ function open(penalty: PenItem) {
 }
 
 // ---------- 保存各标签 ----------
-async function saveBasic() {
-    if (isSavingBasic.value || !authState.isAuthenticated) return;
+async function savestatus() {
+    if (isSavingstatus.value || !authState.isAuthenticated) return;
     const token = localStorage.getItem("token");
     if (!token) {
-        basicError.value = "請先登入管理員帳號";
+        statusError.value = "請先登入管理員帳號";
         return;
     }
-    if (!basicForm.date || !basicForm.name.trim()) {
-        basicError.value = "請填寫日期和內容";
+    if (!statusForm.date || !statusForm.name.trim()) {
+        statusError.value = "請填寫日期和內容";
         return;
     }
     try {
-        isSavingBasic.value = true;
-        basicError.value = null;
-        basicSuccess.value = null;
+        isSavingstatus.value = true;
+        statusError.value = null;
+        statusSuccess.value = null;
         await api.post("/api/penalty/update", {
             token,
-            id: basicForm.id,
-            date: formatDate(basicForm.date),
-            name: basicForm.name.trim(),
-            state: basicForm.state,
+            id: statusForm.id,
+            date: formatDate(statusForm.date),
+            name: statusForm.name.trim(),
+            state: statusForm.state,
         });
-        basicSuccess.value = "更新成功";
+        statusSuccess.value = "更新成功";
         emit("updated");
         setTimeout(() => (showModal.value = false), 600);
     } catch (error) {
         console.error(error);
-        basicError.value = "更新失敗，請稍後再試";
+        statusError.value = "更新失敗，請稍後再試";
     } finally {
-        isSavingBasic.value = false;
+        isSavingstatus.value = false;
     }
 }
 
@@ -129,7 +132,7 @@ async function saveDetail() {
         detailSuccess.value = null;
         await api.post("/api/penalty/detail/update", {
             token,
-            id: basicForm.id,
+            id: statusForm.id,
             detail: detailContent.value,
         });
         detailSuccess.value = "更新成功";
@@ -162,7 +165,7 @@ async function saveHistory() {
         ]);
         await api.post("/api/penalty/history/update", {
             token,
-            id: basicForm.id,
+            id: statusForm.id,
             history: historyPayload,
         });
         historySuccess.value = "更新成功";
@@ -192,7 +195,7 @@ async function deletePenalty() {
         deleteError.value = null;
         await api.post("/api/penalty/delete", {
             token,
-            id: basicForm.id,
+            id: statusForm.id,
         });
         emit("deleted");
         showDeleteConfirm.value = false;
@@ -225,14 +228,14 @@ defineExpose({ open });
 
             <Status
                 v-if="activeTab === 'status'"
-                v-model:date="basicForm.date"
-                v-model:name="basicForm.name"
-                v-model:state="basicForm.state"
+                v-model:date="statusForm.date"
+                v-model:name="statusForm.name"
+                v-model:state="statusForm.state"
                 :state-options="stateOptions"
-                :saving="isSavingBasic"
-                :error="basicError"
-                :success="basicSuccess"
-                @save="saveBasic"
+                :saving="isSavingstatus"
+                :error="statusError"
+                :success="statusSuccess"
+                @save="savestatus"
                 @delete="showDeleteConfirm = true"
                 @cancel="showModal = false"
             />

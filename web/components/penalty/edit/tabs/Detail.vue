@@ -1,4 +1,4 @@
-<!-- components/edit/DetailTab.vue -->
+<!-- components/edit/Detail.vue -->
 <script setup lang="ts">
 import { computed, ref } from "vue";
 import { VaButton, VaTextarea } from "vuestic-ui";

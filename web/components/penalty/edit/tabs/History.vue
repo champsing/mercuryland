@@ -1,4 +1,4 @@
-<!-- components/edit/HistoryTab.vue -->
+<!-- components/edit/History.vue -->
 <script setup lang="ts">
 import { computed } from "vue";
 import { VaButton, VaDateInput, VaSelect } from "vuestic-ui";
