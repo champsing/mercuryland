@@ -129,14 +129,51 @@ defineExpose({ openLoginModal: openLoginLogin, openLogoutModal });
         </VaButton>
         <VaModal
             v-model="modal.show"
-            max-width="380px"
+            hide-default-actions
             close-button
-            @ok="logout"
+            max-width="400px"
         >
             <div
-                class="py-5 text-center text-slate-700 dark:text-slate-300 font-medium text-base"
+                class="flex flex-col items-center p-4 sm:p-5 gap-6 text-slate-800 dark:text-slate-100"
             >
-                您確定要登出嗎？
+                <!-- 頂部安全警告圖示（柔和紅底） -->
+                <div
+                    class="w-14 h-14 bg-rose-50 dark:bg-rose-950/30 text-rose-500 dark:text-rose-400 rounded-full flex items-center justify-center shadow-inner"
+                >
+                    <VaIcon size="24px">
+                        <SignOutAlt />
+                    </VaIcon>
+                </div>
+
+                <!-- 正式標題與說明文字 -->
+                <div class="text-center space-y-2">
+                    <h3 class="text-2xl font-bold tracking-wide">登出</h3>
+                    <p
+                        class="text-sm text-slate-500 dark:text-slate-400 leading-relaxed"
+                    >
+                        您確定要結束目前的登入狀態嗎？<br />
+                        為了保護您的資訊安全，請務必在編輯完成後登出。
+                    </p>
+                </div>
+
+                <!-- 底部正式按鈕列 -->
+                <div class="flex w-full gap-3 mt-1">
+                    <VaButton
+                        class="flex-1 h-12 rounded-2xl font-semibold text-base transition-colors duration-200"
+                        preset="secondary"
+                        border-color="secondary"
+                        @click="modal.show = false"
+                    >
+                        取消
+                    </VaButton>
+                    <VaButton
+                        class="flex-1 h-12 rounded-2xl font-semibold tracking-wider text-base shadow-md transition-colors duration-200"
+                        color="danger"
+                        @click="logout"
+                    >
+                        確認登出
+                    </VaButton>
+                </div>
             </div>
         </VaModal>
     </template>
@@ -216,7 +253,7 @@ defineExpose({ openLoginModal: openLoginLogin, openLogoutModal });
                     v-if="modal.fail"
                     class="w-full text-center text-sm font-medium text-rose-500 bg-rose-50/60 dark:bg-rose-950/20 py-3 px-4 rounded-2xl border border-rose-100/70 dark:border-rose-900/30 backdrop-blur-sm animate-fade-in"
                 >
-                    驗證失敗，請確認驗證碼是否正確或已過期。
+                    驗證失敗，請確認驗證碼是否正確或是否已使用、已過期等。
                 </div>
 
                 <VaButton
