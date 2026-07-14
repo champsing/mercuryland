@@ -49,7 +49,7 @@ watch(
         >
             <!-- Header Section: Date & Chip (Column Flex) -->
             <div
-                class="flex flex-col gap-1 pb-4 border-b border-black/5 dark:border-white/5"
+                class="flex flex-col gap-1 pb-2 border-b border-black/5 dark:border-white/5"
             >
                 <VaChip
                     readonly
