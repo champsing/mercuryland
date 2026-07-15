@@ -1,17 +1,17 @@
 <script setup lang="ts">
-import { computed, onMounted, ref, Ref } from "vue";
-import { VaChip, VaDateInput, VaSelect, VaSwitch } from "vuestic-ui";
-import api from "@composables/axios";
-import Table from "./Table.vue";
-import Summary from "./time/Summary.vue";
-import Calculation from "./time/Calculation.vue";
-import AddVod from "./AddVod.vue";
-import SetVod from "./SetVod.vue";
-import Rule from "./Rule.vue";
+import { useAuthState } from "@/composables/authState";
 import { formatDate, parseDate } from "@/composables/utils";
 import { VodItem } from "@/composables/vod";
-import { useAuthState } from "@/composables/authState";
+import api from "@composables/axios";
+import { computed, onMounted, ref, Ref } from "vue";
+import { VaChip, VaDateInput, VaSelect, VaSwitch } from "vuestic-ui";
 import ViewportHeight from "../ViewportHeight.vue";
+import AddVod from "./AddVod.vue";
+import Rule from "./Rule.vue";
+import SetVod from "./SetVod.vue";
+import Table from "./Table.vue";
+import Calculation from "./time/Calculation.vue";
+import Summary from "./time/Summary.vue";
 
 document.title = "直播隨選 - 水星人的夢幻樂園";
 
@@ -219,7 +219,7 @@ const handleEditVod = (vod: VodItem) => {
     bottom: 1rem;
     left: 50%;
     transform: translateX(-50%);
-    z-index: 10;
+    z-index: 1;
     pointer-events: none;
 }
 

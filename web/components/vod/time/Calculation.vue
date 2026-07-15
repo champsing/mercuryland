@@ -1,16 +1,16 @@
 <script setup lang="ts">
+import vodSchedule from "@assets/data/schedule.json";
+import { formatHMS, parseHMS, VodItem } from "@composables/vod";
 import { computed, ref, watch } from "vue";
 import {
     VaDivider,
-    VaScrollContainer,
     VaList,
-    VaListLabel,
     VaListItem,
     VaListItemSection,
+    VaListLabel,
     VaModal,
+    VaScrollContainer,
 } from "vuestic-ui";
-import { parseHMS, formatHMS, VodItem } from "@composables/vod";
-import vodSchedule from "@assets/data/schedule.json";
 
 interface CalculationEntry {
     date: string;
@@ -141,15 +141,11 @@ function format(seconds: number): string {
         v-model="showModal"
         hide-default-actions
         close-button
-        no-outside-dismiss
         max-width="720px"
         class="calculation-modal"
     >
         <div class="flex flex-col rounded-2xl overflow-hidden">
-            <VaList
-                style="--va-list-label-padding: 1rem"
-                class="flex flex-col"
-            >
+            <VaList style="--va-list-label-padding: 1rem" class="flex flex-col">
                 <VaListLabel class="text-lg text-zinc-200" color="textPrimary">
                     計算明細
                 </VaListLabel>
@@ -184,9 +180,7 @@ function format(seconds: number): string {
                                     </div>
                                 </VaDivider>
 
-                                <div
-                                    class="flex justify-end text-right mr-2"
-                                >
+                                <div class="flex justify-end text-right mr-2">
                                     <div class="font-bold text-zinc-200">
                                         {{ item.reason }}
                                     </div>
