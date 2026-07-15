@@ -67,7 +67,7 @@ const handleEditVod = (vod: VodItem) => {
 
 <template>
     <main class="vod-page">
-        <section class="vod-shell">
+        <section class="w-full max-w-[1680px] mx-auto">
             <section class="vod-filter-bar" aria-label="直播隨選篩選">
                 <VaDateInput
                     v-model="dateRange"
@@ -102,7 +102,7 @@ const handleEditVod = (vod: VodItem) => {
                         </VaChip>
                     </template>
                 </VaSelect>
-                <div class="vod-switch">
+                <div class="flex justify-center">
                     <VaSwitch
                         v-model="strictFiltering"
                         off-color="#1ccba2"
@@ -112,14 +112,16 @@ const handleEditVod = (vod: VodItem) => {
                         true-inner-label="符合全部"
                     />
                 </div>
-                <div class="vod-rule">
+                <div class="flex justify-end vod-rule">
                     <Rule />
                 </div>
             </section>
 
             <ViewportHeight>
-                <section class="vod-main">
-                    <div class="vod-table">
+                <section
+                    class="relative flex flex-col lg:flex-row gap-2 h-full"
+                >
+                    <div class="w-full h-full">
                         <Table
                             :dateRange="dateRange"
                             :selectedTags="selectedTags"
@@ -132,7 +134,9 @@ const handleEditVod = (vod: VodItem) => {
                         />
                     </div>
 
-                    <div class="vod-pill">
+                    <div
+                        class="absolute bottom-4 left-1/2 -translate-x-1/2 z-1 pointer-events-none [&>*]:pointer-events-auto"
+                    >
                         <Summary
                             :t="computedTime"
                             @openCalculation="calculationModalRef?.open()"
@@ -171,11 +175,6 @@ const handleEditVod = (vod: VodItem) => {
     padding: 2.5rem 1rem 1.25rem;
 }
 
-.vod-shell {
-    width: min(1680px, 100%);
-    margin: 0 auto;
-}
-
 .vod-filter-bar {
     display: grid;
     grid-template-columns:
@@ -191,42 +190,6 @@ const handleEditVod = (vod: VodItem) => {
     backdrop-filter: blur(16px);
 }
 
-.vod-switch {
-    display: flex;
-    justify-content: center;
-}
-
-.vod-rule {
-    display: flex;
-    justify-content: flex-end;
-}
-
-.vod-main {
-    position: relative;
-    display: flex;
-    flex-direction: row;
-    gap: 0.5rem;
-    height: 100%;
-}
-
-.vod-table {
-    width: 100%;
-    height: 100%;
-}
-
-.vod-pill {
-    position: absolute;
-    bottom: 1rem;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 1;
-    pointer-events: none;
-}
-
-.vod-pill > * {
-    pointer-events: auto;
-}
-
 .n-base-suffix__arrow {
     --n-arrow-size: 20px;
 }
@@ -238,12 +201,6 @@ const handleEditVod = (vod: VodItem) => {
 
     .vod-rule {
         justify-content: stretch;
-    }
-}
-
-@media (max-width: 900px) {
-    .vod-main {
-        flex-direction: column;
     }
 }
 
