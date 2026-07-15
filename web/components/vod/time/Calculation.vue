@@ -1,17 +1,16 @@
 <script setup lang="ts">
-import { computed, watch } from "vue";
+import vodSchedule from "@assets/data/schedule.json";
+import { formatHMS, parseHMS, VodItem } from "@composables/vod";
+import { computed, ref, watch } from "vue";
 import {
-    VaCard,
-    VaCardContent,
     VaDivider,
-    VaScrollContainer,
     VaList,
-    VaListLabel,
     VaListItem,
     VaListItemSection,
+    VaListLabel,
+    VaModal,
+    VaScrollContainer,
 } from "vuestic-ui";
-import { parseHMS, formatHMS, VodItem } from "@composables/vod";
-import vodSchedule from "@assets/data/schedule.json";
 
 interface CalculationEntry {
     date: string;
@@ -26,6 +25,15 @@ const props = defineProps<{
     vodData: VodItem[];
 }>();
 const emit = defineEmits<{ (e: "computedTime", tag: number): void }>();
+
+const showModal = ref(false);
+
+function open() {
+    showModal.value = true;
+}
+
+defineExpose({ open });
+
 const rawData = computed(() => calcRawData(props.vodData));
 const data = computed(() => {
     let filtered = rawData.value.filter(
@@ -129,22 +137,28 @@ function format(seconds: number): string {
 </script>
 
 <template>
-    <VaCard style="--va-card-padding: 0rem" class="h-full rounded-xl">
-        <VaCardContent class="h-full">
-            <VaList
-                style="--va-list-label-padding: 1rem"
-                class="h-full flex flex-col"
-            >
-                <VaListLabel class="text-xl" color="textPrimary">
+    <VaModal
+        v-model="showModal"
+        hide-default-actions
+        close-button
+        max-width="720px"
+        class="calculation-modal"
+    >
+        <div class="flex flex-col rounded-2xl overflow-hidden">
+            <VaList style="--va-list-label-padding: 1rem" class="flex flex-col">
+                <VaListLabel class="text-lg text-zinc-200" color="textPrimary">
                     計算明細
                 </VaListLabel>
                 <VaScrollContainer
                     vertical
-                    color="#e0feb4"
+                    color="#a0a0a0"
                     size="medium"
-                    class="flex-1"
+                    class="max-h-[60vh]"
                 >
-                    <template v-for="item in data">
+                    <template
+                        v-for="item in data"
+                        :key="item.date + item.reason"
+                    >
                         <VaListItem class="text-center mb-2">
                             <VaListItemSection>
                                 <VaDivider
@@ -152,7 +166,7 @@ function format(seconds: number): string {
                                     orientation="left"
                                     class="mb-3"
                                 >
-                                    <div class="flex">
+                                    <div class="flex text-zinc-200">
                                         <div>
                                             {{ item.date }}
                                         </div>
@@ -167,11 +181,11 @@ function format(seconds: number): string {
                                 </VaDivider>
 
                                 <div class="flex justify-end text-right mr-2">
-                                    <div class="font-bold">
+                                    <div class="font-bold text-zinc-200">
                                         {{ item.reason }}
                                     </div>
                                     <VaDivider vertical />
-                                    <div class="font-bold">
+                                    <div class="font-bold text-zinc-200">
                                         {{ format(item.offset) }}
                                     </div>
                                 </div>
@@ -180,6 +194,26 @@ function format(seconds: number): string {
                     </template>
                 </VaScrollContainer>
             </VaList>
-        </VaCardContent>
-    </VaCard>
+        </div>
+    </VaModal>
 </template>
+
+<style>
+.calculation-modal :deep(.va-modal__dialog) {
+    border-radius: 16px;
+    background: rgba(228, 228, 231, 0.15);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    overflow: hidden;
+}
+
+.calculation-modal :deep(.va-modal__close-button) {
+    color: rgba(255, 255, 255, 0.55);
+}
+
+.calculation-modal :deep(.va-modal__close-button:hover) {
+    color: rgba(255, 255, 255, 0.85);
+}
+</style>
