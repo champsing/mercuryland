@@ -34,6 +34,7 @@ const computedTime = ref(0);
 const authState = useAuthState();
 const setVodRef = ref<{ open: (vod: VodItem) => void } | null>(null);
 const addVodRef = ref<{ open: () => void } | null>(null);
+const calculationModalRef = ref<{ open: () => void } | null>(null);
 
 async function loadVodData() {
     try {
@@ -131,17 +132,11 @@ const handleEditVod = (vod: VodItem) => {
                         />
                     </div>
 
-                    <div class="vod-sidebar">
-                        <div class="vod-summary">
-                            <Summary :t="computedTime" />
-                        </div>
-                        <div class="vod-calculation">
-                            <Calculation
-                                :dateRange="dateRange"
-                                :vodData="vodData"
-                                @computedTime="(time: number) => (computedTime = time)"
-                            />
-                        </div>
+                    <div class="vod-pill">
+                        <Summary
+                            :t="computedTime"
+                            @openCalculation="calculationModalRef?.open()"
+                        />
                     </div>
                 </section>
             </ViewportHeight>
@@ -153,6 +148,12 @@ const handleEditVod = (vod: VodItem) => {
             @deleted="loadVodData"
         />
         <AddVod ref="addVodRef" :tag-list="tagList" @saved="loadVodData" />
+        <Calculation
+            ref="calculationModalRef"
+            :dateRange="dateRange"
+            :vodData="vodData"
+            @computedTime="(time: number) => (computedTime = time)"
+        />
     </main>
 </template>
 
@@ -201,6 +202,7 @@ const handleEditVod = (vod: VodItem) => {
 }
 
 .vod-main {
+    position: relative;
     display: flex;
     flex-direction: row;
     gap: 0.5rem;
@@ -208,24 +210,21 @@ const handleEditVod = (vod: VodItem) => {
 }
 
 .vod-table {
-    width: 75%;
+    width: 100%;
     height: 100%;
 }
 
-.vod-sidebar {
-    display: flex;
-    flex-direction: column;
-    width: 25%;
-    gap: 0.5rem;
-    height: 100%;
+.vod-pill {
+    position: absolute;
+    bottom: 1rem;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10;
+    pointer-events: none;
 }
 
-.vod-summary {
-    height: 25%;
-}
-
-.vod-calculation {
-    height: 75%;
+.vod-pill > * {
+    pointer-events: auto;
 }
 
 .n-base-suffix__arrow {
@@ -245,16 +244,6 @@ const handleEditVod = (vod: VodItem) => {
 @media (max-width: 900px) {
     .vod-main {
         flex-direction: column;
-    }
-
-    .vod-table {
-        width: 100%;
-        height: 60%;
-    }
-
-    .vod-sidebar {
-        width: 100%;
-        height: 40%;
     }
 }
 
