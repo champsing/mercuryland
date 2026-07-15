@@ -1,16 +1,17 @@
 <script setup lang="ts">
-import { computed } from "vue";
+import { useAuthState } from "@/composables/authState";
+import { VodItem } from "@/composables/vod";
+import { computed, onBeforeUnmount, onMounted, ref } from "vue";
 import {
     VaButton,
     VaCard,
     VaCardContent,
+    VaChip,
     VaDataTable,
-    VaDivider,
     VaIcon,
+    VaModal,
     VaScrollContainer,
 } from "vuestic-ui";
-import { VodItem } from "@/composables/vod";
-import { useAuthState } from "@/composables/authState";
 
 const props = defineProps<{
     dateRange: { start: Date; end: Date };
@@ -25,6 +26,9 @@ const emit = defineEmits<{
 }>();
 
 const authState = useAuthState();
+const showActions = computed(() => authState.isAuthenticated);
+
+const YOUTUBE_LIVE = "https://youtube.com/live/";
 
 const data = computed(() => {
     return props.vodData
@@ -49,31 +53,47 @@ const data = computed(() => {
         .sort((lhs, rhs) => rhs.date.localeCompare(lhs.date));
 });
 
-const showActions = computed(() => authState.isAuthenticated);
+const isMdUp = ref(true);
+const mql =
+    typeof window !== "undefined"
+        ? window.matchMedia("(min-width: 768px)")
+        : null;
+
+function handleBreakpoint() {
+    isMdUp.value = mql?.matches ?? true;
+}
+
+onMounted(() => {
+    handleBreakpoint();
+    mql?.addEventListener("change", handleBreakpoint);
+});
+
+onBeforeUnmount(() => {
+    mql?.removeEventListener("change", handleBreakpoint);
+});
 
 const baseColumns = [
     {
         key: "date",
         label: "日期",
-        thAlign: "center" as const,
-        tdAlign: "center" as const,
+        thAlign: "left" as const,
+        tdAlign: "left" as const,
         sortable: true,
-        sortingOptions: ["desc" as const, "asc" as const, null], // because these two string is defined as constants in src.
-        width: 100,
+        sortingOptions: ["desc" as const, "asc" as const, null],
+        width: "132px",
     },
     {
         key: "title",
         label: "標題",
-        thAlign: "center" as const,
-        tdAlign: "center" as const,
-        width: 20,
+        thAlign: "left" as const,
+        tdAlign: "left" as const,
     },
     {
         key: "tags",
         label: "TAG",
         thAlign: "center" as const,
         tdAlign: "center" as const,
-        width: 20,
+        width: "220px",
     },
     {
         key: "duration",
@@ -81,20 +101,26 @@ const baseColumns = [
         thAlign: "center" as const,
         tdAlign: "center" as const,
         sortable: true,
-        width: 100,
+        width: "104px",
     },
 ];
 
 const columns = computed(() => {
-    const result = [...baseColumns];
+    let result = [...baseColumns];
+
+    if (!isMdUp.value) {
+        result = result.filter(
+            (column) => column.key === "date" || column.key === "title",
+        );
+    }
 
     if (showActions.value) {
         result.push({
             key: "actions",
-            label: "",
+            label: "操作",
             thAlign: "center" as const,
             tdAlign: "center" as const,
-            width: 12,
+            width: "76px",
         });
     }
 
@@ -104,32 +130,34 @@ const columns = computed(() => {
 const headerColumns = computed(() =>
     columns.value.filter((column) => column.key !== "actions"),
 );
+
+const modalVod = ref<VodItem | null>(null);
 </script>
 
 <template>
     <VaCard
-        style="--va-card-padding: 0rem"
-        class="h-full overflow-hidden rounded-xl"
+        class="h-[36rem] min-h-[30rem] md:h-[42rem] lg:h-full lg:min-h-[34rem] overflow-hidden border border-white/10 rounded-xl !bg-[#12151b]/90"
+        style="--va-card-padding: 0"
     >
-        <VaCardContent class="!p-0 h-full">
+        <VaCardContent class="flex flex-col h-full !p-0">
             <VaScrollContainer
                 vertical
-                color="#e0feb4"
+                horizontal
+                color="#aec789"
                 size="medium"
-                class="h-full"
+                class="flex-1 min-h-0"
             >
                 <VaDataTable
                     :items="data"
                     :columns="columns"
+                    class="w-full h-full [&_.va-data-table__table-tr]:border-b [&_.va-data-table__table-tr]:border-white/5 [&_.va-data-table__table-td]:p-[0.72rem_0.9rem] [&_.va-data-table__table-th]:p-[0.72rem_0.9rem]"
                     style="
-                        --va-data-table-hover-color: #357286;
-                        --va-data-table-thead-background: var(
-                            --va-background-element
-                        );
+                        --va-data-table-hover-color: rgba(91, 198, 161, 0.12);
+                        --va-data-table-thead-background: #191d25;
                         --va-data-table-thead-border: 0;
                         height: 100%;
                     "
-                    :virtual-scroller="false"
+                    :virtual-scroller="true"
                     sticky-header
                     hoverable
                 >
@@ -138,94 +166,152 @@ const headerColumns = computed(() =>
                         #[`header(${column.key})`]="{ label }"
                         :key="column.key"
                     >
-                        <div class="text-sm text-center">
+                        <div
+                            class="text-[#aeb7c7] text-[0.76rem] font-extrabold tracking-normal uppercase"
+                        >
                             {{ label }}
                         </div>
                     </template>
+
                     <template v-if="showActions" #header(actions)>
-                        <slot name="actions">
-                            <VaButton
-                                preset="plain"
-                                size="small"
-                                color="info"
-                                aria-label="新增直播"
-                                @click="$emit('addVod')"
-                            >
-                                <VaIcon name="add" />
-                            </VaButton>
-                        </slot>
-                    </template>
-                    <template #cell(date)="{ value }">
-                        <div class="text-[1rem] text-center align-middle">
-                            {{ value }}
-                        </div>
-                    </template>
-                    <template #cell(title)="{ value, row }">
                         <VaButton
-                            preset="plain"
-                            color="textPrimary"
-                            hoverMaskColor="#5bc6a1"
-                            hoverOpacity="1"
-                            pressedMaskColor="info"
-                            :pressedOpacity="1"
-                            :href="`https://youtube.com/live/${row.rowData.link}`"
-                            target="_blank"
-                            rel="noreferrer noopener"
-                            class="align-middle inline-block max-w-64"
+                            class="rounded-lg font-extrabold [&_.va-button__content]:gap-[0.35rem]"
+                            color="#5bc6a1"
+                            aria-label="新增直播"
+                            @click="$emit('addVod')"
                         >
-                            <div class="truncate">
-                                {{ value }}
-                            </div>
+                            <VaIcon name="add" />
                         </VaButton>
                     </template>
-                    <template #cell(tags)="{ row }">
-                        <div class="flex flex-wrap gap-2">
-                            <!-- 外層 flex-wrap 讓按鈕換行 -->
-                            <template
-                                v-for="(tag, index) in row.rowData.tags"
-                                :key="tag"
-                            >
-                                <VaButton
-                                    size="small"
-                                    preset="plain"
-                                    color="textPrimary"
-                                    hoverMaskColor="#5bc6a1"
-                                    hoverOpacity="1"
-                                    pressedMaskColor="info"
-                                    :pressedOpacity="1"
-                                    @click="() => emit('updateTag', tag)"
-                                    class="align-middle inline-block max-w-24 truncate"
-                                >
-                                    <div class="text-center truncate">
-                                        {{ tag }}
-                                    </div>
-                                </VaButton>
 
-                                <VaDivider
-                                    vertical
-                                    class="inline align-middle"
-                                    v-if="index !== row.rowData.tags.length - 1"
-                                />
-                            </template>
-                        </div>
-                    </template>
-                    <template #cell(duration)="{ value }">
-                        <div class="text-[1rem] text-center align-middle">
+                    <template #cell(date)="{ value }">
+                        <div
+                            class="text-[#f7f7f8] text-[0.95rem] whitespace-nowrap font-medium"
+                        >
                             {{ value }}
                         </div>
                     </template>
+
+                    <template #cell(title)="{ row }">
+                        <button
+                            type="button"
+                            class="inline-flex items-center w-full max-w-[44rem] border-0 bg-transparent py-[0.4rem] px-0 text-left leading-[1.35] cursor-pointer overflow-hidden text-ellipsis whitespace-nowrap text-[#f7f7f8] hover:text-[#5bc6a1]"
+                            @click="modalVod = row.rowData"
+                        >
+                            {{ row.rowData.title }}
+                        </button>
+                    </template>
+
+                    <template #cell(tags)="{ row }">
+                        <div class="flex flex-wrap gap-1 justify-center">
+                            <VaChip
+                                v-for="tag in row.rowData.tags"
+                                :key="tag"
+                                color="#9fbd85"
+                                outline
+                                size="small"
+                                class="my-0.5 cursor-pointer"
+                                @click="() => emit('updateTag', tag)"
+                            >
+                                {{ tag }}
+                            </VaChip>
+                        </div>
+                    </template>
+
+                    <template #cell(duration)="{ value }">
+                        <div
+                            class="text-[#aeb7c7] text-center text-[0.95rem] font-medium whitespace-nowrap"
+                        >
+                            {{ value }}
+                        </div>
+                    </template>
+
                     <template v-if="showActions" #cell(actions)="{ row }">
                         <VaButton
+                            class="w-9 h-9 rounded-lg bg-[#5bc6a1]/10"
                             preset="plain"
-                            color="info"
+                            color="#5bc6a1"
                             aria-label="編輯直播"
                             @click="emit('editVod', row.rowData)"
                         >
-                            <VaIcon name="edit" />
+                            <VaIcon name="edit" size="small" />
                         </VaButton>
                     </template>
                 </VaDataTable>
             </VaScrollContainer>
+
+            <VaModal
+                :model-value="modalVod !== null"
+                @update:model-value="modalVod = $event ? modalVod : null"
+                hide-default-actions
+                close-button
+                title-class="hidden"
+            >
+                <div
+                    v-if="modalVod"
+                    class="flex flex-col gap-4 min-w-[18rem] sm:min-w-[24rem]"
+                >
+                    <div
+                        class="text-xl font-extrabold tracking-tight leading-tight text-transparent bg-clip-text bg-gradient-to-r from-[#5bc6a1] to-[#3444a2] break-words"
+                    >
+                        {{ modalVod.title }}
+                    </div>
+
+                    <div
+                        class="pb-3 border-b border-white/5 flex flex-col gap-3"
+                    >
+                        <div class="flex flex-col gap-1.5">
+                            <div
+                                class="text-[#aeb7c7] text-[0.72rem] font-extrabold tracking-normal uppercase"
+                            >
+                                TAG
+                            </div>
+                            <div
+                                class="flex flex-wrap gap-1.5 text-gray-400 text-2xl"
+                            >
+                                <VaChip
+                                    v-for="tag in modalVod.tags"
+                                    :key="tag"
+                                    color="#90dc52"
+                                    outline
+                                    size="small"
+                                    class="my-1"
+                                    @click="() => emit('updateTag', tag)"
+                                >
+                                    {{ tag }}
+                                </VaChip>
+                                <span
+                                    v-if="!modalVod.tags.length"
+                                    class="text-2xl text-gray-400"
+                                    >無 TAG</span
+                                >
+                            </div>
+                        </div>
+
+                        <div class="flex flex-col gap-1.5">
+                            <div
+                                class="text-[#aeb7c7] text-[0.72rem] font-extrabold tracking-normal uppercase"
+                            >
+                                時長
+                            </div>
+                            <div class="text-2xl text-gray-400 font-semibold">
+                                {{ modalVod.duration }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <VaButton
+                        class="rounded-lg font-extrabold w-full"
+                        color="#5bc6a1"
+                        :href="`${YOUTUBE_LIVE}${modalVod.link}`"
+                        target="_blank"
+                        rel="noreferrer noopener"
+                    >
+                        <VaIcon name="play_circle" size="small" />
+                        <span>觀看直播</span>
+                    </VaButton>
+                </div>
+            </VaModal>
         </VaCardContent>
     </VaCard>
 </template>
@@ -234,5 +320,28 @@ const headerColumns = computed(() =>
 :deep(.va-data-table__td) {
     display: flex;
     align-items: center;
+}
+
+:deep(.va-modal__container) {
+    background: rgba(15, 23, 42, 0.85);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow:
+        0 25px 50px -12px rgba(0, 0, 0, 0.35),
+        0 0 0 1px rgba(255, 255, 255, 0.04);
+    animation: vod-modal-in 0.25s ease;
+}
+
+@keyframes vod-modal-in {
+    from {
+        opacity: 0;
+        transform: translateY(8px) scale(0.98);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
 }
 </style>
