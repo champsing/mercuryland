@@ -118,6 +118,7 @@ function clickDone() {
             size="small"
             close-button
             hide-default-actions
+            :mobile-fullscreen="false"
         >
             <div class="flex flex-row mb-8 mr-4 justify-center items-center">
                 <div class="text-lg font-semibold text-zinc-200 flex-grow">

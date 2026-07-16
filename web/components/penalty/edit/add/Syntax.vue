@@ -163,6 +163,7 @@ function save() {
         hide-default-actions
         size="small"
         close-button
+        :mobile-fullscreen="false"
     >
         <div class="flex flex-col gap-4">
             <VaSelect

@@ -168,6 +168,7 @@ function save() {
         @update:model-value="closeModal"
         hide-default-actions
         close-button
+        :mobile-fullscreen="false"
         max-width="500px"
     >
         <div class="flex flex-col gap-4">

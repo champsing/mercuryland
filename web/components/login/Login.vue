@@ -131,6 +131,7 @@ defineExpose({ openLoginModal: openLoginLogin, openLogoutModal });
             v-model="modal.show"
             hide-default-actions
             close-button
+            :mobile-fullscreen="false"
             max-width="400px"
         >
             <div
@@ -194,6 +195,7 @@ defineExpose({ openLoginModal: openLoginLogin, openLogoutModal });
             v-model="modal.show"
             hide-default-actions
             close-button
+            :mobile-fullscreen="false"
             max-width="440px"
         >
             <div

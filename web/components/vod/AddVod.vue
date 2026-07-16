@@ -263,9 +263,11 @@ defineExpose({ open: openAddVodModal });
         hide-default-actions
         close-button
         no-outside-dismiss
+        :mobile-fullscreen="false"
         max-width="480px"
+        class="vod-add-modal"
     >
-        <div class="flex flex-col gap-4 p-4">
+        <div class="flex flex-col gap-4 p-3 sm:p-4 w-full min-w-0">
             <div class="text-lg font-semibold text-zinc-200">新增直播紀錄</div>
             <div class="flex items-end gap-2">
                 <VaInput

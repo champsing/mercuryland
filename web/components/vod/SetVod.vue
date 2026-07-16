@@ -275,9 +275,11 @@ defineExpose({
         hide-default-actions
         close-button
         no-outside-dismiss
+        :mobile-fullscreen="false"
         max-width="480px"
+        class="vod-edit-modal"
     >
-        <div class="flex flex-col gap-4 p-4">
+        <div class="flex flex-col gap-4 p-3 sm:p-4 w-full min-w-0">
             <div class="text-lg font-semibold text-zinc-200">編輯直播紀錄</div>
             <VaInput
                 v-model="editVodForm.link"
@@ -375,9 +377,11 @@ defineExpose({
             v-model="showDeleteConfirmModal"
             hide-default-actions
             close-button
+            :mobile-fullscreen="false"
             max-width="360px"
+            class="vod-delete-modal"
         >
-            <div class="flex flex-col gap-4 p-4">
+            <div class="flex flex-col gap-4 p-3 sm:p-4 w-full min-w-0">
                 <div class="text-lg font-semibold text-red-300">
                     確認刪除直播？
                 </div>

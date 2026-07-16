@@ -140,6 +140,7 @@ async function saveVoteConfig() {
         @ok="savePenaltyChannel"
         ok-text="保存"
         cancel-text="取消"
+        :mobile-fullscreen="false"
     >
         <VaInput v-model="penaltyChannel" label="惩罚频道" class="w-full" />
     </VaModal>
@@ -149,6 +150,7 @@ async function saveVoteConfig() {
         @ok="saveCoinChannel"
         ok-text="保存"
         cancel-text="取消"
+        :mobile-fullscreen="false"
     >
         <VaInput v-model="coinChannel" label="交易所頻道" class="w-full" />
     </VaModal>
@@ -158,6 +160,7 @@ async function saveVoteConfig() {
         @ok="saveVoteConfig"
         ok-text="保存"
         cancel-text="取消"
+        :mobile-fullscreen="false"
     >
         <div class="flex flex-col gap-2">
             <VaInput v-model="voteChannel" label="投票頻道" class="w-full" />

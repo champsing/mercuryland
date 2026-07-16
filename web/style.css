@@ -54,3 +54,16 @@
 .bg-4d7c0f {
     background-color: #4d7c0f !important;
 }
+
+/* Responsive VaModal: prevent fullscreen on small screens.
+   Vuestic's VaModal defaults `mobileFullscreen` to true, which stretches
+   the dialog to the full viewport below md. Components opt out via
+   `:mobile-fullscreen="false"`; this rule caps the dialog width so it
+   never overflows on narrow viewports. */
+@media (max-width: 767px) {
+    .va-modal__dialog {
+        max-width: calc(100vw - 1.5rem) !important;
+        width: calc(100vw - 1.5rem) !important;
+        margin-inline: 0.75rem !important;
+    }
+}

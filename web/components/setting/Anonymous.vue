@@ -115,6 +115,7 @@ const columns = [
         v-model="showModal"
         max-width="800px"
         close-button
+        :mobile-fullscreen="false"
         :hide-default-actions="true"
     >
         <template #header>
