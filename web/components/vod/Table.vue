@@ -132,6 +132,19 @@ const headerColumns = computed(() =>
 );
 
 const modalVod = ref<VodItem | null>(null);
+
+function handleTitleClick(vod: VodItem) {
+    if (isMdUp.value) {
+        window.open(
+            `${YOUTUBE_LIVE}${vod.link}`,
+            "_blank",
+            "noreferrer noopener",
+        );
+        return;
+    }
+
+    modalVod.value = vod;
+}
 </script>
 
 <template>
@@ -196,7 +209,7 @@ const modalVod = ref<VodItem | null>(null);
                         <button
                             type="button"
                             class="inline-flex items-center w-full max-w-[44rem] border-0 bg-transparent py-[0.4rem] px-0 text-left leading-[1.35] cursor-pointer overflow-hidden text-ellipsis whitespace-nowrap text-[#f7f7f8] hover:text-[#5bc6a1]"
-                            @click="modalVod = row.rowData"
+                            @click="handleTitleClick(row.rowData)"
                         >
                             {{ row.rowData.title }}
                         </button>
@@ -207,7 +220,7 @@ const modalVod = ref<VodItem | null>(null);
                             <VaChip
                                 v-for="tag in row.rowData.tags"
                                 :key="tag"
-                                color="#9fbd85"
+                                color="#4feed1"
                                 outline
                                 size="small"
                                 class="my-0.5 cursor-pointer"
