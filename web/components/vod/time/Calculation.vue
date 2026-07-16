@@ -141,16 +141,18 @@ function format(seconds: number): string {
         v-model="showModal"
         hide-default-actions
         close-button
+        :mobile-fullscreen="false"
         max-width="720px"
         class="calculation-modal"
     >
-        <div class="flex flex-col rounded-2xl overflow-hidden">
+        <div class="flex flex-col rounded-2xl overflow-hidden w-full min-w-0">
             <VaList style="--va-list-label-padding: 1rem" class="flex flex-col">
                 <VaListLabel class="text-lg text-zinc-200" color="textPrimary">
                     計算明細
                 </VaListLabel>
                 <VaScrollContainer
                     vertical
+                    horizontal
                     color="#a0a0a0"
                     size="medium"
                     class="max-h-[60vh]"
@@ -215,5 +217,13 @@ function format(seconds: number): string {
 
 .calculation-modal :deep(.va-modal__close-button:hover) {
     color: rgba(255, 255, 255, 0.85);
+}
+
+@media (max-width: 767px) {
+    .calculation-modal .va-modal__dialog {
+        max-width: calc(100vw - 1.5rem) !important;
+        width: calc(100vw - 1.5rem) !important;
+        margin-inline: 0.75rem !important;
+    }
 }
 </style>

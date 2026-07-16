@@ -258,11 +258,13 @@ function handleTitleClick(vod: VodItem) {
                 @update:model-value="modalVod = $event ? modalVod : null"
                 hide-default-actions
                 close-button
+                :mobile-fullscreen="false"
                 title-class="hidden"
+                class="vod-detail-modal"
             >
                 <div
                     v-if="modalVod"
-                    class="flex flex-col gap-4 min-w-[18rem] sm:min-w-[24rem]"
+                    class="flex flex-col gap-4 w-full min-w-0 max-w-[26rem]"
                 >
                     <div
                         class="text-xl font-extrabold tracking-tight leading-tight text-transparent bg-clip-text bg-gradient-to-r from-[#5bc6a1] to-[#3444a2] break-words"
@@ -334,8 +336,10 @@ function handleTitleClick(vod: VodItem) {
     display: flex;
     align-items: center;
 }
+</style>
 
-:deep(.va-modal__container) {
+<style>
+.vod-detail-modal .va-modal__dialog {
     background: rgba(15, 23, 42, 0.85);
     backdrop-filter: blur(18px);
     -webkit-backdrop-filter: blur(18px);
@@ -345,6 +349,14 @@ function handleTitleClick(vod: VodItem) {
         0 25px 50px -12px rgba(0, 0, 0, 0.35),
         0 0 0 1px rgba(255, 255, 255, 0.04);
     animation: vod-modal-in 0.25s ease;
+}
+
+@media (max-width: 767px) {
+    .vod-detail-modal .va-modal__dialog {
+        max-width: calc(100vw - 1.5rem) !important;
+        width: calc(100vw - 1.5rem) !important;
+        margin-inline: 0.75rem !important;
+    }
 }
 
 @keyframes vod-modal-in {
