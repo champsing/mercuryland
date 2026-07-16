@@ -139,7 +139,7 @@ const modalVod = ref<VodItem | null>(null);
         class="h-[36rem] min-h-[30rem] md:h-[42rem] lg:h-full lg:min-h-[34rem] overflow-hidden border border-white/10 rounded-xl !bg-[#12151b]/90"
         style="--va-card-padding: 0"
     >
-        <VaCardContent class="flex flex-col h-full !p-0">
+        <VaCardContent class="flex flex-col h-full !p-0 bg-zinc-700/40">
             <VaScrollContainer
                 vertical
                 horizontal
@@ -153,7 +153,7 @@ const modalVod = ref<VodItem | null>(null);
                     class="w-full h-full [&_.va-data-table__table-tr]:border-b [&_.va-data-table__table-tr]:border-white/5 [&_.va-data-table__table-td]:p-[0.72rem_0.9rem] [&_.va-data-table__table-th]:p-[0.72rem_0.9rem]"
                     style="
                         --va-data-table-hover-color: rgba(91, 198, 161, 0.12);
-                        --va-data-table-thead-background: #191d25;
+                        --va-data-table-thead-background: #0e0f11;
                         --va-data-table-thead-border: 0;
                         height: 100%;
                     "
