@@ -235,49 +235,55 @@ defineExpose({ open });
         close-button
         :mobile-fullscreen="false"
         no-outside-dismiss
-        size="large"
+        size="small"
     >
-        <div class="p-4">
-            <VaTabs v-model="activeTab" class="mb-4">
-                <VaTab name="status">狀態資料</VaTab>
-                <VaTab name="detail">詳情</VaTab>
-                <VaTab name="history">歷史</VaTab>
+        <div
+            class="p-2 w-full max-h-[80vh] flex flex-col gap-4 text-slate-800 dark:text-slate-100"
+        >
+            <VaTabs v-model="activeTab" color="#a3e635" center>
+                <template #tabs>
+                    <VaTab name="status" color="#a3e635">狀態資料</VaTab>
+                    <VaTab name="detail" color="#a3e635">詳情</VaTab>
+                    <VaTab name="history" color="#a3e635">歷史</VaTab>
+                </template>
             </VaTabs>
 
-            <Status
-                v-if="activeTab === 'status'"
-                v-model:date="statusForm.date"
-                v-model:name="statusForm.name"
-                v-model:state="statusForm.state"
-                :state-options="stateOptions"
-                :saving="isSavingstatus"
-                :error="statusError"
-                :success="statusSuccess"
-                @save="savestatus"
-                @delete="showDeleteConfirm = true"
-                @cancel="showModal = false"
-            />
+            <div class="flex-1 overflow-y-auto custom-scrollbar pr-1 pt-4">
+                <Status
+                    v-if="activeTab === 'status'"
+                    v-model:date="statusForm.date"
+                    v-model:name="statusForm.name"
+                    v-model:state="statusForm.state"
+                    :state-options="stateOptions"
+                    :saving="isSavingstatus"
+                    :error="statusError"
+                    :success="statusSuccess"
+                    @save="savestatus"
+                    @delete="showDeleteConfirm = true"
+                    @cancel="showModal = false"
+                />
 
-            <Detail
-                v-if="activeTab === 'detail'"
-                v-model:detail="detailContent"
-                :saving="isSavingDetail"
-                :error="detailError"
-                :success="detailSuccess"
-                @save="saveDetail"
-                @back="activeTab = 'status'"
-            />
+                <Detail
+                    v-if="activeTab === 'detail'"
+                    v-model:detail="detailContent"
+                    :saving="isSavingDetail"
+                    :error="detailError"
+                    :success="detailSuccess"
+                    @save="saveDetail"
+                    @back="activeTab = 'status'"
+                />
 
-            <History
-                v-if="activeTab === 'history'"
-                v-model:entries="historyEntries"
-                :state-options="stateOptions"
-                :saving="isSavingHistory"
-                :error="historyError"
-                :success="historySuccess"
-                @save="saveHistory"
-                @back="activeTab = 'status'"
-            />
+                <History
+                    v-if="activeTab === 'history'"
+                    v-model:entries="historyEntries"
+                    :state-options="stateOptions"
+                    :saving="isSavingHistory"
+                    :error="historyError"
+                    :success="historySuccess"
+                    @save="saveHistory"
+                    @back="activeTab = 'status'"
+                />
+            </div>
         </div>
 
         <!-- 删除确认弹窗 -->
@@ -286,9 +292,9 @@ defineExpose({ open });
             hide-default-actions
             close-button
             :mobile-fullscreen="false"
-            max-width="360px"
+            max-width="200px"
         >
-            <div class="flex flex-col gap-4 p-4">
+            <div class="flex flex-col gap-4 p-2">
                 <div class="text-lg font-semibold text-zinc-200">確認刪除</div>
                 <p class="text-sm text-zinc-300">
                     確定要刪除這個懲罰嗎？此操作無法復原。
@@ -315,3 +321,53 @@ defineExpose({ open });
         </VaModal>
     </VaModal>
 </template>
+
+<style scoped>
+/* 深度穿透修改 Vuestic UI Modal 本體，將其改造為 Apple 風格的玻璃擬態，對標 Detail.vue */
+:deep(.va-modal__dialog) {
+    background: rgba(255, 255, 255, 0.1) !important;
+    backdrop-filter: blur(20px) !important;
+    -webkit-backdrop-filter: blur(20px) !important;
+    border-radius: 24px !important;
+    border: 1px solid rgba(255, 255, 255, 0.4) !important;
+    box-shadow:
+        0 20px 40px -15px rgba(0, 0, 0, 0.08),
+        0 0 0 1px rgba(0, 0, 0, 0.02) !important;
+    max-width: 680px !important;
+    width: 95% !important;
+    transition: all 0.3s ease;
+}
+
+:global(.dark) :deep(.va-modal__dialog),
+:global(.va-theme--dark) :deep(.va-modal__dialog) {
+    background: rgba(15, 23, 42, 0.65) !important;
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+    box-shadow:
+        0 25px 50px -12px rgba(0, 0, 0, 0.35),
+        0 0 0 1px rgba(255, 255, 255, 0.04) !important;
+}
+
+/* 修正關閉按鈕的位置 */
+:deep(.va-modal__close) {
+    top: 1rem !important;
+    right: 1rem !important;
+    color: currentColor !important;
+    opacity: 0.6;
+}
+
+/* 嵌套刪除確認彈窗維持較小尺寸 */
+:deep(.va-modal__child .va-modal__dialog) {
+    max-width: 360px !important;
+}
+
+/* Custom Scrollbar */
+.custom-scrollbar::-webkit-scrollbar {
+    width: 6px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+    @apply bg-slate-500/20 hover:bg-slate-500/40 dark:bg-slate-400/15 dark:hover:bg-slate-400/35 rounded-full;
+}
+</style>
