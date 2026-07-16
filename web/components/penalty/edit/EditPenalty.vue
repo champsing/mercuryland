@@ -240,7 +240,7 @@ defineExpose({ open });
         <div
             class="p-2 w-full max-h-[80vh] flex flex-col gap-4 text-slate-800 dark:text-slate-100"
         >
-            <VaTabs v-model="activeTab" color="#a3e635" :left="false">
+            <VaTabs v-model="activeTab" color="#a3e635" center>
                 <template #tabs>
                     <VaTab name="status" color="#a3e635">狀態資料</VaTab>
                     <VaTab name="detail" color="#a3e635">詳情</VaTab>
