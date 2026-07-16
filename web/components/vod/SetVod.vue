@@ -411,14 +411,3 @@ defineExpose({
         </VaModal>
     </VaModal>
 </template>
-
-<style>
-@media (max-width: 767px) {
-    .vod-edit-modal .va-modal__dialog,
-    .vod-delete-modal .va-modal__dialog {
-        max-width: calc(100vw - 1.5rem) !important;
-        width: calc(100vw - 1.5rem) !important;
-        margin-inline: 0.75rem !important;
-    }
-}
-</style>

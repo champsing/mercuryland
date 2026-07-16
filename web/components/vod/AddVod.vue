@@ -362,13 +362,3 @@ defineExpose({ open: openAddVodModal });
         </div>
     </VaModal>
 </template>
-
-<style>
-@media (max-width: 767px) {
-    .vod-add-modal .va-modal__dialog {
-        max-width: calc(100vw - 1.5rem) !important;
-        width: calc(100vw - 1.5rem) !important;
-        margin-inline: 0.75rem !important;
-    }
-}
-</style>

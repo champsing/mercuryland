@@ -99,6 +99,7 @@ const footnote0 = ref(false);
             size="small"
             close-button
             hide-default-actions
+            :mobile-fullscreen="false"
         >
             <template #header>
                 <div class="text-lg font-semibold text-zinc-200">
@@ -179,6 +180,7 @@ const footnote0 = ref(false);
             v-model:model-value="footnote0"
             hide-default-actions
             close-button
+            :mobile-fullscreen="false"
         >
             <div class="text-lg font-semibold">
                 無法完成的懲罰與轉換條件說明

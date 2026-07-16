@@ -218,12 +218,4 @@ function format(seconds: number): string {
 .calculation-modal :deep(.va-modal__close-button:hover) {
     color: rgba(255, 255, 255, 0.85);
 }
-
-@media (max-width: 767px) {
-    .calculation-modal .va-modal__dialog {
-        max-width: calc(100vw - 1.5rem) !important;
-        width: calc(100vw - 1.5rem) !important;
-        margin-inline: 0.75rem !important;
-    }
-}
 </style>

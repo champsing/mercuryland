@@ -23,6 +23,7 @@ const showRuleDescModal = ref(false);
         v-model="showRuleDescModal"
         hide-default-actions
         close-button
+        :mobile-fullscreen="false"
         z-index="4"
     >
         <div class="text-lg font-semibold text-zinc-200">直播懲罰規則說明</div>

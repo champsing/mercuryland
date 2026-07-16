@@ -106,6 +106,7 @@ defineExpose({ open: openAddPenaltyModal });
         v-model="showAddPenaltyModal"
         hide-default-actions
         close-button
+        :mobile-fullscreen="false"
         no-outside-dismiss
         max-width="480px"
     >

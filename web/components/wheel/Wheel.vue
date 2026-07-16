@@ -377,6 +377,7 @@ const isSubmitAvailable: ComputedRef<boolean> = computed(() => {
             @ok="move"
             ok-text="移动"
             cancel-text="取消"
+            :mobile-fullscreen="false"
         >
             <div class="text-3xl">
                 {{ modal.text }}
@@ -385,6 +386,7 @@ const isSubmitAvailable: ComputedRef<boolean> = computed(() => {
         <VaModal
             v-model="modal2.show"
             noDismiss
+            :mobile-fullscreen="false"
             @ok="
                 () => {
                     clearRightArea == true ? (textArea2 = '') : (textArea = '');
@@ -406,6 +408,7 @@ const isSubmitAvailable: ComputedRef<boolean> = computed(() => {
             cancel-text="取消"
             :before-ok="submit"
             :before-cancel="beforeCancel"
+            :mobile-fullscreen="false"
         >
             <div class="flex flex-col gap-2 items-center text-center">
                 <div class="text-xl">
@@ -425,6 +428,7 @@ const isSubmitAvailable: ComputedRef<boolean> = computed(() => {
             ok-text="設定完成"
             cancel-text="取消"
             :before-ok="() => (modal3.show = true)"
+            :mobile-fullscreen="false"
         >
             <div class="mb-2 text-bg">請選擇懲罰送出時的完成狀態</div>
             <div class="mb-4 text-gray-400 text-sm">

@@ -351,14 +351,6 @@ function handleTitleClick(vod: VodItem) {
     animation: vod-modal-in 0.25s ease;
 }
 
-@media (max-width: 767px) {
-    .vod-detail-modal .va-modal__dialog {
-        max-width: calc(100vw - 1.5rem) !important;
-        width: calc(100vw - 1.5rem) !important;
-        margin-inline: 0.75rem !important;
-    }
-}
-
 @keyframes vod-modal-in {
     from {
         opacity: 0;

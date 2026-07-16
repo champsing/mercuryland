@@ -42,6 +42,7 @@ watch(
         hide-default-actions
         size="small"
         close-button
+        :mobile-fullscreen="false"
     >
         <div
             v-if="penalty"

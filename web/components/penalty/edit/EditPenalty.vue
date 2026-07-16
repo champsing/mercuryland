@@ -233,6 +233,7 @@ defineExpose({ open });
         v-model="showModal"
         hide-default-actions
         close-button
+        :mobile-fullscreen="false"
         no-outside-dismiss
         size="large"
     >
@@ -284,6 +285,7 @@ defineExpose({ open });
             v-model="showDeleteConfirm"
             hide-default-actions
             close-button
+            :mobile-fullscreen="false"
             max-width="360px"
         >
             <div class="flex flex-col gap-4 p-4">

@@ -147,6 +147,7 @@ function save() {
         hide-default-actions
         size="small"
         close-button
+        :mobile-fullscreen="false"
     >
         <div class="space-y-4">
             <VaInput
