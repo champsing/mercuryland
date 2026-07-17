@@ -102,18 +102,25 @@ const handleEditVod = (vod: VodItem) => {
                         </VaChip>
                     </template>
                 </VaSelect>
-                <div class="flex justify-center">
-                    <VaSwitch
-                        v-model="strictFiltering"
-                        off-color="#1ccba2"
-                        color="#3444a2"
-                        style="--va-switch-checker-background-color: #252723"
-                        false-inner-label="符合一項"
-                        true-inner-label="符合全部"
-                    />
-                </div>
-                <div class="flex justify-end vod-rule">
-                    <Rule />
+                <div
+                    class="flex justify-between gap-3 w-full px-4 md:flex md:justify-center"
+                >
+                    <div class="vod-switch">
+                        <VaSwitch
+                            v-model="strictFiltering"
+                            off-color="#1ccba2"
+                            color="#3444a2"
+                            style="
+                                --va-switch-checker-background-color: #252723;
+                            "
+                            false-inner-label="符合一項"
+                            true-inner-label="符合全部"
+                        />
+                    </div>
+                    <div class="grow md:hidden"></div>
+                    <div class="flex-1 md:block">
+                        <Rule />
+                    </div>
                 </div>
             </section>
 
@@ -177,9 +184,7 @@ const handleEditVod = (vod: VodItem) => {
 
 .vod-filter-bar {
     display: grid;
-    grid-template-columns:
-        minmax(13rem, 0.9fr) minmax(18rem, 2fr) minmax(10rem, 0.7fr)
-        auto;
+    grid-template-columns: minmax(13rem, 1fr) minmax(18rem, 2fr) auto;
     gap: 0.75rem;
     align-items: center;
     margin-bottom: 1rem;
@@ -198,13 +203,9 @@ const handleEditVod = (vod: VodItem) => {
     .vod-filter-bar {
         grid-template-columns: repeat(2, minmax(0, 1fr));
     }
-
-    .vod-rule {
-        justify-content: stretch;
-    }
 }
 
-@media (max-width: 720px) {
+@media (max-width: 767px) {
     .vod-page {
         padding: 4rem 0.75rem 1rem;
     }

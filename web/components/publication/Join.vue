@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import serverInfo from "@assets/data/server_info.json";
 import { copyToClipboard } from "@composables/utils";
 import { ref } from "vue";
 import { VaButton, VaStepper } from "vuestic-ui";
@@ -20,9 +21,9 @@ function prev() {
 }
 
 const serverOnline = true;
-const serverIP = "mercuryland.exaroton.me";
-const seed = "NOT REVEALED";
-const version = "26.1.2";
+const serverIP = serverInfo.ip;
+const seed = serverInfo.seed;
+const version = serverInfo.version;
 const discordInvitation = "https://discord.gg/A2cMZRr";
 const applyWhitelist = "https://discord.gg/CXSQq4nVAH";
 
@@ -132,7 +133,7 @@ const steps = [
                 >
                     Version
                 </div>
-                <div class="font-mono text-zinc-100">Java {{ version }}</div>
+                <div class="font-mono text-zinc-100">{{ version }}</div>
                 <div class="text-xs text-zinc-400 mt-3">正版限定</div>
             </div>
         </div>
