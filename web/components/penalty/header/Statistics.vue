@@ -78,18 +78,24 @@ function clickDone() {
 
 <template>
     <div>
-        <VaCard class="side-card">
-            <VaCardContent class="side-card__content">
-                <div class="side-card__header">
+        <VaCard
+            class="side-card border border-white/[0.08] rounded-lg !bg-[rgba(18,21,27,0.92)]"
+        >
+            <VaCardContent
+                class="side-card__content flex flex-col min-h-[8.25rem] gap-[0.7rem] !p-[0.85rem]"
+            >
+                <div
+                    class="side-card__header flex items-center justify-between gap-3 text-[#45d483]"
+                >
                     <div>
                         <span class="side-card__eyebrow">Statistics</span>
                         <h2>統計</h2>
                     </div>
                     <VaIcon name="query_stats" size="large" />
                 </div>
-                <div class="stat-actions">
+                <div class="stat-actions grid grid-cols-2 gap-3 flex-1">
                     <VaButton
-                        class="stat-action stat-action--danger"
+                        class="stat-action stat-action--danger min-h-4 rounded-lg"
                         color="danger"
                         size="small"
                         @click="clickExist"
@@ -97,7 +103,7 @@ function clickDone() {
                         <strong>現存懲罰</strong>
                     </VaButton>
                     <VaButton
-                        class="stat-action stat-action--success"
+                        class="stat-action stat-action--success min-h-4 rounded-lg"
                         color="success"
                         size="small"
                         @click="clickDone"
@@ -215,29 +221,12 @@ function clickDone() {
 </template>
 
 <style scoped>
+/* Vuestic 深度覆蓋 */
 .side-card {
     --va-card-padding: 0;
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: 8px;
-    background: rgba(18, 21, 27, 0.92) !important;
 }
 
-.side-card__content {
-    display: flex;
-    min-height: 8.25rem;
-    flex-direction: column;
-    gap: 0.7rem;
-    padding: 0.85rem !important;
-}
-
-.side-card__header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 0.75rem;
-    color: #45d483;
-}
-
+/* 後代選擇器樣式 */
 .side-card__header h2 {
     margin: 0.1rem 0 0;
     color: #f7f7f8;
@@ -252,18 +241,6 @@ function clickDone() {
     font-weight: 800;
     letter-spacing: 0;
     text-transform: uppercase;
-}
-
-.stat-actions {
-    display: grid;
-    flex: 1;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 0.75rem;
-}
-
-.stat-action {
-    min-height: 1rem;
-    border-radius: 8px;
 }
 
 .stat-action span {
@@ -282,5 +259,36 @@ function clickDone() {
 
 .stat-action--success {
     background: #297a33 !important;
+}
+
+/* 玻璃擬態樣式，對標 EditPenalty.vue */
+:deep(.va-modal__dialog) {
+    background: rgba(255, 255, 255, 0.1) !important;
+    backdrop-filter: blur(20px) !important;
+    -webkit-backdrop-filter: blur(20px) !important;
+    border-radius: 24px !important;
+    border: 1px solid rgba(255, 255, 255, 0.4) !important;
+    box-shadow:
+        0 20px 40px -15px rgba(0, 0, 0, 0.08),
+        0 0 0 1px rgba(0, 0, 0, 0.02) !important;
+    max-width: 680px !important;
+    width: 95% !important;
+    transition: all 0.3s ease;
+}
+
+:global(.dark) :deep(.va-modal__dialog),
+:global(.va-theme--dark) :deep(.va-modal__dialog) {
+    background: rgba(15, 23, 42, 0.65) !important;
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+    box-shadow:
+        0 25px 50px -12px rgba(0, 0, 0, 0.35),
+        0 0 0 1px rgba(255, 255, 255, 0.04) !important;
+}
+
+:deep(.va-modal__close) {
+    top: 1rem !important;
+    right: 1rem !important;
+    color: currentColor !important;
+    opacity: 0.6;
 }
 </style>
