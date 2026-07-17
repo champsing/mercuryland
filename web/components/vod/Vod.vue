@@ -68,7 +68,10 @@ const handleEditVod = (vod: VodItem) => {
 <template>
     <main class="vod-page">
         <section class="w-full max-w-[1680px] mx-auto">
-            <section class="vod-filter-bar" aria-label="直播隨選篩選">
+            <section
+                class="vod-filter-bar mx-20 rounded-3xl"
+                aria-label="直播隨選篩選"
+            >
                 <VaDateInput
                     v-model="dateRange"
                     :format-date="formatDate"
@@ -126,7 +129,7 @@ const handleEditVod = (vod: VodItem) => {
 
             <ViewportHeight>
                 <section
-                    class="relative flex flex-col lg:flex-row gap-2 h-full"
+                    class="relative flex flex-col lg:flex-row gap-2 h-full px-6"
                 >
                     <div class="w-full h-full">
                         <Table
@@ -190,7 +193,13 @@ const handleEditVod = (vod: VodItem) => {
     margin-bottom: 1rem;
     border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: 8px;
-    background: rgba(22, 25, 31, 0.86);
+    background: linear-gradient(
+        135deg,
+        rgba(87, 114, 96, 0.94) 0%,
+        rgba(45, 90, 75, 0.92) 50%,
+        rgba(13, 90, 11, 0.95) 100%
+    );
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
     padding: 0.8rem;
     backdrop-filter: blur(16px);
 }

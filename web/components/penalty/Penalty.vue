@@ -60,14 +60,20 @@ onMounted(loadPenData);
 
 <template>
     <main class="penalty-page">
-        <section class="penalty-shell">
-            <section class="penalty-quick-panels" aria-label="懲罰快速面板">
+        <section class="penalty-shell w-full max-w-[1680px] mx-auto">
+            <section
+                class="penalty-quick-panels grid gap-4 mb-4 px-6"
+                aria-label="懲罰快速面板"
+            >
                 <News :penalties="penalties" />
                 <Statistics :penalties="penalties" />
                 <Syntax />
             </section>
 
-            <section class="penalty-filter-bar" aria-label="懲罰篩選">
+            <section
+                class="penalty-filter-bar grid gap-3 items-center mb-4 mx-10 rounded-3xl"
+                aria-label="懲罰篩選"
+            >
                 <VaDateInput
                     v-model="filterDate"
                     :format-date="formatDate"
@@ -95,13 +101,13 @@ onMounted(loadPenData);
                     :clear-value="null"
                     class="penalty-status"
                 />
-                <div class="penalty-rule">
+                <div class="penalty-rule flex justify-end">
                     <Rule />
                 </div>
             </section>
 
             <ViewportHeight>
-                <section class="penalty-main">
+                <section class="penalty-main min-h-0 w-full px-6">
                     <Table
                         :penalties="penalties"
                         :dateRange="filterDate"
@@ -143,16 +149,8 @@ onMounted(loadPenData);
     padding: 2.5rem 1rem 1.25rem;
 }
 
-.penalty-shell {
-    width: min(1680px, 100%);
-    margin: 0 auto;
-}
-
 .penalty-quick-panels {
-    display: grid;
     grid-template-columns: minmax(18rem, 1.15fr) repeat(2, minmax(16rem, 1fr));
-    gap: 1rem;
-    margin-bottom: 1rem;
 }
 
 .penalty-quick-panels .latest-card__content,
@@ -168,28 +166,19 @@ onMounted(loadPenData);
 }
 
 .penalty-filter-bar {
-    display: grid;
     grid-template-columns:
         minmax(13rem, 0.9fr) minmax(16rem, 1.8fr) minmax(11rem, 0.8fr)
         auto;
-    gap: 0.75rem;
-    align-items: center;
-    margin-bottom: 1rem;
     border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: 8px;
-    background: rgba(22, 25, 31, 0.86);
+    background: linear-gradient(
+        135deg,
+        rgba(33, 70, 76, 0.94) 0%,
+        rgba(24, 77, 96, 0.92) 50%,
+        rgba(8, 72, 78, 0.95) 100%
+    );
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
     padding: 0.8rem;
     backdrop-filter: blur(16px);
-}
-
-.penalty-rule {
-    display: flex;
-    justify-content: flex-end;
-}
-
-.penalty-main {
-    min-height: 0;
-    width: 100%;
 }
 
 .overall-button {
