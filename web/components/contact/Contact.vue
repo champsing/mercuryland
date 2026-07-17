@@ -7,7 +7,7 @@ import ContactCard from "./ContactCard.vue";
 
 <template>
     <div class="mt-4 m-auto w-11/12">
-        <div class="flex">
+        <div class="flex flex-row justify-center gap-6 pt-10">
             <ContactCard
                 name1="惡靈"
                 name2="Oreki"
@@ -39,7 +39,7 @@ import ContactCard from "./ContactCard.vue";
                     <VaButton
                         preset="primary"
                         color="warning"
-                        href="https://timesl.online/"
+                        href="https://tslyric.com/"
                         rel="noopener noreferrer"
                         target="_blank"
                     >
