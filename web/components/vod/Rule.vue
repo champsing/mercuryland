@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { ref } from "vue";
-import { VaButton, VaIcon, VaModal, VaCollapse } from "vuestic-ui";
 import { Info24Regular } from "@vicons/fluent";
+import { ref } from "vue";
+import { VaButton, VaCollapse, VaIcon, VaModal } from "vuestic-ui";
 
 const showRuleDescModal = ref(false);
 </script>
@@ -9,7 +9,6 @@ const showRuleDescModal = ref(false);
 <template>
     <VaButton
         preset="plain"
-        class="w-full"
         color="#FFFFFF"
         @click="showRuleDescModal = !showRuleDescModal"
     >
