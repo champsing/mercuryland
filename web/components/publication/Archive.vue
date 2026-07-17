@@ -16,14 +16,14 @@ const hostMeta: Record<string, { label: string; color: string; bg: string }> = {
 </script>
 
 <template>
-    <div class="flex flex-row flex-wrap justify-center gap-4">
+    <div class="grid grid-cols-4 grid-rows-3 gap-24 px-10">
         <a
             v-for="archive in mapArchives"
             :key="archive.season"
             :href="archive.link"
             target="_blank"
             rel="noopener noreferrer"
-            class="flex flex-row gap-2 items-center px-6 py-3 rounded-full transition-all duration-200 cursor-pointer"
+            class="flex flex-row gap-4 items-center px-6 py-3 rounded-full transition-all duration-200 cursor-pointer"
             :class="hostMeta[archive.host]?.bg"
         >
             <div class="text-xl text-neutral-100">{{ archive.season }}</div>
