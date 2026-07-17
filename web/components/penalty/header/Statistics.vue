@@ -107,7 +107,9 @@ function clickDone() {
                         size="small"
                         @click="clickExist"
                     >
-                        <strong class="text-[0.98rem] leading-none">現存懲罰</strong>
+                        <strong class="text-[0.98rem] leading-none"
+                            >現存懲罰</strong
+                        >
                     </VaButton>
                     <VaButton
                         class="stat-action stat-action--success min-h-4 rounded-lg"
@@ -115,7 +117,9 @@ function clickDone() {
                         size="small"
                         @click="clickDone"
                     >
-                        <strong class="text-[0.98rem] leading-none">完成懲罰</strong>
+                        <strong class="text-[0.98rem] leading-none"
+                            >完成懲罰</strong
+                        >
                     </VaButton>
                 </div>
             </VaCardContent>
@@ -132,6 +136,7 @@ function clickDone() {
             close-button
             hide-default-actions
             :mobile-fullscreen="false"
+            class="stat-modal"
         >
             <div class="flex flex-row mb-8 mr-4 justify-center items-center">
                 <div class="text-lg font-semibold text-zinc-200 flex-grow">
@@ -276,5 +281,12 @@ function clickDone() {
     right: 1rem !important;
     color: currentColor !important;
     opacity: 0.6;
+}
+
+/* md 以上縮小現存/完成統計彈窗寬度 */
+@media (min-width: 768px) {
+    .stat-modal :deep(.va-modal__dialog) {
+        max-width: 600px !important;
+    }
 }
 </style>

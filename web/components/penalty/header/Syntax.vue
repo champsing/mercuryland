@@ -87,7 +87,9 @@ const footnote0 = ref(false);
                         size="small"
                         @click="clickSyntax"
                     >
-                        <strong class="text-[0.98rem] leading-none">詳細資料</strong>
+                        <strong class="text-[0.98rem] leading-none"
+                            >詳細資料</strong
+                        >
                     </VaButton>
                     <VaButton
                         class="legend-action legend-action--blue min-h-4 rounded-lg"
@@ -96,7 +98,9 @@ const footnote0 = ref(false);
                         size="small"
                         @click="clickState"
                     >
-                        <strong class="text-[0.98rem] leading-none">完成狀態</strong>
+                        <strong class="text-[0.98rem] leading-none"
+                            >完成狀態</strong
+                        >
                     </VaButton>
                 </div>
             </VaCardContent>
