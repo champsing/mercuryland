@@ -102,7 +102,9 @@ const handleEditVod = (vod: VodItem) => {
                         </VaChip>
                     </template>
                 </VaSelect>
-                <div class="flex justify-between gap-3 w-full px-4">
+                <div
+                    class="flex justify-between gap-3 w-full px-4 md:flex md:justify-center"
+                >
                     <div class="vod-switch">
                         <VaSwitch
                             v-model="strictFiltering"
@@ -115,8 +117,8 @@ const handleEditVod = (vod: VodItem) => {
                             true-inner-label="符合全部"
                         />
                     </div>
-                    <div class="grow"></div>
-                    <div class="flex-1">
+                    <div class="grow md:hidden"></div>
+                    <div class="flex-1 md:block">
                         <Rule />
                     </div>
                 </div>

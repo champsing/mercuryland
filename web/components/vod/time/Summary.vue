@@ -14,14 +14,14 @@ const text = computed(() =>
     <div
         class="flex flex-col items-center gap-2 rounded-[2rem] border border-white/[0.10] bg-zinc-300/12 px-5 py-2.5 shadow-[0_4px_24px_rgba(0,0,0,0.25)] backdrop-blur-xl md:flex-row md:gap-3 md:py-2"
     >
-        <div class="flex items-center gap-2 md:gap-4">
+        <div class="flex flex-col md:flex-row items-center gap-4">
             <span
                 class="text-xs md:text-sm tracking-widest text-zinc-200 uppercase"
             >
                 剩餘時間
             </span>
             <span
-                class="text-4xl font-bold tracking-tight text-zinc-100 tabular-nums"
+                class="text-3xl md:text-4xl font-bold leading-none tracking-tight text-zinc-100 tabular-nums"
             >
                 {{ text }}
             </span>
