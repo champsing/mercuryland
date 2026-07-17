@@ -27,7 +27,7 @@ const showRuleDescModal = ref(false);
         class="vod-rule-modal"
     >
         <div
-            class="flex flex-col gap-1 w-full min-w-0 max-h-[70vh] overflow-y-auto pr-1"
+            class="custom-scrollbar flex flex-col gap-1 w-full min-w-0 max-h-[70vh] overflow-y-auto pr-1"
         >
             <div class="text-lg font-semibold text-zinc-200">
                 直播時數規則說明
@@ -106,5 +106,16 @@ const showRuleDescModal = ref(false);
     right: 1rem !important;
     color: currentColor !important;
     opacity: 0.6;
+}
+
+/* Custom Scrollbar */
+.custom-scrollbar::-webkit-scrollbar {
+    width: 6px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+    @apply bg-slate-500/20 hover:bg-slate-500/40 dark:bg-slate-400/15 dark:hover:bg-slate-400/35 rounded-full;
 }
 </style>
