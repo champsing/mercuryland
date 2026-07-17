@@ -57,33 +57,50 @@ const footnote0 = ref(false);
 
 <template>
     <div>
-        <VaCard class="side-card">
-            <VaCardContent class="side-card__content">
-                <div class="side-card__header">
+        <VaCard
+            class="side-card border border-white/[0.08] rounded-lg !bg-[rgba(18,21,27,0.92)]"
+        >
+            <VaCardContent
+                class="side-card__content flex flex-col min-h-[8.25rem] gap-12 !p-[0.85rem]"
+            >
+                <div
+                    class="side-card__header flex items-center justify-between gap-3 text-[#28c9c7]"
+                >
                     <div>
-                        <span class="side-card__eyebrow">Icons</span>
-                        <h2>圖例</h2>
+                        <span
+                            class="side-card__eyebrow text-[#28c9c7] text-[0.72rem] font-extrabold uppercase"
+                            >Icons</span
+                        >
+                        <h2
+                            class="mt-[0.1rem] text-[#f7f7f8] text-base font-extrabold"
+                        >
+                            圖例
+                        </h2>
                     </div>
                     <VaIcon name="category" size="large" />
                 </div>
-                <div class="legend-actions">
+                <div class="legend-actions grid grid-cols-2 gap-3 flex-1">
                     <VaButton
-                        class="legend-action legend-action--cyan"
+                        class="legend-action legend-action--cyan min-h-4 rounded-lg"
                         gradient
                         color="#28c9c7"
                         size="small"
                         @click="clickSyntax"
                     >
-                        <strong>詳細資料</strong>
+                        <strong class="text-[0.98rem] leading-none"
+                            >詳細資料</strong
+                        >
                     </VaButton>
                     <VaButton
-                        class="legend-action legend-action--blue"
+                        class="legend-action legend-action--blue min-h-4 rounded-lg"
                         gradient
                         color="#005c99"
                         size="small"
                         @click="clickState"
                     >
-                        <strong>完成狀態</strong>
+                        <strong class="text-[0.98rem] leading-none"
+                            >完成狀態</strong
+                        >
                     </VaButton>
                 </div>
             </VaCardContent>
@@ -212,65 +229,15 @@ const footnote0 = ref(false);
 </template>
 
 <style scoped>
+/* Vuestic 深度覆蓋 */
 .side-card {
     --va-card-padding: 0;
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: 8px;
-    background: rgba(18, 21, 27, 0.92) !important;
 }
 
-.side-card__content {
-    display: flex;
-    min-height: 8.25rem;
-    flex-direction: column;
-    gap: 3rem;
-    padding: 0.85rem !important;
-}
-
-.side-card__header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 0.75rem;
-    color: #28c9c7;
-}
-
-.side-card__header h2 {
-    margin: 0.1rem 0 0;
-    color: #f7f7f8;
-    font-size: 1rem;
-    font-weight: 800;
-    letter-spacing: 0;
-}
-
-.side-card__eyebrow {
-    color: #28c9c7;
-    font-size: 0.72rem;
-    font-weight: 800;
-    letter-spacing: 0;
-    text-transform: uppercase;
-}
-
-.legend-actions {
-    display: grid;
-    flex: 1;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 0.75rem;
-}
-
-.legend-action {
-    min-height: 1rem;
-    border-radius: 8px;
-}
-
+/* Vuestic 內部 span 樣式 */
 .legend-action span {
     font-size: 0.78rem;
     font-weight: 700;
-}
-
-.legend-action strong {
-    font-size: 0.98rem;
-    line-height: 1;
 }
 
 .legend-action--cyan {
@@ -279,5 +246,36 @@ const footnote0 = ref(false);
 
 .legend-action--blue {
     background: #005c99 !important;
+}
+
+/* 玻璃擬態樣式，對標 EditPenalty.vue */
+:deep(.va-modal__dialog) {
+    background: rgba(255, 255, 255, 0.1) !important;
+    backdrop-filter: blur(20px) !important;
+    -webkit-backdrop-filter: blur(20px) !important;
+    border-radius: 24px !important;
+    border: 1px solid rgba(255, 255, 255, 0.4) !important;
+    box-shadow:
+        0 20px 40px -15px rgba(0, 0, 0, 0.08),
+        0 0 0 1px rgba(0, 0, 0, 0.02) !important;
+    max-width: 680px !important;
+    width: 95% !important;
+    transition: all 0.3s ease;
+}
+
+:global(.dark) :deep(.va-modal__dialog),
+:global(.va-theme--dark) :deep(.va-modal__dialog) {
+    background: rgba(15, 23, 42, 0.65) !important;
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+    box-shadow:
+        0 25px 50px -12px rgba(0, 0, 0, 0.35),
+        0 0 0 1px rgba(255, 255, 255, 0.04) !important;
+}
+
+:deep(.va-modal__close) {
+    top: 1rem !important;
+    right: 1rem !important;
+    color: currentColor !important;
+    opacity: 0.6;
 }
 </style>
