@@ -67,8 +67,15 @@ const footnote0 = ref(false);
                     class="side-card__header flex items-center justify-between gap-3 text-[#28c9c7]"
                 >
                     <div>
-                        <span class="side-card__eyebrow">Icons</span>
-                        <h2>圖例</h2>
+                        <span
+                            class="side-card__eyebrow text-[#28c9c7] text-[0.72rem] font-extrabold uppercase"
+                            >Icons</span
+                        >
+                        <h2
+                            class="mt-[0.1rem] text-[#f7f7f8] text-base font-extrabold"
+                        >
+                            圖例
+                        </h2>
                     </div>
                     <VaIcon name="category" size="large" />
                 </div>
@@ -80,7 +87,7 @@ const footnote0 = ref(false);
                         size="small"
                         @click="clickSyntax"
                     >
-                        <strong>詳細資料</strong>
+                        <strong class="text-[0.98rem] leading-none">詳細資料</strong>
                     </VaButton>
                     <VaButton
                         class="legend-action legend-action--blue min-h-4 rounded-lg"
@@ -89,7 +96,7 @@ const footnote0 = ref(false);
                         size="small"
                         @click="clickState"
                     >
-                        <strong>完成狀態</strong>
+                        <strong class="text-[0.98rem] leading-none">完成狀態</strong>
                     </VaButton>
                 </div>
             </VaCardContent>
@@ -223,31 +230,10 @@ const footnote0 = ref(false);
     --va-card-padding: 0;
 }
 
-/* 後代選擇器樣式 */
-.side-card__header h2 {
-    margin: 0.1rem 0 0;
-    color: #f7f7f8;
-    font-size: 1rem;
-    font-weight: 800;
-    letter-spacing: 0;
-}
-
-.side-card__eyebrow {
-    color: #28c9c7;
-    font-size: 0.72rem;
-    font-weight: 800;
-    letter-spacing: 0;
-    text-transform: uppercase;
-}
-
+/* Vuestic 內部 span 樣式 */
 .legend-action span {
     font-size: 0.78rem;
     font-weight: 700;
-}
-
-.legend-action strong {
-    font-size: 0.98rem;
-    line-height: 1;
 }
 
 .legend-action--cyan {

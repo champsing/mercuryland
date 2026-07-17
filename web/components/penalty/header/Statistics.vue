@@ -88,8 +88,15 @@ function clickDone() {
                     class="side-card__header flex items-center justify-between gap-3 text-[#45d483]"
                 >
                     <div>
-                        <span class="side-card__eyebrow">Statistics</span>
-                        <h2>統計</h2>
+                        <span
+                            class="side-card__eyebrow text-[#45d483] text-[0.72rem] font-extrabold uppercase"
+                            >Statistics</span
+                        >
+                        <h2
+                            class="mt-[0.1rem] text-[#f7f7f8] text-base font-extrabold"
+                        >
+                            統計
+                        </h2>
                     </div>
                     <VaIcon name="query_stats" size="large" />
                 </div>
@@ -100,7 +107,7 @@ function clickDone() {
                         size="small"
                         @click="clickExist"
                     >
-                        <strong>現存懲罰</strong>
+                        <strong class="text-[0.98rem] leading-none">現存懲罰</strong>
                     </VaButton>
                     <VaButton
                         class="stat-action stat-action--success min-h-4 rounded-lg"
@@ -108,7 +115,7 @@ function clickDone() {
                         size="small"
                         @click="clickDone"
                     >
-                        <strong>完成懲罰</strong>
+                        <strong class="text-[0.98rem] leading-none">完成懲罰</strong>
                     </VaButton>
                 </div>
             </VaCardContent>
@@ -226,31 +233,10 @@ function clickDone() {
     --va-card-padding: 0;
 }
 
-/* 後代選擇器樣式 */
-.side-card__header h2 {
-    margin: 0.1rem 0 0;
-    color: #f7f7f8;
-    font-size: 1rem;
-    font-weight: 800;
-    letter-spacing: 0;
-}
-
-.side-card__eyebrow {
-    color: #45d483;
-    font-size: 0.72rem;
-    font-weight: 800;
-    letter-spacing: 0;
-    text-transform: uppercase;
-}
-
+/* Vuestic 內部 span 樣式 */
 .stat-action span {
     font-size: 0.78rem;
     font-weight: 700;
-}
-
-.stat-action strong {
-    font-size: 0.98rem;
-    line-height: 1;
 }
 
 .stat-action--danger {
