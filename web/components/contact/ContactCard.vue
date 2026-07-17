@@ -71,7 +71,9 @@ const props = defineProps<{
     border: 1px solid var(--va-border);
     border-radius: 1rem;
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
 }
 
 .name-card:hover {
@@ -82,7 +84,11 @@ const props = defineProps<{
 .avatar-side {
     width: clamp(7rem, 40%, 10rem);
     padding: 1.25rem;
-    background: linear-gradient(135deg, var(--va-background-badge), var(--va-background-card));
+    background: linear-gradient(
+        135deg,
+        var(--va-background-badge),
+        var(--va-background-card)
+    );
     border-right: 1px solid var(--va-border);
 }
 
