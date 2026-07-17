@@ -61,13 +61,19 @@ onMounted(loadPenData);
 <template>
     <main class="penalty-page">
         <section class="penalty-shell w-full max-w-[1680px] mx-auto">
-            <section class="penalty-quick-panels grid gap-4 mb-4" aria-label="懲罰快速面板">
+            <section
+                class="penalty-quick-panels grid gap-4 mb-4 px-6"
+                aria-label="懲罰快速面板"
+            >
                 <News :penalties="penalties" />
                 <Statistics :penalties="penalties" />
                 <Syntax />
             </section>
 
-            <section class="penalty-filter-bar grid gap-3 items-center mb-4 mx-20 rounded-3xl" aria-label="懲罰篩選">
+            <section
+                class="penalty-filter-bar grid gap-3 items-center mb-4 mx-10 rounded-3xl"
+                aria-label="懲罰篩選"
+            >
                 <VaDateInput
                     v-model="filterDate"
                     :format-date="formatDate"
@@ -166,9 +172,9 @@ onMounted(loadPenData);
     border: 1px solid rgba(255, 255, 255, 0.08);
     background: linear-gradient(
         135deg,
-        rgba(42, 85, 93, 0.94) 0%,
+        rgba(33, 70, 76, 0.94) 0%,
         rgba(24, 77, 96, 0.92) 50%,
-        rgba(18, 67, 71, 0.95) 100%
+        rgba(8, 72, 78, 0.95) 100%
     );
     box-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
     padding: 0.8rem;
