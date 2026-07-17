@@ -193,7 +193,13 @@ const handleEditVod = (vod: VodItem) => {
     margin-bottom: 1rem;
     border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: 8px;
-    background: rgba(22, 25, 31, 0.86);
+    background: linear-gradient(
+        135deg,
+        rgba(20, 23, 30, 0.94) 0%,
+        rgba(76, 87, 110, 0.92) 50%,
+        rgba(60, 76, 117, 0.95) 100%
+    );
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
     padding: 0.8rem;
     backdrop-filter: blur(16px);
 }
