@@ -15,7 +15,7 @@ import ReturnTopButton from "./ReturnTopButton.vue";
             <div class="mt-8">
                 <VaButton
                     preset="primary"
-                    to="join"
+                    to="publication"
                     size="large"
                     border-color="#0891b2"
                     color="#0891b2"
