@@ -65,7 +65,9 @@ function onWheel(e: WheelEvent) {
 
 onMounted(() => {
     snapContainer.value?.addEventListener("wheel", onWheel, { passive: false });
-    snapContainer.value?.addEventListener("scroll", onContainerScroll, { passive: true });
+    snapContainer.value?.addEventListener("scroll", onContainerScroll, {
+        passive: true,
+    });
 });
 
 onUnmounted(() => {
@@ -90,7 +92,11 @@ onUnmounted(() => {
     </div>
 
     <!-- Server Closed: Show simple welcome -->
-    <div v-else class="relative overflow-hidden" style="height: calc(100vh - 48px)">
+    <div
+        v-else
+        class="relative overflow-hidden"
+        style="height: calc(100vh - 48px)"
+    >
         <NextPageButton :page="1" />
         <div class="absolute x-center y-center text-center">
             <div class="text-white font-bold text-8xl">水星樂園</div>

@@ -82,17 +82,39 @@
    STAGGER DELAY MODIFIERS
    ================================================================ */
 
-.anim-delay-100  { transition-delay: 0.1s; }
-.anim-delay-150  { transition-delay: 0.15s; }
-.anim-delay-200  { transition-delay: 0.2s; }
-.anim-delay-250  { transition-delay: 0.25s; }
-.anim-delay-300  { transition-delay: 0.3s; }
-.anim-delay-350  { transition-delay: 0.35s; }
-.anim-delay-400  { transition-delay: 0.4s; }
-.anim-delay-450  { transition-delay: 0.45s; }
-.anim-delay-500  { transition-delay: 0.5s; }
-.anim-delay-600  { transition-delay: 0.6s; }
-.anim-delay-800  { transition-delay: 0.8s; }
+.anim-delay-100 {
+    transition-delay: 0.1s;
+}
+.anim-delay-150 {
+    transition-delay: 0.15s;
+}
+.anim-delay-200 {
+    transition-delay: 0.2s;
+}
+.anim-delay-250 {
+    transition-delay: 0.25s;
+}
+.anim-delay-300 {
+    transition-delay: 0.3s;
+}
+.anim-delay-350 {
+    transition-delay: 0.35s;
+}
+.anim-delay-400 {
+    transition-delay: 0.4s;
+}
+.anim-delay-450 {
+    transition-delay: 0.45s;
+}
+.anim-delay-500 {
+    transition-delay: 0.5s;
+}
+.anim-delay-600 {
+    transition-delay: 0.6s;
+}
+.anim-delay-800 {
+    transition-delay: 0.8s;
+}
 
 /* ================================================================
    TRIGGER  —  .is-visible added by SlideSection observer
@@ -138,8 +160,13 @@
    ================================================================ */
 
 @keyframes float {
-    0%, 100% { transform: translateY(0); }
-    50%      { transform: translateY(-8px); }
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-8px);
+    }
 }
 
 .anim-float {
@@ -147,8 +174,13 @@
 }
 
 @keyframes bounce-scroll {
-    0%, 100% { transform: translateY(0); }
-    50%      { transform: translateY(8px); }
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(8px);
+    }
 }
 
 .anim-scroll-hint {
@@ -156,8 +188,13 @@
 }
 
 @keyframes pulse-subtle {
-    0%, 100% { opacity: 0.3; }
-    50%      { opacity: 0.7; }
+    0%,
+    100% {
+        opacity: 0.3;
+    }
+    50% {
+        opacity: 0.7;
+    }
 }
 
 .anim-pulse {
@@ -165,8 +202,12 @@
 }
 
 @keyframes spin-slow {
-    from { transform: rotate(0deg); }
-    to   { transform: rotate(360deg); }
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
 }
 
 .anim-spin-slow {

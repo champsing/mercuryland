@@ -7,8 +7,12 @@ import NextPageButton from "./NextPageButton.vue";
         <NextPageButton :page="3" />
 
         <!-- Outer frame -->
-        <div class="anim-frame-in absolute inset-6 border border-white/15 hidden md:block" />
-        <div class="anim-frame-in anim-delay-100 absolute inset-8 border border-white/5 hidden md:block" />
+        <div
+            class="anim-frame-in absolute inset-6 border border-white/15 hidden md:block"
+        />
+        <div
+            class="anim-frame-in anim-delay-100 absolute inset-8 border border-white/5 hidden md:block"
+        />
 
         <!-- Corner accents -->
         <div
@@ -31,7 +35,9 @@ import NextPageButton from "./NextPageButton.vue";
         />
 
         <!-- Statue of Liberty image - as a framed artwork -->
-        <div class="anim-fade-up anim-delay-100 absolute left-[20%] bottom-16 hidden md:block">
+        <div
+            class="anim-fade-up anim-delay-100 absolute left-[20%] bottom-16 hidden md:block"
+        >
             <div class="relative">
                 <div class="absolute -inset-2 border border-yellow-400/20" />
                 <img
@@ -43,7 +49,9 @@ import NextPageButton from "./NextPageButton.vue";
         </div>
 
         <!-- Mobile image (hidden on desktop) -->
-        <div class="anim-fade-up anim-delay-100 absolute top-20 left-1/2 -translate-x-1/2 md:hidden">
+        <div
+            class="anim-fade-up anim-delay-100 absolute top-20 left-1/2 -translate-x-1/2 md:hidden"
+        >
             <img
                 src="/images/welcome/statue_of_liberty.webp"
                 class="h-[30vh] object-contain opacity-40"
@@ -61,11 +69,15 @@ import NextPageButton from "./NextPageButton.vue";
             </div>
 
             <!-- Decorative rule -->
-            <div class="anim-fade-up anim-delay-100 flex items-center justify-end gap-5 mt-5 mb-7">
+            <div
+                class="anim-fade-up anim-delay-100 flex items-center justify-end gap-5 mt-5 mb-7"
+            >
                 <div
                     class="h-px w-24 bg-gradient-to-r from-transparent to-yellow-400/50"
                 />
-                <div class="anim-scale-in anim-delay-200 w-2 h-2 rotate-45 bg-yellow-400/50" />
+                <div
+                    class="anim-scale-in anim-delay-200 w-2 h-2 rotate-45 bg-yellow-400/50"
+                />
             </div>
 
             <!-- Body -->

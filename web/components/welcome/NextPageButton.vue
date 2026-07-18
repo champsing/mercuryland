@@ -1,5 +1,4 @@
-<script setup lang="ts">
-</script>
+<script setup lang="ts"></script>
 
 <template>
     <div class="z-10 absolute bottom-6 left-1/2 -translate-x-1/2 text-white/30">

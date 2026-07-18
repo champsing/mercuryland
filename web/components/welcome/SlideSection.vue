@@ -71,9 +71,12 @@ const slideOpacity = computed(() => {
     return t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
 });
 
-const sectionStyle = computed(() => ({
-    "--slide-opacity": slideOpacity.value,
-} as Record<string, string>));
+const sectionStyle = computed(
+    () =>
+        ({
+            "--slide-opacity": slideOpacity.value,
+        }) as Record<string, string>,
+);
 </script>
 
 <template>
