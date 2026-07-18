@@ -90,6 +90,9 @@ const sectionStyle = computed(() => ({
 
 <style scoped>
 .slide-blend {
+    /* Fast CSS transition blends the opacity change when the slide switches,
+       so the visual crossfade happens even when the scroll itself is instant. */
+    transition: opacity 0.2s ease-out;
     will-change: opacity;
 }
 </style>

@@ -210,6 +210,9 @@
     overflow-y: auto;
     overflow-x: hidden;
     scroll-snap-type: y mandatory;
+    /* Prevent scroll chaining — when you reach the first/last slide the
+       main document won't unexpectedly start scrolling. */
+    overscroll-behavior-y: contain;
 }
 
 .welcome-snap-section {

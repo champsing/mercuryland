@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import serverInfo from "@assets/data/server_info.json";
 import NextPageButton from "./NextPageButton.vue";
 </script>
 
@@ -7,8 +8,12 @@ import NextPageButton from "./NextPageButton.vue";
         <NextPageButton :page="2" />
 
         <!-- Outer frame -->
-        <div class="anim-frame-in absolute inset-6 border border-white/15 hidden md:block" />
-        <div class="anim-frame-in anim-delay-100 absolute inset-8 border border-white/5 hidden md:block" />
+        <div
+            class="anim-frame-in absolute inset-6 border border-white/15 hidden md:block"
+        />
+        <div
+            class="anim-frame-in anim-delay-100 absolute inset-8 border border-white/5 hidden md:block"
+        />
 
         <!-- Corner accents -->
         <div
@@ -27,7 +32,7 @@ import NextPageButton from "./NextPageButton.vue";
         <div
             class="anim-fade-down absolute top-20 left-28 text-emerald-400/70 text-xs font-bold tracking-[0.4em] uppercase hidden md:block"
         >
-            Minecraft Server · Season 9
+            Minecraft Server · Season {{ serverInfo.season }}
         </div>
 
         <!-- Main content block -->
@@ -40,13 +45,21 @@ import NextPageButton from "./NextPageButton.vue";
             </div>
 
             <!-- Decorative rule -->
-            <div class="anim-fade-up anim-delay-200 flex items-center gap-5 mt-5 mb-7">
+            <div
+                class="anim-fade-up anim-delay-200 flex items-center gap-5 mt-5 mb-7"
+            >
                 <div
                     class="h-px flex-1 bg-gradient-to-r from-transparent via-emerald-400/50 to-emerald-400/50"
                 />
-                <div class="anim-scale-in anim-delay-300 w-2 h-2 rotate-45 bg-cyan-400/50" />
-                <div class="anim-scale-in anim-delay-350 w-2 h-2 rotate-45 bg-emerald-400/50" />
-                <div class="anim-scale-in anim-delay-400 w-2 h-2 rotate-45 bg-teal-400/50" />
+                <div
+                    class="anim-scale-in anim-delay-300 w-2 h-2 rotate-45 bg-cyan-400/50"
+                />
+                <div
+                    class="anim-scale-in anim-delay-350 w-2 h-2 rotate-45 bg-emerald-400/50"
+                />
+                <div
+                    class="anim-scale-in anim-delay-400 w-2 h-2 rotate-45 bg-teal-400/50"
+                />
                 <div
                     class="h-px flex-1 bg-gradient-to-l from-transparent via-cyan-400/50 to-cyan-400/50"
                 />
