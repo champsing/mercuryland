@@ -4,7 +4,7 @@ import ReturnTopButton from "./ReturnTopButton.vue";
 </script>
 
 <template>
-    <div class="h-screen overflow-hidden bg-emerald-800 relative">
+    <div class="h-[calc(100vh-48px)] overflow-hidden bg-emerald-800 relative">
         <ReturnTopButton />
         <div class="flex flex-col absolute y-center x-center text-center">
             <div class="text-cyan-400 font-bold text-6xl">還在猶豫什麼？</div>

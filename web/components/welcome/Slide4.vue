@@ -17,7 +17,7 @@ const imgs = [
 </script>
 
 <template>
-    <div class="h-screen overflow-hidden bg-black relative">
+    <div class="h-[calc(100vh-48px)] overflow-hidden bg-black relative">
         <NextPageButton :page="4" />
         <div class="grid grid-cols-2 gap-20 absolute x-center w-5/6 h-full">
             <div class="relative mt-80">
