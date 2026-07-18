@@ -5,18 +5,18 @@ import { backToTop } from "@/composables/utils";
 </script>
 
 <template>
-    <div class="z-10 absolute -bottom-2 w-full text-center">
+    <div class="z-10 absolute bottom-6 w-full text-center">
         <VaButton
-            class="w-auto opacity-30 hover:opacity-100"
+            class="w-auto !opacity-40 hover:!opacity-80 transition-opacity"
             round
-            color="#5bc6a1"
+            color="#ffffff"
             preset="secondary"
             :hover-opacity="0"
             :pressed-opacity="0"
             size="small"
             @click="backToTop()"
         >
-            <VaIcon size="128px">
+            <VaIcon size="48px">
                 <angle-up />
             </VaIcon>
         </VaButton>

@@ -15,24 +15,29 @@ import NextPageButton from "./NextPageButton.vue";
         <div class="absolute inset-0 bg-neutral-900/60" />
 
         <!-- Hero title: centered -->
-        <div class="absolute x-center y-center text-center flex flex-col items-center gap-3">
+        <div
+            class="absolute x-center y-center text-center flex flex-col items-center gap-3"
+        >
             <div
                 class="text-8xl font-black tracking-[0.12em] bg-gradient-to-r from-amber-200 via-yellow-300 to-amber-400 bg-clip-text text-transparent uppercase"
             >
                 水星樂園
             </div>
-            <div class="text-white/90 font-thin text-4xl tracking-[0.25em] uppercase">
+            <div
+                class="text-white/90 font-thin text-4xl tracking-[0.25em] uppercase"
+            >
                 The Mercury Land
             </div>
         </div>
 
         <!-- Bottom text column: just above the NextPageButton -->
-        <div class="absolute bottom-10 left-1/2 -translate-x-1/2 text-center flex flex-col items-center gap-2">
-            <div class="text-amber-400/60 text-xs font-bold tracking-[0.4em] uppercase">
+        <div
+            class="absolute bottom-16 left-1/2 -translate-x-1/2 text-center flex flex-col items-center gap-2"
+        >
+            <div
+                class="text-amber-400/60 text-xs font-bold tracking-[0.4em] uppercase"
+            >
                 Welcome · Bienvenue · ようこそ
-            </div>
-            <div class="text-amber-400/40 text-[0.6rem] tracking-[0.3em] uppercase">
-                Scroll to explore
             </div>
         </div>
     </div>
