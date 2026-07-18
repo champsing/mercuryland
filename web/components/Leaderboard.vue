@@ -1,14 +1,32 @@
 <script setup lang="ts">
 import api from "@composables/axios";
 import { ArrowClockwise24Filled } from "@vicons/fluent";
+import { formatDate } from "@composables/utils";
 import { onMounted, ref, Ref } from "vue";
 import { VaButton, VaDivider, VaIcon } from "vuestic-ui";
 
 document.title = "水星排行 - 水星人的夢幻樂園";
 
 const leaderboard: Ref<UserRank[]> = ref([]);
+const lastRefreshTime = ref("");
+let refreshTimer: ReturnType<typeof setTimeout> | null = null;
+
+function nowTime(): string {
+    const d = new Date();
+    const date = formatDate(d);
+    const h = d.getHours().toString().padStart(2, "0");
+    const min = d.getMinutes().toString().padStart(2, "0");
+    const s = d.getSeconds().toString().padStart(2, "0");
+    return `已於 ${date} ${h}:${min}:${s} 更新`;
+}
 
 function loadLeaderboard() {
+    lastRefreshTime.value = nowTime();
+    if (refreshTimer) clearTimeout(refreshTimer);
+    refreshTimer = setTimeout(() => {
+        lastRefreshTime.value = "";
+    }, 5000);
+
     api.get("/api/leaderboard")
         .then((response) => {
             leaderboard.value = response.data
@@ -114,26 +132,32 @@ function podiumSize(rank: number): string {
     >
         <div class="w-full max-w-[1200px] mx-auto">
             <!-- Header -->
-            <div
-                class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-6 px-4"
-            >
-                <div>
-                    <h1 class="text-3xl font-bold text-neutral-100">
-                        水星排行
-                    </h1>
-                    <p class="text-sm text-zinc-400 mt-1">
+            <div class="mb-6 px-4">
+                <h1 class="text-3xl font-bold text-neutral-100">水星排行</h1>
+                <div class="mt-1 flex items-center gap-1.5">
+                    <p class="text-sm text-zinc-400">
                         每次直播獲得的水星幣都會在這裡顯示，致敬貢獻最多的水星人
                     </p>
+                    <VaButton
+                        preset="secondary"
+                        color="warning"
+                        :disabled="!!lastRefreshTime"
+                        @click="loadLeaderboard()"
+                        class="refresh-btn shrink-0 ml-4 rounded-full px-3 py-1 !normal-case transition-all duration-300 hover:shadow-[0_0_12px_rgba(234,179,8,0.25)]"
+                    >
+                        <VaIcon
+                            size="small"
+                            :class="{ 'animate-spin': lastRefreshTime }"
+                        >
+                            <ArrowClockwise24Filled />
+                        </VaIcon>
+                        <span
+                            class="ml-1 text-xs tabular-nums bg-gradient-to-r from-yellow-300 via-yellow-400 to-amber-400 bg-clip-text text-transparent font-semibold"
+                        >
+                            {{ lastRefreshTime || "重新整理" }}
+                        </span>
+                    </VaButton>
                 </div>
-                <VaButton
-                    preset="plain"
-                    color="info"
-                    @click="loadLeaderboard()"
-                    class="self-start"
-                >
-                    <VaIcon><ArrowClockwise24Filled /></VaIcon>
-                    <span class="ml-1 text-sm">重新整理</span>
-                </VaButton>
             </div>
 
             <!-- Top 3 Podium -->
@@ -295,5 +319,18 @@ function podiumSize(rank: number): string {
             transparent 32rem
         ),
         linear-gradient(135deg, #0f1117 0%, #16191f 48%, #101318 100%);
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.animate-spin {
+    animation: spin 0.8s linear infinite;
 }
 </style>
