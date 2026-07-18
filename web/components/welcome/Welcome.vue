@@ -1,17 +1,17 @@
 <script setup lang="ts">
 document.title = "歡迎來到水星人的夢幻樂園";
 
-import { ref, onMounted, onUnmounted } from "vue";
 import serverInfo from "@assets/data/server_info.json";
+import { onMounted, onUnmounted, ref } from "vue";
 import { VaDivider } from "vuestic-ui";
 import NextPageButton from "./NextPageButton.vue";
 
-import SlideSection from "./SlideSection.vue";
 import Slide1 from "./Slide1.vue";
 import Slide2 from "./Slide2.vue";
 import Slide3 from "./Slide3.vue";
 import Slide4 from "./Slide4.vue";
 import Slide5 from "./Slide5.vue";
+import SlideSection from "./SlideSection.vue";
 
 import "@assets/styles/welcome-animations.css";
 
@@ -80,7 +80,7 @@ onUnmounted(() => {
 <template>
     <!-- Server Open: Snap-scroll container with 5 full-screen slides -->
     <div
-        v-if="serverInfo.server_open"
+        v-if="serverInfo.online"
         ref="snapContainer"
         class="welcome-snap-container"
     >
