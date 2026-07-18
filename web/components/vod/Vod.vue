@@ -195,9 +195,9 @@ const handleEditVod = (vod: VodItem) => {
     border-radius: 8px;
     background: linear-gradient(
         135deg,
-        rgba(87, 114, 96, 0.94) 0%,
-        rgba(45, 90, 75, 0.92) 50%,
-        rgba(13, 90, 11, 0.95) 100%
+        rgba(28, 65, 84, 0.94) 0%,
+        rgba(20, 70, 100, 0.92) 50%,
+        rgba(10, 60, 90, 0.95) 100%
     );
     box-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
     padding: 0.8rem;
