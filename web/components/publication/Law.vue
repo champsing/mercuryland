@@ -1,6 +1,13 @@
 <script setup lang="ts">
 import { Ref, ref, computed } from "vue";
-import { VaButton, VaDivider, VaIcon, VaSplit, VaTab, VaTabs } from "vuestic-ui";
+import {
+    VaButton,
+    VaDivider,
+    VaIcon,
+    VaSplit,
+    VaTab,
+    VaTabs,
+} from "vuestic-ui";
 import lawDocument from "@assets/data/law_document.json";
 import { WindowNew20Filled } from "@vicons/fluent";
 </script>
@@ -22,9 +29,9 @@ let currentDocument: Ref<LawDocEntry> = ref({
 });
 
 /** Unique group names extracted from the law documents, preserving order of first appearance. */
-const groups = computed(() =>
-    [...new Set(lawDocument.map((doc) => doc.group))]
-);
+const groups = computed(() => [
+    ...new Set(lawDocument.map((doc) => doc.group)),
+]);
 
 /** Documents grouped by their `group` field. */
 const docsByGroup = computed(() => {
@@ -48,7 +55,12 @@ function selectDoc(doc: LawDocEntry) {
         <template #start>
             <VaTabs v-model="activeGroup" class="law-tabs" vertical>
                 <template #tabs>
-                    <VaTab v-for="group in groups" :key="group" :name="group" class="law-tab">
+                    <VaTab
+                        v-for="group in groups"
+                        :key="group"
+                        :name="group"
+                        class="law-tab"
+                    >
                         {{ group }}
                     </VaTab>
                 </template>
@@ -63,7 +75,10 @@ function selectDoc(doc: LawDocEntry) {
                         v-for="doc in docsByGroup[group]"
                         :key="doc.id"
                         class="law-doc-item"
-                        :class="{ 'law-doc-item--active': currentDocument.name === doc.name }"
+                        :class="{
+                            'law-doc-item--active':
+                                currentDocument.name === doc.name,
+                        }"
                         @click="selectDoc(doc)"
                     >
                         {{ doc.name }}
@@ -120,7 +135,9 @@ function selectDoc(doc: LawDocEntry) {
 
 .law-doc-item {
     @apply text-white text-base cursor-pointer px-3 py-2 rounded;
-    transition: background-color 0.15s, color 0.15s;
+    transition:
+        background-color 0.15s,
+        color 0.15s;
 
     &:hover {
         background-color: rgba(70, 114, 12, 0.6);
@@ -132,5 +149,4 @@ function selectDoc(doc: LawDocEntry) {
         font-weight: 600;
     }
 }
-
 </style>
