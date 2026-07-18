@@ -87,10 +87,23 @@ function medalEmoji(rank: number): string {
     return "";
 }
 
+function avatarInitial(display: string): string {
+    const stripped = display.replace(/^@+/, "");
+    const firstAlpha = stripped.match(/[a-zA-Z]/);
+    return firstAlpha ? firstAlpha[0].toUpperCase() : stripped.charAt(0);
+}
+
 function podiumOrder(rank: number): string {
     if (rank === 1) return "md:order-2";
     if (rank === 2) return "md:order-1";
     if (rank === 3) return "md:order-3";
+    return "";
+}
+
+function podiumSize(rank: number): string {
+    if (rank === 1) return "md:pt-14 md:pb-10";
+    if (rank === 2) return "md:pt-10 md:pb-8";
+    if (rank === 3) return "md:pt-7 md:pb-6";
     return "";
 }
 </script>
@@ -137,10 +150,11 @@ function podiumOrder(rank: number): string {
                         :key="user.rank"
                         :class="[
                             podiumOrder(user.rank),
+                            podiumSize(user.rank),
                             medalBorder(user.rank),
                             medalBg(user.rank),
                         ]"
-                        class="flex flex-col items-center rounded-2xl border p-5 md:p-6 w-full max-w-[240px] backdrop-blur-sm transition-all duration-300 hover:scale-105 hover:[box-shadow:0_8px_32px_rgba(0,0,0,0.35)]"
+                        class="flex flex-col items-center rounded-2xl border p-5 w-full max-w-[240px] backdrop-blur-sm transition-all duration-300 hover:scale-105 hover:[box-shadow:0_8px_32px_rgba(0,0,0,0.35)]"
                     >
                         <!-- Rank badge -->
                         <div
@@ -165,7 +179,7 @@ function podiumOrder(rank: number): string {
                             ]"
                             class="w-16 h-16 rounded-full border flex items-center justify-center text-2xl font-bold my-3"
                         >
-                            {{ user.display.charAt(0) }}
+                            {{ avatarInitial(user.display) }}
                         </div>
 
                         <!-- Name -->
