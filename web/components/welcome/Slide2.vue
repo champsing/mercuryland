@@ -9,7 +9,11 @@ import NextPageButton from "./NextPageButton.vue";
         <div
             class="absolute x-center top-40 text-center w-10/12 hidden md:block"
         >
-            <div class="text-4xl">水星伺服器</div>
+            <div
+                class="text-5xl font-bold bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent"
+            >
+                水星伺服器
+            </div>
             <VaDivider class="mt-6" />
         </div>
         <div class="absolute x-center y-center text-center w-10/12">
@@ -24,7 +28,7 @@ import NextPageButton from "./NextPageButton.vue";
         >
             <VaDivider class="mb-6" />
             <div class="text-neutral-400 text-3xl">
-                YouTuber oreki惡靈的粉絲專屬生存Minecraft伺服器
+                YouTuber oreki惡靈的粉絲專屬生存Minecraft伺服器。
             </div>
             <div class="text-neutral-400 text-3xl">
                 只需加入Discord伺服器和正版Minecraft帳號。一切完全免費。
