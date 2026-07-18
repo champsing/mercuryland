@@ -20,7 +20,7 @@ function prev() {
     else currentStep.value--;
 }
 
-const serverOnline = true;
+const serverOnline = ref<boolean>(serverInfo.online);
 const serverIP = serverInfo.ip;
 const seed = serverInfo.seed;
 const version = serverInfo.version;

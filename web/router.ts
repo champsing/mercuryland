@@ -8,11 +8,11 @@ import Privacy from "./components/law/Privacy.vue";
 import ToS from "./components/law/ToS.vue";
 import Leaderboard from "./components/Leaderboard.vue";
 import Setting from "./components/setting/Setting.vue";
-import Welcome2 from "./components/welcome/Welcome2.vue";
+import Welcome from "./components/welcome/Welcome.vue";
 import Wheel from "./components/wheel/Wheel.vue";
 
 const routes = [
-    { path: "/", component: Welcome2 },
+    { path: "/", component: Welcome },
     { path: "/publication", component: Publication },
     { path: "/map", component: GameMap },
     { path: "/vod", component: Vod },

@@ -29,7 +29,13 @@ export function parseDate(text): Date {
 }
 
 export function backToTop() {
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    // On the welcome page the snap-container owns the scroll, not window
+    const snap = document.querySelector(".welcome-snap-container");
+    if (snap) {
+        snap.scrollTo({ top: 0, behavior: "smooth" });
+    } else {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+    }
 }
 
 export async function copyToClipboard(text: string) {
