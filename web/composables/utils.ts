@@ -28,10 +28,6 @@ export function parseDate(text): Date {
     return new Date(year, month - 1, day);
 }
 
-export function backToTop() {
-    window.scrollTo({ top: 0, behavior: "smooth" });
-}
-
 export async function copyToClipboard(text: string) {
     try {
         await navigator.clipboard.writeText(text);
