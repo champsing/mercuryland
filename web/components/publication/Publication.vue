@@ -34,7 +34,7 @@ const activeTab = ref<"join" | "publication" | "archive">("join");
                 <div class="text-4xl text-neutral-100 text-left mt-4 mb-6">
                     法規與資料
                 </div>
-                <div class="mt-4">
+                <div class="p-10">
                     <Law />
                 </div>
             </div>
