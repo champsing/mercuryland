@@ -1,5 +1,4 @@
 <script setup lang="ts">
-// TODO: Update Wheel style
 import Spinner from "./Spinner.vue";
 import {
     ref,
@@ -260,117 +259,221 @@ const isSubmitAvailable: ComputedRef<boolean> = computed(() => {
 </script>
 
 <template>
-    <div class="mt-8 m-auto w-11/12">
-        <div class="flex w-full justify-evenly">
-            <div class="wheel-wrapper w-2/5 mt-4">
-                <Spinner ref="wheelRef" :items="items" @winner="handleWinner" />
+    <main
+        class="wheel-page min-h-[calc(100vh-48px)] text-[#f7f7f8] pt-10 pb-5 px-4 max-md:pt-16 max-md:pb-4 max-md:px-3"
+    >
+        <div class="w-full max-w-[1400px] mx-auto">
+            <!-- Page Header -->
+            <div class="mb-8 px-4">
+                <h1 class="text-3xl font-bold text-neutral-100">幸運轉盤</h1>
+                <div
+                    class="mt-1.5 flex flex-wrap items-center gap-x-4 gap-y-1.5"
+                >
+                    <p class="text-sm text-zinc-400">
+                        每行一個項目，可使用「項目名稱x權重」設定比重；旋轉後隨機抽出結果
+                    </p>
+                    <!-- API status hashtag -->
+                    <span
+                        class="inline-flex items-center gap-1 rounded-md px-2 py-0.5 text-xs font-semibold transition-colors duration-300"
+                        :class="
+                            APIstatus === true
+                                ? 'bg-lime-400/10 text-lime-400'
+                                : APIstatus === null
+                                  ? 'bg-gray-400/10 text-gray-400'
+                                  : 'bg-red-400/10 text-red-400'
+                        "
+                    >
+                        <VaIcon size="small">
+                            <ArrowSyncCheckmark24Filled v-if="APIstatus" />
+                            <ArrowClockwise24Filled
+                                v-else-if="APIstatus == null"
+                            />
+                            <AlertCircleOutline v-else />
+                        </VaIcon>
+                        {{
+                            APIstatus === true
+                                ? "已連接到伺服器"
+                                : APIstatus === null
+                                  ? "正在連接伺服器..."
+                                  : "無法連接到伺服器"
+                        }}
+                    </span>
+                    <!-- Auth status hashtag -->
+                    <span
+                        class="inline-flex items-center gap-1 rounded-md px-2 py-0.5 text-xs font-semibold transition-colors duration-300"
+                        :class="
+                            authState.isAuthenticated
+                                ? 'bg-lime-400/10 text-lime-400'
+                                : 'bg-red-400/10 text-red-400'
+                        "
+                    >
+                        <VaIcon size="small">
+                            <PersonLock20Filled
+                                v-if="authState.isAuthenticated"
+                            />
+                            <PresenceBlocked12Regular v-else />
+                        </VaIcon>
+                        {{
+                            authState.isAuthenticated
+                                ? "已登入管理權限"
+                                : "尚未登入管理權限"
+                        }}
+                    </span>
+                </div>
             </div>
-            <div class="w-1/5">
-                <div class="va-h4">待抽區 ({{ count(textArea) }}個)</div>
-                <VaTextarea
-                    v-model="textArea"
-                    color="#ffffff"
-                    :resize="false"
-                    class="w-full h-96 mt-8"
-                    :readonly="isLeftAreaLocked"
-                />
-                <VaButton
-                    class="w-full mt-8"
-                    @click="spin"
-                    :disabled="isSpinning || count(textArea) == 0"
-                >
-                    旋轉
-                </VaButton>
-                <VaButton
-                    class="w-full mt-8"
-                    @click="openStatusModal"
-                    :disabled="!isSubmitAvailable"
-                >
-                    完成抽選
-                </VaButton>
-                <div class="text-red-500 text-right" v-if="!isSubmitAvailable">
-                    <VaDivider color="danger" orientation="right">
-                        停用
-                    </VaDivider>
+
+            <!-- Three-Panel Layout -->
+            <div
+                class="flex flex-col lg:flex-row items-start gap-6 px-4 max-md:px-0"
+            >
+                <!-- Wheel Panel -->
+                <div class="w-full lg:w-[44%]">
+                    <div
+                        class="wheel-panel rounded-2xl border border-[rgba(255,255,255,0.06)] bg-[rgba(18,21,27,0.92)] backdrop-blur-sm p-6 lg:p-8"
+                    >
+                        <Spinner
+                            ref="wheelRef"
+                            :items="items"
+                            @winner="handleWinner"
+                        />
+                    </div>
                 </div>
 
-                <div class="h-44"></div>
-            </div>
-            <div class="w-1/5">
-                <div class="va-h4">抽中區 ({{ count(textArea2) }}個)</div>
-                <VaTextarea
-                    v-model="textArea2"
-                    color="#ffffff"
-                    :resize="false"
-                    class="w-full h-96 mt-8"
-                />
-                <div class="flex w-full justify-between">
-                    <VaButton class="w-3/5 mt-8" @click="modal2.show = true">
-                        清空
-                    </VaButton>
-                    <VaSwitch
-                        class="mt-8"
-                        v-model="clearRightArea"
-                        off-color="#1ccba2"
-                        color="#3444a2"
-                        style="--va-switch-checker-background-color: #252723"
-                        false-inner-label="待抽區"
-                        true-inner-label="抽中區"
-                        :disabled="isSpinning"
-                    />
-                </div>
-                <div class="flex flex-col gap-2 mt-10">
+                <!-- Left Panel: 待抽區 -->
+                <div class="w-full lg:w-[27%]">
                     <div
-                        class="flex flex-row gap-2 text-sm text-lime-400"
-                        v-if="APIstatus"
+                        class="panel-card rounded-2xl border border-[rgba(255,255,255,0.08)] bg-[rgba(18,21,27,0.92)] backdrop-blur-sm p-5 flex flex-col"
                     >
-                        <VaIcon size="large">
-                            <ArrowSyncCheckmark24Filled />
-                        </VaIcon>
-                        已連接到伺服器
-                    </div>
-                    <div
-                        class="flex flex-row gap-2 text-sm text-gray-400"
-                        v-else-if="APIstatus == null"
-                    >
-                        <VaIcon size="large">
-                            <ArrowClockwise24Filled />
-                        </VaIcon>
-                        正在連接伺服器...
-                    </div>
-                    <div
-                        class="flex flex-row gap-2 text-sm text-red-600"
-                        v-else
-                    >
-                        <VaIcon size="large">
-                            <AlertCircleOutline />
-                        </VaIcon>
-                        無法連接到伺服器
-                    </div>
+                        <!-- Panel Header -->
+                        <div class="flex items-center justify-between mb-4">
+                            <div>
+                                <span
+                                    class="text-[0.72rem] font-extrabold uppercase tracking-normal text-[#45d483]"
+                                    >Draw Pool</span
+                                >
+                                <h2
+                                    class="mt-[0.1rem] text-base font-extrabold text-[#f7f7f8]"
+                                >
+                                    待抽區
+                                </h2>
+                            </div>
+                            <span
+                                class="rounded-full bg-[#45d483]/15 px-3 py-1 text-xs font-bold text-[#45d483]"
+                            >
+                                {{ count(textArea) }} 個
+                            </span>
+                        </div>
 
-                    <div
-                        class="flex flex-row gap-2 text-sm text-lime-400"
-                        v-if="authState.isAuthenticated"
-                    >
-                        <VaIcon size="large">
-                            <PersonLock20Filled />
-                        </VaIcon>
-                        已登入管理權限
-                    </div>
-                    <div
-                        class="flex flex-row gap-2 text-sm text-red-600"
-                        v-else
-                    >
-                        <VaIcon size="large">
-                            <PresenceBlocked12Regular />
-                        </VaIcon>
-                        尚未登入管理權限
+                        <!-- Textarea -->
+                        <VaTextarea
+                            v-model="textArea"
+                            :resize="false"
+                            class="w-full h-80"
+                            :class="{
+                                'pointer-events-none opacity-50': isLeftAreaLocked,
+                            }"
+                            :readonly="isLeftAreaLocked"
+                            placeholder="每行一個項目&#10;可加權重：項目名稱x3"
+                        />
+
+                        <!-- Action Buttons -->
+                        <div class="flex flex-col gap-3 mt-4">
+                            <VaButton
+                                class="w-full rounded-xl !normal-case font-bold"
+                                size="large"
+                                @click="spin"
+                                :disabled="
+                                    isSpinning || count(textArea) == 0
+                                "
+                            >
+                                🎰 旋轉
+                            </VaButton>
+
+                            <VaButton
+                                class="w-full rounded-xl !normal-case font-bold"
+                                size="large"
+                                color="success"
+                                @click="openStatusModal"
+                                :disabled="!isSubmitAvailable"
+                            >
+                                📤 完成抽選
+                            </VaButton>
+
+                            <!-- Submit unavailable notice -->
+                            <div
+                                v-if="!isSubmitAvailable"
+                                class="flex items-center gap-2 text-xs text-zinc-500"
+                            >
+                                <VaDivider class="grow !m-0" />
+                                <span class="shrink-0">停用</span>
+                                <VaDivider class="grow !m-0" />
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <div class="h-44"></div>
+
+                <!-- Right Panel: 抽中區 -->
+                <div class="w-full lg:w-[27%]">
+                    <div
+                        class="panel-card rounded-2xl border border-[rgba(255,255,255,0.08)] bg-[rgba(18,21,27,0.92)] backdrop-blur-sm p-5 flex flex-col"
+                    >
+                        <!-- Panel Header -->
+                        <div class="flex items-center justify-between mb-4">
+                            <div>
+                                <span
+                                    class="text-[0.72rem] font-extrabold uppercase tracking-normal text-amber-400"
+                                    >Results</span
+                                >
+                                <h2
+                                    class="mt-[0.1rem] text-base font-extrabold text-[#f7f7f8]"
+                                >
+                                    抽中區
+                                </h2>
+                            </div>
+                            <span
+                                class="rounded-full bg-amber-400/15 px-3 py-1 text-xs font-bold text-amber-400"
+                            >
+                                {{ count(textArea2) }} 個
+                            </span>
+                        </div>
+
+                        <!-- Textarea -->
+                        <VaTextarea
+                            v-model="textArea2"
+                            :resize="false"
+                            class="w-full h-80"
+                            placeholder="抽中的項目會移動到這裡"
+                        />
+
+                        <!-- Clear Row -->
+                        <div
+                            class="flex items-center justify-between gap-3 mt-4"
+                        >
+                            <VaButton
+                                class="rounded-xl !normal-case font-bold flex-1"
+                                color="danger"
+                                size="small"
+                                @click="modal2.show = true"
+                            >
+                                清空
+                            </VaButton>
+                            <VaSwitch
+                                v-model="clearRightArea"
+                                off-color="#1ccba2"
+                                color="#3444a2"
+                                style="--va-switch-checker-background-color: #252723"
+                                false-inner-label="待抽區"
+                                true-inner-label="抽中區"
+                                :disabled="isSpinning"
+                                size="small"
+                            />
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
+        <!-- Modals -->
         <VaModal
             v-model="modal.show"
             noDismiss
@@ -389,7 +492,9 @@ const isSubmitAvailable: ComputedRef<boolean> = computed(() => {
             :mobile-fullscreen="false"
             @ok="
                 () => {
-                    clearRightArea == true ? (textArea2 = '') : (textArea = '');
+                    clearRightArea == true
+                        ? (textArea2 = '')
+                        : (textArea = '');
                     initializeWheel();
                 }
             "
@@ -473,10 +578,25 @@ const isSubmitAvailable: ComputedRef<boolean> = computed(() => {
                 廣播失敗，請檢查權限或伺服器狀態。
             </div>
         </VaModal>
-    </div>
+    </main>
 </template>
 
-<style scoped>
+<style>
+.wheel-page {
+    background:
+        radial-gradient(
+            circle at 50% 0%,
+            rgba(69, 212, 131, 0.06),
+            transparent 36rem
+        ),
+        radial-gradient(
+            circle at 15% 0%,
+            rgba(88, 166, 255, 0.2),
+            transparent 32rem
+        ),
+        linear-gradient(135deg, #0f1117 0%, #16191f 48%, #101318 100%);
+}
+
 .pointer-img {
     width: clamp(8rem, 18vw, 10rem);
     height: auto;
