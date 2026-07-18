@@ -64,7 +64,7 @@ onUnmounted(() => {
                 水星樂園
             </div>
             <div
-                class="anim-fade-up anim-delay-200 text-white/90 font-thin text-4xl tracking-[0.25em] uppercase"
+                class="anim-fade-up anim-delay-200 text-white/90 font-bold italic text-4xl tracking-[0.25em] uppercase"
             >
                 The Mercury Land
             </div>
@@ -77,7 +77,7 @@ onUnmounted(() => {
             <div
                 class="anim-fade-up anim-delay-400 text-amber-400/60 text-xs font-bold tracking-[0.4em] uppercase"
             >
-                Welcome · Bienvenue · ようこそ
+                歡迎 · 欢迎 · Welcome · Bienvenue · ようこそ · 환영합니다
             </div>
         </div>
     </div>
