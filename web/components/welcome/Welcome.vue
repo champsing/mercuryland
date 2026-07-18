@@ -5,21 +5,24 @@ import serverInfo from "@assets/data/server_info.json";
 import { VaDivider } from "vuestic-ui";
 import NextPageButton from "./NextPageButton.vue";
 
+import SlideSection from "./SlideSection.vue";
 import Slide1 from "./Slide1.vue";
 import Slide2 from "./Slide2.vue";
 import Slide3 from "./Slide3.vue";
 import Slide4 from "./Slide4.vue";
 import Slide5 from "./Slide5.vue";
+
+import "@assets/styles/welcome-animations.css";
 </script>
 
 <template>
-    <!-- Server Open: Show 5 slides -->
-    <div v-if="serverInfo.server_open">
-        <Slide1 />
-        <Slide2 />
-        <Slide3 />
-        <Slide4 />
-        <Slide5 />
+    <!-- Server Open: Snap-scroll container with 5 full-screen slides -->
+    <div v-if="serverInfo.server_open" class="welcome-snap-container">
+        <SlideSection class="welcome-snap-section"><Slide1 /></SlideSection>
+        <SlideSection class="welcome-snap-section"><Slide2 /></SlideSection>
+        <SlideSection class="welcome-snap-section"><Slide3 /></SlideSection>
+        <SlideSection class="welcome-snap-section"><Slide4 /></SlideSection>
+        <SlideSection class="welcome-snap-section"><Slide5 /></SlideSection>
     </div>
 
     <!-- Server Closed: Show simple welcome -->

@@ -21,50 +21,58 @@ const imgs = [
         <NextPageButton :page="4" />
 
         <!-- Outer frame -->
-        <div class="absolute inset-6 border border-white/15 hidden md:block" />
-        <div class="absolute inset-8 border border-white/5 hidden md:block" />
+        <div class="anim-frame-in absolute inset-6 border border-white/15 hidden md:block" />
+        <div class="anim-frame-in anim-delay-100 absolute inset-8 border border-white/5 hidden md:block" />
 
         <!-- Corner accents -->
-        <div class="absolute top-12 left-12 w-10 h-10 border-l-2 border-t-2 border-rose-400/50 hidden md:block" />
-        <div class="absolute bottom-12 right-12 w-10 h-10 border-r-2 border-b-2 border-orange-400/50 hidden md:block" />
+        <div class="anim-fade-up anim-delay-200 absolute top-12 left-12 w-10 h-10 border-l-2 border-t-2 border-rose-400/50 hidden md:block" />
+        <div class="anim-fade-up anim-delay-200 absolute bottom-12 right-12 w-10 h-10 border-r-2 border-b-2 border-orange-400/50 hidden md:block" />
 
         <!-- Top label -->
-        <div class="absolute top-20 left-28 text-rose-400/70 text-xs font-bold tracking-[0.4em] uppercase hidden md:block">
+        <div class="anim-fade-down absolute top-20 left-28 text-rose-400/70 text-xs font-bold tracking-[0.4em] uppercase hidden md:block">
             Community · Events · Fireworks
         </div>
 
         <!-- Vertical accent bar - left -->
-        <div class="absolute left-16 top-28 bottom-28 w-px bg-gradient-to-b from-transparent via-rose-400/30 to-transparent hidden md:block" />
+        <div class="anim-reveal-x absolute left-16 top-28 bottom-28 w-px bg-gradient-to-b from-transparent via-rose-400/30 to-transparent hidden md:block" />
 
         <!-- Main content - left side -->
-        <div class="absolute left-28 y-center w-5/12 max-w-xl">
-            <!-- Gradient title -->
+        <div class="absolute left-28 y-center w-[38%] max-w-xl">
+            <!-- Gradient titles -->
             <div
-                class="text-6xl font-black tracking-[0.1em] leading-tight bg-gradient-to-r from-pink-300 via-rose-400 to-orange-300 bg-clip-text text-transparent uppercase"
+                class="anim-slide-left text-6xl font-black tracking-[0.1em] leading-tight bg-gradient-to-r from-pink-300 via-rose-400 to-orange-300 bg-clip-text text-transparent uppercase"
             >
                 來這裡
             </div>
             <div
-                class="text-7xl font-black tracking-[0.12em] leading-tight bg-gradient-to-r from-rose-300 via-pink-400 to-orange-300 bg-clip-text text-transparent uppercase mt-1"
+                class="anim-slide-left anim-delay-100 text-7xl font-black tracking-[0.12em] leading-tight bg-gradient-to-r from-rose-300 via-pink-400 to-orange-300 bg-clip-text text-transparent uppercase mt-1"
             >
                 遇到同好
             </div>
 
             <!-- Decorative rule -->
-            <div class="flex items-center gap-5 mt-5 mb-7">
-                <div class="w-2 h-2 rotate-45 bg-rose-400/50" />
-                <div class="w-2 h-2 rotate-45 bg-pink-400/50" />
+            <div class="anim-fade-up anim-delay-150 flex items-center gap-5 mt-5 mb-7">
+                <div class="anim-scale-in anim-delay-250 w-2 h-2 rotate-45 bg-rose-400/50" />
+                <div class="anim-scale-in anim-delay-300 w-2 h-2 rotate-45 bg-pink-400/50" />
                 <div class="h-px w-32 bg-gradient-to-r from-rose-400/50 to-transparent" />
             </div>
 
-            <!-- Body -->
-            <div class="text-neutral-300 text-lg font-light tracking-[0.08em] leading-relaxed">
+            <!-- Body text -->
+            <div class="anim-fade-up anim-delay-250 text-neutral-300 text-lg font-light tracking-[0.08em] leading-relaxed">
                 擁有豐富的擴充遊玩內容、<span class="text-rose-400 font-medium">玩家自辦活動</span>、以及關服舉行的<span class="text-orange-400 font-medium">煙火大會</span>。
+            </div>
+
+            <!-- Circle badge — moved here from absolute bottom -->
+            <div
+                class="anim-scale-in anim-delay-350 anim-float hidden md:flex flex-col items-center justify-center w-24 h-24 rounded-full border border-rose-400/30 mt-10"
+            >
+                <div class="text-rose-400/80 text-[0.6rem] font-bold tracking-[0.35em] uppercase">Events</div>
+                <div class="text-rose-300 text-lg font-black mt-0.5">FIRE</div>
             </div>
         </div>
 
         <!-- Image carousel - right side, framed -->
-        <div class="absolute right-20 y-center w-5/12 max-w-lg hidden md:block">
+        <div class="anim-slide-right anim-delay-300 absolute right-16 y-center w-[38%] max-w-lg hidden md:block">
             <div class="relative">
                 <!-- Frame around carousel -->
                 <div class="absolute -inset-3 border border-rose-400/20" />
@@ -79,15 +87,15 @@ const imgs = [
                     infinite
                     class="shadow-2xl"
                 />
-                <!-- Caption -->
-                <div class="absolute -bottom-8 right-0 text-rose-400/50 text-xs tracking-[0.2em] uppercase">
+                <!-- Caption — moved inside the visible area -->
+                <div class="mt-4 text-right text-rose-400/50 text-xs tracking-[0.2em] uppercase">
                     Season memories
                 </div>
             </div>
         </div>
 
         <!-- Mobile carousel (hidden on desktop) -->
-        <div class="absolute bottom-32 left-4 right-4 md:hidden opacity-60">
+        <div class="anim-fade-up anim-delay-300 absolute bottom-24 left-4 right-4 md:hidden opacity-60">
             <VaCarousel
                 v-model="currentImg"
                 :items="imgs"
@@ -97,14 +105,6 @@ const imgs = [
                 stateful
                 infinite
             />
-        </div>
-
-        <!-- Circle badge -->
-        <div
-            class="hidden md:flex flex-col items-center justify-center w-24 h-24 rounded-full border border-rose-400/30 absolute bottom-14 left-28"
-        >
-            <div class="text-rose-400/80 text-[0.6rem] font-bold tracking-[0.35em] uppercase">Events</div>
-            <div class="text-rose-300 text-lg font-black mt-0.5">FIRE</div>
         </div>
     </div>
 </template>
