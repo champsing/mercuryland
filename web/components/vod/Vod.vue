@@ -106,7 +106,7 @@ const handleEditVod = (vod: VodItem) => {
                     </template>
                 </VaSelect>
                 <div
-                    class="flex justify-between gap-3 w-full px-4 md:flex md:justify-center"
+                    class="flex justify-between gap-3 w-full px-4 md:flex md:justify-center items-center"
                 >
                     <div class="vod-switch">
                         <VaSwitch
@@ -121,7 +121,7 @@ const handleEditVod = (vod: VodItem) => {
                         />
                     </div>
                     <div class="grow md:hidden"></div>
-                    <div class="flex-1 md:block">
+                    <div class="flex md:block">
                         <Rule />
                     </div>
                 </div>
