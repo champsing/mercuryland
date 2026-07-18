@@ -399,14 +399,71 @@ const isSubmitAvailable: ComputedRef<boolean> = computed(() => {
                                 📤 完成抽選
                             </VaButton>
 
-                            <!-- Submit unavailable notice -->
+                            <!-- Submit conditions checklist -->
                             <div
                                 v-if="!isSubmitAvailable"
-                                class="flex items-center gap-2 text-xs text-zinc-500"
+                                class="grid grid-cols-2 gap-1.5 px-0.5 text-xs"
                             >
-                                <VaDivider class="grow !m-0" />
-                                <span class="shrink-0">停用</span>
-                                <VaDivider class="grow !m-0" />
+                                <div
+                                    class="flex items-center gap-1 rounded-md px-1.5 py-1"
+                                    :class="
+                                        isSpinning
+                                            ? 'text-zinc-500 bg-zinc-500/5'
+                                            : 'text-lime-400 bg-lime-400/5'
+                                    "
+                                >
+                                    <span class="text-sm">⏳</span>
+                                    <span>{{
+                                        isSpinning
+                                            ? "轉盤旋轉中"
+                                            : "轉盤未在旋轉"
+                                    }}</span>
+                                </div>
+                                <div
+                                    class="flex items-center gap-1 rounded-md px-1.5 py-1"
+                                    :class="
+                                        count(textArea2) === 0
+                                            ? 'text-zinc-500 bg-zinc-500/5'
+                                            : 'text-lime-400 bg-lime-400/5'
+                                    "
+                                >
+                                    <span class="text-sm">📭</span>
+                                    <span>{{
+                                        count(textArea2) === 0
+                                            ? "抽中區無項目"
+                                            : "抽中區有項目"
+                                    }}</span>
+                                </div>
+                                <div
+                                    class="flex items-center gap-1 rounded-md px-1.5 py-1"
+                                    :class="
+                                        !APIstatus
+                                            ? 'text-zinc-500 bg-zinc-500/5'
+                                            : 'text-lime-400 bg-lime-400/5'
+                                    "
+                                >
+                                    <span class="text-sm">🔌</span>
+                                    <span>{{
+                                        !APIstatus
+                                            ? "未連接到伺服器"
+                                            : "已連接到伺服器"
+                                    }}</span>
+                                </div>
+                                <div
+                                    class="flex items-center gap-1 rounded-md px-1.5 py-1"
+                                    :class="
+                                        !authState.isAuthenticated
+                                            ? 'text-zinc-500 bg-zinc-500/5'
+                                            : 'text-lime-400 bg-lime-400/5'
+                                    "
+                                >
+                                    <span class="text-sm">🔒</span>
+                                    <span>{{
+                                        !authState.isAuthenticated
+                                            ? "未登入管理權限"
+                                            : "已登入管理權限"
+                                    }}</span>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -446,27 +503,45 @@ const isSubmitAvailable: ComputedRef<boolean> = computed(() => {
                         />
 
                         <!-- Clear Row -->
-                        <div
-                            class="flex items-center justify-between gap-3 mt-4"
-                        >
+                        <div class="flex flex-col gap-3 mt-4">
                             <VaButton
-                                class="rounded-xl !normal-case font-bold flex-1"
+                                class="w-full rounded-xl !normal-case font-bold"
+                                size="large"
                                 color="danger"
-                                size="small"
                                 @click="modal2.show = true"
                             >
                                 清空
                             </VaButton>
-                            <VaSwitch
-                                v-model="clearRightArea"
-                                off-color="#1ccba2"
-                                color="#3444a2"
-                                style="--va-switch-checker-background-color: #252723"
-                                false-inner-label="待抽區"
-                                true-inner-label="抽中區"
-                                :disabled="isSpinning"
-                                size="small"
-                            />
+                            <!-- Tab switcher for clear target -->
+                            <div
+                                class="flex w-full rounded-xl overflow-hidden border border-[rgba(255,255,255,0.08)]"
+                                :class="{ 'pointer-events-none opacity-50': isSpinning }"
+                            >
+                                <button
+                                    class="flex-1 py-2.5 text-sm font-bold transition-colors duration-200"
+                                    :class="
+                                        !clearRightArea
+                                            ? 'bg-[#1ccba2] text-white'
+                                            : 'bg-transparent text-zinc-500 hover:text-zinc-300'
+                                    "
+                                    :disabled="isSpinning"
+                                    @click="clearRightArea = false"
+                                >
+                                    待抽區
+                                </button>
+                                <button
+                                    class="flex-1 py-2.5 text-sm font-bold transition-colors duration-200"
+                                    :class="
+                                        clearRightArea
+                                            ? 'bg-[#3444a2] text-white'
+                                            : 'bg-transparent text-zinc-500 hover:text-zinc-300'
+                                    "
+                                    :disabled="isSpinning"
+                                    @click="clearRightArea = true"
+                                >
+                                    抽中區
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
