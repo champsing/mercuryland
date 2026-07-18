@@ -1,33 +1,32 @@
 <script setup lang="ts">
-import Spinner from "./Spinner.vue";
+import api from "@composables/axios";
 import {
-    ref,
-    onMounted,
-    reactive,
-    onBeforeUnmount,
     computed,
     ComputedRef,
+    onBeforeUnmount,
+    onMounted,
+    reactive,
+    ref,
 } from "vue";
 import {
-    VaTextarea,
-    VaButton,
-    VaModal,
-    VaSwitch,
-    VaPopover,
-    VaIcon,
-    VaDivider,
     useToast,
+    VaButton,
+    VaIcon,
+    VaModal,
+    VaPopover,
+    VaSwitch,
+    VaTextarea,
 } from "vuestic-ui";
-import api from "@composables/axios";
+import Spinner from "./Spinner.vue";
 
-import { AlertCircleOutline } from "@vicons/ionicons5";
+import { useAuthState } from "@/composables/authState";
 import {
     ArrowClockwise24Filled,
     ArrowSyncCheckmark24Filled,
     PersonLock20Filled,
     PresenceBlocked12Regular,
 } from "@vicons/fluent";
-import { useAuthState } from "@/composables/authState";
+import { AlertCircleOutline } from "@vicons/ionicons5";
 
 document.title = "幸運轉盤 - 水星人的夢幻樂園";
 
