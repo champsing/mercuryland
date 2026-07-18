@@ -370,7 +370,8 @@ const isSubmitAvailable: ComputedRef<boolean> = computed(() => {
                             :resize="false"
                             class="w-full h-80"
                             :class="{
-                                'pointer-events-none opacity-50': isLeftAreaLocked,
+                                'pointer-events-none opacity-50':
+                                    isLeftAreaLocked,
                             }"
                             :readonly="isLeftAreaLocked"
                             placeholder="每行一個項目&#10;可加權重：項目名稱x3"
@@ -382,9 +383,7 @@ const isSubmitAvailable: ComputedRef<boolean> = computed(() => {
                                 class="w-full rounded-xl !normal-case font-bold"
                                 size="large"
                                 @click="spin"
-                                :disabled="
-                                    isSpinning || count(textArea) == 0
-                                "
+                                :disabled="isSpinning || count(textArea) == 0"
                             >
                                 🎰 旋轉
                             </VaButton>
@@ -515,7 +514,10 @@ const isSubmitAvailable: ComputedRef<boolean> = computed(() => {
                             <!-- Tab switcher for clear target -->
                             <div
                                 class="flex w-full rounded-xl overflow-hidden border border-[rgba(255,255,255,0.08)]"
-                                :class="{ 'pointer-events-none opacity-50': isSpinning }"
+                                :class="{
+                                    'pointer-events-none opacity-50':
+                                        isSpinning,
+                                }"
                             >
                                 <button
                                     class="flex-1 py-2.5 text-sm font-bold transition-colors duration-200"
@@ -567,9 +569,7 @@ const isSubmitAvailable: ComputedRef<boolean> = computed(() => {
             :mobile-fullscreen="false"
             @ok="
                 () => {
-                    clearRightArea == true
-                        ? (textArea2 = '')
-                        : (textArea = '');
+                    clearRightArea == true ? (textArea2 = '') : (textArea = '');
                     initializeWheel();
                 }
             "
