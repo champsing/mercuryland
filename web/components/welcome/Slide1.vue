@@ -14,48 +14,26 @@ import NextPageButton from "./NextPageButton.vue";
         />
         <div class="absolute inset-0 bg-neutral-900/60" />
 
-        <!-- Outer frame -->
-        <div class="absolute inset-6 border border-white/20 hidden md:block" />
-        <div class="absolute inset-8 border border-white/8 hidden md:block" />
-
-        <!-- Corner accents -->
-        <div class="absolute top-12 left-12 w-10 h-10 border-l-2 border-t-2 border-amber-400/60 hidden md:block" />
-        <div class="absolute bottom-12 right-12 w-10 h-10 border-r-2 border-b-2 border-amber-400/60 hidden md:block" />
-
-        <!-- Top label -->
-        <div class="absolute top-20 left-28 text-amber-400/80 text-xs font-bold tracking-[0.4em] uppercase hidden md:block">
-            Welcome · Bienvenue · ようこそ
-        </div>
-
-        <!-- Main content -->
-        <div class="absolute x-center y-center text-center w-10/12 max-w-3xl">
-            <!-- Hero title -->
+        <!-- Hero title: centered -->
+        <div class="absolute x-center y-center text-center flex flex-col items-center gap-3">
             <div
                 class="text-8xl font-black tracking-[0.12em] bg-gradient-to-r from-amber-200 via-yellow-300 to-amber-400 bg-clip-text text-transparent uppercase"
             >
                 水星樂園
             </div>
-
-            <!-- Decorative rule -->
-            <div class="flex items-center gap-5 mt-6 mb-8">
-                <div class="h-px flex-1 bg-gradient-to-r from-transparent via-amber-400/50 to-amber-400/50" />
-                <div class="w-2 h-2 rotate-45 bg-amber-400/60" />
-                <div class="w-1.5 h-1.5 rotate-45 bg-yellow-300/60" />
-                <div class="w-2 h-2 rotate-45 bg-amber-400/60" />
-                <div class="h-px flex-1 bg-gradient-to-l from-transparent via-amber-400/50 to-amber-400/50" />
-            </div>
-
-            <!-- Subtitle -->
             <div class="text-white/90 font-thin text-4xl tracking-[0.25em] uppercase">
                 The Mercury Land
             </div>
         </div>
 
-        <!-- Bottom accent -->
-        <div class="absolute bottom-14 left-1/2 -translate-x-1/2 flex items-center gap-3">
-            <div class="w-16 h-px bg-amber-400/40" />
-            <div class="text-amber-400/60 text-[0.6rem] font-bold tracking-[0.35em] uppercase">Scroll to explore</div>
-            <div class="w-16 h-px bg-amber-400/40" />
+        <!-- Bottom text column: just above the NextPageButton -->
+        <div class="absolute bottom-10 left-1/2 -translate-x-1/2 text-center flex flex-col items-center gap-2">
+            <div class="text-amber-400/60 text-xs font-bold tracking-[0.4em] uppercase">
+                Welcome · Bienvenue · ようこそ
+            </div>
+            <div class="text-amber-400/40 text-[0.6rem] tracking-[0.3em] uppercase">
+                Scroll to explore
+            </div>
         </div>
     </div>
 </template>
