@@ -442,9 +442,11 @@ const isSubmitAvailable: ComputedRef<boolean> = computed(() => {
                                 >
                                     <span class="text-sm">🔌</span>
                                     <span>{{
-                                        !APIstatus
-                                            ? "未連接到伺服器"
-                                            : "已連接到伺服器"
+                                        APIstatus === true
+                                            ? "已連接到伺服器"
+                                            : APIstatus === null
+                                              ? "正在連接伺服器..."
+                                              : "無法連接到伺服器"
                                     }}</span>
                                 </div>
                                 <div
@@ -457,9 +459,9 @@ const isSubmitAvailable: ComputedRef<boolean> = computed(() => {
                                 >
                                     <span class="text-sm">🔒</span>
                                     <span>{{
-                                        !authState.isAuthenticated
-                                            ? "未登入管理權限"
-                                            : "已登入管理權限"
+                                        authState.isAuthenticated
+                                            ? "已登入管理權限"
+                                            : "尚未登入管理權限"
                                     }}</span>
                                 </div>
                             </div>
