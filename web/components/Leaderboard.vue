@@ -1,16 +1,8 @@
 <script setup lang="ts">
 import api from "@composables/axios";
-import { onMounted, ref, Ref } from "vue";
-import {
-    VaDataTable,
-    VaButton,
-    VaIcon,
-    VaDivider,
-    VaScrollContainer,
-    VaCard,
-} from "vuestic-ui";
 import { ArrowClockwise24Filled } from "@vicons/fluent";
-import ViewportHeight from "./ViewportHeight.vue";
+import { onMounted, ref, Ref } from "vue";
+import { VaButton, VaDivider, VaIcon } from "vuestic-ui";
 
 document.title = "水星排行 - 水星人的夢幻樂園";
 
@@ -22,7 +14,7 @@ function loadLeaderboard() {
             leaderboard.value = response.data
                 .map((u: User) => {
                     return {
-                        rank: 0, // Placeholder for rank, will be assigned later,
+                        rank: 0,
                         youtube: u.youtube,
                         coin: u.coin,
                         display: u.display,
@@ -30,14 +22,13 @@ function loadLeaderboard() {
                     } as UserRank;
                 })
                 .sort((a: UserRank, b: UserRank) => {
-                    return a.coin < b.coin ? 1 : -1; // Sort by coin in descending order
+                    return a.coin < b.coin ? 1 : -1;
                 })
                 .map((r: UserRank, index: number) => {
-                    r.rank = index + 1; // Assign rank based on the sorted order
+                    r.rank = index + 1;
                     return r;
                 })
                 .slice(0, 50);
-            console.log(leaderboard.value);
         })
         .catch((error) => {
             console.error("更新排行榜失敗:", error);
@@ -63,152 +54,232 @@ class UserRank {
     updated_at: number;
 }
 
-const columns = [
-    {
-        key: "rank",
-        label: "名次",
-        tdAlign: "center" as const,
-        thAlign: "center" as const,
-        sortable: true,
-        sortingOptions: ["desc" as const, "asc" as const, null],
-    },
-    {
-        key: "display",
-        label: "名稱",
-        tdAlign: "center" as const,
-        thAlign: "center" as const,
-    },
-    {
-        key: "coin",
-        label: "水星幣",
-        tdAlign: "center" as const,
-        thAlign: "center" as const,
-    },
-    {
-        key: "updated_at",
-        label: "最近出現",
-        tdAlign: "center" as const,
-        thAlign: "center" as const,
-        sortable: true,
-        sortingOptions: ["desc" as const, "asc" as const, null],
-    },
-];
-
-function rankStyle(rank: number) {
-    if (rank === 1) {
-        return "text-yellow-400 font-bold text-2xl";
-    } else if (rank === 2) {
-        return "text-zinc-400 font-bold text-xl";
-    } else if (rank === 3) {
-        return "text-amber-600 font-bold text-lg";
-    } else {
-        return "text-white";
-    }
+function chineseDate(ts: number): string {
+    const d = new Date(ts);
+    return `${d.getFullYear()}年${d.getMonth() + 1}月${d.getDate()}日`;
 }
 
-function rankEmoji(rank: number) {
-    if (rank == 1) {
-        return "🥇";
-    } else if (rank === 2) {
-        return "🥈";
-    } else if (rank === 3) {
-        return "🥉";
-    } else {
-        return "ㅤ"; // Invisible character to maintain layout
-    }
+function medalColor(rank: number): string {
+    if (rank === 1) return "text-yellow-400";
+    if (rank === 2) return "text-zinc-300";
+    if (rank === 3) return "text-amber-500";
+    return "text-zinc-600";
+}
+
+function medalBg(rank: number): string {
+    if (rank === 1) return "bg-yellow-400/15";
+    if (rank === 2) return "bg-zinc-300/10";
+    if (rank === 3) return "bg-amber-500/10";
+    return "bg-zinc-700/50";
+}
+
+function medalBorder(rank: number): string {
+    if (rank === 1) return "border-yellow-400/40";
+    if (rank === 2) return "border-zinc-300/25";
+    if (rank === 3) return "border-amber-500/30";
+    return "border-zinc-700/50";
+}
+
+function medalEmoji(rank: number): string {
+    if (rank === 1) return "👑";
+    if (rank === 2) return "🥈";
+    if (rank === 3) return "🥉";
+    return "";
+}
+
+function podiumOrder(rank: number): string {
+    if (rank === 1) return "md:order-2";
+    if (rank === 2) return "md:order-1";
+    if (rank === 3) return "md:order-3";
+    return "";
 }
 </script>
 
 <template>
-    <div
-        class="flex h-14 w-full flex-row items-center justify-between gap-4 px-2"
+    <main
+        class="lb-page min-h-[calc(100vh-48px)] text-[#f7f7f8] pt-10 pb-5 px-4 max-md:pt-16 max-md:pb-4 max-md:px-3"
     >
-        <h1 class="ml-12 text-2xl font-semibold">水星排行</h1>
-        <div class="flex items-center">
-            <VaButton preset="plain" @click="loadLeaderboard()"
-                ><VaIcon><ArrowClockwise24Filled /></VaIcon
-            ></VaButton>
-            <p class="text-zinc-400 sm:text-right ml-2">
-                這裡顯示的是水星幣的排行榜，每次直播獲得的水星幣都會在這裡顯示。
-            </p>
-        </div>
-    </div>
-    <VaDivider class="w-full !mt-0 !mb-2" />
-
-    <ViewportHeight>
-        <VaCard class="mx-2 overflow-hidden rounded-xl h-full">
-            <VaScrollContainer
-                vertical
-                color="#e0feb4"
-                size="medium"
-                class="h-full"
+        <div class="w-full max-w-[1200px] mx-auto">
+            <!-- Header -->
+            <div
+                class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-6 px-4"
             >
-                <VaDataTable
-                    :items="leaderboard"
-                    :columns="columns"
-                    style="
-                        --va-data-table-hover-color: #357286;
-                        --va-data-table-thead-background: var(
-                            --va-background-element
-                        );
-                        --va-data-table-thead-border: 0;
-                        height: 100%;
-                    "
-                    :virtual-scroller="false"
-                    sticky-header
-                    hoverable
+                <div>
+                    <h1 class="text-3xl font-bold text-neutral-100">
+                        水星排行
+                    </h1>
+                    <p class="text-sm text-zinc-400 mt-1">
+                        每次直播獲得的水星幣都會在這裡顯示，致敬貢獻最多的水星人
+                    </p>
+                </div>
+                <VaButton
+                    preset="plain"
+                    color="info"
+                    @click="loadLeaderboard()"
+                    class="self-start"
                 >
-                    <template
-                        v-for="column in columns"
-                        #[`header(${column.key})`]="{ label }"
-                        :key="column.key"
+                    <VaIcon><ArrowClockwise24Filled /></VaIcon>
+                    <span class="ml-1 text-sm">重新整理</span>
+                </VaButton>
+            </div>
+
+            <!-- Top 3 Podium -->
+            <section
+                v-if="leaderboard.length > 0"
+                class="px-4 mb-8"
+                aria-label="前三名榮譽榜"
+            >
+                <div
+                    class="flex flex-col md:flex-row items-center justify-center gap-4 md:gap-6 md:items-end"
+                >
+                    <div
+                        v-for="user in leaderboard.slice(0, 3)"
+                        :key="user.rank"
+                        :class="[
+                            podiumOrder(user.rank),
+                            medalBorder(user.rank),
+                            medalBg(user.rank),
+                        ]"
+                        class="flex flex-col items-center rounded-2xl border p-5 md:p-6 w-full max-w-[240px] backdrop-blur-sm transition-all duration-300 hover:scale-105 hover:[box-shadow:0_8px_32px_rgba(0,0,0,0.35)]"
                     >
-                        <div class="text-sm text-center">
-                            {{ label }}
+                        <!-- Rank badge -->
+                        <div
+                            :class="medalColor(user.rank)"
+                            class="text-4xl mb-2"
+                        >
+                            {{ medalEmoji(user.rank) }}
                         </div>
-                    </template>
-                    <template #cell(rank)="{ value, row }">
-                        <div class="text-center">
-                            <div :class="rankStyle(row.rowData.rank)">
-                                {{ rankEmoji(row.rowData.rank) }}第
-                                {{ value }} 名
-                            </div>
+                        <div
+                            :class="medalColor(user.rank)"
+                            class="text-lg font-bold tracking-wider"
+                        >
+                            第 {{ user.rank }} 名
                         </div>
-                    </template>
-                    <template #cell(display)="{ value, row }">
-                        <div class="text-center">
-                            <VaButton
-                                :href="`https://www.youtube.com/channel/${row.rowData.youtube}`"
-                                target="_blank"
-                                preset="plain"
-                                rel="noopener noreferrer"
+
+                        <!-- Avatar initial -->
+                        <div
+                            :class="[
+                                medalBg(user.rank),
+                                medalBorder(user.rank),
+                                medalColor(user.rank),
+                            ]"
+                            class="w-16 h-16 rounded-full border flex items-center justify-center text-2xl font-bold my-3"
+                        >
+                            {{ user.display.charAt(0) }}
+                        </div>
+
+                        <!-- Name -->
+                        <a
+                            :href="`https://www.youtube.com/channel/${user.youtube}`"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            :class="medalColor(user.rank)"
+                            class="text-base font-semibold text-center hover:underline truncate max-w-full"
+                        >
+                            {{ user.display }}
+                        </a>
+
+                        <!-- Coin -->
+                        <div class="flex items-baseline gap-1 mt-2">
+                            <span
+                                :class="medalColor(user.rank)"
+                                class="text-2xl font-extrabold"
                             >
-                                <div :class="rankStyle(row.rowData.rank)">
-                                    {{ value }}
-                                </div>
-                            </VaButton>
+                                {{ user.coin.toLocaleString() }}
+                            </span>
+                            <span class="text-xs text-zinc-500">水星幣</span>
                         </div>
-                    </template>
-                    <template #cell(coin)="{ value, row }">
-                        <div class="text-center">
-                            <div :class="rankStyle(row.rowData.rank)">
-                                {{ value }}
+
+                        <!-- Last seen -->
+                        <div class="text-xs text-zinc-500 mt-2">
+                            {{ chineseDate(user.updated_at) }}
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Empty state -->
+            <section
+                v-if="leaderboard.length === 0"
+                class="flex flex-col items-center justify-center py-20 text-zinc-500"
+            >
+                <div class="text-6xl mb-4">🏆</div>
+                <p class="text-lg">尚無排行資料</p>
+                <p class="text-sm mt-1">點擊重新整理按鈕載入排行榜</p>
+            </section>
+
+            <!-- Remaining ranks (4–50) -->
+            <section
+                v-if="leaderboard.length > 3"
+                class="px-4 pb-8"
+                aria-label="其餘排行"
+            >
+                <div class="flex items-center gap-3 mb-3">
+                    <VaDivider class="grow !m-0" />
+                    <span class="text-sm text-zinc-500 whitespace-nowrap"
+                        >第 4 – {{ leaderboard.length }} 名</span
+                    >
+                    <VaDivider class="grow !m-0" />
+                </div>
+
+                <div
+                    class="grid gap-2 [grid-template-columns:repeat(auto-fill,minmax(320px,1fr))] max-md:grid-cols-1"
+                >
+                    <div
+                        v-for="user in leaderboard.slice(3)"
+                        :key="user.rank"
+                        class="flex items-center gap-4 rounded-xl border border-zinc-700/40 bg-zinc-800/40 backdrop-blur-sm px-4 py-3 transition-colors transition-transform duration-200 hover:translate-x-0.5 hover:bg-zinc-700/40 hover:border-zinc-600/50"
+                    >
+                        <!-- Rank number -->
+                        <div
+                            class="w-10 h-10 rounded-full bg-zinc-700/60 flex items-center justify-center text-sm font-bold text-zinc-300 shrink-0"
+                        >
+                            {{ user.rank }}
+                        </div>
+
+                        <!-- Name -->
+                        <div class="flex-1 min-w-0">
+                            <a
+                                :href="`https://www.youtube.com/channel/${user.youtube}`"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                class="text-zinc-200 font-medium hover:text-info hover:underline truncate block"
+                            >
+                                {{ user.display }}
+                            </a>
+                            <div class="text-xs text-zinc-500">
+                                {{ chineseDate(user.updated_at) }}
                             </div>
                         </div>
-                    </template>
-                    <template #cell(updated_at)="{ value }">
-                        <div class="text-center">
-                            {{ new Date(value).toDateString() }}
+
+                        <!-- Coin -->
+                        <div class="flex items-baseline gap-1 shrink-0">
+                            <span
+                                class="text-lg font-bold text-zinc-200 tabular-nums"
+                            >
+                                {{ user.coin.toLocaleString() }}
+                            </span>
                         </div>
-                    </template>
-                </VaDataTable>
-            </VaScrollContainer>
-        </VaCard>
-    </ViewportHeight>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
 </template>
 
-<style scoped>
-:deep(.va-data-table__thead) {
-    background-color: var(--va-background-element);
+<style>
+.lb-page {
+    background:
+        radial-gradient(
+            circle at 50% 0%,
+            rgba(255, 215, 0, 0.08),
+            transparent 36rem
+        ),
+        radial-gradient(
+            circle at 15% 0%,
+            rgba(88, 166, 255, 0.2),
+            transparent 32rem
+        ),
+        linear-gradient(135deg, #0f1117 0%, #16191f 48%, #101318 100%);
 }
 </style>
