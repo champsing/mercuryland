@@ -271,53 +271,6 @@ const isSubmitAvailable: ComputedRef<boolean> = computed(() => {
                     <p class="text-sm text-zinc-400">
                         每行一個項目，可使用「項目名稱x權重」設定比重；旋轉後隨機抽出結果
                     </p>
-                    <!-- API status hashtag -->
-                    <span
-                        class="inline-flex items-center gap-1 rounded-md px-2 py-0.5 text-xs font-semibold transition-colors duration-300"
-                        :class="
-                            APIstatus === true
-                                ? 'bg-lime-400/10 text-lime-400'
-                                : APIstatus === null
-                                  ? 'bg-gray-400/10 text-gray-400'
-                                  : 'bg-red-400/10 text-red-400'
-                        "
-                    >
-                        <VaIcon size="small">
-                            <ArrowSyncCheckmark24Filled v-if="APIstatus" />
-                            <ArrowClockwise24Filled
-                                v-else-if="APIstatus == null"
-                            />
-                            <AlertCircleOutline v-else />
-                        </VaIcon>
-                        {{
-                            APIstatus === true
-                                ? "已連接到伺服器"
-                                : APIstatus === null
-                                  ? "正在連接伺服器..."
-                                  : "無法連接到伺服器"
-                        }}
-                    </span>
-                    <!-- Auth status hashtag -->
-                    <span
-                        class="inline-flex items-center gap-1 rounded-md px-2 py-0.5 text-xs font-semibold transition-colors duration-300"
-                        :class="
-                            authState.isAuthenticated
-                                ? 'bg-lime-400/10 text-lime-400'
-                                : 'bg-red-400/10 text-red-400'
-                        "
-                    >
-                        <VaIcon size="small">
-                            <PersonLock20Filled
-                                v-if="authState.isAuthenticated"
-                            />
-                            <PresenceBlocked12Regular v-else />
-                        </VaIcon>
-                        {{
-                            authState.isAuthenticated
-                                ? "已登入管理權限"
-                                : "尚未登入管理權限"
-                        }}
-                    </span>
                 </div>
             </div>
 
@@ -440,12 +393,22 @@ const isSubmitAvailable: ComputedRef<boolean> = computed(() => {
                                             : 'text-lime-400 bg-lime-400/5'
                                     "
                                 >
-                                    <span class="text-sm">🔌</span>
-                                    <span>{{
-                                        !APIstatus
-                                            ? "未連接到伺服器"
-                                            : "已連接到伺服器"
-                                    }}</span>
+                                    <VaIcon size="small">
+                                        <ArrowSyncCheckmark24Filled
+                                            v-if="APIstatus"
+                                        />
+                                        <ArrowClockwise24Filled
+                                            v-else-if="APIstatus == null"
+                                        />
+                                        <AlertCircleOutline v-else />
+                                    </VaIcon>
+                                    {{
+                                        APIstatus === true
+                                            ? "已連接到伺服器"
+                                            : APIstatus === null
+                                              ? "正在連接伺服器..."
+                                              : "無法連接到伺服器"
+                                    }}
                                 </div>
                                 <div
                                     class="flex items-center gap-1 rounded-md px-1.5 py-1"
@@ -455,12 +418,17 @@ const isSubmitAvailable: ComputedRef<boolean> = computed(() => {
                                             : 'text-lime-400 bg-lime-400/5'
                                     "
                                 >
-                                    <span class="text-sm">🔒</span>
-                                    <span>{{
-                                        !authState.isAuthenticated
-                                            ? "未登入管理權限"
-                                            : "已登入管理權限"
-                                    }}</span>
+                                    <VaIcon size="small">
+                                        <PersonLock20Filled
+                                            v-if="authState.isAuthenticated"
+                                        />
+                                        <PresenceBlocked12Regular v-else />
+                                    </VaIcon>
+                                    {{
+                                        authState.isAuthenticated
+                                            ? "已登入管理權限"
+                                            : "尚未登入管理權限"
+                                    }}
                                 </div>
                             </div>
                         </div>
