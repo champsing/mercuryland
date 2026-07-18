@@ -1,16 +1,7 @@
 <script setup lang="ts">
+import { backToTop } from "@/composables/utils";
 import { AngleUp } from "@vicons/fa";
 import { VaIcon } from "vuestic-ui";
-
-function backToTop() {
-    // On the welcome page the snap-container owns the scroll, not window
-    const snap = document.querySelector(".welcome-snap-container");
-    if (snap) {
-        snap.scrollTo({ top: 0, behavior: "smooth" });
-    } else {
-        window.scrollTo({ top: 0, behavior: "smooth" });
-    }
-}
 </script>
 
 <template>
