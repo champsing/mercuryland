@@ -31,9 +31,6 @@ const activeTab = ref<"join" | "publication" | "archive">("join");
                 <NewLaw /> 
                 <VaDivider /> 
                 -->
-                <div class="text-4xl text-neutral-100 text-left mt-4 mb-6">
-                    法規與資料
-                </div>
                 <div class="p-10">
                     <Law />
                 </div>
@@ -43,7 +40,6 @@ const activeTab = ref<"join" | "publication" | "archive">("join");
                 <div
                     class="flex flex-row items-center justify-center gap-4 text-neutral-100 mt-4 mb-10"
                 >
-                    <div class="text-4xl">地圖檔</div>
                     <div class="flex flex-row items-center gap-1">
                         <VaIcon size="large">
                             <WindowNew20Filled />
