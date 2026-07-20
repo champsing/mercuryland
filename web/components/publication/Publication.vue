@@ -13,7 +13,9 @@ const activeTab = ref<"join" | "publication" | "archive">("join");
 </script>
 
 <template>
-    <div class="publication-page min-h-[calc(100vh-48px)] text-[#f7f7f8] pt-10 pb-5 px-4 max-md:pt-16 max-md:pb-4 max-md:px-3">
+    <div
+        class="publication-page min-h-[calc(100vh-48px)] text-[#f7f7f8] pt-10 pb-5 px-4 max-md:pt-16 max-md:pb-4 max-md:px-3"
+    >
         <div class="w-full max-w-[1400px] mx-auto">
             <VaTabs v-model="activeTab" color="info" center grow>
                 <template #tabs>
