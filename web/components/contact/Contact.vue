@@ -6,8 +6,9 @@ import ContactCard from "./ContactCard.vue";
 </script>
 
 <template>
-    <div class="mt-4 m-auto w-11/12">
-        <div class="flex flex-row justify-center gap-6 pt-10">
+    <div class="contact-page min-h-[calc(100vh-48px)] text-[#f7f7f8] pt-10 pb-5 px-4 max-md:pt-16 max-md:pb-4 max-md:px-3">
+        <div class="w-full max-w-[1400px] mx-auto">
+            <div class="flex flex-row justify-center gap-6 pt-10">
             <ContactCard
                 name1="惡靈"
                 name2="Oreki"
@@ -70,5 +71,23 @@ import ContactCard from "./ContactCard.vue";
                 allowfullscreen
             ></iframe>
         </div>
+        </div>
     </div>
 </template>
+
+<style>
+.contact-page {
+    background:
+        radial-gradient(
+            circle at 50% 0%,
+            rgba(142, 120, 255, 0.09),
+            transparent 36rem
+        ),
+        radial-gradient(
+            circle at 15% 0%,
+            rgba(88, 166, 255, 0.2),
+            transparent 32rem
+        ),
+        linear-gradient(135deg, #0f1117 0%, #16191f 48%, #101318 100%);
+}
+</style>
