@@ -1,16 +1,10 @@
 use crate::{database, error::ServerError, webpage::auth};
-use actix_web::{HttpResponse, Responder, get, web};
+use actix_web::{HttpRequest, HttpResponse, Responder, get};
 use chrono::Utc;
-use serde::Deserialize;
-
-#[derive(Debug, Deserialize)]
-pub struct Query {
-    pub token: String,
-}
 
 #[get("/api/setting/backup")]
-pub async fn handler(query: web::Query<Query>) -> Result<impl Responder, ServerError> {
-    if !auth::verify(&query.token) {
+pub async fn handler(req: HttpRequest) -> Result<impl Responder, ServerError> {
+    if !auth::extract_and_verify(&req) {
         return Ok(HttpResponse::Forbidden().finish());
     }
 

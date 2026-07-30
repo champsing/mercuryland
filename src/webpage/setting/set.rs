@@ -1,19 +1,21 @@
 use crate::database::config::Config;
 use crate::error::ServerError;
 use crate::webpage::auth;
-use actix_web::{HttpResponse, Responder, post, web};
+use actix_web::{HttpRequest, HttpResponse, Responder, post, web};
 use serde::Deserialize;
 
 #[derive(Debug, Deserialize)]
 pub struct Request {
-    pub token: String,
     pub id: i32,
     pub value: String,
 }
 
 #[post("/api/setting/config")]
-pub async fn handler(request: web::Json<Request>) -> Result<impl Responder, ServerError> {
-    if !auth::verify(&request.token) {
+pub async fn handler(
+    req: HttpRequest,
+    request: web::Json<Request>,
+) -> Result<impl Responder, ServerError> {
+    if !auth::extract_and_verify(&req) {
         return Ok(HttpResponse::Forbidden().finish());
     }
 

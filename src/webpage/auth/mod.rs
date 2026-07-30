@@ -2,6 +2,7 @@ pub mod google;
 pub mod login;
 pub mod tick;
 
+use actix_web::HttpRequest;
 use hmac::{Hmac, Mac};
 use jwt::{Header, Token, VerifyWithKey};
 use rand::RngCore;
@@ -39,6 +40,17 @@ pub fn verify(token: &str) -> bool {
             let claims: &Claims = token.claims();
             claims.iat < now && claims.exp > now
         })
+        .unwrap_or(false)
+}
+
+/// Extracts a Bearer token from the `Authorization` header and verifies it.
+/// Returns `true` if the header is present, well-formed, and the token is valid.
+pub fn extract_and_verify(req: &HttpRequest) -> bool {
+    req.headers()
+        .get("Authorization")
+        .and_then(|v| v.to_str().ok())
+        .and_then(|v| v.strip_prefix("Bearer "))
+        .map(|token| verify(token))
         .unwrap_or(false)
 }
 
