@@ -323,36 +323,11 @@ defineExpose({ open });
 </template>
 
 <style scoped>
-/* 深度穿透修改 Vuestic UI Modal 本體，將其改造為 Apple 風格的玻璃擬態，對標 Detail.vue */
+/* Sizing overrides — appearance (glassomorphism) comes from
+   styles/va-modal-glass.css */
 :deep(.va-modal__dialog) {
-    background: rgba(255, 255, 255, 0.1) !important;
-    backdrop-filter: blur(20px) !important;
-    -webkit-backdrop-filter: blur(20px) !important;
-    border-radius: 24px !important;
-    border: 1px solid rgba(255, 255, 255, 0.4) !important;
-    box-shadow:
-        0 20px 40px -15px rgba(0, 0, 0, 0.08),
-        0 0 0 1px rgba(0, 0, 0, 0.02) !important;
     max-width: 680px !important;
     width: 95% !important;
-    transition: all 0.3s ease;
-}
-
-:global(.dark) :deep(.va-modal__dialog),
-:global(.va-theme--dark) :deep(.va-modal__dialog) {
-    background: rgba(15, 23, 42, 0.65) !important;
-    border: 1px solid rgba(255, 255, 255, 0.08) !important;
-    box-shadow:
-        0 25px 50px -12px rgba(0, 0, 0, 0.35),
-        0 0 0 1px rgba(255, 255, 255, 0.04) !important;
-}
-
-/* 修正關閉按鈕的位置 */
-:deep(.va-modal__close) {
-    top: 1rem !important;
-    right: 1rem !important;
-    color: currentColor !important;
-    opacity: 0.6;
 }
 
 /* 嵌套刪除確認彈窗維持較小尺寸 */

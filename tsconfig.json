@@ -22,6 +22,7 @@
         "paths": {
             "@/*": ["./web/*"],
             "@assets/*": ["./web/assets/*"],
+            "@styles/*": ["./styles/*"],
             "@components/*": ["./web/components/*"],
             "@composables/*": ["./web/composables/*"]
         },

@@ -1,7 +1,8 @@
 import { createApp } from "vue";
 import App from "./App.vue";
 import router from "./router.ts";
-import "./style.css";
+import "@styles/style.css";
+import "@styles/va-modal-glass.css";
 import {
     createVuesticEssential,
     VaToastPlugin,
