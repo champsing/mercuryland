@@ -271,4 +271,3 @@ defineExpose({ openLoginModal: openLoginLogin, openLogoutModal });
         </VaModal>
     </template>
 </template>
-
