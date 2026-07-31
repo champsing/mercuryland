@@ -336,18 +336,10 @@ function handleTitleClick(vod: VodItem) {
     display: flex;
     align-items: center;
 }
-</style>
 
-<style>
-.vod-detail-modal .va-modal__dialog {
-    background: rgba(15, 23, 42, 0.85);
-    backdrop-filter: blur(18px);
-    -webkit-backdrop-filter: blur(18px);
-    border-radius: 20px;
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    box-shadow:
-        0 25px 50px -12px rgba(0, 0, 0, 0.35),
-        0 0 0 1px rgba(255, 255, 255, 0.04);
+/* Animation only — glassomorphism appearance comes from
+   styles/va-modal-glass.css */
+.vod-detail-modal :deep(.va-modal__dialog) {
     animation: vod-modal-in 0.25s ease;
 }
 

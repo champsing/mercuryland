@@ -1,0 +1,44 @@
+/*
+  Unified glassomorphism VaModal styles
+  Design language derived from Penalty.vue .penalty-filter-bar and Vod.vue .vod-filter-bar:
+
+    backdrop-filter: blur(16px)
+    border: 1px solid rgba(255, 255, 255, 0.08)
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.3)
+    border-radius: 24px (rounded-3xl)
+    background: linear-gradient(…) (dark semi-transparent gradient)
+
+  These rules apply globally to every VaModal dialog — individual components
+  only need to override max-width, width, or other layout-specific properties.
+*/
+
+/* ── Light / default: subtle frosted glass ── */
+.va-modal__dialog {
+    background: rgba(255, 255, 255, 0.1) !important;
+    backdrop-filter: blur(16px) !important;
+    -webkit-backdrop-filter: blur(16px) !important;
+    border-radius: 24px !important;
+    border: 1px solid rgba(255, 255, 255, 0.18) !important;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08) !important;
+    transition: all 0.3s ease;
+}
+
+/* ── Dark mode: reference glassomorphism gradient ── */
+.dark .va-modal__dialog,
+.va-theme--dark .va-modal__dialog {
+    background: linear-gradient(
+        135deg,
+        rgba(19, 23, 30, 0.96) 0%,
+        rgba(15, 19, 25, 0.94) 50%,
+        rgba(11, 16, 21, 0.96) 100%
+    ) !important;
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.3) !important;
+}
+
+/* ── Close button positioning ── */
+.va-modal__close {
+    top: 1rem !important;
+    right: 1rem !important;
+    opacity: 0.6;
+}

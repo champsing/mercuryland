@@ -13,7 +13,7 @@ import Slide4 from "./Slide4.vue";
 import Slide5 from "./Slide5.vue";
 import SlideSection from "./SlideSection.vue";
 
-import "@assets/styles/welcome-animations.css";
+import "@styles/welcome-animations.css";
 
 // ---- Snap-scroll: instant page switching via wheel interception ----
 const TOTAL_SLIDES = 5;
