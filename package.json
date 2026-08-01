@@ -41,5 +41,8 @@
     },
     "prettier": {
         "tabWidth": 4
+    },
+    "overrides": {
+        "esbuild": "^0.28.1"
     }
 }
