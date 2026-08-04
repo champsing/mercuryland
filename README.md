@@ -76,40 +76,40 @@
 
 ### 前端（`web/`）
 
-| 類別 | 技術 |
-|---|---|
-| 框架 | Vue 3.4（`<script setup>` SFC）、TypeScript |
-| 建置 | Vite 7（`@` 別名指向 `./web`）、vue-tsc |
-| 路由 | vue-router 4 |
-| UI 框架 | Vuestic UI 1.10（暗色主題） |
-| CSS | Tailwind CSS 3、SCSS、PostCSS |
-| HTTP 客戶端 | axios |
-| 工具庫 | @vueuse/core、@vueuse/components |
-| 圖示 | @vicons（Fluent / Ionicons / Tabler / Font Awesome） |
-| 字型 | vfonts、Google Fonts（Source Sans Pro、Playfair Display、Material Icons） |
-| 轉盤 | vue-wheel-spinner |
-| 格式化 | Prettier（tabWidth 4） |
+| 類別        | 技術                                                                      |
+| ----------- | ------------------------------------------------------------------------- |
+| 框架        | Vue 3.4（`<script setup>` SFC）、TypeScript                               |
+| 建置        | Vite 7（`@` 別名指向 `./web`）、vue-tsc                                   |
+| 路由        | vue-router 4                                                              |
+| UI 框架     | Vuestic UI 1.10（暗色主題）                                               |
+| CSS         | Tailwind CSS 3、SCSS、PostCSS                                             |
+| HTTP 客戶端 | axios                                                                     |
+| 工具庫      | @vueuse/core、@vueuse/components                                          |
+| 圖示        | @vicons（Fluent / Ionicons / Tabler / Font Awesome）                      |
+| 字型        | vfonts、Google Fonts（Source Sans Pro、Playfair Display、Material Icons） |
+| 轉盤        | vue-wheel-spinner                                                         |
+| 格式化      | Prettier（tabWidth 4）                                                    |
 
 ### 後端（Rust，edition 2024）
 
-| 類別 | 技術 |
-|---|---|
-| Web 框架 | actix-web 4（+ actix-cors、actix-files、actix-multipart） |
-| 資料庫 | rusqlite 0.32（bundled SQLite）+ r2d2 連線池 + sea-query 0.32 |
-| Discord | poise 0.6.1、serenity 0.12.4 |
-| YouTube | google-youtube3 6.0、yup_oauth2（Device Flow）、reqwest |
-| 認證 | JWT（HMAC-SHA256）、hmac、sha2 |
-| 非同步執行 | tokio |
-| 其他 | chrono、uuid、regex、once_cell、env_logger |
+| 類別       | 技術                                                          |
+| ---------- | ------------------------------------------------------------- |
+| Web 框架   | actix-web 4（+ actix-cors、actix-files、actix-multipart）     |
+| 資料庫     | rusqlite 0.32（bundled SQLite）+ r2d2 連線池 + sea-query 0.32 |
+| Discord    | poise 0.6.1、serenity 0.12.4                                  |
+| YouTube    | google-youtube3 6.0、yup_oauth2（Device Flow）、reqwest       |
+| 認證       | JWT（HMAC-SHA256）、hmac、sha2                                |
+| 非同步執行 | tokio                                                         |
+| 其他       | chrono、uuid、regex、once_cell、env_logger                    |
 
 ### 資料庫
 
-| 項目 | 內容 |
-|---|---|
-| 引擎 | SQLite（單一檔案 `data/sqlite.db`） |
+| 項目     | 內容                                                                 |
+| -------- | -------------------------------------------------------------------- |
+| 引擎     | SQLite（單一檔案 `data/sqlite.db`）                                  |
 | 寫入模式 | WAL（`journal_mode=WAL`、`synchronous=NORMAL`、`busy_timeout=5000`） |
-| 連線池 | r2d2，最大 10 條連線 |
-| 版本管理 | `PRAGMA user_version`（目前 **v12**），12 個循序遷移檔 |
+| 連線池   | r2d2，最大 10 條連線                                                 |
+| 版本管理 | `PRAGMA user_version`（目前 **v12**），12 個循序遷移檔               |
 
 ---
 
@@ -123,13 +123,13 @@
 
 以五階段狀態追蹤每場懲罰的執行進度，提供表格總覽、時間軸檢視、統計圖表與詳細內容編輯。編輯器支援圖片上傳、Steam 連結、YouTube 嵌入與自訂語法標籤。
 
-| 狀態碼 | 狀態名稱 | 說明 |
-|---|---|---|
-| 0 | 未生效 | 尚未排入執行 |
-| 1 | 未完成 | 已排入但尚未開始 |
-| 2 | 進行中 | 正在執行 |
-| 3 | 勉強過 | 低標完成 |
-| 4 | 已完成 | 圓滿完成 |
+| 狀態碼 | 狀態名稱 | 說明             |
+| ------ | -------- | ---------------- |
+| 0      | 未生效   | 尚未排入執行     |
+| 1      | 未完成   | 已排入但尚未開始 |
+| 2      | 進行中   | 正在執行         |
+| 3      | 勉強過   | 低標完成         |
+| 4      | 已完成   | 圓滿完成         |
 
 ### 幸運轉盤（Wheel）
 
@@ -159,19 +159,19 @@ YouTube 聊天室即時計幣的虛擬經濟系統。觀眾在直播中發言即
 
 ## 前端頁面
 
-| 路由 | 頁面 | 說明 |
-|---|---|---|
-| `/` | Welcome | 歡迎頁（五張投影片） |
-| `/publication` | Publication | 法規、公告、歷史檔案、加入資訊 |
-| `/map` | GameMap | 互動遊戲地圖 |
-| `/vod` | VOD | 直播隨選與時間計算 |
-| `/penalty` | Penalty | 懲罰追蹤（表格、時間軸、統計、細節編輯） |
-| `/contact` | Contact | 聯絡我們 |
-| `/wheel` | Wheel | 幸運轉盤 |
-| `/tos` | ToS | 服務條款 |
-| `/privacy` | Privacy | 隱私權政策 |
-| `/leaderboard` | Leaderboard | 水星幣排行榜 |
-| `/setting` | Setting | 管理員設定（需登入） |
+| 路由           | 頁面        | 說明                                     |
+| -------------- | ----------- | ---------------------------------------- |
+| `/`            | Welcome     | 歡迎頁（五張投影片）                     |
+| `/publication` | Publication | 法規、公告、歷史檔案、加入資訊           |
+| `/map`         | GameMap     | 互動遊戲地圖                             |
+| `/vod`         | VOD         | 直播隨選與時間計算                       |
+| `/penalty`     | Penalty     | 懲罰追蹤（表格、時間軸、統計、細節編輯） |
+| `/contact`     | Contact     | 聯絡我們                                 |
+| `/wheel`       | Wheel       | 幸運轉盤                                 |
+| `/tos`         | ToS         | 服務條款                                 |
+| `/privacy`     | Privacy     | 隱私權政策                               |
+| `/leaderboard` | Leaderboard | 水星幣排行榜                             |
+| `/setting`     | Setting     | 管理員設定（需登入）                     |
 
 ---
 
@@ -181,56 +181,56 @@ YouTube 聊天室即時計幣的虛擬經濟系統。觀眾在直播中發言即
 
 ### 認證相關
 
-| 方法 | 路徑 | 說明 | 權限 |
-|---|---|---|---|
-| GET | `/api/ping` | 健康檢查 | 公開 |
+| 方法 | 路徑              | 說明                              | 權限 |
+| ---- | ----------------- | --------------------------------- | ---- |
+| GET  | `/api/ping`       | 健康檢查                          | 公開 |
 | POST | `/api/auth/login` | 以 Discord `/auth` 驗證碼換取 JWT | 公開 |
-| POST | `/api/auth/tick` | JWT 續期（每次 1 小時） | 公開 |
+| POST | `/api/auth/tick`  | JWT 續期（每次 1 小時）           | 公開 |
 
 ### 轉盤
 
-| 方法 | 路徑 | 說明 | 權限 |
-|---|---|---|---|
+| 方法 | 路徑                | 說明                   | 權限   |
+| ---- | ------------------- | ---------------------- | ------ |
 | POST | `/api/wheel/submit` | 送出轉盤結果至 Discord | 管理員 |
 
 ### VOD 隨選
 
-| 方法 | 路徑 | 說明 | 權限 |
-|---|---|---|---|
-| GET | `/api/video/list` | 列出全部 VOD | 公開 |
-| POST | `/api/video/upload-json` | 以 JSON 批次上傳 VOD | 管理員 |
-| POST | `/api/video/insert` | 新增單筆 VOD | 管理員 |
-| POST | `/api/video/delete` | 刪除 VOD | 管理員 |
-| POST | `/api/video/update` | 更新 VOD | 管理員 |
-| POST | `/api/video/metadata` | 取得／更新 VOD 後設資料 | 管理員 |
+| 方法 | 路徑                     | 說明                    | 權限   |
+| ---- | ------------------------ | ----------------------- | ------ |
+| GET  | `/api/video/list`        | 列出全部 VOD            | 公開   |
+| POST | `/api/video/upload-json` | 以 JSON 批次上傳 VOD    | 管理員 |
+| POST | `/api/video/insert`      | 新增單筆 VOD            | 管理員 |
+| POST | `/api/video/delete`      | 刪除 VOD                | 管理員 |
+| POST | `/api/video/update`      | 更新 VOD                | 管理員 |
+| POST | `/api/video/metadata`    | 取得／更新 VOD 後設資料 | 管理員 |
 
 ### 懲罰
 
-| 方法 | 路徑 | 說明 | 權限 |
-|---|---|---|---|
-| GET | `/api/penalty/list` | 懲罰列表 | 公開 |
-| POST | `/api/penalty/insert` | 新增懲罰 | 管理員 |
-| POST | `/api/penalty/delete` | 刪除懲罰 | 管理員 |
-| POST | `/api/penalty/update` | 更新懲罰 | 管理員 |
-| GET | `/api/penalty/detail/{id}` | 取得懲罰細節 | 公開 |
-| POST | `/api/penalty/detail/update` | 更新懲罰細節（HTML） | 管理員 |
-| POST | `/api/penalty/history/update` | 更新懲罰歷史紀錄 | 管理員 |
+| 方法 | 路徑                          | 說明                 | 權限   |
+| ---- | ----------------------------- | -------------------- | ------ |
+| GET  | `/api/penalty/list`           | 懲罰列表             | 公開   |
+| POST | `/api/penalty/insert`         | 新增懲罰             | 管理員 |
+| POST | `/api/penalty/delete`         | 刪除懲罰             | 管理員 |
+| POST | `/api/penalty/update`         | 更新懲罰             | 管理員 |
+| GET  | `/api/penalty/detail/{id}`    | 取得懲罰細節         | 公開   |
+| POST | `/api/penalty/detail/update`  | 更新懲罰細節（HTML） | 管理員 |
+| POST | `/api/penalty/history/update` | 更新懲罰歷史紀錄     | 管理員 |
 
 ### 排行榜與設定
 
-| 方法 | 路徑 | 說明 | 權限 |
-|---|---|---|---|
-| GET | `/api/leaderboard` | 水星幣排行榜 | 公開 |
-| GET | `/api/setting/backup` | 下載 SQLite 資料庫備份 | 管理員 |
-| GET | `/api/setting/config` | 讀取頻道設定 | 公開 |
-| POST | `/api/setting/config` | 更新頻道設定 | 管理員 |
+| 方法 | 路徑                  | 說明                   | 權限   |
+| ---- | --------------------- | ---------------------- | ------ |
+| GET  | `/api/leaderboard`    | 水星幣排行榜           | 公開   |
+| GET  | `/api/setting/backup` | 下載 SQLite 資料庫備份 | 管理員 |
+| GET  | `/api/setting/config` | 讀取頻道設定           | 公開   |
+| POST | `/api/setting/config` | 更新頻道設定           | 管理員 |
 
 ### 圖片
 
-| 方法 | 路徑 | 說明 | 權限 |
-|---|---|---|---|
-| POST | `/api/image/upload` | 上傳圖片 | 管理員 |
-| GET | `/api/image/get/{name}` | 取得圖片（依 UUIDv5 名稱） | 公開 |
+| 方法 | 路徑                    | 說明                       | 權限   |
+| ---- | ----------------------- | -------------------------- | ------ |
+| POST | `/api/image/upload`     | 上傳圖片                   | 管理員 |
+| GET  | `/api/image/get/{name}` | 取得圖片（依 UUIDv5 名稱） | 公開   |
 
 > 管理員判定方式：後端解碼 JWT 取得 Discord 使用者 ID，與 `data/config.json` 中的 `discord.admin` 列表比對。
 
@@ -240,24 +240,24 @@ YouTube 聊天室即時計幣的虛擬經濟系統。觀眾在直播中發言即
 
 機器人以 poise / serenity 實作，支援全域斜線指令（Slash Commands），所有指令與回應皆使用繁體中文。
 
-| 指令 | 說明 |
-|---|---|
-| `/auth` | 產生 8 字元驗證碼（30 分鐘有效），供網站管理員登入 |
-| `/coin` | 查詢自己或指定 YouTube 頻道的水星幣餘額 |
-| `/give` | 管理員贈與水星幣給指定使用者 |
-| `/link` | 連結 Discord 帳號與 YouTube 頻道（2 小時冷卻） |
-| `/unlink` | 解除 Discord 與 YouTube 帳號連結 |
-| `/help` | 顯示所有可用指令與說明 |
-| `/refund close` | 管理員關閉退款申請 |
-| `/refund reopen` | 管理員重新開放退款申請 |
-| `/purchase booster` | 購買水星幣加成（等級 2–9，成本翻倍遞增） |
-| `/purchase overtime` | 購買直播加班時數（1000 幣 / 小時） |
-| `/vote nominate` | 提名投票項目 |
-| `/vote revoke` | 撤回提名 |
-| `/vote deadline` | 設定投票截止時間 |
-| `/vote conclude` | 結算投票結果 |
-| `/vote clear` | 清除投票資料 |
-| `/anonymous create` | 建立匿名投稿（透過 Modal 輸入內容） |
+| 指令                 | 說明                                               |
+| -------------------- | -------------------------------------------------- |
+| `/auth`              | 產生 8 字元驗證碼（30 分鐘有效），供網站管理員登入 |
+| `/coin`              | 查詢自己或指定 YouTube 頻道的水星幣餘額            |
+| `/give`              | 管理員贈與水星幣給指定使用者                       |
+| `/link`              | 連結 Discord 帳號與 YouTube 頻道（2 小時冷卻）     |
+| `/unlink`            | 解除 Discord 與 YouTube 帳號連結                   |
+| `/help`              | 顯示所有可用指令與說明                             |
+| `/refund close`      | 管理員關閉退款申請                                 |
+| `/refund reopen`     | 管理員重新開放退款申請                             |
+| `/purchase booster`  | 購買水星幣加成（等級 2–9，成本翻倍遞增）           |
+| `/purchase overtime` | 購買直播加班時數（1000 幣 / 小時）                 |
+| `/vote nominate`     | 提名投票項目                                       |
+| `/vote revoke`       | 撤回提名                                           |
+| `/vote deadline`     | 設定投票截止時間                                   |
+| `/vote conclude`     | 結算投票結果                                       |
+| `/vote clear`        | 清除投票資料                                       |
+| `/anonymous create`  | 建立匿名投稿（透過 Modal 輸入內容）                |
 
 ---
 
@@ -269,68 +269,68 @@ YouTube 聊天室即時計幣的虛擬經濟系統。觀眾在直播中發言即
 
 ### user（使用者與水星幣帳本）
 
-| 欄位 | 型別 | 限制 | 說明 |
-|---|---|---|---|
-| `id` | INTEGER | PRIMARY KEY AUTOINCREMENT | 主鍵 |
-| `youtube` | TEXT | UNIQUE, NOT NULL | YouTube 頻道 ID（主要查詢鍵） |
-| `discord` | BIGINT | UNIQUE, nullable | Discord 使用者 ID |
-| `display` | TEXT | NOT NULL | 顯示名稱 |
-| `coin` | INTEGER | NOT NULL | 水星幣餘額 |
-| `updated_at` | DATETIME | NOT NULL | 最後更新時間 |
+| 欄位         | 型別     | 限制                      | 說明                          |
+| ------------ | -------- | ------------------------- | ----------------------------- |
+| `id`         | INTEGER  | PRIMARY KEY AUTOINCREMENT | 主鍵                          |
+| `youtube`    | TEXT     | UNIQUE, NOT NULL          | YouTube 頻道 ID（主要查詢鍵） |
+| `discord`    | BIGINT   | UNIQUE, nullable          | Discord 使用者 ID             |
+| `display`    | TEXT     | NOT NULL                  | 顯示名稱                      |
+| `coin`       | INTEGER  | NOT NULL                  | 水星幣餘額                    |
+| `updated_at` | DATETIME | NOT NULL                  | 最後更新時間                  |
 
 ### video（VOD 檔案庫）
 
-| 欄位 | 型別 | 限制 | 說明 |
-|---|---|---|---|
-| `id` | INTEGER | PRIMARY KEY | 主鍵 |
-| `date` | DATE | NOT NULL | 直播日期 |
-| `link` | TEXT | NOT NULL, UNIQUE INDEX | 影片連結 |
-| `title` | TEXT | NOT NULL | 影片標題 |
-| `tags` | TEXT | NOT NULL | 標籤（JSON 陣列，如 `["tag1","tag2"]`） |
-| `duration` | TEXT | NOT NULL | 時長（如 `01:30:00`） |
+| 欄位       | 型別    | 限制                   | 說明                                    |
+| ---------- | ------- | ---------------------- | --------------------------------------- |
+| `id`       | INTEGER | PRIMARY KEY            | 主鍵                                    |
+| `date`     | DATE    | NOT NULL               | 直播日期                                |
+| `link`     | TEXT    | NOT NULL, UNIQUE INDEX | 影片連結                                |
+| `title`    | TEXT    | NOT NULL               | 影片標題                                |
+| `tags`     | TEXT    | NOT NULL               | 標籤（JSON 陣列，如 `["tag1","tag2"]`） |
+| `duration` | TEXT    | NOT NULL               | 時長（如 `01:30:00`）                   |
 
 ### penalty（懲罰追蹤）
 
-| 欄位 | 型別 | 限制 | 說明 |
-|---|---|---|---|
-| `id` | INTEGER | PRIMARY KEY | 主鍵 |
-| `date` | DATE | NOT NULL | 排定日期 |
-| `name` | TEXT | NOT NULL | 懲罰名稱 |
-| `detail` | TEXT | NOT NULL | 細節內容（HTML） |
-| `state` | INTEGER | NOT NULL | 狀態碼（0–4，見上方狀態對照表） |
-| `history` | TEXT | NOT NULL | 歷史紀錄（JSON 陣列，每項為 `[state, date]`） |
+| 欄位      | 型別    | 限制        | 說明                                          |
+| --------- | ------- | ----------- | --------------------------------------------- |
+| `id`      | INTEGER | PRIMARY KEY | 主鍵                                          |
+| `date`    | DATE    | NOT NULL    | 排定日期                                      |
+| `name`    | TEXT    | NOT NULL    | 懲罰名稱                                      |
+| `detail`  | TEXT    | NOT NULL    | 細節內容（HTML）                              |
+| `state`   | INTEGER | NOT NULL    | 狀態碼（0–4，見上方狀態對照表）               |
+| `history` | TEXT    | NOT NULL    | 歷史紀錄（JSON 陣列，每項為 `[state, date]`） |
 
 ### image（上傳圖片）
 
-| 欄位 | 型別 | 限制 | 說明 |
-|---|---|---|---|
-| `id` | INTEGER | PRIMARY KEY | 主鍵 |
-| `name` | TEXT | NOT NULL, UNIQUE | UUIDv5 檔名（由圖片內容雜湊產生） |
-| `data` | BLOB | NOT NULL, UNIQUE | 原始圖片位元組 |
-| `mime` | TEXT | NOT NULL | MIME 型別（如 `image/png`） |
+| 欄位   | 型別    | 限制             | 說明                              |
+| ------ | ------- | ---------------- | --------------------------------- |
+| `id`   | INTEGER | PRIMARY KEY      | 主鍵                              |
+| `name` | TEXT    | NOT NULL, UNIQUE | UUIDv5 檔名（由圖片內容雜湊產生） |
+| `data` | BLOB    | NOT NULL, UNIQUE | 原始圖片位元組                    |
+| `mime` | TEXT    | NOT NULL         | MIME 型別（如 `image/png`）       |
 
 ### config（系統設定鍵值儲存）
 
-| 欄位 | 型別 | 限制 | 說明 |
-|---|---|---|---|
-| `id` | INTEGER | PRIMARY KEY | 設定鍵（數值） |
-| `text` | TEXT | NOT NULL | 設定值 |
+| 欄位   | 型別    | 限制        | 說明           |
+| ------ | ------- | ----------- | -------------- |
+| `id`   | INTEGER | PRIMARY KEY | 設定鍵（數值） |
+| `text` | TEXT    | NOT NULL    | 設定值         |
 
-| 鍵值 | 名稱 | 用途 |
-|---|---|---|
-| 0 | ChannelPenalty | 懲罰公告 Discord 頻道 ID |
-| 1 | ChannelCoin | 水星幣公告 Discord 頻道 ID |
-| 2 | ChannelVote | 投票 Discord 頻道 ID |
-| 3 | MessageVote | 投票訊息 ID |
-| 4 | YoutubeChannelId | 監聽的 YouTube 頻道 ID |
+| 鍵值 | 名稱             | 用途                       |
+| ---- | ---------------- | -------------------------- |
+| 0    | ChannelPenalty   | 懲罰公告 Discord 頻道 ID   |
+| 1    | ChannelCoin      | 水星幣公告 Discord 頻道 ID |
+| 2    | ChannelVote      | 投票 Discord 頻道 ID       |
+| 3    | MessageVote      | 投票訊息 ID                |
+| 4    | YoutubeChannelId | 監聽的 YouTube 頻道 ID     |
 
 ### anonymous（匿名投稿）
 
-| 欄位 | 型別 | 限制 | 說明 |
-|---|---|---|---|
-| `id` | INTEGER | PRIMARY KEY | 主鍵 |
-| `author` | BIGINT | NOT NULL | 投稿者 Discord 使用者 ID |
-| `updated_at` | DATETIME | NOT NULL | 投稿時間 |
+| 欄位         | 型別     | 限制        | 說明                     |
+| ------------ | -------- | ----------- | ------------------------ |
+| `id`         | INTEGER  | PRIMARY KEY | 主鍵                     |
+| `author`     | BIGINT   | NOT NULL    | 投稿者 Discord 使用者 ID |
+| `updated_at` | DATETIME | NOT NULL    | 投稿時間                 |
 
 ---
 
@@ -338,26 +338,26 @@ YouTube 聊天室即時計幣的虛擬經濟系統。觀眾在直播中發言即
 
 水星幣由 YouTube 直播聊天室監聽任務即時計幣，資料即時寫入 `user` 表。計幣規則如下：
 
-| 規則 | 一般觀眾 | 頻道會員（贊助者） |
-|---|---|---|
-| 每則聊天室訊息 | 1 幣 | 2 幣 |
-| 每日首則訊息獎勵 | 10 幣 | 20 幣 |
-| 每日計幣上限 | 50 幣 | 100 幣 |
+| 規則             | 一般觀眾 | 頻道會員（贊助者） |
+| ---------------- | -------- | ------------------ |
+| 每則聊天室訊息   | 1 幣     | 2 幣               |
+| 每日首則訊息獎勵 | 10 幣    | 20 幣              |
+| 每日計幣上限     | 50 幣    | 100 幣             |
 
 為防止洗幣，每位觀眾每 30 秒最多計入一則訊息。
 
 **加成（Booster）**可用來加倍聊天室計幣，等級與成本如下：
 
 | 加成等級 | 成本（水星幣） |
-|---|---|
-| 2 | 50 |
-| 3 | 100 |
-| 4 | 200 |
-| 5 | 400 |
-| 6 | 800 |
-| 7 | 1,600 |
-| 8 | 3,200 |
-| 9 | 6,400 |
+| -------- | -------------- |
+| 2        | 50             |
+| 3        | 100            |
+| 4        | 200            |
+| 5        | 400            |
+| 6        | 800            |
+| 7        | 1,600          |
+| 8        | 3,200          |
+| 9        | 6,400          |
 
 **加班時數**：1000 幣可購買 1 小時直播加班。
 
@@ -390,9 +390,9 @@ YouTube 聊天室即時計幣的虛擬經濟系統。觀眾在直播中發言即
 
 在專案根目錄建立 `.env` 檔案：
 
-| 變數 | 說明 |
-|---|---|
-| `DISCORD_TOKEN` | Discord Bot Token |
+| 變數            | 說明                                                           |
+| --------------- | -------------------------------------------------------------- |
+| `DISCORD_TOKEN` | Discord Bot Token                                              |
 | `YOUTUBE_TOKEN` | YouTube API OAuth 用戶端密鑰 JSON（yup_oauth2 Device Flow 用） |
 
 ### 設定檔
@@ -410,12 +410,14 @@ YouTube 聊天室即時計幣的虛擬經濟系統。觀眾在直播中發言即
 ### 啟動專案
 
 後端（終端機一）：
+
 ```sh
 cargo run
 # 預設監聽 0.0.0.0:8080
 ```
 
 前端（終端機二）：
+
 ```sh
 npm install
 npm run dev
@@ -452,25 +454,27 @@ npm run format         # Vue / TypeScript / CSS（Prettier）
 
 PR 合入 `main` 分支前自動執行：
 
-| 檢查項目 | 說明 |
-|---|---|
-| `cargo fmt --check` | Rust 格式化檢查 |
-| `cargo test` | Rust 單元測試 |
-| Docker build | 驗證 Docker 映像檔建置 |
-| `vue-tsc --noEmit` | Vue TypeScript 型別檢查 |
-| Prettier | 前端格式化檢查 |
-| `vite build` | 前端建置驗證 |
-| 版本一致性 | `Cargo.toml` 與 `package.json` 版本號必須一致 |
+| 檢查項目            | 說明                                          |
+| ------------------- | --------------------------------------------- |
+| `cargo fmt --check` | Rust 格式化檢查                               |
+| `cargo test`        | Rust 單元測試                                 |
+| Docker build        | 驗證 Docker 映像檔建置                        |
+| `vue-tsc --noEmit`  | Vue TypeScript 型別檢查                       |
+| Prettier            | 前端格式化檢查                                |
+| `vite build`        | 前端建置驗證                                  |
+| 版本一致性          | `Cargo.toml` 與 `package.json` 版本號必須一致 |
 
 ### publish.yml（前端發布）
 
 推送至 `main` 分支時自動執行：
+
 1. `npm ci` → `vue-tsc` → `vite build`
 2. `wrangler pages deploy dist --project-name=mercuryland` 部署至 **Cloudflare Pages**
 
 ### build.yml（後端發布）
 
 僅當 `Cargo.toml` 中的版本號變更時觸發：
+
 1. Docker 多階段建置（`rust:alpine` → `scratch`）
 2. `docker save` 匯出映像檔
 3. 透過 **cloudflared SSH 隧道**上傳至遠端伺服器
@@ -556,13 +560,13 @@ mercuryland/
 
 ## 第三方整合
 
-| 服務 | 用途 |
-|---|---|
-| **Discord** | 社群機器人、斜線指令、驗證碼登入、懲罰與金幣公告推播 |
+| 服務                    | 用途                                                                      |
+| ----------------------- | ------------------------------------------------------------------------- |
+| **Discord**             | 社群機器人、斜線指令、驗證碼登入、懲罰與金幣公告推播                      |
 | **YouTube Data API v3** | 直播頻道偵測、聊天室訊息即時監聽（60 秒輪詢）、OAuth 2.0 Device Flow 授權 |
-| **Cloudflare Pages** | 前端靜態託管與自動部署 |
-| **Cloudflare Tunnel** | SSH 後端部署隧道（cloudflared） |
-| **Google Fonts** | 網頁字型（Source Sans Pro、Playfair Display、Material Icons） |
+| **Cloudflare Pages**    | 前端靜態託管與自動部署                                                    |
+| **Cloudflare Tunnel**   | SSH 後端部署隧道（cloudflared）                                           |
+| **Google Fonts**        | 網頁字型（Source Sans Pro、Playfair Display、Material Icons）             |
 
 ---
 

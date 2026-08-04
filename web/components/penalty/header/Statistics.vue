@@ -11,6 +11,7 @@ import {
     VaModal,
     VaTextarea,
 } from "vuestic-ui";
+import StatisticsChartModal from "./StatisticsChartModal.vue";
 
 interface ModalData {
     title: string;
@@ -26,6 +27,7 @@ interface ModalData {
 const props = defineProps<{ penalties: PenItem[] }>();
 
 const modal = ref<ModalData | null>(null);
+const showChartModal = ref(false);
 
 function fillModalData() {
     if (!modal.value) return;
@@ -98,7 +100,17 @@ function clickDone() {
                             統計
                         </h2>
                     </div>
-                    <VaIcon name="query_stats" size="large" />
+
+                    <button
+                        class="stat-chart-trigger group inline-flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-sm font-medium text-teal-300/90 bg-teal-400/10 border border-teal-400/20 hover:text-teal-200 hover:bg-teal-400/20 hover:border-teal-400/35 transition-colors"
+                        title="查看統計圖表"
+                        @click="showChartModal = true"
+                    >
+                        <div class="flex gap-2 items-center">
+                            <VaIcon name="query_stats" size="large" />
+                            <span> 查看圖表 </span>
+                        </div>
+                    </button>
                 </div>
                 <div class="stat-actions grid grid-cols-2 gap-3 flex-1">
                     <VaButton
@@ -229,6 +241,8 @@ function clickDone() {
                 <kbd>Ctrl</kbd>&nbsp;<kbd>A</kbd>&ensp;可快速選取全部項目
             </div>
         </VaModal>
+
+        <StatisticsChartModal v-model="showChartModal" :penalties="penalties" />
     </div>
 </template>
 
@@ -254,7 +268,7 @@ function clickDone() {
 
 /* Sizing override — appearance (glassomorphism) comes from
    styles/va-modal-glass.css */
-:deep(.va-modal__dialog) {
+.stat-modal :deep(.va-modal__dialog) {
     max-width: 680px !important;
     width: 95% !important;
 }
@@ -263,6 +277,53 @@ function clickDone() {
 @media (min-width: 768px) {
     .stat-modal :deep(.va-modal__dialog) {
         max-width: 600px !important;
+    }
+}
+
+.stat-chart-trigger {
+    cursor: pointer;
+    transition:
+        color 0.2s,
+        background 0.2s,
+        border-color 0.2s,
+        box-shadow 0.25s,
+        transform 0.2s;
+}
+
+.stat-chart-trigger:hover {
+    transform: translateY(-1px);
+    box-shadow:
+        0 0 0 1px rgba(83, 177, 184, 0.28),
+        0 0 16px rgba(83, 177, 184, 0.3);
+    animation: chart-trigger-glow 1.6s ease-in-out infinite;
+}
+
+.stat-chart-trigger:active {
+    transform: translateY(0) scale(0.97);
+}
+
+.stat-chart-trigger:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(83, 177, 184, 0.5);
+}
+
+@keyframes chart-trigger-glow {
+    0%,
+    100% {
+        box-shadow:
+            0 0 0 1px rgba(83, 177, 184, 0.22),
+            0 0 10px rgba(83, 177, 184, 0.18);
+    }
+    50% {
+        box-shadow:
+            0 0 0 1px rgba(83, 177, 184, 0.4),
+            0 0 18px rgba(83, 177, 184, 0.38);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .stat-chart-trigger:hover {
+        animation: none;
     }
 }
 </style>
