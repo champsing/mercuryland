@@ -11,6 +11,7 @@ import {
     VaModal,
     VaTextarea,
 } from "vuestic-ui";
+import StatisticsChartModal from "./StatisticsChartModal.vue";
 
 interface ModalData {
     title: string;
@@ -26,6 +27,7 @@ interface ModalData {
 const props = defineProps<{ penalties: PenItem[] }>();
 
 const modal = ref<ModalData | null>(null);
+const showChartModal = ref(false);
 
 function fillModalData() {
     if (!modal.value) return;
@@ -98,7 +100,13 @@ function clickDone() {
                             統計
                         </h2>
                     </div>
-                    <VaIcon name="query_stats" size="large" />
+                    <button
+                        class="stat-chart-trigger rounded-lg p-1 -mr-1 hover:bg-white/[0.08] transition-colors"
+                        title="查看統計圖表"
+                        @click="showChartModal = true"
+                    >
+                        <VaIcon name="query_stats" size="large" />
+                    </button>
                 </div>
                 <div class="stat-actions grid grid-cols-2 gap-3 flex-1">
                     <VaButton
@@ -229,6 +237,11 @@ function clickDone() {
                 <kbd>Ctrl</kbd>&nbsp;<kbd>A</kbd>&ensp;可快速選取全部項目
             </div>
         </VaModal>
+
+        <StatisticsChartModal
+            v-model="showChartModal"
+            :penalties="penalties"
+        />
     </div>
 </template>
 
@@ -254,7 +267,7 @@ function clickDone() {
 
 /* Sizing override — appearance (glassomorphism) comes from
    styles/va-modal-glass.css */
-:deep(.va-modal__dialog) {
+.stat-modal :deep(.va-modal__dialog) {
     max-width: 680px !important;
     width: 95% !important;
 }
@@ -264,5 +277,15 @@ function clickDone() {
     .stat-modal :deep(.va-modal__dialog) {
         max-width: 600px !important;
     }
+}
+
+.stat-chart-trigger {
+    color: inherit;
+    cursor: pointer;
+    border: none;
+    background: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 </style>
