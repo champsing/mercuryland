@@ -238,10 +238,7 @@ function clickDone() {
             </div>
         </VaModal>
 
-        <StatisticsChartModal
-            v-model="showChartModal"
-            :penalties="penalties"
-        />
+        <StatisticsChartModal v-model="showChartModal" :penalties="penalties" />
     </div>
 </template>
 
