@@ -24,7 +24,7 @@ use([
     LegendComponent,
 ]);
 
-type TimeRange = "5d" | "1m" | "6m" | "1y";
+type TimeRange = "1d" | "1w" | "1m" | "6m" | "1y" | "max";
 const FINISH_STATES = [1, 2, 3, 4] as const;
 
 const props = defineProps<{
@@ -37,14 +37,23 @@ const emit = defineEmits<{
 
 const timeRange = ref<TimeRange>("1m");
 const rangeOptions: { value: TimeRange; label: string }[] = [
-    { value: "5d", label: "5 天" },
+    { value: "1d", label: "1 天" },
+    { value: "1w", label: "1 週" },
     { value: "1m", label: "1 個月" },
     { value: "6m", label: "6 個月" },
     { value: "1y", label: "1 年" },
+    { value: "max", label: "∞" },
 ];
 
 function getCutoff(range: TimeRange): Date {
-    const days = { "5d": 5, "1m": 30, "6m": 180, "1y": 365 };
+    const days = {
+        "1d": 1,
+        "1w": 7,
+        "1m": 30,
+        "6m": 180,
+        "1y": 365,
+        max: 999999,
+    };
     const now = new Date();
     return new Date(
         now.getFullYear(),
@@ -240,8 +249,7 @@ const pieOption = computed(() => {
     return {
         backgroundColor: "transparent",
         title: {
-            text: "狀態分佈",
-            subtext: "僅含已完成狀態",
+            text: "懲罰狀態圓餅圖",
             left: "center",
             top: 8,
             textStyle: {
