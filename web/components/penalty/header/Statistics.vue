@@ -100,12 +100,16 @@ function clickDone() {
                             統計
                         </h2>
                     </div>
+
                     <button
-                        class="stat-chart-trigger rounded-lg p-1 -mr-1 hover:bg-white/[0.08] transition-colors"
+                        class="stat-chart-trigger group inline-flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-sm font-medium text-teal-300/90 bg-teal-400/10 border border-teal-400/20 hover:text-teal-200 hover:bg-teal-400/20 hover:border-teal-400/35 transition-colors"
                         title="查看統計圖表"
                         @click="showChartModal = true"
                     >
-                        <VaIcon name="query_stats" size="large" />
+                        <div class="flex gap-2 items-center">
+                            <VaIcon name="query_stats" size="large" />
+                            <span> 查看圖表 </span>
+                        </div>
                     </button>
                 </div>
                 <div class="stat-actions grid grid-cols-2 gap-3 flex-1">
@@ -277,12 +281,49 @@ function clickDone() {
 }
 
 .stat-chart-trigger {
-    color: inherit;
     cursor: pointer;
-    border: none;
-    background: none;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    transition:
+        color 0.2s,
+        background 0.2s,
+        border-color 0.2s,
+        box-shadow 0.25s,
+        transform 0.2s;
+}
+
+.stat-chart-trigger:hover {
+    transform: translateY(-1px);
+    box-shadow:
+        0 0 0 1px rgba(83, 177, 184, 0.28),
+        0 0 16px rgba(83, 177, 184, 0.3);
+    animation: chart-trigger-glow 1.6s ease-in-out infinite;
+}
+
+.stat-chart-trigger:active {
+    transform: translateY(0) scale(0.97);
+}
+
+.stat-chart-trigger:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(83, 177, 184, 0.5);
+}
+
+@keyframes chart-trigger-glow {
+    0%,
+    100% {
+        box-shadow:
+            0 0 0 1px rgba(83, 177, 184, 0.22),
+            0 0 10px rgba(83, 177, 184, 0.18);
+    }
+    50% {
+        box-shadow:
+            0 0 0 1px rgba(83, 177, 184, 0.4),
+            0 0 18px rgba(83, 177, 184, 0.38);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .stat-chart-trigger:hover {
+        animation: none;
+    }
 }
 </style>
