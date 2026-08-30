@@ -326,3 +326,19 @@ pub async fn run() -> Result<(), ServerError> {
 
     Ok(())
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn receiver_variants_are_copy_and_debug() {
+        let channel = Receiver::ChannelId(123);
+        let user = Receiver::UserId(456);
+
+        // `Receiver` is `Copy`, so assigning it must not move the value.
+        let channel_copy = channel;
+        assert_eq!(format!("{channel_copy:?}"), "ChannelId(123)");
+        assert_eq!(format!("{user:?}"), "UserId(456)");
+    }
+}

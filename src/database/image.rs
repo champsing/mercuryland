@@ -63,3 +63,59 @@ impl Image {
         Ok(result.collect::<Result<Vec<_>, _>>()?.into_iter().next())
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::database;
+    use rusqlite::Connection;
+
+    fn setup_conn() -> Result<Connection, ServerError> {
+        let mut conn = Connection::open_in_memory()?;
+        let tran = conn.transaction()?;
+        database::migration::run_migration(&tran)?;
+        tran.commit()?;
+        Ok(conn)
+    }
+
+    #[test]
+    fn insert_and_find_by_name() -> Result<(), ServerError> {
+        let mut conn = setup_conn()?;
+
+        let data = b"some image bytes".to_vec();
+        // `insert` asserts the name is a UUIDv5 derived from the data.
+        let name = uuid::Uuid::new_v5(&uuid::Uuid::NAMESPACE_OID, data.as_slice());
+        let mut image = Image {
+            id: 0,
+            name,
+            data,
+            mime: "image/png".into(),
+        };
+
+        let tran = conn.transaction()?;
+        image.insert(&tran)?;
+        tran.commit()?;
+
+        let tran = conn.transaction()?;
+        let fetched = Image::by_name(&name, &tran)?.expect("image should be found");
+        assert_eq!(fetched.name, name);
+        assert_eq!(fetched.data, image.data);
+        assert_eq!(fetched.mime, image.mime);
+        tran.finish()?;
+
+        Ok(())
+    }
+
+    #[test]
+    fn by_name_not_found() -> Result<(), ServerError> {
+        let mut conn = setup_conn()?;
+
+        let tran = conn.transaction()?;
+        let missing = uuid::Uuid::new_v4();
+        let result = Image::by_name(&missing, &tran)?;
+        assert!(result.is_none());
+        tran.finish()?;
+
+        Ok(())
+    }
+}

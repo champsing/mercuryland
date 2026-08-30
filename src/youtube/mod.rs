@@ -162,16 +162,29 @@ async fn get_broadcast_id<C>(
         reqwest::get(format!("https://www.youtube.com/channel/{}/live", channel)).await?;
     let text = response.text().await?;
 
-    if text.matches("\"isLive\":true").count() >= 2 {
-        let re = Regex::new(r#"video_id=([_0-9a-zA-Z]*)"}"#).unwrap();
-        if let Some(captures) = re.captures(&text) {
-            let id = &captures[1];
-            return Ok(Some(id.into()));
+    match parse_broadcast_id(&text) {
+        Some(id) => Ok(Some(id)),
+        None => {
+            if text.matches("\"isLive\":true").count() >= 2 {
+                log::error!("broadcast is ready but no id found");
+            }
+            Ok(None)
         }
-        log::error!("broadcast is ready but no id found");
+    }
+}
+
+/// Extracts the live broadcast video id from the raw `/channel/{id}/live` HTML.
+///
+/// A live page carries at least two `"isLive":true` markers; the video id is
+/// embedded as `video_id=…"}` in a player URL. Returns `None` when the page is
+/// not live or the id cannot be located.
+fn parse_broadcast_id(text: &str) -> Option<String> {
+    if text.matches("\"isLive\":true").count() < 2 {
+        return None;
     }
 
-    Ok(None)
+    let re = Regex::new(r#"video_id=([_0-9a-zA-Z]*)"}"#).unwrap();
+    re.captures(text).map(|captures| captures[1].to_string())
 }
 
 async fn video_from_id<C>(api: &YouTube<C>, id: &String) -> Result<Option<Video>, ServerError>
@@ -189,4 +202,28 @@ where
     }
 
     return Ok(None);
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn parses_live_broadcast_id() {
+        let html = r#"..."isLive":true... "isLive":true... "video_id=AbC_123_x"}..."#;
+        assert_eq!(parse_broadcast_id(html).as_deref(), Some("AbC_123_x"));
+    }
+
+    #[test]
+    fn returns_none_when_not_live() {
+        // Only a single isLive marker: the channel is not broadcasting.
+        let html = r#""isLive":true "video_id=AbC_123"}"#;
+        assert_eq!(parse_broadcast_id(html), None);
+    }
+
+    #[test]
+    fn returns_none_when_live_but_no_video_id() {
+        let html = r#""isLive":true "isLive":true no video id here"#;
+        assert_eq!(parse_broadcast_id(html), None);
+    }
 }
