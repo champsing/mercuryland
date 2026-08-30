@@ -8,7 +8,9 @@
         "build": "vite build",
         "preview": "vite preview",
         "format": "prettier --write .",
-        "format:check": "prettier --check ."
+        "format:check": "prettier --check .",
+        "test": "vitest run",
+        "test:watch": "vitest"
     },
     "dependencies": {
         "@vicons/fa": "^0.12.0",
@@ -32,6 +34,7 @@
         "@vitejs/plugin-vue": "^6.0.7",
         "autoprefixer": "^10.4.20",
         "baseline-browser-mapping": "^2.9.11",
+        "jsdom": "^29.1.1",
         "postcss": "^8.5.23",
         "prettier": "^3.6.2",
         "sass": "^1.77.8",
@@ -39,6 +42,7 @@
         "typescript": "^5.4.5",
         "url": "^0.11.3",
         "vite": "^7.3.5",
+        "vitest": "^4.1.11",
         "vue-tsc": "^3.2.5"
     },
     "prettier": {

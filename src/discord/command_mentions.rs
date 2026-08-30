@@ -14,7 +14,8 @@ pub async fn initialize(http: impl AsRef<Http>) -> Result<(), ServerError> {
             let mut mentions = HashMap::new();
 
             for command in commands {
-                let mut path = vec![command.name.clone()];
+                let mut path = Vec::new();
+                path.push(command.name.clone());
                 insert_path(&mut mentions, &path, command.id);
                 collect_options(&mut mentions, &mut path, &command);
             }
@@ -76,4 +77,99 @@ fn insert_path(storage: &mut HashMap<String, String>, path: &[String], command_i
     storage
         .entry(key)
         .or_insert_with(|| format!("</{}:{}>", label, command_id));
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn get_returns_none_before_initialize() {
+        assert!(get("coin").is_none());
+        assert!(get("refund_close").is_none());
+    }
+
+    #[test]
+    fn insert_path_formats_a_mention() {
+        let mut storage = HashMap::new();
+        let id = CommandId::new(42);
+        insert_path(
+            &mut storage,
+            &["refund".to_string(), "close".to_string()],
+            id,
+        );
+
+        assert_eq!(
+            storage.get("refund_close").map(String::as_str),
+            Some("</refund close:42>")
+        );
+    }
+
+    #[test]
+    fn insert_path_does_not_overwrite_existing_entries() {
+        let mut storage = HashMap::new();
+        storage.insert("coin".to_string(), "existing".to_string());
+        insert_path(&mut storage, &["coin".to_string()], CommandId::new(1));
+
+        assert_eq!(storage.get("coin").map(String::as_str), Some("existing"));
+    }
+
+    #[test]
+    fn collect_options_builds_subcommand_mentions() {
+        let command: Command = serde_json::from_value(serde_json::json!({
+            "id": "42",
+            "type": 1,
+            "application_id": "1",
+            "name": "refund",
+            "description": "Refund commands",
+            "options": [
+                { "type": 1, "name": "close", "description": "close a request" },
+                { "type": 1, "name": "reopen", "description": "reopen a request" }
+            ],
+            "version": "1"
+        }))
+        .expect("command should deserialize");
+
+        let mut storage = HashMap::new();
+        let mut path = Vec::new();
+        path.push(command.name.clone());
+        insert_path(&mut storage, &path, command.id);
+        collect_options(&mut storage, &mut path, &command);
+
+        assert_eq!(
+            storage.get("refund").map(String::as_str),
+            Some("</refund:42>")
+        );
+        assert_eq!(
+            storage.get("refund_close").map(String::as_str),
+            Some("</refund close:42>")
+        );
+        assert_eq!(
+            storage.get("refund_reopen").map(String::as_str),
+            Some("</refund reopen:42>")
+        );
+    }
+
+    #[test]
+    fn collect_group_builds_nested_mentions() {
+        let options: Vec<CommandOption> = serde_json::from_value(serde_json::json!([
+            { "type": 1, "name": "nominate", "description": "nominate an option" },
+            { "type": 1, "name": "revoke", "description": "revoke a nomination" }
+        ]))
+        .expect("options should deserialize");
+
+        let mut storage = HashMap::new();
+        let mut path = vec!["vote".to_string(), "group".to_string()];
+        let id = CommandId::new(99);
+        collect_group(&mut storage, &mut path, id, &options);
+
+        assert_eq!(
+            storage.get("vote_group_nominate").map(String::as_str),
+            Some("</vote group nominate:99>")
+        );
+        assert_eq!(
+            storage.get("vote_group_revoke").map(String::as_str),
+            Some("</vote group revoke:99>")
+        );
+    }
 }

@@ -50,3 +50,48 @@ pub fn run_migration(transaction: &rusqlite::Transaction) -> Result<(), ServerEr
         Ok(())
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use rusqlite::Connection;
+
+    fn user_version(conn: &Connection) -> Result<u32, ServerError> {
+        let version = conn.query_row("PRAGMA user_version;", (), |row| row.get(0))?;
+        Ok(version)
+    }
+
+    #[test]
+    fn migrates_from_scratch_to_latest() -> Result<(), ServerError> {
+        let mut conn = Connection::open_in_memory()?;
+        let tran = conn.transaction()?;
+        run_migration(&tran)?;
+        tran.commit()?;
+
+        assert_eq!(user_version(&conn)?, VERSION);
+        Ok(())
+    }
+
+    #[test]
+    fn skips_when_already_up_to_date() -> Result<(), ServerError> {
+        let mut conn = Connection::open_in_memory()?;
+        conn.pragma_update(None, "user_version", &VERSION)?;
+
+        let tran = conn.transaction()?;
+        run_migration(&tran)?;
+        tran.commit()?;
+
+        assert_eq!(user_version(&conn)?, VERSION);
+        Ok(())
+    }
+
+    #[test]
+    fn errors_on_future_version() -> Result<(), ServerError> {
+        let mut conn = Connection::open_in_memory()?;
+        conn.pragma_update(None, "user_version", &(VERSION + 1))?;
+
+        let tran = conn.transaction()?;
+        assert!(run_migration(&tran).is_err());
+        Ok(())
+    }
+}

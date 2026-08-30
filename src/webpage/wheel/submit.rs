@@ -26,6 +26,24 @@ fn state_text(state: i32) -> &'static str {
     }
 }
 
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn state_text_maps_known_states() {
+        assert_eq!(state_text(0), "未生效");
+        assert_eq!(state_text(1), "未完成");
+    }
+
+    #[test]
+    fn state_text_falls_back_to_unknown() {
+        assert_eq!(state_text(2), "未知");
+        assert_eq!(state_text(-1), "未知");
+        assert_eq!(state_text(i32::MAX), "未知");
+    }
+}
+
 #[post("/api/wheel/submit")]
 pub async fn handler(request: web::Json<Request>) -> Result<impl Responder, ServerError> {
     let channel_penalty = {

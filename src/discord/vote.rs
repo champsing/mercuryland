@@ -444,7 +444,6 @@ impl VoteOption {
             self.nominee
         )
     }
-
     fn parse(text: &str) -> Option<Self> {
         if let Some((icon, rest)) = text.split_once(": ") {
             if let Some((desc, nominee)) = rest.rsplit_once(" (<@") {
@@ -571,5 +570,158 @@ impl From<Flag> for ReactionType {
 impl From<Flag> for u32 {
     fn from(flag: Flag) -> Self {
         flag.id()
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use serenity::all::{ReactionType, UserId};
+
+    // ---- Flag conversion tests ----
+
+    #[test]
+    fn flag_parses_all_known_emojis() {
+        for (id, emoji) in [
+            (0, "🇦🇷"),
+            (1, "🇦🇺"),
+            (2, "🇧🇷"),
+            (3, "🇨🇦"),
+            (4, "🇹🇼"),
+            (5, "🇫🇷"),
+            (6, "🇩🇪"),
+            (7, "🇮🇳"),
+            (8, "🇮🇩"),
+            (9, "🇮🇹"),
+            (10, "🇯🇵"),
+            (11, "🇰🇷"),
+            (12, "🇲🇽"),
+            (13, "🇷🇺"),
+            (14, "🇸🇦"),
+            (15, "🇿🇦"),
+            (16, "🇹🇷"),
+            (17, "🇬🇧"),
+            (18, "🇺🇸"),
+            (19, "🇪🇺"),
+        ] {
+            let flag = Flag::try_from(emoji).unwrap();
+            assert_eq!(flag, Flag(id));
+            assert_eq!(flag.str(), emoji);
+        }
+    }
+
+    #[test]
+    fn flag_rejects_unknown_emoji() {
+        assert!(Flag::try_from("🌵").is_err());
+        assert!(Flag::try_from("").is_err());
+    }
+
+    #[test]
+    fn flag_parses_reaction_type() {
+        let flag = Flag::try_from(ReactionType::Unicode("🇦🇷".to_string())).unwrap();
+        assert_eq!(flag, Flag(0));
+    }
+
+    #[test]
+    fn flag_rejects_non_unicode_reaction() {
+        let flag = Flag::try_from(ReactionType::Unicode("🌵".to_string()));
+        assert!(flag.is_err());
+    }
+
+    #[test]
+    fn flag_conversions_roundtrip() {
+        let flag = Flag(7);
+        assert_eq!(u32::from(flag), 7);
+        assert_eq!(String::from(flag), "🇮🇳".to_string());
+
+        let reaction = ReactionType::from(flag);
+        assert_eq!(Flag::try_from(reaction).unwrap(), flag);
+    }
+
+    #[test]
+    fn flag_all_returns_twenty_flags() {
+        let all = Flag::all();
+        assert_eq!(all.len(), 20);
+        assert!(all.contains(&Flag(0)));
+        assert!(all.contains(&Flag(19)));
+    }
+
+    // ---- VoteOption tests ----
+
+    #[test]
+    fn vote_option_parse_and_format_roundtrip() {
+        let text = "🇦🇷: Game A (<@123>)";
+        let option = VoteOption::parse(text).expect("should parse");
+        assert_eq!(option.flag, Flag(0));
+        assert_eq!(option.description, "Game A");
+        assert_eq!(option.nominee, UserId::new(123));
+        assert_eq!(option.to_string(), text);
+    }
+
+    #[test]
+    fn vote_option_parse_rejects_malformed_input() {
+        assert!(VoteOption::parse("").is_none());
+        assert!(VoteOption::parse("no colon here").is_none());
+        assert!(VoteOption::parse("🌵: Bad flag (<@1>)").is_none());
+        assert!(VoteOption::parse("🇦🇷: No nominee").is_none());
+        assert!(VoteOption::parse("🇦🇷: Bad nominee (<@abc>)").is_none());
+    }
+
+    // ---- Ballot tests ----
+
+    fn ballot() -> Ballot {
+        Ballot {
+            deadline: None,
+            options: HashMap::new(),
+        }
+    }
+
+    #[test]
+    fn nominate_requires_an_active_deadline() {
+        let mut ballot = ballot();
+        assert_eq!(
+            ballot.nominate("Game".to_string(), UserId::new(1)),
+            Err("当前投票尚未开始".to_string())
+        );
+        assert!(ballot.options.is_empty());
+    }
+
+    #[test]
+    fn nominate_fills_flags_until_full() {
+        let mut ballot = ballot();
+        ballot.deadline = Some(1_700_000_000);
+
+        for i in 0..20 {
+            ballot
+                .nominate(format!("Option {i}"), UserId::new(i as u64 + 1))
+                .unwrap();
+        }
+        assert_eq!(ballot.options.len(), 20);
+
+        // The 21st nomination must be rejected once all 20 flags are used.
+        assert_eq!(
+            ballot.nominate("Overflow".to_string(), UserId::new(21)),
+            Err("选项已满".to_string())
+        );
+    }
+
+    #[test]
+    fn revoke_requires_an_active_deadline() {
+        let mut ballot = ballot();
+        assert_eq!(
+            ballot.revoke(Flag(0), UserId::new(1)),
+            Err("当前投票尚未开始".to_string())
+        );
+    }
+
+    #[test]
+    fn revoke_reports_missing_nomination() {
+        let mut ballot = ballot();
+        ballot.deadline = Some(1_700_000_000);
+        // Options are empty, so this must not touch any admin config.
+        assert_eq!(
+            ballot.revoke(Flag(0), UserId::new(1)),
+            Err("未找到该提名".to_string())
+        );
     }
 }
