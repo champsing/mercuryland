@@ -14,6 +14,7 @@ This file guides Claude Code when working in this repository.
 ## Commands
 
 ### Backend (Rust)
+
 ```sh
 cargo run                # dev server on 0.0.0.0:8080
 cargo build --release    # -> target/release/mercury_land
@@ -22,6 +23,7 @@ cargo test               # unit tests (#[cfg(test)] inline modules)
 ```
 
 ### Frontend (Node)
+
 ```sh
 npm install
 npm run dev              # Vite dev server on :5173
@@ -44,6 +46,7 @@ Single tokio binary (`src/main.rs`) runs three tasks; on error each logs and res
 3. **`youtube::run`** — YouTube live-chat listener, polls every 60s, awards Mercury Coin.
 
 Source layout:
+
 - `src/webpage/` — API modules (`auth`, `wheel`, `video`, `penalty`, `leaderboard`, `setting`, `image`, `anonymous`); routes registered in `mod.rs`.
 - `src/database/` — SQLite access layer (`user`, `video`, `penalty`, `image`, `config`, `anonymous`) + `migration/` (12 sequential SQL files).
 - `src/coin/` — Mercury Coin rules and chat-command handling.
@@ -81,7 +84,7 @@ Source layout:
 
 - `main` is the protected branch; switch back to main first, pull the remote to local, and work on feature branches (e.g. `feat/…`) and open PRs to `main`.
 - `.github/workflows/` has three pipelines:
-  - `check.yml` (on PR): `cargo fmt --check`, `cargo test`, Docker build, `vue-tsc --noEmit`, Prettier check, `vite build`, and version-consistency check.
-  - `publish.yml` (push to `main`): build frontend, deploy to Cloudflare Pages via `wrangler pages deploy`.
-  - `build.yml` (on Cargo.toml version bump): multi-stage Docker build → deploy over cloudflared SSH tunnel → `docker load` + restart.
+    - `check.yml` (on PR): `cargo fmt --check`, `cargo test`, Docker build, `vue-tsc --noEmit`, Prettier check, `vite build`, and version-consistency check.
+    - `publish.yml` (push to `main`): build frontend, deploy to Cloudflare Pages via `wrangler pages deploy`.
+    - `build.yml` (on Cargo.toml version bump): multi-stage Docker build → deploy over cloudflared SSH tunnel → `docker load` + restart.
 - Commit messages are concise; for fuller background and the complete API/DB/Discord reference, see `README.md`.
