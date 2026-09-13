@@ -2,6 +2,10 @@
 import { ref, computed, onMounted, onUnmounted } from "vue";
 import { useIntersectionObserver } from "@vueuse/core";
 
+const props = defineProps<{
+    fade?: boolean;
+}>();
+
 const target = ref<HTMLElement | null>(null);
 const isVisible = ref(false);
 const rawProgress = ref(0);
@@ -64,6 +68,10 @@ onUnmounted(() => {
 // Derive a smooth opacity value from raw progress:
 // 1.0 at center, plateaus for the middle 40 % of the zone, then fades out
 const slideOpacity = computed(() => {
+    // In stacked (non-snap) mode the crossfade between slides is disabled so
+    // each slide stays fully opaque as it scrolls through the viewport.
+    if (props.fade === false) return 1;
+
     const p = rawProgress.value;
     if (p >= 0.55) return 1;
     if (p <= 0.0) return 0;

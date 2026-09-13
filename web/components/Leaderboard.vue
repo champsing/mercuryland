@@ -142,6 +142,8 @@ function podiumSize(rank: number): string {
                         preset="secondary"
                         color="warning"
                         :disabled="!!lastRefreshTime"
+                        aria-label="重新整理"
+                        title="重新整理"
                         @click="loadLeaderboard()"
                         class="refresh-btn shrink-0 ml-4 rounded-full px-3 py-1 !normal-case transition-all duration-300 hover:shadow-[0_0_12px_rgba(234,179,8,0.25)]"
                     >
@@ -152,7 +154,7 @@ function podiumSize(rank: number): string {
                             <ArrowClockwise24Filled />
                         </VaIcon>
                         <span
-                            class="ml-1 text-xs tabular-nums bg-gradient-to-r from-yellow-300 via-yellow-400 to-amber-400 bg-clip-text text-transparent font-semibold"
+                            class="ml-1 text-xs tabular-nums bg-gradient-to-r from-yellow-300 via-yellow-400 to-amber-400 bg-clip-text text-transparent font-semibold max-md:hidden"
                         >
                             {{ lastRefreshTime || "重新整理" }}
                         </span>

@@ -16,7 +16,7 @@ const hostMeta: Record<string, { label: string; color: string; bg: string }> = {
 </script>
 
 <template>
-    <div class="grid grid-cols-4 grid-rows-3 gap-24 px-10">
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-24 px-3 md:px-10">
         <a
             v-for="archive in mapArchives"
             :key="archive.season"

@@ -1,13 +1,6 @@
 <script setup lang="ts">
 import { Ref, ref, computed } from "vue";
-import {
-    VaButton,
-    VaDivider,
-    VaIcon,
-    VaSplit,
-    VaTab,
-    VaTabs,
-} from "vuestic-ui";
+import { VaButton, VaDivider, VaIcon, VaTab, VaTabs } from "vuestic-ui";
 import lawDocument from "@assets/data/law_document.json";
 import { WindowNew20Filled } from "@vicons/fluent";
 </script>
@@ -51,8 +44,8 @@ function selectDoc(doc: LawDocEntry) {
 </script>
 
 <template>
-    <VaSplit :model-value="40" disabled>
-        <template #start>
+    <div class="flex flex-col md:flex-row gap-4">
+        <div class="w-full md:w-[40%] md:shrink-0">
             <VaTabs v-model="activeGroup" class="law-tabs" vertical>
                 <template #tabs>
                     <VaTab
@@ -86,10 +79,10 @@ function selectDoc(doc: LawDocEntry) {
                 </div>
             </VaTabs>
             <VaDivider class="mt-8" />
-            <div class="text-zinc-300 text-center text-3xl mt-4">
+            <div class="text-zinc-300 text-center text-2xl md:text-3xl mt-4">
                 {{ currentDocument.name }}
             </div>
-            <div class="text-zinc-300 text-center text-lg mt-4">
+            <div class="text-zinc-300 text-center text-base md:text-lg mt-4">
                 {{ currentDocument.description }}
             </div>
             <div class="text-center mt-5">
@@ -107,19 +100,16 @@ function selectDoc(doc: LawDocEntry) {
                     <div class="ml-2 mr-2 text-center">在新分頁開啟</div>
                 </VaButton>
             </div>
-        </template>
-        <template #end>
-            <!-- need calciFrameHeight() -->
+        </div>
+        <div class="w-full md:w-[60%] md:flex-1">
             <iframe
-                class="ml-2"
-                width="100%"
-                height="600"
+                class="w-full h-[60vh] md:h-[600px]"
                 frameborder="0"
                 :src="currentDocument.url"
                 title="preview iframe"
             />
-        </template>
-    </VaSplit>
+        </div>
+    </div>
 </template>
 
 <style lang="scss">

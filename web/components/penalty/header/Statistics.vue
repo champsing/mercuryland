@@ -104,11 +104,12 @@ function clickDone() {
                     <button
                         class="stat-chart-trigger group inline-flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-sm font-medium text-teal-300/90 bg-teal-400/10 border border-teal-400/20 hover:text-teal-200 hover:bg-teal-400/20 hover:border-teal-400/35 transition-colors"
                         title="查看統計圖表"
+                        aria-label="查看統計圖表"
                         @click="showChartModal = true"
                     >
                         <div class="flex gap-2 items-center">
                             <VaIcon name="query_stats" size="large" />
-                            <span> 查看圖表 </span>
+                            <span class="max-md:hidden"> 查看圖表 </span>
                         </div>
                     </button>
                 </div>
@@ -150,7 +151,9 @@ function clickDone() {
             :mobile-fullscreen="false"
             class="stat-modal"
         >
-            <div class="flex flex-row mb-8 mr-4 justify-center items-center">
+            <div
+                class="flex flex-col sm:flex-row mb-8 justify-center items-center gap-2 sm:mr-4"
+            >
                 <div class="text-lg font-semibold text-zinc-200 flex-grow">
                     懲罰統計：{{ modal.title }}
                 </div>
@@ -174,7 +177,9 @@ function clickDone() {
                 </VaButton>
             </div>
 
-            <div class="flex justify-center text-center gap-32 ml-4">
+            <div
+                class="flex justify-center text-center gap-8 md:gap-32 ml-4 flex-wrap"
+            >
                 <div class="flex flex-col">
                     <div
                         class="text-sm mt-1"
@@ -207,7 +212,9 @@ function clickDone() {
                 </div>
             </div>
             <VaDivider class="!mt-2 !mb-1" />
-            <div class="flex text-center justify-between">
+            <div
+                class="flex flex-col sm:flex-row text-center justify-between gap-4"
+            >
                 <div class="flex flex-col">
                     <div
                         class="text-sm mt-4 mb-2"

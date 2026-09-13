@@ -223,11 +223,13 @@ onBeforeUnmount(() => {
         color="#2563eb"
         class="w-full h-full"
         gradient
+        aria-label="添加圖片"
+        title="添加圖片"
     >
-        <VaIcon class="mr-2">
+        <VaIcon class="mr-2 max-md:mr-0">
             <Photo />
         </VaIcon>
-        添加圖片
+        <span class="max-md:hidden">添加圖片</span>
     </VaButton>
 
     <VaModal

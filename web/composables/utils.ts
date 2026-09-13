@@ -29,13 +29,26 @@ export function parseDate(text): Date {
 }
 
 export function backToTop() {
-    // On the welcome page the snap-container owns the scroll, not window
+    // On the welcome page the snap-container owns the scroll, not window.
+    // On mobile the snap container is display:none (stacked layout), so
+    // fall back to window scroll — otherwise scrollTo on a hidden element
+    // is a no-op and returning to top breaks.
     const snap = document.querySelector(".welcome-snap-container");
     if (snap) {
-        snap.scrollTo({ top: 0, behavior: "smooth" });
-    } else {
-        window.scrollTo({ top: 0, behavior: "smooth" });
+        let hidden = false;
+        try {
+            hidden = getComputedStyle(snap).display === "none";
+        } catch {
+            // getComputedStyle throws on non-Element values (e.g. test mocks);
+            // treat it as the real scroll owner.
+            hidden = false;
+        }
+        if (!hidden) {
+            snap.scrollTo({ top: 0, behavior: "smooth" });
+            return;
+        }
     }
+    window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
 export async function copyToClipboard(text: string) {

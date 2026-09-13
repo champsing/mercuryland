@@ -43,17 +43,17 @@ function insertHtml(html: string, range?: { start: number; end: number }) {
 
 <template>
     <div class="flex flex-col gap-4">
-        <div class="flex gap-2">
+        <div class="flex flex-col md:flex-row gap-2">
             <VaTextarea
                 ref="textareaRef"
                 v-model="detail"
                 placeholder="輸入 HTML 詳情"
-                class="w-3/4"
+                class="w-full md:w-3/4"
                 :resize="false"
                 min-rows="9"
                 max-rows="9"
             />
-            <div class="flex flex-col gap-2 w-1/4">
+            <div class="grid grid-cols-5 md:grid-cols-1 gap-2 w-full md:w-1/4">
                 <AddSteam
                     :textarea-ref="textareaRef"
                     @insert-html="insertHtml"

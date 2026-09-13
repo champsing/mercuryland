@@ -79,17 +79,25 @@ onUnmounted(() => {
 
 <template>
     <!-- Server Open: Snap-scroll container with 5 full-screen slides -->
-    <div
-        v-if="serverInfo.online"
-        ref="snapContainer"
-        class="welcome-snap-container"
-    >
-        <SlideSection class="welcome-snap-section"><Slide1 /></SlideSection>
-        <SlideSection class="welcome-snap-section"><Slide2 /></SlideSection>
-        <SlideSection class="welcome-snap-section"><Slide3 /></SlideSection>
-        <SlideSection class="welcome-snap-section"><Slide4 /></SlideSection>
-        <SlideSection class="welcome-snap-section"><Slide5 /></SlideSection>
-    </div>
+    <template v-if="serverInfo.online">
+        <!-- Desktop: snap-scroll, one slide per page -->
+        <div ref="snapContainer" class="welcome-snap-container hidden md:block">
+            <SlideSection class="welcome-snap-section"><Slide1 /></SlideSection>
+            <SlideSection class="welcome-snap-section"><Slide2 /></SlideSection>
+            <SlideSection class="welcome-snap-section"><Slide3 /></SlideSection>
+            <SlideSection class="welcome-snap-section"><Slide4 /></SlideSection>
+            <SlideSection class="welcome-snap-section"><Slide5 /></SlideSection>
+        </div>
+
+        <!-- Mobile: normal stacked scroll, same five slides -->
+        <div class="md:hidden">
+            <SlideSection :fade="false"><Slide1 /></SlideSection>
+            <SlideSection :fade="false"><Slide2 /></SlideSection>
+            <SlideSection :fade="false"><Slide3 /></SlideSection>
+            <SlideSection :fade="false"><Slide4 /></SlideSection>
+            <SlideSection :fade="false"><Slide5 /></SlideSection>
+        </div>
+    </template>
 
     <!-- Server Closed: Show simple welcome -->
     <div
@@ -99,9 +107,13 @@ onUnmounted(() => {
     >
         <NextPageButton :page="1" />
         <div class="absolute x-center y-center text-center">
-            <div class="text-white font-bold text-8xl">水星樂園</div>
+            <div class="text-white font-bold text-5xl md:text-8xl">
+                水星樂園
+            </div>
             <VaDivider class="mt-6 mb-6 opacity-70" />
-            <div class="text-white italic text-3xl">The Mercury Land</div>
+            <div class="text-white italic text-2xl md:text-3xl">
+                The Mercury Land
+            </div>
         </div>
         <img
             src="/images/welcome/welcome.webp"

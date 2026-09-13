@@ -158,9 +158,11 @@ function save() {
         color="warning"
         class="w-full h-full"
         gradient
+        aria-label="插入懲罰"
+        title="插入懲罰"
     >
-        <VaIcon class="mr-2"><Gavel /></VaIcon>
-        插入懲罰
+        <VaIcon class="mr-2 max-md:mr-0"><Gavel /></VaIcon>
+        <span class="max-md:hidden">插入懲罰</span>
     </VaButton>
 
     <VaModal

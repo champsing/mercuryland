@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onMounted, ref } from "vue";
+import { computed, onBeforeUnmount, onMounted, ref } from "vue";
 import {
     VaButton,
     VaCard,
@@ -85,8 +85,32 @@ const baseColumns = [
     },
 ];
 
+const isMdUp = ref(true);
+const mql =
+    typeof window !== "undefined"
+        ? window.matchMedia("(min-width: 768px)")
+        : null;
+
+function handleBreakpoint() {
+    isMdUp.value = mql?.matches ?? true;
+}
+
+onMounted(() => {
+    handleBreakpoint();
+    mql?.addEventListener("change", handleBreakpoint);
+});
+
+onBeforeUnmount(() => {
+    mql?.removeEventListener("change", handleBreakpoint);
+});
+
 const columns = computed(() => {
-    const result = [...baseColumns];
+    let result = [...baseColumns];
+
+    if (!isMdUp.value) {
+        // 手機版隱藏「日期」欄（日期已顯示於詳情彈窗）
+        result = result.filter((column) => column.key !== "date");
+    }
 
     if (showActions.value) {
         result.push({
@@ -137,7 +161,7 @@ function filterPenaltyData(
 
 <template>
     <VaCard
-        class="h-[36rem] min-h-[30rem] md:h-[42rem] lg:h-[min(68vh,46rem)] lg:min-h-[34rem] overflow-hidden border border-white/10 rounded-lg !bg-[#12151b]/90"
+        class="h-[calc(100vh-14rem)] min-h-[20rem] md:h-[42rem] md:min-h-[30rem] lg:h-[min(68vh,46rem)] lg:min-h-[34rem] overflow-hidden border border-white/10 rounded-lg !bg-[#12151b]/90"
         style="--va-card-padding: 0"
     >
         <VaCardContent class="flex flex-col h-full !p-0">
@@ -151,7 +175,7 @@ function filterPenaltyData(
                 <VaDataTable
                     :items="items"
                     :columns="columns"
-                    class="w-full h-full [&_.va-data-table__table-tr]:border-b [&_.va-data-table__table-tr]:border-white/5 [&_.va-data-table__table-td]:p-[0.72rem_0.9rem] [&_.va-data-table__table-th]:p-[0.72rem_0.9rem]"
+                    class="w-full h-full [&_.va-data-table__table-tr]:border-b [&_.va-data-table__table-tr]:border-white/5 [&_.va-data-table__table-td]:p-[0.72rem_0.9rem] [&_.va-data-table__table-th]:p-[0.72rem_0.9rem] max-md:[&_.va-data-table__table-td]:p-[0.55rem_0.55rem] max-md:[&_.va-data-table__table-th]:p-[0.55rem_0.55rem]"
                     style="
                         --va-data-table-hover-color: rgba(88, 101, 242, 0.14);
                         --va-data-table-thead-background: #191d25;

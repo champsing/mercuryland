@@ -134,11 +134,13 @@ function save() {
         color="#2a475e"
         class="w-full h-full"
         gradient
+        aria-label="添加游戏"
+        title="添加游戏"
     >
-        <VaIcon class="mr-2">
+        <VaIcon class="mr-2 max-md:mr-0">
             <BrandSteam />
         </VaIcon>
-        添加游戏
+        <span class="max-md:hidden">添加游戏</span>
     </VaButton>
 
     <VaModal
