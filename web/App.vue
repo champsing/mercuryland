@@ -153,10 +153,8 @@ onBeforeUnmount(() => {
                         title="使用條款"
                         @click="backToTop()"
                     >
-                        <VaIcon name="description" />
-                        <span class="text-zinc-200 max-md:hidden"
-                            >使用條款</span
-                        >
+                        <VaIcon name="description" class="text-red-300" />
+                        <span class="text-red-300 max-md:hidden">使用條款</span>
                     </VaButton>
                     <VaDivider vertical class="mx-2" />
                     <VaButton
@@ -167,10 +165,8 @@ onBeforeUnmount(() => {
                         title="隱私政策"
                         @click="backToTop()"
                     >
-                        <VaIcon name="privacy_tip" />
-                        <span class="text-zinc-200 max-md:hidden"
-                            >隱私政策</span
-                        >
+                        <VaIcon name="privacy_tip" class="text-sky-300" />
+                        <span class="text-sky-300 max-md:hidden">隱私政策</span>
                     </VaButton>
                     <VaDivider vertical class="mx-2" />
                     <VaButton
@@ -182,8 +178,8 @@ onBeforeUnmount(() => {
                         aria-label="使用教學"
                         title="使用教學"
                     >
-                        <VaIcon name="play_circle" />
-                        <span class="text-zinc-200 max-md:hidden"
+                        <VaIcon name="play_circle" class="text-lime-300" />
+                        <span class="text-lime-300 max-md:hidden"
                             >使用教學</span
                         >
                     </VaButton>
@@ -197,10 +193,10 @@ onBeforeUnmount(() => {
                         aria-label="開源代碼"
                         title="開源代碼"
                     >
-                        <VaIcon>
+                        <VaIcon class="text-orange-300">
                             <Github />
                         </VaIcon>
-                        <span class="text-zinc-200 max-md:hidden"
+                        <span class="text-orange-300 max-md:hidden"
                             >開源代碼</span
                         >
                     </VaButton>
