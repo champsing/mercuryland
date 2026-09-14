@@ -10,7 +10,7 @@ import ContactCard from "./ContactCard.vue";
         class="contact-page min-h-[calc(100vh-48px)] text-[#f7f7f8] pt-10 pb-5 px-4 max-md:pt-16 max-md:pb-4 max-md:px-3"
     >
         <div class="w-full max-w-[1400px] mx-auto">
-            <div class="flex flex-row justify-center gap-6 pt-10">
+            <div class="flex flex-col md:flex-row justify-center gap-6 pt-10">
                 <ContactCard
                     name1="惡靈"
                     name2="Oreki"
@@ -56,12 +56,10 @@ import ContactCard from "./ContactCard.vue";
             <VaDivider class="!mb-2" />
             <div class="w-full mb-6">
                 <iframe
-                    class="m-auto"
+                    class="m-auto w-full aspect-video max-w-[800px]"
                     src="https://www.youtube.com/embed/YTB35De0Bs8?si=cP5rNghSy_WQLl8m"
                     title="YouTube video player"
                     frameborder="0"
-                    height="400"
-                    width="800"
                     allow="
                         accelerometer;
                         autoplay;

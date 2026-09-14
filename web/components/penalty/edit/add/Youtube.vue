@@ -331,9 +331,11 @@ function save() {
         color="#ff0000"
         class="w-full h-full"
         gradient
+        aria-label="添加影片"
+        title="添加影片"
     >
-        <VaIcon class="mr-2"><BrandYoutube /></VaIcon>
-        添加影片
+        <VaIcon class="mr-2 max-md:mr-0"><BrandYoutube /></VaIcon>
+        <span class="max-md:hidden">添加影片</span>
     </VaButton>
 
     <VaModal

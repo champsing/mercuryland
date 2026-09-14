@@ -2,7 +2,13 @@
 import { ref } from "vue";
 import api from "@composables/axios";
 
-import { VaButton, VaCard, VaCardContent, VaCardTitle } from "vuestic-ui";
+import {
+    VaButton,
+    VaCard,
+    VaCardContent,
+    VaCardTitle,
+    VaIcon,
+} from "vuestic-ui";
 
 const isVodDownloading = ref(false);
 
@@ -49,6 +55,7 @@ async function downloadDatabase() {
                 :loading="isVodDownloading"
                 @click="downloadDatabase"
             >
+                <VaIcon name="download" class="mr-1" />
                 下载数据库
             </VaButton>
         </VaCardContent>

@@ -62,7 +62,7 @@ onMounted(loadPenData);
     <main class="penalty-page">
         <section class="penalty-shell w-full max-w-[1680px] mx-auto">
             <section
-                class="penalty-quick-panels grid gap-4 mb-4 px-6"
+                class="penalty-quick-panels grid gap-4 mb-4 px-3 md:px-6"
                 aria-label="懲罰快速面板"
             >
                 <News :penalties="penalties" />
@@ -71,7 +71,7 @@ onMounted(loadPenData);
             </section>
 
             <section
-                class="penalty-filter-bar grid gap-3 items-center mb-4 mx-10 rounded-3xl"
+                class="penalty-filter-bar grid gap-3 items-center mb-4 mx-3 md:mx-10 rounded-3xl"
                 aria-label="懲罰篩選"
             >
                 <VaDateInput
@@ -107,7 +107,7 @@ onMounted(loadPenData);
             </section>
 
             <ViewportHeight>
-                <section class="penalty-main min-h-0 w-full px-6">
+                <section class="penalty-main min-h-0 w-full px-3 md:px-6">
                     <Table
                         :penalties="penalties"
                         :dateRange="filterDate"

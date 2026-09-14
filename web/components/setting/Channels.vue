@@ -7,6 +7,7 @@ import {
     VaCard,
     VaCardContent,
     VaCardTitle,
+    VaIcon,
     VaInput,
     VaModal,
 } from "vuestic-ui";
@@ -115,6 +116,7 @@ async function saveVoteConfig() {
                     color="info"
                     @click="openPenaltyChannelModal"
                 >
+                    <VaIcon name="chat" class="mr-1" />
                     惩罚频道
                 </VaButton>
                 <VaButton
@@ -122,6 +124,7 @@ async function saveVoteConfig() {
                     color="info"
                     @click="openCoinChannelModal"
                 >
+                    <VaIcon name="currency_exchange" class="mr-1" />
                     交易所频道
                 </VaButton>
                 <VaButton
@@ -129,6 +132,7 @@ async function saveVoteConfig() {
                     color="info"
                     @click="openVoteConfigModal"
                 >
+                    <VaIcon name="how_to_vote" class="mr-1" />
                     投票频道與訊息
                 </VaButton>
             </div>

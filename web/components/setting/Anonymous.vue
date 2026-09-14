@@ -7,6 +7,7 @@ import {
     VaCardContent,
     VaCardTitle,
     VaDataTable,
+    VaIcon,
     VaModal,
 } from "vuestic-ui";
 
@@ -106,6 +107,7 @@ const columns = [
                 :disabled="!isLoaded"
                 @click="openModal"
             >
+                <VaIcon name="chat_bubble" class="mr-1" />
                 {{ isLoaded ? "消息记录" : "加载中..." }}
             </VaButton>
         </VaCardContent>

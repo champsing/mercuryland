@@ -37,18 +37,23 @@ const steps = [
 
 <template>
     <div class="h-20" v-if="!serverOnline"></div>
-    <div class="flex flex-row justify-between" v-if="!serverOnline">
-        <div class="mt-20 w-1/2">
+    <div
+        class="flex flex-col md:flex-row justify-between gap-6"
+        v-if="!serverOnline"
+    >
+        <div class="mt-6 md:mt-20 w-full md:w-1/2">
             <div class="text-center mb-4">
-                <div class="text-6xl text-red-400">伺服器目前關閉中</div>
+                <div class="text-4xl md:text-6xl text-red-400">
+                    伺服器目前關閉中
+                </div>
             </div>
-            <div class="text-center text-2xl">
+            <div class="text-center text-xl md:text-2xl">
                 重新開放日期將於 Discord 群組另行公告。
             </div>
-            <div class="text-center text-2xl mt-4">
+            <div class="text-center text-xl md:text-2xl mt-4">
                 敬請耐心等候並留意「伺服公告」頻道，謝謝！
             </div>
-            <div class="text-center text-2xl mt-4">
+            <div class="text-center text-xl md:text-2xl mt-4">
                 伺服器開放遊玩時，請務必遵守伺服器規則，<br />以免造成不必要的損失。
                 <div class="mt-4 ml-4">
                     伺服器遊玩規則在關服期間仍可於本頁查詢。
@@ -56,10 +61,8 @@ const steps = [
             </div>
         </div>
         <iframe
-            class="m-auto"
+            class="m-auto w-full max-w-md h-[70vh]"
             src="https://discord.com/widget?id=506120681495199756&theme=dark"
-            height="600"
-            width="500"
         />
     </div>
 
@@ -76,7 +79,9 @@ const steps = [
                     >伺服器開放中</span
                 >
             </div>
-            <h1 class="text-5xl font-bold text-white tracking-tight">
+            <h1
+                class="text-3xl md:text-5xl font-bold text-white tracking-tight"
+            >
                 現在就立刻加入我們
             </h1>
         </div>

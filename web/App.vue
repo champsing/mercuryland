@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import Login from "@/components/login/Login.vue";
+import { Github } from "@vicons/fa";
 import { computed, onBeforeUnmount, onMounted, ref } from "vue";
 import { RouterLink } from "vue-router";
-import { VaButton, VaDivider, useColors } from "vuestic-ui";
+import { VaButton, VaDivider, VaIcon, useColors } from "vuestic-ui";
 import { useAuthState } from "./composables/authState";
 import { backToTop } from "./composables/utils";
 
@@ -81,7 +82,7 @@ onBeforeUnmount(() => {
                 </button>
                 <div
                     v-if="isMenuOpen"
-                    class="absolute left-0 mt-3 w-56 rounded-md border border-zinc-700 bg-zinc-900 py-2 shadow-lg"
+                    class="absolute left-0 mt-3 w-56 max-w-[calc(100vw-2rem)] rounded-md border border-zinc-700 bg-zinc-900 py-2 shadow-lg"
                 >
                     <nav class="flex flex-col">
                         <router-link
@@ -133,31 +134,39 @@ onBeforeUnmount(() => {
             <router-view />
         </div>
         <div class="bg-zinc-900 text-base text-zinc-200">
-            <div class="mx-auto flex h-12 w-[95%] items-center justify-between">
+            <div
+                class="mx-auto flex min-h-12 w-[95%] flex-col items-center justify-between gap-2 py-2 md:h-12 md:flex-row"
+            >
                 <div
-                    class="flex flex-row items-center gap-2"
+                    class="flex flex-row items-center gap-2 text-center"
                     style="font-family: playfair display"
                 >
                     <div>Copyright © 2026 The Mercury Land</div>
-                    <div>保留一切權利。</div>
+                    <div class="hidden md:block">保留一切權利。</div>
                 </div>
                 <div class="flex flex-row items-center">
                     <VaButton
                         preset="secondary"
                         :bordered="false"
                         to="tos"
+                        aria-label="使用條款"
+                        title="使用條款"
                         @click="backToTop()"
                     >
-                        <div class="text-zinc-200">使用條款</div>
+                        <VaIcon name="description" class="text-red-300" />
+                        <span class="text-red-300 max-md:hidden">使用條款</span>
                     </VaButton>
                     <VaDivider vertical class="mx-2" />
                     <VaButton
                         preset="secondary"
                         :bordered="false"
                         to="privacy"
+                        aria-label="隱私政策"
+                        title="隱私政策"
                         @click="backToTop()"
                     >
-                        <div class="text-zinc-200">隱私政策</div>
+                        <VaIcon name="privacy_tip" class="text-sky-300" />
+                        <span class="text-sky-300 max-md:hidden">隱私政策</span>
                     </VaButton>
                     <VaDivider vertical class="mx-2" />
                     <VaButton
@@ -166,8 +175,13 @@ onBeforeUnmount(() => {
                         href="https://www.youtube.com/watch?v=Yir_XAcccmY"
                         target="_blank"
                         rel="noopener noreferrer"
+                        aria-label="使用教學"
+                        title="使用教學"
                     >
-                        <div class="text-zinc-200">使用教學</div>
+                        <VaIcon name="play_circle" class="text-lime-300" />
+                        <span class="text-lime-300 max-md:hidden"
+                            >使用教學</span
+                        >
                     </VaButton>
                     <VaDivider vertical class="mx-2" />
                     <VaButton
@@ -176,8 +190,15 @@ onBeforeUnmount(() => {
                         href="https://github.com/champsing/mercuryland"
                         target="_blank"
                         rel="noopener noreferrer"
+                        aria-label="開源代碼"
+                        title="開源代碼"
                     >
-                        <div class="text-zinc-200">開源代碼</div>
+                        <VaIcon class="text-orange-300">
+                            <Github />
+                        </VaIcon>
+                        <span class="text-orange-300 max-md:hidden"
+                            >開源代碼</span
+                        >
                     </VaButton>
                 </div>
             </div>

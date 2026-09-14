@@ -69,7 +69,7 @@ const handleEditVod = (vod: VodItem) => {
     <main class="vod-page">
         <section class="w-full max-w-[1680px] mx-auto">
             <section
-                class="vod-filter-bar mx-20 rounded-3xl"
+                class="vod-filter-bar mx-4 md:mx-20 rounded-3xl"
                 aria-label="直播隨選篩選"
             >
                 <VaDateInput

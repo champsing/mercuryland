@@ -150,11 +150,13 @@ function save() {
         color="#28c9c7"
         class="w-full h-full"
         gradient
+        aria-label="詳細資料"
+        title="詳細資料"
     >
-        <VaIcon class="mr-2">
+        <VaIcon class="mr-2 max-md:mr-0">
             <InfoCircle />
         </VaIcon>
-        詳細資料
+        <span class="max-md:hidden">詳細資料</span>
     </VaButton>
 
     <VaModal
