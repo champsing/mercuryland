@@ -3,7 +3,7 @@ import { UseElementBounding } from "@vueuse/components";
 import { useWindowSize } from "@vueuse/core";
 
 const FOOTNOTE_HEIGHT = 48;
-const PADDING_BOTTOM = 4;
+const PADDING_BOTTOM = 20;
 const vh = useWindowSize().height;
 
 function height(top: number) {

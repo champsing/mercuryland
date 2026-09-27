@@ -149,7 +149,7 @@ function handleTitleClick(vod: VodItem) {
 
 <template>
     <VaCard
-        class="h-[calc(100vh-14rem)] min-h-[20rem] md:h-[42rem] md:min-h-[30rem] lg:h-full lg:min-h-[34rem] overflow-hidden border border-white/10 rounded-xl !bg-[#12151b]/90"
+        class="h-full min-h-0 md:h-[42rem] md:min-h-[30rem] lg:h-full lg:min-h-[34rem] overflow-hidden border border-white/10 rounded-xl !bg-[#12151b]/90"
         style="--va-card-padding: 0"
     >
         <VaCardContent class="flex flex-col h-full !p-0 bg-zinc-700/40">
