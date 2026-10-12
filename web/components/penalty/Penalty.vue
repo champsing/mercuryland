@@ -14,11 +14,11 @@ import Syntax from "./header/Syntax.vue";
 
 document.title = "直播懲罰 - 水星人的夢幻樂園";
 
-let filterDate = defineModel("filterDate", {
-    default: {
+let filterDate = defineModel<{ start: Date; end: Date }>("filterDate", {
+    default: () => ({
         start: new Date(1672502400000),
         end: new Date(Date.now() + 28800000),
-    },
+    }),
 });
 
 let filterStatus = defineModel("filterStatus", {
