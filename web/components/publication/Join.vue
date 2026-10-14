@@ -36,12 +36,11 @@ const steps = [
 </script>
 
 <template>
-    <div class="h-20" v-if="!serverOnline"></div>
     <div
-        class="flex flex-col md:flex-row justify-between gap-6"
+        class="flex flex-col md:flex-row md:items-center justify-between gap-6"
         v-if="!serverOnline"
     >
-        <div class="mt-6 md:mt-20 w-full md:w-1/2">
+        <div class="mt-6 md:mt-0 w-full md:w-1/2">
             <div class="text-center mb-4">
                 <div class="text-4xl md:text-6xl text-red-400">
                     伺服器目前關閉中
@@ -61,7 +60,7 @@ const steps = [
             </div>
         </div>
         <iframe
-            class="m-auto w-full max-w-md h-[70vh]"
+            class="mx-auto w-full max-w-md h-[70vh]"
             src="https://discord.com/widget?id=506120681495199756&theme=dark"
         />
     </div>

@@ -2,6 +2,13 @@
 import { onMounted, onUnmounted, ref } from "vue";
 import NextPageButton from "./NextPageButton.vue";
 
+const props = withDefaults(
+    defineProps<{
+        showScrollHint?: boolean;
+    }>(),
+    { showScrollHint: true },
+);
+
 const slideEl = ref<HTMLElement | null>(null);
 const parallaxY = ref(0);
 let raf = 0;
@@ -48,7 +55,7 @@ onUnmounted(() => {
     >
         <!-- Desktop -->
         <div class="hidden md:block">
-            <NextPageButton :page="1" />
+            <NextPageButton v-if="props.showScrollHint" :page="1" />
 
             <!-- Background image with parallax -->
             <img
