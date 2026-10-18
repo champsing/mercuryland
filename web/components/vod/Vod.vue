@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { useAuthState } from "@/composables/authState";
 import { formatDate, parseDate } from "@/composables/utils";
 import { VodItem } from "@/composables/vod";
 import api from "@composables/axios";
@@ -7,9 +6,9 @@ import { computed, onMounted, ref, Ref } from "vue";
 import { VaChip, VaDateInput, VaSelect, VaSwitch } from "vuestic-ui";
 import ViewportHeight from "../ViewportHeight.vue";
 import AddVod from "./AddVod.vue";
+import Blocks from "./Blocks.vue";
 import Rule from "./Rule.vue";
 import SetVod from "./SetVod.vue";
-import Table from "./Table.vue";
 import Calculation from "./time/Calculation.vue";
 import Summary from "./time/Summary.vue";
 
@@ -31,7 +30,6 @@ const tagList = computed(() =>
 );
 
 const computedTime = ref(0);
-const authState = useAuthState();
 const setVodRef = ref<{ open: (vod: VodItem) => void } | null>(null);
 const addVodRef = ref<{ open: () => void } | null>(null);
 const calculationModalRef = ref<{ open: () => void } | null>(null);
@@ -132,12 +130,11 @@ const handleEditVod = (vod: VodItem) => {
                     class="relative flex flex-col lg:flex-row gap-2 h-full px-6"
                 >
                     <div class="w-full h-full">
-                        <Table
+                        <Blocks
                             :dateRange="dateRange"
                             :selectedTags="selectedTags"
                             :strictFiltering="strictFiltering"
                             :vodData="vodData"
-                            :isAuthenticated="authState.isAuthenticated"
                             @updateTag="(tag: string) => updateTag(tag)"
                             @editVod="handleEditVod"
                             @addVod="addVodRef?.open()"
