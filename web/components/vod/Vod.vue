@@ -127,7 +127,7 @@ const handleEditVod = (vod: VodItem) => {
 
             <ViewportHeight>
                 <section
-                    class="relative flex flex-col lg:flex-row gap-2 h-full px-6"
+                    class="relative flex flex-col lg:flex-row gap-2 h-full px-4 md:px-20"
                 >
                     <div class="w-full h-full">
                         <Blocks

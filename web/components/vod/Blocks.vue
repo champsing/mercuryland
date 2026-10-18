@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { useAuthState } from "@/composables/authState";
 import { VodItem } from "@/composables/vod";
-import { computed } from "vue";
+import { Play24Filled } from "@vicons/fluent";
+import { computed, ref } from "vue";
 import { VaButton, VaChip, VaIcon, VaScrollContainer } from "vuestic-ui";
 
 const props = defineProps<{
@@ -47,22 +48,60 @@ const data = computed(() => {
 function videoUrl(vod: VodItem): string {
     return `${YOUTUBE_LIVE}${vod.link}`;
 }
+
+const TAG_LIMIT = 3;
+const expandedTags = ref<Set<number>>(new Set());
+
+function isTagsExpanded(vod: VodItem): boolean {
+    return expandedTags.value.has(vod.id);
+}
+
+function visibleTags(vod: VodItem): string[] {
+    return isTagsExpanded(vod) ? vod.tags : vod.tags.slice(0, TAG_LIMIT);
+}
+
+function hiddenTagCount(vod: VodItem): number {
+    return Math.max(vod.tags.length - TAG_LIMIT, 0);
+}
+
+function toggleTags(vod: VodItem) {
+    const next = new Set(expandedTags.value);
+    if (next.has(vod.id)) {
+        next.delete(vod.id);
+    } else {
+        next.add(vod.id);
+    }
+    expandedTags.value = next;
+}
 </script>
 
 <template>
     <div class="flex h-full min-h-0 flex-col">
-        <div class="mb-3 flex items-center justify-between gap-3 px-1">
-            <p class="text-sm text-zinc-400">共 {{ data.length }} 筆直播</p>
-            <VaButton
-                v-if="showActions"
-                class="rounded-lg font-extrabold [&_.va-button__content]:gap-[0.35rem]"
-                color="#5bc6a1"
-                aria-label="新增直播"
-                @click="$emit('addVod')"
+        <div class="mb-3 grid grid-cols-[1fr_auto_1fr] items-center gap-3 px-1">
+            <span aria-hidden="true" />
+            <p
+                class="flex items-center justify-center gap-1 text-sm text-zinc-400"
             >
-                <VaIcon name="add" />
-                <span class="max-md:hidden">新增直播</span>
-            </VaButton>
+                <span>共</span>
+                <span
+                    class="text-base font-bold leading-none text-zinc-100 tabular-nums"
+                >
+                    {{ data.length }}
+                </span>
+                <span>筆直播</span>
+            </p>
+            <div class="flex justify-end">
+                <VaButton
+                    v-if="showActions"
+                    class="rounded-lg font-extrabold [&_.va-button__content]:gap-[0.35rem]"
+                    color="#5bc6a1"
+                    aria-label="新增直播"
+                    @click="$emit('addVod')"
+                >
+                    <VaIcon name="add" />
+                    <span class="max-md:hidden">新增直播</span>
+                </VaButton>
+            </div>
         </div>
 
         <VaScrollContainer
@@ -73,7 +112,7 @@ function videoUrl(vod: VodItem): string {
         >
             <div
                 v-if="data.length"
-                class="grid w-full gap-3 pb-24 pr-1 [grid-template-columns:repeat(auto-fill,minmax(300px,1fr))] max-md:grid-cols-1"
+                class="grid w-full grid-cols-1 gap-3 pb-24 pr-1 md:grid-cols-2 lg:grid-cols-3"
             >
                 <article
                     v-for="vod in data"
@@ -87,7 +126,7 @@ function videoUrl(vod: VodItem): string {
                             {{ vod.date }}
                         </span>
                         <h3
-                            class="line-clamp-2 break-words text-[14px] font-bold leading-snug text-white"
+                            class="line-clamp-2 break-words text-[22px] font-bold leading-snug text-white"
                         >
                             <a
                                 :href="videoUrl(vod)"
@@ -101,9 +140,9 @@ function videoUrl(vod: VodItem): string {
                         </h3>
                     </header>
 
-                    <div class="flex flex-wrap gap-1.5">
+                    <div class="flex flex-wrap items-center gap-1.5">
                         <VaChip
-                            v-for="tag in vod.tags"
+                            v-for="tag in visibleTags(vod)"
                             :key="tag"
                             color="#4feed1"
                             outline
@@ -113,6 +152,24 @@ function videoUrl(vod: VodItem): string {
                         >
                             {{ tag }}
                         </VaChip>
+                        <button
+                            v-if="hiddenTagCount(vod) && !isTagsExpanded(vod)"
+                            type="button"
+                            class="inline-flex items-center rounded-full border border-[#4feed1] px-2 py-0.5 text-xs font-semibold text-[#4feed1] transition-colors hover:bg-[#4feed1]/10"
+                            :aria-label="`展開其餘 ${hiddenTagCount(vod)} 個 TAG`"
+                            @click="toggleTags(vod)"
+                        >
+                            +{{ hiddenTagCount(vod) }}
+                        </button>
+                        <button
+                            v-else-if="isTagsExpanded(vod)"
+                            type="button"
+                            class="inline-flex h-6 w-6 items-center justify-center rounded-full border border-[#4feed1] text-[#4feed1] transition-colors hover:bg-[#4feed1]/10"
+                            aria-label="收合 TAG"
+                            @click="toggleTags(vod)"
+                        >
+                            <VaIcon name="expand_less" size="small" />
+                        </button>
                         <span
                             v-if="!vod.tags.length"
                             class="text-xs text-zinc-500"
@@ -150,7 +207,9 @@ function videoUrl(vod: VodItem): string {
                                 :title="`觀看直播：${vod.title}`"
                                 class="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-[#ff0000] text-white shadow-lg shadow-black/30 transition-all duration-200 hover:scale-105 hover:bg-[#e60000] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#ff0000]"
                             >
-                                <VaIcon name="play_arrow" color="#ffffff" />
+                                <VaIcon color="#ffffff" size="1.5rem">
+                                    <Play24Filled />
+                                </VaIcon>
                             </a>
                         </div>
                     </footer>
