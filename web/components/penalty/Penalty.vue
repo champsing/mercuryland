@@ -4,9 +4,10 @@ import { formatDate, parseDate } from "@/composables/utils";
 import api from "@composables/axios";
 import { onMounted, ref } from "vue";
 import { VaDateInput, VaIcon, VaInput, VaSelect } from "vuestic-ui";
+import ViewportHeight from "../ViewportHeight.vue";
 import AddPenalty from "./AddPenalty.vue";
+import Blocks from "./Blocks.vue";
 import Rule from "./Rule.vue";
-import Table from "./Table.vue";
 import EditPenalty from "./edit/EditPenalty.vue";
 import News from "./header/News.vue";
 import Statistics from "./header/Statistics.vue";
@@ -107,8 +108,10 @@ onMounted(loadPenData);
             </section>
 
             <ViewportHeight>
-                <section class="penalty-main min-h-0 w-full px-3 md:px-6">
-                    <Table
+                <section
+                    class="penalty-main flex h-full min-h-0 w-full flex-col px-3 md:px-6"
+                >
+                    <Blocks
                         :penalties="penalties"
                         :dateRange="filterDate"
                         :state="filterStatus"
