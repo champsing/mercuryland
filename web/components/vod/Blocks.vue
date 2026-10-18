@@ -4,6 +4,7 @@ import { VodItem } from "@/composables/vod";
 import { Play24Filled } from "@vicons/fluent";
 import { computed, ref } from "vue";
 import { VaButton, VaChip, VaIcon, VaScrollContainer } from "vuestic-ui";
+import SortMenu from "../SortMenu.vue";
 
 const props = defineProps<{
     dateRange: { start: Date; end: Date };
@@ -21,6 +22,22 @@ const authState = useAuthState();
 const showActions = computed(() => authState.isAuthenticated);
 
 const YOUTUBE_LIVE = "https://youtube.com/live/";
+
+const sortField = ref<string>("date");
+const sortDirection = ref<"asc" | "desc">("desc");
+
+const sortOptions = [
+    { value: "date", label: "日期", defaultDirection: "desc" as const },
+    { value: "title", label: "名稱", defaultDirection: "asc" as const },
+];
+
+function compareVod(lhs: VodItem, rhs: VodItem): number {
+    const result =
+        sortField.value === "title"
+            ? lhs.title.localeCompare(rhs.title, "zh-Hant")
+            : lhs.date.localeCompare(rhs.date);
+    return sortDirection.value === "asc" ? result : -result;
+}
 
 const data = computed(() => {
     return props.vodData
@@ -42,7 +59,7 @@ const data = computed(() => {
 
             return v.tags.some((tag) => props.selectedTags.includes(tag));
         })
-        .sort((lhs, rhs) => rhs.date.localeCompare(lhs.date));
+        .sort(compareVod);
 });
 
 function videoUrl(vod: VodItem): string {
@@ -90,7 +107,12 @@ function toggleTags(vod: VodItem) {
                 </span>
                 <span>筆直播</span>
             </p>
-            <div class="flex justify-end">
+            <div class="flex items-center justify-end gap-2">
+                <SortMenu
+                    v-model:field="sortField"
+                    v-model:direction="sortDirection"
+                    :options="sortOptions"
+                />
                 <VaButton
                     v-if="showActions"
                     class="rounded-lg font-extrabold [&_.va-button__content]:gap-[0.35rem]"
@@ -121,7 +143,7 @@ function toggleTags(vod: VodItem) {
                 >
                     <header class="flex min-w-0 flex-col gap-1.5">
                         <span
-                            class="text-xs font-semibold tracking-wide text-[#5bc6a1] tabular-nums"
+                            class="text-base font-semibold tracking-wide text-[#5bc6a1] tabular-nums"
                         >
                             {{ vod.date }}
                         </span>

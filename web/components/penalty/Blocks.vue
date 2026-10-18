@@ -6,6 +6,7 @@ import { VodItem } from "@/composables/vod";
 import api from "@composables/axios";
 import { computed, onMounted, ref } from "vue";
 import { VaButton, VaChip, VaIcon, VaScrollContainer } from "vuestic-ui";
+import SortMenu from "../SortMenu.vue";
 import Detail from "./Detail.vue";
 
 const props = defineProps<{
@@ -41,13 +42,34 @@ const YOUTUBE_LIVE = "https://youtube.com/live/";
 
 const modal = ref(null as number | null);
 
+const sortField = ref<string>("date");
+const sortDirection = ref<"asc" | "desc">("desc");
+
+const sortOptions = [
+    { value: "date", label: "日期", defaultDirection: "desc" as const },
+    { value: "name", label: "名稱", defaultDirection: "asc" as const },
+    { value: "state", label: "狀態", defaultDirection: "asc" as const },
+];
+
+function comparePenalty(lhs: PenItem, rhs: PenItem): number {
+    let result = 0;
+    if (sortField.value === "name") {
+        result = lhs.name.localeCompare(rhs.name, "zh-Hant");
+    } else if (sortField.value === "state") {
+        result = lhs.state - rhs.state;
+    } else {
+        result = lhs.date.localeCompare(rhs.date);
+    }
+    return sortDirection.value === "asc" ? result : -result;
+}
+
 const items = computed(() =>
     filterPenaltyData(
         props.penalties,
         props.dateRange,
         props.state,
         props.search,
-    ).slice(),
+    ).sort(comparePenalty),
 );
 
 const vodLinksByDate = computed(() => {
@@ -97,25 +119,42 @@ function filterPenaltyData(
             (v) =>
                 search == "" ||
                 v.name.toLowerCase().includes(search.toLowerCase()),
-        )
-        .sort((lhs, rhs) => rhs.date.localeCompare(lhs.date));
+        );
 }
 </script>
 
 <template>
     <div class="flex h-full min-h-0 flex-col">
-        <div class="mb-3 flex items-center justify-between gap-3 px-1">
-            <p class="text-sm text-zinc-400">共 {{ items.length }} 筆懲罰</p>
-            <VaButton
-                v-if="showActions"
-                class="rounded-lg font-extrabold [&_.va-button__content]:gap-[0.35rem]"
-                color="#5865f2"
-                aria-label="新增懲罰"
-                @click="$emit('addPenalty')"
+        <div class="mb-3 grid grid-cols-[1fr_auto_1fr] items-center gap-3 px-1">
+            <span aria-hidden="true" />
+            <p
+                class="flex items-center justify-center gap-1 text-sm text-zinc-400"
             >
-                <VaIcon name="add" />
-                <span class="max-md:hidden">新增懲罰</span>
-            </VaButton>
+                <span>共</span>
+                <span
+                    class="text-base font-bold leading-none text-zinc-100 tabular-nums"
+                >
+                    {{ items.length }}
+                </span>
+                <span>筆懲罰</span>
+            </p>
+            <div class="flex items-center justify-end gap-2">
+                <SortMenu
+                    v-model:field="sortField"
+                    v-model:direction="sortDirection"
+                    :options="sortOptions"
+                />
+                <VaButton
+                    v-if="showActions"
+                    class="rounded-lg font-extrabold [&_.va-button__content]:gap-[0.35rem]"
+                    color="#5865f2"
+                    aria-label="新增懲罰"
+                    @click="$emit('addPenalty')"
+                >
+                    <VaIcon name="add" />
+                    <span class="max-md:hidden">新增懲罰</span>
+                </VaButton>
+            </div>
         </div>
 
         <VaScrollContainer
@@ -126,7 +165,7 @@ function filterPenaltyData(
         >
             <div
                 v-if="items.length"
-                class="grid w-full gap-3 pb-4 pr-1 [grid-template-columns:repeat(auto-fill,minmax(300px,1fr))] max-md:grid-cols-1"
+                class="grid w-full grid-cols-1 gap-3 pb-4 pr-1 md:grid-cols-2 lg:grid-cols-3"
             >
                 <article
                     v-for="penalty in items"
@@ -137,15 +176,37 @@ function filterPenaltyData(
                         class="flex min-w-0 items-start justify-between gap-3"
                     >
                         <div class="flex min-w-0 flex-col gap-1.5">
-                            <span
-                                class="flex items-center gap-1.5 text-xs font-semibold tracking-wide text-[#8ea2ff] tabular-nums"
-                            >
-                                <VaIcon name="event" size="small" />
-                                {{ penalty.date }}
-                            </span>
+                            <div class="flex items-center gap-2">
+                                <span
+                                    class="flex items-center gap-1.5 text-base font-semibold tracking-wide text-[#8ea2ff] tabular-nums"
+                                >
+                                    <VaIcon name="event" size="small" />
+                                    {{ penalty.date }}
+                                </span>
+                                <button
+                                    type="button"
+                                    :disabled="
+                                        !vodLinksOfDate(penalty.date).length
+                                    "
+                                    :aria-label="`觀看 ${penalty.date} 的直播`"
+                                    :title="
+                                        vodLinksOfDate(penalty.date).length
+                                            ? `觀看 ${penalty.date} 的直播`
+                                            : '此日期尚無直播影片'
+                                    "
+                                    class="inline-flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-[#ff0000] text-white transition-colors hover:bg-[#e60000] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#ff0000] disabled:cursor-not-allowed disabled:bg-zinc-600 disabled:opacity-50 disabled:hover:bg-zinc-600"
+                                    @click="openVodOfDate(penalty.date)"
+                                >
+                                    <VaIcon
+                                        name="play_arrow"
+                                        color="#ffffff"
+                                        size="0.75rem"
+                                    />
+                                </button>
+                            </div>
                             <button
                                 type="button"
-                                class="line-clamp-2 cursor-pointer break-words border-0 bg-transparent p-0 text-left text-[14px] font-bold leading-snug text-white transition-colors hover:text-[#8ea2ff]"
+                                class="line-clamp-2 cursor-pointer break-words border-0 bg-transparent p-0 text-left text-[22px] font-bold leading-snug text-white transition-colors hover:text-[#8ea2ff]"
                                 :title="penalty.name"
                                 @click="modal = penalty.id"
                             >
@@ -168,30 +229,18 @@ function filterPenaltyData(
                         </VaChip>
                     </header>
 
-                    <footer class="mt-auto flex justify-end gap-2 pt-1">
-                        <VaButton
-                            v-if="showActions"
-                            class="h-9 w-9 rounded-lg bg-[#8ea2ff]/10"
-                            preset="plain"
-                            color="#8ea2ff"
+                    <footer
+                        v-if="showActions"
+                        class="mt-auto flex justify-end gap-2 pt-1"
+                    >
+                        <button
+                            type="button"
+                            class="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-[#a855f7] text-white shadow-md shadow-black/20 transition-colors hover:bg-[#9333ea] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#a855f7]"
                             aria-label="編輯懲罰"
+                            title="編輯懲罰"
                             @click="emit('editPenalty', penalty)"
                         >
                             <VaIcon name="edit" size="small" />
-                        </VaButton>
-                        <button
-                            type="button"
-                            :disabled="!vodLinksOfDate(penalty.date).length"
-                            :aria-label="`觀看 ${penalty.date} 的直播`"
-                            :title="
-                                vodLinksOfDate(penalty.date).length
-                                    ? `觀看 ${penalty.date} 的直播`
-                                    : '此日期尚無直播影片'
-                            "
-                            class="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-[#ff0000] text-white shadow-lg shadow-black/30 transition-all duration-200 hover:scale-105 hover:bg-[#e60000] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#ff0000] disabled:cursor-not-allowed disabled:bg-zinc-600 disabled:opacity-50 disabled:hover:scale-100 disabled:hover:bg-zinc-600"
-                            @click="openVodOfDate(penalty.date)"
-                        >
-                            <VaIcon name="play_arrow" color="#ffffff" />
                         </button>
                     </footer>
                 </article>

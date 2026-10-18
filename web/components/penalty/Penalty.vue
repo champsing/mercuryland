@@ -4,6 +4,7 @@ import { formatDate, parseDate } from "@/composables/utils";
 import api from "@composables/axios";
 import { onMounted, ref } from "vue";
 import { VaDateInput, VaIcon, VaInput, VaSelect } from "vuestic-ui";
+import ViewportHeight from "../ViewportHeight.vue";
 import AddPenalty from "./AddPenalty.vue";
 import Blocks from "./Blocks.vue";
 import Rule from "./Rule.vue";
