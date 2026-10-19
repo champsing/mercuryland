@@ -4,6 +4,7 @@ import { PenItem, stateColor, stateString } from "@/composables/penalty";
 import { openLinks } from "@/composables/utils";
 import { VodItem } from "@/composables/vod";
 import api from "@composables/axios";
+import { Play24Filled } from "@vicons/fluent";
 import { computed, onMounted, ref } from "vue";
 import { VaButton, VaChip, VaIcon, VaScrollContainer } from "vuestic-ui";
 import SortMenu from "../SortMenu.vue";
@@ -176,34 +177,12 @@ function filterPenaltyData(
                         class="flex min-w-0 items-start justify-between gap-3"
                     >
                         <div class="flex min-w-0 flex-col gap-1.5">
-                            <div class="flex items-center gap-2">
-                                <span
-                                    class="flex items-center gap-1.5 text-base font-semibold tracking-wide text-[#8ea2ff] tabular-nums"
-                                >
-                                    <VaIcon name="event" size="small" />
-                                    {{ penalty.date }}
-                                </span>
-                                <button
-                                    type="button"
-                                    :disabled="
-                                        !vodLinksOfDate(penalty.date).length
-                                    "
-                                    :aria-label="`觀看 ${penalty.date} 的直播`"
-                                    :title="
-                                        vodLinksOfDate(penalty.date).length
-                                            ? `觀看 ${penalty.date} 的直播`
-                                            : '此日期尚無直播影片'
-                                    "
-                                    class="inline-flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-[#ff0000] text-white transition-colors hover:bg-[#e60000] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#ff0000] disabled:cursor-not-allowed disabled:bg-zinc-600 disabled:opacity-50 disabled:hover:bg-zinc-600"
-                                    @click="openVodOfDate(penalty.date)"
-                                >
-                                    <VaIcon
-                                        name="play_arrow"
-                                        color="#ffffff"
-                                        size="0.75rem"
-                                    />
-                                </button>
-                            </div>
+                            <span
+                                class="flex items-center gap-1.5 text-base font-semibold tracking-wide text-[#8ea2ff] tabular-nums"
+                            >
+                                <VaIcon name="event" size="small" />
+                                {{ penalty.date }}
+                            </span>
                             <button
                                 type="button"
                                 class="line-clamp-2 cursor-pointer break-words border-0 bg-transparent p-0 text-left text-[22px] font-bold leading-snug text-white transition-colors hover:text-[#8ea2ff]"
@@ -230,17 +209,34 @@ function filterPenaltyData(
                     </header>
 
                     <footer
-                        v-if="showActions"
-                        class="mt-auto flex justify-end gap-2 pt-1"
+                        class="mt-auto flex items-center justify-end gap-2 pt-1"
                     >
                         <button
+                            v-if="showActions"
                             type="button"
-                            class="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-[#a855f7] text-white shadow-md shadow-black/20 transition-colors hover:bg-[#9333ea] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#a855f7]"
+                            class="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#a855f7] text-white shadow-md shadow-black/20 transition-colors hover:bg-[#9333ea] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#a855f7]"
                             aria-label="編輯懲罰"
                             title="編輯懲罰"
                             @click="emit('editPenalty', penalty)"
                         >
                             <VaIcon name="edit" size="small" />
+                        </button>
+                        <button
+                            type="button"
+                            :disabled="!vodLinksOfDate(penalty.date).length"
+                            :aria-label="`觀看 ${penalty.date} 的直播`"
+                            :title="
+                                vodLinksOfDate(penalty.date).length
+                                    ? `觀看 ${penalty.date} 的直播`
+                                    : '此日期尚無直播影片'
+                            "
+                            class="inline-flex h-9 shrink-0 items-center justify-center gap-1.5 rounded-full bg-[#ff0000] px-4 text-sm font-semibold text-white shadow-md shadow-black/20 transition-colors hover:bg-[#e60000] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#ff0000] disabled:cursor-not-allowed disabled:bg-zinc-600 disabled:opacity-50 disabled:hover:bg-zinc-600"
+                            @click="openVodOfDate(penalty.date)"
+                        >
+                            <VaIcon color="#ffffff" size="1.25rem">
+                                <Play24Filled />
+                            </VaIcon>
+                            <span>播放</span>
                         </button>
                     </footer>
                 </article>
