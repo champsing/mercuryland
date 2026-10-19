@@ -6,7 +6,7 @@ import { VodItem } from "@/composables/vod";
 import api from "@composables/axios";
 import { Play24Filled } from "@vicons/fluent";
 import { computed, onMounted, ref } from "vue";
-import { VaButton, VaChip, VaIcon, VaScrollContainer } from "vuestic-ui";
+import { VaButton, VaIcon, VaScrollContainer } from "vuestic-ui";
 import SortMenu from "../SortMenu.vue";
 import Detail from "./Detail.vue";
 
@@ -91,13 +91,6 @@ function vodLinksOfDate(date: string): string[] {
 
 function openVodOfDate(date: string) {
     openLinks(vodLinksOfDate(date));
-}
-
-function handleStateKeydown(event: KeyboardEvent, state: number) {
-    if (event.key !== "Enter" && event.key !== " ") return;
-
-    event.preventDefault();
-    emit("updateState", state);
 }
 
 function filterPenaltyData(
@@ -193,19 +186,15 @@ function filterPenaltyData(
                             </button>
                         </div>
 
-                        <VaChip
-                            outline
-                            size="small"
-                            role="button"
-                            tabindex="0"
-                            :color="stateColor(penalty.state, 'raw')"
-                            class="shrink-0 cursor-pointer"
+                        <button
+                            type="button"
+                            :class="stateColor(penalty.state, 'bg')"
+                            class="shrink-0 cursor-pointer rounded-lg border-0 px-2.5 py-1 text-sm font-bold leading-none text-white shadow-sm shadow-black/25 transition-opacity hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#8ea2ff]"
                             :title="`點擊篩選：${stateString(penalty.state)}`"
                             @click="emit('updateState', penalty.state)"
-                            @keydown="handleStateKeydown($event, penalty.state)"
                         >
-                            ● {{ stateString(penalty.state) }}
-                        </VaChip>
+                            {{ stateString(penalty.state) }}
+                        </button>
                     </header>
 
                     <footer
