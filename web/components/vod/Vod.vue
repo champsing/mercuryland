@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { formatDate, parseDate } from "@/composables/utils";
+import { useBlockViewMode } from "@/composables/viewMode";
 import { VodItem } from "@/composables/vod";
 import api from "@composables/axios";
 import { computed, onMounted, ref, Ref } from "vue";
@@ -25,6 +26,10 @@ const dateRange = defineModel<{ start: Date; end: Date }>("dateRange", {
 const strictFiltering = ref(false);
 const selectedTags: Ref<string[]> = ref([]);
 const vodData = ref<VodItem[]>([]);
+
+// 卡片（3 欄）或表格（單欄單列）檢視，選擇會記在 localStorage。
+const viewMode = useBlockViewMode("vod");
+
 const tagList = computed(() =>
     [...new Set(vodData.value.flatMap((x) => x.tags))].sort(),
 );
@@ -135,6 +140,7 @@ const handleEditVod = (vod: VodItem) => {
                             :selectedTags="selectedTags"
                             :strictFiltering="strictFiltering"
                             :vodData="vodData"
+                            v-model:viewMode="viewMode"
                             @updateTag="(tag: string) => updateTag(tag)"
                             @editVod="handleEditVod"
                             @addVod="addVodRef?.open()"

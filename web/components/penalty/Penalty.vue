@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { PenItem, stateString } from "@/composables/penalty";
+import { useCollapsed } from "@/composables/collapsible";
 import { formatDate, parseDate } from "@/composables/utils";
+import { useBlockViewMode } from "@/composables/viewMode";
 import api from "@composables/axios";
 import { onMounted, ref } from "vue";
 import { VaDateInput, VaIcon, VaInput, VaSelect } from "vuestic-ui";
@@ -43,6 +45,12 @@ const valueByFinish = (option: { valueBy: number }) => option.valueBy;
 
 const penalties = ref<PenItem[]>([]);
 
+// 卡片（3 欄）或表格（單欄單列）檢視，選擇會記在 localStorage。
+const viewMode = useBlockViewMode("penalty");
+
+// 三個快速面板（最新懲罰 / 統計 / 語法）可整組收合，狀態同樣會記住。
+const panelsCollapsed = useCollapsed("penalty-quick-panels");
+
 const addPenaltyRef = ref<{ open: () => void } | null>(null);
 const setPenaltyRef = ref<{ open: (penalty: PenItem) => void } | null>(null);
 
@@ -62,14 +70,36 @@ onMounted(loadPenData);
 <template>
     <main class="penalty-page">
         <section class="penalty-shell w-full max-w-[1680px] mx-auto">
-            <section
-                class="penalty-quick-panels grid gap-4 mb-4 px-3 md:px-6"
-                aria-label="懲罰快速面板"
-            >
-                <News :penalties="penalties" />
-                <Statistics :penalties="penalties" />
-                <Syntax />
-            </section>
+            <div class="mb-2 flex justify-end px-3 md:px-6">
+                <button
+                    type="button"
+                    class="inline-flex cursor-pointer items-center gap-1.5 rounded-lg border border-white/10 bg-zinc-900/60 px-3 py-1 text-xs font-semibold text-zinc-300 transition-colors hover:border-[#8ea2ff]/40 hover:bg-zinc-800/70 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#8ea2ff]"
+                    :aria-expanded="!panelsCollapsed"
+                    aria-controls="penalty-quick-panels"
+                    @click="panelsCollapsed = !panelsCollapsed"
+                >
+                    <VaIcon
+                        :name="panelsCollapsed ? 'unfold_more' : 'unfold_less'"
+                        size="small"
+                    />
+                    <span>{{
+                        panelsCollapsed ? "展開快速面板" : "收合快速面板"
+                    }}</span>
+                </button>
+            </div>
+
+            <Transition name="quick-panels">
+                <section
+                    v-show="!panelsCollapsed"
+                    id="penalty-quick-panels"
+                    class="penalty-quick-panels grid gap-4 mb-4 px-3 md:px-6"
+                    aria-label="懲罰快速面板"
+                >
+                    <News :penalties="penalties" />
+                    <Statistics :penalties="penalties" />
+                    <Syntax />
+                </section>
+            </Transition>
 
             <section
                 class="penalty-filter-bar grid gap-3 items-center mb-4 mx-3 md:mx-10 rounded-3xl"
@@ -116,6 +146,7 @@ onMounted(loadPenData);
                         :dateRange="filterDate"
                         :state="filterStatus"
                         :search="filterSearch"
+                        v-model:viewMode="viewMode"
                         @updateState="
                             (state) => {
                                 filterStatus == null
@@ -154,6 +185,19 @@ onMounted(loadPenData);
 
 .penalty-quick-panels {
     grid-template-columns: minmax(18rem, 1.15fr) repeat(2, minmax(16rem, 1fr));
+}
+
+.quick-panels-enter-active,
+.quick-panels-leave-active {
+    transition:
+        opacity 0.18s ease,
+        transform 0.18s ease;
+}
+
+.quick-panels-enter-from,
+.quick-panels-leave-to {
+    opacity: 0;
+    transform: translateY(-0.4rem);
 }
 
 .penalty-quick-panels .latest-card__content,

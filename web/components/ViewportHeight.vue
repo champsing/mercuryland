@@ -1,26 +1,22 @@
 <script setup lang="ts">
+import { availableHeight } from "@/composables/viewportHeight";
 import { UseElementBounding } from "@vueuse/components";
 import { useWindowSize } from "@vueuse/core";
 
-const FOOTNOTE_HEIGHT = 48;
-const PADDING_BOTTOM = 20;
 const vh = useWindowSize().height;
 
 function height(top: number) {
-    let height =
-        vh.value - window.scrollY - top - FOOTNOTE_HEIGHT - PADDING_BOTTOM;
-    return height;
+    return availableHeight({
+        viewportHeight: vh.value,
+        scrollY: window.scrollY,
+        top,
+    });
 }
 </script>
 
 <template>
     <UseElementBounding v-slot="{ top }">
-        <div
-            :style="{
-                height: `${height(top)}px`,
-                paddingBottom: `${PADDING_BOTTOM}px`,
-            }"
-        >
+        <div :style="{ height: `${height(top)}px` }">
             <slot></slot>
         </div>
     </UseElementBounding>
