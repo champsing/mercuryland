@@ -211,16 +211,16 @@ function toggleTags(vod: VodItem) {
                         </div>
 
                         <div class="flex items-center gap-2">
-                            <VaButton
+                            <button
                                 v-if="showActions"
-                                class="h-9 w-9 rounded-lg bg-[#5bc6a1]/10"
-                                preset="plain"
-                                color="#5bc6a1"
+                                type="button"
+                                class="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#5bc6a1] text-white shadow-md shadow-black/20 transition-colors hover:bg-[#3db088] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#5bc6a1]"
                                 aria-label="編輯直播"
+                                title="編輯直播"
                                 @click="emit('editVod', vod)"
                             >
                                 <VaIcon name="edit" size="small" />
-                            </VaButton>
+                            </button>
                             <a
                                 :href="videoUrl(vod)"
                                 target="_blank"
