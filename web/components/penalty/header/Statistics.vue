@@ -109,7 +109,7 @@ function clickDone() {
                     >
                         <div class="flex gap-2 items-center">
                             <VaIcon name="query_stats" size="large" />
-                            <span class="max-md:hidden"> 查看圖表 </span>
+                            <span> 查看圖表 </span>
                         </div>
                     </button>
                 </div>

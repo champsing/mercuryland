@@ -46,23 +46,29 @@ const latestPenalty = computed(() =>
 
             <div
                 v-if="latestPenalty"
-                class="flex flex-col gap-3 text-[0.82rem] text-[#aeb7c7] md:flex-row md:flex-wrap md:items-center md:gap-x-[0.45rem] md:gap-y-3"
+                class="flex flex-wrap items-center gap-x-[0.45rem] gap-y-3 text-[0.82rem] text-[#aeb7c7]"
             >
-                <strong
-                    class="text-[0.9rem] font-black leading-none text-[#f7f7f8]"
+                <div
+                    class="flex flex-wrap items-center gap-x-[0.45rem] gap-y-2"
                 >
-                    #{{ latestPenalty.id }}
-                </strong>
-                <span>{{ latestPenalty.date }}</span>
-                <VaChip
-                    readonly
-                    outline
-                    size="small"
-                    :color="stateColor(latestPenalty.state, 'raw')"
-                    class="min-w-[5rem] justify-center"
-                >
-                    ● {{ stateString(latestPenalty.state) }}
-                </VaChip>
+                    <strong
+                        class="text-[0.9rem] font-black leading-none text-[#f7f7f8]"
+                    >
+                        #{{ latestPenalty.id }}
+                    </strong>
+                    <span class="whitespace-nowrap">{{
+                        latestPenalty.date
+                    }}</span>
+                    <VaChip
+                        readonly
+                        outline
+                        size="small"
+                        :color="stateColor(latestPenalty.state, 'raw')"
+                        class="min-w-[5rem] justify-center"
+                    >
+                        ● {{ stateString(latestPenalty.state) }}
+                    </VaChip>
+                </div>
                 <p
                     class="w-full break-words text-[1.12rem] font-extrabold leading-[1.45] text-[#f7f7f8] md:w-auto md:flex-1"
                 >
