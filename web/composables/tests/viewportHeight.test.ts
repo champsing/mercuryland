@@ -3,7 +3,7 @@ import {
     availableHeight,
     FOOTNOTE_HEIGHT,
     MIN_CONTENT_HEIGHT,
-} from "./viewportHeight";
+} from "../viewportHeight";
 
 describe("availableHeight", () => {
     it("fills the space between the wrapper and the footer", () => {
@@ -74,5 +74,48 @@ describe("availableHeight", () => {
                 footnoteHeight: 0,
             }),
         ).toBe(700);
+    });
+
+    it("adds `extraHeight` back to the result", () => {
+        const base = availableHeight({
+            viewportHeight: 1000,
+            scrollY: 0,
+            top: 200,
+        });
+        const withExtra = availableHeight({
+            viewportHeight: 1000,
+            scrollY: 0,
+            top: 200,
+            extraHeight: 150,
+        });
+
+        expect(withExtra).toBe(base + 150);
+    });
+
+    it("keeps the area stable when a collapsible panel above is opened", () => {
+        const collapsed = availableHeight({
+            viewportHeight: 1000,
+            scrollY: 0,
+            top: 250,
+        });
+        const expanded = availableHeight({
+            viewportHeight: 1000,
+            scrollY: 0,
+            top: 400,
+            extraHeight: 150,
+        });
+
+        expect(expanded).toBe(collapsed);
+    });
+
+    it("still clamps to the minimum when `extraHeight` is supplied", () => {
+        expect(
+            availableHeight({
+                viewportHeight: 667,
+                scrollY: 0,
+                top: 830,
+                extraHeight: 20,
+            }),
+        ).toBe(MIN_CONTENT_HEIGHT);
     });
 });

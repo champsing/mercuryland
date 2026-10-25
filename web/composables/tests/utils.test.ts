@@ -6,7 +6,7 @@ import {
     formatDate,
     openLinks,
     parseDate,
-} from "./utils";
+} from "../utils";
 
 afterEach(() => {
     vi.restoreAllMocks();

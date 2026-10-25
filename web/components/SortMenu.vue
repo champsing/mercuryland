@@ -45,8 +45,12 @@ function select(option: SortOption) {
                 aria-label="排序"
                 :aria-expanded="isOpen"
             >
-                <VaIcon name="filter_list" size="large" class="mr-2" />
-                <div class="text-lg text-center">排序</div>
+                <VaIcon
+                    name="filter_list"
+                    size="large"
+                    class="mr-2 max-md:mr-0"
+                />
+                <div class="text-lg text-center max-md:hidden">排序</div>
             </VaButton>
         </template>
 

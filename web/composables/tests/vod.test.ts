@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { formatHMS, parseHMS } from "./vod";
+import { formatHMS, parseHMS } from "../vod";
 
 describe("parseHMS", () => {
     it("parses seconds only", () => {

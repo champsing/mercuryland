@@ -1,5 +1,5 @@
 import { describe, expect, it, beforeEach } from "vitest";
-import { readStorage, writeStorage } from "./storage";
+import { readStorage, writeStorage } from "../storage";
 
 describe("readStorage / writeStorage", () => {
     beforeEach(() => localStorage.clear());

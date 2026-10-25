@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { useAuthState } from "./authState";
+import { useAuthState } from "../authState";
 
 describe("useAuthState", () => {
     it("returns the same reactive singleton on every call", () => {

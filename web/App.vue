@@ -1,7 +1,9 @@
 <script setup lang="ts">
 import Login from "@/components/login/Login.vue";
+import { APP_FOOTER_HEIGHT } from "@/composables/appFooter";
+import { useElementSize } from "@vueuse/core";
 import { Github } from "@vicons/fa";
-import { computed, onBeforeUnmount, onMounted, ref } from "vue";
+import { computed, onBeforeUnmount, onMounted, provide, ref } from "vue";
 import { RouterLink } from "vue-router";
 import { VaButton, VaDivider, VaIcon, useColors } from "vuestic-ui";
 import { useAuthState } from "./composables/authState";
@@ -10,6 +12,12 @@ import { backToTop } from "./composables/utils";
 useColors().applyPreset("dark");
 
 const authState = useAuthState();
+
+// The footer height differs between desktop (48px) and mobile (two rows), so
+// pages that manage their own scroll area measure it instead of hard-coding it.
+const footerRef = ref<HTMLElement | null>(null);
+const { height: footerHeight } = useElementSize(footerRef);
+provide(APP_FOOTER_HEIGHT, footerHeight);
 
 const baseTabs = [
     { path: "/publication", label: "水星伺服器" },
@@ -129,13 +137,20 @@ onBeforeUnmount(() => {
         </div>
     </header>
     <Login ref="loginRef" :render-trigger="false" />
-    <div class="flex min-h-screen flex-col">
+    <div
+        class="app-shell flex flex-col"
+        :style="
+            footerHeight > 0
+                ? { '--app-footer-height': `${footerHeight}px` }
+                : undefined
+        "
+    >
         <div class="flex-1">
             <router-view />
         </div>
-        <div class="bg-zinc-900 text-base text-zinc-200">
+        <div ref="footerRef" class="bg-zinc-900 text-base text-zinc-200">
             <div
-                class="mx-auto flex min-h-12 w-[95%] flex-col items-center justify-between gap-2 py-2 md:h-12 md:flex-row"
+                class="mx-auto flex min-h-12 w-[95%] flex-col items-center justify-between gap-2 py-2 md:min-h-12 md:flex-row"
             >
                 <div
                     class="flex flex-row items-center gap-2 text-center"
@@ -207,6 +222,13 @@ onBeforeUnmount(() => {
 </template>
 
 <style>
+/* Fit the app shell to the visible viewport on mobile browsers, where the
+   dynamic toolbar makes 100vh taller than the screen. */
+.app-shell {
+    min-height: 100vh;
+    min-height: 100dvh;
+}
+
 .va-navbar {
     --va-navbar-padding-x: 0.7rem;
     --va-navbar-padding-y: 0.6rem;

@@ -61,25 +61,23 @@ const footnote0 = ref(false);
             class="side-card border border-white/[0.08] rounded-lg !bg-[rgba(18,21,27,0.92)]"
         >
             <VaCardContent
-                class="side-card__content flex flex-col min-h-[8.25rem] gap-12 !p-[0.85rem]"
+                class="side-card__content flex h-32 flex-col gap-[0.4rem] !p-[0.85rem]"
             >
                 <div
                     class="side-card__header flex items-center justify-between gap-3 text-[#28c9c7]"
                 >
-                    <div>
+                    <div class="flex flex-wrap items-baseline gap-x-2">
+                        <h2 class="text-[#f7f7f8] text-base font-extrabold">
+                            圖例
+                        </h2>
                         <span
                             class="side-card__eyebrow text-[#28c9c7] text-[0.72rem] font-extrabold uppercase"
                             >Icons</span
                         >
-                        <h2
-                            class="mt-[0.1rem] text-[#f7f7f8] text-base font-extrabold"
-                        >
-                            圖例
-                        </h2>
                     </div>
                     <VaIcon name="category" size="large" />
                 </div>
-                <div class="legend-actions grid grid-cols-2 gap-3 flex-1">
+                <div class="legend-actions grid h-12 grid-cols-2 gap-3">
                     <VaButton
                         class="legend-action legend-action--cyan min-h-4 rounded-lg"
                         gradient

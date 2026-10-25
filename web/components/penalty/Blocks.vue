@@ -5,6 +5,7 @@ import { openLinks } from "@/composables/utils";
 import { BlockViewMode } from "@/composables/viewMode";
 import { VodItem } from "@/composables/vod";
 import api from "@composables/axios";
+import { useMediaQuery } from "@vueuse/core";
 import { Play24Filled } from "@vicons/fluent";
 import { computed, onMounted, ref } from "vue";
 import { VaButton, VaIcon, VaScrollContainer } from "vuestic-ui";
@@ -20,6 +21,13 @@ const props = defineProps<{
 }>();
 
 const viewMode = defineModel<BlockViewMode>("viewMode", { default: "grid" });
+
+// 手機寬度一律用列表檢視：卡片與列表在窄螢幕上幾乎相同，列表更省捲動。
+// 這裡只影響顯示，不會覆寫使用者在桌面上儲存的偏好。
+const isDesktop = useMediaQuery("(min-width: 768px)");
+const effectiveViewMode = computed<BlockViewMode>(() =>
+    isDesktop.value ? viewMode.value : "list",
+);
 
 const emit = defineEmits<{
     (e: "updateState", state: number): void;
@@ -139,7 +147,7 @@ function filterPenaltyData(
                 <span>筆懲罰</span>
             </p>
             <div class="ml-auto flex flex-wrap items-center justify-end gap-2">
-                <ViewModeToggle v-model="viewMode" />
+                <ViewModeToggle v-model="viewMode" class="max-md:hidden" />
                 <SortMenu
                     v-model:field="sortField"
                     v-model:direction="sortDirection"
@@ -165,7 +173,7 @@ function filterPenaltyData(
             class="flex-1 min-h-0"
         >
             <div
-                v-if="items.length && viewMode === 'grid'"
+                v-if="items.length && effectiveViewMode === 'grid'"
                 class="grid w-full grid-cols-1 gap-3 pb-4 pr-1 md:grid-cols-2 lg:grid-cols-3"
             >
                 <article

@@ -16,9 +16,9 @@ import Summary from "./time/Summary.vue";
 document.title = "直播隨選 - 水星人的夢幻樂園";
 
 const dateRange = defineModel<{ start: Date; end: Date }>("dateRange", {
-    //1582992000 = 2020 03 01 12:00 AM Taipei ST; 8 hours = 28800 seconds
+    //1519833600 = 2018 03 01 12:00 AM Taipei ST; 8 hours = 28800 seconds
     default: () => ({
-        start: new Date(1582992000000),
+        start: new Date(1519833600000),
         end: new Date(Date.now() + 28800000),
     }),
 });
