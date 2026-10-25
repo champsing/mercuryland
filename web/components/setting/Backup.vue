@@ -45,7 +45,7 @@ async function downloadDatabase() {
         <VaCardTitle
             class="px-6 pt-6 !text-xl font-medium text-zinc-200 justify-center"
         >
-            数据备份
+            資料備份
         </VaCardTitle>
         <VaCardContent class="px-6 pb-6 text-sm text-zinc-300">
             <VaButton
@@ -56,7 +56,7 @@ async function downloadDatabase() {
                 @click="downloadDatabase"
             >
                 <VaIcon name="download" class="mr-1" />
-                下载数据库
+                下載資料庫
             </VaButton>
         </VaCardContent>
     </VaCard>

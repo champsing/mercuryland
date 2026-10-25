@@ -117,7 +117,7 @@ async function saveVoteConfig() {
                     @click="openPenaltyChannelModal"
                 >
                     <VaIcon name="chat" class="mr-1" />
-                    惩罚频道
+                    懲罰頻道
                 </VaButton>
                 <VaButton
                     preset="primary"
@@ -125,7 +125,7 @@ async function saveVoteConfig() {
                     @click="openCoinChannelModal"
                 >
                     <VaIcon name="currency_exchange" class="mr-1" />
-                    交易所频道
+                    交易所頻道
                 </VaButton>
                 <VaButton
                     preset="primary"
@@ -133,7 +133,7 @@ async function saveVoteConfig() {
                     @click="openVoteConfigModal"
                 >
                     <VaIcon name="how_to_vote" class="mr-1" />
-                    投票频道與訊息
+                    投票頻道與訊息
                 </VaButton>
             </div>
         </VaCardContent>
@@ -146,7 +146,7 @@ async function saveVoteConfig() {
         cancel-text="取消"
         :mobile-fullscreen="false"
     >
-        <VaInput v-model="penaltyChannel" label="惩罚频道" class="w-full" />
+        <VaInput v-model="penaltyChannel" label="懲罰頻道" class="w-full" />
     </VaModal>
 
     <VaModal
