@@ -4,6 +4,7 @@ import { useCollapsed } from "@/composables/collapsible";
 import { formatDate, parseDate } from "@/composables/utils";
 import { useBlockViewMode } from "@/composables/viewMode";
 import api from "@composables/axios";
+import { useElementSize, useMediaQuery } from "@vueuse/core";
 import { onMounted, ref } from "vue";
 import { VaDateInput, VaIcon, VaInput, VaSelect } from "vuestic-ui";
 import ViewportHeight from "../ViewportHeight.vue";
@@ -48,6 +49,18 @@ const penalties = ref<PenItem[]>([]);
 // 卡片（3 欄）或表格（單欄單列）檢視，選擇會記在 localStorage。
 const viewMode = useBlockViewMode("penalty");
 
+// 手機上懲罰頁自己是捲動容器；量測快速面板高度，讓表格高度不隨面板開合改變。
+const pageRef = ref<HTMLElement | null>(null);
+const panelsRef = ref<HTMLElement | null>(null);
+const { height: panelsHeight } = useElementSize(
+    panelsRef,
+    { width: 0, height: 0 },
+    { box: "border-box" },
+);
+
+// 短螢幕手機上允許清單縮小，讓頁面仍能剛好貼合螢幕高度。
+const isMobile = useMediaQuery("(max-width: 720px)");
+
 // 三個快速面板（最新懲罰 / 統計 / 語法）可整組收合，狀態同樣會記住。
 const panelsCollapsed = useCollapsed("penalty-quick-panels");
 
@@ -68,7 +81,7 @@ onMounted(loadPenData);
 </script>
 
 <template>
-    <main class="penalty-page">
+    <main ref="pageRef" class="penalty-page">
         <section class="penalty-shell w-full max-w-[1680px] mx-auto">
             <div class="mb-2 flex justify-end px-3 md:px-6">
                 <button
@@ -91,8 +104,9 @@ onMounted(loadPenData);
             <Transition name="quick-panels">
                 <section
                     v-show="!panelsCollapsed"
+                    ref="panelsRef"
                     id="penalty-quick-panels"
-                    class="penalty-quick-panels grid gap-4 mb-4 px-3 md:px-6"
+                    class="penalty-quick-panels grid gap-4 pb-4 px-3 md:px-6"
                     aria-label="懲罰快速面板"
                 >
                     <News :penalties="penalties" />
@@ -137,28 +151,34 @@ onMounted(loadPenData);
                 </div>
             </section>
 
-            <ViewportHeight>
-                <section
-                    class="penalty-main flex h-full min-h-0 w-full flex-col px-3 md:px-6"
+            <div class="penalty-viewport">
+                <ViewportHeight
+                    :scroll-container="pageRef"
+                    :extra-height="panelsHeight"
+                    :min-height="isMobile ? 160 : undefined"
                 >
-                    <Blocks
-                        :penalties="penalties"
-                        :dateRange="filterDate"
-                        :state="filterStatus"
-                        :search="filterSearch"
-                        v-model:viewMode="viewMode"
-                        @updateState="
-                            (state) => {
-                                filterStatus == null
-                                    ? (filterStatus = state)
-                                    : (filterStatus = null);
-                            }
-                        "
-                        @addPenalty="addPenaltyRef?.open()"
-                        @editPenalty="setPenaltyRef?.open($event)"
-                    />
-                </section>
-            </ViewportHeight>
+                    <section
+                        class="penalty-main flex h-full min-h-0 w-full flex-col px-3 md:px-6"
+                    >
+                        <Blocks
+                            :penalties="penalties"
+                            :dateRange="filterDate"
+                            :state="filterStatus"
+                            :search="filterSearch"
+                            v-model:viewMode="viewMode"
+                            @updateState="
+                                (state) => {
+                                    filterStatus == null
+                                        ? (filterStatus = state)
+                                        : (filterStatus = null);
+                                }
+                            "
+                            @addPenalty="addPenaltyRef?.open()"
+                            @editPenalty="setPenaltyRef?.open($event)"
+                        />
+                    </section>
+                </ViewportHeight>
+            </div>
         </section>
         <AddPenalty ref="addPenaltyRef" @saved="loadPenData" />
         <EditPenalty
@@ -171,7 +191,7 @@ onMounted(loadPenData);
 
 <style>
 .penalty-page {
-    min-height: calc(100vh - 48px);
+    min-height: calc(100vh - var(--app-footer-height, 48px));
     background:
         radial-gradient(
             circle at 15% 0%,
@@ -227,6 +247,11 @@ onMounted(loadPenData);
     backdrop-filter: blur(16px);
 }
 
+/* 表格在自己的捲動區內捲動，捲到底不會帶動整個頁面。 */
+.penalty-viewport .va-scroll-container {
+    overscroll-behavior: contain;
+}
+
 .overall-button {
     margin-top: 0.65rem;
     --va-button-group-font-size: 1.15rem;
@@ -274,6 +299,11 @@ kbd {
 @media (max-width: 720px) {
     .penalty-page {
         padding: 4rem 0.75rem 1rem;
+        height: calc(100vh - var(--app-footer-height, 48px));
+        height: calc(100dvh - var(--app-footer-height, 48px));
+        min-height: 0;
+        overflow-y: auto;
+        overscroll-behavior: contain;
     }
 
     .penalty-filter-bar {
