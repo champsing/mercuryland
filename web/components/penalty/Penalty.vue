@@ -202,8 +202,7 @@ onMounted(loadPenData);
 
 .penalty-quick-panels .latest-card__content,
 .penalty-quick-panels .side-card__content {
-    min-height: 8.25rem;
-    gap: 0.7rem;
+    gap: 0.4rem;
     padding: 0.85rem !important;
 }
 

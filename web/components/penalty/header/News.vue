@@ -24,17 +24,17 @@ const latestPenalty = computed(() =>
     >
         <VaCardContent class="flex flex-col gap-4 !p-4">
             <div class="flex items-center justify-between gap-3">
-                <div>
+                <div class="flex flex-wrap items-baseline gap-x-2">
+                    <h2
+                        class="text-base font-extrabold tracking-normal text-[#f7f7f8]"
+                    >
+                        最新懲罰
+                    </h2>
                     <span
                         class="text-[0.72rem] font-extrabold uppercase tracking-normal text-[#ff6978]"
                     >
                         Latest penalty
                     </span>
-                    <h2
-                        class="mt-[0.1rem] text-base font-extrabold tracking-normal text-[#f7f7f8]"
-                    >
-                        最新懲罰
-                    </h2>
                 </div>
                 <div
                     class="grid h-11 w-11 place-items-center rounded-lg bg-[rgba(229,9,20,0.14)] text-[#ff6978]"
