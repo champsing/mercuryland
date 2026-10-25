@@ -1,10 +1,10 @@
-import { describe, expect, it, beforeEach } from "vitest";
+import { beforeEach, describe, expect, it } from "vitest";
 import {
     collapsedStorageKey,
     readCollapsed,
     useCollapsed,
     writeCollapsed,
-} from "./collapsible";
+} from "../collapsible";
 
 describe("readCollapsed", () => {
     beforeEach(() => localStorage.clear());

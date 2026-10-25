@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it } from "vitest";
-import api from "./axios";
+import api from "../axios";
 
 // Grab the single request interceptor registered at module load.
 const interceptor = (

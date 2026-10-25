@@ -3,7 +3,7 @@ import {
     availableHeight,
     FOOTNOTE_HEIGHT,
     MIN_CONTENT_HEIGHT,
-} from "./viewportHeight";
+} from "../viewportHeight";
 
 describe("availableHeight", () => {
     it("fills the space between the wrapper and the footer", () => {

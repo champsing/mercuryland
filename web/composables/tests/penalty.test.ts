@@ -5,14 +5,14 @@ vi.mock("@composables/axios", () => ({
 }));
 
 import api from "@composables/axios";
-import { BASE_URL } from "./utils";
+import { BASE_URL } from "../utils";
 import {
     formatDetailHtml,
     stateColor,
     stateString,
     statusOf,
     usePenaltyDetail,
-} from "./penalty";
+} from "../penalty";
 
 const get = api.get as unknown as ReturnType<typeof vi.fn>;
 

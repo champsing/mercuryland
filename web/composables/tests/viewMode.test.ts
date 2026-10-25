@@ -5,7 +5,7 @@ import {
     readBlockViewMode,
     useBlockViewMode,
     writeBlockViewMode,
-} from "./viewMode";
+} from "../viewMode";
 
 describe("isBlockViewMode", () => {
     it("accepts the known modes", () => {
