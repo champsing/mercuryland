@@ -1,8 +1,11 @@
 <script setup lang="ts">
+import { useAuthState } from "@composables/authState";
 import { VaDivider } from "vuestic-ui";
 import Backup from "./Backup.vue";
 import Channels from "./Channels.vue";
 import Anonymous from "./Anonymous.vue";
+
+const authState = useAuthState();
 
 document.title = "系統設定 - 水星人的夢幻樂園";
 </script>
@@ -19,7 +22,25 @@ document.title = "系統設定 - 水星人的夢幻樂園";
     </div>
     <VaDivider class="w-full !mt-0 !mb-2" />
 
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-2 m-4">
+    <div
+        v-if="!authState.isResolved"
+        class="m-4 text-sm text-zinc-400"
+        role="status"
+    >
+        正在確認登入狀態…
+    </div>
+    <div
+        v-else-if="!authState.isAuthenticated"
+        class="m-4 rounded-xl border border-zinc-700 bg-zinc-900/50 p-6 text-center"
+        role="status"
+    >
+        <h2 class="text-lg font-semibold text-zinc-200">需要管理員權限</h2>
+        <p class="mt-2 text-sm text-zinc-400">
+            此頁面僅供管理員使用，請從左上角選單點選「開啟管理」並完成 Discord
+            驗證登入。
+        </p>
+    </div>
+    <div v-else class="grid grid-cols-1 md:grid-cols-3 gap-2 m-4">
         <Backup />
         <Channels />
         <Anonymous />

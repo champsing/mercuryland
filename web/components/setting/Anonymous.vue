@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, ref } from "vue";
+import { computed, onMounted, ref } from "vue";
 import api from "@composables/axios";
 import {
     VaButton,
@@ -23,10 +23,20 @@ const showModal = ref(false);
 const anonymousData = ref<AnonymousEntry[]>([]);
 const isLoading = ref(true);
 const isLoaded = ref(false);
+const loadError = ref("");
 
 async function fetchAnonymousData() {
+    // The list endpoint requires an admin token; never request it without one.
+    if (!localStorage.getItem("token")) {
+        isLoading.value = false;
+        isLoaded.value = false;
+        loadError.value = "尚未登入，無法載入匿名訊息。請重新登入後再試。";
+        return;
+    }
+
     try {
         isLoading.value = true;
+        loadError.value = "";
         const response = await api.get(`/api/anonymous/list`);
         // Sort by ID in descending order (newest first)
         anonymousData.value = response.data.sort(
@@ -35,10 +45,17 @@ async function fetchAnonymousData() {
         isLoaded.value = true;
     } catch (error) {
         console.error("Failed to fetch anonymous data", error);
+        isLoaded.value = false;
+        loadError.value = "匿名訊息載入失敗，請稍後再試。";
     } finally {
         isLoading.value = false;
     }
 }
+
+const buttonLabel = computed(() => {
+    if (isLoading.value) return "載入中…";
+    return isLoaded.value ? "訊息紀錄" : "重新載入";
+});
 
 function openModal() {
     showModal.value = true;
@@ -103,13 +120,20 @@ const columns = [
                 preset="primary"
                 color="info"
                 class="w-full"
-                :loading="isLoading && !isLoaded"
-                :disabled="!isLoaded"
-                @click="openModal"
+                :loading="isLoading"
+                :disabled="isLoading || (!isLoaded && !loadError)"
+                @click="isLoaded ? openModal() : fetchAnonymousData()"
             >
                 <VaIcon name="chat_bubble" class="mr-1" />
-                {{ isLoaded ? "訊息紀錄" : "載入中…" }}
+                {{ buttonLabel }}
             </VaButton>
+            <p
+                v-if="loadError"
+                class="mt-2 text-xs text-rose-400"
+                role="status"
+            >
+                {{ loadError }}
+            </p>
         </VaCardContent>
     </VaCard>
 

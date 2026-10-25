@@ -80,6 +80,7 @@ function logout() {
     localStorage.removeItem("token");
     modal.auth = false;
     authState.isAuthenticated = false;
+    authState.isResolved = true;
 }
 
 function tick() {
@@ -87,6 +88,7 @@ function tick() {
     if (token == null) {
         modal.auth = false;
         authState.isAuthenticated = false;
+        authState.isResolved = true;
         return;
     }
 
@@ -101,6 +103,9 @@ function tick() {
         .catch((_) => {
             modal.auth = false;
             authState.isAuthenticated = false;
+        })
+        .finally(() => {
+            authState.isResolved = true;
         });
 }
 
