@@ -221,9 +221,6 @@ function count(text: string): number {
 
 onMounted(() => {
     getAPIStatus();
-    if (wheelRef.value) {
-        wheelRef.value.drawWheel();
-    }
 });
 
 onBeforeUnmount(() => {
@@ -283,7 +280,28 @@ const isSubmitAvailable: ComputedRef<boolean> = computed(() => {
                     <div
                         class="wheel-panel rounded-2xl border border-[rgba(255,255,255,0.06)] bg-[rgba(18,21,27,0.92)] backdrop-blur-sm p-6 lg:p-8"
                     >
+                        <div
+                            v-if="items.length === 0"
+                            class="flex aspect-square w-full flex-col items-center justify-center gap-4 rounded-xl border border-dashed border-white/10 px-8 text-center"
+                        >
+                            <VaIcon
+                                name="casino"
+                                size="48px"
+                                class="text-zinc-500"
+                            />
+                            <div>
+                                <p
+                                    class="text-base font-semibold text-zinc-300"
+                                >
+                                    待抽區目前是空的
+                                </p>
+                                <p class="mt-1 text-sm text-zinc-400">
+                                    在「待抽區」輸入項目後，轉盤就會出現
+                                </p>
+                            </div>
+                        </div>
                         <Spinner
+                            v-else
                             ref="wheelRef"
                             :items="items"
                             @winner="handleWinner"

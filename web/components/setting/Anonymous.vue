@@ -52,7 +52,7 @@ onMounted(() => {
 const columns = [
     {
         key: "avatar",
-        label: "头像",
+        label: "頭像",
         thAlign: "center" as const,
         tdAlign: "center" as const,
         sortable: false,
@@ -60,21 +60,21 @@ const columns = [
     },
     {
         key: "nickname",
-        label: "昵称",
+        label: "暱稱",
         thAlign: "center" as const,
         tdAlign: "center" as const,
         sortable: true,
     },
     {
         key: "author_id",
-        label: "用户",
+        label: "使用者",
         thAlign: "center" as const,
         tdAlign: "center" as const,
         sortable: true,
     },
     {
         key: "id",
-        label: "消息ID",
+        label: "訊息 ID",
         thAlign: "center" as const,
         tdAlign: "center" as const,
         sortable: true,
@@ -82,7 +82,7 @@ const columns = [
     },
     {
         key: "updated_at",
-        label: "发送时间",
+        label: "傳送時間",
         thAlign: "center" as const,
         tdAlign: "center" as const,
         sortable: true,
@@ -96,7 +96,7 @@ const columns = [
         <VaCardTitle
             class="px-6 pt-6 !text-xl font-medium text-zinc-200 justify-center"
         >
-            匿名频道
+            匿名頻道
         </VaCardTitle>
         <VaCardContent class="px-6 pb-6 text-sm text-zinc-300">
             <VaButton
@@ -108,7 +108,7 @@ const columns = [
                 @click="openModal"
             >
                 <VaIcon name="chat_bubble" class="mr-1" />
-                {{ isLoaded ? "消息记录" : "加载中..." }}
+                {{ isLoaded ? "訊息紀錄" : "載入中…" }}
             </VaButton>
         </VaCardContent>
     </VaCard>
@@ -121,7 +121,7 @@ const columns = [
         :hide-default-actions="true"
     >
         <template #header>
-            <h3 class="text-lg font-semibold">匿名消息记录</h3>
+            <h3 class="text-lg font-semibold">匿名訊息紀錄</h3>
         </template>
         <VaDataTable
             :items="anonymousData"
@@ -148,7 +148,7 @@ const columns = [
                 </div>
             </template>
             <template #cell(updated_at)="{ value }">
-                {{ new Date(value).toLocaleString("zh-CN") }}
+                {{ new Date(value).toLocaleString("zh-TW") }}
             </template>
         </VaDataTable>
     </VaModal>

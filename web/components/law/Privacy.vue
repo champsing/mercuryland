@@ -3,6 +3,8 @@ import { VaButton, VaInput } from "vuestic-ui";
 import { backToTop, copyToClipboard } from "@/composables/utils";
 import { ref } from "vue";
 
+document.title = "隱私政策 - 水星人的夢幻樂園";
+
 backToTop();
 const email = ref("0.flunky-sojourn@icloud.com");
 </script>
