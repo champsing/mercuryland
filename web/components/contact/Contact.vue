@@ -20,6 +20,7 @@ import ContactCard from "./ContactCard.vue";
                     <template #avatar>
                         <img
                             src="/images/admin_avatars/oreki20.webp"
+                            alt="惡靈 Oreki 的頭像"
                             class="w-full h-full object-contain"
                             slot="avatar"
                         />
@@ -34,6 +35,7 @@ import ContactCard from "./ContactCard.vue";
                     <template #avatar>
                         <img
                             src="/images/admin_avatars/champsing.webp"
+                            alt="香榭 Champsing 的頭像"
                             class="w-full h-full object-contain"
                             slot="avatar"
                         />

@@ -62,6 +62,7 @@ const steps = [
         <iframe
             class="mx-auto w-full max-w-md h-[70vh]"
             src="https://discord.com/widget?id=506120681495199756&theme=dark"
+            title="Discord 社群伺服器"
         />
     </div>
 
