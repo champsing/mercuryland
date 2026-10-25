@@ -221,9 +221,6 @@ function count(text: string): number {
 
 onMounted(() => {
     getAPIStatus();
-    if (wheelRef.value) {
-        wheelRef.value.drawWheel();
-    }
 });
 
 onBeforeUnmount(() => {
