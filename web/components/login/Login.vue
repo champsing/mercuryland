@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import api from "@composables/axios";
-import { onMounted, reactive, ref } from "vue";
+import { nextTick, onMounted, reactive, ref, watch } from "vue";
 import { VaButton, VaIcon, VaModal } from "vuestic-ui";
 
 import { useAuthState } from "@/composables/authState";
@@ -27,6 +27,41 @@ const isSubmitting = ref(false);
 const isFocused = ref(false); // 追蹤輸入框是否聚焦
 const authState = useAuthState();
 const clientIP = ref("unknown");
+const codeInput = ref<HTMLInputElement | null>(null);
+
+// The element that opened the modal, so focus can return there on close. The
+// menu closes before the modal opens, so this element may already be removed
+// by the time the modal closes; the navigation menu button is the fallback.
+let lastTrigger: HTMLElement | null = null;
+
+function rememberTrigger() {
+    const active = document.activeElement;
+    lastTrigger = active instanceof HTMLElement ? active : null;
+}
+
+function restoreFocus() {
+    const target = lastTrigger;
+    lastTrigger = null;
+
+    if (target?.isConnected) {
+        target.focus();
+        return;
+    }
+
+    document.querySelector<HTMLElement>('[aria-label="切換導覽選單"]')?.focus();
+}
+
+watch(
+    () => modal.show,
+    async (isOpen) => {
+        await nextTick();
+        if (isOpen) {
+            codeInput.value?.focus();
+        } else {
+            restoreFocus();
+        }
+    },
+);
 
 onMounted(async () => {
     try {
@@ -39,6 +74,7 @@ onMounted(async () => {
 });
 
 function openLoginLogin() {
+    rememberTrigger();
     modal.show = true;
     modal.fail = false;
     form.code = ""; // 開啟時清空
@@ -46,6 +82,7 @@ function openLoginLogin() {
 
 function openLogoutModal() {
     if (!modal.auth) return;
+    rememberTrigger();
     modal.show = true;
     modal.fail = false;
 }
@@ -204,31 +241,40 @@ defineExpose({ openLoginModal: openLoginLogin, openLogoutModal });
             max-width="440px"
         >
             <div
-                class="flex flex-col items-center p-4 sm:p-5 gap-6 text-slate-800 dark:text-slate-100"
+                class="flex flex-col items-center p-4 sm:p-5 gap-6 text-slate-100"
             >
                 <div class="text-center space-y-2">
                     <h3 class="text-2xl font-bold tracking-wide">
                         Discord 驗證碼
                     </h3>
-                    <p class="text-sm text-slate-500 dark:text-slate-400">
+                    <p
+                        id="login-code-description"
+                        class="text-sm text-slate-300"
+                    >
                         請輸入來自 Discord 的 8 位數驗證碼
                     </p>
                 </div>
 
                 <div class="relative w-full max-w-sm mt-1">
                     <input
+                        ref="codeInput"
                         v-model="form.code"
                         type="text"
                         maxlength="8"
                         class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
                         autocomplete="one-time-code"
+                        aria-label="Discord 8 位數驗證碼"
+                        aria-describedby="login-code-description"
                         @focus="isFocused = true"
                         @blur="isFocused = false"
                         @input="form.code = form.code.toUpperCase()"
                         @keyup.enter="authenticate"
                     />
 
-                    <div class="grid grid-cols-8 gap-1.5 w-full justify-center">
+                    <div
+                        class="grid grid-cols-8 gap-1.5 w-full justify-center"
+                        aria-hidden="true"
+                    >
                         <div
                             v-for="i in 8"
                             :key="i"
@@ -258,7 +304,7 @@ defineExpose({ openLoginModal: openLoginLogin, openLogoutModal });
 
                 <div
                     v-if="modal.fail"
-                    class="w-full text-center text-sm font-medium text-rose-500 bg-rose-50/60 dark:bg-rose-950/20 py-3 px-4 rounded-2xl border border-rose-100/70 dark:border-rose-900/30 backdrop-blur-sm animate-fade-in"
+                    class="w-full text-center text-sm font-medium text-rose-300 bg-rose-950/40 py-3 px-4 rounded-2xl border border-rose-900/40 backdrop-blur-sm animate-fade-in"
                 >
                     驗證失敗，請確認驗證碼是否正確或是否已使用、已過期等。
                 </div>
