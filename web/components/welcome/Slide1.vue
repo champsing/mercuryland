@@ -95,30 +95,44 @@ onUnmounted(() => {
         </div>
 
         <!-- Mobile -->
-        <div
-            class="md:hidden absolute inset-0 flex flex-col items-center justify-center px-6"
-        >
+        <div class="md:hidden absolute inset-0 overflow-hidden bg-[#05050a]">
+            <!--
+                The artwork is 16:9 with the pixel wordmark in the middle. Covering
+                the whole portrait viewport would crop it down to ~26% of its width
+                and cut the wordmark, so mobile uses a square crop of the centred
+                artwork instead and lets the page background carry the rest.
+            -->
             <img
                 src="/images/welcome/welcome.webp"
                 alt="Welcome"
-                class="-z-10 w-full h-full object-cover absolute inset-0"
+                class="absolute left-0 top-0 w-full aspect-square object-cover"
             />
-            <div class="absolute inset-0 bg-neutral-900/60" />
-            <div class="relative flex flex-col items-center gap-3 text-center">
-                <div
-                    class="anim-fade-up text-4xl font-black tracking-[0.12em] bg-gradient-to-r from-amber-200 via-yellow-300 to-amber-400 bg-clip-text text-transparent uppercase"
-                >
-                    水星樂園
-                </div>
-                <div
-                    class="anim-fade-up anim-delay-200 text-white/90 font-bold italic text-xl tracking-[0.25em] uppercase"
-                >
-                    The Mercury Land
-                </div>
-                <div
-                    class="anim-fade-up anim-delay-400 text-amber-400/60 text-xs font-bold tracking-[0.4em] uppercase mt-4"
-                >
-                    歡迎 · 欢迎 · Welcome · Bienvenue · ようこそ · 환영합니다
+            <div
+                class="absolute left-0 top-0 w-full aspect-square bg-neutral-900/40"
+            />
+            <div
+                class="absolute left-0 top-0 w-full aspect-square bg-gradient-to-b from-transparent via-transparent to-[#05050a]"
+            />
+            <div
+                class="relative flex h-full flex-col items-center justify-center px-6"
+            >
+                <div class="flex flex-col items-center gap-3 text-center">
+                    <div
+                        class="anim-fade-up text-4xl font-black tracking-[0.12em] bg-gradient-to-r from-amber-200 via-yellow-300 to-amber-400 bg-clip-text text-transparent uppercase"
+                    >
+                        水星樂園
+                    </div>
+                    <div
+                        class="anim-fade-up anim-delay-200 text-white/90 font-bold italic text-xl tracking-[0.25em] uppercase"
+                    >
+                        The Mercury Land
+                    </div>
+                    <div
+                        class="anim-fade-up anim-delay-400 text-amber-400/60 text-xs font-bold tracking-[0.4em] uppercase mt-4"
+                    >
+                        歡迎 · 欢迎 · Welcome · Bienvenue · ようこそ ·
+                        환영합니다
+                    </div>
                 </div>
             </div>
         </div>
