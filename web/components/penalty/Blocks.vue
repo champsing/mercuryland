@@ -250,7 +250,7 @@ function filterPenaltyData(
 
             <div v-else-if="items.length" class="w-full pb-4 pr-1">
                 <div
-                    class="mb-1 hidden grid-cols-[10.5rem_minmax(0,1fr)_6rem_2.25rem] items-center gap-3 px-4 text-xs font-semibold tracking-wide text-zinc-500 md:grid"
+                    class="mb-1 hidden grid-cols-[10rem_minmax(0,1fr)_6rem_2.25rem] items-center gap-3 px-4 text-xs font-semibold tracking-wide text-zinc-500 md:grid"
                     aria-hidden="true"
                 >
                     <span>日期</span>
@@ -264,7 +264,7 @@ function filterPenaltyData(
                         v-for="penalty in items"
                         :key="penalty.id"
                         tabindex="0"
-                        class="grid cursor-pointer grid-cols-[minmax(0,1fr)_auto_auto] items-center gap-x-3 gap-y-1.5 rounded-xl border border-zinc-700/40 bg-zinc-800/40 px-4 py-2.5 backdrop-blur-sm transition-colors hover:border-[#8ea2ff]/40 hover:bg-zinc-700/40 md:grid-cols-[10.5rem_minmax(0,1fr)_6rem_2.25rem] md:gap-3"
+                        class="grid cursor-pointer grid-cols-[minmax(0,1fr)_auto_auto] items-center gap-x-3 gap-y-1.5 rounded-xl border border-zinc-700/40 bg-zinc-800/40 px-4 py-2.5 backdrop-blur-sm transition-colors hover:border-[#8ea2ff]/40 hover:bg-zinc-700/40 md:grid-cols-[10rem_minmax(0,1fr)_6rem_2.25rem] md:gap-3"
                         @click="modal = penalty.id"
                         @keydown.enter.self="modal = penalty.id"
                         @keydown.space.self.prevent="modal = penalty.id"
