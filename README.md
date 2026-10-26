@@ -166,6 +166,7 @@ YouTube 聊天室即時計幣的虛擬經濟系統。觀眾在直播中發言即
 | `/privacy`     | Privacy     | 隱私權政策                               |
 | `/leaderboard` | Leaderboard | 水星幣排行榜                             |
 | `/setting`     | Setting     | 管理員設定（需登入）                     |
+| 其他路徑       | NotFound    | 404 找不到頁面                           |
 
 ---
 

@@ -1,4 +1,5 @@
 import Contact from "@components/contact/Contact.vue";
+import NotFound from "@components/NotFound.vue";
 import Penalty from "@components/penalty/Penalty.vue";
 import Publication from "@components/publication/Publication.vue";
 import Vod from "@components/vod/Vod.vue";
@@ -21,6 +22,8 @@ const routes = [
     { path: "/privacy", component: Privacy },
     { path: "/leaderboard", component: Leaderboard },
     { path: "/setting", component: Setting },
+    // Anything else gets the 404 page instead of a blank router-view.
+    { path: "/:pathMatch(.*)*", component: NotFound },
 ];
 
 const router = createRouter({
