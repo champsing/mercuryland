@@ -111,8 +111,8 @@ const sliceIndexBuckets = computed<number[][]>(() => {
 });
 
 const cursorAngle = 270;
-const cursorPosition = "edge";
-const cursorDistance = 12;
+const cursorPosition = "center";
+const cursorDistance = 0;
 const extraSpins = 6;
 
 function pickWinnerSlice(): { displayIndex: number; baseIndex: number } | null {
@@ -221,7 +221,7 @@ defineExpose({
     >
         <template #cursor>
             <img
-                src="/images/pointer.svg"
+                src="/images/pointer-center.svg"
                 alt="指針"
                 class="pointer-img pointer-events-none select-none"
             />
@@ -231,8 +231,10 @@ defineExpose({
 
 <style scoped>
 .pointer-img {
-    width: clamp(8rem, 18vw, 10rem);
+    width: clamp(3.5rem, 8vw, 5rem);
     height: auto;
-    margin-top: clamp(12px, 2vw, 28px);
+    margin-top: 0;
+    transform: rotate(180deg);
+    filter: brightness(0) invert(1) drop-shadow(0 2px 6px rgba(0, 0, 0, 0.55));
 }
 </style>
