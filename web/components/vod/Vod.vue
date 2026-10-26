@@ -151,7 +151,7 @@ const handleEditVod = (vod: VodItem) => {
                     </div>
 
                     <div
-                        class="absolute bottom-4 left-1/2 -translate-x-1/2 z-1 pointer-events-none [&>*]:pointer-events-auto"
+                        class="pointer-events-none absolute bottom-0 left-1/2 z-1 w-screen -translate-x-1/2 [&>*]:pointer-events-auto md:bottom-4 md:w-auto"
                     >
                         <Summary
                             :t="computedTime"
