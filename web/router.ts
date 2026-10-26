@@ -1,5 +1,4 @@
 import Contact from "@components/contact/Contact.vue";
-import GameMap from "@components/GameMap.vue";
 import Penalty from "@components/penalty/Penalty.vue";
 import Publication from "@components/publication/Publication.vue";
 import Vod from "@components/vod/Vod.vue";
@@ -14,7 +13,6 @@ import Wheel from "./components/wheel/Wheel.vue";
 const routes = [
     { path: "/", component: Welcome },
     { path: "/publication", component: Publication },
-    { path: "/map", component: GameMap },
     { path: "/vod", component: Vod },
     { path: "/penalty", component: Penalty },
     { path: "/contact", component: Contact },
