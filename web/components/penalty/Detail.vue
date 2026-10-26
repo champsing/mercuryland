@@ -35,6 +35,7 @@ watch(
 
 <template>
     <VaModal
+        aria-label="懲罰詳情"
         :model-value="props.modelValue !== null"
         @update:model-value="
             emit('update:modelValue', $event ? props.modelValue : null)

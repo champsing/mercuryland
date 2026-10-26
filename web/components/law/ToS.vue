@@ -22,12 +22,62 @@ const email = ref("0.flunky-sojourn@icloud.com");
                 </p>
             </div>
 
+            <nav
+                aria-label="使用條款目錄"
+                class="mb-8 rounded-xl border border-white/10 bg-zinc-900/40 p-4"
+            >
+                <div
+                    class="mb-3 text-sm font-semibold tracking-wide text-zinc-300"
+                >
+                    目錄
+                </div>
+                <ul
+                    class="grid gap-x-6 gap-y-2 text-sm text-zinc-400 sm:grid-cols-2"
+                >
+                    <li>
+                        <a
+                            class="transition-colors hover:text-zinc-100"
+                            href="#tos-general"
+                            >一、總則</a
+                        >
+                    </li>
+                    <li>
+                        <a
+                            class="transition-colors hover:text-zinc-100"
+                            href="#tos-effect"
+                            >二、條款之契約效力</a
+                        >
+                    </li>
+                    <li>
+                        <a
+                            class="transition-colors hover:text-zinc-100"
+                            href="#tos-liability"
+                            >三、責任限制與合理注意義務聲明</a
+                        >
+                    </li>
+                    <li>
+                        <a
+                            class="transition-colors hover:text-zinc-100"
+                            href="#tos-privacy"
+                            >四、個人資料與隱私政策</a
+                        >
+                    </li>
+                    <li>
+                        <a
+                            class="transition-colors hover:text-zinc-100"
+                            href="#tos-jurisdiction"
+                            >五、準據法與管轄法院</a
+                        >
+                    </li>
+                </ul>
+            </nav>
+
             <div class="law-document">
                 <p>
                     本聲明旨在規範網際網路連接視聽閱覽者（以下簡稱「閱聽人」）存取水星樂園（以下簡稱「本網站」）所提供之多媒體內容，包括但不限於：文字、文件、圖片、影音、壓縮檔與外部連結，所應享有之權利與應履行之義務，並規範閱聽人與本網站管理者之間的權利義務關係。
                 </p>
 
-                <h1>一、總則</h1>
+                <h2 id="tos-general" class="scroll-mt-24">一、總則</h2>
                 <ol>
                     <li>
                         本網站之管理者（以下簡稱「管理方」），若未經正常程序變更，為水星伺服器管理委員會。
@@ -76,23 +126,29 @@ const email = ref("0.flunky-sojourn@icloud.com");
                     </li>
                 </ol>
 
-                <h1>二、條款之契約效力</h1>
+                <h2 id="tos-effect" class="scroll-mt-24">二、條款之契約效力</h2>
                 <p>
                     閱聽人一經進入、瀏覽或使用本網站，即視為已詳閱、理解並同意本使用條款及相關政策（包含但不限於隱私政策、著作權聲明等），並與管理方成立具有法律效力之契約關係。若不同意本條款內容，請立即停止使用本網站。
                 </p>
 
-                <h1>三、責任限制與合理注意義務聲明</h1>
+                <h2 id="tos-liability" class="scroll-mt-24">
+                    三、責任限制與合理注意義務聲明
+                </h2>
                 <p>
                     管理方已盡合理努力確保本網站所提供資訊與資源之正確性、安全性與完整性，惟不保證其完全無誤或不中斷運作。對於因使用本網站、下載資源或連結第三方網站所生之任何直接、間接、附帶、特殊或衍生性損害，管理方概不負責，除非可證明係由管理方之重大過失或故意所致。
                 </p>
 
-                <h1>四、個人資料與隱私政策</h1>
+                <h2 id="tos-privacy" class="scroll-mt-24">
+                    四、個人資料與隱私政策
+                </h2>
                 <p>
                     本網站可能於您瀏覽期間收集必要之技術性資訊（如
                     IP位址、裝置資訊與Cookie等），僅作為網站安全與內容優化用途，管理方將依據中華民國《個人資料保護法》等相關法規妥善處理所有個人資料。如欲了解更多資訊，請參閱本網站「隱私政策」。
                 </p>
 
-                <h1>五、準據法與管轄法院</h1>
+                <h2 id="tos-jurisdiction" class="scroll-mt-24">
+                    五、準據法與管轄法院
+                </h2>
                 <p>
                     本使用條款之成立、解釋與適用，均以中華民國法律為準據法。如因使用本網站而產生任何爭議，雙方同意以臺灣臺北地方法院為第一審專屬管轄法院。
                 </p>
@@ -155,7 +211,7 @@ const email = ref("0.flunky-sojourn@icloud.com");
     color: #e4e4e7;
 }
 
-.law-document h1 {
+.law-document h2 {
     margin: 2rem 0 0.75rem;
     padding-bottom: 0.5rem;
     border-bottom: 1px solid rgba(255, 255, 255, 0.08);

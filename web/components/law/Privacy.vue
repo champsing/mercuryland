@@ -21,6 +21,70 @@ const email = ref("0.flunky-sojourn@icloud.com");
                 </p>
             </div>
 
+            <nav
+                aria-label="隱私政策目錄"
+                class="mb-8 rounded-xl border border-white/10 bg-zinc-900/40 p-4"
+            >
+                <div
+                    class="mb-3 text-sm font-semibold tracking-wide text-zinc-300"
+                >
+                    目錄
+                </div>
+                <ul
+                    class="grid gap-x-6 gap-y-2 text-sm text-zinc-400 sm:grid-cols-2"
+                >
+                    <li>
+                        <a
+                            class="transition-colors hover:text-zinc-100"
+                            href="#privacy-collection"
+                            >一、個人資料的蒐集與使用</a
+                        >
+                    </li>
+                    <li>
+                        <a
+                            class="transition-colors hover:text-zinc-100"
+                            href="#privacy-protection"
+                            >二、個人資料的保護</a
+                        >
+                    </li>
+                    <li>
+                        <a
+                            class="transition-colors hover:text-zinc-100"
+                            href="#privacy-links"
+                            >三、瀏覽外部連結時的資料處理</a
+                        >
+                    </li>
+                    <li>
+                        <a
+                            class="transition-colors hover:text-zinc-100"
+                            href="#privacy-deletion"
+                            >四、個人資料的刪除與更正</a
+                        >
+                    </li>
+                    <li>
+                        <a
+                            class="transition-colors hover:text-zinc-100"
+                            href="#privacy-sharing"
+                            >五、與第三方共用個人資料</a
+                        >
+                    </li>
+                    <li>
+                        <a
+                            class="transition-colors hover:text-zinc-100"
+                            href="#privacy-updates"
+                            >六、隱私政策的更新</a
+                        >
+                    </li>
+                    <li>
+                        <a
+                            class="transition-colors hover:text-zinc-100"
+                            href="#privacy-contact"
+                            >七、聯絡方式</a
+                        >
+                    </li>
+                </ul>
+            </nav>
+
             <div class="law-document">
                 <p>
                     本隱私政策旨在規範使用者（以下簡稱「您」）在使用水星樂園（以下簡稱「本網站」）時，本網站對您的個人資料之蒐集、處理、使用、儲存及保護等事項，並告知您相關權利。
@@ -32,7 +96,9 @@ const email = ref("0.flunky-sojourn@icloud.com");
 
                 <p>當您使用本網站服務時，即表示您同意本隱私政策之內容。</p>
 
-                <h1>一、個人資料的蒐集與使用</h1>
+                <h2 id="privacy-collection" class="scroll-mt-24">
+                    一、個人資料的蒐集與使用
+                </h2>
                 <ol>
                     <li>
                         蒐集的資料類型
@@ -57,7 +123,9 @@ const email = ref("0.flunky-sojourn@icloud.com");
                     </li>
                 </ol>
 
-                <h1>二、個人資料的保護</h1>
+                <h2 id="privacy-protection" class="scroll-mt-24">
+                    二、個人資料的保護
+                </h2>
                 <ol>
                     <li>
                         本網站採取以下措施保護您的個人資料
@@ -71,7 +139,9 @@ const email = ref("0.flunky-sojourn@icloud.com");
                     </li>
                 </ol>
 
-                <h1>三、瀏覽外部連結時的資料處理</h1>
+                <h2 id="privacy-links" class="scroll-mt-24">
+                    三、瀏覽外部連結時的資料處理
+                </h2>
                 <ol>
                     <li>
                         本網站可能包含指向其他網站的連結。本網站無法控制這些第三方網站的隱私政策及其資料處理方式。
@@ -81,7 +151,9 @@ const email = ref("0.flunky-sojourn@icloud.com");
                     </li>
                 </ol>
 
-                <h1>四、個人資料的刪除與更正</h1>
+                <h2 id="privacy-deletion" class="scroll-mt-24">
+                    四、個人資料的刪除與更正
+                </h2>
                 <ol>
                     <li>
                         刪除個人資料
@@ -101,7 +173,9 @@ const email = ref("0.flunky-sojourn@icloud.com");
                     </li>
                 </ol>
 
-                <h1>五、與第三方共用個人資料</h1>
+                <h2 id="privacy-sharing" class="scroll-mt-24">
+                    五、與第三方共用個人資料
+                </h2>
                 <ol>
                     <li>
                         共用情境
@@ -124,14 +198,16 @@ const email = ref("0.flunky-sojourn@icloud.com");
                     </li>
                 </ol>
 
-                <h1>六、隱私政策的更新</h1>
+                <h2 id="privacy-updates" class="scroll-mt-24">
+                    六、隱私政策的更新
+                </h2>
                 <ol>
                     <li>
                         本網站保留隨時修改本隱私政策的權利。若有重大變更，本網站將透過電子郵件或網站公告通知您。建議您定期查閱本政策，以確保瞭解最新內容。
                     </li>
                 </ol>
 
-                <h1>七、聯絡方式</h1>
+                <h2 id="privacy-contact" class="scroll-mt-24">七、聯絡方式</h2>
                 <ol>
                     <li>
                         若您對本隱私政策有任何疑問，或需行使您的個人資料權利，請使用電子郵件，或前往「聯絡我們」分頁尋找網站管理人員的Discord，本網站將竭誠為您服務。
@@ -200,7 +276,7 @@ const email = ref("0.flunky-sojourn@icloud.com");
     color: #e4e4e7;
 }
 
-.law-document h1 {
+.law-document h2 {
     margin: 2rem 0 0.75rem;
     padding-bottom: 0.5rem;
     border-bottom: 1px solid rgba(255, 255, 255, 0.08);

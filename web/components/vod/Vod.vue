@@ -71,6 +71,9 @@ const handleEditVod = (vod: VodItem) => {
 <template>
     <main class="vod-page">
         <section class="w-full max-w-[1680px] mx-auto">
+            <div class="mx-4 md:mx-20 mb-3">
+                <h1 class="text-2xl font-bold text-neutral-100">直播隨選</h1>
+            </div>
             <section
                 class="vod-filter-bar mx-4 md:mx-20 rounded-3xl"
                 aria-label="直播隨選篩選"
@@ -148,7 +151,7 @@ const handleEditVod = (vod: VodItem) => {
                     </div>
 
                     <div
-                        class="absolute bottom-4 left-1/2 -translate-x-1/2 z-1 pointer-events-none [&>*]:pointer-events-auto"
+                        class="pointer-events-none absolute bottom-0 left-0 right-0 z-1 pl-4 pr-5 [&>*]:pointer-events-auto md:bottom-4 md:left-1/2 md:right-auto md:w-auto md:-translate-x-1/2 md:px-0"
                     >
                         <Summary
                             :t="computedTime"
@@ -185,7 +188,7 @@ const handleEditVod = (vod: VodItem) => {
         ),
         linear-gradient(135deg, #0f1117 0%, #16191f 48%, #101318 100%);
     color: #f7f7f8;
-    padding: 2.5rem 1rem 1.25rem;
+    padding: 1.25rem 1rem 1.25rem;
 }
 
 .vod-filter-bar {
@@ -193,7 +196,7 @@ const handleEditVod = (vod: VodItem) => {
     grid-template-columns: minmax(13rem, 1fr) minmax(18rem, 2fr) auto;
     gap: 0.75rem;
     align-items: center;
-    margin-bottom: 1rem;
+    margin-bottom: 0.75rem;
     border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: 8px;
     background: linear-gradient(
@@ -219,7 +222,7 @@ const handleEditVod = (vod: VodItem) => {
 
 @media (max-width: 767px) {
     .vod-page {
-        padding: 4rem 0.75rem 1rem;
+        padding: 3.5rem 0.75rem 1rem;
     }
 
     .vod-filter-bar {

@@ -233,6 +233,7 @@ onBeforeUnmount(() => {
     </VaButton>
 
     <VaModal
+        aria-label="插入圖片"
         v-model="isModalOpen"
         @update:model-value="closeModal"
         hide-default-actions

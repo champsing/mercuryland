@@ -59,11 +59,29 @@ const steps = [
                 </div>
             </div>
         </div>
-        <iframe
-            class="mx-auto w-full max-w-md h-[70vh]"
-            src="https://discord.com/widget?id=506120681495199756&theme=dark"
-            title="Discord 社群伺服器"
-        />
+        <div class="mx-auto w-full max-w-md">
+            <div
+                class="overflow-hidden rounded-xl border border-white/10 bg-zinc-900"
+            >
+                <iframe
+                    class="block w-full h-[70vh]"
+                    src="https://discord.com/widget?id=506120681495199756&theme=dark"
+                    title="Discord 社群伺服器"
+                    loading="lazy"
+                />
+            </div>
+            <p class="mt-2 text-center text-xs text-zinc-500">
+                Discord 無法載入？
+                <a
+                    class="text-indigo-300 underline underline-offset-2 hover:text-indigo-200"
+                    href="https://discord.com/widget?id=506120681495199756&theme=dark"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                >
+                    在新分頁開啟
+                </a>
+            </p>
+        </div>
     </div>
 
     <div class="mt-8" v-if="serverOnline">

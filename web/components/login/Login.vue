@@ -175,6 +175,7 @@ defineExpose({ openLoginModal: openLoginLogin, openLogoutModal });
             close-button
             :mobile-fullscreen="false"
             max-width="400px"
+            aria-label="登出確認"
         >
             <div
                 class="flex flex-col items-center p-4 sm:p-5 gap-6 text-slate-800 dark:text-slate-100"
@@ -239,6 +240,7 @@ defineExpose({ openLoginModal: openLoginLogin, openLogoutModal });
             close-button
             :mobile-fullscreen="false"
             max-width="440px"
+            aria-label="Discord 驗證碼登入"
         >
             <div
                 class="flex flex-col items-center p-4 sm:p-5 gap-6 text-slate-100"

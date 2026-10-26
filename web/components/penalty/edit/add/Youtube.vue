@@ -328,7 +328,7 @@ function save() {
     <VaButton
         @mousedown="onTriggerMouseDown"
         @click="openModal"
-        color="#ff0000"
+        color="#d90000"
         class="w-full h-full"
         gradient
         aria-label="添加影片"
@@ -339,6 +339,7 @@ function save() {
     </VaButton>
 
     <VaModal
+        aria-label="插入 YouTube 影片"
         v-model="isModalOpen"
         @update:model-value="closeModal"
         hide-default-actions

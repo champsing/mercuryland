@@ -19,7 +19,7 @@ const latestPenalty = computed(() =>
 
 <template>
     <VaCard
-        class="overflow-hidden rounded-lg border border-[rgba(255,255,255,0.08)] !bg-[linear-gradient(135deg,rgba(229,9,20,0.14),transparent_42%),rgba(18,21,27,0.92)]"
+        class="h-full overflow-hidden rounded-lg border border-[rgba(255,255,255,0.08)] !bg-[linear-gradient(135deg,rgba(229,9,20,0.14),transparent_42%),rgba(18,21,27,0.92)]"
         style="--va-card-padding: 0"
     >
         <VaCardContent class="flex flex-col gap-4 !p-4">

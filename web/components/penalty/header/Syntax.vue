@@ -56,12 +56,12 @@ const footnote0 = ref(false);
 </script>
 
 <template>
-    <div>
+    <div class="h-full">
         <VaCard
-            class="side-card border border-white/[0.08] rounded-lg !bg-[rgba(18,21,27,0.92)]"
+            class="side-card h-full border border-white/[0.08] rounded-lg !bg-[rgba(18,21,27,0.92)]"
         >
             <VaCardContent
-                class="side-card__content flex h-32 flex-col gap-[0.4rem] !p-[0.85rem]"
+                class="side-card__content flex h-full min-h-32 flex-col gap-[0.4rem] !p-[0.85rem] md:justify-between md:gap-3"
             >
                 <div
                     class="side-card__header flex items-center justify-between gap-3 text-[#28c9c7]"
@@ -105,6 +105,7 @@ const footnote0 = ref(false);
         </VaCard>
 
         <VaModal
+            aria-label="懲罰圖例"
             :model-value="modal !== null"
             @update:model-value="
                 (value) => {
@@ -192,6 +193,7 @@ const footnote0 = ref(false);
         </VaModal>
 
         <VaModal
+            aria-label="無法完成的懲罰說明"
             v-model:model-value="footnote0"
             hide-default-actions
             close-button

@@ -179,7 +179,11 @@ function filterPenaltyData(
                 <article
                     v-for="penalty in items"
                     :key="penalty.id"
-                    class="flex flex-col gap-3 rounded-2xl border border-zinc-700/40 bg-zinc-800/40 p-8 backdrop-blur-sm transition-all duration-200 hover:-translate-y-0.5 hover:border-[#8ea2ff]/40 hover:bg-zinc-700/40 hover:shadow-[0_8px_32px_rgba(0,0,0,0.35)]"
+                    tabindex="0"
+                    class="flex cursor-pointer flex-col gap-3 rounded-2xl border border-zinc-700/40 bg-zinc-800/40 p-8 backdrop-blur-sm transition-all duration-200 hover:-translate-y-0.5 hover:border-[#8ea2ff]/40 hover:bg-zinc-700/40 hover:shadow-[0_8px_32px_rgba(0,0,0,0.35)]"
+                    @click="modal = penalty.id"
+                    @keydown.enter.self="modal = penalty.id"
+                    @keydown.space.self.prevent="modal = penalty.id"
                 >
                     <header
                         class="flex min-w-0 items-start justify-between gap-3"
@@ -191,14 +195,12 @@ function filterPenaltyData(
                                 <VaIcon name="event" size="small" />
                                 {{ penalty.date }}
                             </span>
-                            <button
-                                type="button"
-                                class="line-clamp-2 cursor-pointer break-words border-0 bg-transparent p-0 text-left text-[22px] font-bold leading-snug text-white transition-colors hover:text-[#8ea2ff]"
+                            <div
+                                class="line-clamp-2 break-words text-[22px] font-bold leading-snug text-white"
                                 :title="penalty.name"
-                                @click="modal = penalty.id"
                             >
                                 {{ penalty.name }}
-                            </button>
+                            </div>
                         </div>
 
                         <button
@@ -206,7 +208,7 @@ function filterPenaltyData(
                             :class="stateColor(penalty.state, 'bg')"
                             class="shrink-0 cursor-pointer rounded-lg border-0 px-2.5 py-1 text-sm font-bold leading-none text-white shadow-sm shadow-black/25 transition-opacity hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#8ea2ff]"
                             :title="`點擊篩選：${stateString(penalty.state)}`"
-                            @click="emit('updateState', penalty.state)"
+                            @click.stop="emit('updateState', penalty.state)"
                         >
                             {{ stateString(penalty.state) }}
                         </button>
@@ -218,10 +220,10 @@ function filterPenaltyData(
                         <button
                             v-if="showActions"
                             type="button"
-                            class="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#a855f7] text-white shadow-md shadow-black/20 transition-colors hover:bg-[#9333ea] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#a855f7]"
+                            class="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#7e22ce] text-white shadow-md shadow-black/20 transition-colors hover:bg-[#6b21a8] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#a855f7]"
                             aria-label="編輯懲罰"
                             title="編輯懲罰"
-                            @click="emit('editPenalty', penalty)"
+                            @click.stop="emit('editPenalty', penalty)"
                         >
                             <VaIcon name="edit" size="small" />
                         </button>
@@ -235,7 +237,7 @@ function filterPenaltyData(
                                     : '此日期尚無直播影片'
                             "
                             class="inline-flex h-9 shrink-0 items-center justify-center gap-1.5 rounded-full bg-[#d90000] px-4 text-sm font-semibold text-white shadow-md shadow-black/20 transition-colors hover:bg-[#b30000] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#ff0000] disabled:cursor-not-allowed disabled:bg-zinc-600 disabled:opacity-50 disabled:hover:bg-zinc-600"
-                            @click="openVodOfDate(penalty.date)"
+                            @click.stop="openVodOfDate(penalty.date)"
                         >
                             <VaIcon color="#ffffff" size="1.25rem">
                                 <Play24Filled />
@@ -248,20 +250,24 @@ function filterPenaltyData(
 
             <div v-else-if="items.length" class="w-full pb-4 pr-1">
                 <div
-                    class="mb-1 hidden grid-cols-[10.5rem_minmax(0,1fr)_2.25rem_6rem] items-center gap-3 px-4 text-xs font-semibold tracking-wide text-zinc-500 md:grid"
+                    class="mb-1 hidden grid-cols-[10rem_minmax(0,1fr)_6rem_2.25rem] items-center gap-3 px-4 text-xs font-semibold tracking-wide text-zinc-500 md:grid"
                     aria-hidden="true"
                 >
                     <span>日期</span>
                     <span>懲罰</span>
-                    <span />
                     <span class="text-center">狀態</span>
+                    <span />
                 </div>
 
                 <div class="flex w-full flex-col gap-1.5">
                     <article
                         v-for="penalty in items"
                         :key="penalty.id"
-                        class="grid grid-cols-[minmax(0,1fr)_auto_auto] items-center gap-x-3 gap-y-1.5 rounded-xl border border-zinc-700/40 bg-zinc-800/40 px-4 py-2.5 backdrop-blur-sm transition-colors hover:border-[#8ea2ff]/40 hover:bg-zinc-700/40 md:grid-cols-[10.5rem_minmax(0,1fr)_2.25rem_6rem] md:gap-3"
+                        tabindex="0"
+                        class="grid cursor-pointer grid-cols-[minmax(0,1fr)_auto_auto] items-center gap-x-3 gap-y-1.5 rounded-xl border border-zinc-700/40 bg-zinc-800/40 px-4 py-2.5 backdrop-blur-sm transition-colors hover:border-[#8ea2ff]/40 hover:bg-zinc-700/40 md:grid-cols-[10rem_minmax(0,1fr)_6rem_2.25rem] md:gap-3"
+                        @click="modal = penalty.id"
+                        @keydown.enter.self="modal = penalty.id"
+                        @keydown.space.self.prevent="modal = penalty.id"
                     >
                         <div
                             class="col-start-1 row-start-1 flex min-w-0 items-center gap-2"
@@ -282,7 +288,7 @@ function filterPenaltyData(
                                         : '此日期尚無直播影片'
                                 "
                                 class="inline-flex h-7 w-7 shrink-0 cursor-pointer items-center justify-center rounded-full bg-[#d90000] text-white shadow-sm shadow-black/25 transition-colors hover:bg-[#b30000] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#ff0000] disabled:cursor-not-allowed disabled:bg-zinc-600 disabled:opacity-50 disabled:hover:bg-zinc-600"
-                                @click="openVodOfDate(penalty.date)"
+                                @click.stop="openVodOfDate(penalty.date)"
                             >
                                 <VaIcon color="#ffffff" size="0.9rem">
                                     <Play24Filled />
@@ -290,21 +296,19 @@ function filterPenaltyData(
                             </button>
                         </div>
 
-                        <button
-                            type="button"
-                            class="col-span-3 row-start-2 cursor-pointer truncate border-0 bg-transparent p-0 text-left text-base font-bold text-white transition-colors hover:text-[#8ea2ff] md:col-span-1 md:col-start-2 md:row-start-1"
+                        <div
+                            class="col-span-3 row-start-2 truncate text-base font-bold text-white md:col-span-1 md:col-start-2 md:row-start-1"
                             :title="penalty.name"
-                            @click="modal = penalty.id"
                         >
                             {{ penalty.name }}
-                        </button>
+                        </div>
 
                         <button
                             type="button"
                             :class="stateColor(penalty.state, 'bg')"
-                            class="col-start-3 row-start-1 shrink-0 cursor-pointer justify-self-end rounded-lg border-0 px-2.5 py-1 text-xs font-bold leading-none text-white shadow-sm shadow-black/25 transition-opacity hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#8ea2ff] md:col-start-4 md:row-start-1"
+                            class="col-start-2 row-start-1 shrink-0 cursor-pointer justify-self-end rounded-lg border-0 px-2.5 py-1 text-xs font-bold leading-none text-white shadow-sm shadow-black/25 transition-opacity hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#8ea2ff] md:col-start-3 md:row-start-1"
                             :title="`點擊篩選：${stateString(penalty.state)}`"
-                            @click="emit('updateState', penalty.state)"
+                            @click.stop="emit('updateState', penalty.state)"
                         >
                             {{ stateString(penalty.state) }}
                         </button>
@@ -312,10 +316,10 @@ function filterPenaltyData(
                         <button
                             v-if="showActions"
                             type="button"
-                            class="col-start-2 row-start-1 inline-flex h-9 w-9 shrink-0 cursor-pointer items-center justify-center justify-self-end rounded-full bg-[#a855f7] text-white shadow-md shadow-black/20 transition-colors hover:bg-[#9333ea] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#a855f7] md:col-start-3 md:row-start-1"
+                            class="col-start-3 row-start-1 inline-flex h-9 w-9 shrink-0 cursor-pointer items-center justify-center justify-self-end rounded-full bg-[#7e22ce] text-white shadow-md shadow-black/20 transition-colors hover:bg-[#6b21a8] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#a855f7] md:col-start-4 md:row-start-1"
                             aria-label="編輯懲罰"
                             title="編輯懲罰"
-                            @click="emit('editPenalty', penalty)"
+                            @click.stop="emit('editPenalty', penalty)"
                         >
                             <VaIcon name="edit" size="small" />
                         </button>

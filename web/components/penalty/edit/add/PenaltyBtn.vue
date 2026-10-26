@@ -166,6 +166,7 @@ function save() {
     </VaButton>
 
     <VaModal
+        aria-label="懲罰按鈕設定"
         v-model="isModalOpen"
         @update:model-value="closeModal"
         hide-default-actions
