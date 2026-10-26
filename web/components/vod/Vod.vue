@@ -71,8 +71,8 @@ const handleEditVod = (vod: VodItem) => {
 <template>
     <main class="vod-page">
         <section class="w-full max-w-[1680px] mx-auto">
-            <div class="mx-4 md:mx-20 mb-6">
-                <h1 class="text-3xl font-bold text-neutral-100">直播隨選</h1>
+            <div class="mx-4 md:mx-20 mb-3">
+                <h1 class="text-2xl font-bold text-neutral-100">直播隨選</h1>
             </div>
             <section
                 class="vod-filter-bar mx-4 md:mx-20 rounded-3xl"
@@ -188,7 +188,7 @@ const handleEditVod = (vod: VodItem) => {
         ),
         linear-gradient(135deg, #0f1117 0%, #16191f 48%, #101318 100%);
     color: #f7f7f8;
-    padding: 2.5rem 1rem 1.25rem;
+    padding: 1.25rem 1rem 1.25rem;
 }
 
 .vod-filter-bar {
@@ -196,7 +196,7 @@ const handleEditVod = (vod: VodItem) => {
     grid-template-columns: minmax(13rem, 1fr) minmax(18rem, 2fr) auto;
     gap: 0.75rem;
     align-items: center;
-    margin-bottom: 1rem;
+    margin-bottom: 0.75rem;
     border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: 8px;
     background: linear-gradient(
@@ -222,7 +222,7 @@ const handleEditVod = (vod: VodItem) => {
 
 @media (max-width: 767px) {
     .vod-page {
-        padding: 4rem 0.75rem 1rem;
+        padding: 3.5rem 0.75rem 1rem;
     }
 
     .vod-filter-bar {

@@ -84,7 +84,7 @@ onMounted(loadPenData);
 <template>
     <main ref="pageRef" class="penalty-page">
         <section class="penalty-shell page-content">
-            <h1 class="mb-4 text-3xl font-bold text-neutral-100">直播懲罰</h1>
+            <h1 class="mb-2 text-2xl font-bold text-neutral-100">直播懲罰</h1>
             <div class="mb-2 flex justify-end">
                 <button
                     type="button"
@@ -108,7 +108,7 @@ onMounted(loadPenData);
                     v-show="!panelsCollapsed"
                     ref="panelsRef"
                     id="penalty-quick-panels"
-                    class="penalty-quick-panels grid gap-4 pb-4"
+                    class="penalty-quick-panels grid gap-4 pb-3"
                     aria-label="懲罰快速面板"
                 >
                     <News :penalties="penalties" />
@@ -118,7 +118,7 @@ onMounted(loadPenData);
             </Transition>
 
             <section
-                class="penalty-filter-bar grid gap-3 items-center mb-4 rounded-3xl"
+                class="penalty-filter-bar grid gap-3 items-center mb-3 rounded-3xl"
                 aria-label="懲罰篩選"
             >
                 <VaDateInput
@@ -202,7 +202,7 @@ onMounted(loadPenData);
         ),
         linear-gradient(135deg, #0f1117 0%, #16191f 48%, #101318 100%);
     color: #f7f7f8;
-    padding: 2.5rem 1rem 1.25rem;
+    padding: 1.25rem 1rem 1.25rem;
 }
 
 .penalty-quick-panels {
@@ -313,7 +313,7 @@ kbd {
 
 @media (max-width: 720px) {
     .penalty-page {
-        padding: 4rem 0.75rem 1rem;
+        padding: 3.5rem 0.75rem 1rem;
         height: calc(100vh - var(--app-footer-height, 48px));
         height: calc(100dvh - var(--app-footer-height, 48px));
         min-height: 0;
