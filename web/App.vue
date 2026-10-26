@@ -121,9 +121,16 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-    <header class="fixed top-0 left-0 right-0 z-20 w-full pointer-events-none">
-        <div class="flex items-center justify-between px-4 py-3">
-            <div ref="dropdownRef" class="relative pointer-events-auto">
+    <header
+        class="fixed top-0 left-0 right-0 z-20 w-full pointer-events-none lg:border-b lg:border-white/10 lg:bg-[#0b0d12]/85 lg:backdrop-blur-md"
+    >
+        <div
+            class="relative flex items-center justify-between px-4 py-3 lg:px-6 lg:py-4"
+        >
+            <div
+                ref="dropdownRef"
+                class="relative pointer-events-auto lg:hidden"
+            >
                 <button
                     ref="menuTriggerRef"
                     type="button"
@@ -186,11 +193,55 @@ onBeforeUnmount(() => {
                     </nav>
                 </div>
             </div>
+
+            <RouterLink
+                to="/"
+                class="pointer-events-auto hidden items-center lg:flex"
+                aria-label="水星樂園"
+                @click="backToTop()"
+            >
+                <img src="/images/icon.webp" class="h-8 w-8" alt="" />
+            </RouterLink>
+
+            <nav
+                aria-label="主要導覽"
+                class="desktop-nav pointer-events-auto absolute left-1/2 top-1/2 hidden -translate-x-1/2 -translate-y-1/2 items-center gap-1 lg:flex"
+            >
+                <RouterLink
+                    v-for="item in tabs"
+                    :key="item.path"
+                    :to="item.path"
+                    class="shrink-0 whitespace-nowrap rounded-full px-3 py-2 text-sm text-zinc-300 transition-colors hover:bg-white/10 hover:text-white"
+                    @click="backToTop()"
+                >
+                    {{ item.label }}
+                </RouterLink>
+            </nav>
+
+            <button
+                type="button"
+                class="pointer-events-auto hidden items-center gap-1.5 whitespace-nowrap rounded-full border px-4 py-2 text-sm font-bold shadow-lg backdrop-blur-md transition-all lg:inline-flex"
+                :class="
+                    authState.isAuthenticated
+                        ? 'border-rose-400/30 bg-rose-400/10 text-rose-200 hover:border-rose-300/50 hover:bg-rose-400/15'
+                        : 'border-amber-300/30 bg-amber-300/10 text-amber-200 hover:border-amber-200/60 hover:bg-amber-300/15'
+                "
+                @click="
+                    authState.isAuthenticated ? triggerLogout() : triggerLogin()
+                "
+            >
+                <VaIcon
+                    name="admin_panel_settings"
+                    size="small"
+                    aria-hidden="true"
+                />
+                {{ authState.isAuthenticated ? "結束管理" : "開啟管理" }}
+            </button>
         </div>
     </header>
     <Login ref="loginRef" :render-trigger="false" />
     <div
-        class="app-shell flex flex-col"
+        class="app-shell flex flex-col lg:pt-[4.5rem]"
         :style="
             footerHeight > 0
                 ? { '--app-footer-height': `${footerHeight}px` }
@@ -279,6 +330,11 @@ onBeforeUnmount(() => {
 .app-shell {
     min-height: 100vh;
     min-height: 100dvh;
+}
+
+.desktop-nav a.router-link-active {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: #ffffff;
 }
 
 .va-navbar {
