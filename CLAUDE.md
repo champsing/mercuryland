@@ -52,7 +52,7 @@ Source layout:
 - `src/coin/` — Mercury Coin rules and chat-command handling.
 - `src/discord/`, `src/youtube/` — bot and live-chat listener.
 - `src/config.rs`, `src/error.rs`, `src/lib.rs` — config, error type, module root.
-- `web/` — SPA: `router.ts` (11 routes), `components/` (per-feature folders), `composables/`, `assets/data/` (static JSON).
+- `web/` — SPA: `router.ts` (10 routes), `components/` (per-feature folders), `composables/`, `assets/data/` (static JSON).
 
 ## Conventions
 
