@@ -535,6 +535,7 @@ const isSubmitAvailable: ComputedRef<boolean> = computed(() => {
 
         <!-- Modals -->
         <VaModal
+            aria-label="轉盤抽獎結果"
             v-model="modal.show"
             noDismiss
             @ok="move"
@@ -547,6 +548,7 @@ const isSubmitAvailable: ComputedRef<boolean> = computed(() => {
             </div>
         </VaModal>
         <VaModal
+            aria-label="清空轉盤確認"
             v-model="modal2.show"
             noDismiss
             :mobile-fullscreen="false"
@@ -566,6 +568,7 @@ const isSubmitAvailable: ComputedRef<boolean> = computed(() => {
             <div v-else class="text-4xl text-right text-[#bae64c]">←清</div>
         </VaModal>
         <VaModal
+            aria-label="廣播懲罰到 Discord"
             v-model="modal3.show"
             ok-text="廣播到Discord"
             cancel-text="取消"
@@ -586,6 +589,7 @@ const isSubmitAvailable: ComputedRef<boolean> = computed(() => {
             </div>
         </VaModal>
         <VaModal
+            aria-label="確認懲罰生效狀態"
             v-model="modal4.show"
             title="確認懲罰生效狀態"
             ok-text="設定完成"

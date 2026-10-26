@@ -105,6 +105,7 @@ const footnote0 = ref(false);
         </VaCard>
 
         <VaModal
+            aria-label="懲罰圖例"
             :model-value="modal !== null"
             @update:model-value="
                 (value) => {
@@ -192,6 +193,7 @@ const footnote0 = ref(false);
         </VaModal>
 
         <VaModal
+            aria-label="無法完成的懲罰說明"
             v-model:model-value="footnote0"
             hide-default-actions
             close-button

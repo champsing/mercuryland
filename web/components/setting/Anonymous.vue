@@ -138,6 +138,7 @@ const columns = [
     </VaCard>
 
     <VaModal
+        aria-label="匿名訊息紀錄"
         v-model="showModal"
         max-width="800px"
         close-button
@@ -145,7 +146,7 @@ const columns = [
         :hide-default-actions="true"
     >
         <template #header>
-            <h3 class="text-lg font-semibold">匿名訊息紀錄</h3>
+            <h2 class="text-lg font-semibold">匿名訊息紀錄</h2>
         </template>
         <VaDataTable
             :items="anonymousData"

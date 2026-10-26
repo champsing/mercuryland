@@ -140,6 +140,7 @@ async function saveVoteConfig() {
     </VaCard>
 
     <VaModal
+        aria-label="懲罰頻道設定"
         v-model="showPenaltyChannelModal"
         @ok="savePenaltyChannel"
         ok-text="保存"
@@ -150,6 +151,7 @@ async function saveVoteConfig() {
     </VaModal>
 
     <VaModal
+        aria-label="交易所頻道設定"
         v-model="showCoinChannelModal"
         @ok="saveCoinChannel"
         ok-text="保存"
@@ -160,6 +162,7 @@ async function saveVoteConfig() {
     </VaModal>
 
     <VaModal
+        aria-label="投票頻道與訊息設定"
         v-model="showVoteConfigModal"
         @ok="saveVoteConfig"
         ok-text="保存"

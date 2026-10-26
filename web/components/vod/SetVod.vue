@@ -271,6 +271,7 @@ defineExpose({
 
 <template>
     <VaModal
+        aria-label="編輯直播紀錄"
         v-model="showEditVodModal"
         hide-default-actions
         close-button
@@ -306,6 +307,7 @@ defineExpose({
             <VaTimeInput
                 v-model="editVodDuration"
                 label="直播時長"
+                role="group"
                 color="info"
                 :ampm="false"
                 :hide-period-switch="true"
@@ -374,6 +376,7 @@ defineExpose({
         </div>
 
         <VaModal
+            aria-label="刪除直播確認"
             v-model="showDeleteConfirmModal"
             hide-default-actions
             close-button

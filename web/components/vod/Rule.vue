@@ -19,6 +19,7 @@ const showRuleDescModal = ref(false);
     </VaButton>
 
     <VaModal
+        aria-label="規則說明"
         v-model="showRuleDescModal"
         hide-default-actions
         close-button

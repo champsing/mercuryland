@@ -103,6 +103,7 @@ defineExpose({ open: openAddPenaltyModal });
 
 <template>
     <VaModal
+        aria-label="新增懲罰"
         v-model="showAddPenaltyModal"
         hide-default-actions
         close-button

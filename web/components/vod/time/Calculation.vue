@@ -138,6 +138,7 @@ function format(seconds: number): string {
 
 <template>
     <VaModal
+        aria-label="計算明細"
         v-model="showModal"
         hide-default-actions
         close-button

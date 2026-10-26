@@ -137,6 +137,7 @@ function clickDone() {
         </VaCard>
 
         <VaModal
+            aria-label="懲罰統計"
             :model-value="modal !== null"
             @update:model-value="
                 (value) => {
@@ -222,6 +223,7 @@ function clickDone() {
                     </div>
                     <VaTextarea
                         v-model="modal.leftText"
+                        :label="stateString(modal.leftSlot)"
                         :maxRows="7"
                         :resize="false"
                         readonly
@@ -236,6 +238,7 @@ function clickDone() {
                     </div>
                     <VaTextarea
                         v-model="modal.rightText"
+                        :label="stateString(modal.rightSlot)"
                         :maxRows="7"
                         :resize="false"
                         readonly
@@ -269,6 +272,20 @@ function clickDone() {
 
 .stat-action--success {
     background: #297a33 !important;
+}
+
+/* The visible column headings already show the state; the textarea label is
+   for assistive technology only. */
+.stat-modal :deep(.va-input-wrapper__label) {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
 }
 
 /* Sizing override — appearance (glassomorphism) comes from

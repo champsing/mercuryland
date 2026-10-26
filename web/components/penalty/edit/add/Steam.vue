@@ -144,6 +144,7 @@ function save() {
     </VaButton>
 
     <VaModal
+        aria-label="插入 Steam 遊戲"
         v-model="isModalOpen"
         @update:model-value="closeModal"
         hide-default-actions

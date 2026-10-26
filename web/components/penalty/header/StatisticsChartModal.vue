@@ -351,6 +351,7 @@ const pieOption = computed(() => {
 
 <template>
     <VaModal
+        aria-label="懲罰統計圖表"
         :model-value="modelValue"
         @update:model-value="
             (value: boolean) => emit('update:modelValue', value)

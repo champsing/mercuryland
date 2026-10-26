@@ -220,7 +220,7 @@ function filterPenaltyData(
                         <button
                             v-if="showActions"
                             type="button"
-                            class="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#a855f7] text-white shadow-md shadow-black/20 transition-colors hover:bg-[#9333ea] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#a855f7]"
+                            class="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#7e22ce] text-white shadow-md shadow-black/20 transition-colors hover:bg-[#6b21a8] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#a855f7]"
                             aria-label="編輯懲罰"
                             title="編輯懲罰"
                             @click.stop="emit('editPenalty', penalty)"
@@ -316,7 +316,7 @@ function filterPenaltyData(
                         <button
                             v-if="showActions"
                             type="button"
-                            class="col-start-3 row-start-1 inline-flex h-9 w-9 shrink-0 cursor-pointer items-center justify-center justify-self-end rounded-full bg-[#a855f7] text-white shadow-md shadow-black/20 transition-colors hover:bg-[#9333ea] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#a855f7] md:col-start-4 md:row-start-1"
+                            class="col-start-3 row-start-1 inline-flex h-9 w-9 shrink-0 cursor-pointer items-center justify-center justify-self-end rounded-full bg-[#7e22ce] text-white shadow-md shadow-black/20 transition-colors hover:bg-[#6b21a8] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#a855f7] md:col-start-4 md:row-start-1"
                             aria-label="編輯懲罰"
                             title="編輯懲罰"
                             @click.stop="emit('editPenalty', penalty)"

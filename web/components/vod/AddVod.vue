@@ -259,6 +259,7 @@ defineExpose({ open: openAddVodModal });
 
 <template>
     <VaModal
+        aria-label="新增直播紀錄"
         v-model="showAddVodModal"
         hide-default-actions
         close-button
@@ -307,6 +308,7 @@ defineExpose({ open: openAddVodModal });
             <VaTimeInput
                 v-model="addVodDuration"
                 label="時長"
+                role="group"
                 color="info"
                 :ampm="false"
                 :hide-period-switch="true"

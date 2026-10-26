@@ -230,6 +230,7 @@ defineExpose({ open });
 
 <template>
     <VaModal
+        aria-label="編輯懲罰"
         v-model="showModal"
         hide-default-actions
         close-button
@@ -288,6 +289,7 @@ defineExpose({ open });
 
         <!-- 删除确认弹窗 -->
         <VaModal
+            aria-label="刪除懲罰確認"
             v-model="showDeleteConfirm"
             hide-default-actions
             close-button
