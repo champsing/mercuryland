@@ -161,7 +161,7 @@ function save() {
         aria-label="插入懲罰"
         title="插入懲罰"
     >
-        <VaIcon class="mr-2 max-md:mr-0"><Gavel /></VaIcon>
+        <VaIcon class="mr-2 max-md:mr-0" aria-hidden="true"><Gavel /></VaIcon>
         <span class="max-md:hidden">插入懲罰</span>
     </VaButton>
 
