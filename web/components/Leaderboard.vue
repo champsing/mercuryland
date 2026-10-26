@@ -130,9 +130,9 @@ function podiumSize(rank: number): string {
     <main
         class="lb-page min-h-[calc(100vh-48px)] text-[#f7f7f8] pt-10 pb-5 px-4 max-md:pt-16 max-md:pb-4 max-md:px-3"
     >
-        <div class="w-full max-w-[1200px] mx-auto">
+        <div class="page-content">
             <!-- Header -->
-            <div class="mb-6 px-4">
+            <div class="mb-6">
                 <h1 class="text-3xl font-bold text-neutral-100">水星排行</h1>
                 <div class="mt-1 flex items-center gap-1.5">
                     <p class="text-sm text-zinc-400">
@@ -165,7 +165,7 @@ function podiumSize(rank: number): string {
             <!-- Top 3 Podium -->
             <section
                 v-if="leaderboard.length > 0"
-                class="px-4 mb-8"
+                class="mb-8"
                 aria-label="前三名榮譽榜"
             >
                 <div
@@ -251,7 +251,7 @@ function podiumSize(rank: number): string {
             <!-- Remaining ranks (4–50) -->
             <section
                 v-if="leaderboard.length > 3"
-                class="px-4 pb-8"
+                class="pb-8"
                 aria-label="其餘排行"
             >
                 <div class="flex items-center gap-3 mb-3">

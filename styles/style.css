@@ -6,6 +6,25 @@ html {
 @tailwind components;
 @tailwind utilities;
 
+/*
+ * Shared page shell. Mirrors the VOD page: a 1680px content cap plus an
+ * extra 80px gutter on desktop. It is used inside the page's own
+ * px-4 / max-md:px-3 root padding, so the final content edge matches VOD
+ * at 96px on desktop and 28px on mobile.
+ */
+.page-content {
+    width: 100%;
+    max-width: 1680px;
+    margin-inline: auto;
+    padding-inline: 1rem;
+}
+
+@media (min-width: 768px) {
+    .page-content {
+        padding-inline: 5rem;
+    }
+}
+
 .va-card {
     background-color: var(--va-background-element) !important;
     box-shadow: none !important;

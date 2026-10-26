@@ -9,7 +9,7 @@ import ContactCard from "./ContactCard.vue";
     <div
         class="contact-page min-h-[calc(100vh-48px)] text-[#f7f7f8] pt-10 pb-5 px-4 max-md:pt-16 max-md:pb-4 max-md:px-3"
     >
-        <div class="w-full max-w-[1400px] mx-auto">
+        <div class="page-content">
             <div class="flex flex-col md:flex-row justify-center gap-6 pt-10">
                 <ContactCard
                     name1="惡靈"
