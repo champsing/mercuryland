@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { onMounted, onUnmounted, ref } from "vue";
+import { VaIcon } from "vuestic-ui";
 import NextPageButton from "./NextPageButton.vue";
 
 const props = withDefaults(
@@ -114,6 +115,10 @@ onUnmounted(() => {
                 class="absolute left-0 top-0 w-full aspect-square bg-gradient-to-b from-transparent via-transparent to-[#05050a]"
             />
             <div
+                class="pointer-events-none absolute inset-x-0 bottom-0 h-56 bg-gradient-to-t from-amber-400/5 to-transparent"
+                aria-hidden="true"
+            />
+            <div
                 class="relative flex h-full flex-col items-center justify-center px-6"
             >
                 <div class="flex flex-col items-center gap-3 text-center">
@@ -134,6 +139,21 @@ onUnmounted(() => {
                         환영합니다
                     </div>
                 </div>
+            </div>
+            <div
+                class="pointer-events-none absolute bottom-24 left-1/2 flex -translate-x-1/2 flex-col items-center gap-1 text-amber-300/70"
+                aria-hidden="true"
+            >
+                <span
+                    class="text-[0.62rem] font-bold tracking-[0.35em] uppercase"
+                >
+                    向下滑動
+                </span>
+                <VaIcon
+                    name="keyboard_arrow_down"
+                    size="1.5rem"
+                    class="animate-bounce motion-reduce:animate-none"
+                />
             </div>
         </div>
     </div>
