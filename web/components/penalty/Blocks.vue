@@ -234,7 +234,7 @@ function filterPenaltyData(
                                     ? `觀看 ${penalty.date} 的直播`
                                     : '此日期尚無直播影片'
                             "
-                            class="inline-flex h-9 shrink-0 items-center justify-center gap-1.5 rounded-full bg-[#ff0000] px-4 text-sm font-semibold text-white shadow-md shadow-black/20 transition-colors hover:bg-[#e60000] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#ff0000] disabled:cursor-not-allowed disabled:bg-zinc-600 disabled:opacity-50 disabled:hover:bg-zinc-600"
+                            class="inline-flex h-9 shrink-0 items-center justify-center gap-1.5 rounded-full bg-[#d90000] px-4 text-sm font-semibold text-white shadow-md shadow-black/20 transition-colors hover:bg-[#b30000] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#ff0000] disabled:cursor-not-allowed disabled:bg-zinc-600 disabled:opacity-50 disabled:hover:bg-zinc-600"
                             @click="openVodOfDate(penalty.date)"
                         >
                             <VaIcon color="#ffffff" size="1.25rem">
@@ -281,7 +281,7 @@ function filterPenaltyData(
                                         ? `觀看 ${penalty.date} 的直播`
                                         : '此日期尚無直播影片'
                                 "
-                                class="inline-flex h-7 w-7 shrink-0 cursor-pointer items-center justify-center rounded-full bg-[#ff0000] text-white shadow-sm shadow-black/25 transition-colors hover:bg-[#e60000] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#ff0000] disabled:cursor-not-allowed disabled:bg-zinc-600 disabled:opacity-50 disabled:hover:bg-zinc-600"
+                                class="inline-flex h-7 w-7 shrink-0 cursor-pointer items-center justify-center rounded-full bg-[#d90000] text-white shadow-sm shadow-black/25 transition-colors hover:bg-[#b30000] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#ff0000] disabled:cursor-not-allowed disabled:bg-zinc-600 disabled:opacity-50 disabled:hover:bg-zinc-600"
                                 @click="openVodOfDate(penalty.date)"
                             >
                                 <VaIcon color="#ffffff" size="0.9rem">

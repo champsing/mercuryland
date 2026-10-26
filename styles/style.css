@@ -19,28 +19,31 @@ html {
     @apply truncate;
 }
 
-.text-6d8581 {
-    color: #6d8581 !important;
+/* Penalty-state palette. The text variants are lighter than the background
+   variants on purpose: text has to clear 4.5:1 on the dark page/modal
+   surfaces, while the backgrounds have to clear 4.5:1 under white text. */
+.text-7a938f {
+    color: #7a938f !important;
 }
 
-.text-b91c1c {
-    color: #b91c1c !important;
+.text-f87171 {
+    color: #f87171 !important;
 }
 
-.text-b45309 {
-    color: #b45309 !important;
+.text-f59e0b {
+    color: #f59e0b !important;
 }
 
-.text-047857 {
-    color: #047857 !important;
+.text-10b981 {
+    color: #10b981 !important;
 }
 
-.text-4d7c0f {
-    color: #4d7c0f !important;
+.text-84cc16 {
+    color: #84cc16 !important;
 }
 
-.bg-6d8581 {
-    background-color: #6d8581 !important;
+.bg-5a716e {
+    background-color: #5a716e !important;
 }
 
 .bg-b91c1c {

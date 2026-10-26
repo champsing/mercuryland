@@ -23,15 +23,15 @@ export function stateString(state: number): string {
 
 export function stateColor(state: number, mode: "bg" | "text" | "raw"): string {
     const colors = {
-        bg: ["bg-6d8581", "bg-b91c1c", "bg-b45309", "bg-047857", "bg-4d7c0f"],
+        bg: ["bg-5a716e", "bg-b91c1c", "bg-b45309", "bg-047857", "bg-4d7c0f"],
         text: [
-            "text-6d8581",
-            "text-b91c1c",
-            "text-b45309",
-            "text-047857",
-            "text-4d7c0f",
+            "text-7a938f",
+            "text-f87171",
+            "text-f59e0b",
+            "text-10b981",
+            "text-84cc16",
         ],
-        raw: ["#6d8581", "#b91c1c", "#b45309", "#047857", "#4d7c0f"],
+        raw: ["#7a938f", "#f87171", "#f59e0b", "#10b981", "#84cc16"],
     };
     return colors[mode][state] || colors[mode][0];
 }
