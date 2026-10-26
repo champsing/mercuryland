@@ -247,8 +247,13 @@ onBeforeUnmount(() => {
             </VaAlert>
 
             <div>
-                <label class="block text-sm font-medium mb-2">選擇圖片</label>
+                <label
+                    for="image-file-input"
+                    class="block text-sm font-medium mb-2"
+                    >選擇圖片</label
+                >
                 <input
+                    id="image-file-input"
                     ref="fileInputRef"
                     type="file"
                     accept="image/*"

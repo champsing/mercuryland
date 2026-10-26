@@ -45,7 +45,11 @@
     top: 1rem !important;
     right: 1rem !important;
     color: #e4e4e7 !important;
-    opacity: 0.8;
+    opacity: 1;
+}
+
+.va-modal .va-select__toggle-icon {
+    color: #cbd5e1 !important;
 }
 
 .va-modal__default-cancel-button .va-button__content {
