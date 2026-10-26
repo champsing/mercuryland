@@ -13,7 +13,7 @@ const text = computed(() =>
 
 <template>
     <div
-        class="flex w-full items-center justify-between gap-3 rounded-t-2xl border border-x-0 border-b-0 border-white/[0.10] bg-zinc-300/12 px-4 py-2.5 shadow-[0_4px_24px_rgba(0,0,0,0.25)] backdrop-blur-xl md:w-auto md:rounded-[2rem] md:border md:px-5 md:py-2"
+        class="flex w-full items-center justify-between gap-3 rounded-2xl border border-white/[0.10] bg-zinc-300/12 px-4 py-2.5 shadow-[0_4px_24px_rgba(0,0,0,0.25)] backdrop-blur-xl md:w-auto md:rounded-[2rem] md:border md:px-5 md:py-2"
     >
         <div class="flex items-baseline gap-2 md:items-center md:gap-4">
             <span
