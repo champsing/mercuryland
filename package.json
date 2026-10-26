@@ -42,7 +42,7 @@
         "typescript": "^5.4.5",
         "url": "^0.11.3",
         "vite": "^7.3.7",
-        "vitest": "^4.1.11",
+        "vitest": "^4.1.12",
         "vue-tsc": "^3.2.5"
     },
     "prettier": {
