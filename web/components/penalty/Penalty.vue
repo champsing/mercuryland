@@ -82,8 +82,8 @@ onMounted(loadPenData);
 
 <template>
     <main ref="pageRef" class="penalty-page">
-        <section class="penalty-shell w-full max-w-[1680px] mx-auto">
-            <div class="mb-2 flex justify-end px-3 md:px-6">
+        <section class="penalty-shell page-content">
+            <div class="mb-2 flex justify-end">
                 <button
                     type="button"
                     class="inline-flex cursor-pointer items-center gap-1.5 rounded-lg border border-white/10 bg-zinc-900/60 px-3 py-1 text-xs font-semibold text-zinc-300 transition-colors hover:border-[#8ea2ff]/40 hover:bg-zinc-800/70 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#8ea2ff]"
@@ -106,7 +106,7 @@ onMounted(loadPenData);
                     v-show="!panelsCollapsed"
                     ref="panelsRef"
                     id="penalty-quick-panels"
-                    class="penalty-quick-panels grid gap-4 pb-4 px-3 md:px-6"
+                    class="penalty-quick-panels grid gap-4 pb-4"
                     aria-label="懲罰快速面板"
                 >
                     <News :penalties="penalties" />
@@ -116,7 +116,7 @@ onMounted(loadPenData);
             </Transition>
 
             <section
-                class="penalty-filter-bar grid gap-3 items-center mb-4 mx-3 md:mx-10 rounded-3xl"
+                class="penalty-filter-bar grid gap-3 items-center mb-4 rounded-3xl"
                 aria-label="懲罰篩選"
             >
                 <VaDateInput
@@ -158,7 +158,7 @@ onMounted(loadPenData);
                     :min-height="isMobile ? 160 : undefined"
                 >
                     <section
-                        class="penalty-main flex h-full min-h-0 w-full flex-col px-3 md:px-6"
+                        class="penalty-main flex h-full min-h-0 w-full flex-col"
                     >
                         <Blocks
                             :penalties="penalties"

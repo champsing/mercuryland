@@ -11,7 +11,7 @@ const email = ref("0.flunky-sojourn@icloud.com");
 
 <template>
     <main
-        class="law-page min-h-[calc(100vh-48px)] text-[#f7f7f8] pt-10 pb-5 px-6 max-md:pt-16 max-md:pb-4 max-md:px-5"
+        class="law-page min-h-[calc(100vh-48px)] text-[#f7f7f8] pt-10 pb-5 px-7 max-md:pt-16 max-md:pb-4 md:px-24"
     >
         <div class="w-full max-w-3xl mx-auto">
             <div class="mb-8">

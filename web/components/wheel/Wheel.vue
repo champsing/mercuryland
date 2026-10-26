@@ -258,9 +258,9 @@ const isSubmitAvailable: ComputedRef<boolean> = computed(() => {
     <main
         class="wheel-page min-h-[calc(100vh-48px)] text-[#f7f7f8] pt-10 pb-5 px-4 max-md:pt-16 max-md:pb-4 max-md:px-3"
     >
-        <div class="w-full max-w-[1400px] mx-auto">
+        <div class="page-content">
             <!-- Page Header -->
-            <div class="mb-8 px-4">
+            <div class="mb-8">
                 <h1 class="text-3xl font-bold text-neutral-100">幸運轉盤</h1>
                 <div
                     class="mt-1.5 flex flex-wrap items-center gap-x-4 gap-y-1.5"
@@ -272,9 +272,7 @@ const isSubmitAvailable: ComputedRef<boolean> = computed(() => {
             </div>
 
             <!-- Three-Panel Layout -->
-            <div
-                class="flex flex-col lg:flex-row items-start gap-6 px-4 max-md:px-0"
-            >
+            <div class="flex flex-col lg:flex-row items-start gap-6">
                 <!-- Wheel Panel -->
                 <div class="w-full lg:w-[44%]">
                     <div
