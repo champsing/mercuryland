@@ -46,17 +46,17 @@ describe("stateString", () => {
 
 describe("stateColor", () => {
     it("returns the raw color for each state", () => {
-        expect(stateColor(0, "raw")).toBe("#6d8581");
-        expect(stateColor(4, "raw")).toBe("#4d7c0f");
+        expect(stateColor(0, "raw")).toBe("#7a938f");
+        expect(stateColor(4, "raw")).toBe("#84cc16");
     });
 
     it("returns the bg/text classes", () => {
         expect(stateColor(1, "bg")).toBe("bg-b91c1c");
-        expect(stateColor(2, "text")).toBe("text-b45309");
+        expect(stateColor(2, "text")).toBe("text-f59e0b");
     });
 
     it("falls back to the first color for an out-of-range state", () => {
-        expect(stateColor(99, "raw")).toBe("#6d8581");
+        expect(stateColor(99, "raw")).toBe("#7a938f");
     });
 });
 

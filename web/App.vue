@@ -35,6 +35,7 @@ const tabs = computed(() =>
 
 const isMenuOpen = ref(false);
 const dropdownRef = ref<HTMLElement | null>(null);
+const menuTriggerRef = ref<HTMLButtonElement | null>(null);
 const loginRef = ref<InstanceType<typeof Login> | null>(null);
 
 function toggleMenu() {
@@ -53,6 +54,51 @@ function onClickOutside(event: MouseEvent) {
     }
 }
 
+// The disclosure keeps keyboard focus on the trigger and its links while it is
+// open, so Tab never wanders into the page behind the menu.
+function focusableInMenu(): HTMLElement[] {
+    if (!dropdownRef.value) return [];
+    return Array.from(
+        dropdownRef.value.querySelectorAll<HTMLElement>(
+            "button:not([disabled]), a[href], [tabindex]:not([tabindex='-1'])",
+        ),
+    );
+}
+
+function onDocumentKeydown(event: KeyboardEvent) {
+    if (!isMenuOpen.value) return;
+
+    if (event.key === "Escape") {
+        event.preventDefault();
+        closeMenu();
+        menuTriggerRef.value?.focus();
+        return;
+    }
+
+    if (event.key !== "Tab") return;
+
+    const focusables = focusableInMenu();
+    if (focusables.length === 0) return;
+
+    const first = focusables[0];
+    const last = focusables[focusables.length - 1];
+    const active = document.activeElement as HTMLElement | null;
+
+    if (!active || !dropdownRef.value?.contains(active)) {
+        event.preventDefault();
+        (event.shiftKey ? last : first).focus();
+        return;
+    }
+
+    if (event.shiftKey && active === first) {
+        event.preventDefault();
+        last.focus();
+    } else if (!event.shiftKey && active === last) {
+        event.preventDefault();
+        first.focus();
+    }
+}
+
 function triggerLogin() {
     closeMenu();
     loginRef.value?.openLoginModal();
@@ -65,10 +111,12 @@ function triggerLogout() {
 
 onMounted(() => {
     document.addEventListener("click", onClickOutside);
+    document.addEventListener("keydown", onDocumentKeydown);
 });
 
 onBeforeUnmount(() => {
     document.removeEventListener("click", onClickOutside);
+    document.removeEventListener("keydown", onDocumentKeydown);
 });
 </script>
 
@@ -77,9 +125,12 @@ onBeforeUnmount(() => {
         <div class="flex items-center justify-between px-4 py-3">
             <div ref="dropdownRef" class="relative pointer-events-auto">
                 <button
+                    ref="menuTriggerRef"
                     type="button"
                     class="flex items-center focus:outline-none"
                     aria-label="切換導覽選單"
+                    :aria-expanded="isMenuOpen"
+                    aria-controls="app-nav-menu"
                     @click.stop="toggleMenu"
                 >
                     <img
@@ -89,7 +140,8 @@ onBeforeUnmount(() => {
                     />
                 </button>
                 <div
-                    v-if="isMenuOpen"
+                    v-show="isMenuOpen"
+                    id="app-nav-menu"
                     class="absolute left-0 mt-3 w-56 max-w-[calc(100vw-2rem)] rounded-md border border-zinc-700 bg-zinc-900 py-2 shadow-lg"
                 >
                     <nav class="flex flex-col">
