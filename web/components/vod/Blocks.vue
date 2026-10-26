@@ -249,7 +249,7 @@ function toggleTags(vod: VodItem) {
 
             <div v-else-if="data.length" class="w-full pb-24 pr-1">
                 <div
-                    class="mb-1 hidden grid-cols-[8rem_minmax(0,1fr)_13rem_5rem_2.25rem] items-center gap-3 px-4 text-xs font-semibold tracking-wide text-zinc-500 md:grid"
+                    class="mb-1 hidden grid-cols-[8rem_minmax(0,1fr)_18rem_5rem_2.25rem] items-center gap-3 px-4 text-xs font-semibold tracking-wide text-zinc-500 md:grid"
                     aria-hidden="true"
                 >
                     <span>日期</span>
@@ -263,7 +263,7 @@ function toggleTags(vod: VodItem) {
                     <article
                         v-for="vod in data"
                         :key="vod.id"
-                        class="grid grid-cols-[minmax(0,1fr)_auto_auto] items-center gap-x-3 gap-y-1.5 rounded-xl border border-zinc-700/40 bg-zinc-800/40 px-4 py-2.5 backdrop-blur-sm transition-colors hover:border-[#5bc6a1]/40 hover:bg-zinc-700/40 md:grid-cols-[8rem_minmax(0,1fr)_13rem_5rem_2.25rem] md:gap-3"
+                        class="grid grid-cols-[minmax(0,1fr)_auto_auto] items-center gap-x-3 gap-y-1.5 rounded-xl border border-zinc-700/40 bg-zinc-800/40 px-4 py-2.5 backdrop-blur-sm transition-colors hover:border-[#5bc6a1]/40 hover:bg-zinc-700/40 md:grid-cols-[8rem_minmax(0,1fr)_18rem_5rem_2.25rem] md:gap-3"
                     >
                         <div
                             class="col-start-1 row-start-1 flex min-w-0 items-center gap-2"
