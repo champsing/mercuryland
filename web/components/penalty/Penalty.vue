@@ -226,6 +226,14 @@ onMounted(loadPenData);
     padding: 0.85rem !important;
 }
 
+/* Mobile keeps the compressed gap; desktop has room to breathe and the
+   side cards follow the tallest card in the row. */
+@media (min-width: 768px) {
+    .penalty-quick-panels .side-card__content {
+        gap: 0.75rem;
+    }
+}
+
 .penalty-quick-panels .latest-release__title {
     -webkit-line-clamp: 2;
     font-size: 1rem;
