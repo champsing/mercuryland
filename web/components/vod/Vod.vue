@@ -71,6 +71,9 @@ const handleEditVod = (vod: VodItem) => {
 <template>
     <main class="vod-page">
         <section class="w-full max-w-[1680px] mx-auto">
+            <div class="mx-4 md:mx-20 mb-6">
+                <h1 class="text-3xl font-bold text-neutral-100">直播隨選</h1>
+            </div>
             <section
                 class="vod-filter-bar mx-4 md:mx-20 rounded-3xl"
                 aria-label="直播隨選篩選"

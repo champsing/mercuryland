@@ -200,7 +200,7 @@ onBeforeUnmount(() => {
         <div class="flex-1">
             <router-view />
         </div>
-        <div ref="footerRef" class="bg-zinc-900 text-base text-zinc-200">
+        <footer ref="footerRef" class="bg-zinc-900 text-base text-zinc-200">
             <div
                 class="mx-auto flex min-h-12 w-[95%] flex-col items-center justify-between gap-2 py-2 md:min-h-12 md:flex-row"
             >
@@ -269,7 +269,7 @@ onBeforeUnmount(() => {
                     </VaButton>
                 </div>
             </div>
-        </div>
+        </footer>
     </div>
 </template>
 

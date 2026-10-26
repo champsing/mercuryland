@@ -83,6 +83,7 @@ onMounted(loadPenData);
 <template>
     <main ref="pageRef" class="penalty-page">
         <section class="penalty-shell page-content">
+            <h1 class="mb-4 text-3xl font-bold text-neutral-100">直播懲罰</h1>
             <div class="mb-2 flex justify-end">
                 <button
                     type="button"

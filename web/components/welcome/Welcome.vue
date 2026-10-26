@@ -76,31 +76,48 @@ onUnmounted(() => {
 </script>
 
 <template>
-    <!-- Server Open: Snap-scroll container with 5 full-screen slides -->
-    <template v-if="serverInfo.online">
-        <!-- Desktop: snap-scroll, one slide per page -->
-        <div ref="snapContainer" class="welcome-snap-container hidden md:block">
-            <SlideSection class="welcome-snap-section"><Slide1 /></SlideSection>
-            <SlideSection class="welcome-snap-section"><Slide2 /></SlideSection>
-            <SlideSection class="welcome-snap-section"><Slide3 /></SlideSection>
-            <SlideSection class="welcome-snap-section"><Slide4 /></SlideSection>
-            <SlideSection class="welcome-snap-section"><Slide5 /></SlideSection>
-        </div>
+    <main>
+        <h1 class="sr-only">水星樂園</h1>
 
-        <!-- Mobile: normal stacked scroll, same five slides -->
-        <div class="md:hidden">
-            <SlideSection :fade="false"><Slide1 /></SlideSection>
-            <SlideSection :fade="false"><Slide2 /></SlideSection>
-            <SlideSection :fade="false"><Slide3 /></SlideSection>
-            <SlideSection :fade="false"><Slide4 /></SlideSection>
-            <SlideSection :fade="false"><Slide5 /></SlideSection>
-        </div>
-    </template>
+        <!-- Server Open: Snap-scroll container with 5 full-screen slides -->
+        <template v-if="serverInfo.online">
+            <!-- Desktop: snap-scroll, one slide per page -->
+            <div
+                ref="snapContainer"
+                class="welcome-snap-container hidden md:block"
+            >
+                <SlideSection class="welcome-snap-section"
+                    ><Slide1
+                /></SlideSection>
+                <SlideSection class="welcome-snap-section"
+                    ><Slide2
+                /></SlideSection>
+                <SlideSection class="welcome-snap-section"
+                    ><Slide3
+                /></SlideSection>
+                <SlideSection class="welcome-snap-section"
+                    ><Slide4
+                /></SlideSection>
+                <SlideSection class="welcome-snap-section"
+                    ><Slide5
+                /></SlideSection>
+            </div>
 
-    <!-- Server Closed: reuse the redesigned Slide 1 hero so it stays in sync -->
-    <SlideSection v-else :fade="false">
-        <Slide1 :show-scroll-hint="false" />
-    </SlideSection>
+            <!-- Mobile: normal stacked scroll, same five slides -->
+            <div class="md:hidden">
+                <SlideSection :fade="false"><Slide1 /></SlideSection>
+                <SlideSection :fade="false"><Slide2 /></SlideSection>
+                <SlideSection :fade="false"><Slide3 /></SlideSection>
+                <SlideSection :fade="false"><Slide4 /></SlideSection>
+                <SlideSection :fade="false"><Slide5 /></SlideSection>
+            </div>
+        </template>
+
+        <!-- Server Closed: reuse the redesigned Slide 1 hero so it stays in sync -->
+        <SlideSection v-else :fade="false">
+            <Slide1 :show-scroll-hint="false" />
+        </SlideSection>
+    </main>
 </template>
 
 <style>

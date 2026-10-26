@@ -32,7 +32,7 @@ const email = ref("0.flunky-sojourn@icloud.com");
 
                 <p>當您使用本網站服務時，即表示您同意本隱私政策之內容。</p>
 
-                <h1>一、個人資料的蒐集與使用</h1>
+                <h2>一、個人資料的蒐集與使用</h2>
                 <ol>
                     <li>
                         蒐集的資料類型
@@ -57,7 +57,7 @@ const email = ref("0.flunky-sojourn@icloud.com");
                     </li>
                 </ol>
 
-                <h1>二、個人資料的保護</h1>
+                <h2>二、個人資料的保護</h2>
                 <ol>
                     <li>
                         本網站採取以下措施保護您的個人資料
@@ -71,7 +71,7 @@ const email = ref("0.flunky-sojourn@icloud.com");
                     </li>
                 </ol>
 
-                <h1>三、瀏覽外部連結時的資料處理</h1>
+                <h2>三、瀏覽外部連結時的資料處理</h2>
                 <ol>
                     <li>
                         本網站可能包含指向其他網站的連結。本網站無法控制這些第三方網站的隱私政策及其資料處理方式。
@@ -81,7 +81,7 @@ const email = ref("0.flunky-sojourn@icloud.com");
                     </li>
                 </ol>
 
-                <h1>四、個人資料的刪除與更正</h1>
+                <h2>四、個人資料的刪除與更正</h2>
                 <ol>
                     <li>
                         刪除個人資料
@@ -101,7 +101,7 @@ const email = ref("0.flunky-sojourn@icloud.com");
                     </li>
                 </ol>
 
-                <h1>五、與第三方共用個人資料</h1>
+                <h2>五、與第三方共用個人資料</h2>
                 <ol>
                     <li>
                         共用情境
@@ -124,14 +124,14 @@ const email = ref("0.flunky-sojourn@icloud.com");
                     </li>
                 </ol>
 
-                <h1>六、隱私政策的更新</h1>
+                <h2>六、隱私政策的更新</h2>
                 <ol>
                     <li>
                         本網站保留隨時修改本隱私政策的權利。若有重大變更，本網站將透過電子郵件或網站公告通知您。建議您定期查閱本政策，以確保瞭解最新內容。
                     </li>
                 </ol>
 
-                <h1>七、聯絡方式</h1>
+                <h2>七、聯絡方式</h2>
                 <ol>
                     <li>
                         若您對本隱私政策有任何疑問，或需行使您的個人資料權利，請使用電子郵件，或前往「聯絡我們」分頁尋找網站管理人員的Discord，本網站將竭誠為您服務。
@@ -200,7 +200,7 @@ const email = ref("0.flunky-sojourn@icloud.com");
     color: #e4e4e7;
 }
 
-.law-document h1 {
+.law-document h2 {
     margin: 2rem 0 0.75rem;
     padding-bottom: 0.5rem;
     border-bottom: 1px solid rgba(255, 255, 255, 0.08);

@@ -11,7 +11,7 @@ document.title = "系統設定 - 水星人的夢幻樂園";
 </script>
 
 <template>
-    <div class="px-4 max-md:px-3">
+    <main class="px-4 max-md:px-3">
         <div class="page-content">
             <div
                 class="flex w-full flex-col md:flex-row items-start md:items-center justify-between gap-2 md:gap-4 py-2"
@@ -50,7 +50,7 @@ document.title = "系統設定 - 水星人的夢幻樂園";
                 <Anonymous />
             </div>
         </div>
-    </div>
+    </main>
 </template>
 
 <style scoped>

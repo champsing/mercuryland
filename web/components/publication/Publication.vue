@@ -1,5 +1,5 @@
 <script setup lang="ts">
-document.title = "資料公開 - 水星人的夢幻樂園";
+document.title = "水星伺服器 - 水星人的夢幻樂園";
 
 import { ref } from "vue";
 import { VaIcon, VaTab, VaTabs } from "vuestic-ui";
@@ -13,10 +13,11 @@ const activeTab = ref<"join" | "publication" | "archive">("join");
 </script>
 
 <template>
-    <div
+    <main
         class="publication-page min-h-[calc(100vh-48px)] text-[#f7f7f8] pt-10 pb-5 px-4 max-md:pt-16 max-md:pb-4 max-md:px-3"
     >
         <div class="page-content">
+            <h1 class="mb-6 text-3xl font-bold text-neutral-100">水星伺服器</h1>
             <VaTabs v-model="activeTab" color="info" center grow>
                 <template #tabs>
                     <VaTab name="join" color="info">加入伺服</VaTab>
@@ -54,7 +55,7 @@ const activeTab = ref<"join" | "publication" | "archive">("join");
                 </div>
             </div>
         </div>
-    </div>
+    </main>
 </template>
 
 <style>

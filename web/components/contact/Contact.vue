@@ -6,11 +6,12 @@ import ContactCard from "./ContactCard.vue";
 </script>
 
 <template>
-    <div
+    <main
         class="contact-page min-h-[calc(100vh-48px)] text-[#f7f7f8] pt-10 pb-5 px-4 max-md:pt-16 max-md:pb-4 max-md:px-3"
     >
         <div class="page-content">
-            <div class="flex flex-col md:flex-row justify-center gap-6 pt-10">
+            <h1 class="mb-6 text-3xl font-bold text-neutral-100">聯絡我們</h1>
+            <div class="flex flex-col md:flex-row justify-center gap-6">
                 <ContactCard
                     name1="惡靈"
                     name2="Oreki"
@@ -76,7 +77,7 @@ import ContactCard from "./ContactCard.vue";
                 ></iframe>
             </div>
         </div>
-    </div>
+    </main>
 </template>
 
 <style>
