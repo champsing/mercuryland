@@ -20,7 +20,8 @@ document.title = "直播懲罰 - 水星人的夢幻樂園";
 
 let filterDate = defineModel<{ start: Date; end: Date }>("filterDate", {
     default: () => ({
-        start: new Date(1672502400000),
+        // 2018-03-01 00:00 Taipei, matching the VOD filter default.
+        start: new Date(1519833600000),
         end: new Date(Date.now() + 28800000),
     }),
 });
@@ -254,6 +255,11 @@ onMounted(loadPenData);
     box-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
     padding: 0.8rem;
     backdrop-filter: blur(16px);
+}
+
+/* The penalty date filter intentionally has no calendar trigger. */
+.penalty-date .va-input-wrapper__field > .va-icon {
+    display: none;
 }
 
 /* 表格在自己的捲動區內捲動，捲到底不會帶動整個頁面。 */

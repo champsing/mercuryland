@@ -248,20 +248,20 @@ function filterPenaltyData(
 
             <div v-else-if="items.length" class="w-full pb-4 pr-1">
                 <div
-                    class="mb-1 hidden grid-cols-[10.5rem_minmax(0,1fr)_2.25rem_6rem] items-center gap-3 px-4 text-xs font-semibold tracking-wide text-zinc-500 md:grid"
+                    class="mb-1 hidden grid-cols-[10.5rem_minmax(0,1fr)_6rem_2.25rem] items-center gap-3 px-4 text-xs font-semibold tracking-wide text-zinc-500 md:grid"
                     aria-hidden="true"
                 >
                     <span>日期</span>
                     <span>懲罰</span>
-                    <span />
                     <span class="text-center">狀態</span>
+                    <span />
                 </div>
 
                 <div class="flex w-full flex-col gap-1.5">
                     <article
                         v-for="penalty in items"
                         :key="penalty.id"
-                        class="grid grid-cols-[minmax(0,1fr)_auto_auto] items-center gap-x-3 gap-y-1.5 rounded-xl border border-zinc-700/40 bg-zinc-800/40 px-4 py-2.5 backdrop-blur-sm transition-colors hover:border-[#8ea2ff]/40 hover:bg-zinc-700/40 md:grid-cols-[10.5rem_minmax(0,1fr)_2.25rem_6rem] md:gap-3"
+                        class="grid grid-cols-[minmax(0,1fr)_auto_auto] items-center gap-x-3 gap-y-1.5 rounded-xl border border-zinc-700/40 bg-zinc-800/40 px-4 py-2.5 backdrop-blur-sm transition-colors hover:border-[#8ea2ff]/40 hover:bg-zinc-700/40 md:grid-cols-[10.5rem_minmax(0,1fr)_6rem_2.25rem] md:gap-3"
                     >
                         <div
                             class="col-start-1 row-start-1 flex min-w-0 items-center gap-2"
@@ -302,7 +302,7 @@ function filterPenaltyData(
                         <button
                             type="button"
                             :class="stateColor(penalty.state, 'bg')"
-                            class="col-start-3 row-start-1 shrink-0 cursor-pointer justify-self-end rounded-lg border-0 px-2.5 py-1 text-xs font-bold leading-none text-white shadow-sm shadow-black/25 transition-opacity hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#8ea2ff] md:col-start-4 md:row-start-1"
+                            class="col-start-2 row-start-1 shrink-0 cursor-pointer justify-self-end rounded-lg border-0 px-2.5 py-1 text-xs font-bold leading-none text-white shadow-sm shadow-black/25 transition-opacity hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#8ea2ff] md:col-start-3 md:row-start-1"
                             :title="`點擊篩選：${stateString(penalty.state)}`"
                             @click="emit('updateState', penalty.state)"
                         >
@@ -312,7 +312,7 @@ function filterPenaltyData(
                         <button
                             v-if="showActions"
                             type="button"
-                            class="col-start-2 row-start-1 inline-flex h-9 w-9 shrink-0 cursor-pointer items-center justify-center justify-self-end rounded-full bg-[#a855f7] text-white shadow-md shadow-black/20 transition-colors hover:bg-[#9333ea] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#a855f7] md:col-start-3 md:row-start-1"
+                            class="col-start-3 row-start-1 inline-flex h-9 w-9 shrink-0 cursor-pointer items-center justify-center justify-self-end rounded-full bg-[#a855f7] text-white shadow-md shadow-black/20 transition-colors hover:bg-[#9333ea] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#a855f7] md:col-start-4 md:row-start-1"
                             aria-label="編輯懲罰"
                             title="編輯懲罰"
                             @click="emit('editPenalty', penalty)"
