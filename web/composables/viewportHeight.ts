@@ -5,8 +5,8 @@
  * viewport, which keeps the list area exactly one screen tall and lets the
  * inner scroll container do the scrolling.
  *
- * When the content above the wrapper (e.g. the penalty quick panels on a phone)
- * is taller than the viewport, that calculation goes negative. Clamping it to a
+ * When the content above the wrapper (e.g. a collapsible panel on a phone) is
+ * taller than the viewport, that calculation goes negative. Clamping it to a
  * minimum keeps the list usable and lets the page itself scroll instead of
  * collapsing the list to nothing.
  */

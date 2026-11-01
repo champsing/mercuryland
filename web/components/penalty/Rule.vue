@@ -34,7 +34,7 @@ const showRuleDescModal = ref(false);
             <br />
             每個懲罰會各自擁有一個完成狀態，分別有：已生效、已完成、勉強過、進行中。
             <br />
-            關於各完成狀態的說明，請點擊下方圖例中的「完成狀態」查看。
+            關於各完成狀態的說明，請切換至「圖例」分頁的「完成狀態」查看。
         </div>
         <div class="text-xl mt-4">二、加班台懲罰</div>
         <div class="text-base mt-2">
