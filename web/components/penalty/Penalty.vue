@@ -86,6 +86,7 @@ onMounted(loadPenData);
         <section class="penalty-shell page-content">
             <div class="mb-4 flex flex-wrap items-center gap-x-6 gap-y-3">
                 <h1 class="text-2xl font-bold text-neutral-100">直播懲罰</h1>
+                <Rule />
                 <div
                     role="tablist"
                     aria-label="直播懲罰分頁"
@@ -152,9 +153,6 @@ onMounted(loadPenData);
                         :clear-value="null"
                         class="penalty-status"
                     />
-                    <div class="penalty-rule flex justify-end">
-                        <Rule />
-                    </div>
                 </section>
 
                 <div class="penalty-viewport">
@@ -221,9 +219,10 @@ onMounted(loadPenData);
 }
 
 .penalty-filter-bar {
-    grid-template-columns:
-        minmax(13rem, 0.9fr) minmax(16rem, 1.8fr) minmax(11rem, 0.8fr)
-        auto;
+    grid-template-columns: minmax(13rem, 0.9fr) minmax(16rem, 1.8fr) minmax(
+            11rem,
+            0.8fr
+        );
     border: 1px solid rgba(255, 255, 255, 0.08);
     background: linear-gradient(
         135deg,
@@ -249,10 +248,6 @@ onMounted(loadPenData);
 @media (max-width: 900px) {
     .penalty-filter-bar {
         grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-
-    .penalty-rule {
-        justify-content: stretch;
     }
 }
 

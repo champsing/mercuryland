@@ -1,23 +1,22 @@
 <script setup lang="ts">
 import { ref } from "vue";
-import { VaButton, VaIcon, VaModal } from "vuestic-ui";
+import { VaIcon, VaModal } from "vuestic-ui";
 import { Info24Regular } from "@vicons/fluent";
 
 const showRuleDescModal = ref(false);
 </script>
 
 <template>
-    <VaButton
-        preset="plain"
-        class="w-full"
-        color="#FFFFFF"
-        @click="showRuleDescModal = !showRuleDescModal"
+    <button
+        type="button"
+        class="inline-flex shrink-0 cursor-pointer items-center gap-1.5 rounded-full border border-white/10 bg-white/5 px-4 py-1.5 text-sm font-medium text-zinc-300 transition-colors hover:bg-white/10 hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-300/60"
+        @click="showRuleDescModal = true"
     >
-        <VaIcon size="large" class="mr-2">
+        <VaIcon size="small" aria-hidden="true">
             <Info24Regular />
         </VaIcon>
-        <div class="text-lg text-center">規則說明</div>
-    </VaButton>
+        規則說明
+    </button>
 
     <VaModal
         aria-label="規則說明"
