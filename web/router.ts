@@ -1,7 +1,7 @@
 import Contact from "@components/contact/Contact.vue";
 import NotFound from "@components/NotFound.vue";
 import Penalty from "@components/penalty/Penalty.vue";
-import Publication from "@components/publication/Publication.vue";
+import Server from "@components/server/Server.vue";
 import Vod from "@components/vod/Vod.vue";
 import { createRouter, createWebHistory } from "vue-router";
 import Privacy from "./components/law/Privacy.vue";
@@ -13,7 +13,7 @@ import Wheel from "./components/wheel/Wheel.vue";
 
 const routes = [
     { path: "/", component: Welcome },
-    { path: "/publication", component: Publication },
+    { path: "/server", component: Server },
     { path: "/vod", component: Vod },
     { path: "/penalty", component: Penalty },
     { path: "/contact", component: Contact },

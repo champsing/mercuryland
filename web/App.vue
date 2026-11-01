@@ -20,7 +20,7 @@ const { height: footerHeight } = useElementSize(footerRef);
 provide(APP_FOOTER_HEIGHT, footerHeight);
 
 const baseTabs = [
-    { path: "/publication", label: "水星伺服器" },
+    { path: "/server", label: "水星伺服器" },
     { path: "/vod", label: "直播隨選" },
     { path: "/penalty", label: "直播懲罰" },
     { path: "/wheel", label: "幸運轉盤" },
@@ -125,7 +125,7 @@ onBeforeUnmount(() => {
         class="fixed top-0 left-0 right-0 z-20 w-full pointer-events-none lg:border-b lg:border-white/10 lg:bg-[#0b0d12]/85 lg:backdrop-blur-md"
     >
         <div
-            class="relative flex items-center justify-between px-4 py-3 lg:px-6 lg:py-4"
+            class="relative flex items-center justify-between px-2 py-1.5 lg:px-3 lg:py-2"
         >
             <div
                 ref="dropdownRef"
@@ -241,7 +241,7 @@ onBeforeUnmount(() => {
     </header>
     <Login ref="loginRef" :render-trigger="false" />
     <div
-        class="app-shell flex flex-col lg:pt-[4.5rem]"
+        class="app-shell flex flex-col lg:pt-[3.5rem]"
         :style="
             footerHeight > 0
                 ? { '--app-footer-height': `${footerHeight}px` }

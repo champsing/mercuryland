@@ -69,7 +69,7 @@ const handleEditVod = (vod: VodItem) => {
 </script>
 
 <template>
-    <main class="vod-page">
+    <main class="vod-page bg-page-surface">
         <section class="w-full max-w-[1680px] mx-auto">
             <div class="mx-4 md:mx-20 mb-3">
                 <h1 class="text-2xl font-bold text-neutral-100">直播隨選</h1>
@@ -180,13 +180,6 @@ const handleEditVod = (vod: VodItem) => {
 <style>
 .vod-page {
     min-height: calc(100vh - 48px);
-    background:
-        radial-gradient(
-            circle at 15% 0%,
-            rgba(88, 166, 255, 0.2),
-            transparent 32rem
-        ),
-        linear-gradient(135deg, #0f1117 0%, #16191f 48%, #101318 100%);
     color: #f7f7f8;
     padding: 1.25rem 1rem 1.25rem;
 }

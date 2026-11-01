@@ -91,7 +91,7 @@ import ReturnTopButton from "./ReturnTopButton.vue";
                 <div class="anim-fade-up anim-delay-350 mt-12">
                     <VaButton
                         preset="primary"
-                        to="publication"
+                        to="server"
                         size="large"
                         border-color="#0891b2"
                         color="#0891b2"
@@ -165,7 +165,7 @@ import ReturnTopButton from "./ReturnTopButton.vue";
             <div class="anim-fade-up anim-delay-350 mt-4">
                 <VaButton
                     preset="primary"
-                    to="publication"
+                    to="server"
                     size="large"
                     border-color="#0891b2"
                     color="#0891b2"
