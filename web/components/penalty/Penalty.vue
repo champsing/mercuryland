@@ -55,6 +55,7 @@ const textByFinish = (option: { textBy: string }) => option.textBy;
 const valueByFinish = (option: { valueBy: number }) => option.valueBy;
 
 const penalties = ref<PenItem[]>([]);
+const listCount = ref(0);
 
 // 卡片（3 欄）或表格（單欄單列）檢視，選擇會記在 localStorage。
 const viewMode = useBlockViewMode("penalty");
@@ -86,7 +87,15 @@ onMounted(loadPenData);
         <section class="penalty-shell page-content">
             <div class="mb-4 flex flex-wrap items-center gap-x-6 gap-y-3">
                 <h1 class="text-2xl font-bold text-neutral-100">直播懲罰</h1>
-                <Rule />
+                <p class="flex items-center gap-1 text-sm text-zinc-400">
+                    <span>共</span>
+                    <span
+                        class="text-base font-bold leading-none text-zinc-100 tabular-nums"
+                    >
+                        {{ listCount }}
+                    </span>
+                    <span>筆懲罰</span>
+                </p>
                 <div
                     role="tablist"
                     aria-label="直播懲罰分頁"
@@ -111,6 +120,7 @@ onMounted(loadPenData);
                         {{ tab.label }}
                     </button>
                 </div>
+                <Rule />
             </div>
 
             <section
@@ -178,6 +188,7 @@ onMounted(loadPenData);
                                 "
                                 @addPenalty="addPenaltyRef?.open()"
                                 @editPenalty="setPenaltyRef?.open($event)"
+                                @countChange="listCount = $event"
                             />
                         </section>
                     </ViewportHeight>
@@ -233,11 +244,6 @@ onMounted(loadPenData);
     box-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
     padding: 0.8rem;
     backdrop-filter: blur(16px);
-}
-
-/* The penalty date filter intentionally has no calendar trigger. */
-.penalty-date .va-input-wrapper__field > .va-icon {
-    display: none;
 }
 
 /* 表格在自己的捲動區內捲動，捲到底不會帶動整個頁面。 */

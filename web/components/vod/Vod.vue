@@ -35,6 +35,7 @@ const tagList = computed(() =>
 );
 
 const computedTime = ref(0);
+const filteredCount = ref(0);
 const setVodRef = ref<{ open: (vod: VodItem) => void } | null>(null);
 const addVodRef = ref<{ open: () => void } | null>(null);
 const calculationModalRef = ref<{ open: () => void } | null>(null);
@@ -75,6 +76,15 @@ const handleEditVod = (vod: VodItem) => {
                 class="mx-4 md:mx-20 mb-3 flex flex-wrap items-center gap-x-6 gap-y-3"
             >
                 <h1 class="text-2xl font-bold text-neutral-100">直播隨選</h1>
+                <p class="flex items-center gap-1 text-sm text-zinc-400">
+                    <span>共</span>
+                    <span
+                        class="text-base font-bold leading-none text-zinc-100 tabular-nums"
+                    >
+                        {{ filteredCount }}
+                    </span>
+                    <span>筆直播</span>
+                </p>
                 <Rule />
             </div>
             <section
@@ -144,6 +154,7 @@ const handleEditVod = (vod: VodItem) => {
                             @updateTag="(tag: string) => updateTag(tag)"
                             @editVod="handleEditVod"
                             @addVod="addVodRef?.open()"
+                            @countChange="filteredCount = $event"
                         />
                     </div>
 
