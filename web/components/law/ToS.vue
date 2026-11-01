@@ -12,11 +12,11 @@ const email = ref("0.flunky-sojourn@icloud.com");
 
 <template>
     <main
-        class="law-page min-h-[calc(100vh-48px)] text-[#f7f7f8] pt-10 pb-5 px-7 max-md:pt-16 max-md:pb-4 md:px-24"
+        class="bg-page-surface min-h-[calc(100vh-48px)] text-[#f7f7f8] pt-10 pb-5 px-7 max-md:pt-16 max-md:pb-4 md:px-24"
     >
         <div class="w-full max-w-3xl mx-auto">
             <div class="mb-8">
-                <h1 class="text-3xl font-bold text-neutral-100">使用條款</h1>
+                <h1 class="text-2xl font-bold text-neutral-100">使用條款</h1>
                 <p class="mt-1.5 text-sm text-zinc-400">
                     請於使用本網站服務前，詳閱並理解本使用條款之內容。
                 </p>
@@ -189,21 +189,6 @@ const email = ref("0.flunky-sojourn@icloud.com");
 </template>
 
 <style scoped>
-.law-page {
-    background:
-        radial-gradient(
-            circle at 50% 0%,
-            rgba(142, 120, 255, 0.09),
-            transparent 36rem
-        ),
-        radial-gradient(
-            circle at 15% 0%,
-            rgba(88, 166, 255, 0.2),
-            transparent 32rem
-        ),
-        linear-gradient(135deg, #0f1117 0%, #16191f 48%, #101318 100%);
-}
-
 .law-document p {
     margin: 0 0 1rem;
     font-size: 1.0625rem;

@@ -128,12 +128,12 @@ function podiumSize(rank: number): string {
 
 <template>
     <main
-        class="lb-page min-h-[calc(100vh-48px)] text-[#f7f7f8] pt-10 pb-5 px-4 max-md:pt-16 max-md:pb-4 max-md:px-3"
+        class="bg-page-surface min-h-[calc(100vh-48px)] text-[#f7f7f8] pt-10 pb-5 px-4 max-md:pt-16 max-md:pb-4 max-md:px-3"
     >
         <div class="page-content">
             <!-- Header -->
             <div class="mb-6">
-                <h1 class="text-3xl font-bold text-neutral-100">水星排行</h1>
+                <h1 class="text-2xl font-bold text-neutral-100">水星排行</h1>
                 <div class="mt-1 flex items-center gap-1.5">
                     <p class="text-sm text-zinc-400">
                         每次直播獲得的水星幣都會在這裡顯示，致敬貢獻最多的水星人
@@ -308,21 +308,6 @@ function podiumSize(rank: number): string {
 </template>
 
 <style>
-.lb-page {
-    background:
-        radial-gradient(
-            circle at 50% 0%,
-            rgba(255, 215, 0, 0.08),
-            transparent 36rem
-        ),
-        radial-gradient(
-            circle at 15% 0%,
-            rgba(88, 166, 255, 0.2),
-            transparent 32rem
-        ),
-        linear-gradient(135deg, #0f1117 0%, #16191f 48%, #101318 100%);
-}
-
 @keyframes spin {
     from {
         transform: rotate(0deg);
