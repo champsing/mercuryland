@@ -1,23 +1,22 @@
 <script setup lang="ts">
 import { ref } from "vue";
-import { VaButton, VaIcon, VaModal } from "vuestic-ui";
+import { VaIcon, VaModal } from "vuestic-ui";
 import { Info24Regular } from "@vicons/fluent";
 
 const showRuleDescModal = ref(false);
 </script>
 
 <template>
-    <VaButton
-        preset="plain"
-        class="w-full"
-        color="#FFFFFF"
-        @click="showRuleDescModal = !showRuleDescModal"
+    <button
+        type="button"
+        class="inline-flex shrink-0 cursor-pointer items-center gap-1.5 rounded-full border border-white/10 bg-white/5 px-4 py-1.5 text-sm font-medium text-zinc-300 transition-colors hover:bg-white/10 hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-300/60"
+        @click="showRuleDescModal = true"
     >
-        <VaIcon size="large" class="mr-2">
+        <VaIcon size="small" aria-hidden="true">
             <Info24Regular />
         </VaIcon>
-        <div class="text-lg text-center">規則說明</div>
-    </VaButton>
+        規則說明
+    </button>
 
     <VaModal
         aria-label="規則說明"
@@ -34,7 +33,7 @@ const showRuleDescModal = ref(false);
             <br />
             每個懲罰會各自擁有一個完成狀態，分別有：已生效、已完成、勉強過、進行中。
             <br />
-            關於各完成狀態的說明，請點擊下方圖例中的「完成狀態」查看。
+            關於各完成狀態的說明，請切換至「圖例」分頁的「完成狀態」查看。
         </div>
         <div class="text-xl mt-4">二、加班台懲罰</div>
         <div class="text-base mt-2">

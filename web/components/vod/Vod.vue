@@ -71,8 +71,11 @@ const handleEditVod = (vod: VodItem) => {
 <template>
     <main class="vod-page bg-page-surface">
         <section class="w-full max-w-[1680px] mx-auto">
-            <div class="mx-4 md:mx-20 mb-3">
+            <div
+                class="mx-4 md:mx-20 mb-3 flex flex-wrap items-center gap-x-6 gap-y-3"
+            >
                 <h1 class="text-2xl font-bold text-neutral-100">直播隨選</h1>
+                <Rule />
             </div>
             <section
                 class="vod-filter-bar mx-4 md:mx-20 rounded-3xl"
@@ -111,9 +114,7 @@ const handleEditVod = (vod: VodItem) => {
                         </VaChip>
                     </template>
                 </VaSelect>
-                <div
-                    class="flex justify-between gap-3 w-full px-4 md:flex md:justify-center items-center"
-                >
+                <div class="flex w-full items-center justify-center gap-3 px-4">
                     <div class="vod-switch">
                         <VaSwitch
                             v-model="strictFiltering"
@@ -125,10 +126,6 @@ const handleEditVod = (vod: VodItem) => {
                             false-inner-label="符合一項"
                             true-inner-label="符合全部"
                         />
-                    </div>
-                    <div class="grow md:hidden"></div>
-                    <div class="flex md:block">
-                        <Rule />
                     </div>
                 </div>
             </section>

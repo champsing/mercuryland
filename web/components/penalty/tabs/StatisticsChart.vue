@@ -12,7 +12,6 @@ import { use } from "echarts/core";
 import { CanvasRenderer } from "echarts/renderers";
 import { computed, ref } from "vue";
 import VChart from "vue-echarts";
-import { VaModal } from "vuestic-ui";
 
 use([
     CanvasRenderer,
@@ -27,13 +26,7 @@ use([
 type TimeRange = "1d" | "1w" | "1m" | "6m" | "1y" | "max";
 const FINISH_STATES = [1, 2, 3, 4] as const;
 
-const props = defineProps<{
-    penalties: PenItem[];
-    modelValue: boolean;
-}>();
-const emit = defineEmits<{
-    "update:modelValue": [value: boolean];
-}>();
+const props = defineProps<{ penalties: PenItem[] }>();
 
 const timeRange = ref<TimeRange>("1m");
 const rangeOptions: { value: TimeRange; label: string }[] = [
@@ -350,173 +343,81 @@ const pieOption = computed(() => {
 </script>
 
 <template>
-    <VaModal
-        aria-label="懲罰統計圖表"
-        :model-value="modelValue"
-        @update:model-value="
-            (value: boolean) => emit('update:modelValue', value)
-        "
-        size="large"
-        close-button
-        hide-default-actions
-        :mobile-fullscreen="false"
-        class="chart-stat-modal"
-    >
-        <div class="chart-stat__shell flex flex-col gap-4">
-            <!-- Header row: title + time-range selector -->
-            <div
-                class="chart-stat__header flex flex-wrap items-center justify-between gap-3 mr-8"
-            >
-                <div
-                    class="text-lg font-semibold text-zinc-300 flex items-center gap-2"
-                >
+    <section class="flex flex-col gap-4" aria-label="懲罰統計圖表">
+        <!-- Header row: title + time-range selector -->
+        <div class="flex flex-wrap items-center justify-between gap-3">
+            <div class="flex flex-wrap items-center gap-2">
+                <h3 class="text-base font-extrabold text-[#f7f7f8]">
                     懲罰統計圖表
-                    <span
-                        class="text-xs font-normal text-zinc-400 bg-white/[0.06] px-2 py-0.5 rounded-full"
-                    >
-                        {{ totalCount }} 筆
-                    </span>
-                </div>
-
-                <!-- Mutual time-range selector (segmented control) -->
-                <div
-                    class="chart-stat__range flex rounded-lg bg-white/[0.06] p-0.5 gap-0.5 border border-white/[0.06]"
-                    role="radiogroup"
-                    aria-label="時間範圍"
+                </h3>
+                <span
+                    class="rounded-full bg-white/[0.06] px-2 py-0.5 text-xs font-normal text-zinc-400"
                 >
-                    <VaButton
-                        v-for="opt in rangeOptions"
-                        :key="opt.value"
-                        :color="
-                            timeRange === opt.value ? '#53b1b8' : 'secondary'
-                        "
-                        :preset="
-                            timeRange === opt.value ? undefined : 'secondary'
-                        "
-                        size="small"
-                        class="chart-stat__range-btn !text-[0.72rem] !px-2.5 !py-1 !min-h-0 !rounded-md"
-                        :class="{
-                            '!bg-[#53b1b8]/15 !text-[#53b1b8] !font-bold':
-                                timeRange === opt.value,
-                        }"
-                        @click="timeRange = opt.value"
-                    >
-                        {{ opt.label }}
-                    </VaButton>
-                </div>
+                    {{ totalCount }} 筆
+                </span>
             </div>
 
-            <!-- Empty state: no penalties in range -->
+            <!-- Mutual time-range selector, styled like the page tabs -->
             <div
-                v-if="totalCount === 0"
-                class="chart-stat__empty flex flex-col items-center justify-center gap-2 py-16 text-zinc-400"
+                class="flex max-w-full items-center gap-1 overflow-x-auto rounded-full border border-white/10 bg-white/5 p-1 shadow-[0_2px_12px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.08)] backdrop-blur-md"
+                role="group"
+                aria-label="時間範圍"
             >
-                <span class="text-4xl">📊</span>
-                <span class="text-sm">此時間範圍內暫無懲罰記錄</span>
-            </div>
-
-            <!-- Charts grid -->
-            <div
-                v-else
-                class="chart-stat__charts grid gap-4 grid-cols-1 md:grid-cols-2"
-            >
-                <div
-                    class="chart-stat__card rounded-xl border border-white/[0.06] bg-[rgba(18,21,27,0.6)] p-3"
+                <button
+                    v-for="opt in rangeOptions"
+                    :key="opt.value"
+                    type="button"
+                    :aria-pressed="timeRange === opt.value"
+                    class="shrink-0 rounded-full px-3 py-1 text-xs font-medium text-zinc-300 transition-colors hover:bg-white/10 hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-300/60"
+                    :class="
+                        timeRange === opt.value
+                            ? 'bg-gradient-to-b from-white/20 to-white/10 text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.2),0_1px_3px_rgba(0,0,0,0.25)]'
+                            : ''
+                    "
+                    @click="timeRange = opt.value"
                 >
-                    <VChart
-                        :option="columnOption"
-                        autoresize
-                        class="h-[320px] w-full"
-                    />
-                </div>
-                <div
-                    class="chart-stat__card rounded-xl border border-white/[0.06] bg-[rgba(18,21,27,0.6)] p-3"
-                >
-                    <VChart
-                        :option="pieOption"
-                        autoresize
-                        class="h-[320px] w-full"
-                    />
-                </div>
+                    {{ opt.label }}
+                </button>
             </div>
         </div>
-    </VaModal>
+
+        <!-- Empty state: no penalties in range -->
+        <div
+            v-if="totalCount === 0"
+            class="flex flex-col items-center justify-center gap-2 rounded-2xl border border-white/[0.06] bg-[rgba(18,21,27,0.6)] py-16 text-zinc-400"
+        >
+            <span class="text-4xl">📊</span>
+            <span class="text-sm">此時間範圍內暫無懲罰記錄</span>
+        </div>
+
+        <!-- Charts grid -->
+        <div v-else class="grid grid-cols-1 gap-4 md:grid-cols-2">
+            <div
+                class="chart-stat__card rounded-xl border border-white/[0.06] bg-[rgba(18,21,27,0.6)] p-3"
+            >
+                <VChart
+                    :option="columnOption"
+                    autoresize
+                    class="h-[280px] w-full md:h-[320px]"
+                />
+            </div>
+            <div
+                class="chart-stat__card rounded-xl border border-white/[0.06] bg-[rgba(18,21,27,0.6)] p-3"
+            >
+                <VChart
+                    :option="pieOption"
+                    autoresize
+                    class="h-[280px] w-full md:h-[320px]"
+                />
+            </div>
+        </div>
+    </section>
 </template>
 
 <style scoped>
-/* Wider dialog for two-chart layout */
-:deep(.va-modal__dialog) {
-    max-width: 960px !important;
-    width: 95% !important;
-}
-
-@media (min-width: 768px) {
-    .chart-stat-modal :deep(.va-modal__dialog) {
-        max-width: 900px !important;
-    }
-}
-
 /* Only show empty state graphic when needed */
 .chart-stat__card .echarts {
-    min-height: 320px;
-}
-
-/* 時間範圍按鈕 — 更清晰的 focus / active */
-.chart-stat__range-btn {
-    position: relative;
-    font-size: 0.8125rem;
-    font-weight: 500;
-    color: #71717a;
-    background: transparent;
-    border: none;
-    border-radius: 8px;
-    padding: 6px 14px;
-    cursor: pointer;
-    transition:
-        color 0.2s,
-        background 0.2s,
-        box-shadow 0.2s;
-    white-space: nowrap;
-    outline: none;
-}
-.chart-stat__range-btn:hover {
-    color: #d4d4d8;
-    background: rgba(255, 255, 255, 0.05);
-}
-.chart-stat__range-btn:focus-visible {
-    box-shadow: 0 0 0 2px rgba(83, 177, 184, 0.45);
-}
-.chart-stat__range-btn--active {
-    color: #5ec4cb;
-    background: rgba(83, 177, 184, 0.14);
-    font-weight: 600;
-    box-shadow: inset 0 0 0 1px rgba(83, 177, 184, 0.25);
-}
-
-/* 標題對比 */
-.chart-stat__title {
-    font-size: 1.25rem;
-    font-weight: 700;
-    color: #fafafa;
-    line-height: 1.3;
-    letter-spacing: -0.015em;
-}
-.chart-stat__subtitle {
-    font-size: 0.8125rem;
-    color: #71717a;
-    margin-top: 3px;
-}
-
-/* Badge 更精緻 */
-.chart-stat__count-badge {
-    font-size: 0.75rem;
-    font-weight: 600;
-    color: #a1a1aa;
-    background: rgba(255, 255, 255, 0.04);
-    border: 1px solid rgba(255, 255, 255, 0.07);
-    padding: 5px 12px;
-    border-radius: 999px;
-    letter-spacing: 0.02em;
+    min-height: 280px;
 }
 
 /* 卡片 hover 更柔和 */
