@@ -3,8 +3,8 @@ import { useAuthState } from "@/composables/authState";
 import { BlockViewMode } from "@/composables/viewMode";
 import { VodItem } from "@/composables/vod";
 import { Play24Filled } from "@vicons/fluent";
-import { computed, ref } from "vue";
-import { VaButton, VaChip, VaIcon, VaScrollContainer } from "vuestic-ui";
+import { computed, ref, watch } from "vue";
+import { VaChip, VaIcon, VaScrollContainer } from "vuestic-ui";
 import SortMenu from "../SortMenu.vue";
 import ViewModeToggle from "../ViewModeToggle.vue";
 
@@ -19,7 +19,7 @@ const viewMode = defineModel<BlockViewMode>("viewMode", { default: "grid" });
 const emit = defineEmits<{
     (e: "updateTag", tag: string): void;
     (e: "editVod", vod: VodItem): void;
-    (e: "addVod"): void;
+    (e: "countChange", count: number): void;
 }>();
 
 const authState = useAuthState();
@@ -27,8 +27,10 @@ const showActions = computed(() => authState.isAuthenticated);
 
 const YOUTUBE_LIVE = "https://youtube.com/live/";
 
-const sortField = ref<string>("date");
-const sortDirection = ref<"asc" | "desc">("desc");
+const sortField = defineModel<string>("sortField", { default: "date" });
+const sortDirection = defineModel<"asc" | "desc">("sortDirection", {
+    default: "desc",
+});
 
 const sortOptions = [
     { value: "date", label: "日期", defaultDirection: "desc" as const },
@@ -66,6 +68,9 @@ const data = computed(() => {
         .sort(compareVod);
 });
 
+// The count is shown next to the page title, so report it to the parent.
+watch(data, (items) => emit("countChange", items.length), { immediate: true });
+
 function videoUrl(vod: VodItem): string {
     return `${YOUTUBE_LIVE}${vod.link}`;
 }
@@ -99,38 +104,14 @@ function toggleTags(vod: VodItem) {
 <template>
     <div class="flex h-full min-h-0 flex-col">
         <div
-            class="mb-3 flex w-full flex-wrap items-center justify-between gap-2 px-1 md:grid md:grid-cols-[1fr_auto_1fr] md:items-center md:gap-3"
+            class="mb-3 flex w-full flex-wrap items-center justify-end gap-2 px-1 md:hidden"
         >
-            <span aria-hidden="true" class="hidden md:block" />
-            <p
-                class="flex items-center gap-1 text-sm text-zinc-400 md:justify-center"
-            >
-                <span>共</span>
-                <span
-                    class="text-base font-bold leading-none text-zinc-100 tabular-nums"
-                >
-                    {{ data.length }}
-                </span>
-                <span>筆直播</span>
-            </p>
-            <div class="ml-auto flex flex-wrap items-center justify-end gap-2">
-                <ViewModeToggle v-model="viewMode" />
-                <SortMenu
-                    v-model:field="sortField"
-                    v-model:direction="sortDirection"
-                    :options="sortOptions"
-                />
-                <VaButton
-                    v-if="showActions"
-                    class="rounded-lg font-extrabold [&_.va-button__content]:gap-[0.35rem]"
-                    color="#5bc6a1"
-                    aria-label="新增直播"
-                    @click="$emit('addVod')"
-                >
-                    <VaIcon name="add" />
-                    <span class="max-md:hidden">新增直播</span>
-                </VaButton>
-            </div>
+            <ViewModeToggle v-model="viewMode" />
+            <SortMenu
+                v-model:field="sortField"
+                v-model:direction="sortDirection"
+                :options="sortOptions"
+            />
         </div>
 
         <h2 class="sr-only">直播列表</h2>

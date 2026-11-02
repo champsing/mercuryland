@@ -7,10 +7,9 @@ import { VodItem } from "@/composables/vod";
 import api from "@composables/axios";
 import { useMediaQuery } from "@vueuse/core";
 import { Play24Filled } from "@vicons/fluent";
-import { computed, onMounted, ref } from "vue";
-import { VaButton, VaIcon, VaScrollContainer } from "vuestic-ui";
+import { computed, onMounted, ref, watch } from "vue";
+import { VaIcon, VaScrollContainer } from "vuestic-ui";
 import SortMenu from "../SortMenu.vue";
-import ViewModeToggle from "../ViewModeToggle.vue";
 import Detail from "./Detail.vue";
 
 const props = defineProps<{
@@ -31,8 +30,8 @@ const effectiveViewMode = computed<BlockViewMode>(() =>
 
 const emit = defineEmits<{
     (e: "updateState", state: number): void;
-    (e: "addPenalty"): void;
     (e: "editPenalty", penalty: PenItem): void;
+    (e: "countChange", count: number): void;
 }>();
 
 const vodData = ref<VodItem[]>([]);
@@ -55,8 +54,10 @@ const YOUTUBE_LIVE = "https://youtube.com/live/";
 
 const modal = ref(null as number | null);
 
-const sortField = ref<string>("date");
-const sortDirection = ref<"asc" | "desc">("desc");
+const sortField = defineModel<string>("sortField", { default: "date" });
+const sortDirection = defineModel<"asc" | "desc">("sortDirection", {
+    default: "desc",
+});
 
 const sortOptions = [
     { value: "date", label: "日期", defaultDirection: "desc" as const },
@@ -84,6 +85,9 @@ const items = computed(() =>
         props.search,
     ).sort(comparePenalty),
 );
+
+// The count is shown next to the page title, so report it to the parent.
+watch(items, (value) => emit("countChange", value.length), { immediate: true });
 
 const vodLinksByDate = computed(() => {
     const map = new Map<string, string[]>();
@@ -132,38 +136,13 @@ function filterPenaltyData(
 <template>
     <div class="flex h-full min-h-0 flex-col">
         <div
-            class="mb-3 flex w-full flex-wrap items-center justify-between gap-2 px-1 md:grid md:grid-cols-[1fr_auto_1fr] md:items-center md:gap-3"
+            class="mb-3 flex w-full flex-wrap items-center justify-end gap-2 px-1 md:hidden"
         >
-            <span aria-hidden="true" class="hidden md:block" />
-            <p
-                class="flex items-center gap-1 text-sm text-zinc-400 md:justify-center"
-            >
-                <span>共</span>
-                <span
-                    class="text-base font-bold leading-none text-zinc-100 tabular-nums"
-                >
-                    {{ items.length }}
-                </span>
-                <span>筆懲罰</span>
-            </p>
-            <div class="ml-auto flex flex-wrap items-center justify-end gap-2">
-                <ViewModeToggle v-model="viewMode" class="max-md:hidden" />
-                <SortMenu
-                    v-model:field="sortField"
-                    v-model:direction="sortDirection"
-                    :options="sortOptions"
-                />
-                <VaButton
-                    v-if="showActions"
-                    class="rounded-lg font-extrabold [&_.va-button__content]:gap-[0.35rem]"
-                    color="#5865f2"
-                    aria-label="新增懲罰"
-                    @click="$emit('addPenalty')"
-                >
-                    <VaIcon name="add" />
-                    <span class="max-md:hidden">新增懲罰</span>
-                </VaButton>
-            </div>
+            <SortMenu
+                v-model:field="sortField"
+                v-model:direction="sortDirection"
+                :options="sortOptions"
+            />
         </div>
 
         <VaScrollContainer
