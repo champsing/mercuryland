@@ -112,13 +112,27 @@ function copyGroup(group: StatGroup) {
 
 <template>
     <div class="flex flex-col gap-4 pb-4">
-        <div class="flex flex-wrap items-baseline gap-x-2">
-            <h2 class="text-xl font-bold text-neutral-100">統計</h2>
-            <span
-                class="text-[0.72rem] font-extrabold uppercase text-[#45d483]"
-            >
-                Statistics
-            </span>
+        <div class="flex flex-col gap-4">
+            <div class="flex flex-wrap items-baseline gap-x-2">
+                <h2 class="text-xl font-bold text-neutral-100">統計</h2>
+                <span
+                    class="text-[0.72rem] font-extrabold uppercase text-[#45d483]"
+                >
+                    Statistics
+                </span>
+            </div>
+            <div class="flex flex-wrap items-center justify-between gap-2">
+                <h3 class="text-base font-extrabold text-[#f7f7f8]">數量</h3>
+                <p
+                    class="flex flex-wrap items-center gap-1.5 text-sm text-zinc-400"
+                >
+                    <span class="inline-flex items-center gap-1">
+                        <kbd :class="kbdClass">Ctrl</kbd>
+                        <kbd :class="kbdClass">A</kbd>
+                    </span>
+                    <span>可快速選取清單的全部項目</span>
+                </p>
+            </div>
         </div>
 
         <div class="grid gap-4 md:grid-cols-2">
@@ -215,14 +229,6 @@ function copyGroup(group: StatGroup) {
                 </div>
             </section>
         </div>
-
-        <p class="flex flex-wrap items-center gap-1.5 text-sm text-zinc-400">
-            <span class="inline-flex items-center gap-1">
-                <kbd :class="kbdClass">Ctrl</kbd>
-                <kbd :class="kbdClass">A</kbd>
-            </span>
-            <span>可快速選取清單的全部項目</span>
-        </p>
 
         <StatisticsChart :penalties="penalties" />
     </div>

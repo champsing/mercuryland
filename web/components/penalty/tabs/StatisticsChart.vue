@@ -343,13 +343,11 @@ const pieOption = computed(() => {
 </script>
 
 <template>
-    <section class="flex flex-col gap-4" aria-label="懲罰統計圖表">
+    <section class="flex flex-col gap-4" aria-label="懲罰圖表">
         <!-- Header row: title + time-range selector -->
         <div class="flex flex-wrap items-center justify-between gap-3">
             <div class="flex flex-wrap items-center gap-2">
-                <h3 class="text-base font-extrabold text-[#f7f7f8]">
-                    懲罰統計圖表
-                </h3>
+                <h3 class="text-base font-extrabold text-[#f7f7f8]">圖表</h3>
                 <span
                     class="rounded-full bg-white/[0.06] px-2 py-0.5 text-xs font-normal text-zinc-400"
                 >

@@ -1,11 +1,14 @@
 <script setup lang="ts">
+import { useAuthState } from "@/composables/authState";
 import { PenItem, stateString } from "@/composables/penalty";
 import { formatDate, parseDate } from "@/composables/utils";
 import { useBlockViewMode } from "@/composables/viewMode";
 import api from "@composables/axios";
 import { useMediaQuery } from "@vueuse/core";
-import { onMounted, ref } from "vue";
+import { computed, onMounted, ref } from "vue";
 import { VaDateInput, VaIcon, VaInput, VaSelect } from "vuestic-ui";
+import SortMenu from "../SortMenu.vue";
+import ViewModeToggle from "../ViewModeToggle.vue";
 import ViewportHeight from "../ViewportHeight.vue";
 import AddPenalty from "./AddPenalty.vue";
 import Blocks from "./Blocks.vue";
@@ -59,6 +62,18 @@ const listCount = ref(0);
 
 // 卡片（3 欄）或表格（單欄單列）檢視，選擇會記在 localStorage。
 const viewMode = useBlockViewMode("penalty");
+
+const authState = useAuthState();
+const showActions = computed(() => authState.isAuthenticated);
+
+// Demo: list presentation controls live in the filter bar on desktop.
+const sortField = ref<string>("date");
+const sortDirection = ref<"asc" | "desc">("desc");
+const sortOptions = [
+    { value: "date", label: "日期", defaultDirection: "desc" as const },
+    { value: "name", label: "名稱", defaultDirection: "asc" as const },
+    { value: "state", label: "狀態", defaultDirection: "asc" as const },
+];
 
 // 手機上懲罰頁自己是捲動容器，ViewportHeight 需要量測它。
 const pageRef = ref<HTMLElement | null>(null);
@@ -121,6 +136,16 @@ onMounted(loadPenData);
                     </button>
                 </div>
                 <Rule />
+                <button
+                    v-if="showActions"
+                    type="button"
+                    class="ml-auto inline-flex shrink-0 cursor-pointer items-center gap-1.5 rounded-full border border-white/10 bg-[#5865f2] px-4 py-1.5 text-sm font-medium text-white transition-colors hover:bg-[#4752c4] focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-300/60"
+                    aria-label="新增懲罰"
+                    @click="addPenaltyRef?.open()"
+                >
+                    <VaIcon name="add" size="small" aria-hidden="true" />
+                    新增懲罰
+                </button>
             </div>
 
             <section
@@ -132,38 +157,50 @@ onMounted(loadPenData);
             >
                 <LatestPenalty :penalties="penalties" class="mb-3" />
 
-                <section
-                    class="penalty-filter-bar grid gap-3 items-center mb-3 rounded-3xl"
-                    aria-label="懲罰篩選"
+                <div
+                    class="mb-3 flex flex-col gap-3 md:flex-row md:items-stretch"
                 >
-                    <VaDateInput
-                        v-model="filterDate"
-                        :format-date="formatDate"
-                        :parse-date="parseDate"
-                        manual-input
-                        mode="auto"
-                        class="penalty-date"
-                    />
-                    <VaInput
-                        v-model="filterSearch"
-                        class="penalty-search"
-                        placeholder="搜尋懲罰內容"
+                    <section
+                        class="penalty-filter-bar grid flex-1 gap-3 items-center rounded-3xl"
+                        aria-label="懲罰篩選"
                     >
-                        <template #prependInner>
-                            <VaIcon name="search" size="small" />
-                        </template>
-                    </VaInput>
-                    <VaSelect
-                        v-model="filterStatus"
-                        :options="finishOptions"
-                        placeholder="完成狀態"
-                        :text-by="textByFinish"
-                        :value-by="valueByFinish"
-                        clearable
-                        :clear-value="null"
-                        class="penalty-status"
-                    />
-                </section>
+                        <VaDateInput
+                            v-model="filterDate"
+                            :format-date="formatDate"
+                            :parse-date="parseDate"
+                            manual-input
+                            mode="auto"
+                            class="penalty-date"
+                        />
+                        <VaInput
+                            v-model="filterSearch"
+                            class="penalty-search"
+                            placeholder="搜尋懲罰內容"
+                        >
+                            <template #prependInner>
+                                <VaIcon name="search" size="small" />
+                            </template>
+                        </VaInput>
+                        <VaSelect
+                            v-model="filterStatus"
+                            :options="finishOptions"
+                            placeholder="完成狀態"
+                            :text-by="textByFinish"
+                            :value-by="valueByFinish"
+                            clearable
+                            :clear-value="null"
+                            class="penalty-status"
+                        />
+                    </section>
+                    <div class="hidden items-center gap-2 md:flex">
+                        <ViewModeToggle v-model="viewMode" />
+                        <SortMenu
+                            v-model:field="sortField"
+                            v-model:direction="sortDirection"
+                            :options="sortOptions"
+                        />
+                    </div>
+                </div>
 
                 <div class="penalty-viewport">
                     <ViewportHeight
@@ -179,6 +216,8 @@ onMounted(loadPenData);
                                 :state="filterStatus"
                                 :search="filterSearch"
                                 v-model:viewMode="viewMode"
+                                v-model:sort-field="sortField"
+                                v-model:sort-direction="sortDirection"
                                 @updateState="
                                     (state) => {
                                         filterStatus == null
@@ -186,7 +225,6 @@ onMounted(loadPenData);
                                             : (filterStatus = null);
                                     }
                                 "
-                                @addPenalty="addPenaltyRef?.open()"
                                 @editPenalty="setPenaltyRef?.open($event)"
                                 @countChange="listCount = $event"
                             />

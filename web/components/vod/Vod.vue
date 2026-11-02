@@ -1,10 +1,13 @@
 <script setup lang="ts">
+import { useAuthState } from "@/composables/authState";
 import { formatDate, parseDate } from "@/composables/utils";
 import { useBlockViewMode } from "@/composables/viewMode";
 import { VodItem } from "@/composables/vod";
 import api from "@composables/axios";
 import { computed, onMounted, ref, Ref } from "vue";
-import { VaChip, VaDateInput, VaSelect, VaSwitch } from "vuestic-ui";
+import { VaChip, VaDateInput, VaIcon, VaSelect, VaSwitch } from "vuestic-ui";
+import SortMenu from "../SortMenu.vue";
+import ViewModeToggle from "../ViewModeToggle.vue";
 import ViewportHeight from "../ViewportHeight.vue";
 import AddVod from "./AddVod.vue";
 import Blocks from "./Blocks.vue";
@@ -29,6 +32,16 @@ const vodData = ref<VodItem[]>([]);
 
 // 卡片（3 欄）或表格（單欄單列）檢視，選擇會記在 localStorage。
 const viewMode = useBlockViewMode("vod");
+
+const authState = useAuthState();
+const showActions = computed(() => authState.isAuthenticated);
+
+const sortField = ref<string>("date");
+const sortDirection = ref<"asc" | "desc">("desc");
+const sortOptions = [
+    { value: "date", label: "日期", defaultDirection: "desc" as const },
+    { value: "title", label: "名稱", defaultDirection: "asc" as const },
+];
 
 const tagList = computed(() =>
     [...new Set(vodData.value.flatMap((x) => x.tags))].sort(),
@@ -86,59 +99,83 @@ const handleEditVod = (vod: VodItem) => {
                     <span>筆直播</span>
                 </p>
                 <Rule />
-            </div>
-            <section
-                class="vod-filter-bar mx-4 md:mx-20 rounded-3xl"
-                aria-label="直播隨選篩選"
-            >
-                <VaDateInput
-                    v-model="dateRange"
-                    :format-date="formatDate"
-                    :parse-date="parseDate"
-                    manual-input
-                    mode="auto"
-                    class="vod-date"
-                />
-                <VaSelect
-                    v-model="selectedTags"
-                    :options="tagList"
-                    multiple
-                    clearable
-                    searchable
-                    placeholder="請選擇直播的TAG"
-                    dropdownIcon="va-plus"
-                    class="vod-tags"
+                <button
+                    v-if="showActions"
+                    type="button"
+                    class="ml-auto inline-flex shrink-0 cursor-pointer items-center gap-1.5 rounded-full border border-white/10 bg-[#5bc6a1] px-4 py-1.5 text-sm font-medium text-zinc-900 transition-colors hover:bg-[#3db088] focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-300/60"
+                    aria-label="新增直播"
+                    @click="addVodRef?.open()"
                 >
-                    <template #content>
-                        <VaChip
-                            v-for="chip in selectedTags"
-                            :key="chip"
-                            color="#90dc52"
-                            outline
-                            size="small"
-                            class="mr-1 my-1"
-                            closeable
-                            @update:model-value="updateTag(chip)"
-                        >
-                            {{ chip }}
-                        </VaChip>
-                    </template>
-                </VaSelect>
-                <div class="flex w-full items-center justify-center gap-3 px-4">
-                    <div class="vod-switch">
-                        <VaSwitch
-                            v-model="strictFiltering"
-                            off-color="#1ccba2"
-                            color="#3444a2"
-                            style="
-                                --va-switch-checker-background-color: #252723;
-                            "
-                            false-inner-label="符合一項"
-                            true-inner-label="符合全部"
-                        />
+                    <VaIcon name="add" size="small" aria-hidden="true" />
+                    新增直播
+                </button>
+            </div>
+            <div
+                class="mx-4 md:mx-20 mb-3 flex flex-col gap-3 md:flex-row md:items-stretch"
+            >
+                <section
+                    class="vod-filter-bar flex-1 rounded-3xl"
+                    aria-label="直播隨選篩選"
+                >
+                    <VaDateInput
+                        v-model="dateRange"
+                        :format-date="formatDate"
+                        :parse-date="parseDate"
+                        manual-input
+                        mode="auto"
+                        class="vod-date"
+                    />
+                    <VaSelect
+                        v-model="selectedTags"
+                        :options="tagList"
+                        multiple
+                        clearable
+                        searchable
+                        placeholder="請選擇直播的TAG"
+                        dropdownIcon="va-plus"
+                        class="vod-tags"
+                    >
+                        <template #content>
+                            <VaChip
+                                v-for="chip in selectedTags"
+                                :key="chip"
+                                color="#90dc52"
+                                outline
+                                size="small"
+                                class="mr-1 my-1"
+                                closeable
+                                @update:model-value="updateTag(chip)"
+                            >
+                                {{ chip }}
+                            </VaChip>
+                        </template>
+                    </VaSelect>
+                    <div
+                        class="flex w-full items-center justify-center gap-3 px-4"
+                    >
+                        <div class="vod-switch">
+                            <VaSwitch
+                                v-model="strictFiltering"
+                                off-color="#1ccba2"
+                                color="#3444a2"
+                                style="
+                                    --va-switch-checker-background-color: #252723;
+                                "
+                                false-inner-label="符合一項"
+                                true-inner-label="符合全部"
+                            />
+                        </div>
                     </div>
+                </section>
+                <div class="hidden items-center gap-2 md:flex">
+                    <ViewModeToggle v-model="viewMode" />
+                    <SortMenu
+                        v-model:field="sortField"
+                        v-model:direction="sortDirection"
+                        :options="sortOptions"
+                    />
                 </div>
-            </section>
+            </div>
 
             <ViewportHeight>
                 <section
@@ -151,9 +188,10 @@ const handleEditVod = (vod: VodItem) => {
                             :strictFiltering="strictFiltering"
                             :vodData="vodData"
                             v-model:viewMode="viewMode"
+                            v-model:sort-field="sortField"
+                            v-model:sort-direction="sortDirection"
                             @updateTag="(tag: string) => updateTag(tag)"
                             @editVod="handleEditVod"
-                            @addVod="addVodRef?.open()"
                             @countChange="filteredCount = $event"
                         />
                     </div>
@@ -204,7 +242,6 @@ const handleEditVod = (vod: VodItem) => {
     grid-template-columns: minmax(13rem, 1fr) minmax(18rem, 2fr) auto;
     gap: 0.75rem;
     align-items: center;
-    margin-bottom: 0.75rem;
     border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: 8px;
     background: linear-gradient(
