@@ -11,7 +11,7 @@ document.title = "系統設定 - 水星人的夢幻樂園";
 </script>
 
 <template>
-    <main class="px-4 max-md:px-3">
+    <main class="bg-page-surface min-h-[calc(100vh-48px)] px-4 max-md:px-3">
         <div class="page-content">
             <div
                 class="flex w-full flex-col md:flex-row items-start md:items-center justify-between gap-2 md:gap-4 py-2"

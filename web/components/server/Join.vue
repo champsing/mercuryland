@@ -194,7 +194,7 @@ const steps = [
                         preset="secondary"
                         color="textPrimary"
                         border-color="#969494"
-                        to="publication"
+                        to="server"
                         target="_blank"
                         @click="currentStep++"
                     >
