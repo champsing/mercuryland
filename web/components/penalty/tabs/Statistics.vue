@@ -113,13 +113,18 @@ function copyGroup(group: StatGroup) {
 <template>
     <div class="flex flex-col gap-4 pb-4">
         <div class="flex flex-col gap-4">
-            <div class="flex flex-wrap items-baseline gap-x-2">
-                <h2 class="text-xl font-bold text-neutral-100">統計</h2>
-                <span
-                    class="text-[0.72rem] font-extrabold uppercase text-[#45d483]"
-                >
-                    Statistics
-                </span>
+            <div class="flex flex-col gap-1">
+                <div class="flex flex-wrap items-baseline gap-x-2">
+                    <h2 class="text-xl font-bold text-neutral-100">統計</h2>
+                    <span
+                        class="text-[0.72rem] font-extrabold uppercase text-[#45d483]"
+                    >
+                        Statistics
+                    </span>
+                </div>
+                <p class="text-xs text-zinc-500">
+                    列表依狀態篩選；圖表依時間範圍。
+                </p>
             </div>
             <div class="flex flex-wrap items-center justify-between gap-2">
                 <h3 class="text-base font-extrabold text-[#f7f7f8]">數量</h3>
