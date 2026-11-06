@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { useAuthState } from "@/composables/authState";
 import { PenItem, stateString } from "@/composables/penalty";
+import { nextTabIndex } from "@/composables/tabList";
 import { formatDate, parseDate } from "@/composables/utils";
 import { useBlockViewMode } from "@/composables/viewMode";
 import api from "@composables/axios";
@@ -66,6 +67,22 @@ const viewMode = useBlockViewMode("penalty");
 const authState = useAuthState();
 const showActions = computed(() => authState.isAuthenticated);
 
+function onTabKeydown(
+    event: KeyboardEvent,
+    current: number,
+    count: number,
+    select: (index: number) => void,
+) {
+    const next = nextTabIndex(event.key, current, count);
+    if (next === null) return;
+
+    event.preventDefault();
+    select(next);
+
+    const tablist = (event.currentTarget as HTMLElement).parentElement;
+    tablist?.querySelectorAll<HTMLElement>('[role="tab"]')[next]?.focus();
+}
+
 // Demo: list presentation controls live in the filter bar on desktop.
 const sortField = ref<string>("date");
 const sortDirection = ref<"asc" | "desc">("desc");
@@ -100,21 +117,31 @@ onMounted(loadPenData);
 <template>
     <main ref="pageRef" class="penalty-page bg-page-surface">
         <section class="penalty-shell page-content">
-            <div class="mb-4 flex flex-wrap items-center gap-x-6 gap-y-3">
-                <h1 class="text-2xl font-bold text-neutral-100">直播懲罰</h1>
-                <p class="flex items-center gap-1 text-sm text-zinc-400">
-                    <span>共</span>
-                    <span
-                        class="text-base font-bold leading-none text-zinc-100 tabular-nums"
+            <div
+                class="mb-4 flex flex-wrap items-center gap-x-4 gap-y-3 sm:gap-x-6"
+            >
+                <div class="flex min-w-0 items-center gap-3">
+                    <h1 class="shrink-0 text-2xl font-bold text-neutral-100">
+                        直播懲罰
+                    </h1>
+                    <p
+                        v-if="activeTab !== 'legend'"
+                        class="flex items-center gap-1 whitespace-nowrap text-sm text-zinc-400"
                     >
-                        {{ listCount }}
-                    </span>
-                    <span>筆懲罰</span>
-                </p>
+                        <span>共</span>
+                        <span
+                            class="text-base font-bold leading-none text-zinc-100 tabular-nums"
+                        >
+                            {{ listCount }}
+                        </span>
+                        <span class="hidden sm:inline">筆懲罰</span>
+                        <span class="sm:hidden">筆</span>
+                    </p>
+                </div>
                 <div
                     role="tablist"
                     aria-label="直播懲罰分頁"
-                    class="flex items-center gap-1 rounded-full border border-white/10 bg-white/5 p-1 shadow-[0_2px_12px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.08)] backdrop-blur-md"
+                    class="order-last flex w-full items-center gap-1 rounded-full border border-white/10 bg-white/5 p-1 shadow-[0_2px_12px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.08)] backdrop-blur-md lg:order-none lg:w-auto"
                 >
                     <button
                         v-for="tab in tabs"
@@ -124,27 +151,39 @@ onMounted(loadPenData);
                         role="tab"
                         :aria-selected="activeTab === tab.name"
                         :aria-controls="`penalty-panel-${tab.name}`"
-                        class="rounded-full px-4 py-1.5 text-sm font-medium text-zinc-300 transition-colors hover:bg-white/10 hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-300/60"
+                        :tabindex="activeTab === tab.name ? 0 : -1"
+                        class="flex-1 rounded-full px-4 py-1.5 text-sm font-medium text-zinc-300 transition-colors hover:bg-white/10 hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-300/60 lg:flex-none"
                         :class="
                             activeTab === tab.name
                                 ? 'bg-gradient-to-b from-white/20 to-white/10 text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.2),0_1px_3px_rgba(0,0,0,0.25)]'
                                 : ''
                         "
                         @click="activeTab = tab.name"
+                        @keydown="
+                            onTabKeydown(
+                                $event,
+                                tabs.findIndex(
+                                    (item) => item.name === activeTab,
+                                ),
+                                tabs.length,
+                                (index) => (activeTab = tabs[index].name),
+                            )
+                        "
                     >
                         {{ tab.label }}
                     </button>
                 </div>
-                <Rule />
+                <Rule class="max-lg:ml-auto" />
                 <button
                     v-if="showActions"
                     type="button"
-                    class="ml-auto inline-flex shrink-0 cursor-pointer items-center gap-1.5 rounded-full border border-white/10 bg-[#5865f2] px-4 py-1.5 text-sm font-medium text-white transition-colors hover:bg-[#4752c4] focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-300/60"
+                    class="inline-flex h-8 shrink-0 cursor-pointer items-center justify-center gap-1.5 rounded-full border border-white/10 bg-[#5865f2] px-3 text-sm font-medium text-white transition-colors hover:bg-[#4752c4] focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-300/60 lg:ml-auto lg:px-4"
                     aria-label="新增懲罰"
+                    title="新增懲罰"
                     @click="addPenaltyRef?.open()"
                 >
                     <VaIcon name="add" size="small" aria-hidden="true" />
-                    新增懲罰
+                    <span class="hidden lg:inline">新增懲罰</span>
                 </button>
             </div>
 
@@ -292,6 +331,12 @@ onMounted(loadPenData);
 @media (max-width: 900px) {
     .penalty-filter-bar {
         grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    /* The date range needs the full row at tablet widths; splitting it with
+       the search field truncates the second date. */
+    .penalty-filter-bar .penalty-date {
+        grid-column: 1 / -1;
     }
 }
 
