@@ -1,0 +1,1196 @@
+<title>Penalty &amp; VOD Refine</title>
+<meta name="claude:viewport-fit-sides" content="cover" />
+<link
+    rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@10..48,400..800&family=Noto+Sans+TC:wght@400;500;700&display=swap"
+/>
+<style>
+    :root {
+        --font-display:
+            "Bricolage Grotesque", "Noto Sans TC", system-ui, sans-serif;
+        --font-body: "Noto Sans TC", "Helvetica Neue", Arial, sans-serif;
+        --font-mono:
+            ui-monospace, "SFMono-Regular", "Cascadia Mono", "Roboto Mono",
+            monospace;
+
+        --bg: #0b0d12;
+        --panel: #12151b;
+        --panel-2: #191c23;
+        --ink: #f4f5f7;
+        --muted: #a6abb6;
+        --line: rgba(255, 255, 255, 0.1);
+        --line-strong: rgba(255, 255, 255, 0.18);
+        --accent: #9aa6ff;
+        --accent-fill: #5865f2;
+        --green: #5bc6a1;
+        --green-fill: #2f8f70;
+        --teal: #53b1b8;
+        --teal-fill: #1f7f86;
+        --amber: #f0b45e;
+        --amber-fill: #8a5a12;
+        --on-accent: #ffffff;
+        --shadow: 0 24px 70px rgba(0, 0, 0, 0.35);
+        --tint-accent: color-mix(in srgb, var(--accent-fill) 16%, transparent);
+        --tint-teal: color-mix(in srgb, var(--teal-fill) 16%, transparent);
+        --tint-green: color-mix(in srgb, var(--green-fill) 14%, transparent);
+        --tint-amber: color-mix(in srgb, var(--amber-fill) 14%, transparent);
+        color-scheme: dark;
+    }
+
+    @media (prefers-color-scheme: light) {
+        :root:not([data-theme="dark"]) {
+            --bg: #f2f3f5;
+            --panel: #ffffff;
+            --panel-2: #e9ebef;
+            --ink: #14161c;
+            --muted: #5b616c;
+            --line: rgba(20, 24, 32, 0.12);
+            --line-strong: rgba(20, 24, 32, 0.22);
+            --accent: #3d48c8;
+            --accent-fill: #4752c4;
+            --green: #167a5b;
+            --green-fill: #1f7a5c;
+            --teal: #1f757d;
+            --teal-fill: #1f757d;
+            --amber: #a35d08;
+            --amber-fill: #a35d08;
+            --on-accent: #ffffff;
+            --shadow: 0 24px 70px rgba(20, 24, 32, 0.1);
+            --tint-accent: color-mix(
+                in srgb,
+                var(--accent-fill) 12%,
+                transparent
+            );
+            --tint-teal: color-mix(in srgb, var(--teal-fill) 12%, transparent);
+            --tint-green: color-mix(
+                in srgb,
+                var(--green-fill) 10%,
+                transparent
+            );
+            --tint-amber: color-mix(
+                in srgb,
+                var(--amber-fill) 10%,
+                transparent
+            );
+            color-scheme: light;
+        }
+    }
+
+    :root[data-theme="light"] {
+        --bg: #f2f3f5;
+        --panel: #ffffff;
+        --panel-2: #e9ebef;
+        --ink: #14161c;
+        --muted: #5b616c;
+        --line: rgba(20, 24, 32, 0.12);
+        --line-strong: rgba(20, 24, 32, 0.22);
+        --accent: #3d48c8;
+        --accent-fill: #4752c4;
+        --green: #167a5b;
+        --green-fill: #1f7a5c;
+        --teal: #1f757d;
+        --teal-fill: #1f757d;
+        --amber: #a35d08;
+        --amber-fill: #a35d08;
+        --on-accent: #ffffff;
+        --shadow: 0 24px 70px rgba(20, 24, 32, 0.1);
+        --tint-accent: color-mix(in srgb, var(--accent-fill) 12%, transparent);
+        --tint-teal: color-mix(in srgb, var(--teal-fill) 12%, transparent);
+        --tint-green: color-mix(in srgb, var(--green-fill) 10%, transparent);
+        --tint-amber: color-mix(in srgb, var(--amber-fill) 10%, transparent);
+        color-scheme: light;
+    }
+
+    * {
+        box-sizing: border-box;
+    }
+
+    html {
+        scroll-behavior: smooth;
+    }
+
+    body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--ink);
+        font-family: var(--font-body);
+        font-size: 16px;
+        line-height: 1.6;
+        padding-left: max(16px, env(safe-area-inset-left));
+        padding-right: max(16px, env(safe-area-inset-right));
+        -webkit-font-smoothing: antialiased;
+    }
+
+    body::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        z-index: 0;
+        pointer-events: none;
+        background:
+            radial-gradient(
+                52rem 28rem at 12% -8%,
+                var(--tint-accent),
+                transparent 65%
+            ),
+            radial-gradient(
+                40rem 24rem at 92% 4%,
+                var(--tint-teal),
+                transparent 65%
+            );
+    }
+
+    ::selection {
+        background: var(--tint-accent);
+        color: var(--ink);
+    }
+
+    .page {
+        position: relative;
+        z-index: 1;
+        max-width: 1120px;
+        margin-inline: auto;
+        padding-block: clamp(40px, 7vw, 88px) 48px;
+    }
+
+    .masthead {
+        border-bottom: 1px solid var(--line);
+        padding-bottom: clamp(32px, 5vw, 56px);
+    }
+
+    .meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px 18px;
+        font-family: var(--font-mono);
+        font-size: 0.68rem;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--muted);
+    }
+
+    .meta span + span {
+        border-left: 1px solid var(--line);
+        padding-left: 18px;
+    }
+
+    .masthead h1 {
+        margin: clamp(28px, 5vw, 46px) 0 0;
+        max-width: 14ch;
+        font-family: var(--font-display);
+        font-weight: 700;
+        font-size: clamp(3rem, 8.5vw, 6.2rem);
+        line-height: 0.94;
+        letter-spacing: -0.045em;
+        text-wrap: balance;
+    }
+
+    .masthead h1 .zh {
+        display: block;
+        margin-bottom: 18px;
+        font-family: var(--font-body);
+        font-size: clamp(0.82rem, 1.5vw, 0.98rem);
+        font-weight: 500;
+        letter-spacing: 0.18em;
+        color: var(--muted);
+    }
+
+    .lede {
+        max-width: 62ch;
+        margin: 24px 0 0;
+        font-size: clamp(1.02rem, 1.4vw, 1.18rem);
+        line-height: 1.7;
+        color: var(--muted);
+    }
+
+    .lede strong {
+        color: var(--ink);
+        font-weight: 600;
+    }
+
+    .sentence {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px;
+        margin-top: clamp(28px, 4vw, 40px);
+        font-family: var(--font-mono);
+        font-size: 0.72rem;
+    }
+
+    .token {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 7px 10px;
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        background: var(--panel);
+        color: var(--ink);
+        white-space: nowrap;
+    }
+
+    .token--identity {
+        border-color: var(--line-strong);
+    }
+
+    .token--scale {
+        border-color: color-mix(in srgb, var(--accent) 35%, var(--line));
+        color: var(--accent);
+    }
+
+    .token--mode {
+        border-color: color-mix(in srgb, var(--accent) 28%, var(--line));
+        background: var(--tint-accent);
+    }
+
+    .token--action {
+        border-color: color-mix(in srgb, var(--green) 28%, var(--line));
+        background: var(--tint-green);
+    }
+
+    .arrow {
+        color: var(--muted);
+    }
+
+    .sentence-caption {
+        margin: 10px 0 0;
+        font-size: 0.82rem;
+        color: var(--muted);
+    }
+
+    .section {
+        margin-top: clamp(56px, 8vw, 96px);
+    }
+
+    .section-head {
+        display: grid;
+        grid-template-columns: 170px minmax(0, 1fr);
+        gap: 24px;
+        margin-bottom: 28px;
+        padding-top: 18px;
+        border-top: 1px solid var(--line);
+    }
+
+    .eyebrow {
+        font-family: var(--font-mono);
+        font-size: 0.68rem;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        color: var(--muted);
+    }
+
+    .section-head h2 {
+        margin: 0;
+        font-family: var(--font-display);
+        font-weight: 650;
+        font-size: clamp(1.6rem, 3.4vw, 2.6rem);
+        line-height: 1.08;
+        letter-spacing: -0.03em;
+        text-wrap: balance;
+    }
+
+    .section-body {
+        max-width: 68ch;
+    }
+
+    .prose {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+    }
+
+    .prose p {
+        margin: 0;
+        color: var(--muted);
+    }
+
+    .prose strong {
+        color: var(--ink);
+        font-weight: 600;
+    }
+
+    .compare {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 24px;
+    }
+
+    figure {
+        min-width: 0;
+        margin: 0;
+    }
+
+    .wire {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        min-width: 0;
+        padding: 14px;
+        border: 1px solid var(--line);
+        border-radius: 16px;
+        background: var(--panel);
+        box-shadow: var(--shadow);
+    }
+
+    .wire-top {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 8px;
+    }
+
+    .wire-name {
+        font-family: var(--font-display);
+        font-size: 0.95rem;
+        font-weight: 700;
+    }
+
+    .wire-tag {
+        font-family: var(--font-mono);
+        font-size: 0.6rem;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--muted);
+    }
+
+    .wire-cards {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 6px;
+    }
+
+    .wire-card {
+        padding: 10px 6px;
+        border: 1px dashed var(--line-strong);
+        border-radius: 8px;
+        background: var(--panel-2);
+        color: var(--muted);
+        font-size: 0.62rem;
+        text-align: center;
+    }
+
+    .wire-bar {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        gap: 6px;
+        padding: 8px 10px;
+        border: 1px solid color-mix(in srgb, var(--teal) 30%, var(--line));
+        border-radius: 8px;
+        background: var(--tint-teal);
+        font-size: 0.62rem;
+        color: var(--ink);
+    }
+
+    .wire-toolbar {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 6px;
+        color: var(--muted);
+        font-size: 0.6rem;
+    }
+
+    .wire-chip {
+        padding: 3px 7px;
+        border: 1px solid var(--line);
+        border-radius: 999px;
+        background: var(--panel-2);
+        white-space: nowrap;
+    }
+
+    .wire-rows {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        padding-top: 2px;
+    }
+
+    .wire-row {
+        height: 8px;
+        border-radius: 999px;
+        background: var(--panel-2);
+    }
+
+    .wire-row:nth-child(2) {
+        width: 86%;
+    }
+
+    .wire-row:nth-child(3) {
+        width: 70%;
+    }
+
+    .wire-headline {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 6px;
+    }
+
+    .wire-count {
+        font-family: var(--font-mono);
+        font-size: 0.58rem;
+        color: var(--accent);
+    }
+
+    .wire-tabgroup {
+        display: flex;
+        gap: 3px;
+        padding: 3px;
+        border: 1px solid var(--line);
+        border-radius: 999px;
+    }
+
+    .wire-tab {
+        padding: 2px 6px;
+        border-radius: 999px;
+        color: var(--muted);
+        font-size: 0.58rem;
+    }
+
+    .wire-tab.is-active {
+        background: var(--accent-fill);
+        color: var(--on-accent);
+    }
+
+    .wire-action {
+        width: 20px;
+        height: 20px;
+        margin-left: auto;
+        border-radius: 999px;
+        background: var(--accent-fill);
+    }
+
+    .wire-filterrow {
+        display: flex;
+        gap: 6px;
+        align-items: stretch;
+    }
+
+    .wire-filterrow .wire-bar {
+        flex: 1;
+        min-width: 0;
+    }
+
+    .wire-lens {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: center;
+        gap: 3px;
+    }
+
+    .wire-thin {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        padding: 6px 8px;
+        border: 1px solid color-mix(in srgb, var(--accent) 28%, var(--line));
+        border-radius: 8px;
+        background: var(--tint-accent);
+        color: var(--ink);
+        font-size: 0.58rem;
+    }
+
+    .wire-thin .dot {
+        width: 5px;
+        height: 5px;
+        border-radius: 50%;
+        background: var(--accent);
+    }
+
+    figcaption {
+        margin-top: 12px;
+        font-size: 0.85rem;
+        color: var(--muted);
+    }
+
+    figcaption strong {
+        color: var(--ink);
+        font-weight: 600;
+    }
+
+    .grammar {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        margin-top: 32px;
+        padding: 14px 0;
+        border-top: 1px solid var(--line);
+        border-bottom: 1px solid var(--line);
+    }
+
+    .grammar-row {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px;
+        font-family: var(--font-mono);
+        font-size: 0.68rem;
+        color: var(--muted);
+    }
+
+    .grammar-label {
+        min-width: 92px;
+        color: var(--ink);
+    }
+
+    .g-chip {
+        padding: 3px 8px;
+        border: 1px solid var(--line);
+        border-radius: 999px;
+    }
+
+    .g-chip--accent {
+        border-color: color-mix(in srgb, var(--accent) 30%, var(--line));
+        background: var(--tint-accent);
+        color: var(--accent);
+    }
+
+    .g-chip--green {
+        border-color: color-mix(in srgb, var(--green) 30%, var(--line));
+        background: var(--tint-green);
+        color: var(--green);
+    }
+
+    .g-sep {
+        color: var(--line-strong);
+    }
+
+    .changes {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 0 40px;
+    }
+
+    .change {
+        min-width: 0;
+        padding: 18px 0 26px;
+        border-top: 1px solid var(--line);
+    }
+
+    .change--wide {
+        grid-column: 1 / -1;
+    }
+
+    .change h3 {
+        margin: 0 0 8px;
+        font-family: var(--font-display);
+        font-size: 1.15rem;
+        font-weight: 650;
+        letter-spacing: -0.01em;
+    }
+
+    .change p {
+        margin: 0;
+        color: var(--muted);
+        font-size: 0.95rem;
+    }
+
+    .principles {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 0 40px;
+        margin: 0;
+    }
+
+    .principle {
+        display: grid;
+        grid-template-columns: 130px minmax(0, 1fr);
+        gap: 16px;
+        padding: 16px 0 22px;
+        border-top: 1px solid var(--line);
+    }
+
+    .principle dt {
+        font-family: var(--font-mono);
+        font-size: 0.68rem;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--accent);
+    }
+
+    .principle dd {
+        margin: 0;
+        color: var(--muted);
+        font-size: 0.95rem;
+    }
+
+    .caveats {
+        padding: 8px clamp(18px, 3vw, 28px);
+        border: 1px solid var(--line);
+        border-radius: 18px;
+        background: var(--panel);
+        box-shadow: var(--shadow);
+    }
+
+    .caveats-label {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding-top: 16px;
+        font-family: var(--font-mono);
+        font-size: 0.62rem;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--amber);
+    }
+
+    .caveats-label::before {
+        content: "";
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: var(--amber);
+    }
+
+    .caveat {
+        display: grid;
+        grid-template-columns: 200px minmax(0, 1fr);
+        gap: 20px;
+        padding: 18px 0;
+        border-top: 1px solid var(--line);
+    }
+
+    .caveat:first-of-type {
+        margin-top: 14px;
+    }
+
+    .caveat h3 {
+        margin: 0;
+        font-family: var(--font-display);
+        font-size: 1rem;
+        font-weight: 650;
+    }
+
+    .caveat p {
+        margin: 0;
+        color: var(--muted);
+        font-size: 0.95rem;
+    }
+
+    .closing {
+        margin-top: clamp(56px, 8vw, 96px);
+        padding-top: 28px;
+        border-top: 1px solid var(--line);
+    }
+
+    .statement {
+        max-width: 24ch;
+        margin: 12px 0 18px;
+        font-family: var(--font-display);
+        font-size: clamp(1.8rem, 4vw, 3.2rem);
+        font-weight: 650;
+        line-height: 1.05;
+        letter-spacing: -0.03em;
+        text-wrap: balance;
+    }
+
+    .statement em {
+        font-style: normal;
+        color: var(--accent);
+    }
+
+    .closing-copy {
+        max-width: 62ch;
+        margin: 0;
+        color: var(--muted);
+    }
+
+    .footer-meta {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        gap: 10px 20px;
+        margin-top: 40px;
+        padding-top: 16px;
+        border-top: 1px solid var(--line);
+        font-family: var(--font-mono);
+        font-size: 0.66rem;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        color: var(--muted);
+    }
+
+    .footer-meta a {
+        color: var(--accent);
+        text-decoration: none;
+        border-bottom: 1px solid
+            color-mix(in srgb, var(--accent) 40%, transparent);
+    }
+
+    .footer-meta a:hover {
+        color: var(--ink);
+    }
+
+    a:focus-visible {
+        outline: 2px solid var(--accent);
+        outline-offset: 3px;
+    }
+
+    @media (min-width: 761px) {
+        .section-body {
+            margin-left: 194px;
+        }
+    }
+
+    @media (max-width: 820px) {
+        .compare,
+        .changes,
+        .principles {
+            grid-template-columns: 1fr;
+        }
+
+        .change--wide {
+            grid-column: auto;
+        }
+
+        .principle,
+        .caveat {
+            grid-template-columns: 1fr;
+            gap: 6px;
+        }
+    }
+
+    @media (max-width: 760px) {
+        .section-head {
+            grid-template-columns: 1fr;
+            gap: 8px;
+        }
+
+        .meta span + span {
+            border-left: 0;
+            padding-left: 0;
+        }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        html {
+            scroll-behavior: auto;
+        }
+    }
+</style>
+
+<div class="page">
+    <header class="masthead">
+        <div class="meta">
+            <span>Design note</span>
+            <span>02 Nov 2026</span>
+            <span>Mercury Land / 水星樂園</span>
+        </div>
+
+        <h1>
+            <span class="zh">直播懲罰 · 直播隨選</span>
+            From catalog to feature.
+        </h1>
+
+        <p class="lede">
+            The penalty and VOD pages used to present every piece of information
+            at once. They now stage a task:
+            <strong>choose a mode, narrow the data, act on the result.</strong>
+            The difference is structure, not decoration.
+        </p>
+
+        <div
+            class="sentence"
+            role="img"
+            aria-label="The header now reads as a sentence: title, count, modes, actions."
+        >
+            <span class="token token--identity">直播懲罰</span>
+            <span class="arrow">→</span>
+            <span class="token token--scale">共 238 筆</span>
+            <span class="arrow">→</span>
+            <span class="token token--mode">列表 / 統計 / 圖例</span>
+            <span class="arrow">→</span>
+            <span class="token token--action">規則說明 · 新增懲罰</span>
+        </div>
+        <p class="sentence-caption">
+            Every header item has one job. The page reads as a sentence instead
+            of a shelf.
+        </p>
+    </header>
+
+    <main>
+        <section class="section" aria-labelledby="shift">
+            <div class="section-head">
+                <span class="eyebrow">01 / The shift</span>
+                <h2 id="shift">Completeness gave way to a workflow.</h2>
+            </div>
+            <div class="section-body prose">
+                <p>
+                    An information compilation optimises for
+                    <strong>completeness</strong>: every artifact gets similar
+                    weight, and the controls sit wherever they happen to live.
+                    The reader has to assemble their own workflow from the
+                    pieces. A feature optimises for
+                    <strong>task completion</strong>: it establishes modes,
+                    scope, state and actions, then arranges the interface around
+                    them.
+                </p>
+                <p>
+                    The penalty page used to be a wall of three quick cards, a
+                    filter bar and a table. The VOD page was a header, a filter
+                    bar and a toolbar whose count, sort, view mode and add
+                    action all competed for attention. Both were readable.
+                    Neither told you what to do next.
+                </p>
+                <p>
+                    The refine changed that grammar. Tabs created modes. The
+                    header became a control strip. The filter bar became a query
+                    surface, and presentation controls moved beside it instead
+                    of inside it. State became visible: the active tab, the
+                    active count tile, the copy button that names what it will
+                    copy.
+                </p>
+            </div>
+        </section>
+
+        <section class="section" aria-labelledby="compare">
+            <div class="section-head">
+                <span class="eyebrow">02 / Compare</span>
+                <h2 id="compare">The same content, a different grammar.</h2>
+            </div>
+
+            <div class="compare">
+                <figure>
+                    <div class="wire" aria-hidden="true">
+                        <div class="wire-top">
+                            <span class="wire-name">直播懲罰</span>
+                            <span class="wire-tag">Before</span>
+                        </div>
+                        <div class="wire-cards">
+                            <div class="wire-card">最新懲罰</div>
+                            <div class="wire-card">統計</div>
+                            <div class="wire-card">圖例</div>
+                        </div>
+                        <div class="wire-bar">
+                            <span>日期</span>
+                            <span>搜尋</span>
+                            <span>狀態</span>
+                            <span>規則說明</span>
+                        </div>
+                        <div class="wire-toolbar">
+                            <span class="wire-chip">共 238 筆</span>
+                            <span class="wire-chip">檢視</span>
+                            <span class="wire-chip">排序</span>
+                            <span class="wire-chip">新增</span>
+                        </div>
+                        <div class="wire-rows">
+                            <div class="wire-row"></div>
+                            <div class="wire-row"></div>
+                            <div class="wire-row"></div>
+                        </div>
+                    </div>
+                    <figcaption>
+                        <strong>Equal weight, scattered controls.</strong>
+                        Count, view mode, sort and add shared a toolbar; the
+                        rule trigger lived inside the filter bar; three cards
+                        competed with the list.
+                    </figcaption>
+                </figure>
+
+                <figure>
+                    <div class="wire" aria-hidden="true">
+                        <div class="wire-top">
+                            <div class="wire-headline">
+                                <span class="wire-name">直播懲罰</span>
+                                <span class="wire-count">共 238 筆</span>
+                                <span class="wire-tabgroup">
+                                    <span class="wire-tab is-active">列表</span>
+                                    <span class="wire-tab">統計</span>
+                                    <span class="wire-tab">圖例</span>
+                                </span>
+                            </div>
+                            <span class="wire-action"></span>
+                        </div>
+                        <div class="wire-filterrow">
+                            <div class="wire-bar">
+                                <span>日期</span>
+                                <span>搜尋</span>
+                                <span>狀態</span>
+                            </div>
+                            <div class="wire-lens">
+                                <span class="wire-chip">檢視</span>
+                                <span class="wire-chip">排序</span>
+                            </div>
+                        </div>
+                        <div class="wire-thin">
+                            <span class="dot"></span>
+                            <span>最新懲罰 · #252 · 未生效</span>
+                        </div>
+                        <div class="wire-rows">
+                            <div class="wire-row"></div>
+                            <div class="wire-row"></div>
+                            <div class="wire-row"></div>
+                        </div>
+                    </div>
+                    <figcaption>
+                        <strong
+                            >One mode, one query surface, one action.</strong
+                        >
+                        The header handles identity, scale, mode and admin
+                        actions. The colored panel narrows data; the view and
+                        sort controls sit outside it because they do not.
+                    </figcaption>
+                </figure>
+            </div>
+
+            <div class="grammar">
+                <div class="grammar-row">
+                    <span class="grammar-label">Header</span>
+                    <span class="g-chip">identity</span>
+                    <span class="g-sep">→</span>
+                    <span class="g-chip">scale</span>
+                    <span class="g-sep">→</span>
+                    <span class="g-chip g-chip--accent">mode</span>
+                    <span class="g-sep">→</span>
+                    <span class="g-chip g-chip--green">action</span>
+                </div>
+                <div class="grammar-row">
+                    <span class="grammar-label">Filter row</span>
+                    <span class="g-chip">query surface</span>
+                    <span class="g-sep">|</span>
+                    <span class="g-chip">presentation</span>
+                </div>
+            </div>
+        </section>
+
+        <section class="section" aria-labelledby="changed">
+            <div class="section-head">
+                <span class="eyebrow">03 / What changed</span>
+                <h2 id="changed">Seven moves that changed the page.</h2>
+            </div>
+
+            <div class="changes">
+                <article class="change">
+                    <h3>Modes replace panels</h3>
+                    <p>
+                        The penalty quick cards became 列表 / 統計 / 圖例. Only
+                        one mode is on screen, so the page asks what you came to
+                        do instead of asking you to scan everything. Statistics
+                        and legend stopped being modals competing with the list.
+                    </p>
+                </article>
+
+                <article class="change">
+                    <h3>The header became a sentence</h3>
+                    <p>
+                        Title, count, modes and actions each got one job and one
+                        place. The count no longer lives in a list toolbar; the
+                        rule trigger no longer lives in the filter bar. The
+                        order itself carries meaning.
+                    </p>
+                </article>
+
+                <article class="change">
+                    <h3>Query surface, not preview surface</h3>
+                    <p>
+                        Date, search and state narrow the data, so they share
+                        the colored panel. View mode and sort do not narrow
+                        anything — they change how the result is presented — so
+                        they sit outside the panel, on the same row. The visual
+                        separation encodes the semantic one.
+                    </p>
+                </article>
+
+                <article class="change">
+                    <h3>The list toolbar lost its junk drawer</h3>
+                    <p>
+                        The count moved to the header, the add action moved to
+                        the title row, and the view and sort controls moved
+                        beside the filters. What remains is only what the list
+                        itself needs. On mobile, those controls degrade into one
+                        compact row instead of disappearing.
+                    </p>
+                </article>
+
+                <article class="change">
+                    <h3>Statistics became a dashboard</h3>
+                    <p>
+                        數量 and 圖表 became symmetric section headings. The
+                        state count tiles are filters with state-colored active
+                        states; the copy button changes its label to match the
+                        selection; Ctrl+A sits with the list it applies to. The
+                        chart count stays with the chart's time range.
+                    </p>
+                </article>
+
+                <article class="change">
+                    <h3>The latest penalty became a status line</h3>
+                    <p>
+                        As a thin bar, the newest penalty keeps its announcement
+                        without taking card-level weight. It reads as a status
+                        strip, so the eye moves on to the filter and the list
+                        instead of treating three cards as the page's content.
+                    </p>
+                </article>
+
+                <article class="change change--wide">
+                    <h3>VOD and Penalty now share a grammar</h3>
+                    <p>
+                        Pills, eyebrow labels, accent buttons, state colors and
+                        filter-row geometry are the same on both pages. VOD does
+                        not need tabs yet, but it now speaks the same language:
+                        title, count, rule, add; query panel; presentation
+                        controls beside it. Moving between the pages feels like
+                        moving inside one product.
+                    </p>
+                </article>
+            </div>
+        </section>
+
+        <section class="section" aria-labelledby="works">
+            <div class="section-head">
+                <span class="eyebrow">04 / Why it works</span>
+                <h2 id="works">Six principles, applied.</h2>
+            </div>
+
+            <dl class="principles">
+                <div class="principle">
+                    <dt>Scope</dt>
+                    <dd>
+                        Global filters, list presentation and page actions are
+                        different scopes. Giving each its own place removes the
+                        ambiguity of a toolbar that does a bit of everything.
+                    </dd>
+                </div>
+                <div class="principle">
+                    <dt>Disclosure</dt>
+                    <dd>
+                        Tabs hide secondary panels until they are relevant.
+                        Modals either became inline sections or were kept only
+                        for true drill-downs.
+                    </dd>
+                </div>
+                <div class="principle">
+                    <dt>State</dt>
+                    <dd>
+                        The active tab, the active count tile and the copy label
+                        all say what mode you are in and what will happen next.
+                        A compilation page has content; a feature has state.
+                    </dd>
+                </div>
+                <div class="principle">
+                    <dt>Reduction</dt>
+                    <dd>
+                        IDs and dates left the copy lists. Duplicate counts
+                        disappeared. The collapsed-panel machinery went away.
+                        Less chrome means the remaining controls read louder.
+                    </dd>
+                </div>
+                <div class="principle">
+                    <dt>Degradation</dt>
+                    <dd>
+                        Desktop puts the lens controls beside the query panel;
+                        mobile returns them to a compact toolbar. The structure
+                        survives the narrow width instead of being cropped.
+                    </dd>
+                </div>
+                <div class="principle">
+                    <dt>Grammar</dt>
+                    <dd>
+                        Shared shapes and shared semantics across VOD and
+                        Penalty make the site feel designed as a system, not
+                        assembled page by page.
+                    </dd>
+                </div>
+            </dl>
+        </section>
+
+        <section class="section" aria-labelledby="watch">
+            <div class="section-head">
+                <span class="eyebrow">05 / What I'd watch</span>
+                <h2 id="watch">
+                    The remaining friction is scope, not structure.
+                </h2>
+            </div>
+
+            <div class="caveats">
+                <span class="caveats-label">Open questions</span>
+
+                <div class="caveat">
+                    <h3>The count's scope</h3>
+                    <p>
+                        共 N 筆懲罰 reflects the list filters, yet it is visible
+                        on 統計 and 圖例. On those tabs it can be misread as the
+                        total. Show it only on 列表, or label it as a list
+                        count.
+                    </p>
+                </div>
+
+                <div class="caveat">
+                    <h3>Header density on mobile</h3>
+                    <p>
+                        For admins, title, count, tabs, rule and add can wrap
+                        into three rows. Icon-only actions below a breakpoint,
+                        or a single action cluster, would keep the header calm.
+                    </p>
+                </div>
+
+                <div class="caveat">
+                    <h3>Two scopes on 統計</h3>
+                    <p>
+                        The list filters and the chart time range are
+                        independent. 數量 and 圖表 separate them, but one
+                        caption — “列表依上方篩選；圖表依時間範圍” — would
+                        remove the last ambiguity.
+                    </p>
+                </div>
+
+                <div class="caveat">
+                    <h3>Mid-width tension</h3>
+                    <p>
+                        Between roughly 720 and 900px, a two-column filter bar
+                        plus the external view and sort controls can feel tight.
+                        A deliberate wrap point would help.
+                    </p>
+                </div>
+
+                <div class="caveat">
+                    <h3>Don't add VOD tabs yet</h3>
+                    <p>
+                        VOD has one mode. Its header and filter row are enough.
+                        Tabs should appear only when a second genuine mode
+                        exists, otherwise they become decoration.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <footer class="closing">
+            <span class="eyebrow">Bottom line</span>
+            <p class="statement">
+                The refine changed the page's <em>grammar</em>, not just its
+                skin.
+            </p>
+            <p class="closing-copy">
+                It moved from “here is all the information” to “here is the
+                task, its scope, its current state, and the next action.” The
+                remaining issues are about count scope and responsive density —
+                refinements of an already sound structure, not reasons to
+                rethink it.
+            </p>
+
+            <div class="footer-meta">
+                <span>Mercury Land design note · 02 Nov 2026</span>
+                <span>
+                    Shipped in
+                    <a
+                        href="https://github.com/champsing/mercuryland/pull/291"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        >PR #291</a
+                    >
+                    and
+                    <a
+                        href="https://github.com/champsing/mercuryland/pull/292"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        >PR #292</a
+                    >
+                </span>
+            </div>
+        </footer>
+    </main>
+</div>

@@ -1,0 +1,415 @@
+<svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 1000 560"
+    width="1000"
+    height="560"
+    role="img"
+    aria-labelledby="penalty-conversion-title penalty-conversion-desc"
+>
+    <title id="penalty-conversion-title">無法轉換與可轉換的懲罰</title>
+    <desc id="penalty-conversion-desc">
+        左側懲罰在期限過後判定失敗，只能拿到勉強過；右側懲罰主文含有「否則懲罰
+        +2」，失敗後會轉換成兩個新懲罰，之後由直播抽出。
+    </desc>
+
+    <defs>
+        <marker
+            id="penalty-conversion-arrow"
+            viewBox="0 0 10 10"
+            refX="8"
+            refY="5"
+            markerWidth="6"
+            markerHeight="6"
+            orient="auto"
+        >
+            <path d="M 0 0 L 10 5 L 0 10 Z" fill="#8f98a8" />
+        </marker>
+    </defs>
+
+    <rect width="1000" height="560" rx="24" fill="#12151b" />
+    <rect
+        x="0.5"
+        y="0.5"
+        width="999"
+        height="559"
+        rx="23.5"
+        fill="none"
+        stroke="#ffffff14"
+    />
+
+    <!-- Column labels -->
+    <rect
+        x="178"
+        y="30"
+        width="160"
+        height="32"
+        rx="16"
+        fill="#f871711f"
+        stroke="#f8717159"
+    />
+    <text
+        x="258"
+        y="51"
+        text-anchor="middle"
+        font-family="'Noto Sans TC','Microsoft JhengHei','PingFang TC',sans-serif"
+        font-size="14"
+        font-weight="700"
+        fill="#f87171"
+    >
+        無法轉換
+    </text>
+    <rect
+        x="662"
+        y="30"
+        width="160"
+        height="32"
+        rx="16"
+        fill="#5bc6a11f"
+        stroke="#5bc6a159"
+    />
+    <text
+        x="742"
+        y="51"
+        text-anchor="middle"
+        font-family="'Noto Sans TC','Microsoft JhengHei','PingFang TC',sans-serif"
+        font-size="14"
+        font-weight="700"
+        fill="#5bc6a1"
+    >
+        可轉換
+    </text>
+
+    <!-- Left: penalty without a conversion condition -->
+    <rect
+        x="52"
+        y="84"
+        width="412"
+        height="104"
+        rx="16"
+        fill="#191c23"
+        stroke="#ffffff14"
+    />
+    <text
+        x="72"
+        y="112"
+        font-family="'Noto Sans TC','Microsoft JhengHei','PingFang TC',sans-serif"
+        font-size="12"
+        letter-spacing="1.5"
+        fill="#a6abb6"
+    >
+        懲罰主文
+    </text>
+    <text
+        x="72"
+        y="144"
+        font-family="'Noto Sans TC','Microsoft JhengHei','PingFang TC',sans-serif"
+        font-size="20"
+        font-weight="700"
+        fill="#f4f5f7"
+    >
+        「2024 年結束以前
+    </text>
+    <text
+        x="72"
+        y="172"
+        font-family="'Noto Sans TC','Microsoft JhengHei','PingFang TC',sans-serif"
+        font-size="20"
+        font-weight="700"
+        fill="#f4f5f7"
+    >
+        打完星鐵主線」
+    </text>
+
+    <line
+        x1="258"
+        y1="196"
+        x2="258"
+        y2="224"
+        stroke="#8f98a8"
+        stroke-width="2"
+        marker-end="url(#penalty-conversion-arrow)"
+    />
+
+    <rect
+        x="118"
+        y="234"
+        width="280"
+        height="44"
+        rx="22"
+        fill="#f0b45e1a"
+        stroke="#f0b45e59"
+    />
+    <text
+        x="258"
+        y="262"
+        text-anchor="middle"
+        font-family="'Noto Sans TC','Microsoft JhengHei','PingFang TC',sans-serif"
+        font-size="15"
+        font-weight="700"
+        fill="#f0b45e"
+    >
+        期限已過 → 判定失敗
+    </text>
+
+    <line
+        x1="258"
+        y1="286"
+        x2="258"
+        y2="310"
+        stroke="#8f98a8"
+        stroke-width="2"
+        marker-end="url(#penalty-conversion-arrow)"
+    />
+
+    <rect
+        x="52"
+        y="318"
+        width="412"
+        height="174"
+        rx="16"
+        fill="#191c23"
+        stroke="#ffffff14"
+    />
+    <text
+        x="258"
+        y="350"
+        text-anchor="middle"
+        font-family="'Noto Sans TC','Microsoft JhengHei','PingFang TC',sans-serif"
+        font-size="16"
+        font-weight="700"
+        fill="#f4f5f7"
+    >
+        原懲罰停留在失敗
+    </text>
+    <text
+        x="258"
+        y="394"
+        text-anchor="middle"
+        font-family="'Noto Sans TC','Microsoft JhengHei','PingFang TC',sans-serif"
+        font-size="24"
+        font-weight="800"
+        fill="#10b981"
+    >
+        ▲勉強過
+    </text>
+    <text
+        x="258"
+        y="430"
+        text-anchor="middle"
+        font-family="'Noto Sans TC','Microsoft JhengHei','PingFang TC',sans-serif"
+        font-size="14"
+        fill="#a6abb6"
+    >
+        唯一能拿到的完成狀態
+    </text>
+    <text
+        x="258"
+        y="462"
+        text-anchor="middle"
+        font-family="'Noto Sans TC','Microsoft JhengHei','PingFang TC',sans-serif"
+        font-size="14"
+        fill="#a6abb6"
+    >
+        永遠無法取得
+        <tspan fill="#84cc16" text-decoration="line-through">▲已完成</tspan>
+    </text>
+
+    <!-- Right: penalty with a conversion condition -->
+    <rect
+        x="536"
+        y="84"
+        width="412"
+        height="104"
+        rx="16"
+        fill="#191c23"
+        stroke="#ffffff14"
+    />
+    <text
+        x="556"
+        y="112"
+        font-family="'Noto Sans TC','Microsoft JhengHei','PingFang TC',sans-serif"
+        font-size="12"
+        letter-spacing="1.5"
+        fill="#a6abb6"
+    >
+        懲罰主文
+    </text>
+    <text
+        x="556"
+        y="144"
+        font-family="'Noto Sans TC','Microsoft JhengHei','PingFang TC',sans-serif"
+        font-size="20"
+        font-weight="700"
+        fill="#f4f5f7"
+    >
+        「2024 年結束以前打完
+    </text>
+    <text
+        x="556"
+        y="172"
+        font-family="'Noto Sans TC','Microsoft JhengHei','PingFang TC',sans-serif"
+        font-size="20"
+        font-weight="700"
+        fill="#f4f5f7"
+    >
+        星鐵主線，<tspan fill="#5bc6a1">否則懲罰 +2</tspan>」
+    </text>
+
+    <line
+        x1="742"
+        y1="196"
+        x2="742"
+        y2="224"
+        stroke="#8f98a8"
+        stroke-width="2"
+        marker-end="url(#penalty-conversion-arrow)"
+    />
+
+    <rect
+        x="602"
+        y="234"
+        width="280"
+        height="44"
+        rx="22"
+        fill="#f0b45e1a"
+        stroke="#f0b45e59"
+    />
+    <text
+        x="742"
+        y="262"
+        text-anchor="middle"
+        font-family="'Noto Sans TC','Microsoft JhengHei','PingFang TC',sans-serif"
+        font-size="15"
+        font-weight="700"
+        fill="#f0b45e"
+    >
+        期限已過 → 判定失敗
+    </text>
+
+    <line
+        x1="742"
+        y1="286"
+        x2="742"
+        y2="310"
+        stroke="#8f98a8"
+        stroke-width="2"
+        marker-end="url(#penalty-conversion-arrow)"
+    />
+
+    <rect
+        x="536"
+        y="318"
+        width="412"
+        height="174"
+        rx="16"
+        fill="#191c23"
+        stroke="#ffffff14"
+    />
+    <text
+        x="742"
+        y="350"
+        text-anchor="middle"
+        font-family="'Noto Sans TC','Microsoft JhengHei','PingFang TC',sans-serif"
+        font-size="16"
+        font-weight="700"
+        fill="#5bc6a1"
+    >
+        轉換為 2 個新懲罰
+    </text>
+    <rect
+        x="556"
+        y="366"
+        width="176"
+        height="48"
+        rx="12"
+        fill="#0e1117"
+        stroke="#ffffff1f"
+    />
+    <text
+        x="644"
+        y="390"
+        text-anchor="middle"
+        font-family="'Noto Sans TC','Microsoft JhengHei','PingFang TC',sans-serif"
+        font-size="14"
+        font-weight="700"
+        fill="#f4f5f7"
+    >
+        新懲罰 A
+    </text>
+    <text
+        x="644"
+        y="407"
+        text-anchor="middle"
+        font-family="'Noto Sans TC','Microsoft JhengHei','PingFang TC',sans-serif"
+        font-size="11"
+        fill="#a6abb6"
+    >
+        未抽出
+    </text>
+    <rect
+        x="752"
+        y="366"
+        width="176"
+        height="48"
+        rx="12"
+        fill="#0e1117"
+        stroke="#ffffff1f"
+    />
+    <text
+        x="840"
+        y="390"
+        text-anchor="middle"
+        font-family="'Noto Sans TC','Microsoft JhengHei','PingFang TC',sans-serif"
+        font-size="14"
+        font-weight="700"
+        fill="#f4f5f7"
+    >
+        新懲罰 B
+    </text>
+    <text
+        x="840"
+        y="407"
+        text-anchor="middle"
+        font-family="'Noto Sans TC','Microsoft JhengHei','PingFang TC',sans-serif"
+        font-size="11"
+        fill="#a6abb6"
+    >
+        未抽出
+    </text>
+    <text
+        x="742"
+        y="444"
+        text-anchor="middle"
+        font-family="'Noto Sans TC','Microsoft JhengHei','PingFang TC',sans-serif"
+        font-size="14"
+        fill="#a6abb6"
+    >
+        判定失敗後自動生成
+    </text>
+    <text
+        x="742"
+        y="472"
+        text-anchor="middle"
+        font-family="'Noto Sans TC','Microsoft JhengHei','PingFang TC',sans-serif"
+        font-size="15"
+        font-weight="700"
+        fill="#5bc6a1"
+    >
+        之後由直播抽出
+    </text>
+
+    <line x1="500" y1="30" x2="500" y2="492" stroke="#ffffff0d" />
+
+    <!-- Footer rule -->
+    <line x1="52" y1="512" x2="948" y2="512" stroke="#ffffff14" />
+    <text
+        x="500"
+        y="541"
+        text-anchor="middle"
+        font-family="'Noto Sans TC','Microsoft JhengHei','PingFang TC',sans-serif"
+        font-size="14"
+        fill="#a6abb6"
+    >
+        主文出現「否則」、「失敗」等字，才算擁有轉換條件。
+    </text>
+</svg>

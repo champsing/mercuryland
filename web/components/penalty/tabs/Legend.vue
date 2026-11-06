@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import { stateColor, stateString } from "@/composables/penalty";
+import { nextTabIndex } from "@/composables/tabList";
+import { computed, ref } from "vue";
 
 interface LegendItem {
     label: string;
@@ -48,12 +50,30 @@ const stateDescriptions = [
     "已經完成該懲罰的所有條件，獲得「已完成」狀態。",
 ];
 
-const stateItems: LegendItem[] = stateDescriptions.map(
-    (description, state) => ({
-        label: `<span class="${stateColor(state, "text")}">▲${stateString(state)}</span>`,
-        description,
-    }),
-);
+const syntaxTabId = (index: number) => `penalty-syntax-tab-${index}`;
+const stateTabId = (state: number) => `penalty-state-tab-${state}`;
+
+const activeSyntax = ref(0);
+const activeState = ref(0);
+
+const currentSyntax = computed(() => syntaxItems[activeSyntax.value]);
+const currentState = computed(() => stateDescriptions[activeState.value]);
+
+function onTabKeydown(
+    event: KeyboardEvent,
+    current: number,
+    count: number,
+    select: (index: number) => void,
+) {
+    const next = nextTabIndex(event.key, current, count);
+    if (next === null) return;
+
+    event.preventDefault();
+    select(next);
+
+    const tablist = (event.currentTarget as HTMLElement).parentElement;
+    tablist?.querySelectorAll<HTMLElement>('[role="tab"]')[next]?.focus();
+}
 </script>
 
 <template>
@@ -84,20 +104,61 @@ const stateItems: LegendItem[] = stateDescriptions.map(
                     Syntax
                 </span>
             </header>
-            <div class="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
-                <article
-                    v-for="item in syntaxItems"
+
+            <div
+                role="tablist"
+                aria-label="懲罰標籤"
+                class="grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-7"
+            >
+                <button
+                    v-for="(item, index) in syntaxItems"
+                    :id="syntaxTabId(index)"
                     :key="item.label"
-                    class="rounded-2xl border border-white/[0.08] bg-[rgba(18,21,27,0.6)] p-4"
+                    type="button"
+                    role="tab"
+                    aria-controls="penalty-syntax-panel"
+                    :aria-selected="activeSyntax === index"
+                    :tabindex="activeSyntax === index ? 0 : -1"
+                    class="flex min-h-10 cursor-pointer items-center justify-center gap-1.5 rounded-xl border px-3 py-2 text-sm font-bold transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-300/60"
+                    :class="
+                        activeSyntax === index
+                            ? 'border-[#28c9c7]/50 bg-[#28c9c7]/15 text-white'
+                            : 'border-white/[0.08] bg-white/[0.03] text-zinc-300 hover:border-white/20 hover:bg-white/[0.07]'
+                    "
+                    @click="activeSyntax = index"
+                    @keydown="
+                        onTabKeydown(
+                            $event,
+                            activeSyntax,
+                            syntaxItems.length,
+                            (index) => (activeSyntax = index),
+                        )
+                    "
                 >
-                    <h4 class="text-base font-extrabold text-[#f7f7f8]">
-                        {{ item.label }}
+                    {{ item.label }}
+                </button>
+            </div>
+
+            <div
+                id="penalty-syntax-panel"
+                role="tabpanel"
+                :aria-labelledby="syntaxTabId(activeSyntax)"
+                tabindex="0"
+                class="rounded-2xl border border-white/[0.08] bg-[rgba(18,21,27,0.6)] p-5 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-300/60 md:p-8"
+            >
+                <div
+                    class="flex flex-col gap-4 md:flex-row md:items-center md:justify-center md:gap-6"
+                >
+                    <h4
+                        class="text-center text-2xl font-black leading-tight text-[#f7f7f8] md:text-3xl"
+                    >
+                        {{ currentSyntax.label }}
                     </h4>
                     <p
-                        class="mt-2 text-sm leading-relaxed text-zinc-300"
-                        v-html="item.description"
+                        class="max-w-prose text-center text-base leading-relaxed text-zinc-300 md:text-lg"
+                        v-html="currentSyntax.description"
                     ></p>
-                </article>
+                </div>
             </div>
         </section>
 
@@ -118,59 +179,110 @@ const stateItems: LegendItem[] = stateDescriptions.map(
                     States
                 </span>
             </header>
-            <div class="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
-                <article
-                    v-for="item in stateItems"
-                    :key="item.label"
-                    class="rounded-2xl border border-white/[0.08] bg-[rgba(18,21,27,0.6)] p-4"
+
+            <div
+                role="tablist"
+                aria-label="懲罰完成狀態"
+                class="grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-5"
+            >
+                <button
+                    v-for="(_, state) in stateDescriptions"
+                    :id="stateTabId(state)"
+                    :key="state"
+                    type="button"
+                    role="tab"
+                    aria-controls="penalty-state-panel"
+                    :aria-selected="activeState === state"
+                    :tabindex="activeState === state ? 0 : -1"
+                    class="flex min-h-10 cursor-pointer items-center justify-center rounded-xl border px-3 py-2 text-sm font-bold transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-300/60"
+                    :class="
+                        activeState === state
+                            ? `${stateColor(state, 'bg')} border-transparent text-white`
+                            : 'border-white/[0.08] bg-white/[0.03] hover:border-white/20 hover:bg-white/[0.07]'
+                    "
+                    @click="activeState = state"
+                    @keydown="
+                        onTabKeydown(
+                            $event,
+                            activeState,
+                            stateDescriptions.length,
+                            (state) => (activeState = state),
+                        )
+                    "
+                >
+                    <span
+                        :class="
+                            activeState === state
+                                ? 'text-white'
+                                : stateColor(state, 'text')
+                        "
+                    >
+                        ▲{{ stateString(state) }}
+                    </span>
+                </button>
+            </div>
+
+            <div
+                id="penalty-state-panel"
+                role="tabpanel"
+                :aria-labelledby="stateTabId(activeState)"
+                tabindex="0"
+                class="rounded-2xl border border-white/[0.08] bg-[rgba(18,21,27,0.6)] p-5 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-300/60 md:p-8"
+            >
+                <div
+                    class="flex flex-col gap-4 md:flex-row md:items-center md:justify-center md:gap-6"
                 >
                     <h4
-                        class="text-base font-extrabold"
-                        v-html="item.label"
-                    ></h4>
+                        class="text-center text-2xl font-black leading-tight md:text-3xl"
+                        :class="stateColor(activeState, 'text')"
+                    >
+                        ▲{{ stateString(activeState) }}
+                    </h4>
                     <p
-                        class="mt-2 text-sm leading-relaxed text-zinc-300"
-                        v-html="item.description"
+                        class="max-w-prose text-center text-base leading-relaxed text-zinc-300 md:text-lg"
+                        v-html="currentState"
                     ></p>
-                </article>
+                </div>
             </div>
         </section>
 
         <section
-            aria-labelledby="penalty-legend-footnote"
+            aria-labelledby="penalty-legend-conversion"
             class="rounded-2xl border border-[#f59e0b]/30 bg-[rgba(245,158,11,0.06)] p-4"
         >
             <h3
-                id="penalty-legend-footnote"
+                id="penalty-legend-conversion"
                 class="text-base font-extrabold text-[#f7f7f8]"
             >
                 <sup class="text-[#f59e0b]">1</sup>
-                無法完成的懲罰與轉換條件說明
+                無法轉換的懲罰與轉換條件
             </h3>
-            <div
-                class="mt-3 flex flex-col gap-3 text-sm leading-relaxed text-zinc-300"
-            >
-                <p>
-                    某些懲罰的主文有可能存在會造成該懲罰永遠無法完成的條件，例如時間限制等；雖然這類懲罰通常會在進入轉盤之前被過濾，但難保完全沒有。而這類懲罰在該條件無法被滿足之後會被判定失敗，永遠無法獲得<span
-                        :class="stateColor(4, 'text')"
-                        >▲{{ stateString(4) }}</span
-                    >狀態，僅可獲得<span :class="stateColor(3, 'text')"
-                        >▲{{ stateString(3) }}</span
-                    >。除非該懲罰帶有「否則」、「失敗」等語，即視為擁有轉換條件，當前項條件無法被滿足時，會轉換為後面所說的懲罰。
-                </p>
-                <p>
-                    假設今有一個懲罰：「2024年結束以前打完星鐵主線」；如主文所示，在2024年結束之後便永遠無法達成前項條件，此時將會判定為懲罰失敗，並將永遠無法獲得<span
-                        :class="stateColor(4, 'text')"
-                        >▲{{ stateString(4) }}</span
-                    >；唯一的完成方式是懲罰原主人或投票給過，即以<span
-                        :class="stateColor(3, 'text')"
-                        >▲{{ stateString(3) }}</span
-                    >的方式完成。
-                </p>
-                <p>
-                    但是，若懲罰為「2024年結束以前打完星鐵主線，否則懲罰+2」，就會在判定失敗時將原懲罰取代為2個新的未抽出懲罰，並於之後由直播時抽出，原懲罰便轉化為2個新的懲罰了。
-                </p>
-            </div>
+            <p class="mt-3 text-sm leading-relaxed text-zinc-300">
+                主文若有「否則」、「失敗」等字，判定失敗時會轉換成新的懲罰；沒有的話，就只能以
+                <span :class="stateColor(3, 'text')"
+                    >▲{{ stateString(3) }}</span
+                >
+                結案。
+            </p>
+            <figure class="mt-4">
+                <picture>
+                    <source
+                        media="(max-width: 1023px)"
+                        srcset="/images/penalty_conversion_mobile.svg"
+                    />
+                    <img
+                        src="/images/penalty_conversion.svg"
+                        alt="圖例：沒有轉換條件的懲罰在期限過後判定失敗，只能拿到勉強過；有「否則懲罰 +2」轉換條件的懲罰，失敗後會生成兩個新懲罰，之後由直播抽出。"
+                        class="mx-auto block h-auto w-full max-w-xl rounded-xl border border-white/10 lg:max-w-none"
+                        decoding="async"
+                    />
+                </picture>
+                <figcaption
+                    class="mt-2 text-center text-xs text-zinc-400 lg:text-left"
+                >
+                    紅：沒有轉換條件；綠：有轉換條件。
+                </figcaption>
+            </figure>
         </section>
     </div>
 </template>
