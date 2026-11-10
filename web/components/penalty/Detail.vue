@@ -74,7 +74,7 @@ watch(
                 class="py-2 my-1 max-h-[20vh] overflow-y-auto custom-scrollbar"
             >
                 <div
-                    class="text-xl md:text-2xl font-extrabold tracking-tight leading-tight text-transparent bg-clip-text bg-gradient-to-r from-sky-500 via-blue-600 to-indigo-600 dark:from-cyan-300 dark:via-sky-400 dark:to-indigo-400 drop-shadow-sm select-all"
+                    class="text-xl md:text-2xl font-extrabold tracking-tight leading-tight text-transparent bg-clip-text bg-gradient-to-r from-sky-500 via-blue-600 to-indigo-600 dark:from-cyan-300 dark:via-sky-400 dark:to-indigo-400 drop-shadow-sm select-text"
                 >
                     {{ penalty.name }}
                 </div>
