@@ -2,10 +2,8 @@
 import { useAuthState } from "@/composables/authState";
 import { PenItem, stateColor, stateString } from "@/composables/penalty";
 import { openLinks } from "@/composables/utils";
-import { BlockViewMode } from "@/composables/viewMode";
 import { VodItem } from "@/composables/vod";
 import api from "@composables/axios";
-import { useMediaQuery } from "@vueuse/core";
 import { Play24Filled } from "@vicons/fluent";
 import { computed, onMounted, ref, watch } from "vue";
 import { VaIcon, VaScrollContainer } from "vuestic-ui";
@@ -18,15 +16,6 @@ const props = defineProps<{
     state?: number | null;
     search: string;
 }>();
-
-const viewMode = defineModel<BlockViewMode>("viewMode", { default: "grid" });
-
-// 手機寬度一律用列表檢視：卡片與列表在窄螢幕上幾乎相同，列表更省捲動。
-// 這裡只影響顯示，不會覆寫使用者在桌面上儲存的偏好。
-const isDesktop = useMediaQuery("(min-width: 768px)");
-const effectiveViewMode = computed<BlockViewMode>(() =>
-    isDesktop.value ? viewMode.value : "list",
-);
 
 const emit = defineEmits<{
     (e: "updateState", state: number): void;
@@ -151,83 +140,7 @@ function filterPenaltyData(
             size="medium"
             class="flex-1 min-h-0"
         >
-            <div
-                v-if="items.length && effectiveViewMode === 'grid'"
-                class="grid w-full grid-cols-1 gap-3 pb-4 pr-1 md:grid-cols-2 lg:grid-cols-3"
-            >
-                <article
-                    v-for="penalty in items"
-                    :key="penalty.id"
-                    tabindex="0"
-                    class="flex cursor-pointer flex-col gap-3 rounded-2xl border border-zinc-700/40 bg-zinc-800/40 p-8 backdrop-blur-sm transition-all duration-200 hover:-translate-y-0.5 hover:border-[#8ea2ff]/40 hover:bg-zinc-700/40 hover:shadow-[0_8px_32px_rgba(0,0,0,0.35)]"
-                    @click="modal = penalty.id"
-                    @keydown.enter.self="modal = penalty.id"
-                    @keydown.space.self.prevent="modal = penalty.id"
-                >
-                    <header
-                        class="flex min-w-0 items-start justify-between gap-3"
-                    >
-                        <div class="flex min-w-0 flex-col gap-1.5">
-                            <span
-                                class="flex items-center gap-1.5 text-base font-semibold tracking-wide text-[#8ea2ff] tabular-nums"
-                            >
-                                <VaIcon name="event" size="small" />
-                                {{ penalty.date }}
-                            </span>
-                            <div
-                                class="line-clamp-2 break-words text-[22px] font-bold leading-snug text-white"
-                                :title="penalty.name"
-                            >
-                                {{ penalty.name }}
-                            </div>
-                        </div>
-
-                        <button
-                            type="button"
-                            :class="stateColor(penalty.state, 'bg')"
-                            class="shrink-0 cursor-pointer rounded-lg border-0 px-2.5 py-1 text-sm font-bold leading-none text-white shadow-sm shadow-black/25 transition-opacity hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#8ea2ff]"
-                            :title="`點擊篩選：${stateString(penalty.state)}`"
-                            @click.stop="emit('updateState', penalty.state)"
-                        >
-                            {{ stateString(penalty.state) }}
-                        </button>
-                    </header>
-
-                    <footer
-                        class="mt-auto flex items-center justify-end gap-2 pt-1"
-                    >
-                        <button
-                            v-if="showActions"
-                            type="button"
-                            class="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#7e22ce] text-white shadow-md shadow-black/20 transition-colors hover:bg-[#6b21a8] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#a855f7]"
-                            aria-label="編輯懲罰"
-                            title="編輯懲罰"
-                            @click.stop="emit('editPenalty', penalty)"
-                        >
-                            <VaIcon name="edit" size="small" />
-                        </button>
-                        <button
-                            type="button"
-                            :disabled="!vodLinksOfDate(penalty.date).length"
-                            :aria-label="`觀看 ${penalty.date} 的直播`"
-                            :title="
-                                vodLinksOfDate(penalty.date).length
-                                    ? `觀看 ${penalty.date} 的直播`
-                                    : '此日期尚無直播影片'
-                            "
-                            class="inline-flex h-9 shrink-0 items-center justify-center gap-1.5 rounded-full bg-[#d90000] px-4 text-sm font-semibold text-white shadow-md shadow-black/20 transition-colors hover:bg-[#b30000] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#ff0000] disabled:cursor-not-allowed disabled:bg-zinc-600 disabled:opacity-50 disabled:hover:bg-zinc-600"
-                            @click.stop="openVodOfDate(penalty.date)"
-                        >
-                            <VaIcon color="#ffffff" size="1.25rem">
-                                <Play24Filled />
-                            </VaIcon>
-                            <span>播放</span>
-                        </button>
-                    </footer>
-                </article>
-            </div>
-
-            <div v-else-if="items.length" class="w-full pb-4 pr-1">
+            <div v-if="items.length" class="w-full pb-4 pr-1">
                 <div
                     class="mb-1 hidden grid-cols-[10rem_minmax(0,1fr)_6rem_2.25rem] items-center gap-3 px-4 text-xs font-semibold tracking-wide text-zinc-500 md:grid"
                     aria-hidden="true"

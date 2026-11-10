@@ -212,6 +212,7 @@ function toggleTags(vod: VodItem) {
                                 <VaIcon name="edit" size="small" />
                             </button>
                             <a
+                                v-if="showActions"
                                 :href="videoUrl(vod)"
                                 target="_blank"
                                 rel="noreferrer noopener"
@@ -222,6 +223,20 @@ function toggleTags(vod: VodItem) {
                                 <VaIcon color="#ffffff" size="1.5rem">
                                     <Play24Filled />
                                 </VaIcon>
+                            </a>
+                            <a
+                                v-else
+                                :href="videoUrl(vod)"
+                                target="_blank"
+                                rel="noreferrer noopener"
+                                :aria-label="`觀看直播：${vod.title}`"
+                                :title="`觀看直播：${vod.title}`"
+                                class="inline-flex h-9 shrink-0 items-center justify-center gap-1.5 rounded-full bg-[#d90000] px-4 text-sm font-semibold text-white shadow-md shadow-black/20 transition-colors hover:bg-[#b30000] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#ff0000]"
+                            >
+                                <VaIcon color="#ffffff" size="1.25rem">
+                                    <Play24Filled />
+                                </VaIcon>
+                                <span>播放</span>
                             </a>
                         </div>
                     </footer>
