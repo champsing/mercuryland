@@ -86,19 +86,29 @@ const handleEditVod = (vod: VodItem) => {
     <main class="vod-page bg-page-surface">
         <section class="w-full max-w-[1680px] mx-auto">
             <div
-                class="mx-4 md:mx-20 mb-3 flex flex-wrap items-center gap-x-6 gap-y-3"
+                class="mx-4 md:mx-20 mb-3 flex flex-wrap items-center gap-x-3 gap-y-3 md:gap-x-6"
             >
-                <h1 class="text-2xl font-bold text-neutral-100">直播隨選</h1>
-                <p class="flex items-center gap-1 text-sm text-zinc-400">
-                    <span>共</span>
-                    <span
-                        class="text-base font-bold leading-none text-zinc-100 tabular-nums"
+                <div
+                    class="flex min-w-0 flex-nowrap items-center gap-x-3 md:gap-x-6"
+                >
+                    <h1
+                        class="shrink-0 whitespace-nowrap text-2xl font-bold text-neutral-100"
                     >
-                        {{ filteredCount }}
-                    </span>
-                    <span>筆直播</span>
-                </p>
-                <Rule />
+                        直播隨選
+                    </h1>
+                    <p
+                        class="flex shrink-0 items-center gap-1 whitespace-nowrap text-sm text-zinc-400"
+                    >
+                        <span>共</span>
+                        <span
+                            class="text-base font-bold leading-none text-zinc-100 tabular-nums"
+                        >
+                            {{ filteredCount }}
+                        </span>
+                        <span>筆直播</span>
+                    </p>
+                    <Rule />
+                </div>
                 <button
                     v-if="showActions"
                     type="button"
@@ -151,7 +161,7 @@ const handleEditVod = (vod: VodItem) => {
                         </template>
                     </VaSelect>
                     <div
-                        class="flex w-full items-center justify-center gap-3 px-4"
+                        class="flex w-full flex-wrap items-center justify-center gap-3 px-4"
                     >
                         <div class="vod-switch">
                             <VaSwitch
@@ -165,15 +175,20 @@ const handleEditVod = (vod: VodItem) => {
                                 true-inner-label="符合全部"
                             />
                         </div>
+                        <div class="flex items-center gap-2">
+                            <div class="md:hidden">
+                                <ViewModeToggle v-model="viewMode" />
+                            </div>
+                            <SortMenu
+                                v-model:field="sortField"
+                                v-model:direction="sortDirection"
+                                :options="sortOptions"
+                            />
+                        </div>
                     </div>
                 </section>
                 <div class="hidden items-center gap-2 md:flex">
                     <ViewModeToggle v-model="viewMode" />
-                    <SortMenu
-                        v-model:field="sortField"
-                        v-model:direction="sortDirection"
-                        :options="sortOptions"
-                    />
                 </div>
             </div>
 

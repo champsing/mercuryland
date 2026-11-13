@@ -17,7 +17,7 @@ const showRuleDescModal = ref(false);
         <VaIcon size="small" aria-hidden="true">
             <Info24Regular />
         </VaIcon>
-        <span class="hidden lg:inline">規則說明</span>
+        <span class="whitespace-nowrap">規則說明</span>
     </button>
 
     <VaModal

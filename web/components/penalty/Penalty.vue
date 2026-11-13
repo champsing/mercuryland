@@ -31,6 +31,9 @@ const tabs: { name: PenaltyTab; label: string }[] = [
 
 const activeTab = ref<PenaltyTab>("list");
 
+// 手機上篩選選項預設收合，讓清單有更多空間。
+const filterOpen = ref(false);
+
 let filterDate = defineModel<{ start: Date; end: Date }>("filterDate", {
     default: () => ({
         // 2018-03-01 00:00 Taipei, matching the VOD filter default.
@@ -200,44 +203,77 @@ onMounted(loadPenData);
                     class="mb-3 flex flex-col gap-3 md:flex-row md:items-stretch"
                 >
                     <section
-                        class="penalty-filter-bar grid flex-1 gap-3 items-center rounded-3xl"
+                        class="penalty-filter-panel flex min-w-0 flex-1 flex-col gap-2 rounded-3xl"
                         aria-label="懲罰篩選"
                     >
-                        <VaDateInput
-                            v-model="filterDate"
-                            :format-date="formatDate"
-                            :parse-date="parseDate"
-                            manual-input
-                            mode="auto"
-                            class="penalty-date"
-                        />
-                        <VaInput
-                            v-model="filterSearch"
-                            class="penalty-search"
-                            placeholder="搜尋懲罰內容"
+                        <button
+                            v-if="isMobile"
+                            type="button"
+                            class="flex w-full cursor-pointer items-center gap-2 rounded-2xl px-2 py-1.5 text-sm font-medium text-zinc-300 transition-colors hover:bg-white/10 hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-300/60"
+                            :aria-expanded="filterOpen"
+                            aria-controls="penalty-filter-bar"
+                            @click="filterOpen = !filterOpen"
                         >
-                            <template #prependInner>
-                                <VaIcon name="search" size="small" />
-                            </template>
-                        </VaInput>
-                        <VaSelect
-                            v-model="filterStatus"
-                            :options="finishOptions"
-                            placeholder="完成狀態"
-                            :text-by="textByFinish"
-                            :value-by="valueByFinish"
-                            clearable
-                            :clear-value="null"
-                            class="penalty-status"
-                        />
+                            <VaIcon
+                                name="filter_alt"
+                                size="small"
+                                aria-hidden="true"
+                            />
+                            <span>篩選選項</span>
+                            <VaIcon
+                                :name="
+                                    filterOpen ? 'expand_less' : 'expand_more'
+                                "
+                                size="small"
+                                class="ml-auto"
+                                aria-hidden="true"
+                            />
+                        </button>
+                        <div
+                            v-show="!isMobile || filterOpen"
+                            id="penalty-filter-bar"
+                            class="penalty-filter-bar grid gap-3 items-center"
+                        >
+                            <VaDateInput
+                                v-model="filterDate"
+                                :format-date="formatDate"
+                                :parse-date="parseDate"
+                                manual-input
+                                mode="auto"
+                                class="penalty-date"
+                            />
+                            <VaInput
+                                v-model="filterSearch"
+                                class="penalty-search"
+                                placeholder="搜尋懲罰內容"
+                            >
+                                <template #prependInner>
+                                    <VaIcon name="search" size="small" />
+                                </template>
+                            </VaInput>
+                            <div
+                                class="penalty-status-row flex items-center gap-2"
+                            >
+                                <VaSelect
+                                    v-model="filterStatus"
+                                    :options="finishOptions"
+                                    placeholder="完成狀態"
+                                    :text-by="textByFinish"
+                                    :value-by="valueByFinish"
+                                    clearable
+                                    :clear-value="null"
+                                    class="penalty-status min-w-0 flex-1"
+                                />
+                                <SortMenu
+                                    v-model:field="sortField"
+                                    v-model:direction="sortDirection"
+                                    :options="sortOptions"
+                                />
+                            </div>
+                        </div>
                     </section>
                     <div class="hidden items-center gap-2 md:flex">
                         <ViewModeToggle v-model="viewMode" />
-                        <SortMenu
-                            v-model:field="sortField"
-                            v-model:direction="sortDirection"
-                            :options="sortOptions"
-                        />
                     </div>
                 </div>
 
@@ -306,11 +342,7 @@ onMounted(loadPenData);
     padding: 1.25rem 1rem 1.25rem;
 }
 
-.penalty-filter-bar {
-    grid-template-columns: minmax(13rem, 0.9fr) minmax(16rem, 1.8fr) minmax(
-            11rem,
-            0.8fr
-        );
+.penalty-filter-panel {
     border: 1px solid rgba(255, 255, 255, 0.08);
     background: linear-gradient(
         135deg,
@@ -321,6 +353,13 @@ onMounted(loadPenData);
     box-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
     padding: 0.8rem;
     backdrop-filter: blur(16px);
+}
+
+.penalty-filter-bar {
+    grid-template-columns: minmax(13rem, 0.9fr) minmax(16rem, 1.8fr) minmax(
+            13rem,
+            0.9fr
+        );
 }
 
 /* 表格在自己的捲動區內捲動，捲到底不會帶動整個頁面。 */
@@ -350,9 +389,12 @@ onMounted(loadPenData);
         overscroll-behavior: contain;
     }
 
+    .penalty-filter-panel {
+        padding: 0.7rem;
+    }
+
     .penalty-filter-bar {
         grid-template-columns: 1fr;
-        padding: 0.7rem;
     }
 }
 </style>

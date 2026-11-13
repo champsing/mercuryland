@@ -1,9 +1,12 @@
 <script setup lang="ts">
 import { PenItem, stateColor, stateString } from "@/composables/penalty";
-import { computed } from "vue";
+import { computed, ref } from "vue";
 import { VaChip, VaIcon } from "vuestic-ui";
 
 const props = defineProps<{ penalties: PenItem[] }>();
+
+// 手機上主文預設收合成一行，可用箭頭展開看全文。
+const nameExpanded = ref(false);
 
 const latestPenalty = computed(() =>
     props.penalties.length > 0
@@ -50,12 +53,30 @@ const latestPenalty = computed(() =>
             >
                 ● {{ stateString(latestPenalty.state) }}
             </VaChip>
-            <p
-                class="m-0 w-full min-w-0 truncate text-sm font-bold text-[#f7f7f8] md:w-auto md:flex-1"
-                :title="latestPenalty.name"
-            >
-                {{ latestPenalty.name }}
-            </p>
+            <div class="flex w-full min-w-0 items-start gap-1 md:contents">
+                <p
+                    id="latest-penalty-name"
+                    class="m-0 min-w-0 flex-1 text-sm font-bold text-[#f7f7f8] md:flex-1"
+                    :class="nameExpanded ? 'break-words' : 'truncate'"
+                    :title="latestPenalty.name"
+                >
+                    {{ latestPenalty.name }}
+                </p>
+                <button
+                    type="button"
+                    class="inline-flex h-6 w-6 shrink-0 cursor-pointer items-center justify-center rounded-full text-[#aeb7c7] transition-colors hover:bg-white/10 hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-300/60 md:hidden"
+                    :aria-expanded="nameExpanded"
+                    aria-controls="latest-penalty-name"
+                    :aria-label="nameExpanded ? '收合最新懲罰' : '展開最新懲罰'"
+                    :title="nameExpanded ? '收合' : '展開全文'"
+                    @click="nameExpanded = !nameExpanded"
+                >
+                    <VaIcon
+                        :name="nameExpanded ? 'expand_less' : 'expand_more'"
+                        size="small"
+                    />
+                </button>
+            </div>
         </template>
         <span v-else class="text-sm text-[#8f98a8]">暫無懲罰</span>
     </section>

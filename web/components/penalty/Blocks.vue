@@ -9,7 +9,6 @@ import { useMediaQuery } from "@vueuse/core";
 import { Play24Filled } from "@vicons/fluent";
 import { computed, onMounted, ref, watch } from "vue";
 import { VaIcon, VaScrollContainer } from "vuestic-ui";
-import SortMenu from "../SortMenu.vue";
 import Detail from "./Detail.vue";
 
 const props = defineProps<{
@@ -58,12 +57,6 @@ const sortField = defineModel<string>("sortField", { default: "date" });
 const sortDirection = defineModel<"asc" | "desc">("sortDirection", {
     default: "desc",
 });
-
-const sortOptions = [
-    { value: "date", label: "日期", defaultDirection: "desc" as const },
-    { value: "name", label: "名稱", defaultDirection: "asc" as const },
-    { value: "state", label: "狀態", defaultDirection: "asc" as const },
-];
 
 function comparePenalty(lhs: PenItem, rhs: PenItem): number {
     let result = 0;
@@ -135,16 +128,6 @@ function filterPenaltyData(
 
 <template>
     <div class="flex h-full min-h-0 flex-col">
-        <div
-            class="mb-3 flex w-full flex-wrap items-center justify-end gap-2 px-1 md:hidden"
-        >
-            <SortMenu
-                v-model:field="sortField"
-                v-model:direction="sortDirection"
-                :options="sortOptions"
-            />
-        </div>
-
         <VaScrollContainer
             vertical
             color="#8ea2ff"
