@@ -23,7 +23,7 @@ interface StatGroup {
 const props = defineProps<{ penalties: PenItem[] }>();
 
 const kbdClass =
-    "inline-block whitespace-nowrap rounded-[3px] border border-[#b4b4b4] bg-[#e3d0d0] px-1 py-0.5 text-[0.85em] font-bold leading-none text-[#0b17c3d4] shadow-[0_1px_1px_rgba(0,0,0,0.2),0_2px_0_0_rgba(255,255,255,0.7)_inset]";
+    "inline-flex min-w-[1.7em] select-none items-center justify-center rounded-md border border-white/10 bg-gradient-to-b from-[#454c5a] to-[#23262e] px-1.5 py-[0.2em] font-sans text-[0.78em] font-semibold leading-none tracking-wide text-zinc-100 shadow-[inset_0_1px_0_rgba(255,255,255,0.18),inset_0_-1px_1px_rgba(0,0,0,0.45),0_1px_0_#14161b,0_2px_4px_rgba(0,0,0,0.4)]";
 
 // Each group's count tiles act as a state filter for its merged list.
 const selectedStates = ref<Record<string, number | null>>({});
@@ -113,29 +113,26 @@ function copyGroup(group: StatGroup) {
 <template>
     <div class="flex flex-col gap-4 pb-4">
         <div class="flex flex-col gap-4">
-            <div class="flex flex-col gap-1">
-                <div class="flex flex-wrap items-baseline gap-x-2">
-                    <h2 class="text-xl font-bold text-neutral-100">統計</h2>
-                    <span
-                        class="text-[0.72rem] font-extrabold uppercase text-[#45d483]"
-                    >
-                        Statistics
-                    </span>
-                </div>
-                <p class="text-xs text-zinc-500">
-                    列表依狀態篩選；圖表依時間範圍。
-                </p>
+            <div class="flex flex-wrap items-baseline gap-x-2">
+                <h2 class="text-xl font-bold text-neutral-100">統計</h2>
+                <span
+                    class="text-[0.72rem] font-extrabold uppercase text-[#45d483]"
+                >
+                    Statistics
+                </span>
             </div>
             <div class="flex flex-wrap items-center justify-between gap-2">
                 <h3 class="text-base font-extrabold text-[#f7f7f8]">數量</h3>
                 <p
-                    class="flex flex-wrap items-center gap-1.5 text-sm text-zinc-400"
+                    class="flex flex-wrap items-center gap-x-1.5 gap-y-1 text-sm text-zinc-400"
                 >
                     <span class="inline-flex items-center gap-1">
                         <kbd :class="kbdClass">Ctrl</kbd>
                         <kbd :class="kbdClass">A</kbd>
                     </span>
-                    <span>可快速選取清單的全部項目</span>
+                    <span
+                        >可快速選取清單的全部項目；點擊懲罰狀態可以切換顯示</span
+                    >
                 </p>
             </div>
         </div>

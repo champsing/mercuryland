@@ -5,8 +5,6 @@ import { VodItem } from "@/composables/vod";
 import { Play24Filled } from "@vicons/fluent";
 import { computed, ref, watch } from "vue";
 import { VaChip, VaIcon, VaScrollContainer } from "vuestic-ui";
-import SortMenu from "../SortMenu.vue";
-import ViewModeToggle from "../ViewModeToggle.vue";
 
 const props = defineProps<{
     dateRange: { start: Date; end: Date };
@@ -31,11 +29,6 @@ const sortField = defineModel<string>("sortField", { default: "date" });
 const sortDirection = defineModel<"asc" | "desc">("sortDirection", {
     default: "desc",
 });
-
-const sortOptions = [
-    { value: "date", label: "日期", defaultDirection: "desc" as const },
-    { value: "title", label: "名稱", defaultDirection: "asc" as const },
-];
 
 function compareVod(lhs: VodItem, rhs: VodItem): number {
     const result =
@@ -103,17 +96,6 @@ function toggleTags(vod: VodItem) {
 
 <template>
     <div class="flex h-full min-h-0 flex-col">
-        <div
-            class="mb-3 flex w-full flex-wrap items-center justify-end gap-2 px-1 md:hidden"
-        >
-            <ViewModeToggle v-model="viewMode" />
-            <SortMenu
-                v-model:field="sortField"
-                v-model:direction="sortDirection"
-                :options="sortOptions"
-            />
-        </div>
-
         <h2 class="sr-only">直播列表</h2>
 
         <VaScrollContainer
