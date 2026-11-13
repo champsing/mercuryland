@@ -3,13 +3,11 @@ import { useAuthState } from "@/composables/authState";
 import { PenItem, stateString } from "@/composables/penalty";
 import { nextTabIndex } from "@/composables/tabList";
 import { formatDate, parseDate } from "@/composables/utils";
-import { useBlockViewMode } from "@/composables/viewMode";
 import api from "@composables/axios";
 import { useMediaQuery } from "@vueuse/core";
 import { computed, onMounted, ref } from "vue";
 import { VaDateInput, VaIcon, VaInput, VaSelect } from "vuestic-ui";
 import SortMenu from "../SortMenu.vue";
-import ViewModeToggle from "../ViewModeToggle.vue";
 import ViewportHeight from "../ViewportHeight.vue";
 import AddPenalty from "./AddPenalty.vue";
 import Blocks from "./Blocks.vue";
@@ -63,9 +61,6 @@ const valueByFinish = (option: { valueBy: number }) => option.valueBy;
 
 const penalties = ref<PenItem[]>([]);
 const listCount = ref(0);
-
-// 卡片（3 欄）或表格（單欄單列）檢視，選擇會記在 localStorage。
-const viewMode = useBlockViewMode("penalty");
 
 const authState = useAuthState();
 const showActions = computed(() => authState.isAuthenticated);
@@ -272,9 +267,6 @@ onMounted(loadPenData);
                             </div>
                         </div>
                     </section>
-                    <div class="hidden items-center gap-2 md:flex">
-                        <ViewModeToggle v-model="viewMode" />
-                    </div>
                 </div>
 
                 <div class="penalty-viewport">
@@ -290,7 +282,6 @@ onMounted(loadPenData);
                                 :dateRange="filterDate"
                                 :state="filterStatus"
                                 :search="filterSearch"
-                                v-model:viewMode="viewMode"
                                 v-model:sort-field="sortField"
                                 v-model:sort-direction="sortDirection"
                                 @updateState="
