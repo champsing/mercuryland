@@ -1,12 +1,19 @@
 import { describe, expect, it } from "vitest";
 import {
+    calculateVodTime,
+    durationHistogram,
     formatHMS,
     groupCalculationEntries,
     groupCalculationMonths,
     isoWeekNumber,
+    movingAverage,
     parseHMS,
+    summarizeCalculation,
+    summarizeDurations,
     type CalculationEntry,
     type CalculationGroup,
+    type VodItem,
+    type VodTimeSchedule,
 } from "../vod";
 
 describe("parseHMS", () => {
@@ -46,6 +53,11 @@ describe("formatHMS", () => {
 
     it("formats negative values using their absolute value", () => {
         expect(formatHMS(-90)).toBe("00:01:30");
+    });
+
+    it("rounds fractional seconds instead of printing decimals", () => {
+        expect(formatHMS(90.6)).toBe("00:01:31");
+        expect(formatHMS(3723.5)).toBe("01:02:04");
     });
 });
 
@@ -243,5 +255,176 @@ describe("isoWeekNumber", () => {
     it("uses the ISO week-year at a year boundary", () => {
         expect(isoWeekNumber("2024-12-30")).toBe(1);
         expect(isoWeekNumber("2025-01-01")).toBe(1);
+    });
+});
+
+function vod(overrides: Partial<VodItem> = {}): VodItem {
+    return {
+        id: 1,
+        date: "2026-01-08",
+        link: "abc123",
+        title: "測試直播",
+        tags: [],
+        duration: "01:00:00",
+        ...overrides,
+    };
+}
+
+const schedule: VodTimeSchedule = {
+    initial: "02:00:00",
+    schedule: [
+        { date: "2026-01-07", duration: "02:00:00" },
+        { date: "2026-01-14", duration: "02:00:00" },
+    ],
+    override: [{ date: "2026-01-10", duration: "01:00:00", reason: "懲罰" }],
+};
+
+describe("calculateVodTime", () => {
+    it("opens each week with its 計劃 and subtracts streams in date order", () => {
+        const entries = calculateVodTime(
+            [
+                vod({ id: 2, date: "2026-01-12", duration: "03:30:00" }),
+                vod({ id: 1, date: "2026-01-08", duration: "01:00:00" }),
+            ],
+            schedule,
+            new Date("2026-01-15T12:00:00"),
+        );
+
+        expect(entries.map((entry) => [entry.date, entry.reason])).toEqual([
+            ["2026-01-07", "計劃"],
+            ["2026-01-08", "直播"],
+            ["2026-01-10", "懲罰"],
+            ["2026-01-12", "直播"],
+            ["2026-01-14", "計劃"],
+        ]);
+        expect(entries.map((entry) => entry.offset)).toEqual([
+            7200, -3600, 3600, -12600, 7200,
+        ]);
+        expect(entries.map((entry) => entry.previous)).toEqual([
+            7200, 14400, 10800, 14400, 1800,
+        ]);
+    });
+
+    it("keeps the running balance across weeks", () => {
+        const entries = calculateVodTime(
+            [vod({ date: "2026-01-08", duration: "01:00:00" })],
+            { ...schedule, override: [] },
+            new Date("2026-01-15T12:00:00"),
+        );
+
+        const last = entries[entries.length - 1];
+        expect(last.previous + last.offset).toBe(18000);
+    });
+
+    it("still emits 計劃 entries when there are no streams", () => {
+        const entries = calculateVodTime(
+            [],
+            { ...schedule, override: [] },
+            new Date("2026-01-15T12:00:00"),
+        );
+
+        expect(entries).toHaveLength(2);
+        expect(entries.every((entry) => entry.reason === "計劃")).toBe(true);
+    });
+
+    it("returns no entries before the first plan date", () => {
+        expect(
+            calculateVodTime(
+                [vod({ date: "2026-01-06" })],
+                schedule,
+                new Date("2026-01-05T12:00:00"),
+            ),
+        ).toEqual([]);
+    });
+});
+
+describe("summarizeCalculation", () => {
+    it("splits the opening balance and additions from streams", () => {
+        const entries = calculateVodTime(
+            [
+                vod({ id: 1, date: "2026-01-08", duration: "01:00:00" }),
+                vod({ id: 2, date: "2026-01-12", duration: "03:30:00" }),
+            ],
+            schedule,
+            new Date("2026-01-15T12:00:00"),
+        );
+
+        expect(summarizeCalculation(entries)).toEqual({
+            owed: 25200,
+            paid: 16200,
+            remaining: 9000,
+        });
+    });
+
+    it("returns zeros for an empty ledger", () => {
+        expect(summarizeCalculation([])).toEqual({
+            owed: 0,
+            paid: 0,
+            remaining: 0,
+        });
+    });
+});
+
+describe("summarizeDurations", () => {
+    it("computes count, total, average, median and extremes", () => {
+        expect(summarizeDurations([3600, 7200, 10800])).toEqual({
+            count: 3,
+            total: 21600,
+            average: 7200,
+            median: 7200,
+            longest: 10800,
+            shortest: 3600,
+        });
+    });
+
+    it("averages the two middle values for an even count", () => {
+        expect(summarizeDurations([100, 200]).median).toBe(150);
+    });
+
+    it("returns zeros for no durations", () => {
+        expect(summarizeDurations([])).toEqual({
+            count: 0,
+            total: 0,
+            average: 0,
+            median: 0,
+            longest: 0,
+            shortest: 0,
+        });
+    });
+
+    it("does not mutate the input order", () => {
+        const values = [300, 100, 200];
+        summarizeDurations(values);
+        expect(values).toEqual([300, 100, 200]);
+    });
+});
+
+describe("durationHistogram", () => {
+    it("counts values into edge-bounded buckets", () => {
+        expect(
+            durationHistogram([0, 3599, 3600, 7199, 7200, 10000], [3600, 7200]),
+        ).toEqual([2, 2, 2]);
+    });
+
+    it("returns one zero for every bucket when empty", () => {
+        expect(durationHistogram([], [3600, 7200])).toEqual([0, 0, 0]);
+    });
+});
+
+describe("movingAverage", () => {
+    it("uses the trailing window", () => {
+        expect(movingAverage([1, 2, 3], 2)).toEqual([1, 1.5, 2.5]);
+    });
+
+    it("averages the points available before the window is full", () => {
+        expect(movingAverage([1, 2, 3], 5)).toEqual([1, 1.5, 2]);
+    });
+
+    it("returns an empty array for a non-positive window", () => {
+        expect(movingAverage([1, 2, 3], 0)).toEqual([]);
+    });
+
+    it("returns an empty array for no values", () => {
+        expect(movingAverage([], 3)).toEqual([]);
     });
 });
