@@ -47,6 +47,11 @@ describe("formatHMS", () => {
     it("formats negative values using their absolute value", () => {
         expect(formatHMS(-90)).toBe("00:01:30");
     });
+
+    it("rounds fractional seconds instead of printing decimals", () => {
+        expect(formatHMS(90.6)).toBe("00:01:31");
+        expect(formatHMS(3723.5)).toBe("01:02:04");
+    });
 });
 
 describe("groupCalculationEntries", () => {
