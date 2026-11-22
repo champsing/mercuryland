@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import vodSchedule from "@assets/data/schedule.json";
 import {
     CalculationEntry,
     CalculationGroup,
@@ -7,42 +6,24 @@ import {
     groupCalculationEntries,
     groupCalculationMonths,
     isoWeekNumber,
-    parseHMS,
-    VodItem,
+    summarizeCalculation,
 } from "@composables/vod";
 import { ChevronDown24Regular } from "@vicons/fluent";
-import { computed, nextTick, ref, watch } from "vue";
-import { VaModal } from "vuestic-ui";
+import { computed, nextTick, onBeforeUnmount, ref, watch } from "vue";
 
-const props = defineProps<{
-    dateRange: { start: Date; end: Date };
-    vodData: VodItem[];
-}>();
-const emit = defineEmits<{ (e: "computedTime", tag: number): void }>();
+const props = defineProps<{ entries: CalculationEntry[] }>();
 
-const showModal = ref(false);
 const scrollRef = ref<HTMLElement | null>(null);
 
-function open() {
-    showModal.value = true;
-}
-
-defineExpose({ open });
-
-const rawData = computed(() => calcRawData(props.vodData));
-const data = computed(() =>
-    rawData.value.filter(
-        (v: CalculationEntry) =>
-            v.date >= props.dateRange.start.toISOString().slice(0, 10) &&
-            v.date <=
-                new Date(props.dateRange.end.getTime() + 28800000)
-                    .toISOString()
-                    .slice(0, 10),
-    ),
-);
-
-const groups = computed(() => groupCalculationEntries(data.value));
+const groups = computed(() => groupCalculationEntries(props.entries));
 const months = computed(() => groupCalculationMonths(groups.value));
+const totals = computed(() => summarizeCalculation(props.entries));
+
+const balanceClass = computed(() => {
+    if (totals.value.remaining < 0) return "text-rose-200";
+    if (totals.value.remaining > 0) return "text-emerald-200";
+    return "text-zinc-100";
+});
 
 const years = computed(() => [
     ...new Set(months.value.map((month) => month.key.slice(0, 4))),
@@ -79,23 +60,6 @@ function syncIndexToLatest() {
     selectedMonth.value = latest.key;
     visibleMonth.value = latest.key;
 }
-
-watch(
-    months,
-    () => {
-        const monthExists = months.value.some(
-            (month) => month.key === selectedMonth.value,
-        );
-        const yearExists =
-            selectedYear.value !== "" &&
-            months.value.some((month) =>
-                month.key.startsWith(selectedYear.value + "-"),
-            );
-
-        if (!monthExists || !yearExists) syncIndexToLatest();
-    },
-    { immediate: true },
-);
 
 function scrollToMonth(key: string) {
     selectedMonth.value = key;
@@ -172,112 +136,45 @@ function onScroll() {
     });
 }
 
-// The ledger spans years; land on the most recent entry instead of 2023.
-watch(showModal, async (visible) => {
-    if (!visible) return;
-    await nextTick();
-    syncIndexToLatest();
+function showLatest() {
     const container = scrollRef.value;
-    if (container) {
-        container.scrollTop = container.scrollHeight;
-        updateSpotlight();
-    }
-});
+    if (!container) return;
+
+    syncIndexToLatest();
+    container.scrollTop = container.scrollHeight;
+    updateSpotlight();
+}
+
+// The ledger spans years; land on the latest week when the tab opens (or when
+// VOD data finishes loading after it).
+const syncedLatest = ref(false);
 
 watch(
-    rawData,
-    (value) => {
-        const lastItem = value[value.length - 1];
-        const total = lastItem ? lastItem.previous + lastItem.offset : 0;
-        emit("computedTime", total);
+    months,
+    async (value) => {
+        const monthExists = value.some(
+            (month) => month.key === selectedMonth.value,
+        );
+        const yearExists =
+            selectedYear.value !== "" &&
+            value.some((month) =>
+                month.key.startsWith(selectedYear.value + "-"),
+            );
+
+        if (!monthExists || !yearExists) syncIndexToLatest();
+
+        if (value.length === 0 || syncedLatest.value) return;
+
+        syncedLatest.value = true;
+        await nextTick();
+        showLatest();
     },
     { immediate: true },
 );
 
-function calcRawData(vodItems: VodItem[]): CalculationEntry[] {
-    let re: CalculationEntry[] = [];
-
-    let sch = vodSchedule.schedule;
-    // Sort overrides so every entry is emitted in date order — the per-date
-    // grouping below relies on chronological, adjacent dates.
-    let ove = vodSchedule.override
-        .slice()
-        .sort((lhs, rhs) => lhs.date.localeCompare(rhs.date));
-
-    let s = 0;
-    let o = 0;
-    let v = 0;
-
-    let now = new Date(Date.now());
-    let date: Date = new Date(
-        Math.min(
-            (sch.length == 0 ? now : new Date(sch[0].date)).getTime(),
-            (ove.length == 0 ? now : new Date(ove[0].date)).getTime(),
-        ),
-    );
-    let vod = vodItems
-        .filter((x) => x.date > date.toISOString().slice(0, 10))
-        .slice()
-        .sort((lhs, rhs) => lhs.date.localeCompare(rhs.date));
-
-    let previous = parseHMS(vodSchedule.initial);
-
-    while (date < now) {
-        if (
-            s + 1 < sch.length &&
-            sch[s + 1].date >= date.toISOString().slice(0, 10)
-        ) {
-            s = s + 1;
-        }
-        re.push({
-            date: date.toISOString().slice(0, 10),
-            offset: parseHMS(sch[s].duration),
-            previous: previous,
-            reason: "計劃",
-            divider: true,
-        });
-        previous = previous + re[re.length - 1].offset;
-
-        date.setDate(date.getDate() + 7);
-
-        // Collect this week's live streams and overrides into one list so the
-        // display stays chronological regardless of which source comes first.
-        const weekEntries: CalculationEntry[] = [];
-
-        while (v < vod.length && new Date(vod[v].date) < date) {
-            weekEntries.push({
-                date: vod[v].date,
-                offset: -parseHMS(vod[v].duration),
-                previous: previous,
-                reason: "直播",
-                divider: false,
-            });
-
-            v = v + 1;
-        }
-
-        while (o < ove.length && new Date(ove[o].date) < date) {
-            weekEntries.push({
-                date: ove[o].date,
-                offset: parseHMS(ove[o].duration),
-                previous: previous,
-                reason: ove[o].reason,
-                divider: false,
-            });
-
-            o = o + 1;
-        }
-
-        weekEntries.sort((lhs, rhs) => lhs.date.localeCompare(rhs.date));
-
-        for (const entry of weekEntries) {
-            entry.previous = previous;
-            previous = previous + entry.offset;
-            re.push(entry);
-        }
-    }
-    return re;
-}
+onBeforeUnmount(() => {
+    if (spotlightFrame) cancelAnimationFrame(spotlightFrame);
+});
 
 function format(seconds: number): string {
     if (seconds > 0) return "+ " + formatHMS(seconds);
@@ -317,125 +214,193 @@ function weekRange(group: CalculationGroup): string {
 </script>
 
 <template>
-    <VaModal
-        aria-label="計算明細"
-        v-model="showModal"
-        hide-default-actions
-        close-button
-        :mobile-fullscreen="false"
-        max-width="720px"
-        class="calculation-modal"
-    >
-        <div class="flex w-full min-w-0 flex-col gap-3">
-            <div class="flex flex-wrap items-center justify-between gap-2 pr-8">
-                <h2 class="text-lg font-semibold text-zinc-100">計算明細</h2>
-                <div class="flex items-center gap-3 text-xs">
-                    <span
-                        class="inline-flex items-center gap-1.5 text-emerald-300"
-                    >
-                        <span
-                            class="h-1.5 w-1.5 rounded-full bg-emerald-400"
-                            aria-hidden="true"
-                        />
-                        增加
-                    </span>
-                    <span
-                        class="inline-flex items-center gap-1.5 text-rose-300"
-                    >
-                        <span
-                            class="h-1.5 w-1.5 rounded-full bg-rose-400"
-                            aria-hidden="true"
-                        />
-                        扣除
-                    </span>
-                </div>
-            </div>
+    <div class="flex flex-col gap-3 md:h-full md:min-h-0">
+        <section
+            aria-labelledby="vod-hours-balance"
+            class="relative overflow-hidden rounded-3xl border border-white/[0.08] bg-gradient-to-br from-[#0f3b35]/95 via-[#0c2b33]/92 to-[#0b141c]/95 shadow-[0_2px_12px_rgba(0,0,0,0.3)]"
+        >
+            <div
+                class="pointer-events-none absolute -right-24 -top-28 h-64 w-64 rounded-full bg-[#5bc6a1]/15 blur-3xl"
+                aria-hidden="true"
+            />
+            <div
+                class="pointer-events-none absolute -bottom-28 left-1/3 h-56 w-56 rounded-full bg-rose-400/10 blur-3xl"
+                aria-hidden="true"
+            />
 
             <div
-                v-if="months.length > 0"
-                class="flex flex-col gap-1.5 rounded-xl border border-white/[0.08] bg-white/[0.03] px-3 py-2"
+                class="relative flex flex-col gap-4 p-4 md:p-5 lg:flex-row lg:items-center lg:justify-between lg:gap-8"
             >
+                <div class="min-w-0">
+                    <p
+                        id="vod-hours-balance"
+                        class="text-[0.7rem] font-semibold uppercase tracking-[0.3em] text-emerald-200/70"
+                    >
+                        剩餘時間
+                    </p>
+                    <div
+                        class="mt-1 flex flex-wrap items-baseline gap-x-3 gap-y-1"
+                    >
+                        <span
+                            class="text-4xl font-black leading-none tracking-tight tabular-nums md:text-6xl"
+                            :class="balanceClass"
+                        >
+                            {{ formatBalance(totals.remaining) }}
+                        </span>
+                        <span class="text-xs text-zinc-400">加班台時數</span>
+                    </div>
+                </div>
+
+                <div class="grid gap-2 sm:grid-cols-2 lg:w-[27rem] lg:shrink-0">
+                    <div
+                        class="rounded-2xl border border-emerald-300/20 bg-emerald-400/[0.08] px-3 py-2.5"
+                    >
+                        <p
+                            class="flex items-center gap-1 text-xs font-semibold text-emerald-300"
+                        >
+                            <span
+                                class="text-base leading-none"
+                                aria-hidden="true"
+                                >＋</span
+                            >
+                            現在應付的直播時數
+                        </p>
+                        <p
+                            class="mt-1.5 text-lg font-bold leading-none tabular-nums text-emerald-100"
+                        >
+                            {{ formatHMS(totals.owed) }}
+                        </p>
+                        <p class="mt-1 text-[0.65rem] text-emerald-200/50">
+                            計劃 ＋ 懲罰 ＋ 課金
+                        </p>
+                    </div>
+
+                    <div
+                        class="rounded-2xl border border-rose-300/20 bg-rose-400/[0.08] px-3 py-2.5"
+                    >
+                        <p
+                            class="flex items-center gap-1 text-xs font-semibold text-rose-300"
+                        >
+                            <span
+                                class="text-base leading-none"
+                                aria-hidden="true"
+                                >−</span
+                            >
+                            現在已付的時間
+                        </p>
+                        <p
+                            class="mt-1.5 text-lg font-bold leading-none tabular-nums text-rose-100"
+                        >
+                            {{ formatHMS(totals.paid) }}
+                        </p>
+                        <p class="mt-1 text-[0.65rem] text-rose-200/50">
+                            直播時長
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section
+            aria-labelledby="vod-hours-ledger"
+            class="flex min-h-0 flex-col overflow-hidden rounded-3xl border border-white/[0.08] bg-[rgba(18,21,27,0.65)] shadow-[0_2px_12px_rgba(0,0,0,0.3)] md:flex-1"
+        >
+            <header
+                class="flex flex-wrap items-center justify-between gap-2 border-b border-white/[0.06] px-3 py-2.5 md:px-4"
+            >
+                <div class="flex min-w-0 flex-wrap items-baseline gap-x-2">
+                    <h2
+                        id="vod-hours-ledger"
+                        class="text-base font-semibold text-zinc-100"
+                    >
+                        計算明細
+                    </h2>
+                    <span
+                        class="text-[0.65rem] font-bold uppercase tracking-[0.18em] text-emerald-300/70"
+                    >
+                        Ledger
+                    </span>
+                </div>
                 <button
                     type="button"
-                    class="flex w-full cursor-pointer items-center justify-between gap-2 text-left"
+                    class="flex cursor-pointer items-center gap-1.5 rounded-full px-2 py-1 text-xs text-zinc-300 transition-colors hover:bg-white/10 hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-300/60"
                     :aria-expanded="indexExpanded"
-                    aria-controls="calculation-month-index"
+                    aria-controls="vod-hours-month-index"
                     @click="toggleIndex"
                 >
-                    <span class="text-sm font-semibold text-zinc-100">
-                        {{ spotlightLabel }}
-                    </span>
+                    <span class="tabular-nums">{{ spotlightLabel }}</span>
                     <ChevronDown24Regular
                         class="h-3.5 w-3.5 shrink-0 text-zinc-400 transition-transform"
                         :class="{ 'rotate-180': indexExpanded }"
                     />
                 </button>
+            </header>
 
+            <div
+                v-show="indexExpanded"
+                id="vod-hours-month-index"
+                class="flex flex-col gap-1.5 border-b border-white/[0.06] bg-white/[0.02] px-3 py-2"
+            >
                 <div
-                    id="calculation-month-index"
-                    v-show="indexExpanded"
-                    class="flex flex-col gap-1.5"
+                    class="flex flex-wrap items-center gap-1"
+                    role="group"
+                    aria-label="年份"
                 >
-                    <div
-                        class="flex flex-wrap items-center gap-1"
-                        role="group"
-                        aria-label="年份"
+                    <button
+                        v-for="year in years"
+                        :key="year"
+                        type="button"
+                        :aria-current="
+                            year === selectedYear ? 'true' : undefined
+                        "
+                        class="cursor-pointer rounded-full px-2.5 py-0.5 text-xs tabular-nums transition-colors"
+                        :class="
+                            year === selectedYear
+                                ? 'bg-white/15 text-zinc-100'
+                                : 'text-zinc-400 hover:bg-white/10 hover:text-zinc-200'
+                        "
+                        @click="selectYear(year)"
                     >
-                        <button
-                            v-for="year in years"
-                            :key="year"
-                            type="button"
-                            :aria-current="
-                                year === selectedYear ? 'true' : undefined
-                            "
-                            class="cursor-pointer rounded-full px-2.5 py-0.5 text-xs tabular-nums transition-colors"
-                            :class="
-                                year === selectedYear
-                                    ? 'bg-white/15 text-zinc-100'
-                                    : 'text-zinc-400 hover:bg-white/10 hover:text-zinc-200'
-                            "
-                            @click="selectYear(year)"
-                        >
-                            {{ year }}
-                        </button>
-                    </div>
-                    <div
-                        class="flex flex-wrap items-center gap-1"
-                        role="group"
-                        aria-label="月份"
+                        {{ year }}
+                    </button>
+                </div>
+                <div
+                    class="flex flex-wrap items-center gap-1"
+                    role="group"
+                    aria-label="月份"
+                >
+                    <button
+                        v-for="month in 12"
+                        :key="month"
+                        type="button"
+                        :disabled="!availableMonths.has(month)"
+                        :aria-current="
+                            monthKey(month) === selectedMonth
+                                ? 'true'
+                                : undefined
+                        "
+                        class="min-w-8 rounded-full px-2 py-0.5 text-xs tabular-nums transition-colors disabled:cursor-not-allowed"
+                        :class="
+                            monthKey(month) === selectedMonth
+                                ? 'bg-white/15 text-zinc-100'
+                                : availableMonths.has(month)
+                                  ? 'cursor-pointer text-zinc-300 hover:bg-white/10 hover:text-zinc-100'
+                                  : 'text-zinc-600'
+                        "
+                        @click="selectMonth(month)"
                     >
-                        <button
-                            v-for="month in 12"
-                            :key="month"
-                            type="button"
-                            :disabled="!availableMonths.has(month)"
-                            :aria-current="
-                                monthKey(month) === selectedMonth
-                                    ? 'true'
-                                    : undefined
-                            "
-                            class="min-w-8 rounded-full px-2 py-0.5 text-xs tabular-nums transition-colors disabled:cursor-not-allowed"
-                            :class="
-                                monthKey(month) === selectedMonth
-                                    ? 'bg-white/15 text-zinc-100'
-                                    : availableMonths.has(month)
-                                      ? 'cursor-pointer text-zinc-300 hover:bg-white/10 hover:text-zinc-100'
-                                      : 'text-zinc-600'
-                            "
-                            @click="selectMonth(month)"
-                        >
-                            {{ month }}月
-                        </button>
-                    </div>
+                        {{ month }}月
+                    </button>
                 </div>
             </div>
 
             <div
+                v-if="months.length > 0"
                 ref="scrollRef"
                 role="region"
                 tabindex="0"
                 aria-label="計算明細列表"
-                class="custom-scrollbar max-h-[60vh] overflow-y-auto overscroll-contain pr-1 outline-none focus-visible:ring-2 focus-visible:ring-white/30"
+                class="custom-scrollbar max-h-[55vh] min-h-0 overflow-y-auto overscroll-contain px-2 py-2 outline-none focus-visible:ring-2 focus-visible:ring-white/30 md:max-h-none md:flex-1 md:px-3"
                 @scroll="onScroll"
             >
                 <div class="flex min-w-0 flex-col gap-4">
@@ -446,7 +411,7 @@ function weekRange(group: CalculationGroup): string {
                         class="flex min-w-0 flex-col gap-2"
                     >
                         <h3
-                            class="sticky top-0 z-10 bg-zinc-900/95 px-1 py-1 text-sm font-semibold text-zinc-100 backdrop-blur-sm"
+                            class="sticky top-0 z-10 rounded-md bg-[#12151b]/95 px-1 py-1 text-sm font-semibold text-zinc-100 backdrop-blur-sm"
                         >
                             {{ month.label }}
                         </h3>
@@ -521,20 +486,26 @@ function weekRange(group: CalculationGroup): string {
                     </section>
                 </div>
             </div>
-        </div>
-    </VaModal>
+
+            <div
+                v-else
+                class="flex flex-1 flex-col items-center justify-center gap-1 px-4 py-12 text-zinc-500"
+            >
+                <span class="text-2xl" aria-hidden="true">🧾</span>
+                <p class="text-sm">暫無計算明細</p>
+            </div>
+        </section>
+    </div>
 </template>
 
 <style scoped>
-/* Sizing override — appearance (glassomorphism) comes from
-   styles/va-modal-glass.css */
-:deep(.va-modal__dialog) {
-    max-width: 720px !important;
-    width: 95% !important;
-    overflow: hidden;
-}
-
 /* Custom Scrollbar */
+.custom-scrollbar {
+    /* Keep the ledger's tall content from enlarging the document's scroll
+       range; without paint containment the page can scroll far into blank
+       space below the footer. */
+    contain: paint;
+}
 .custom-scrollbar::-webkit-scrollbar {
     width: 6px;
 }
