@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import { useAuthState } from "@/composables/authState";
+import { notifyConnectionFailure } from "@/composables/connectionNotice";
+import { sampleVods, withDevSamples } from "@/composables/sampleData";
 import { formatDate, parseDate } from "@/composables/utils";
 import { useBlockViewMode } from "@/composables/viewMode";
 import { VodItem } from "@/composables/vod";
@@ -47,23 +49,32 @@ const tagList = computed(() =>
     [...new Set(vodData.value.flatMap((x) => x.tags))].sort(),
 );
 
+// ViewportHeight subtracts the page's bottom padding so the list ends exactly
+// above the footer instead of overflowing the page by that padding.
+const pageRef = ref<HTMLElement | null>(null);
 const computedTime = ref(0);
 const filteredCount = ref(0);
 const setVodRef = ref<{ open: (vod: VodItem) => void } | null>(null);
 const addVodRef = ref<{ open: () => void } | null>(null);
 const calculationModalRef = ref<{ open: () => void } | null>(null);
 
+function applyVodData(items: VodItem[]) {
+    vodData.value = items
+        .map((item) => ({
+            ...item,
+            tags: item.tags ?? [],
+        }))
+        .sort((lhs, rhs) => lhs.date.localeCompare(rhs.date));
+}
+
 async function loadVodData() {
     try {
         const response = await api.get<VodItem[]>(`/api/video/list`);
-        vodData.value = response.data
-            .map((item) => ({
-                ...item,
-                tags: item.tags ?? [],
-            }))
-            .sort((lhs, rhs) => lhs.date.localeCompare(rhs.date));
+        applyVodData(withDevSamples(response.data, sampleVods()));
     } catch (error) {
         console.error("Failed to load VOD data", error);
+        notifyConnectionFailure();
+        applyVodData(withDevSamples(vodData.value, sampleVods()));
     }
 }
 
@@ -83,7 +94,7 @@ const handleEditVod = (vod: VodItem) => {
 </script>
 
 <template>
-    <main class="vod-page bg-page-surface">
+    <main ref="pageRef" class="vod-page bg-page-surface">
         <section class="w-full max-w-[1680px] mx-auto">
             <div
                 class="mx-4 md:mx-20 mb-3 flex flex-wrap items-center gap-x-3 gap-y-3 md:gap-x-6"
@@ -192,7 +203,7 @@ const handleEditVod = (vod: VodItem) => {
                 </div>
             </div>
 
-            <ViewportHeight>
+            <ViewportHeight :scroll-container="pageRef">
                 <section
                     class="relative flex flex-col lg:flex-row gap-2 h-full px-4 md:px-20"
                 >
@@ -240,9 +251,20 @@ const handleEditVod = (vod: VodItem) => {
 
 <style>
 .vod-page {
-    min-height: calc(100vh - 48px);
+    min-height: calc(100vh - var(--app-footer-height, 48px));
+    min-height: calc(100dvh - var(--app-footer-height, 48px));
     color: #f7f7f8;
-    padding: 1.25rem 1rem 1.25rem;
+    padding: 1.25rem 1rem 1.125rem;
+}
+
+/* The app shell reserves 3.5rem above the page for the fixed desktop header.
+   Without subtracting it the page overflows the viewport by exactly that
+   amount, leaving dead space between the list and the footer. */
+@media (min-width: 1024px) {
+    .vod-page {
+        min-height: calc(100vh - var(--app-footer-height, 48px) - 3.5rem);
+        min-height: calc(100dvh - var(--app-footer-height, 48px) - 3.5rem);
+    }
 }
 
 .vod-filter-bar {
@@ -275,7 +297,7 @@ const handleEditVod = (vod: VodItem) => {
 
 @media (max-width: 767px) {
     .vod-page {
-        padding: 3.5rem 0.75rem 1rem;
+        padding: 3.5rem 0.75rem 0.875rem;
     }
 
     .vod-filter-bar {

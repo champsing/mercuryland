@@ -262,31 +262,38 @@ onBeforeUnmount(() => {
                     <div>Copyright © 2026 The Mercury Land</div>
                     <div class="hidden md:block">保留一切權利。</div>
                 </div>
-                <div class="flex flex-row items-center">
+                <!-- Mobile: a named 2x2 grid so each action is identifiable
+                     without hovering; desktop: the original divider-separated
+                     row. -->
+                <div
+                    class="app-footer-actions flex flex-row items-center max-md:grid max-md:w-full max-md:grid-cols-2 max-md:grid-rows-2 max-md:gap-2"
+                >
                     <VaButton
                         preset="secondary"
                         :bordered="false"
                         to="tos"
                         aria-label="使用條款"
                         title="使用條款"
+                        class="app-footer-action"
                         @click="backToTop()"
                     >
                         <VaIcon name="description" class="text-red-300" />
-                        <span class="text-red-300 max-md:hidden">使用條款</span>
+                        <span class="text-red-300">使用條款</span>
                     </VaButton>
-                    <VaDivider vertical class="mx-2" />
+                    <VaDivider vertical class="mx-2 max-md:hidden" />
                     <VaButton
                         preset="secondary"
                         :bordered="false"
                         to="privacy"
                         aria-label="隱私政策"
                         title="隱私政策"
+                        class="app-footer-action"
                         @click="backToTop()"
                     >
                         <VaIcon name="privacy_tip" class="text-sky-300" />
-                        <span class="text-sky-300 max-md:hidden">隱私政策</span>
+                        <span class="text-sky-300">隱私政策</span>
                     </VaButton>
-                    <VaDivider vertical class="mx-2" />
+                    <VaDivider vertical class="mx-2 max-md:hidden" />
                     <VaButton
                         preset="secondary"
                         :bordered="false"
@@ -295,13 +302,12 @@ onBeforeUnmount(() => {
                         rel="noopener noreferrer"
                         aria-label="使用教學"
                         title="使用教學"
+                        class="app-footer-action"
                     >
                         <VaIcon name="play_circle" class="text-lime-300" />
-                        <span class="text-lime-300 max-md:hidden"
-                            >使用教學</span
-                        >
+                        <span class="text-lime-300">使用教學</span>
                     </VaButton>
-                    <VaDivider vertical class="mx-2" />
+                    <VaDivider vertical class="mx-2 max-md:hidden" />
                     <VaButton
                         preset="secondary"
                         :bordered="false"
@@ -310,13 +316,12 @@ onBeforeUnmount(() => {
                         rel="noopener noreferrer"
                         aria-label="開源代碼"
                         title="開源代碼"
+                        class="app-footer-action"
                     >
                         <VaIcon class="text-orange-300">
                             <Github />
                         </VaIcon>
-                        <span class="text-orange-300 max-md:hidden"
-                            >開源代碼</span
-                        >
+                        <span class="text-orange-300">開源代碼</span>
                     </VaButton>
                 </div>
             </div>
@@ -335,6 +340,21 @@ onBeforeUnmount(() => {
 .desktop-nav a.router-link-active {
     background-color: rgba(255, 255, 255, 0.1);
     color: #ffffff;
+}
+
+/* The footer actions are icon-only on desktop to keep the bar compact, but on
+   mobile that makes the four links indistinguishable. The 2x2 grid utilities
+   live on the container; here each cell becomes a centred, visibly bordered
+   button. */
+@media (max-width: 767px) {
+    .app-footer-actions .app-footer-action {
+        width: 100%;
+        justify-content: center;
+        border-radius: 0.5rem;
+        /* Vuestic sets an inline transparent border on preset buttons, so the
+           outline is drawn as an inset shadow instead. */
+        box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.12);
+    }
 }
 
 .va-navbar {

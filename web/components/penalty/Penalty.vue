@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { useAuthState } from "@/composables/authState";
+import { notifyConnectionFailure } from "@/composables/connectionNotice";
 import { PenItem, stateString } from "@/composables/penalty";
+import { samplePenalties, withDevSamples } from "@/composables/sampleData";
 import { nextTabIndex } from "@/composables/tabList";
 import { formatDate, parseDate } from "@/composables/utils";
 import api from "@composables/axios";
@@ -90,7 +92,7 @@ const sortOptions = [
     { value: "state", label: "狀態", defaultDirection: "asc" as const },
 ];
 
-// 手機上懲罰頁自己是捲動容器，ViewportHeight 需要量測它。
+// 桌面上 ViewportHeight 以頁面為捲動容器量測高度；手機上清單隨頁面一起捲動。
 const pageRef = ref<HTMLElement | null>(null);
 
 // 短螢幕手機上允許清單縮小，讓頁面仍能剛好貼合螢幕高度。
@@ -102,10 +104,12 @@ const setPenaltyRef = ref<{ open: (penalty: PenItem) => void } | null>(null);
 async function loadPenData() {
     try {
         const response = await api.get<PenItem[]>(`/api/penalty/list`);
-        penalties.value = response.data;
+        penalties.value = withDevSamples(response.data, samplePenalties());
         console.log("Penalty data loaded:", penalties.value);
     } catch (error) {
         console.error("Failed to load penalty data", error);
+        notifyConnectionFailure();
+        penalties.value = withDevSamples(penalties.value, samplePenalties());
     }
 }
 
@@ -273,6 +277,7 @@ onMounted(loadPenData);
                     <ViewportHeight
                         :scroll-container="pageRef"
                         :min-height="isMobile ? 160 : undefined"
+                        :auto-height="isMobile"
                     >
                         <section
                             class="penalty-main flex h-full min-h-0 w-full flex-col"
@@ -330,7 +335,17 @@ onMounted(loadPenData);
 .penalty-page {
     min-height: calc(100vh - var(--app-footer-height, 48px));
     color: #f7f7f8;
-    padding: 1.25rem 1rem 1.25rem;
+    padding: 1.25rem 1rem 1.125rem;
+}
+
+/* The app shell reserves 3.5rem above the page for the fixed desktop header.
+   Without subtracting it the page overflows the viewport by exactly that
+   amount, leaving dead space between the list and the footer. */
+@media (min-width: 1024px) {
+    .penalty-page {
+        min-height: calc(100vh - var(--app-footer-height, 48px) - 3.5rem);
+        min-height: calc(100dvh - var(--app-footer-height, 48px) - 3.5rem);
+    }
 }
 
 .penalty-filter-panel {
@@ -371,13 +386,19 @@ onMounted(loadPenData);
 }
 
 @media (max-width: 720px) {
+    /* The page scrolls with its content on phones, so the footer no longer
+       reserves a fixed slice of the viewport and the list can use the full
+       height. */
     .penalty-page {
-        padding: 3.5rem 0.75rem 1rem;
-        height: calc(100vh - var(--app-footer-height, 48px));
-        height: calc(100dvh - var(--app-footer-height, 48px));
-        min-height: 0;
-        overflow-y: auto;
-        overscroll-behavior: contain;
+        padding: 3.5rem 0.75rem 0.875rem;
+    }
+
+    /* The list has no scrollable overflow here, but as a scroll container it
+       still swallows touch/wheel gestures, so the page never moves. Let the
+       gestures pass through to the page instead. */
+    .penalty-viewport .va-scroll-container {
+        overflow: visible;
+        overscroll-behavior: auto;
     }
 
     .penalty-filter-panel {
