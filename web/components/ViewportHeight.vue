@@ -12,6 +12,11 @@ const props = defineProps<{
     scrollContainer?: HTMLElement | null;
     /** Smallest usable area height; defaults to the shared minimum. */
     minHeight?: number;
+    /**
+     * Leave the wrapper at its natural height instead of pinning it to the
+     * viewport. Used where the page itself is the scroller (mobile lists).
+     */
+    autoHeight?: boolean;
 }>();
 
 const vh = useWindowSize().height;
@@ -60,7 +65,7 @@ function height(top: number) {
 
 <template>
     <UseElementBounding v-slot="{ top }">
-        <div :style="{ height: `${height(top)}px` }">
+        <div :style="autoHeight ? undefined : { height: `${height(top)}px` }">
             <slot></slot>
         </div>
     </UseElementBounding>
