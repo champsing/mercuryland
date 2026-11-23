@@ -91,7 +91,8 @@ const tagList = computed(() =>
 );
 
 // ViewportHeight subtracts the page's bottom padding so the list ends exactly
-// above the footer instead of overflowing the page by that padding.
+// above the footer on desktop. On phones it stops at the copyright line and
+// leaves the footer actions below the fold.
 const pageRef = ref<HTMLElement | null>(null);
 const filteredCount = ref(0);
 const setVodRef = ref<{ open: (vod: VodItem) => void } | null>(null);
@@ -106,8 +107,12 @@ const calculationTotals = computed(() =>
 );
 const computedTime = computed(() => calculationTotals.value.remaining);
 
-// The hours tab lets the page scroll on phones; the ledger caps its own height.
+// Phones collapse the filter panel and let the hours tab page-scroll; the
+// ledger caps its own height there.
 const isMobile = useMediaQuery("(max-width: 767px)");
+
+// 手機上篩選選項預設收合，讓清單有更多空間。
+const filterOpen = ref(false);
 
 function applyVodData(items: VodItem[]) {
     vodData.value = items
@@ -227,66 +232,95 @@ const handleEditVod = (vod: VodItem) => {
                     class="mx-4 md:mx-20 mb-3 flex flex-col gap-3 md:flex-row md:items-stretch"
                 >
                     <section
-                        class="vod-filter-bar flex-1 rounded-3xl"
+                        class="vod-filter-panel min-w-0 flex-1 rounded-3xl"
                         aria-label="直播隨選篩選"
                     >
-                        <VaDateInput
-                            v-model="dateRange"
-                            :format-date="formatDate"
-                            :parse-date="parseDate"
-                            manual-input
-                            mode="auto"
-                            class="vod-date"
-                        />
-                        <VaSelect
-                            v-model="selectedTags"
-                            :options="tagList"
-                            multiple
-                            clearable
-                            searchable
-                            placeholder="請選擇直播的TAG"
-                            dropdownIcon="va-plus"
-                            class="vod-tags"
+                        <button
+                            v-if="isMobile"
+                            type="button"
+                            class="flex w-full cursor-pointer items-center gap-2 rounded-2xl px-2 py-1.5 text-sm font-medium text-zinc-300 transition-colors hover:bg-white/10 hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-300/60"
+                            :aria-expanded="filterOpen"
+                            aria-controls="vod-filter-bar"
+                            @click="filterOpen = !filterOpen"
                         >
-                            <template #content>
-                                <VaChip
-                                    v-for="chip in selectedTags"
-                                    :key="chip"
-                                    color="#90dc52"
-                                    outline
-                                    size="small"
-                                    class="mr-1 my-1"
-                                    closeable
-                                    @update:model-value="updateTag(chip)"
-                                >
-                                    {{ chip }}
-                                </VaChip>
-                            </template>
-                        </VaSelect>
+                            <VaIcon
+                                name="filter_alt"
+                                size="small"
+                                aria-hidden="true"
+                            />
+                            <span>篩選選項</span>
+                            <VaIcon
+                                :name="
+                                    filterOpen ? 'expand_less' : 'expand_more'
+                                "
+                                size="small"
+                                class="ml-auto"
+                                aria-hidden="true"
+                            />
+                        </button>
                         <div
-                            class="flex w-full flex-wrap items-center justify-center gap-3 px-4"
+                            v-show="!isMobile || filterOpen"
+                            id="vod-filter-bar"
+                            class="vod-filter-bar"
                         >
-                            <div class="vod-switch">
-                                <VaSwitch
-                                    v-model="strictFiltering"
-                                    off-color="#1ccba2"
-                                    color="#3444a2"
-                                    style="
-                                        --va-switch-checker-background-color: #252723;
-                                    "
-                                    false-inner-label="符合一項"
-                                    true-inner-label="符合全部"
-                                />
-                            </div>
-                            <div class="flex items-center gap-2">
-                                <div class="md:hidden">
-                                    <ViewModeToggle v-model="viewMode" />
+                            <VaDateInput
+                                v-model="dateRange"
+                                :format-date="formatDate"
+                                :parse-date="parseDate"
+                                manual-input
+                                mode="auto"
+                                class="vod-date"
+                            />
+                            <VaSelect
+                                v-model="selectedTags"
+                                :options="tagList"
+                                multiple
+                                clearable
+                                searchable
+                                placeholder="請選擇直播的TAG"
+                                dropdownIcon="va-plus"
+                                class="vod-tags"
+                            >
+                                <template #content>
+                                    <VaChip
+                                        v-for="chip in selectedTags"
+                                        :key="chip"
+                                        color="#90dc52"
+                                        outline
+                                        size="small"
+                                        class="mr-1 my-1"
+                                        closeable
+                                        @update:model-value="updateTag(chip)"
+                                    >
+                                        {{ chip }}
+                                    </VaChip>
+                                </template>
+                            </VaSelect>
+                            <div
+                                class="flex w-full flex-wrap items-center justify-center gap-3 px-4"
+                            >
+                                <div class="vod-switch">
+                                    <VaSwitch
+                                        v-model="strictFiltering"
+                                        off-color="#1ccba2"
+                                        color="#3444a2"
+                                        style="
+                                            --va-switch-checker-background-color: #252723;
+                                        "
+                                        false-inner-label="符合一項"
+                                        true-inner-label="符合全部"
+                                    />
                                 </div>
-                                <SortMenu
-                                    v-model:field="sortField"
-                                    v-model:direction="sortDirection"
-                                    :options="sortOptions"
-                                />
+                                <div class="flex items-center gap-2">
+                                    <div class="md:hidden">
+                                        <ViewModeToggle v-model="viewMode" />
+                                    </div>
+                                    <SortMenu
+                                        v-model:field="sortField"
+                                        v-model:direction="sortDirection"
+                                        :options="sortOptions"
+                                    />
+                                </div>
                             </div>
                         </div>
                     </section>
@@ -295,7 +329,11 @@ const handleEditVod = (vod: VodItem) => {
                     </div>
                 </div>
 
-                <ViewportHeight :scroll-container="pageRef">
+                <ViewportHeight
+                    :scroll-container="pageRef"
+                    footer-copyright-only
+                    :min-height="isMobile ? 160 : undefined"
+                >
                     <section
                         class="relative flex flex-col lg:flex-row gap-2 h-full px-4 md:px-20"
                     >
@@ -382,13 +420,11 @@ const handleEditVod = (vod: VodItem) => {
     }
 }
 
-.vod-filter-bar {
-    display: grid;
-    grid-template-columns: minmax(13rem, 1fr) minmax(18rem, 2fr) auto;
-    gap: 0.75rem;
-    align-items: center;
+.vod-filter-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
     border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: 8px;
     background: linear-gradient(
         135deg,
         rgba(28, 65, 84, 0.94) 0%,
@@ -398,6 +434,13 @@ const handleEditVod = (vod: VodItem) => {
     box-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
     padding: 0.8rem;
     backdrop-filter: blur(16px);
+}
+
+.vod-filter-bar {
+    display: grid;
+    grid-template-columns: minmax(13rem, 1fr) minmax(18rem, 2fr) auto;
+    gap: 0.75rem;
+    align-items: center;
 }
 
 .n-base-suffix__arrow {
@@ -415,9 +458,12 @@ const handleEditVod = (vod: VodItem) => {
         padding: 3.5rem 0.75rem 0.875rem;
     }
 
+    .vod-filter-panel {
+        padding: 0.7rem;
+    }
+
     .vod-filter-bar {
         grid-template-columns: 1fr;
-        padding: 0.7rem;
     }
 }
 </style>
