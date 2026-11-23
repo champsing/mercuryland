@@ -1,6 +1,9 @@
 <script setup lang="ts">
 import Login from "@/components/login/Login.vue";
-import { APP_FOOTER_HEIGHT } from "@/composables/appFooter";
+import {
+    APP_FOOTER_COPYRIGHT_HEIGHT,
+    APP_FOOTER_HEIGHT,
+} from "@/composables/appFooter";
 import { useElementSize } from "@vueuse/core";
 import { Github } from "@vicons/fa";
 import { computed, onBeforeUnmount, onMounted, provide, ref } from "vue";
@@ -13,11 +16,28 @@ useColors().applyPreset("dark");
 
 const authState = useAuthState();
 
-// The footer height differs between desktop (48px) and mobile (two rows), so
-// pages that manage their own scroll area measure it instead of hard-coding it.
+// The footer height differs between desktop (one row) and mobile (copyright
+// plus a 2x2 action grid), so pages that manage their own scroll area measure
+// it instead of hard-coding it.
 const footerRef = ref<HTMLElement | null>(null);
+const copyrightRef = ref<HTMLElement | null>(null);
 const { height: footerHeight } = useElementSize(footerRef);
+const { height: copyrightHeight } = useElementSize(copyrightRef);
+
+// Height of the footer strip above the 2x2 action grid: the footer's top
+// padding plus the copyright row. Sizes stay stable while the page moves, so
+// this is safer than measuring two element positions at different times.
+const footerCopyrightHeight = computed(() => {
+    const inner = footerRef.value?.firstElementChild;
+    if (!inner) return 0;
+
+    const paddingTop =
+        Number.parseFloat(getComputedStyle(inner).paddingTop) || 0;
+    return paddingTop + copyrightHeight.value;
+});
+
 provide(APP_FOOTER_HEIGHT, footerHeight);
+provide(APP_FOOTER_COPYRIGHT_HEIGHT, footerCopyrightHeight);
 
 const baseTabs = [
     { path: "/server", label: "水星伺服器" },
@@ -256,6 +276,7 @@ onBeforeUnmount(() => {
                 class="mx-auto flex min-h-12 w-[95%] flex-col items-center justify-between gap-2 py-2 md:min-h-12 md:flex-row"
             >
                 <div
+                    ref="copyrightRef"
                     class="flex flex-row items-center gap-2 text-center"
                     style="font-family: playfair display"
                 >
