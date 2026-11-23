@@ -92,11 +92,12 @@ const sortOptions = [
     { value: "state", label: "狀態", defaultDirection: "asc" as const },
 ];
 
-// 桌面上 ViewportHeight 以頁面為捲動容器量測高度；手機上清單隨頁面一起捲動。
+// ViewportHeight 以視窗為基準量測高度；手機上清單底部切齊 Copyright，
+// footer 的四個按鈕留在視窗外，向下捲動才看得到。
 const pageRef = ref<HTMLElement | null>(null);
 
 // 短螢幕手機上允許清單縮小，讓頁面仍能剛好貼合螢幕高度。
-const isMobile = useMediaQuery("(max-width: 720px)");
+const isMobile = useMediaQuery("(max-width: 767px)");
 
 const addPenaltyRef = ref<{ open: () => void } | null>(null);
 const setPenaltyRef = ref<{ open: (penalty: PenItem) => void } | null>(null);
@@ -276,8 +277,8 @@ onMounted(loadPenData);
                 <div class="penalty-viewport">
                     <ViewportHeight
                         :scroll-container="pageRef"
+                        footer-copyright-only
                         :min-height="isMobile ? 160 : undefined"
-                        :auto-height="isMobile"
                     >
                         <section
                             class="penalty-main flex h-full min-h-0 w-full flex-col"
@@ -385,20 +386,10 @@ onMounted(loadPenData);
     }
 }
 
-@media (max-width: 720px) {
-    /* The page scrolls with its content on phones, so the footer no longer
-       reserves a fixed slice of the viewport and the list can use the full
-       height. */
+@media (max-width: 767px) {
+    /* The fixed mobile header sits above the page content. */
     .penalty-page {
         padding: 3.5rem 0.75rem 0.875rem;
-    }
-
-    /* The list has no scrollable overflow here, but as a scroll container it
-       still swallows touch/wheel gestures, so the page never moves. Let the
-       gestures pass through to the page instead. */
-    .penalty-viewport .va-scroll-container {
-        overflow: visible;
-        overscroll-behavior: auto;
     }
 
     .penalty-filter-panel {
