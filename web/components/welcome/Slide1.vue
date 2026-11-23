@@ -141,6 +141,7 @@ onUnmounted(() => {
                 </div>
             </div>
             <div
+                v-if="props.showScrollHint"
                 class="pointer-events-none absolute bottom-24 left-1/2 flex -translate-x-1/2 flex-col items-center gap-1 text-amber-300/70"
                 aria-hidden="true"
             >
